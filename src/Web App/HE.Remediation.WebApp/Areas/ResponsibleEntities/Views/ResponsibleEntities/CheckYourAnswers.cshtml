@@ -2,13 +2,14 @@
 @using System.Linq
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.CheckYourAnswersViewModel
 @{
-    ViewData["Title"] = "Check your information is correct for this application";
+    ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
     ViewData["FullWidth"] = true;
     ViewData["ReturnUrl"] = "CheckYourAnswers";
     ViewData["BackLink"] = Url.Action("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["ReadOnly"] = Model.ReadOnly;
 }
 
-<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+<h1 class="govuk-heading-xl">@(Model.ReadOnly ? "Your answers" : "Check your answers")</h1>
 
 @if (Model.RepresentationTypeId == (int)EApplicationRepresentationType.Representative)
 {
@@ -27,9 +28,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.RepresentativeUKBased ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("BasedInUk", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("BasedInUk", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -42,9 +46,12 @@
                 <govuk-summary-list-row-value>
                     @Model.RepresentativeIndividualOrCompany
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividual", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividual", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -64,9 +71,12 @@
                             <span>@item<br></span>
                         }
                     </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                        Change
-                    </govuk-summary-list-row-action>
+                    @if (!Model.ReadOnly)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
                 </govuk-summary-list-row>
             }
         }
@@ -85,9 +95,12 @@
                         <span>@item<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -102,12 +115,18 @@
                 <govuk-summary-list-row-value>
                     @foreach (var item in details)
                     {
-                        <span>@item<br></span>
+                        @if (!String.IsNullOrWhiteSpace(item))
+                        {
+                            <span>@item<br></span>
+                        }
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -129,9 +148,12 @@
             <govuk-summary-list-row-value>
                 @Model.ResponsibleEntityRelation
             </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityRelation", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                Change
-            </govuk-summary-list-row-action>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityRelation", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                    Change
+                </govuk-summary-list-row-action>
+            }
         </govuk-summary-list-row>
     }
 
@@ -144,9 +166,12 @@
             <govuk-summary-list-row-value>
                 @Model.ResponsibleEntityCompanyType
             </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                Change
-            </govuk-summary-list-row-action>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                    Change
+                </govuk-summary-list-row-action>
+            }
         </govuk-summary-list-row>
     }
 
@@ -169,9 +194,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.ResponsibleEntityRegisteredInUK ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -189,9 +217,12 @@
                         <span>@item<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -206,12 +237,18 @@
                 <govuk-summary-list-row-value>
                     @foreach (var item in details)
                     {
-                        <span>@item<br></span>
+                        @if (!String.IsNullOrWhiteSpace(item))
+                        {
+                            <span>@item<br></span>
+                        }
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -229,9 +266,12 @@
                         <span>@item<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -247,9 +287,12 @@
                         <span>@item.Name<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
     }
@@ -272,9 +315,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.ResponsibleEntityRegisteredInUK ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -292,9 +338,12 @@
                         <span>@item<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -310,9 +359,12 @@
                         <span>@item.Name<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -329,9 +381,12 @@
                 <govuk-summary-list-row-value>
                     @Model.ResponsibleEntitySharedOwners
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -344,9 +399,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.ResponsibleEntityClaimingGrant ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ClaimingGrant", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ClaimingGrant", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -359,9 +417,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.ConfirmedNotViable ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ConfirmedNotViable", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ConfirmedNotViable", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -377,9 +438,12 @@
                         <span>@item.Name<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
     }
@@ -395,9 +459,12 @@
                 <govuk-summary-list-row-value>
                     @Model.ResponsibleEntitySharedOwners
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -410,9 +477,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.ResponsibleEntityClaimingGrant ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ClaimingGrant", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ClaimingGrant", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
         
@@ -425,9 +495,12 @@
                 <govuk-summary-list-row-value>
                     @((bool)Model.ConfirmedNotViable ? "Yes" : "No")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("ConfirmedNotViable", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ConfirmedNotViable", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -443,9 +516,12 @@
                         <span>@item.Name<br></span>
                     }
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
     }
@@ -469,9 +545,12 @@
                 <govuk-summary-list-row-value>
                     @Model.FreeholderIndividualOrCompany
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyOrIndividual", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyOrIndividual", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
             </govuk-summary-list-row>
         }
 
@@ -491,9 +570,12 @@
                             <span>@item<br></span>
                         }
                     </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                        Change
-                    </govuk-summary-list-row-action>
+                    @if (!Model.ReadOnly)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
                 </govuk-summary-list-row>
             }
 
@@ -508,12 +590,18 @@
                     <govuk-summary-list-row-value>
                         @foreach (var item in details)
                         {
-                            <span>@item<br></span>
+                            @if (!String.IsNullOrWhiteSpace(item))
+                            {
+                                <span>@item<br></span>
+                            }
                         }
                     </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                        Change
-                    </govuk-summary-list-row-action>
+                    @if (!Model.ReadOnly)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
                 </govuk-summary-list-row>
             }
         }
@@ -533,9 +621,12 @@
                             <span>@item<br></span>
                         }
                     </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-action href="@Url.Action("FreeholderIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                        Change
-                    </govuk-summary-list-row-action>
+                    @if (!Model.ReadOnly)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("FreeholderIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
                 </govuk-summary-list-row>
             }
 
@@ -550,12 +641,18 @@
                     <govuk-summary-list-row-value>
                         @foreach (var item in details)
                         {
-                            <span>@item<br></span>
+                            @if (!String.IsNullOrWhiteSpace(item))
+                            {
+                                <span>@item<br></span>
+                            }
                         }
                     </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-action href="@Url.Action("FreeholderIndividualAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
-                        Change
-                    </govuk-summary-list-row-action>
+                    @if (!Model.ReadOnly)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("FreeholderIndividualAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
                 </govuk-summary-list-row>
             }
         }        
@@ -563,9 +660,12 @@
     </govuk-summary-list>
 }
 
-<h3 class="govuk-heading-s">Proceed to next step of your application</h3>
-<p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct, and that Homes England can contact the responsible entity to validate you have been authorised to apply on their behalf.</p>
+@if (!Model.ReadOnly)
+{
+    <h3 class="govuk-heading-s">Proceed to next step of your application</h3>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct, and that Homes England can contact the responsible entity to validate you have been authorised to apply on their behalf.</p>
 
-<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CheckYourAnswers" method="post">
-    <govuk-button type="submit">Accept and save application</govuk-button>
-</form>
+    <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CheckYourAnswers" method="post">
+        <govuk-button type="submit">Accept and save application</govuk-button>
+    </form>
+}

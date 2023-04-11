@@ -1,0 +1,83 @@
+﻿@using HE.Remediation.Core.Interface
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.GetExternalWorksViewModel
+
+@{
+    ViewData["Title"] = "External Wall Works";
+    ViewData["FullWidth"] = true;    
+    ViewData["BackLink"] = Url.Action("ExternalWorksRequired", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+
+    if (Model.WallWorks == null || Model.WallWorks.Count == 0)
+    {
+        ViewData["AddedHeading"] = "Other works to the External Wall";
+    }
+    else
+    {
+        ViewData["AddedHeading"] = "You have added " + @Model.WallWorks.Count.ToString() + " other ";
+        ViewData["AddedHeading"] += (@Model.WallWorks.Count > 1) ? "external wall elements" : "external wall element";
+    }
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            @section ErrorSummary
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item asp-for="WallWorks" />
+                </govuk-error-summary>
+            }
+
+            <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="SetExternalWallWorks" method="post">
+                <h1 class="govuk-heading-xl">@ViewData["AddedHeading"]</h1>
+
+                @if ((Model.WallWorks != null) && (Model.WallWorks.Count > 0))
+                {
+                    @for (var itemCounter = 0; itemCounter < Model.WallWorks.Count; itemCounter++)
+                    {
+                        <input asp-for="@Model.WallWorks[itemCounter].Id" type="hidden" value="@Model.WallWorks[itemCounter].Id" />
+                        <input asp-for="@Model.WallWorks[itemCounter].Description" type="hidden" value="@Model.WallWorks[itemCounter].Description" />
+
+                        <govuk-summary-list>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    Other external wall element @((itemCounter + 1).ToString())
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.WallWorks[itemCounter].Description
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-action href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString(), ElementNo = @itemCounter+1 })" visually-hidden-text="name">
+                                    Change
+                                </govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action href="@Url.Action("DeleteExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString() })" visually-hidden-text="name">
+                                    Remove
+                                </govuk-summary-list-row-action>
+                            </govuk-summary-list-row>
+                        </govuk-summary-list>
+
+
+                    }
+
+                    int wallWorksCount = Model.WallWorks == null ? 0 : Model.WallWorks.Count;
+                    <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1 })" class="govuk-button--secondary">Add another element</govuk-button>
+                }
+                else
+                {
+                    int wallWorksCount = Model.WallWorks == null ? 0 : Model.WallWorks.Count;
+
+                    <p class="govuk-body">You can add a maximum of 20 external walls</p>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+                    <span class="govuk-caption-m">No external works have been added</span>
+                    <br/>
+                    <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1 })" class="govuk-button--secondary">Add external wall</govuk-button>
+                }
+
+                <br/>
+
+                <div class="comp-btn-group">
+                    <govuk-button name="SubmitAction" type="submit">Continue</govuk-button>
+                    <govuk-button href="@Url.Action("Index", "TaskList", new { Area = "Application" })" class="govuk-button--secondary">Return later</govuk-button>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>

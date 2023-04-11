@@ -1,0 +1,43 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@{
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
+    ViewData["FullWidth"] = true;
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">                
+        <h1 class="govuk-heading-xl">
+            @ViewData["Title"]
+        </h1>
+        <p class="govuk-body">
+            Homes England will provide the Funding to the Applicant on and subject to the terms of this
+            Agreement.
+        </p>
+
+        <p class="govuk-body">
+            Homes England will provide PTS Funding to the Applicant following the occurrence of the PTS
+            Effective Date and on and subject to the terms of the PTS Agreement. Unless and until the
+            occurrence of the GFA Effective Date the Applicant will only be subject to the terms of the PTS
+            Provisions and the remaining terms of this Agreement shall not apply.
+        </p>
+
+        <p class="govuk-body">
+            After the occurrence of the GFA Effective Date the Applicant will be subject to all of the terms of this
+            Agreement save for Schedule 6
+        </p>
+
+        <govuk-button href="@Url.Action("ClaimPreTenderSupport", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>
+    </div>
+    <div class="govuk-grid-column-one-third">
+
+        <hr class="related-content-separator-line" />
+        <h2 class="govuk-heading-m">Related Items</h2>
+        <a class="govuk-link" target="_blank" href="/">How pre-tender support is calculated</a>
+        <br /><br />
+        <a class="govuk-link" target="_blank" href="/">More</a>
+    </div>
+</div>
+    

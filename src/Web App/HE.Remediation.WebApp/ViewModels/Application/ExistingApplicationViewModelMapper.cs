@@ -7,7 +7,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
     {
         public ExistingApplicationViewModelMapper()
         {
-            CreateMap<GetExistingApplicationResponse, ApplicationViewModel>();
+            CreateMap<GetExistingApplicationResponse, ExistingApplicationViewModel.ApplicationViewModel>();
         }
     }
 }

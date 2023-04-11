@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCase\Areas\RegisteredProvider\**" />
     <Compile Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
+    <EmbeddedResource Remove="UseCase\Areas\RegisteredProvider\**" />
     <EmbeddedResource Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
+    <None Remove="UseCase\Areas\RegisteredProvider\**" />
     <None Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
   </ItemGroup>
 
@@ -29,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\StoredProcedureParameters\" />
     <Folder Include="Services\OidcEventHandlerService\" />
     <Folder Include="Services\FireAssessorList\" />
     <Folder Include="Services\UserService\Model\" />
@@ -44,7 +46,7 @@
     <Folder Include="UseCase\Areas\BuildingDetails\DeveloperContacted\SetDeveloperContacted\" />
     <Folder Include="UseCase\Areas\BuildingDetails\DeveloperInBusiness\GetDeveloperInBusiness\" />
     <Folder Include="UseCase\Areas\BuildingDetails\DeveloperInBusiness\SetDeveloperInBusiness\" />
-    <Folder Include="UseCase\Areas\RegisteredProvider\" />
+    <Folder Include="UseCase\Areas\AreaProgress\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\NotEligible\SetNotEligible\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityCompanyType\GetResponsibleEntityCompanyType\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityCompanyType\SetResponsibleEntityCompanyType\" />

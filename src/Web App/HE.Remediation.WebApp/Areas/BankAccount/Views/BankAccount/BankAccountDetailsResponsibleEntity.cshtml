@@ -35,19 +35,19 @@
         <govuk-input-label is-page-heading="false" class="govuk-label--s">Branch name</govuk-input-label>
     </govuk-input>
 
-    <govuk-input asp-for="AccountNumber" name="AccountNumber" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false">
+    <govuk-input asp-for="AccountNumber" name="AccountNumber" input-class="govuk-input--width-20" inputmode="text" pattern="[0-9]*" spellcheck="false">
         <govuk-input-label is-page-heading="false" class="govuk-label--s">Account number</govuk-input-label>
         <govuk-input-hint>Must be between 6 and 8 digits long</govuk-input-hint>
     </govuk-input>
 
-    <govuk-input asp-for="SortCode" name="SortCode" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false">
+    <govuk-input asp-for="SortCode" name="SortCode" input-class="govuk-input--width-20" inputmode="text" pattern="[0-9]*" spellcheck="false">
         <govuk-input-label is-page-heading="false" class="govuk-label--s">Sort code</govuk-input-label>
         <govuk-input-hint>Must be 6 digits long</govuk-input-hint>
     </govuk-input>
     
     @Html.Hidden(nameof(Model.RepresentationType), Model.RepresentationType)
 
-    <h1 class="govuk-heading-m">Confirm you will enter into a deed of trust</h1>
+    <h2 class="govuk-heading-m">Confirm you will enter into a deed of trust</h2>
     <p class="govuk-body">By continuing, you confirm that you have or will enter into a deed of trust to receive the grant funding.</p>
 
     <govuk-button name="SubmitAction" value="Continue">Confirm and continue</govuk-button>

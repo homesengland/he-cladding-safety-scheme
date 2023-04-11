@@ -6,7 +6,7 @@ namespace HE.Remediation.WebApp.Areas.Error.Controllers
     public class HandleErrorController : Controller
     {
         [Route("/Error/HandleError/{errorStatusCode:int}")]
-        public async Task<IActionResult> Index(int errorStatusCode)
+        public IActionResult Index(int errorStatusCode)
         {
             return errorStatusCode switch
                 {

@@ -24,7 +24,8 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
                 .NotEmpty()
                 .WithMessage("Please enter an Email address")
                 .EmailAddress()
-                .WithMessage(@"Enter an email address in the correct format, like name@example.com");
+                .WithMessage(@"Enter an email address in the correct format, like name@example.com")
+                .NotValidEmailAddress();
 
             RuleFor(x => x.ContactNumber)
                 .NotEmpty()

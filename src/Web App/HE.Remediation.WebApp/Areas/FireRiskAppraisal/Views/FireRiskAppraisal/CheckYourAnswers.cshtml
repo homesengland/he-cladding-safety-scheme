@@ -1,0 +1,525 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
+    ViewData["BackLink"] = Url.Action("CompletedAppraisal", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["ReadOnly"] = Model.ReadOnly;
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["FullWidth"] = true;            
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<h2 class="govuk-heading-m">Report and Summary</h2>
+<govuk-summary-list>    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Fire risk appraisal report
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.AppraisalReportFilename))
+            {
+                <span>@Model.AppraisalReportFilename<br></span>
+            }             
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>    
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Fire risk appraisal summary
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.AppraisalSummaryFilename))
+            {
+                <span>@Model.AppraisalSummaryFilename<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<h2 class="govuk-heading-m">Appraisal survey details</h2>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company who did the survey
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.FireRiskAssessorCompany))
+            {
+                <span>@Model.FireRiskAssessorCompany<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Date you instructed the company
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.DateOfInstruction != null)
+            {
+                <span>@Model.DateOfInstruction.Value.ToString("dd/MM/yyyy")<br></span>
+            }            
+        </govuk-summary-list-row-value>
+
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }        
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Survey date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.SurveyDate != null)
+            {
+                <span>@Model.SurveyDate.Value.ToString("dd/MM/yyyy")<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                    Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+
+<h2 class="govuk-heading-m">Report details</h2>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Report authors name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.AuthorsName))
+            {
+                <span>@Model.AuthorsName<br></span>
+            }            
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Name of person conducting peer review
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+
+            @if (!String.IsNullOrEmpty(Model.PeerReviewPerson))
+            {
+                <span>@Model.PeerReviewPerson<br></span>
+            }            
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Firm undertaking report
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.UndertakingFirm))
+            {
+                <span>@Model.UndertakingFirm<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }        
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            How many stories does the building have?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.NumberOfStoreys != null)
+            {
+                <span>@Model.NumberOfStoreys.ToString()<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            What is the height of the building in metres?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.BuildingHeight != null)
+            {
+                <span>@Model.BuildingHeight.ToString()<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }        
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Is the building in interim measures?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.BuildingInterimMeasures != null)
+            {
+                string interimDisplayText = Model.BuildingInterimMeasures == ENoYes.Yes ? "Yes" : "No";
+                <span>@interimDisplayText<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }        
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Is the assessment basic or complex?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>            
+            @if (Model.BasicComplexType != null)
+            {
+                string interimDisplayText = string.Empty;
+                if (Model.BasicComplexType == EBasicComplexType.Basic)
+                {
+                    interimDisplayText = "Basic";
+                }
+                else if (Model.BasicComplexType == EBasicComplexType.Complex)
+                {
+                    interimDisplayText = "Complex";
+                }
+                <span>@interimDisplayText<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReportDetails", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }        
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+
+<h2 class="govuk-heading-m">Cladding Systems</h2>
+
+
+@if ((Model.CladdingSystems != null) && (Model.CladdingSystems.Count > 0))
+{
+    @for (var itemCounter = 0; itemCounter < Model.CladdingSystems.Count; itemCounter++)
+    {
+        <govuk-summary-list>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Cladding System @((itemCounter + 1).ToString())
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                </govuk-summary-list-row-value>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("WorksToCladdingSystems", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Cladding type
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+
+                    @if (!String.IsNullOrEmpty(Model.CladdingSystems[itemCounter].CladdingSystemTypeName))
+                    {
+                        <span>@Model.CladdingSystems[itemCounter].CladdingSystemTypeName<br></span>
+                    }                        
+                </govuk-summary-list-row-value>                
+            </govuk-summary-list-row>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Insulation material
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (!String.IsNullOrEmpty(Model.CladdingSystems[itemCounter].InsulationTypeName))
+                    {
+                        <span>@Model.CladdingSystems[itemCounter].InsulationTypeName<br></span>
+                    }
+                </govuk-summary-list-row-value>                
+            </govuk-summary-list-row>
+        </govuk-summary-list>
+    }
+}
+    
+
+<h2 class="govuk-heading-m">External Systems</h2>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Are there any other elements of the external wall in addition to the cladding systems(s)
+            which you are recommending are subject
+            to remediation/mitigation works to address the life safety risk you have identified?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.ExternalWorksRequired != null)
+            {
+                string externalWorksRequiredDisplayText = Model.ExternalWorksRequired == ENoYes.Yes ? "Yes" : "No";
+                <span>@externalWorksRequiredDisplayText<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ExternalWallWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    @if ((Model.ExternalWorks != null) && (Model.ExternalWorks.Count > 0))
+    {
+        @for (var itemCounter = 0; itemCounter < Model.ExternalWorks.Count; itemCounter++)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    @((itemCounter + 1).ToString()). Other external wall element
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ExternalWorks[itemCounter].Description
+                </govuk-summary-list-row-value>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("ExternalWallWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>            
+        }
+    }
+    
+    
+</govuk-summary-list>
+
+
+<h2 class="govuk-heading-m">Internal elements</h2>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Are there any elements of the interior of the building 
+            which you are recommending are subject
+            to remediation/mitigation works to address the life safety risk you have identified?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.InternalWorksRequired != null)
+            {
+                string internalWorksRequiredDisplayText = Model.InternalWorksRequired == ENoYes.Yes ? "Yes" : "No";
+                <span>@internalWorksRequiredDisplayText<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("InternalWallWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+
+
+    @if ((Model.InternalWorks != null) && (Model.InternalWorks.Count > 0))
+    {
+        @for (var itemCounter = 0; itemCounter < Model.InternalWorks.Count; itemCounter++)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    @((itemCounter + 1).ToString()). Internal element
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.InternalWorks[itemCounter].Description
+                </govuk-summary-list-row-value>
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("InternalWallWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>            
+        }
+    }
+
+</govuk-summary-list>
+
+
+<h2 class="govuk-heading-m">Recommended works</h2>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            What is your assessment of the life safety risk of the building associated with the external wall systems,
+            in accordance with PAS-9980?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.LifeSafetyRiskAssessment))
+            {
+                <span>@Model.LifeSafetyRiskAssessment<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }
+    </govuk-summary-list-row>
+
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Do you recommend full replacement of cladding, partial replacement of cladding or no replacement of cladding (alternative mitigation works only)?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.RecommendCladding))
+            {
+                <span>@Model.RecommendCladding<br></span>
+            }            
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Do you recommend the building be put into interim measures?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.RecommendBuildingInterim != null)
+            {
+                string recommendInterimDisplayText = Model.RecommendBuildingInterim == ENoYes.Yes ? "Yes" : "No";
+                <span>@recommendInterimDisplayText<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>            
+        }
+
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Please state any caveats or limitations on the conclusions in your FRAEW
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.CaveatsLimitations))
+            {
+                <span>@Model.CaveatsLimitations<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Summarise the remediation/mitigation works you are recommending to address the life safety risk of the building
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.RemediationSummary))
+            {
+                <span>@Model.RemediationSummary<br></span>
+            }            
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Please justify your recommendation
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.JustifyRecommendation))
+            {
+                <span>@Model.JustifyRecommendation<br></span>
+            }            
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new { Id = 1 })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+</govuk-summary-list>
+
+@if (!Model.ReadOnly)
+{
+    <h3 class="govuk-heading-s">Proceed to next step of your application</h3>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+
+    <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="CheckYourAnswers" method="post">
+        <govuk-button type="submit">Accept and save application</govuk-button>
+    </form>
+}

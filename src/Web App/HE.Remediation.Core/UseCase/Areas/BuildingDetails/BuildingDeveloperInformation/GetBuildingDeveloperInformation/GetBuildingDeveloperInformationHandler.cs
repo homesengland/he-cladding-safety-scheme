@@ -16,7 +16,7 @@ public class GetBuildingDeveloperInformationHandler : IRequestHandler<GetBuildin
 
     public async Task<GetBuildingDeveloperInformationResponse> Handle(GetBuildingDeveloperInformationRequest request, CancellationToken cancellationToken)
     {
-        var response = await _connection.QuerySingleOrDefaultAsync<GetBuildingDeveloperInformationResponse>("GetBuildingDeveloperInformation", new
+        var response = await _connection.QuerySingleOrDefaultAsync<GetBuildingDeveloperInformationResponse>("GetBuildingOriginalDeveloperIsKnown", new
         {
             ApplicationId = _applicationDataProvider.GetApplicationId()
         });

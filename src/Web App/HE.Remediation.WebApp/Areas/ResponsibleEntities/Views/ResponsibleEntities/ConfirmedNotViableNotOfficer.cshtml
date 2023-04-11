@@ -14,8 +14,4 @@
     Saving and exiting will keep this application in progress until you return with evidence.
 </p>
 
-<form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ConfirmedNotViableNotProceed">
-    @Html.Hidden("OrganisationType", value: EApplicationResponsibleEntityOrganisationType.LocalAuthority)
-    @Html.Hidden("IsConfirmedNotViable", value: false)
-    <govuk-button name="button" value="Continue">Save and exit</govuk-button>
-</form>
+<govuk-button href="@Url.Action("Index", "TaskList", new {Area = "Application"})">Save and exit</govuk-button>

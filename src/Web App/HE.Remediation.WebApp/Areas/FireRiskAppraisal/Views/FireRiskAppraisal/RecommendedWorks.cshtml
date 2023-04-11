@@ -1,0 +1,186 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.GetRecommendedWorksViewModel
+
+@{
+    ViewData["Title"] = "Recommended works";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLink"] = Url.Action("RecommendedWorksStart", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+}
+@section ErrorSummary
+{
+<govuk-error-summary>
+    <govuk-error-summary-item asp-for="LifeSafetyRiskAssessment" />
+    <govuk-error-summary-item asp-for="RecommendCladding" />
+    <govuk-error-summary-item asp-for="RecommendBuildingIntetim" />
+    <govuk-error-summary-item asp-for="RecommendedTotalAreaCladding" />
+    <govuk-error-summary-item asp-for="CaveatsLimitations" />
+    <govuk-error-summary-item asp-for="RemediationSummary" />
+    <govuk-error-summary-item asp-for="JustifyRecommendation" />
+</govuk-error-summary>
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+                    <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="RecommendedWorks" method="post">
+                        
+                        <govuk-radios asp-for="LifeSafetyRiskAssessment">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    What is your assessment of the life safety risk of the building associated with the external wall systems, in accordance with PAS-9980?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+
+                            <govuk-radios-item value="@(ERiskType.Low)">Low</govuk-radios-item>
+                            <govuk-radios-item value="@(ERiskType.Medium)">Medium</govuk-radios-item>
+                            <govuk-radios-item value="@(ERiskType.High)">High</govuk-radios-item>
+                        </govuk-radios>
+
+
+                        <govuk-radios asp-for="RecommendCladding">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Do you recommend full replacement of cladding, partial replacement of cladding or no replacement of cladding (alternative mitigation works only)?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+
+                            <govuk-radios-item value="@(EReplacementCladding.Full)">Full replacement of cladding</govuk-radios-item>
+                            <govuk-radios-item value="@(EReplacementCladding.Partial)">Partial replacement of cladding</govuk-radios-item>
+                            <govuk-radios-item value="@(EReplacementCladding.None)">No replacement of cladding (alternative mitigation works only)</govuk-radios-item>
+                        </govuk-radios>
+
+
+                        <govuk-radios asp-for="RecommendBuildingIntetim">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Do you recommend the building be put into interim measures?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+
+                            <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+                            <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+                        </govuk-radios>
+                        
+
+                        <govuk-input asp-for="RecommendedTotalAreaCladding" type="text" input-class="govuk-input--width-5" input-maxlength="10" input-pattern="[0-9]*">
+                            <govuk-input-label class="govuk-label--s">
+                                What is the approximate total area of cladding systems which you are recommending are subject to
+                                remediation/mitigation works to address the life safety risk you have identified? (Square metres)
+                            </govuk-input-label>
+                            <govuk-input-hint></govuk-input-hint>
+                        </govuk-input>
+                        <br />
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="CaveatsLimitations" max-length="1000" asp-for="CaveatsLimitations">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        Please state any caveats or limitations on the conclusions in your FRAEW.
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+
+                            <div id="with-hint-info" class="govuk-hint govuk-character-count__message">
+                                You have 1000 characters
+                            </div>
+                        </div>
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="RemediationSummary" max-length="1000" asp-for="RemediationSummary">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        Summarise the remediation/mitigation works you are recommending to address the life safety risk of the building.
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+                            <div id="with-hint-info" class="govuk-hint govuk-character-count__message">
+                                You have 1000 characters
+                            </div>
+                        </div>
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="JustifyRecommendation" max-length="1000" asp-for="JustifyRecommendation">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        Please justify your recommendation
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+
+                            <div id="with-hint-info" class="govuk-hint govuk-character-count__message">
+                                You have 1000 characters
+                            </div>
+                        </div>
+                        
+                        <div class="comp-btn-group">
+                            <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+                            <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+                        </div>
+                    </form>
+                </div>
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">Building Details</h2>
+
+
+
+                    <govuk-summary-list>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Address of building
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.BuildingAddress
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Company undertaking report
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.CompanyUndertakingReport
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                FRAEW instructed date
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if (Model.FRAEWInstructedDate is not null)
+                                {
+                                    var instructedDate = Model.FRAEWInstructedDate;
+                                    <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
+                                }
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Building name
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.BuildingName
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                FRAEW completed date
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if (Model.FRAEWCompletedDate is not null)
+                                {
+                                    var completedDate = Model.FRAEWCompletedDate;
+                                    <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
+                                }
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                    </govuk-summary-list>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

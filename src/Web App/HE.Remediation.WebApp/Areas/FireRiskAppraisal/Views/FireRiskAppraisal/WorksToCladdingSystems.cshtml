@@ -1,0 +1,102 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using InputTagHelper = GovUk.Frontend.AspNetCore.TagHelpers.InputTagHelper
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.WorksToCladdingSystemsViewModel
+@{
+    var hasCladdingSystems = Model.SelectedWorksToCladdingSystem != null && Model.SelectedWorksToCladdingSystem.Any();
+    ViewData["Title"] = hasCladdingSystems ? $"You have added {Model.SelectedWorksToCladdingSystem.Count()} cladding systems" : "Works to cladding systems";
+    ViewData["FullWidth"] = false;
+
+    //ToDo: Change BackLink when previous page complete
+    ViewData["BackLink"] = Url.Action("ReportDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+
+    //ToDo: Change ReturnURL when previous page complete
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+}
+
+<form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="SetWorksToCladdingSystems" method="post">
+    @section ErrorSummary
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item asp-for="SelectedWorksToCladdingSystem" />
+        </govuk-error-summary>
+    }
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+
+    @if (hasCladdingSystems)
+    {
+        <span class="govuk-caption-m">You can add a maximum of 20 cladding systems</span>
+        <hr class="govuk-section-break govuk-section-break--m">
+
+        @foreach (var x in Model.SelectedWorksToCladdingSystem.Select((value, index) => new { value, index }))
+        {
+            List<SelectedWorksToCladdingSystemsViewModel> SelectedWorksToCladdingSystem = Model.SelectedWorksToCladdingSystem.ToList();
+
+            <input asp-for="@SelectedWorksToCladdingSystem[x.index].FireRiskCladdingSystemsId" type="hidden" value="@SelectedWorksToCladdingSystem[x.index].FireRiskCladdingSystemsId" />
+            <input asp-for="@SelectedWorksToCladdingSystem[x.index].InsulationTypeName" type="hidden" value="@SelectedWorksToCladdingSystem[x.index].InsulationTypeName" />
+            <input asp-for="@SelectedWorksToCladdingSystem[x.index].CladdingSystemTypeName" type="hidden" value="@SelectedWorksToCladdingSystem[x.index].CladdingSystemTypeName" />
+
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        <span class="govuk-heading-m govuk-!-margin-bottom-5">
+                            Cladding System @(x.index + 1)
+                        </span>
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="@Url.Action("CladdingSystem", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", fireRiskCladdingSystemsId = x.value.FireRiskCladdingSystemsId })">Change</a>
+                        <a class="govuk-link" href="@Url.Action("RemoveCladdingSystem", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", fireRiskCladdingSystemsId = x.value.FireRiskCladdingSystemsId })">Remove</a>
+                    </dd>
+
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Cladding type
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @x.value.CladdingSystemTypeName
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Insulation material
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @x.value.InsulationTypeName
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+
+                    </dd>
+                </div>
+            </dl>
+            <hr class="govuk-section-break govuk-section-break--m">
+        }
+    }
+    else
+    {
+        <p class="govuk-body">Identify each of the cladding systems which contribute to the life safety risk of the building. For each cladding system identify the cladding type and the insulation material.</p>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <span class="govuk-caption-m">No cladding systems have been added</span>
+    }
+
+    <hr class="govuk-section-break govuk-section-break--m">
+
+    <govuk-button asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" disabled="@(Model.SelectedWorksToCladdingSystem != null && Model.SelectedWorksToCladdingSystem.Count() >= 20)" asp-action="CladdingSystem" class="govuk-button--secondary">
+        @(hasCladdingSystems ? "Add another system" : "Add cladding system")
+    </govuk-button>
+
+    <hr class="govuk-section-break govuk-section-break--s">
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" type="submit">Continue</govuk-button>
+        <govuk-button href="@Url.Action("Index", "TaskList", new { Area = "Application" })" class="govuk-button--secondary">Return later</govuk-button>
+    </div>
+</form>

@@ -3,9 +3,8 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExistingApplication;
-using HE.Remediation.WebApp.Authorisation;
+using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.Helpers;
-using HE.Remediation.WebApp.ViewModels;
 using HE.Remediation.WebApp.ViewModels.Application;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -53,22 +52,22 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
 
         #region "Existing Application"
 
-        public async Task<IActionResult> ExistingApplications(int? PageNo)
+        public async Task<IActionResult> ExistingApplications(int? pageNo, string search)
         {
-            if (PageNo == null)
-            {
-                PageNo = 1;
-            }
+            const int pageSize = 10;
+            pageNo ??= 1;
 
-            var existingApplicationsResponse = await _sender.Send(GetExistingApplicationRequest.Request);
+            var existingApplicationsResponse = await _sender.Send(new GetExistingApplicationRequest
+            {
+                Search = search
+            });
             var viewModel = new ExistingApplicationViewModel();
 
-            var applications = _mapper.Map<List<ApplicationViewModel>>(existingApplicationsResponse);
+            var applications = _mapper.Map<IReadOnlyCollection<ExistingApplicationViewModel.ApplicationViewModel>>(existingApplicationsResponse);
 
-            PagnationRangeValuesViewModel pagingRangeValuesViewModel = PaginationHelper.ObtainPageHandlingDetails(PageNo.Value, applications.Count,
-                10, false);
+            var pagingRangeValuesViewModel = PaginationHelper.ObtainPageHandlingDetails(pageNo.Value, applications.Count, pageSize, false);
             viewModel.CurrentPage = pagingRangeValuesViewModel.CurrentPage;
-            viewModel.ApplicationList = applications.Skip(pagingRangeValuesViewModel.StartRecordValue).Take(10).ToList();
+            viewModel.ApplicationList = applications.Skip(pagingRangeValuesViewModel.StartRecordValue).Take(pageSize).ToArray();
             viewModel.PageCount = pagingRangeValuesViewModel.NoOfPages;
             viewModel.UseEllipses = pagingRangeValuesViewModel.UseEllipses;
             return View(viewModel);

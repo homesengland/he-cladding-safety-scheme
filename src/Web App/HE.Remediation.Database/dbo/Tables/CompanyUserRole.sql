@@ -1,6 +1,0 @@
-﻿CREATE TABLE [dbo].[CompanyUserRole]
-(
-	[CompanyId] UNIQUEIDENTIFIER NOT NULL,
-	[UserId]	UNIQUEIDENTIFIER NOT NULL,
-	[Role]		NVARCHAR(150)
-);

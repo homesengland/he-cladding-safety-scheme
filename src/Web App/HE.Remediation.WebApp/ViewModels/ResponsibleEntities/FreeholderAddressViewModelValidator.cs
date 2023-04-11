@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using HE.Remediation.WebApp.CustomPropertyValidators;
 
 namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
 {

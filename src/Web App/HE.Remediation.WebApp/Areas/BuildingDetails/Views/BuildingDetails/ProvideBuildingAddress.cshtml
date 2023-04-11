@@ -1,6 +1,6 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
 @using HE.Remediation.Core.Enums
-@model HE.Remediation.WebApp.ViewModels.BuildingDetails.ProvideBuildingAddressViewModel
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeEntryViewModel
 
 @{
     ViewData["Title"] = "Provide building address";
@@ -8,51 +8,33 @@
         ? Url.Action("NonResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" })
         : Url.Action("ResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" });
     ViewData["FullWidth"] = false;
+
+    ViewData["ReturnUrl"] = "CompanyAddress";
+    ViewData["ReturnActionUrl"] = "CompanyAddress";
+    ViewData["ReturnControllerUrl"] = @ViewContext.RouteData.Values["controller"].ToString();
+
 }
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="NameNumber" />
-        <govuk-error-summary-item asp-for="AddressLine1" />
-        <govuk-error-summary-item asp-for="AddressLine2" />
-        <govuk-error-summary-item asp-for="City" />
-        <govuk-error-summary-item asp-for="LocalAuthority" />
-        <govuk-error-summary-item asp-for="County" />
-        <govuk-error-summary-item asp-for="Postcode" />
+        <govuk-error-summary-item asp-for="PostCode" />        
     </govuk-error-summary>
 }
 <h1 class="govuk-heading-xl">
     Provide building address
 </h1>
-<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ProvideBuildingAddress">
+
+
+<form method="get" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="PostCodeItemEntered">        
     <govuk-fieldset>
-        <govuk-input asp-for="NameNumber" input-class="govuk-input--width-20">
-            <govuk-input-label class="govuk-label--s">Building name or number</govuk-input-label>
-        </govuk-input>
-        <govuk-input asp-for="AddressLine1" input-class="govuk-input--width-20">
-            <govuk-input-label class="govuk-label--s">Address Line 1</govuk-input-label>
-        </govuk-input>
-        <govuk-input asp-for="AddressLine2" input-class="govuk-input--width-20">
-            <govuk-input-label class="govuk-label--s">Address Line 2 (optional)</govuk-input-label>
-        </govuk-input>
-        <govuk-input asp-for="City" input-class="govuk-input--width-20">
-            <govuk-input-label class="govuk-label--s">Town or city</govuk-input-label>
-        </govuk-input>
-        <govuk-input asp-for="LocalAuthority" input-class="govuk-input--width-20">
-            <govuk-input-label class="govuk-label--s">Local Authority</govuk-input-label>
-        </govuk-input>
-        <govuk-input asp-for="County" input-class="govuk-input--width-20">
-            <govuk-input-label class="govuk-label--s">County (optional)</govuk-input-label>
-        </govuk-input>
-        <govuk-input asp-for="Postcode" input-class="govuk-input--width-5">
-            <govuk-input-label class="govuk-label--s">Postcode</govuk-input-label>
-        </govuk-input>
+        <partial name="_PostCodeLookupPartial" view-data="ViewData" />        
     </govuk-fieldset>
-
+                
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
-
+    <a href="@Url.Action("ProvideBuildingAddressManual", "BuildingDetails", new { area = "BuildingDetails"})" class="govuk-link" >Enter Address Manually</a>
     <div class="comp-btn-group">
-    <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
-    <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
-    </div>
-</form>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.FindAddress)">Find Address</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>        
+</form>    
+

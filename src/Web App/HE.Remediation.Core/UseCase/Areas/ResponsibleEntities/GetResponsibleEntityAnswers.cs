@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
@@ -7,16 +8,20 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
     {
         private readonly IDbConnectionWrapper _connection;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IApplicationRepository _applicationRepository;
 
-        public GetResponsibleEntityAnswersHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+        public GetResponsibleEntityAnswersHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IApplicationRepository applicationRepository)
         {
             _connection = connection;
             _applicationDataProvider = applicationDataProvider;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<GetResponsibleEntityAnswersResponse> Handle(GetResponsibleEntityAnswersRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
+
+            var applicationStatus = await _applicationRepository.GetApplicationStatus(applicationId);
 
             var answers = await _connection.QuerySingleOrDefaultAsync<GetResponsibleEntityAnswersResponse>("GetResponsibleEntityAnswers",
                 new
@@ -32,6 +37,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             if (answers is not null)
             {
                 answers.EvidenceFiles = evidenceFiles.ToList();
+                answers.ReadOnly = applicationStatus.DeclarationConfirmed;
             }
 
             return answers ?? new GetResponsibleEntityAnswersResponse();
@@ -83,6 +89,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         public string FreeholderCompanyDetails { get; set; }
         public string FreeholderDetails { get; set; }
         public string FreeholderAddress { get; set; }
+        public bool ReadOnly { get; set; }
     }
 
     public class EvidenceFile

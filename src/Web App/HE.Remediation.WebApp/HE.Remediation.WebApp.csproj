@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Application\Data\**" />
+    <Compile Remove="Areas\RegisteredProvider\**" />
     <Content Remove="Areas\Application\Data\**" />
+    <Content Remove="Areas\RegisteredProvider\**" />
     <EmbeddedResource Remove="Areas\Application\Data\**" />
+    <EmbeddedResource Remove="Areas\RegisteredProvider\**" />
     <None Remove="Areas\Application\Data\**" />
+    <None Remove="Areas\RegisteredProvider\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +34,7 @@
     <PackageReference Include="GovUk.Frontend.AspNetCore" Version="0.5.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
@@ -41,7 +46,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\AlternativeFundingRoutes\Controllers\" />
-    <Folder Include="Areas\RegisteredProvider\" />
+    <Folder Include="Attributes\Routing\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
 

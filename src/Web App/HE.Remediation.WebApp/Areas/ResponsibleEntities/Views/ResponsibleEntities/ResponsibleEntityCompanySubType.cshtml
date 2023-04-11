@@ -1,0 +1,40 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityCompanySubTypeViewModel
+@{
+    ViewData["Title"] = "What type of company is the Responsible Entity?";
+    ViewData["BackLink"] = Url.Action("ResponsibleEntityCompanyType");    
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="OrganisationSubType" />
+        <govuk-error-summary-item asp-for="OrganisationSubTypeDescription" />
+    </govuk-error-summary>
+}
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityCompanySubType">
+    <govuk-radios asp-for="OrganisationSubType">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationSubType.Individual)">Individual</govuk-radios-item>
+        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationSubType.PrivateTrust)">Private Trust</govuk-radios-item>
+        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationSubType.OtherCompanyType)">
+            Other company type
+            <govuk-radios-item-conditional>
+                <govuk-input asp-for="OrganisationSubTypeDescription" input-class="govuk-input--width-10">
+                    <govuk-input-label>Please describe company type</govuk-input-label>
+                </govuk-input>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>        
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

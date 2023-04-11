@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HE.Remediation.Entity", "HE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HE.Remediation.Core", "HE.Remediation.Core\HE.Remediation.Core.csproj", "{DD203751-859D-425A-BE63-5610E78F5AA4}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "HE.Remediation.Database", "HE.Remediation.Database\HE.Remediation.Database.sqlproj", "{ED67BE43-351E-4CE6-8356-7852D6097047}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HE.Remediation.Core.Tests", "HE.Remediation.Core.Tests\HE.Remediation.Core.Tests.csproj", "{93DD25F0-2B70-4989-A367-78ED6A6ADF62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +29,10 @@ Global
 		{DD203751-859D-425A-BE63-5610E78F5AA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD203751-859D-425A-BE63-5610E78F5AA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD203751-859D-425A-BE63-5610E78F5AA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED67BE43-351E-4CE6-8356-7852D6097047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED67BE43-351E-4CE6-8356-7852D6097047}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED67BE43-351E-4CE6-8356-7852D6097047}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{ED67BE43-351E-4CE6-8356-7852D6097047}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED67BE43-351E-4CE6-8356-7852D6097047}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED67BE43-351E-4CE6-8356-7852D6097047}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{93DD25F0-2B70-4989-A367-78ED6A6ADF62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93DD25F0-2B70-4989-A367-78ED6A6ADF62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93DD25F0-2B70-4989-A367-78ED6A6ADF62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93DD25F0-2B70-4989-A367-78ED6A6ADF62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

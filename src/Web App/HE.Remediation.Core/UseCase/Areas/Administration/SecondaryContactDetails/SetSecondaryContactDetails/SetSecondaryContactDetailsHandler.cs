@@ -3,6 +3,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
 using MediatR;
+using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.SetSecondaryContactDetails;
 
@@ -35,20 +36,39 @@ public class SetSecondaryContactDetailsHandler : IRequestHandler<SetSecondaryCon
                 "Cannot set current user secondary contact details because the current user could be determined.");
         }
 
-        await _db.ExecuteAsync("InsertOrUpdateSecondaryContactDetails", new 
-        { 
-            userId, 
-            request.Name,                
-            request.ContactNumber,
-            request.EmailAddress
-        });
+        if ((request.Id == null) || (request.Id == Guid.Empty))
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await _db.ExecuteAsync("InsertSecondaryContactDetails", new
+                {
+                    userId,
+                    request.Name,
+                    request.ContactNumber,
+                    request.EmailAddress
+                });
 
-        await _userService.SetUserProfileStageCompletionStatus(
-            EUserProfileStage.SecondaryContactInformation,
-            userId.Value,
-            true);
+                await _userService.SetUserProfileStageCompletionStatus(
+                    EUserProfileStage.SecondaryContactInformation,
+                    userId.Value,
+                    true);
 
-        _applicationDataProvider.SetUserProfileStageCompletionStatus(
-            EUserProfileStage.SecondaryContactInformation);
+                _applicationDataProvider.SetUserProfileStageCompletionStatus(
+                    EUserProfileStage.SecondaryContactInformation);
+                
+                scope.Complete();
+            }
+        }
+        else
+        {
+            await _db.ExecuteAsync("UpdateSecondaryContactDetails", new 
+            { 
+                request.Id,
+                userId, 
+                request.Name,                
+                request.ContactNumber,
+                request.EmailAddress
+            });
+        }
     }
 }

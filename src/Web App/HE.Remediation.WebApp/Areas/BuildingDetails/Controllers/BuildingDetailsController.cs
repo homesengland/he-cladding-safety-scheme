@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperAddressInformation;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperInformation;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.SetBuildingDeveloperAddressInformation;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.SetBuildingDeveloperInformation;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.GetBuildingPartOfDevelopment;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.SetBuildingPartOfDevelopment;
@@ -21,10 +23,12 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.NonResidentialUnits.GetN
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.NonResidentialUnits.SetNonResidentialUnits;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddress;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddressManual;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.GetResidentialUnits;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.SetResidentialUnits;
-using HE.Remediation.WebApp.Authorisation;
+using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using HE.Remediation.WebApp.ViewModels.BuildingDetails;
+using HE.Remediation.WebApp.ViewModels.Location;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,17 +36,19 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 {
     [Area("BuildingDetails")]
     [Route("BuildingDetails")]
-    [CookieApplicationAuthorise]
-    public class BuildingDetailsController : Controller
+    public class BuildingDetailsController : StartController
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
 
         public BuildingDetailsController(ISender sender, IMapper mapper)
+            : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
         }
+
+        protected override IActionResult DefaultStart => RedirectToAction("WhatYoullNeed", "BuildingDetails", new { Area = "BuildingDetails" });
 
         #region What You'll Need
         [HttpGet(nameof(WhatYoullNeed))]
@@ -259,23 +265,93 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
         }
         #endregion
 
+        [HttpPost(nameof(PostCodeItemSelected))]
+        public async Task<IActionResult> PostCodeItemSelected(string returnUrl, PostCodeSelectionViewModel viewModel, ESubmitAction submitAction)
+        {
+            var validator = new PostCodeSelectionViewModelValidator();
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, String.Empty);
+                // need to set these properties on the output model if there is an error
+                return View("ProvideBuildingAddressResults", viewModel);
+            }
+
+            var request = _mapper.Map<SetBuildingAddressRequest>(viewModel);
+            await _sender.Send(request);
+            
+            if (submitAction == ESubmitAction.Continue)
+            {
+                var action = viewModel.ReturnUrl is null
+                             ? nameof(BuildingPartOfDevelopment)
+                             : viewModel.ReturnUrl;
+
+                return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            }
+            else if (submitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            return View("ProvideBuildingAddress", viewModel);
+        }
+
+        [HttpGet(nameof(PostCodeItemEntered))]
+        public async Task<IActionResult> PostCodeItemEntered(string returnUrl, PostCodeEntryViewModel viewModel, ESubmitAction submitAction)
+        {
+            var validator = new PostCodeEntryViewModelValidator();
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, String.Empty);
+                return View("ProvideBuildingAddress", viewModel);
+            }
+
+            if (submitAction == ESubmitAction.FindAddress)
+            {
+                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
+                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
+
+                if (!newMappedModel.HaveResults)
+                {                    
+                    var manualViewModel = _mapper.Map<PostCodeManualViewModel>(response);
+                    manualViewModel.Postcode = viewModel.PostCode;
+                    return View("ProvideBuildingAddressManual", manualViewModel);
+                }
+                return View("ProvideBuildingAddressResults", newMappedModel);
+            }
+            
+            return View("ProvideBuildingAddress", viewModel);
+        }
+        
+        [HttpGet(nameof(ProvideBuildingAddressManual))]
+        public async Task<IActionResult> ProvideBuildingAddressManual(string returnUrl, string postCode)
+        {
+            var response = await _sender.Send(GetBuildingAddressRequest.Request);
+
+            var viewModel = _mapper.Map<PostCodeManualViewModel>(response);
+            return View(viewModel);
+        }
+
         #region Provide Building Address
         [HttpGet(nameof(ProvideBuildingAddress))]
         public async Task<IActionResult> ProvideBuildingAddress(string returnUrl)
         {
             var response = await _sender.Send(GetBuildingAddressRequest.Request);
 
-            var viewModel = _mapper.Map<ProvideBuildingAddressViewModel>(response);
-
+            var viewModel = _mapper.Map<PostCodeEntryViewModel>(response);                        
             viewModel.ReturnUrl = returnUrl;
 
             return View(viewModel);
-        }
+        }        
 
-        [HttpPost(nameof(ProvideBuildingAddress))]
-        public async Task<IActionResult> ProvideBuildingAddress(ProvideBuildingAddressViewModel viewModel, ESubmitAction submitAction)
+        [HttpPost(nameof(ProvideBuildingAddressManual))]
+        public async Task<IActionResult> ProvideBuildingAddressManual(PostCodeManualViewModel viewModel, ESubmitAction submitAction)
         {
-            var validator = new ProvideBuildingAddressViewModelValidator();
+            var validator = new PostCodeManualViewModelValidator(true);
             var validationResult = await validator.ValidateAsync(viewModel);
 
             if (!validationResult.IsValid)
@@ -283,8 +359,8 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 validationResult.AddToModelState(ModelState, String.Empty);
                 return View(viewModel);
             }
-
-            var request = _mapper.Map<SetBuildingAddressRequest>(viewModel);
+            
+            var request = _mapper.Map<SetBuildingAddressManualRequest>(viewModel);
             await _sender.Send(request);
 
             if (submitAction == ESubmitAction.Exit)
@@ -333,23 +409,62 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 return RedirectToAction("Index", "TaskList", new { Area = "Application" });
             }
 
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return RedirectToAction(model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" });                
+            }            
+            if (model.DoYouKnowOriginalDeveloper!.Value)
+            {
+                return RedirectToAction(nameof(DeveloperInBusiness), "BuildingDetails", new { Area = "BuildingDetails" });
+            }
+                        
+            return RedirectToAction("CheckYourAnswers", new { returnUrl = "BuildingDeveloperInformation" });           
+        }
+
+        [HttpGet(nameof(BuildingDeveloperInformationAddress))]
+        public async Task<IActionResult> BuildingDeveloperInformationAddress(string returnUrl)
+        {
+            var response = await _sender.Send(GetBuildingDeveloperInformationAddressRequest.Request);
+
+            var viewModel = _mapper.Map<BuildingDeveloperInformationAddressViewModel>(response);
+
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(BuildingDeveloperInformationAddress))]
+        public async Task<IActionResult> BuildingDeveloperInformationAddress(BuildingDeveloperInformationAddressViewModel model)
+        {
+            var validator = new BuildingDeveloperInformationAddressViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetBuildingDeveloperInformationAddressRequest>(model);
+            await _sender.Send(request);
+
             var action = !string.IsNullOrEmpty(model.ReturnUrl)
                 ? model.ReturnUrl
-                : model.DoYouKnowOriginalDeveloper!.Value
-                    ? nameof(DeveloperInBusiness)
-                    : nameof(CheckYourAnswers);
+                : nameof(DeveloperInBusiness);
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return RedirectToAction(action);            
         }
+
+        
         #endregion
 
         #region Developer In Business
         [HttpGet(nameof(DeveloperInBusiness))]
-        public async Task<IActionResult> DeveloperInBusiness()
+        public async Task<IActionResult> DeveloperInBusiness(string returnUrl)
         {
             var response = await _sender.Send(GetDeveloperInBusinessRequest.Request);
-
-            return View(_mapper.Map<DeveloperInBusinessViewModel>(response));
+            var viewModel = _mapper.Map<DeveloperInBusinessViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
         }
 
         [HttpPost(nameof(DeveloperInBusiness))]
@@ -370,20 +485,21 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             {
                 return RedirectToAction("Index", "TaskList", new { Area = "Application" });
             }
-
+            
             return model.IsOriginalDeveloperStillInBusiness == EApplicationDeveloperInBusinessType.Yes
                 ? RedirectToAction("DeveloperContacted", "BuildingDetails", new { Area = "BuildingDetails" })
-                : RedirectToAction("CheckYourAnswers", "BuildingDetails", new { Area = "BuildingDetails" });
+                : RedirectToAction("CheckYourAnswers", new { returnUrl = "DeveloperInBusiness" });
         }
         #endregion
 
         #region Developer Contacted
         [HttpGet(nameof(DeveloperContacted))]
-        public async Task<IActionResult> DeveloperContacted()
+        public async Task<IActionResult> DeveloperContacted(string returnUrl)
         {
             var response = await _sender.Send(GetDeveloperContactedRequest.Request);
-
-            return View(_mapper.Map<DeveloperContactedViewModel>(response));
+            var viewModel = _mapper.Map<DeveloperContactedViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
         }
 
         [HttpPost(nameof(DeveloperContacted))]
@@ -399,9 +515,9 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 
             var request = _mapper.Map<SetDeveloperContactedRequest>(model);
             await _sender.Send(request);
-
+            
             return model.SubmitAction == ESubmitAction.Continue
-                ? RedirectToAction("CheckYourAnswers", "BuildingDetails", new { Area = "BuildingDetails" })
+                ? RedirectToAction("CheckYourAnswers", new { returnUrl = "DeveloperContacted" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion
@@ -437,11 +553,13 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 
         #region Check Your Answers
         [HttpGet(nameof(CheckYourAnswers))]
-        public async Task<IActionResult> CheckYourAnswers()
-        {
+        public async Task<IActionResult> CheckYourAnswers(string returnURL)
+        {            
             var response = await _sender.Send(GetBuildingDetailsAnswersRequest.Request);
 
-            return View(_mapper.Map<CheckYourAnswersViewModel>(response));
+            var model = _mapper.Map<CheckYourAnswersViewModel>(response);
+            model.ReturnURL = returnURL;
+            return View(model);
         }
 
         [HttpPost(nameof(CheckYourAnswers))]

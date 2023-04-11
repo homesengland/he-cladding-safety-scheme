@@ -4,6 +4,7 @@ using GovUk.Frontend.AspNetCore;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Middleware;
 using Microsoft.AspNetCore.HttpOverrides;
+using Polly;
 
 namespace HE.Remediation.WebApp
 {
@@ -39,7 +40,23 @@ namespace HE.Remediation.WebApp
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
 
+            int retryCount = Int32.Parse(Environment.GetEnvironmentVariable("APIM_RETRY_COUNT") ?? "5");
+            int delayBetweenRetries = Int32.Parse(Environment.GetEnvironmentVariable("APIM_DELAY_BETWEEN_RETRY_MS") ?? "500");
 
+            builder.Services.AddHttpClient("ApimClient", apimClient =>
+            {
+                apimClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("BASE_APIM_ENDPOINT"));
+
+                apimClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key",
+                                                     Environment.GetEnvironmentVariable("LOCATION_SUBSCRIPTION_KEY"));
+
+                apimClient.DefaultRequestHeaders.Add("X-APIM-PROXY-KEY",
+                    Environment.GetEnvironmentVariable("APIM_PROXY_API_KEY"));
+            })
+            .SetHandlerLifetime(TimeSpan.FromMinutes(2))
+            .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(retryCount,
+                                                                              retryNumber => TimeSpan.FromMilliseconds(delayBetweenRetries)));
+            
             var mvcBuilder = builder.Services.AddMvc();
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -93,14 +110,19 @@ namespace HE.Remediation.WebApp
                 pattern: "AlternativeFundingRoutes/{controller=Start}/{action=Index}/{id?}");
 
             app.MapAreaControllerRoute(
-                name: "RegisteredProvider",
-                areaName: "RegisteredProvider",
-                pattern: "RegisteredProvider/{controller=Start}/{action=Index}/{id?}");
+                name: "LeaseholderArea",
+                areaName: "Leaseholder",
+                pattern: "Leaseholder/{controller=Start}/{action=Index}/{id?}");
 
             app.MapAreaControllerRoute(
                 name: "FireRiskAppraisalArea",
                 areaName: "FireRiskAppraisal",
                 pattern: "FireRiskAppraisal/{controller=Start}/{action=Index}/{id?}");
+
+            app.MapAreaControllerRoute(
+                name: "PreTenderSupport",
+                areaName: "PreTenderSupport",
+                pattern: "PreTenderSupport/{controller=Start}/{action=Index}/{id?}");
 
             app.MapAreaControllerRoute(
                 name: "AdministrationArea",

@@ -1,0 +1,78 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Interface
+@model HE.Remediation.WebApp.ViewModels.Administration.AdditionalContactsViewModel
+
+@{
+    ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = true;
+    ViewData["AddedHeading"] = "You have added " + @Model.ContactDetails.Count.ToString() + " additional ";
+    ViewData["AddedHeading"] += (@Model.ContactDetails.Count > 1) ? "contacts" : "contact";    
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        @if (!_adp.IsEnforcedFlow())
+        {
+            <a href="/Administration" class="govuk-back-link">Back</a>
+        }
+        <main class="govuk-main-wrapper">
+            <span class="govuk-caption-xl">Complete your profile</span>
+            <h1 class="govuk-heading-xl">@ViewData["AddedHeading"]</h1>
+
+            @if ((Model.ContactDetails != null) && (Model.ContactDetails.Count > 0))
+            {                    
+                @for (var detailsCounter = 0; detailsCounter < Model.ContactDetails.Count; detailsCounter++)
+                {
+                    <govuk-summary-list>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Additional contact @((detailsCounter+1).ToString())
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-action href="@Url.Action("SecondaryContactDetails", "Account", new { Id = @Model.ContactDetails[detailsCounter].Id.ToString() })" visually-hidden-text="name">
+                                Change                                    
+                            </govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action href="@Url.Action("DeleteAdditionalContact", "Account", new { Id = @Model.ContactDetails[detailsCounter].Id.ToString() })" visually-hidden-text="name">
+                                Remove
+                            </govuk-summary-list-row-action>
+                        </govuk-summary-list-row>
+                    </govuk-summary-list>
+
+                    <govuk-summary-list>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Contact name
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.ContactDetails[detailsCounter].Name
+                            </govuk-summary-list-row-value>                                
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Contact number
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.ContactDetails[detailsCounter].ContactNumber
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Email Address
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @Model.ContactDetails[detailsCounter].EmailAddress
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                    </govuk-summary-list>
+                }                                        
+            }
+            
+            <govuk-button href="@Url.Action("SecondaryContactDetails", "Account", new {Area = "Administration"})" class="govuk-button--secondary">Add another contact</govuk-button>
+                
+            <br />
+            <govuk-button href="@Url.Action("Index", "Account", new {Area = "Administration"})">Continue</govuk-button>
+
+            <div>
+                <a class="govuk-link" href="@Url.Action("Index", "Account")">Cancel and exit</a>
+            </div>
+        </main>
+    </div>
+</div>

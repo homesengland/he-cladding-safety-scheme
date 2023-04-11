@@ -77,9 +77,12 @@
                 <div class="govuk-grid-column-one-third">   
                     <hr class="related-content-separator-line" />
                     <h2 class="govuk-heading-m">Related items</h2>
-                    <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Sign in to continue or manage your existing grant application</a>
-                    <br/><br/>
-                    <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Create an account</a>
+
+                    <nav role="navigation">
+                        <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Sign in to continue or manage your existing grant application</a>
+                        <br/><br/>
+                        <a asp-action="CreateAccount" asp-controller="Authentication" asp-area="" class="govuk-link">Create an account</a>
+                    </nav>
                 </div>
             </div>
         </main>

@@ -27,7 +27,10 @@ public class UserService : IUserService
             userProfileCompletionModel.IsResponsibleEntityTypeSelectionComplete,
             userProfileCompletionModel.IsCompanyDetailsComplete,
             userProfileCompletionModel.IsCompanyAddressComplete,
-            userProfileCompletionModel.IsSecondaryContactInformationComplete
+            userProfileCompletionModel.IsSecondaryContactInformationComplete,
+            userProfileCompletionModel.IsSecondaryContactSelectionComplete,
+            userProfileCompletionModel.IsContactConsentComplete,
+            userProfileCompletionModel.IsWantSecondaryContactComplete
         });
 
     public async Task SetUserProfileStageCompletionStatus(EUserProfileStage profileStage, Guid userId, bool isComplete)
@@ -58,6 +61,18 @@ public class UserService : IUserService
 
             case EUserProfileStage.SecondaryContactInformation:
                 profileStageCompletion.IsSecondaryContactInformationComplete = isComplete;
+                break;
+
+            case EUserProfileStage.SecondaryContactSelection:
+                profileStageCompletion.IsSecondaryContactSelectionComplete = isComplete;
+                break;
+
+            case EUserProfileStage.ContactInfoConsent:
+                profileStageCompletion.IsContactConsentComplete = isComplete;
+                break;
+
+            case EUserProfileStage.WantSecondaryContact :
+                profileStageCompletion.IsWantSecondaryContactComplete = isComplete;
                 break;
 
             default:

@@ -14,6 +14,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public ETaskStatus ApplicationBankDetailsStatusId { get; set; }
         public ETaskStatus ConfirmDeclarationStatusId { get; set; }
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
+        public string BackLink { get; set; }
 
         public bool Phase2ReadyForDeclaration()
         {

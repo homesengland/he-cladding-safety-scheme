@@ -11,7 +11,7 @@ namespace HE.Remediation.Core.Providers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDataProtector _protector;
-        private const string CookieName = "AppData";
+        private const string CookieName = "AppData";        
         
         private enum CookieValueTypes : int
         {
@@ -32,6 +32,11 @@ namespace HE.Remediation.Core.Providers
 
         public string GetCookieName => CookieName;
 
+        /// <summary>
+        /// Checks if we are on the enforced path - hence where the system controls our flow from start to
+        /// finish. 
+        /// </summary>
+        /// <returns></returns>
         public bool IsEnforcedFlow()
         {
             UserProfileCompletionModel profileCompletion = GetProfileCompletion();
@@ -50,9 +55,12 @@ namespace HE.Remediation.Core.Providers
                 return true;
             }
 
-            // A profile has been chosen so just simply see if we have completed our profile by 
-            // seeing if the last sequence event has been completed
-            return (!profileCompletion.IsSecondaryContactInformationComplete);            
+            if (profileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company)
+            {
+                return (profileCompletion.IsSecondaryContactInformationComplete == false);            
+            }
+
+            return (profileCompletion.IsWantSecondaryContactComplete == false);
         }
 
         public Guid GetApplicationId()
@@ -167,6 +175,23 @@ namespace HE.Remediation.Core.Providers
 
                     profileCompletion.IsSecondaryContactInformationComplete = true;
                     break;
+                case EUserProfileStage.SecondaryContactSelection:
+
+                    profileCompletion.IsSecondaryContactSelectionComplete = true;
+                    break;
+                case EUserProfileStage.ContactInfoConsent:
+
+                    profileCompletion.IsContactConsentComplete = true;
+                    break;
+                case EUserProfileStage.WantSecondaryContact:
+
+                    profileCompletion.IsWantSecondaryContactComplete = true;
+                    break;
+                case EUserProfileStage.UserAddedSecondaryContact:
+
+                    profileCompletion.WantedToAddSecondaryContact = true;
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(profileStage));
             }
@@ -204,6 +229,22 @@ namespace HE.Remediation.Core.Providers
                 case EUserProfileStage.SecondaryContactInformation:
 
                     profileCompletion.IsSecondaryContactInformationComplete = true;
+                    break;
+                case EUserProfileStage.SecondaryContactSelection:
+
+                    profileCompletion.IsSecondaryContactSelectionComplete = true;
+                    break;
+                case EUserProfileStage.ContactInfoConsent:
+
+                    profileCompletion.IsContactConsentComplete = true;
+                    break;
+                case EUserProfileStage.WantSecondaryContact:
+
+                    profileCompletion.IsWantSecondaryContactComplete = true;
+                    break;
+                case EUserProfileStage.UserAddedSecondaryContact:
+
+                    profileCompletion.WantedToAddSecondaryContact = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(profileStage));
@@ -308,7 +349,7 @@ namespace HE.Remediation.Core.Providers
             };
 
             var encryptedAppId = _protector.Protect(value);
-            _httpContextAccessor.HttpContext?.Response.Cookies.Append(CookieName, encryptedAppId, cookieOptions);            
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append(CookieName, encryptedAppId, cookieOptions);                        
         }
 
         private void SetCookiePart(int index, string value)
@@ -330,6 +371,10 @@ namespace HE.Remediation.Core.Providers
             profileCompletion.IsCompanyDetailsComplete = (profileCompletionValue & 8) == 8;
             profileCompletion.IsCompanyAddressComplete = (profileCompletionValue & 16) == 16;
             profileCompletion.IsSecondaryContactInformationComplete = (profileCompletionValue & 32) == 32;
+            profileCompletion.IsSecondaryContactSelectionComplete = (profileCompletionValue & 64) == 64;
+            profileCompletion.IsContactConsentComplete = (profileCompletionValue & 128) == 128;
+            profileCompletion.IsWantSecondaryContactComplete = (profileCompletionValue & 256) == 256;
+            profileCompletion.WantedToAddSecondaryContact = (profileCompletionValue & 512) == 512;
             return profileCompletion;
         }
 
@@ -337,11 +382,15 @@ namespace HE.Remediation.Core.Providers
         {
             int profileCompletionValue = 0;            
             profileCompletionValue |= (profileCompletion.IsContactInformationComplete ? 1 : 0);
-            profileCompletionValue |= (profileCompletion.IsCorrespondenceAddressComplete ? 2 : 0);
+            profileCompletionValue |= (profileCompletion.IsCorrespondenceAddressComplete == true ? 2 : 0);
             profileCompletionValue |= (profileCompletion.IsResponsibleEntityTypeSelectionComplete ? 4 : 0);            
             profileCompletionValue |= (profileCompletion.IsCompanyDetailsComplete == true) ? 8 : 0;
             profileCompletionValue |= (profileCompletion.IsCompanyAddressComplete == true) ? 16 : 0;
-            profileCompletionValue |= (profileCompletion.IsSecondaryContactInformationComplete ? 32 : 0);            
+            profileCompletionValue |= (profileCompletion.IsSecondaryContactInformationComplete == true ? 32 : 0);            
+            profileCompletionValue |= (profileCompletion.IsSecondaryContactSelectionComplete == true ? 64 : 0);     
+            profileCompletionValue |= (profileCompletion.IsContactConsentComplete == true ? 128 : 0);            
+            profileCompletionValue |= (profileCompletion.IsWantSecondaryContactComplete == true ? 256 : 0);            
+            profileCompletionValue |= (profileCompletion.WantedToAddSecondaryContact == true ? 512 : 0);            
             return profileCompletionValue;
         }
 

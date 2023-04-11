@@ -1,22 +1,85 @@
-﻿@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.UploadFireRiskAppraisalReportViewModel
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.UploadFireRiskAppraisalReportViewModel
 
 @{
     ViewData["Title"] = "Upload fire risk appraisal report";
     ViewData["BackLink"] = Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
     ViewData["FullWidth"] = false;
+
+    var fraewAcceptedTypes = Model.FraewAcceptedFileTypes?.Any() == true ? string.Join(",", Model.FraewAcceptedFileTypes) : "*";
+    var fraewSummaryTypes = Model.FraewSummaryAcceptedFileTypes?.Any() == true ? string.Join(",", Model.FraewSummaryAcceptedFileTypes) : "*";
+
+    var fraewFile = Model.AddedFraew;
+    var summaryFile = Model.AddedSummary;
 }
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="File"/>
+        <govuk-error-summary-item asp-for="Fraew"/>
+        <govuk-error-summary-item asp-for="FraewSummary"/>
     </govuk-error-summary>
 }
-<h1 class="govuk-heading-xl">Upload fire risk appraisal report</h1>
+<h1 class="govuk-heading-xl">Upload fire risk appraisal summary and report</h1>
 
-<p class="govuk-body">File must be smaller than 30MB.</p>
+<p class="govuk-body">Each file must be smaller than 50MB.</p>
 
 <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="UploadFireRiskAppraisalReport" method="post" enctype="multipart/form-data">
-    @await Html.PartialAsync("FileUpload", Model)
+    <h3 class="govuk-heading-m">Upload FRAEW Report</h3>
+    @if (@Model.AddedFraew is null)
+    {
+        <govuk-file-upload asp-for="Fraew" name="Fraew" input-accept="@fraewAcceptedTypes">
+            <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
+        </govuk-file-upload>
+        
+    }
+    else
+    {
+        <h2 class="govuk-heading-m">Files added</h2>
+        <govuk-summary-list>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        File
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.AddedFraew.Name @($"{@Model.AddedFraew.FileSize}")
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Model.DeleteEndpoint?fileId=@Model.AddedFraew.Id">Delete</govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+    
+        </govuk-summary-list>
+
+        <input type="hidden" name="AddedFraew.Id" value="@fraewFile.Id"/>
+        <input type="hidden" name="AddedFraew.Name" value="@fraewFile.Name"/>
+        <input type="hidden" name="AddedFraew.FileSize" value="@fraewFile.FileSize"/>
+    }
+    <h3 class="govuk-heading-m">Upload FRAEW Summary</h3>
+    @if (@Model.AddedSummary is null)
+    {
+        <govuk-file-upload asp-for="FraewSummary" name="FraewSummary" input-accept="@fraewSummaryTypes">
+            <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
+        </govuk-file-upload>
+        
+    }
+    else
+    {
+        <h2 class="govuk-heading-m">Files added</h2>
+        <govuk-summary-list>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        File
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.AddedSummary.Name @($"{@Model.AddedSummary.FileSize}")
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Model.DeleteEndpoint?fileId=@Model.AddedSummary.Id">Delete</govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+    
+        </govuk-summary-list>
+
+        <input type="hidden" name="AddedSummary.Id" value="@summaryFile.Id"/>
+        <input type="hidden" name="AddedSummary.Name" value="@summaryFile.Name"/>
+        <input type="hidden" name="AddedSummary.FileSize" value="@summaryFile.FileSize"/>
+    }
 
     <div class="comp-btn-group">
     <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>

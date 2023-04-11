@@ -1,0 +1,25 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model  HE.Remediation.WebApp.ViewModels.Leaseholder.LeaseHolderEvidenceViewModel
+@{
+    ViewData["Title"] = "Upload evidence of your leaseholder and tenant update";
+    ViewData["BackLink"] = Url.Action("WhatYoullNeed", "Leaseholder", new { Area = "Leaseholder" });
+}
+
+<govuk-error-summary>
+    <govuk-error-summary-item asp-for="File" />
+</govuk-error-summary>
+
+<h1 class="govuk-heading-xl">
+    Upload evidence of your leaseholder and tenant update 
+</h1>
+
+<p class="govuk-body">You can upload up to 5 files.</p>
+<p class="govuk-body">Each file must be smaller than 20MB. and a .pdf file</p>
+<form method="post" asp-area="Leaseholder" asp-controller="Leaseholder" asp-action="Evidence" enctype="multipart/form-data">
+    @await Html.PartialAsync("FileUpload", Model)
+    <br/>
+    <govuk-button class="gov-uk-link" name="SubmitAction" value="@(ESubmitAction.Continue)" type="submit">Save and Continue</govuk-button>
+</form>

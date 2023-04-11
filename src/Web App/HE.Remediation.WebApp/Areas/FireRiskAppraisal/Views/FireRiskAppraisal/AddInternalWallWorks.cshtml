@@ -1,0 +1,46 @@
+﻿@using HE.Remediation.Core.Interface
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.InternalWorksDetailViewModel
+
+@{
+    ViewData["Title"] = "Complete your profile";
+    ViewData["BackLink"] = Url.Action("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+    ViewData["AddedHeading"] = "What are the internal elements you are recommending?";
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Description" />
+    </govuk-error-summary>
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <h1 class="govuk-heading-xl">@ViewData["AddedHeading"]</h1>
+
+            <span class="govuk-caption-m">You can add multiple internal elements</span>
+            <br />
+            <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="AddInternalWallWorks" method="post">
+
+                <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="200">
+                    <div class="govuk-form-group">
+                        <govuk-character-count name="Description" max-length="200" asp-for="Description">
+                            <govuk-character-count-label class="govuk-label--s">
+                                Internal element @Model.ElementNo.ToString()
+                            </govuk-character-count-label>
+                        </govuk-character-count>
+                    </div>
+
+                    <div id="with-hint-info" class="govuk-hint govuk-character-count__message">
+                        You have 200 characters
+                    </div>
+                </div>
+
+                <input asp-for="ElementNo" type="hidden" value="@Model.ElementNo.ToString()" />
+
+                <br />
+                <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

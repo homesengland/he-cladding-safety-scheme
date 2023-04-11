@@ -4,5 +4,6 @@ public enum ESubmitAction
 {
     Exit = 0,
     Continue = 1,
-    Upload = 2
+    Upload = 2,
+    FindAddress = 3
 }

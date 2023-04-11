@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using HE.Remediation.Core.UseCase.Areas.Application.Submit.GetSubmit;
 using HE.Remediation.Core.UseCase.Areas.Application.Submit.SetSubmit;
-using HE.Remediation.WebApp.Authorisation;
+using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Application;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

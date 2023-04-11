@@ -1,5 +1,0 @@
-﻿CREATE TABLE [dbo].[UserEmail]
-(
-	[UserId]	UNIQUEIDENTIFIER NOT NULL,
-	[EmailId]	UNIQUEIDENTIFIER NOT NULL
-);

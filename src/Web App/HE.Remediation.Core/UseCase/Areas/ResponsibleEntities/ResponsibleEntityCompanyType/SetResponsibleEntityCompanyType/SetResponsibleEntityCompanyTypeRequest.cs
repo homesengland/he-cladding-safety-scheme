@@ -6,6 +6,5 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntit
 public class SetResponsibleEntityCompanyTypeRequest : IRequest<Unit>
 {
     public EApplicationResponsibleEntityOrganisationType? OrganisationType { get; set; }
-    public EApplicationResponsibleEntityOrganisationSubType? OrganisationSubType { get; set; }
-    public string OrganisationSubTypeDescription { get; set; }
+    
 }

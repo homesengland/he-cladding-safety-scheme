@@ -27,7 +27,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
 
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                await _dbConnection.ExecuteAsync("DeleteFraewForApplication", new { applicationId });
+                await _dbConnection.ExecuteAsync("DeleteFraewForApplication", new { request.FileId });
                 var result = await _fileRepository.DeleteFile(request.FileId);
 
                 await _fileService.DeleteFile($"{request.FileId}{result.Extension}");

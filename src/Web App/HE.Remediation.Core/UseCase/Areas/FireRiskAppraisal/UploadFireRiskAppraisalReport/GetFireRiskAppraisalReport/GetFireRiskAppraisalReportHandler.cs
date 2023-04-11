@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport
 {
-    public class GetFireRiskAppraisalReportHandler : IRequestHandler<GetFireRiskReportAppraisalReportRequest, IReadOnlyCollection<GetFireRiskAppraisalReportResponse>>
+    public class GetFireRiskAppraisalReportHandler : IRequestHandler<GetFireRiskReportAppraisalReportRequest, GetFireRiskAppraisalReportResponse>
     {
         private readonly IDbConnectionWrapper _dbConnection;
         private readonly IApplicationDataProvider _applicationDataProvider;
@@ -14,13 +14,30 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public Task<IReadOnlyCollection<GetFireRiskAppraisalReportResponse>> Handle(GetFireRiskReportAppraisalReportRequest request, CancellationToken cancellationToken)
+        public async Task<GetFireRiskAppraisalReportResponse> Handle(GetFireRiskReportAppraisalReportRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var file = _dbConnection.QueryAsync<GetFireRiskAppraisalReportResponse>("GetFireRiskAppraisalForApplication", new { applicationId });
+            var result =  new GetFireRiskAppraisalReportResponse();
 
-            return file;
+            var file = await _dbConnection.QueryAsync<FileResult, FileResult, GetFireRiskAppraisalReportResponse>("GetFireRiskAppraisalForApplication", 
+            (fraewFile, fraewSummary) =>
+            {
+               if(fraewFile is not null && fraewFile.Id != Guid.Empty)
+                {
+                    result.FraewFile = fraewFile;
+                }
+
+                if (fraewSummary is not null && fraewSummary.Id != Guid.Empty)
+                {
+                    result.SummaryFile = fraewSummary;
+                }
+
+                return result;
+
+            }, new { applicationId });
+
+            return result;
         }
     }
 }

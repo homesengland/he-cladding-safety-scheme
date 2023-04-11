@@ -42,5 +42,6 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public string FreeholderAddress { get; set; }
 
         public string ReturnUrl { get; set; }
+        public bool ReadOnly { get; set; }
     }
 }

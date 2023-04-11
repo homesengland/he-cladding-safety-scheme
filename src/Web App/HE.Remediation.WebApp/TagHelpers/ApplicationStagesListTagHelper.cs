@@ -27,7 +27,16 @@ namespace HE.Remediation.WebApp.TagHelpers
             var stageMembersList = (EApplicationStage[])Enum.GetValues(typeof(EApplicationStage));
             foreach (var stage in stageMembersList)
             {
-                var setStageSelected = (int)stage <= (int)currentStage ? "govuk-stage-list-item-selected" : "";
+                var setStageSelected = string.Empty;
+                if ((int)stage < (int)currentStage)
+                {
+                    setStageSelected = "govuk-stage-list-item-selected";
+                }
+                else if (((int)stage == (int)currentStage))
+                {
+                    setStageSelected = "govuk-stage-list-item-current";
+                }
+
                 sb.Append($"<li class=\"govuk-stage-list-item {setStageSelected} \">");
                     sb.Append("<div class=\"govuk-stage-list-item-bullet\"></div>");
                     sb.Append("<div class=\"govuk-stage-list-item-line\" ></div>");

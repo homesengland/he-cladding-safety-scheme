@@ -9,6 +9,7 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         {
             CreateMap<GetResponsibleEntityCompanyAddressResponse, ResponsibleEntityCompanyAddressViewModel>();
             CreateMap<ResponsibleEntityCompanyAddressViewModel, SetResponsibleEntityCompanyAddressRequest>();
+            CreateMap<GetResponsibleEntityCompanyAddressResponse, SetResponsibleEntityCompanyAddressRequest>();
         }
     }
 }

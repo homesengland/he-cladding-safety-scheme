@@ -8,4 +8,8 @@ public enum EUserProfileStage
     CompanyDetails,
     CompanyAddress,
     SecondaryContactInformation,
+    SecondaryContactSelection,
+    ContactInfoConsent,
+    WantSecondaryContact,
+    UserAddedSecondaryContact
 }

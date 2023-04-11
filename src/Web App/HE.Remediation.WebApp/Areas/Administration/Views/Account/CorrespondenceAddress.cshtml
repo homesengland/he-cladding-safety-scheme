@@ -1,0 +1,40 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Location.PostCodeEntryViewModel
+
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Interface
+@using HE.Remediation.WebApp.TagHelpers
+@{
+    ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = false;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        @if (!_adp.IsEnforcedFlow())
+        {
+            <a href="/Administration" class="govuk-back-link">Back</a>
+        }    
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="PostCode" />
+            </govuk-error-summary>
+
+            <span class="govuk-caption-xl">Complete your profile</span>   
+            <h1 class="govuk-heading-xl">Please provide your correspondence address</h1>                                                   
+            <p class="govuk-body">Please complete your details below.</p>
+            <p class="govuk-body">This will help autopopulate your forms on any new applications.</p>                
+            <p class="govuk-heading-m">What is your correspondence address?</p>
+
+            <form asp-area="Administration" asp-controller="Account" asp-action="CorrespondenceAddrPostCodeItemEntered" method="get">
+                
+                <partial name="_PostCodeLookupPartial" view-data="ViewData" />
+
+                <a href="@Url.Action("CorrespondenceAddressManual", "Account", new { area = "Administration"})" class="govuk-link" >Enter Address Manually</a>
+                <div class="comp-btn-group">
+                    <govuk-button name="SubmitAction" value="@(ESubmitAction.FindAddress)">Find Address</govuk-button>
+                    <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>

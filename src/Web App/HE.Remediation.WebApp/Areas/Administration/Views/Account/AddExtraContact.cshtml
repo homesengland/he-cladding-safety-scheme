@@ -1,0 +1,32 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Administration.AddExtraContactViewModel
+@{
+    ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = false;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="AddContact" />
+            </govuk-error-summary>
+
+            <span class="govuk-caption-xl">Complete your profile</span>
+            <h1 class="govuk-heading-xl">Do you wish to add an additional contact?</h1>
+            
+            <form asp-area="Administration" asp-controller="Account" asp-action="AddExtraContact" method="post">
+                <govuk-radios asp-for="AddContact">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">                            
+                        </govuk-radios-fieldset-legend>
+                    </govuk-radios-fieldset>
+                    <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+                    <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+                </govuk-radios>
+
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

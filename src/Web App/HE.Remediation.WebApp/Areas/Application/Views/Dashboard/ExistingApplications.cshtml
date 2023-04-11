@@ -3,41 +3,62 @@
 @model HE.Remediation.WebApp.ViewModels.Application.ExistingApplicationViewModel
 
 @{
-    ViewData["Title"] = "View existing applications";    
+    ViewData["Title"] = "View existing applications";
+    string search = null;
+    if (Context.Request.Query.TryGetValue("search", out var results))
+    {
+        search = results.FirstOrDefault();
+    }
+    else if (Context.Request.Query.TryGetValue("Search", out results))
+    {
+        search = results.FirstOrDefault();
+    }
 }
 
 <div class="text-center">
     <div class="govuk-width-container">
         <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
-        <main class="govuk-main-wrapper">            
-                <h1 class="govuk-heading-xl">View existing applications</h1>
-                <p class="govuk-body">View all applications shared with you. Select a row to view the building application page.</p>
+        <main class="govuk-main-wrapper">
+            <h1 class="govuk-heading-xl">View existing applications</h1>
+            <p class="govuk-body">View all applications shared with you. Select a row to view the building application page.</p>
+            
+            <form asp-area="Application" asp-controller="Dashboard" asp-action="ExistingApplications" method="get" class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half govuk-body">
+                    <label for="search">Search by Application number or Building Name</label>
+                </div>
+                <div class="govuk-grid-column-one-half">
+                    <input class="govuk-input govuk-!-width-three-quarters govuk-!-margin-right-3" id="search" name="search" value="@search" type="search" placeholder="Search by Application number or Building Name" />
+                    <govuk-button type="submit">Search</govuk-button>
+                </div>
 
-                <table class="govuk-table">
-                    <thead class="govuk-table__head">
+            </form>
+
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Building application ID</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header">Unique building name</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header">Date created</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header">Stage</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @foreach (var application in Model.ApplicationList)
+                    {
                         <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header">Building application ID</th>
-                            <th scope="col" class="govuk-table__header govuk-table__header">Unique building name</th>
-                            <th scope="col" class="govuk-table__header govuk-table__header">Date created</th>
-                            <th scope="col" class="govuk-table__header govuk-table__header">Stage</th>
-                            <th scope="col" class="govuk-table__header govuk-table__header">Status</th>
+                            <td class="govuk-table__cell govuk-table__cell"><a class="govuk-link" href="@Url.Action("ExistingApplication", "Dashboard", new { Area = "Application", applicationId = @application.ApplicationId, applicationNumber = @application.ApplicationNumber })">@application.ApplicationNumber</a></td>
+                            <td class="govuk-table__cell govuk-table__cell">@application.UniqueBuildingName</td>
+                            <td class="govuk-table__cell govuk-table__cell">@application.DateCreated.ToString("dd/MM/yy")</td>
+                            <td class="govuk-table__cell govuk-table__cell">@application.Stage.ToString().SplitCamelCase()</td>
+                            <td><application-status-badge status="@application.Status"></application-status-badge></td>
                         </tr>
-                    </thead>
-                    <tbody class="govuk-table__body">
-                            @foreach (var application in Model.ApplicationList) {
-                                <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell govuk-table__cell"><a class="govuk-link" href="@Url.Action("ExistingApplication", "Dashboard", new { Area = "Application", applicationId = @application.ApplicationId, applicationNumber = @application.ApplicationNumber })">@application.ApplicationNumber</a></td>
-                                    <td class="govuk-table__cell govuk-table__cell">@application.UniqueBuildingName</td>
-                                    <td class="govuk-table__cell govuk-table__cell">@application.DateCreated.ToString("dd/MM/yy")</td>
-                                    <td class="govuk-table__cell govuk-table__cell">@application.Stage.ToString().SplitCamelCase()</td>
-                                    <td><application-status-badge status="@application.Status"></application-status-badge></td>
-                                </tr>                                
-                            }       
-                    </tbody>
-                </table>    
-                                                   
-                <results-small-pager CurrentPage="@Model.CurrentPage" PageCount="@Model.PageCount" URIPrefix="ExistingApplications"></results-small-pager>
-           
+                    }
+                </tbody>
+            </table>
+
+            <results-small-pager current-page="@Model.CurrentPage" page-count="@Model.PageCount" search-parameter="@search" uri-prefix="ExistingApplications" />
+
         </main>
     </div>
 </div>

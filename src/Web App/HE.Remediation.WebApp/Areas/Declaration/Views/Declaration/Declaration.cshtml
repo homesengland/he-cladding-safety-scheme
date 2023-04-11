@@ -1,6 +1,7 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
 
 @{
+    ViewData["Title"] = "Declaration";
     ViewData["Backlink"] = Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
 }
 
@@ -14,6 +15,7 @@
     <li>The information I have provided is true and correct</li>
     <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice">Homes England privacy notice</a>, which explains how we'll use and share your information'</li>
     <li>I can apply for grant funding for the building in this application as a responsible entity or an authorised representative</li>
+    <li>I agree any grant received under Cladding Safety Scheme will be treated as state subsidy. More information about state subsidy can found in the guidance you have received.</li>
 </ul>
 
 <govuk-warning-text icon-fallback-text="Warning">

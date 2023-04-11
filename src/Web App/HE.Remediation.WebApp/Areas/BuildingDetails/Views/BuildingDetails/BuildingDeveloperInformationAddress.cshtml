@@ -1,0 +1,40 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.BuildingDeveloperInformationAddressViewModel
+@{
+    ViewData["Title"] = "Building developer information";
+    ViewData["BackLink"] = Url.Action("ConfirmBuildingHeight", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="OrganisationName"/>
+        <govuk-error-summary-item asp-for="NameNumber"/>
+        <govuk-error-summary-item asp-for="AddressLine1"/>
+        <govuk-error-summary-item asp-for="AddressLine2"/>
+        <govuk-error-summary-item asp-for="City"/>
+        <govuk-error-summary-item asp-for="County"/>
+        <govuk-error-summary-item asp-for="Postcode"/>
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Who the original developer for this building was?</h1>
+
+<p class="govuk-body">The details must be for the original developer of the building. The developer is classed as the original owner of the building who was responsible for the building programme and design of the building.</p>
+
+<form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="BuildingDeveloperInformationAddress" method="post">
+
+    <govuk-input asp-for="OrganisationName" input-class="govuk-input--width-20">
+        <govuk-input-label class="govuk-label--m">Organisation name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input-label class="govuk-label--m">Organisation address</govuk-input-label>
+
+    <partial name="_AddressPartial" view-data="ViewData" />
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

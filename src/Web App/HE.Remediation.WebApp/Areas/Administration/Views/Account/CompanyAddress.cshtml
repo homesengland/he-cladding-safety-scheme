@@ -1,8 +1,9 @@
 ﻿@using HE.Remediation.Core.Enums
 @using HE.Remediation.Core.Interface
-@model HE.Remediation.WebApp.ViewModels.Administration.CompanyAddressViewModel
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeEntryViewModel
 @{
     ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = false;
 }
 <div class="text-center">
     <div class="govuk-width-container">
@@ -12,12 +13,7 @@
         }                
         <main class="govuk-main-wrapper">
             <govuk-error-summary>
-                <govuk-error-summary-item asp-for="NameNumber" />
-                <govuk-error-summary-item asp-for="AddressLine1" />
-                <govuk-error-summary-item asp-for="AddressLine2" />
-                <govuk-error-summary-item asp-for="City" />
-                <govuk-error-summary-item asp-for="County" />
-                <govuk-error-summary-item asp-for="Postcode" />
+                <govuk-error-summary-item asp-for="PostCode" />
             </govuk-error-summary>
 
             <span class="govuk-caption-xl">Complete your profile</span>
@@ -25,12 +21,16 @@
             <p class="govuk-body">Please complete your details below.</p>
             <p class="govuk-body">This will help autopopulate your forms on any new applications.</p>
 
-            <form asp-area="Administration" asp-controller="Account" asp-action="CompanyAddress" method="post">
-                <h3 class="govuk-heading-m">What is your company address?</h3>
+            <form asp-area="Administration" asp-controller="Account" asp-action="CompanyAddrPostCodeItemEntered" method="get">
+                <h3 class="govuk-heading-m">What is your company address?</h3>                
+                
+                <partial name="_PostCodeLookupPartial" view-data="ViewData" />
 
-                <partial name="_AddressPartial" view-data="ViewData"/>
-
-                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+                <a href="@Url.Action("CompanyAddressManual", "Account", new { area = "Administration"})" class="govuk-link" >Enter Address Manually</a>
+                <div class="comp-btn-group">
+                    <govuk-button name="SubmitAction" value="@(ESubmitAction.FindAddress)">Find Address</govuk-button>
+                    <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+                </div>
             </form>
         </main>
     </div>

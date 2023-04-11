@@ -1,4 +1,7 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using System.Transactions;
+using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.SetPursuedSourcesFunding
@@ -7,11 +10,15 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
+        private readonly IApplicationRepository _applicationRepository;
 
-        public SetPursuedSourcesFundingHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db)
+        public SetPursuedSourcesFundingHandler(IApplicationDataProvider applicationDataProvider, 
+                                               IDbConnectionWrapper db,
+                                               IApplicationRepository applicationRepository)
         {
             _applicationDataProvider = applicationDataProvider;
             _db = db;
+            _applicationRepository = applicationRepository;     
         }
 
         public async Task<Unit> Handle(SetPursuedSourcesFundingRequest request, CancellationToken cancellationToken)
@@ -24,7 +31,23 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            await _db.ExecuteAsync("UpsertPursuedSourcesFunding", new { applicationId, request.PursuedSourcesFunding });
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+            await _db.ExecuteAsync("UpsertPursuedSourcesFunding", new
+            {
+                ApplicationId = applicationId, 
+                request.PursuedSourcesFunding
+            });
+
+            await _db.ExecuteAsync("UpdateAlternateFundingTaskStatus", new
+            {
+                ApplicationId = applicationId,
+                TaskStatusId = (int)(request.CompleteSection ? ETaskStatus.Completed : ETaskStatus.InProgress)
+            });
+
+            await _applicationRepository.UpdateStatusToInProgress(applicationId);
+
+            scope.Complete();
         }
     }
 }

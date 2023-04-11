@@ -1,0 +1,45 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeSelectionViewModel
+
+@{
+    ViewData["Title"] = "Provide company address";
+    ViewData["FullWidth"] = false;
+    ViewData["ReturnActionUrl"] = "CorrespondenceAddress";
+    ViewData["ReturnControllerUrl"] = @ViewContext.RouteData.Values["controller"].ToString();
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SelectedAddressId" />
+    </govuk-error-summary>
+}
+
+    <span class="govuk-caption-xl">Complete your profile</span>   
+    <h1 class="govuk-heading-xl">Please provide your correspondance address</h1>                                                   
+    <p class="govuk-body">Please complete your details below.</p>
+    <p class="govuk-body">This will help autopopulate your forms on any new applications.</p>                
+    <p class="govuk-heading-m">What is your correspondance address?</p>
+
+<form method="post" asp-area="Administration" asp-controller="Account" asp-action="CorrespondenceAddrPostCodeItemSelected">
+                
+    <govuk-fieldset>
+        <partial name="_PostCodeLookupResultsPartial" view-data="ViewData" />        
+    </govuk-fieldset>
+
+    @if (@Model.OutputLocations != null)
+    {
+        if (@Model.OutputLocations.Count > 0)
+        {
+            <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+            <input asp-for="PostCode" type="hidden" value="@Model.PostCode" />
+
+            <a href="@Url.Action("CorrespondenceAddressManual", "Account", new { area = "Administration", postCode=@Model.PostCode })" class="govuk-link" >I cannot find the address in this list</a>
+            <div class="comp-btn-group">
+                <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Select Address</govuk-button>
+                <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>        
+            </div>    
+        }            
+    }
+</form>
+

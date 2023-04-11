@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.CheckYourAnswers.GetCheckYourAnswers
@@ -7,11 +8,13 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.CheckYourAn
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
+        private readonly IApplicationRepository _applicationRepository;
 
-        public GetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db)
+        public GetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db, IApplicationRepository applicationRepository)
         {
             _applicationDataProvider = applicationDataProvider;
             _db = db;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<GetCheckYourAnswersResponse> Handle(GetCheckYourAnswersRequest request, CancellationToken cancellationToken)
@@ -21,12 +24,18 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.CheckYourAn
 
         private async Task<GetCheckYourAnswersResponse> GetCheckYourAnswers()
         {
-            var response = await _db.QuerySingleOrDefaultAsync<GetCheckYourAnswersResponse>("GetFundingRoutesCheckYourAnswers", new
+            var applicationId = _applicationDataProvider.GetApplicationId();
+
+            var applicationStatus = await _applicationRepository.GetApplicationStatus(applicationId);
+
+            var answers = await _db.QuerySingleOrDefaultAsync<GetCheckYourAnswersResponse>("GetFundingRoutesCheckYourAnswers", new
             {
-                ApplicationId = _applicationDataProvider.GetApplicationId()
+                ApplicationId = applicationId
             });
 
-            return response ?? new GetCheckYourAnswersResponse();
+            answers.ReadOnly = applicationStatus.DeclarationConfirmed;
+
+            return answers ?? new GetCheckYourAnswersResponse();
         }
     }
 }

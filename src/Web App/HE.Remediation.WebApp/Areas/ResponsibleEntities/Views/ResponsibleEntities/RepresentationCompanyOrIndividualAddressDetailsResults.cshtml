@@ -1,0 +1,47 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeSelectionViewModel
+
+@{
+    ViewData["Title"] = "Check your information is correct for this application";
+    ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["FullWidth"] = false;
+
+    ViewData["ReturnUrl"] = "CompanyAddress";
+    ViewData["ReturnActionUrl"] = "RepresentationCompanyOrIndividualAddressDetails";
+    ViewData["ReturnControllerUrl"] = @ViewContext.RouteData.Values["controller"].ToString();
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SelectedAddressId" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-body">If the details used to create your account are not relevant for this application, you can change the response below. </p>
+
+<h2 class="govuk-heading-m">What is your@(Model.ResponsibleEntityType == EResponsibleEntityType.Company ? " Company " : " ")address?</h2>
+
+<form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CompanyOrIndAddrDetailsPostCodeItemSelected">
+                
+    <govuk-fieldset>
+        <partial name="_PostCodeLookupResultsPartial" view-data="ViewData" />        
+    </govuk-fieldset>
+
+    @if (@Model.OutputLocations != null)
+    {
+        if (@Model.OutputLocations.Count > 0)
+        {
+            <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+            <input asp-for="PostCode" type="hidden" value="@Model.PostCode" />
+
+            <a href="@Url.Action("RepresentationCompanyOrIndividualAddressDetailsManual", "ResponsibleEntities", new { area = "ResponsibleEntities", postCode=@Model.PostCode })" class="govuk-link" >I cannot find the address in this list</a>
+            <div class="comp-btn-group">
+                <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Select Address</govuk-button>
+                <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>        
+            </div>    
+        }            
+    }
+</form>    
+

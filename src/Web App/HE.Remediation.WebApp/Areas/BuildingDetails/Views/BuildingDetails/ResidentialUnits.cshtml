@@ -19,7 +19,7 @@
 </h1>
 
 <form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ResidentialUnits">
-    <govuk-input asp-for="ResidentialUnitsCount" name="ResidentialUnitsCount" input-class="govuk-input--width-5">
+    <govuk-input asp-for="ResidentialUnitsCount" name="ResidentialUnitsCount" input-class="govuk-input--width-5" pattern="[0-9]*" input-maxlength="3" inputmode="numeric" type="number">
         <govuk-input-label class="govuk-label--s">Number of residential units</govuk-input-label>
         <govuk-input-hint>A residential unit is a private flat in a dwelling.</govuk-input-hint>
     </govuk-input>

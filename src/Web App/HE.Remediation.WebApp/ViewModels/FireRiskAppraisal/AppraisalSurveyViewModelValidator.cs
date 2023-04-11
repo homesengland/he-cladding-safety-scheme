@@ -7,10 +7,10 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public AppraisalSurveyViewModelValidator()
         {
             RuleFor(x => x.FireRiskAssessorId)
-                .NotNull()
-                .GreaterThan(0)
-                .When(x => !x.FireAccessorNotOnPanel)
-                .WithMessage("Please select a company");
+                .NotNull()
+                .GreaterThan(0)
+                .When(x => !x.FireAccessorNotOnPanel)
+                .WithMessage("Please select a company");
 
 
             RuleFor(x => x.DateOfInstruction)
@@ -21,10 +21,14 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 
             RuleFor(x => x.SurveyDate)
                 .NotNull()
-                .WithMessage("Enter a valid instruction date in a DD MM YYYY format")
+                .WithMessage("Enter a valid survey date in a DD MM YYYY format")
                 .Must(BeAValidDate)
-                .WithMessage("Enter a valid instruction date in a DD MM YYYY format");
-        }
+                .WithMessage("Enter a valid survey date in a DD MM YYYY format");
+
+            RuleFor(x => x.SurveyDate)
+                .GreaterThan(x => x.DateOfInstruction)
+                .WithMessage("The Survey date must be after the instruction date");            
+        }        
 
         private bool BeAValidDate(DateTime? date)
         {

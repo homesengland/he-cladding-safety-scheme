@@ -4,13 +4,17 @@
 
 <div class="govuk-grid-row">
     <div class="@((bool)ViewData["FullWidth"] == false ? "govuk-grid-column-two-thirds" : "govuk-grid-column-full")">
-        <govuk-back-link href="@ViewData["BackLink"]">Back</govuk-back-link>
+        @if ((bool)ViewData["ReadOnly"] == false)
+        {
+            <govuk-back-link href="@ViewData["BackLink"]">Back</govuk-back-link>
+        }
+
         <main class="govuk-main-wrapper">
             @await RenderSectionAsync("ErrorSummary", false)
             <span class="govuk-caption-xl">Building details</span>
             @RenderBody()
             <div>
-                <a class="govuk-link" href="@Url.Action("Index", "TaskList", new { Area = "Application" })">Cancel and exit</a>
+                <a class="govuk-link" href="@Url.Action("Index", "TaskList", new { Area = "Application" })">@((bool)ViewData["ReadOnly"] ? "Exit" : "Cancel and exit") </a>
             </div>
         </main>
     </div>

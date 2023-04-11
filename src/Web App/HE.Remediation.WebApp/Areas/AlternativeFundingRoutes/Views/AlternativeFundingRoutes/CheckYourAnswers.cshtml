@@ -1,9 +1,15 @@
-﻿@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.CheckYourAnswersViewModel
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.CheckYourAnswersViewModel
 @{
-    ViewData["Title"] = "Check your answers";
-    ViewData["BackLink"] = Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"});
+    ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
+    ViewData["BackLink"] = Model.OtherSourcesPursuedType == EPursuedSourcesFundingType.PursuingOtherRoutes
+        ? Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+        : Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+    ViewData["ReadOnly"] = Model.ReadOnly;
     ViewData["FullWidth"] = true;
 }
+
+<h1 class="govuk-heading-xl">@(Model.ReadOnly ? "Your answers" : "Check your answers")</h1>
 
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
@@ -14,9 +20,12 @@
             @Model.PursuedSourcesFundingAnswer
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="@Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"})">
-                Change<span class="govuk-visually-hidden"> pursued sources funding answer</span>
-            </a>
+            @if (!Model.ReadOnly)
+            {
+                <a class="govuk-link" href="@Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                    Change<span class="govuk-visually-hidden"> pursued sources funding answer</span>
+                </a>
+            }
         </dd>
     </div>
     @if (Model.FundingStillPursuingAnswer.Any())
@@ -34,18 +43,24 @@
                 </ul>
             </dd>
             <dd class="govuk-summary-list__actions">
-                <a class="govuk-link" href="@Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"})">
-                    Change<span class="govuk-visually-hidden"> funding still pursuing answer</span>
-                </a>
+                @if (!Model.ReadOnly)
+                {
+                    <a class="govuk-link" href="@Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                        Change<span class="govuk-visually-hidden"> funding still pursuing answer</span>
+                    </a>
+                }
             </dd>
         </div>
     }
 </dl>
 
-<h1 class="govuk-heading-m govuk-!-margin-bottom-0">Proceed to next step of your application</h1>
-<p class="govuk-body">By submitting this notification you are confirming that, to the best of
-    your knowledge, the details you are providing are correct.</p>
+@if (!Model.ReadOnly)
+{
+    <h3 class="govuk-heading-m govuk-!-margin-bottom-0">Proceed to next step of your application</h3>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of
+        your knowledge, the details you are providing are correct.</p>
 
-<form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="SetCheckYourAnswers">
-    <govuk-button name="button" value="Continue">Accept and save application</govuk-button>
-</form>
+    <form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="SetCheckYourAnswers">
+        <govuk-button name="button" value="Continue">Accept and save application</govuk-button>
+    </form>
+}

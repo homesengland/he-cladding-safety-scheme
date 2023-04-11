@@ -8,7 +8,8 @@
 
 header.govuk-header .govuk-header__service-name .govuk-caption-l {
     pointer-events: none;
-    display: inline-block
+    display: inline-block;
+    color: #fff;
 }
 
 header.govuk-header .govuk-header__service-name .logout {
@@ -578,6 +579,16 @@ header.govuk-header .govuk-header__service-name .logout {
     border: 1px solid #B1B4B6;
 }
 
+.govuk-stage-list-item.govuk-stage-list-item-current > .govuk-stage-list-item-bullet {
+    
+    border-radius: 50%;
+    border-style: solid;    
+    border-color: blue;
+    background-color: rgba(255, 255, 255, 255);
+    line-height: 0px;    
+    padding-top: 0;
+}
+
 .govuk-stage-list-item:first-child > .govuk-stage-list-item-bullet {
     top: 0;
 }
@@ -605,4 +616,14 @@ header.govuk-header .govuk-header__service-name .logout {
 
 .govuk-stage-list-item > .govuk-stage-list-item-line {
     border: 1px solid #B1B4B6;
+}
+
+.imageDescription img {
+    display: block;
+}
+
+.imageDescription span {
+    display: block;
+    font-size: 14.4521px;
+    padding-top:0.5em;
 }

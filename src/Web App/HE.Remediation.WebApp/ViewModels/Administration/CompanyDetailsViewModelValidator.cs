@@ -15,8 +15,8 @@ public class CompanyDetailsViewModelValidator : AbstractValidator<CompanyDetails
         RuleFor(e => e.CompanyRegistrationNumber)
             .NotEmpty()
             .WithMessage("Please enter a Company registration number")
-            .MaximumLength(150)
-            .WithMessage("Company registration number cannot exceed 150 characters");
+            .Matches("^[a-zA-Z0-9]{8}$")
+            .WithMessage("Please enter a valid Company registration number");
 
         RuleFor(e => e.UserRoleInCompany)
             .NotEmpty()

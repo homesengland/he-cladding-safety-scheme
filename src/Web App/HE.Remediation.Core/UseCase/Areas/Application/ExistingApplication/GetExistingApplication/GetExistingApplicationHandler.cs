@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication
 {
-    public class GetExistingApplicationHandler : IRequestHandler<GetExistingApplicationRequest, List<GetExistingApplicationResponse>>
+    public class GetExistingApplicationHandler : IRequestHandler<GetExistingApplicationRequest, IReadOnlyCollection<GetExistingApplicationResponse>>
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
@@ -14,24 +14,15 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetE
             _applicationDataProvider = applicationDataProvider; 
         }
 
-        public async Task<List<GetExistingApplicationResponse>> Handle(GetExistingApplicationRequest request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<GetExistingApplicationResponse>> Handle(GetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
-            var userId = _applicationDataProvider.GetUserId();
-
-            if (userId == null)
+            var existingApplications = await _db.QueryAsync<GetExistingApplicationResponse>("GetExistingApplications", new
             {
-                throw new InvalidOperationException(
-                    $"Unable to determine user id in {nameof(GetExistingApplicationHandler)}");
-            }
-
-            var existingApplications = await _db.QueryAsync<GetExistingApplicationResponse>("GetExistingApplications", new { userId});
-
-            if (existingApplications == null)
-            {
-                return new List<GetExistingApplicationResponse>();
-            }
-
-            return existingApplications.ToList();
+                UserId = _applicationDataProvider.GetUserId(),
+                Search = string.IsNullOrWhiteSpace(request.Search) ? null : request.Search
+            });
+            
+            return existingApplications;
         }
     }
 }

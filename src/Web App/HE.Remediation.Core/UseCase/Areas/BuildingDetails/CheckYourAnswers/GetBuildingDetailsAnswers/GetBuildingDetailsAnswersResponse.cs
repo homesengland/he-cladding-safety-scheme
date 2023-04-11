@@ -26,5 +26,6 @@
         public string DeveloperPostcode { get; set; }
         public string DeveloperStillInBusiness { get; set; }
         public bool DeveloperContacted { get; set; }
+        public bool ReadOnly { get; set; }
     }
 }

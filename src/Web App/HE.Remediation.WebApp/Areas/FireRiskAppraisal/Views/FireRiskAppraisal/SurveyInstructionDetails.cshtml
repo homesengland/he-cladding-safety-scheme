@@ -42,6 +42,13 @@
         }
     </govuk-select>
     
+    @for (var i = 0; i < Model.FireRiskAssessorCompanies.Count; i++)
+    {
+        var company = Model.FireRiskAssessorCompanies[i];
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.CompanyName))" value="@company.CompanyName"/>
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i]@(nameof(company.Id))" value="@company.Id" />
+    }
+
     <a class="govuk-link" href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", FireAccessorNotOnPanel = "true" })">
         I cannot find the company on this list
     </a>

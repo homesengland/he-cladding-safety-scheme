@@ -5,6 +5,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Transactions;
 
@@ -17,6 +18,9 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
         private readonly IDbConnectionWrapper _dbConnection;
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly FileServiceSettings _fileServiceSettings;
+
+        private const string FraewFilePropertyName = "Fraew";
+        private const string FraewSummaryFilePropertyName = "FraewSummary";
 
         public UploadFireRiskAppraisalReportHandler(IFileService fileService, IDbConnectionWrapper dbConnection, IApplicationDataProvider applicationDataProvider, IOptionsSnapshot<FileServiceSettings> fileServiceSettings,
             IFileRepository fileRepository)
@@ -32,34 +36,72 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            if(await CheckFraewAlreadyExists(applicationId))
-            {
-                return Unit.Value;
-            }
-
-            if (request.File == null)
-            {
-                throw new InvalidFileException("No file selected");
-            }
-
-            var fileResult = await _fileService.ProcessFile(request.File, _fileServiceSettings.FireRiskAppraisal);
-                       
-
+            await ValidateFraew(applicationId, request);
+            
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                await _fileRepository.InsertFile(new InsertFileParameters { Extension = Path.GetExtension(request.File.FileName), Id = fileResult.FileId, MimeType = fileResult.MimeType, Name = request.File.FileName, Size = request.File.Length });
-                await _dbConnection.ExecuteAsync("InsertFraewForApplication", new { fileResult.FileId, applicationId });
-                await _dbConnection.ExecuteAsync("UpdateFireRiskAssessmentAsComplete", new { applicationId });
+                ProcessFileResult fraewResult = default;
+                ProcessFileResult fraewSummaryResult = default;
+
+                if(request.FraewFile is not null)
+                {
+                    fraewResult = await ProcessFile(request.FraewFile, FraewFilePropertyName, _fileServiceSettings.FireRiskAppraisal);
+                }
+
+                if (request.SummaryFile is not null)
+                {
+                    fraewSummaryResult = await ProcessFile(request.SummaryFile, FraewSummaryFilePropertyName, _fileServiceSettings.FireRiskAppraisalSummary);
+                }
+
+                if (request.FraewFile is not null)
+                {
+                    await _fileRepository.InsertFile(new InsertFileParameters { Extension = Path.GetExtension(request.FraewFile.FileName), Id = fraewResult.FileId, MimeType = fraewResult.MimeType, Name = request.FraewFile.FileName, Size = request.FraewFile.Length });
+                    await _dbConnection.ExecuteAsync("InsertFraewForApplication", new { fraewResult.FileId, applicationId });
+                }
+                if (request.SummaryFile is not null)
+                {
+                    await _fileRepository.InsertFile(new InsertFileParameters { Extension = Path.GetExtension(request.SummaryFile.FileName), Id = fraewSummaryResult.FileId, MimeType = fraewSummaryResult.MimeType, Name = request.SummaryFile.FileName, Size = request.SummaryFile.Length });
+                    await _dbConnection.ExecuteAsync("InsertFraewSummaryForApplication", new { fraewSummaryResult.FileId, applicationId });
+                }
 
                 scope.Complete();
             }
-            
+
             return Unit.Value;
         }
 
-        public async Task<bool> CheckFraewAlreadyExists(Guid applicationId)
+        private async Task<ProcessFileResult> ProcessFile(IFormFile file, string propertyName, UploadSectionSettings settings)
         {
-            return await _dbConnection.QuerySingleOrDefaultAsync<bool>("CheckFraewExistsForApplication", new { applicationId });
+            try
+            {
+                return await _fileService.ProcessFile(file, settings);
+            }
+            catch(InvalidFileException ex)
+            {
+                throw new InvalidFileException(ex.Message, propertyName);
+            }
+        }
+
+        private async Task ValidateFraew(Guid applicationId, UploadFireRiskAppraisalReportRequest request)
+        {
+            var existingFraew = await _dbConnection.QuerySingleOrDefaultAsync<ExistingFraewResult>("GetExistingFraewForApplication", new { applicationId });
+
+            var errors = new List<KeyValuePair<string, string>>();
+
+            if(existingFraew.FraewFileId == null && request.FraewFile == null)
+            {
+                errors.Add(new KeyValuePair<string, string>(FraewFilePropertyName, "FRAEW File Required"));
+            }
+
+            if (existingFraew.FraewSummaryFileId == null && request.SummaryFile == null)
+            {
+                errors.Add(new KeyValuePair<string, string>(FraewSummaryFilePropertyName, "FRAEW Summary File Required"));
+            }
+
+            if (errors.Any())
+            {
+                throw new InvalidFileException(errors);
+            }
         }
     }
 }

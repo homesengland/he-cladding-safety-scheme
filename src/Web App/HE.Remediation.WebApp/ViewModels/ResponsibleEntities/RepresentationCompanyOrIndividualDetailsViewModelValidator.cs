@@ -40,7 +40,8 @@ public class RepresentationCompanyOrIndividualDetailsViewModelValidator : Abstra
             .NotEmpty()
             .WithMessage("Please enter an Email address")
             .EmailAddress()
-            .WithMessage(@"Enter an Email address in the correct format, like name@example.com");
+            .WithMessage(@"Enter an Email address in the correct format, like name@example.com")
+            .NotValidEmailAddress();
 
         RuleFor(x => x.ContactNumber)
             .NotEmpty()

@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = false;
 }
 <div class="text-center">
     <div class="govuk-width-container">
@@ -17,15 +18,11 @@
                 <govuk-error-summary-item asp-for="EmailAddress" />
             </govuk-error-summary>
             <span class="govuk-caption-xl">Complete your profile</span>
-            <h1 class="govuk-heading-xl">Please provide secondary contact information</h1>
-            <p class="govuk-body">Please provide details of a secondary contact at your company.</p>
-            <p class="govuk-body">We will only contact them in the event that your account has been
-                inactive for an extended period of time and there is an existing
-                application that you are no longer able to complete.</p>
-
+            <h1 class="govuk-heading-xl">Provide additional contact information</h1>
+                                    
             <form asp-area="Administration" asp-controller="Account" asp-action="SecondaryContactDetails" method="post">
                 <govuk-input asp-for="Name" name="Name" input-class="govuk-input--width-10" inputmode="text" spellcheck="false">
-                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Secondary contact name</govuk-input-label>
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Additional contact name</govuk-input-label>
                 </govuk-input>
 
                 <govuk-input asp-for="ContactNumber" name="ContactNumber" input-class="govuk-input--width-10" inputmode="text" spellcheck="false">
@@ -36,7 +33,8 @@
                     <govuk-input-label is-page-heading="false" class="govuk-label--s">Email address</govuk-input-label>
                 </govuk-input>
 
-                <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>
+                
+                <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>                
             </form>
         </main>
     </div>

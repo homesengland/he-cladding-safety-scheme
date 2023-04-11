@@ -33,7 +33,8 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
                 .NotEmpty()
                 .WithMessage("Please enter an Email address")
                 .EmailAddress()
-                .WithMessage(@"Enter an Email address in the correct format, like name@example.com");
+                .WithMessage(@"Enter an Email address in the correct format, like name@example.com")
+                .NotValidEmailAddress();
 
             RuleFor(x => x.Telephone)
                 .NotEmpty()

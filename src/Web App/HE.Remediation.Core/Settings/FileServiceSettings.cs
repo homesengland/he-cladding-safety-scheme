@@ -5,6 +5,7 @@
         public UploadSectionSettings LeaseHolderEvidence { get; set; }
         public UploadSectionSettings FireRiskAppraisal { get; set; }
         public UploadSectionSettings ResponsibleEntitiesEvidence { get; set; }
+        public UploadSectionSettings FireRiskAppraisalSummary { get; set; }
     }
 
     public class UploadSectionSettings

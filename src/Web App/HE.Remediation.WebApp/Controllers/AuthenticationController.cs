@@ -27,6 +27,16 @@ namespace HE.Remediation.WebApp.Controllers
             await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
         }
 
+        public async Task CreateAccount()
+        {
+            var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+                .WithRedirectUri(Url.Action("Callback", "Authentication")!)
+                .WithParameter("screen_hint", "signup")
+                .Build();
+
+            await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+        }
+
         public async Task Logout()
         {
             var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
@@ -75,47 +85,58 @@ namespace HE.Remediation.WebApp.Controllers
         {
             if (postLoginResponse.UserProfileCompletion.IsContactInformationComplete == false)
             {
-                // Replace with redirection to Contact information (profile information) page
-                // TODO: https://dev.azure.com.mcas.ms/homesengland/Medium-Rise%20Scheme/_workitems/edit/49626/
-                 return RedirectToAction("contactdetails", "Administration");
+                // Go to the Contact information (profile information) page
+                return RedirectToAction("contactdetails", "Administration");
             }
-
-            if (postLoginResponse.UserProfileCompletion.IsCorrespondenceAddressComplete == false)
-            {
-                // TODO: Replace with redirection to Correspondance Address page
-                // https://dev.azure.com.mcas.ms/homesengland/Medium-Rise%20Scheme/_workitems/edit/48889/
-                return RedirectToAction("CorrespondanceAddress", "Administration");
-            }
-
+            
             if (postLoginResponse.UserProfileCompletion.IsResponsibleEntityTypeSelectionComplete == false)
             {
-                // TODO: Replace with redirection to Company or Individual (profile information) page
-                // https://dev.azure.com.mcas.ms/homesengland/Medium-Rise%20Scheme/_workitems/edit/48889/
+                // Go to the Company or Individual (profile information) page                
                 return RedirectToAction("profile", "Administration");
             }
+            
+            if (postLoginResponse.UserProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Unknown)
+            {
+                // extra guard - we should have IsResponsibleEntityTypeSelectionComplete set to false and hence not arrive here
+                // However, just incase we don't know our entity type, we need to get it from the profile page
+                return RedirectToAction("profile", "Administration");
+            }
+            else if (postLoginResponse.UserProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Individual)
+            {
+                if (postLoginResponse.UserProfileCompletion.IsCorrespondenceAddressComplete == false)
+                {
+                    // Go to the Correspondance Address page                    
+                    return RedirectToAction("CorrespondenceAddress", "Administration");
+                }
 
-            if (postLoginResponse.UserProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company)
+                if (postLoginResponse.UserProfileCompletion.IsSecondaryContactInformationComplete == false)
+                {
+                    // Go to the Secondary contact (profile information) page
+                    if (postLoginResponse.UserProfileCompletion.WantedToAddSecondaryContact == true)
+                    {
+                        return RedirectToAction("SecondaryContactDetails", "Administration");
+                    }                    
+                }
+            }
+            else if (postLoginResponse.UserProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company)
             {
                 if (postLoginResponse.UserProfileCompletion.IsCompanyDetailsComplete == false)
                 {
-                    // TODO: Replace with redirection to Company Details (profile information) page
-                    // https://dev.azure.com.mcas.ms/homesengland/Medium-Rise%20Scheme/_workitems/edit/48890/
-                    return RedirectToAction("companydetails", "Administration");
+                    // Go to Company Details (profile information) page                    
+                    return RedirectToAction("CompanyDetails", "Administration");
                 }
 
                 if (postLoginResponse.UserProfileCompletion.IsCompanyAddressComplete == false)
                 {
-                    // TODO: Replace with redirection to Company Address (profile information) page
-                    // https://dev.azure.com.mcas.ms/homesengland/Medium-Rise%20Scheme/_workitems/edit/48891/
-                    return RedirectToAction("companyaddress", "Administration");
+                    // Go to Company Address (profile information) page                    
+                    return RedirectToAction("CompanyAddress", "Administration");
                 }
-            }
-            
-            if (postLoginResponse.UserProfileCompletion.IsSecondaryContactInformationComplete == false)
-            {
-                // TODO: Replace with redirection to Secondary contact (profile information) page
-                // https://dev.azure.com.mcas.ms/homesengland/Medium-Rise%20Scheme/_workitems/edit/48892/
-                return RedirectToAction("SecondaryContactDetails", "Administration");
+
+                if (postLoginResponse.UserProfileCompletion.IsSecondaryContactInformationComplete == false)
+                {
+                    // Go to the Secondary contact (profile information) page                    
+                    return RedirectToAction("SecondaryContactDetails", "Administration");
+                }
             }
             
             // Profile is considered to be complete

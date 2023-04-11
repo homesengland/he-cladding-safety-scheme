@@ -71,19 +71,19 @@ public class ProfileCompletionMiddleware
         if (userProfileCompletion == null)
         {
             return false;
-        }
+        }        
 
-        if (CheckPageAndPermission("/Administration/CorrespondanceAddress",
+        if (CheckPageAndPermission("/Administration/ContactInfoConsent",
                                    "/Administration/ContactDetails",
-                                   !userProfileCompletion.IsContactInformationComplete,
+                                   userProfileCompletion.IsContactInformationComplete == false,
                                    context))
         {
             return true;
         }
 
         if (CheckPageAndPermission("/Administration/Profile",
-                                   "/Administration/CorrespondanceAddress",
-                                   !userProfileCompletion.IsCorrespondenceAddressComplete,
+                                   "/Administration/ContactInfoConsent",
+                                   userProfileCompletion.IsContactConsentComplete == false,
                                    context))
         {
             return true;
@@ -110,8 +110,8 @@ public class ProfileCompletionMiddleware
         else if (userProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Individual)
         {
             if (CheckPageAndPermission("/Administration/SecondaryContactDetails",
-                                   "/Administration/CorrespondanceAddress",
-                                   (userProfileCompletion.IsCorrespondenceAddressComplete == false),
+                                   "/Administration/AddExtraContact",
+                                   (userProfileCompletion.IsWantSecondaryContactComplete == false),
                                    context))
             {
                 return true;
@@ -131,6 +131,14 @@ public class ProfileCompletionMiddleware
                                        "/Administration/ContactDetails",
                                        true,
                                        context))
+            {
+                return true;
+            }
+
+            if (CheckPageAndPermission("/Administration/SecondaryContactDetails",
+                                   "/Administration/AddExtraContact",
+                                   userProfileCompletion.IsWantSecondaryContactComplete == false,
+                                   context))
             {
                 return true;
             }
@@ -179,8 +187,30 @@ public class ProfileCompletionMiddleware
             if (badPaths.Any(segments => context.Request.Path.StartsWithSegments(segments,
                                                                                  StringComparison.OrdinalIgnoreCase)))
             {
-                context.Response.Redirect("/Administration/profile");
-                return true;
+                if (!ProcessProfileStates(userProfileCompletion, context))
+                {
+                    context.Response.Redirect("/Administration/profile");
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        else if (userProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company)
+        {
+            // a company shouldn't go to a corresondence address
+            var badPaths = new List<string>()
+            {
+                "/Administration/CorrespondenceAddress"                
+            };
+            if (badPaths.Any(segments => context.Request.Path.StartsWithSegments(segments,
+                                                                                 StringComparison.OrdinalIgnoreCase)))
+            {
+                if (!ProcessProfileStates(userProfileCompletion, context))
+                {
+                    context.Response.Redirect("/Administration/profile");
+                    return true;
+                }                
             }
 
             return false;
@@ -192,47 +222,79 @@ public class ProfileCompletionMiddleware
     {
         if (userProfileCompletion.IsContactInformationComplete == false)
         {
-            // Replace with redirection to Contact information (profile information) page
+            // Redirect to Contact information (profile information) page
             context.Response.Redirect("/Administration/contactdetails");
             return true;
         }
 
-        if (userProfileCompletion.IsCorrespondenceAddressComplete == false)
+        if (!userProfileCompletion.IsContactConsentComplete)
         {
-            // Replace with redirection to Contact information (profile information) page
-            context.Response.Redirect("/Administration/CorrespondanceAddress");
+            // Redirect to Contact information consent page
+            context.Response.Redirect("/Administration/ContactInfoConsent");
             return true;
         }
 
         if (userProfileCompletion.IsResponsibleEntityTypeSelectionComplete == false)
         {
-            // TODO: Replace with redirection to Company or Individual (profile information) page
+            // Redirect to Company or Individual (profile information) page
             context.Response.Redirect("/Administration/profile");
             return true;
         }
+
         if (userProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company)
         {
             if (userProfileCompletion.IsCompanyDetailsComplete == false)
             {
-                // TODO: Replace with redirection to Company Details (profile information) page
+                // Redirect to Company Details (profile information) page
                 context.Response.Redirect("/Administration/companydetails");
                 return true;
             }
 
             if (userProfileCompletion.IsCompanyAddressComplete == false)
             {
-                // TODO: Replace with redirection to Company Address (profile information) page
+                // Redirect to Company Address (profile information) page
                 context.Response.Redirect("/Administration/companyaddress");
                 return true;
             }
+
+            if (userProfileCompletion.IsSecondaryContactInformationComplete == false)
+            {
+                // Redirect to Secondary contact (profile information) page                
+                context.Response.Redirect("/Administration/SecondaryContactDetails");
+                return true;
+            }
+
+            // we have finished our profile so go to the settings page
+            return false;
         }
-        if (userProfileCompletion.IsSecondaryContactInformationComplete == false)
+        else if (userProfileCompletion.ResponsibleEntityType == EResponsibleEntityType.Individual)
         {
-            // TODO: Replace with redirection to Secondary contact (profile information) page                
-            context.Response.Redirect("/Administration/SecondaryContactDetails");
-            return true;
+            if (userProfileCompletion.IsWantSecondaryContactComplete == false)
+            {
+                // Redirect to Contact information (profile information) page
+                context.Response.Redirect("/Administration/AddExtraContact");
+                return true;
+            }
+
+            if (userProfileCompletion.IsWantSecondaryContactComplete == false)
+            {
+                // Redirect to Contact information (profile information) page
+                context.Response.Redirect("/Administration/AddExtraContact");
+                return true;
+            }
+
+            if (userProfileCompletion.IsCorrespondenceAddressComplete == false)
+            {
+                // Redirect to Contact information (profile information) page
+                context.Response.Redirect("/Administration/CorrespondenceAddress");
+                return true;
+            }
+
+            // we have finished our profile so go to the settings page
+            return false;
         }
 
+        // if we are still here for an unknown profile page
         return false;
     }
 }

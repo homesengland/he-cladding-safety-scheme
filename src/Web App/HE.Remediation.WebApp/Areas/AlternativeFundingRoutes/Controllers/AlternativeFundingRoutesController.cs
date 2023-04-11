@@ -11,23 +11,24 @@ using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesF
 using HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using HE.Remediation.WebApp.Authorisation;
 
 namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 {
     [Area("AlternativeFundingRoutes")]
     [Route("AlternativeFundingRoutes")]
-    [CookieApplicationAuthorise]
-    public class AlternativeFundingRoutesController : Controller
+    public class AlternativeFundingRoutesController : StartController
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
 
         public AlternativeFundingRoutesController(ISender sender, IMapper mapper)
+            : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
         }
+
+        protected override IActionResult DefaultStart => RedirectToAction("Information", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
 
         #region Information
         [HttpGet(nameof(Information))]
@@ -50,7 +51,7 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 
         #region SetPursuedSourcesFunding
         [HttpPost(nameof(SetPursuedSourcesFunding))]
-        public async Task<IActionResult> SetPursuedSourcesFunding(PursuedSourcesFundingViewModel viewModel, ESubmitAction button)
+        public async Task<IActionResult> SetPursuedSourcesFunding(PursuedSourcesFundingViewModel viewModel)
         {
             var validator = new PursuedSourcesFundingViewModelValidator();
 
@@ -65,11 +66,16 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
             var request = _mapper.Map<SetPursuedSourcesFundingRequest>(viewModel);
             await _sender.Send(request);
 
-            if (request.PursuedSourcesFunding is EPursuedSourcesFundingType.ExhaustedAllRoutes
+            if (request.PursuedSourcesFunding is 
+                EPursuedSourcesFundingType.ExhaustedAllRoutes
                 or EPursuedSourcesFundingType.NotExhaustedAllRoutes)
+            {
                 return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
 
-            return button == ESubmitAction.Continue ? RedirectToAction("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" }) : RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            return viewModel.SubmitAction == ESubmitAction.Continue 
+                ? RedirectToAction("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" }) 
+                : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion
 
@@ -119,8 +125,7 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
         [HttpGet(nameof(CheckYourAnswers))]
         public async Task<IActionResult> CheckYourAnswers()
         {
-            var request = GetCheckYourAnswersRequest.Request;
-            var response = await _sender.Send(request);
+            var response = await _sender.Send(GetCheckYourAnswersRequest.Request);
             var viewModel = _mapper.Map<CheckYourAnswersViewModel>(response);
 
             return View(viewModel);

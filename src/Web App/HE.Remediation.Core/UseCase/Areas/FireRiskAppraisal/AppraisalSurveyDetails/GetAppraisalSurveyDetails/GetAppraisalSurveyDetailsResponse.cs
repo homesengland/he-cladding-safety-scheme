@@ -1,4 +1,4 @@
-﻿using HE.Remediation.Core.Data.StoredProcedureResults;
+﻿using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.GetAppraisalSurveyDetails
 {
@@ -8,5 +8,6 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
         public DateTime? DateOfInstruction { get; set; }
         public List<GetFireRiskAssessorListResult> FireRiskAssessorCompanies { get; set; }
         public DateTime? SurveyDate { get; set; }
+        public bool FireAccessorNotOnPanel { get; set; }
     }
 }

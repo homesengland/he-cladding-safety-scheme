@@ -1,0 +1,18 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.RecommendedWorksStartViewModel
+
+@{
+    ViewData["Title"] = "Recommended works";
+    ViewData["FullWidth"] = false;
+
+    ViewData["BackLink"] = Model.InternalWorksRequired == ENoYes.Yes ?
+                           Url.Action("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" }) :
+                           Url.Action("InternalWorksRequired", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });    
+}
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-body">We require the FRAEW to produce a single preferred option of remediation/mitigation works.</p>
+
+<govuk-button href="@Url.Action("RecommendedWorks", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"})">Continue</govuk-button>
+                

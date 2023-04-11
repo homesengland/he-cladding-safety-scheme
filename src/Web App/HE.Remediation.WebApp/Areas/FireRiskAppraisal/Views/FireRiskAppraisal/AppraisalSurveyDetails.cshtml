@@ -16,11 +16,10 @@
 <h1 class="govuk-heading-xl">Appraisal survey details</h1>
 
 <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="AppraisalSurveyDetails" method="post">
-    <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Company who did the survey</h3>
-    <h4 class="govuk-caption-m govuk-!-margin-bottom-2 govuk-!-margin-top-1">Enter a company name</h4>
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-0">Company who did the survey</h2>
 
-    <govuk-select asp-for="FireRiskAssessorId" name="FireRiskAssessorId" class="govuk-!-width-full">
-        <govuk-select-label></govuk-select-label>
+    <govuk-select asp-for="FireRiskAssessorId" name="FireRiskAssessorId" class="govuk-!-width-full" aria-label="Select Fire Risk Assessor">
+        <govuk-select-label><span class="govuk-hint">Enter a company name</span></govuk-select-label>
         @if (Model.FireRiskAssessorId == 0)
         {
             <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
@@ -41,6 +40,13 @@
             }
         }
         </govuk-select>
+
+    @for (var i = 0; i < Model.FireRiskAssessorCompanies.Count; i++)
+    {
+        var company = Model.FireRiskAssessorCompanies[i];
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.CompanyName))" value="@company.CompanyName"/>
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.Id))" value="@company.Id" />
+    }
 
     <a class="govuk-link" href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", FireAccessorNotOnPanel = "true" })">
         I cannot find the company on this list

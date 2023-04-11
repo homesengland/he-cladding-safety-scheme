@@ -9,19 +9,28 @@ namespace HE.Remediation.WebApp.TagHelpers
     [HtmlTargetElement("results-small-pager")]
     public class SmallPagerTagHelper : TagHelper
     {
-        [HtmlAttributeName("CurrentPage")]
+        [HtmlAttributeName("current-page")]
         public int CurrentPage { get; set; }
 
-        [HtmlAttributeName("PageCount")]
+        [HtmlAttributeName("page-count")]
         public int PageCount { get; set; }
 
-        [HtmlAttributeName("URIPrefix")]
+        [HtmlAttributeName("uri-prefix")]
         public string URIPrefix { get; set; }
+
+        [HtmlAttributeName("search-parameter")]
+        public string SearchParameter { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "SmallPagerTagHelper";
             output.TagMode = TagMode.StartTagAndEndTag;
+             
+            if ((CurrentPage == 1) && (PageCount == 1))
+            {
+                output.PreContent.SetHtmlContent(string.Empty);
+                return;
+            }
 
             var sb = new StringBuilder(Environment.NewLine);
             sb.Append(OutputPagerTitle());
@@ -124,7 +133,7 @@ namespace HE.Remediation.WebApp.TagHelpers
                 sb.Append("    <li class=\"govuk-pagination__item\">" + Environment.NewLine);
             }
             sb.Append("      <a class=\"govuk-link govuk-pagination__link\" href=\"");
-            sb.Append(AddIntParamToURL(URIPrefix, "PageNo", PageNo));                    
+            sb.Append(new UriBuilder(URIPrefix).AddParameter("pageNo", PageNo).AddParameter("search", SearchParameter).Build());                    
             sb.Append("\" aria-label=\"Page ");
             sb.Append(PageNo.ToString());
             sb.Append("\"");
@@ -148,7 +157,7 @@ namespace HE.Remediation.WebApp.TagHelpers
 
             sb.Append("  <div class=\"govuk-pagination__prev\">" + Environment.NewLine);
             sb.Append("    <a class=\"govuk-link govuk-pagination__link\" href=\"");
-            sb.Append(AddIntParamToURL(URIPrefix, "PageNo", CurrentPage-1));
+            sb.Append(new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage - 1).AddParameter("search", SearchParameter).Build());
             sb.Append("\" rel=\"prev\">" + Environment.NewLine);            
             sb.Append("      <svg class=\"govuk-pagination__icon govuk-pagination__icon--prev\" ");
             sb.Append("xmlns=\"http://www.w3.org/2000/svg\" height=\"13\" width=\"15\" aria-hidden=\"true\" focusable=\"false\" viewBox=\"0 0 15 13\">" + Environment.NewLine);
@@ -166,7 +175,7 @@ namespace HE.Remediation.WebApp.TagHelpers
             var sb = new StringBuilder();
             sb.Append("  <div class=\"govuk-pagination__next\">" + Environment.NewLine);
             sb.Append("    <a class=\"govuk-link govuk-pagination__link\" href=\"");
-            sb.Append(AddIntParamToURL(URIPrefix, "PageNo", CurrentPage+1));
+            sb.Append(new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage + 1).AddParameter("search", SearchParameter).Build());
             sb.Append("\" rel=\"next\">"  + Environment.NewLine);
             sb.Append("      <span class=\"govuk-pagination__link-title\">Next</span>"  + Environment.NewLine);
             sb.Append("      <svg class=\"govuk-pagination__icon govuk-pagination__icon--next\" ");
@@ -180,18 +189,37 @@ namespace HE.Remediation.WebApp.TagHelpers
             return sb.ToString();
         }        
 
-        private string AddIntParamToURL(string Uri, string ParamName, int IntParamValue)
+        private class UriBuilder
         {
-            if ((String.IsNullOrWhiteSpace(ParamName)) ||
-                (String.IsNullOrWhiteSpace(Uri)))
+            private string baseUri;
+            private readonly IDictionary<string, string> parameters;
+
+            public UriBuilder()
             {
-                return String.Empty;
+                parameters = new Dictionary<string, string>();
             }
-            Dictionary<string, string> extraParams = new Dictionary<string, string>()
+
+            public UriBuilder(string baseUri) : this()
             {
-                { ParamName, IntParamValue.ToString() }
-            };
-            return QueryHelpers.AddQueryString(Uri, extraParams);            
+                SetBase(baseUri);
+            }
+
+            public UriBuilder SetBase(string baseUri)
+            {
+                this.baseUri = baseUri;
+                return this;
+            }
+
+            public UriBuilder AddParameter(string name, object value)
+            {
+                parameters.Add(name, value is not null ? value.ToString() : string.Empty);
+                return this;
+            }
+
+            public string Build()
+            {
+                return QueryHelpers.AddQueryString(baseUri, parameters);
+            }
         }
     }
 }

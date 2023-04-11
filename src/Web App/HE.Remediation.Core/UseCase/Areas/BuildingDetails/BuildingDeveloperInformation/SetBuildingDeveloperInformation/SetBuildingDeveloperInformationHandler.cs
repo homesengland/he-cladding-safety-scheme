@@ -26,6 +26,6 @@ public class SetBuildingDeveloperInformationHandler : IRequestHandler<SetBuildin
         var parameters = new DynamicParameters(request);
         parameters.Add("@ApplicationId", _applicationDataProvider.GetApplicationId());
 
-        await _connection.ExecuteAsync("UpdateBuildingDeveloperInformation", parameters);
+        await _connection.ExecuteAsync("SetBuildingOriginalDeveloperIsKnown", parameters);
     }
 }

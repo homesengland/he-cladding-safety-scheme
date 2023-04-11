@@ -2,14 +2,13 @@
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddress;
 
-namespace HE.Remediation.WebApp.ViewModels.BuildingDetails
+namespace HE.Remediation.WebApp.ViewModels.BuildingDetails;
+
+public class ProvideBuildingAddressViewModelMapper : Profile
 {
-    public class ProvideBuildingAddressViewModelMapper : Profile
+    public ProvideBuildingAddressViewModelMapper()
     {
-        public ProvideBuildingAddressViewModelMapper()
-        {
-            CreateMap<ProvideBuildingAddressViewModel, SetBuildingAddressRequest>();
-            CreateMap<GetBuildingAddressResponse, ProvideBuildingAddressViewModel>();
-        }
+        CreateMap<ProvideBuildingAddressViewModel, SetBuildingAddressRequest>();
+        CreateMap<GetBuildingAddressResponse, ProvideBuildingAddressViewModel>();
     }
 }

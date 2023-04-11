@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Fire risk appraisal summary";
+    ViewData["BackLink"] = Url.Action("AppraisalSurveyDetailsNotOnPanel", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = true;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+
+                    <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+                    <p class="govuk-body">
+                        Your assessor needs to complete Homes England's FRAEW summary template.
+                        Please download a copy here to send to the assessor. You will need to enter the data
+                        from the template when the assessor returns it to you.
+                    </p>
+
+                    <p class="govuk-body">
+                        Please enter the information your FRAEW assessor has completed on the summary template
+                        over the next few pages. The information should come from the FREAW summary template and
+                        be a straight copy across to the CSS application system. If there is missing information
+                        on the summary, please raise this with your assessor and get them to provide any missing information.
+                    </p>
+
+                    <div class="comp-btn-group">
+                        <govuk-button href="@Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })">Continue</govuk-button>
+                    </div>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">In this section</h2>
+                    <a class="govuk-link" target="_blank" href="/FireAssessorList/HE MRS_FRAEW Summary Form_V1.0.xlsx">Download FRAEW summary template</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -2,12 +2,8 @@
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication
 {
-    public class GetExistingApplicationRequest : IRequest<List<GetExistingApplicationResponse>>
+    public class GetExistingApplicationRequest : IRequest<IReadOnlyCollection<GetExistingApplicationResponse>>
     {
-        private GetExistingApplicationRequest()
-        {
-        }
-
-        public static GetExistingApplicationRequest Request = new();
+        public string Search { get; set; }
     }
 }

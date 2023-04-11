@@ -1,0 +1,68 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.CladdingSystemViewModel
+@{
+    ViewData["Title"] = "Works to cladding systems";
+    ViewData["FullWidth"] = false;
+
+    //ToDo: Change BackLink when previous page complete
+    ViewData["BackLink"] = Url.Action("WorksToCladdingSystems", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+
+    //ToDo: Change ReturnURL when previous page complete
+    ViewData["ReturnUrl"] = "CompletedAppraisal";
+}
+
+<govuk-error-summary>
+    <govuk-error-summary-item asp-for="CladdingSystemTypeId" />
+    <govuk-error-summary-item asp-for="InsulationTypeId" />
+</govuk-error-summary>
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+<p class="govuk-body">Identify each of the cladding systems which contribute to the life safety risk of the building. For each cladding system identify the cladding type and the insulation material.</p>
+
+<hr class="govuk-section-break govuk-section-break--m">
+<span class="govuk-caption-m">You can add a maximum of 20 cladding systems</span>
+<hr class="govuk-section-break govuk-section-break--m">
+
+<form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="CladdingSystem" method="post">
+    <input asp-for="FireRiskCladdingSystemsId" type="hidden" value="@Model.FireRiskCladdingSystemsId" />
+    <govuk-select asp-for="CladdingSystemTypeId" name="CladdingSystemTypeId" class="govuk-!-width-full">
+        <govuk-select-label><span class="govuk-hint">Cladding type</span></govuk-select-label>
+        @if (!Model.CladdingSystemTypeId.HasValue || Model.CladdingSystemTypeId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var claddingType in Model.CladdingTypes)
+        {
+            @if (Model.CladdingSystemTypeId.HasValue && claddingType.Id == Model.CladdingSystemTypeId.Value)
+            {
+                <govuk-select-item value="@claddingType.Id" selected="true">@claddingType.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@claddingType.Id">@claddingType.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
+    
+    
+    <govuk-select asp-for="InsulationTypeId" name="InsulationTypeId" class="govuk-!-width-full">
+        <govuk-select-label><span class="govuk-hint">Insulation material</span></govuk-select-label>
+        @if (!Model.InsulationTypeId.HasValue || Model.InsulationTypeId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var insulationType in Model.InsulationTypes)
+        {
+            @if (Model.InsulationTypeId.HasValue && insulationType.Id == Model.InsulationTypeId.Value)
+            {
+                <govuk-select-item value="@insulationType.Id" selected="true">@insulationType.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@insulationType.Id">@insulationType.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
+
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+</form>

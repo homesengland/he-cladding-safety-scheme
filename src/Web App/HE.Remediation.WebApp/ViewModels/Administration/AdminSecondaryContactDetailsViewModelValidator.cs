@@ -9,7 +9,9 @@ namespace HE.Remediation.WebApp.ViewModels.Administration
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage("Enter secondary contact name");
+                .WithMessage("Enter secondary contact name")
+                .MaximumLength(150)
+                .WithMessage("Name must be less than 150 characters");
 
             RuleFor(x => x.ContactNumber)
                 .NotEmpty()
@@ -21,7 +23,8 @@ namespace HE.Remediation.WebApp.ViewModels.Administration
                 .NotEmpty()
                 .WithMessage("Enter email address")
                 .EmailAddress()
-                .WithMessage(@"Enter an email address in the correct format, like name@example.com");
+                .WithMessage(@"Enter an email address in the correct format, like name@example.com")
+                .NotValidEmailAddress();
         }
     }
 }

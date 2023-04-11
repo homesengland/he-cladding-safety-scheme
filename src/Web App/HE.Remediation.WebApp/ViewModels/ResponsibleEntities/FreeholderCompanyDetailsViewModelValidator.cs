@@ -18,8 +18,8 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
             RuleFor(x => x.CompanyRegistrationNumber)
                 .NotEmpty()
                 .WithMessage("Please enter a Company registration number")
-                .MaximumLength(150)
-                .WithMessage("Company registration cannot exceed 150 characters");
+                .Matches("^[a-zA-Z0-9]{8}$")
+                .WithMessage("Please enter a valid Company registration number");
 
             RuleFor(x => x.FirstName)
                 .NotEmpty()
@@ -37,7 +37,8 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
                 .NotEmpty()
                 .WithMessage("Please enter an Email address")
                 .EmailAddress()
-                .WithMessage(@"Enter an Email address in the correct format, like name@example.com");
+                .WithMessage(@"Enter an Email address in the correct format, like name@example.com")
+                .NotValidEmailAddress();
 
             RuleFor(x => x.ContactNumber)
                 .NotEmpty()

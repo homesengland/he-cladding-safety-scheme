@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.SetRepresentativeType;
@@ -7,11 +8,15 @@ public class SetRepresentativeTypeHandler : IRequestHandler<SetRepresentativeTyp
 {
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IApplicationRepository _applicationRepository;
 
-    public SetRepresentativeTypeHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+    public SetRepresentativeTypeHandler(IDbConnectionWrapper connection, 
+                                        IApplicationDataProvider applicationDataProvider,
+                                        IApplicationRepository applicationRepository)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
+        _applicationRepository = applicationRepository;
     }
 
     public async Task<Unit> Handle(SetRepresentativeTypeRequest request, CancellationToken cancellationToken)
@@ -22,10 +27,13 @@ public class SetRepresentativeTypeHandler : IRequestHandler<SetRepresentativeTyp
 
     private async Task SaveResponse(SetRepresentativeTypeRequest request)
     {
+        var applicationId = _applicationDataProvider.GetApplicationId();
         await _connection.ExecuteAsync("InsertOrUpdateRepresentativeType", new
         {
-            ApplicationId = _applicationDataProvider.GetApplicationId(),
+            ApplicationId = applicationId,
             RepresentationTypeId = (int?)request.RepresentativeType
         });
+
+        await _applicationRepository.UpdateStatusToInProgress(applicationId);
     }
 }

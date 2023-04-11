@@ -1,5 +1,4 @@
 ﻿using HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration;
-using HE.Remediation.WebApp.Authorisation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,15 +6,17 @@ namespace HE.Remediation.WebApp.Areas.Declaration.Controllers
 {
     [Area("Declaration")]
     [Route("BeforeYouContinue")]
-    [CookieApplicationAuthorise]
-    public class DeclarationController : Controller
+    public class DeclarationController : StartController
     {
         private readonly ISender _sender;
 
         public DeclarationController(ISender sender)
+            : base(sender)
         {
             _sender = sender;
         }
+
+        protected override IActionResult DefaultStart => RedirectToAction("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
 
         #region "Before You Continue"
 

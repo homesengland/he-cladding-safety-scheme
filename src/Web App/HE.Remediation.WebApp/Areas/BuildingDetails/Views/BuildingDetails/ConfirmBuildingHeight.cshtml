@@ -19,13 +19,14 @@
 
 <h2 class="govuk-heading-m">How to measure the height of your building</h2>
 
-<p class="govuk-body">Medium Rise means between 11.00 metres and 17.70 metres when measured in accordance with diagram D6 of Approved Document B.</p>
+<p class="govuk-body">Medium Rise means between 11 metres and 18 metres when measured in accordance with diagram D6 of Approved Document B.</p>
 
 
 @*TODO government guidance here is to use an svg image because the image contains text and alt text should match the text in the image. (https://design-system.service.gov.uk/styles/images/)*@
-<p class="govuk-body">
-    <img src="~/img/buildingdetails/buildingheight.png" height="432" width="630"
+<p class="govuk-body imageDescription">
+    <img src="~/img/buildingdetails/buildingheight.png" height="432" width="630" title="Building height details"
      alt="Height of top storey measured from upper floor surface of top floor to ground level on lowest side of building. Height of top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms."/>
+    <span>Height of top storey measured from upper floor surface of top floor to ground level on lowest side of building. Height of top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms.</span>
 </p>
 
 <p class="govuk-body">The measurement should be taken from the lowest external ground level to the finished floor level of the top occupied storey. Following this diagram involves measuring external ground level in the same location as you measure the height of the floor level of the top occupied storey.</p>
@@ -37,7 +38,7 @@
 
 
 <form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ConfirmBuildingHeight" method="post">
-    <govuk-input asp-for="NumberOfStoreys" type="number" input-novalidate="" input-class="govuk-input--width-5">
+    <govuk-input asp-for="NumberOfStoreys" type="text" input-class="govuk-input--width-5" input-maxlength="3" input-pattern="[0-9]*">
         <govuk-input-label class="govuk-label--s">How many storeys does the building have?</govuk-input-label>
         <govuk-input-hint>Please enter the number of storeys starting at ground level but do not include underground storeys.</govuk-input-hint>
     </govuk-input>

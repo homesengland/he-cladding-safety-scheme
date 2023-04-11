@@ -1,0 +1,46 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.Location
+@model PostCodeSelectionViewModel
+
+@if (Model.HaveResults)
+{
+    @if (Model.OutputLocations != null)
+    {
+        <h2 class="govuk-heading-m">Postcode</h2>        
+
+        <govuk-summary-list>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    @Model.PostCode
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-action href="@Url.Action(ViewData["ReturnActionUrl"].ToString(), 
+                                                                 ViewData["ReturnControllerUrl"].ToString(), 
+                                                                 new { returnUrl = ViewData["ReturnUrl"] })">Change</govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        </govuk-summary-list>        
+
+        @if (@Model.OutputLocations.Count == 0)
+        {
+            <h1>no results returned</h1>
+        }
+        else
+        {
+            <govuk-select asp-for="SelectedAddressId" name="SelectedAddressId" class="govuk-!-width-full" aria-label="Select Address">
+                <govuk-select-label></govuk-select-label>
+                <govuk-select-item value="0">&nbsp;</govuk-select-item>
+                @foreach (var currentLocation in Model.OutputLocations)
+                {
+                    <govuk-select-item value="@currentLocation.Value">@currentLocation.Key</govuk-select-item>                    
+                }
+            </govuk-select>                
+
+            @for (var currentLocation = 0; currentLocation < Model.OutputLocations.Count; currentLocation++)
+            {
+                var location = Model.OutputLocations[currentLocation];
+                <input type="hidden" name="outputLocations[@currentLocation]" value="@location"/>               
+            }
+            <input type="hidden" name="HaveResults" value="true"/>               
+        }        
+    }    
+}

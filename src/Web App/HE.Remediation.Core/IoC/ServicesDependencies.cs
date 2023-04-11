@@ -11,6 +11,8 @@ using VirusScanner.Client.Interfaces;
 using VirusScanner.Client.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Services.Location;
+using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 
 namespace HE.Remediation.Core.IoC
 {
@@ -20,17 +22,24 @@ namespace HE.Remediation.Core.IoC
         {
             services.AddScoped<IDbConnectionWrapper, DbConnectionWrapper>();
             services.AddScoped<IApplicationDataProvider, ApplicationDataProvider>();
+            services.AddScoped<IAnalyticsDataProivder, AnalyticsDataProvider>();
 
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<ICustomFileFormatInspector, CustomFileFormatInspector>();
-            services.AddScoped<IFireAssessorListRepository, FireAssessorListRepository>();
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            services.AddScoped<IFireRiskAppraisalRepository, FireRiskAppraisalRepository>();
             services.AddScoped<IResponsibleEntityRepository, ResponsibleEntityRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFireRiskWorksRepository, FireRiskWorksRepository>();
+
+            services.AddScoped<IPostCodeLookup, PostCodeLookup>();
+            services.AddScoped<IBuildingDetailsRepository, BuildingDetailsRepository>();
 
             services.Configure<FileServiceSettings>(configuration.GetSection(nameof(FileServiceSettings)));
             services.Configure<VirusScanningSettings>(configuration);
             services.Configure<AwsS3Options>(configuration);
+            services.Configure<AnalyticsSettings>(configuration);
 
             services.AddScoped<IContentTypeProvider, FileExtensionContentTypeProvider>();
             services.AddScoped<IVirusScannerClient, VirusScannerClient>();
