@@ -1,0 +1,38 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Administration.CorrespondanceAddressViewModel
+
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Interface
+@using HE.Remediation.WebApp.TagHelpers
+@{
+    ViewData["Title"] = "Complete your profile";
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        @if (!_adp.IsEnforcedFlow())
+        {
+            <a href="/Administration" class="govuk-back-link">Back</a>
+        }    
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="NameNumber" />
+                <govuk-error-summary-item asp-for="AddressLine1" />
+                <govuk-error-summary-item asp-for="AddressLine2" />
+                <govuk-error-summary-item asp-for="City" />
+                <govuk-error-summary-item asp-for="County" />
+                <govuk-error-summary-item asp-for="Postcode" />
+            </govuk-error-summary>
+
+            <span class="govuk-caption-xl">Complete your profile</span>   
+            <h1 class="govuk-heading-xl">Please provide your correspondance address</h1>                                                   
+            <p class="govuk-body">Please complete your details below.</p>
+            <p class="govuk-body">This will help autopopulate your forms on any new applications.</p>                
+            <p class="govuk-heading-m">What is your correspondance address?</p>
+
+            <form asp-area="Administration" asp-controller="Account" asp-action="CorrespondanceAddress" method="post">
+                <partial name="_AddressPartial" view-data="ViewData" />
+
+                <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>                
+            </form>
+        </main>
+    </div>
+</div>

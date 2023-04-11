@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.FundingStillPursuingViewModel
+@{
+    ViewData["Title"] = "Which routes of funding are you still pursuing?";
+    ViewData["BackLink"] = Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"});
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FundingStillPursuing" />
+    </govuk-error-summary>
+}
+<form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="SetFundingStillPursuing">
+   
+    <govuk-checkboxes name="FundingStillPursuing" asp-for="FundingStillPursuing">
+        <govuk-checkboxes-fieldset>
+            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-checkboxes-fieldset-legend>
+        </govuk-checkboxes-fieldset>
+        <govuk-checkboxes-hint>
+            Please select all that apply.
+        </govuk-checkboxes-hint>
+        <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.SignedUpDevelopersPledge)" value="@EFundingStillPursuing.SignedUpDevelopersPledge">Developer that has signed up to the Developer’s pledge</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.NotSignedUpDevelopersPledge)" value="@EFundingStillPursuing.NotSignedUpDevelopersPledge">Developer that has not signed up to the pledge, or freeholder</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.ClaimAgainstContracter)" value="@EFundingStillPursuing.ClaimAgainstContracter">Warranty, insurance or other claim against contractor or design team</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.Other)" value="@EFundingStillPursuing.Other">Other</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <div class="comp-btn-group">
+        <govuk-button name="button" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="button" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

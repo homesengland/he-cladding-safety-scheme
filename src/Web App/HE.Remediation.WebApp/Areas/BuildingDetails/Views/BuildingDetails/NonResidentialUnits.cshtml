@@ -1,0 +1,28 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.NonResidentialUnitsViewModel
+
+@{
+    ViewData["Title"] = "How many non-residential units are there in this building?";
+    ViewData["Backlink"] = Url.Action("ResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="NonResidentialUnitsCount" />
+    </govuk-error-summary>
+}
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="NonResidentialUnits">
+    <govuk-input asp-for="NonResidentialUnitsCount" name="NonResidentialUnitsCount" input-class="govuk-input--width-5">
+        <govuk-input-label is-page-heading="true" class="govuk-label--xl">How many non-residential units are there in this building?</govuk-input-label>
+        <govuk-input-hint>Non-residential units can also be called commercial units. For example, shops, offices or business premises.</govuk-input-hint>
+    </govuk-input>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+    <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

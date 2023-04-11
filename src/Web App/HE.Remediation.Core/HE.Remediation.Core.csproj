@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
+    <EmbeddedResource Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
+    <None Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.101.48" />
+    <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.0.4" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="FileSignatures" Version="4.4.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.0.0" />
+    <PackageReference Include="VirusScanner.Client" Version="1.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\StoredProcedureParameters\" />
+    <Folder Include="Services\OidcEventHandlerService\" />
+    <Folder Include="Services\FireAssessorList\" />
+    <Folder Include="Services\UserService\Model\" />
+    <Folder Include="Services\UserService\Enum\" />
+    <Folder Include="UseCase\Areas\Administration\CompanyAddress\GetCompanyAddressForCurrentUser\" />
+    <Folder Include="UseCase\Areas\Administration\CompanyAddress\SetCompanyAddressForCurrentUser\" />
+    <Folder Include="UseCase\Areas\Administration\CompanyDetails\GetCompanyDetailsForCurrentUser\" />
+    <Folder Include="UseCase\Areas\Administration\Profile\GetUserResponsibleEntityType\" />
+    <Folder Include="UseCase\Areas\BuildingDetails\BuildingDeveloperInformation\SetBuildingDeveloperInformation\" />
+    <Folder Include="UseCase\Areas\BuildingDetails\ConfirmBuildingHeight\GetBuildingHeight\" />
+    <Folder Include="UseCase\Areas\BuildingDetails\DeveloperContacted\GetDeveloperContacted\" />
+    <Folder Include="UseCase\Areas\BuildingDetails\DeveloperContacted\SetDeveloperContacted\" />
+    <Folder Include="UseCase\Areas\BuildingDetails\DeveloperInBusiness\GetDeveloperInBusiness\" />
+    <Folder Include="UseCase\Areas\BuildingDetails\DeveloperInBusiness\SetDeveloperInBusiness\" />
+    <Folder Include="UseCase\Areas\RegisteredProvider\" />
+    <Folder Include="UseCase\Areas\ResponsibleEntities\NotEligible\SetNotEligible\" />
+    <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityCompanyType\GetResponsibleEntityCompanyType\" />
+    <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityCompanyType\SetResponsibleEntityCompanyType\" />
+    <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityUkRegistered\GetResponsibleEntityUkRegistered\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Fire risk appraisal summary";
+    ViewData["BackLink"] = Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">Fire risk appraisal summary</h1>
+
+<p class="govuk-body">
+    Thank you for uploading, we will review this, we will contact you shortly to discuss the submission of your FRAEW summary.
+</p>
+
+<div class="comp-btn-group">
+    <govuk-button href="@Url.Action("Index", "TaskList", new { Area = "Application" })">Continue</govuk-button>
+</div>

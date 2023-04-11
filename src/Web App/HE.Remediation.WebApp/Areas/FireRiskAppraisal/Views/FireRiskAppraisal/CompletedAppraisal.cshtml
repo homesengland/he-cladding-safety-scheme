@@ -1,0 +1,30 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.CompletedAppraisalViewModel
+
+@{
+    ViewData["Title"] = "Do you have a completed fire risk appraisal for this building?";
+    ViewData["BackLink"] = Url.Action("WhatYouWillNeed", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IsAppraisalCompleted"/>
+    </govuk-error-summary>
+}
+<form method="post" asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="SetCompletedAppraisal">
+    <govuk-radios asp-for="IsAppraisalCompleted">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <div class="comp-btn-group">
+    <govuk-button name="submitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    <govuk-button name="submitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

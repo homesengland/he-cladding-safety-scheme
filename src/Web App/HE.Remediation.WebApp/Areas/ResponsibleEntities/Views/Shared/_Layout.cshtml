@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="@((bool)ViewData["FullWidth"] == false ? "govuk-grid-column-two-thirds" : "govuk-grid-column-full")">
+                <govuk-back-link href="@ViewData["BackLink"]">Back</govuk-back-link>
+                
+                <main class="govuk-main-wrapper">
+                    @await RenderSectionAsync("ErrorSummary", false)
+                    <span class="govuk-caption-xl">Responsible Entity details</span>
+
+                    @RenderBody()
+
+                    @if (((bool)ViewData["ShowCancelAndExit"]))
+                    {
+                        <div>
+                            <a class="govuk-link" href="@Url.Action("Index", "TaskList", new { Area = "Application" })">Cancel and exit</a>
+                        </div>
+                    }
+                </main>
+            </div>
+        </div>
+    </div>
+</div>

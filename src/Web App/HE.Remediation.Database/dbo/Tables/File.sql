@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[File]
+(
+	[Id]		UNIQUEIDENTIFIER NOT NULL,
+	[Name]		NVARCHAR (150),
+	[Extension]	NVARCHAR (150),
+	[MimeType]	NVARCHAR (150), 
+    [Size]		INT NULL,
+	CONSTRAINT [PK_File] PRIMARY KEY CLUSTERED ([Id])
+);

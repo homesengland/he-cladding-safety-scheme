@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "New application";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">New application</h1>
+
+                    <p class="govuk-body">Register a new building that is eligible for remediation works.</p>
+                    <p class="govuk-body">You'll need to complete and submit each building before you can add the next one.</p>
+                    <p class="govuk-body">You can save each building application as a draft at any stage.</p>
+                    <h3 class="govuk-heading-m">Use this service to:</h3>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>supply building details and determine building eligibility</li>
+                        <li>provide information on the Responsible Entity and where applicable, their Representative</li>
+                        <li>apply for Pre-Tender Support and grant funding</li>
+                    </ul>
+
+                    <p class="govuk-body">The applicaiton can be submitted once all details have been added and the building has 
+                        been deemed eligible for works by our accredited panel.</p>
+
+                    <p class="govuk-body">In order to finalise and submit your application, you will need to submit outputs from a 
+                        <a class="govuk-link" href="https://www.bsigroup.com/en-GB/standards/pas-9980/" target="_blank">Fire Risk Assessment of External Walls (FRAEW)</a>. These will be provided by an Accredited Panel member.
+                    </p>
+
+                    <p class="govuk-body">If you need to change the details of a submitted building, email us at 
+                        email@email.gov.uk. Please include your building submission ID and let us 
+                        know what needs to be changed.</p>
+
+                    <p class="govuk-body">At the end of this stage, for eligible applications, an agreed pre-tender funding amount 
+                        will be approved.</p>
+
+                    <p class="govuk-body">This financial support is provided to assist Applicants in completing the design phase 
+                        of their remediation works, which will be required to proceed with the grant agreement.</p>
+
+                    <p class="govuk-body">Once the grant funding agreement is signed and the start on site criteria are met, 
+                        you will be able to claim monthly in arrears for works completed.</p>                   
+                    
+                    <form asp-area="Application" asp-controller="Dashboard" asp-action="start" method="post">
+                        <govuk-button is-start-button="true" type="submit">Start Now</govuk-button>
+                    </form>
+                </div>
+                <div class="govuk-grid-column-one-third">                    
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

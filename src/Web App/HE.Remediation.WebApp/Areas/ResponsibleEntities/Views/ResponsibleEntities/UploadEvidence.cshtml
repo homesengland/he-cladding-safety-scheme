@@ -1,0 +1,42 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.UploadEvidenceViewModel
+@{
+    switch (Model.OrganisationType)
+    {
+        case EApplicationResponsibleEntityOrganisationType.LocalAuthority:
+            ViewData["Title"] = "Please provide evidence from the S151 officer";
+            ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+        case EApplicationResponsibleEntityOrganisationType.RegisteredProvider:
+            ViewData["Title"] = "Please provide evidence from the Chief Executive";
+            ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+        case EApplicationResponsibleEntityOrganisationType.PrivateCompany:
+        case EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation:
+        case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:
+        case EApplicationResponsibleEntityOrganisationType.Other:
+            ViewData["Title"] = "Upload evidence that you can represent the Responsible Entity";
+            ViewData["BackLink"] = Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+    }
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File"/>
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-caption-m">You can upload up to 5 files.</p>
+<p class="govuk-caption-m">Each file must be smaller than 20mb.</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="UploadEvidence" method="post" enctype="multipart/form-data">
+    @await Html.PartialAsync("FileUpload", Model)
+    <br/>
+    @Html.Hidden(nameof(Model.OrganisationType), Model.OrganisationType)
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)" type="submit">Save and continue</govuk-button>
+</form>

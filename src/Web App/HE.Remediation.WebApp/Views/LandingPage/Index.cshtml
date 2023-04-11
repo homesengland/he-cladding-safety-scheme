@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Cladding Safety Scheme";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">Apply for a grant for removal of unsafe cladding for medium rise buildings.</h1>
+
+                    <p class="govuk-body">Use this service to apply for a grant for remediation of a medium rise residential building.</p>
+                    
+                    <p class="govuk-body">Applicants are able to add as many buildings as they need to, one at a time.</p>
+                    
+                    <h2 class="govuk-heading-m">Who can use this service?</h2>
+
+                    <p class="govuk-body">Applications can only be made by the person responsible for the external repair of the building. This is 
+                        likely to be the freeholder, local authority or Right to Manage company, or a Property Managing Agent.
+                    </p>
+
+                    <p class="govuk-body">If whoever has built your buildings has signed up to the <a class="govuk-link" href="https://www.gov.uk/guidance/list-of-developers-who-have-signed-building-safety-repairs-pledge" target="_blank">Developer's Pledge</a>, check if they should be paying for your building remediation through the developers pledge policy.</p>
+
+                    <p class="govuk-body govuk-!-font-weight-bold">You can use this service if you:</p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>are a Responsible Entity</li>
+                        <li>an authorised Representative of a Responsible Entity</li>
+                        <li>are eligible to apply for government funding, having sought other routes of funding</li>
+                    </ul>
+                    
+                    <govuk-inset-text>
+                        If you are a leaseholder or resident you cannot register for the fund.
+                        Please contact your building owner or managing agent as they will be able to register your building.
+                    </govuk-inset-text>
+                    
+                    <p class="govuk-body govuk-!-font-weight-bold">This service is only suitable for buildings that are:</p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>between 11 and 18 metres high</li>
+                        <li>Residential, with at least one flat with a lease over 21 years where leaseholder is responsible for external repair</li>
+                        <li>have unsafe non-ACM cladding as an external wall</li>
+                    </ul>
+                    
+                    <p class="govuk-body govuk-!-font-weight-bold">Sign In</p>
+                    
+                    <p class="govuk-body">
+                        <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Sign in to your account</a> to continue or manage your existing grant application
+                        if you already have one.</p>
+
+                    <govuk-button is-start-button="true" href="@Url.Action("Index", "EligibilityCheck")">Start now</govuk-button>
+
+                    <h2 class="govuk-heading-m">Before you start</h2>
+                    
+                    <p class="govuk-body govuk-!-font-weight-bold">To apply for funding, you'll need to:</p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>prove building eligibility for remediation works through a <a class="govuk-link" href="https://www.bsigroup.com/en-GB/standards/pas-9980/" type="_blank">Fire Risk Assessment of External Walls (FRAEW)</a> completed to PAS9980:2022 standards through our accredited panel</li>
+                        <li>register a new building application</li>
+                        <li>provide details on the Responsible Entity for remediation work</li>
+                    </ul>
+                    
+                    <h2 class="govuk-heading-m">Next steps</h2>
+                    
+                    <p class="govuk-body">If your funding application is approved, before you can receive a medium rise remediation grant, you'll need to:</p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>compile a work package, providing full contractor scheduling and costs details for the remediation works</li>
+                        <li>Seek required statutory consents for the works</li>
+                        <li>demonstrate value for money in works package by getting multiple quotes or through tender process</li>
+                    </ul>
+
+                    <p class="govuk-body">Once your grant is approved and you start we will expect regular updates as a condition of providing funding, and that
+                        you keep leaseholders fully informed.
+                    </p>
+                </div>
+                <div class="govuk-grid-column-one-third">   
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">Related items</h2>
+                    <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Sign in to continue or manage your existing grant application</a>
+                    <br/><br/>
+                    <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Create an account</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

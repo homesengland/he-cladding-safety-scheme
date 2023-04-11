@@ -1,0 +1,65 @@
+﻿@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.AssessorListViewModel
+
+@{
+    ViewData["Title"] = "Fire risk assessor list";
+    ViewData["BackLink"] = (bool)ViewData["FireAccessorNotOnPanel"] ? Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" }) : Url.Action("CompletedAppraisal", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@ViewData["Title"]</h1>
+<p class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-5">
+    Contact a company to check if they can do a fire risk appraisal for you.<br/>
+    Some companies may be busier than others.
+</p>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-3">Give the assessor your application ID</h2>
+<p class="govuk-body govuk-!-margin-bottom-0">
+    When you book a survey, give the assessor your application ID so they<br/>
+    can add it to their fire risk appraisal report.
+</p>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-5 govuk-!-margin-top-5">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-m govuk-!-display-inline-block">Application ID:</span>
+        <span class="govuk-body govuk-!-font-weight-bold govuk-!-padding-left-2">@Model.ApplicationReferenceNumber</span>
+    </div>
+</div>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Company name</th>
+        <th scope="col" class="govuk-table__header">Regions covered</th>
+        <th scope="col" class="govuk-table__header">Email address</th>
+        <th scope="col" class="govuk-table__header govuk-text-align-right">Telephone number</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    @{
+        foreach (var company in Model.AssessorList)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@company.CompanyName</td>
+                <td class="govuk-table__cell">@company.RegionsCovered</td>
+                <td class="govuk-table__cell">@company.EmailAddress</td>
+                <td class="govuk-table__cell">
+                    <span class="govuk-text-align-right">@company.Telephone</span>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+<h2 class="govuk-heading-m">Printable version</h2>
+<a class="govuk-link" target="_blank" href="/FireAssessorList/Fire Risk Assessors v1.1 27.01.pdf">View a printable version of this list</a>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-4">If you’ve booked a FRAEW survey</h2>
+<p class="govuk-body govuk-!-margin-bottom-9">
+    Add details of the company you’ve instructed and when you instructed <br/> them.
+</p>
+
+<div class="comp-btn-group">
+<govuk-button href="@((bool)ViewData["FireAccessorNotOnPanel"] ? Url.Action("AppraisalSurveyDetailsNotOnPanel", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"}) : Url.Action("SurveyInstructionDetails", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"}))">Add survey</govuk-button>
+<govuk-button href="@Url.Action("Index", "TaskList", new {Area = "Application"})">Save and return later</govuk-button>
+</div>

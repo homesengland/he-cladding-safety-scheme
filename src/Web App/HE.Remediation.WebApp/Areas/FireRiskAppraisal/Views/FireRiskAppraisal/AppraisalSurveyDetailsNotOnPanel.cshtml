@@ -1,0 +1,47 @@
+﻿@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.AppraisalSurveyDetailsViewModel
+
+@{
+    ViewData["Title"] = "Appraisal survey details";
+    ViewData["BackLink"] = Url.Action("AssessorDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", FireAccessorNotOnPanel = "true" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FireRiskAssessorId" />
+        <govuk-error-summary-item asp-for="DateOfInstruction" />
+        <govuk-error-summary-item asp-for="SurveyDate" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Appraisal survey details</h1>
+
+<form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="AppraisalSurveyDetailsNotOnPanel" method="post">
+
+
+    <govuk-date-input asp-for="DateOfInstruction" name="DateOfInstruction">
+        <govuk-date-input-fieldset class="govuk-!-margin-top-5">
+            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                Date you instructed the company
+            </govuk-date-input-fieldset-legend>
+        </govuk-date-input-fieldset>
+        <govuk-date-input-label></govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+
+    <govuk-date-input asp-for="SurveyDate" name="SurveyDate">
+        <govuk-date-input-fieldset>
+            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                Survey date
+            </govuk-date-input-fieldset-legend>
+        </govuk-date-input-fieldset>
+        <govuk-date-input-label></govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary govuk-!-margin-left-4">Save and return later</govuk-button>
+</form>

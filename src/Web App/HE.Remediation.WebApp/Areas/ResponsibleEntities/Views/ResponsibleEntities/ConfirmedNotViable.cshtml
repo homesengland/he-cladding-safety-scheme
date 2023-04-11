@@ -1,0 +1,40 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ConfirmedNotViableViewModel
+@{
+    switch (Model.OrganisationType)
+    {
+        case EApplicationResponsibleEntityOrganisationType.LocalAuthority:
+            ViewData["Title"] = "Has the Section 151 (S151) officer confirmed that the cost of the works are not viable?";
+            break;
+        case EApplicationResponsibleEntityOrganisationType.RegisteredProvider:
+            ViewData["Title"] = "Has the Chief Executive confirmed that the cost of the works are not viable?";
+            break;
+    }
+    ViewData["BackLink"] = Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IsConfirmedNotViable"/>
+    </govuk-error-summary>
+}
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ConfirmedNotViable" method="post">
+    @Html.Hidden("OrganisationType", value: Model.OrganisationType)
+    <govuk-radios asp-for="IsConfirmedNotViable">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Cladding Safety Scheme dashboard";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+                <div>
+                    <h1 class="govuk-heading-xl">Cladding Safety Scheme dashboard</h1>
+
+                    <div class="govuk-grid-row app-cards">
+                        <div class="govuk-grid-column-one-third">
+                            <a href="@Url.Action("NewApplication", "Dashboard", new { area = "Application"})">
+                                <div class="app-card">
+                                    <p class="govuk-link govuk-heading-m">Start new application</p>
+                                    <p class="govuk-body">Begin applying for a building to confirm eligiblity for Cladding Safety Scheme</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            <a href="@Url.Action("ExistingApplications", "Dashboard", new { area = "Application"})">
+                                <div class="app-card">
+                                    <p class="govuk-link govuk-heading-m">View existing applications</p>
+                                    <p class="govuk-body">Revisit existing grant applications and review application progress</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            <a href="@Url.Action("GetHelp", "Dashboard", new { area = "Application"})">
+                                <div class="app-card">
+                                    <p class="govuk-link govuk-heading-m">Get help</p>                                
+                                    <p class="govuk-body">View guidance and get help with your grant application</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            <a href="@Url.Action("index", "Account", new { area = "Administration"})">
+                                <div class="app-card">
+                                    <p class="govuk-link govuk-heading-m">Your settings<p>
+                                    <p class="govuk-body">View your login details and profile information</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+</div>

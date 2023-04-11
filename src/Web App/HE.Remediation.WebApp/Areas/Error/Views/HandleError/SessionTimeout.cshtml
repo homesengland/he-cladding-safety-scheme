@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Sorry";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">Sorry, your session has timed out</h1>
+                    
+                    <p class="govuk-body">
+                        Your session automatically end if you don't use the service for 2 hours. We do this for your security.
+                        <br/><br/>
+                        <a href="@Url.Action("Login", "Authentication")" class="govuk-link">Return to login</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

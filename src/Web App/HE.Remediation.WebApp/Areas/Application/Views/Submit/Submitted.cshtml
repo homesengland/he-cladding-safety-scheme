@@ -1,0 +1,32 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Application.SubmittedViewModel
+
+@{
+    ViewData["Title"] = "Submit Building Application";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="2">
+                        <govuk-panel-title>Application complete</govuk-panel-title>
+                        <govuk-panel-body>
+                            Application ID<br/><strong>@Model.ReferenceNumber</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h3 class="govuk-heading-m">What happens next</h3>
+
+                    <p class="govuk-body">Confirmation of your application submission will be sent to your email account.</p>
+
+                    <p class="govuk-body">You can monitor the status of your application from the Existing Applications page of your Home dashboard.</p>
+
+                    <p class="govuk-body">Once the application has been validated, you will receive an email and notification on the home page with any further actions that are required.</p>
+
+                    <govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to home</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

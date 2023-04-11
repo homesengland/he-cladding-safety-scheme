@@ -1,0 +1,28 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RepresentativeTypeViewModel
+@{
+    ViewData["Title"] = "Are you the Responsible Entity or their Representative?";
+    ViewData["BackLink"] = Url.Action("Information", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="RepresentativeType"/>
+    </govuk-error-summary>
+}
+<form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="Representative">
+    <govuk-radios asp-for="RepresentativeType">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">@ViewData["Title"]</govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item value="@(EApplicationRepresentationType.ResponsibleEntity)">Responsible Entity</govuk-radios-item>
+        <govuk-radios-item value="@(EApplicationRepresentationType.Representative)">Representative</govuk-radios-item>
+    </govuk-radios>
+    
+    <div class="comp-btn-group">
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

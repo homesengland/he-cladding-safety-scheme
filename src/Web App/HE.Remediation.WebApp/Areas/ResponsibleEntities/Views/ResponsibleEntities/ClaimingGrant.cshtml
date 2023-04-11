@@ -1,0 +1,29 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ClaimingGrantViewModel
+@{
+    ViewData["Title"] = "Are you claiming funding on the grounds of the works not being viable to your organisation";
+    ViewData["BackLink"] = Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IsClaimingGrant"/>
+    </govuk-error-summary>
+}
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ClaimingGrant" method="post">
+    <govuk-radios asp-for="IsClaimingGrant">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input type="hidden" asp-for="HasOwners" value="@Model.HasOwners" />
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary govuk-!-margin-left-4">Save and return later</govuk-button>
+</form>

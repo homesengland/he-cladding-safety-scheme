@@ -1,0 +1,85 @@
+﻿@using HE.Remediation.WebApp.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Application.StageDiagramViewModel
+
+@{
+    ViewData["Title"] = Model.UniqueBuildingName;    
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="@Url.Action("Index", "Dashboard", new {Area = "Application"})" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    
+                    <span class="govuk-caption-xl">@Model.ApplicationNumber</span>
+                    <h1 class="govuk-heading-xl">@Model.UniqueBuildingName</h1>
+                    
+                    <div class="govuk-flex-row">
+                        <h1 class="govuk-heading-m">Application status:</h1>
+                        <application-status-badge class="govuk-!-margin-left-2" status="@Model.Status"></application-status-badge>
+                    </div>
+                    
+                    <div class="govuk-flex-row">
+                        <h1 class="govuk-heading-m">Application stage:</h1>
+                        <application-stage-text class="govuk-!-margin-left-2" stage="@Model.Stage"></application-stage-text>
+                    </div>
+
+                    <div class="ggovuk-!-margin-top-5">
+                        <h1 class="govuk-heading-m govuk-!-margin-bottom-2">Stages:</h1>
+                        <application-stages-list stage="@Model.Stage"></application-stages-list>
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                        <p class="govuk-body">
+                            Once submitted, you application will be reviewed to determine eligibility for the Cladding Safety Scheme funding. Once the review is complete you will be notified of the outcome via email and here along with any further actions that are required.
+                        </p>
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                        <h1 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-display-inline">Your application was submitted on:</h1>
+                        <span class="govuk-body">@Model.DateCreated.ToShortDateString()</span>
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                        <p class="govuk-body">
+                            You can check the details of the submitted application below.
+                        </p>
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                        <a href="@Url.Action("Index", "TaskList", new {Area = "Application"})" class="govuk-link">Application details</a>
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                        <p class="govuk-body">
+                            View previously submitted application details
+                        </p>
+                        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">What happens next</h1>
+                        <p class="govuk-body">
+                            An eligibility decision will be made on your application.
+                        </p>
+                        <p class="govuk-body">
+                            Provided your application has been approved, you will be required to carry out the following actions:
+                        </p>
+                    </div>
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-1">
+                        <ul class="govuk-list govuk-list--bullet">
+                            <li>Sign the grant fund agreement for pre-tender funding support</li>
+                            <li>Fill in a monthly report to track your progress</li>
+                            <li>Begin to compile a work package detailing the full scheduling and costs of works plan</li>
+                        </ul>
+                        <p class="govuk-body">
+                            Your application may require some more information in order for an eligibility decision to be made, in which case, you will be directly contacted via email or telephone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

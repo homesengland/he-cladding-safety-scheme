@@ -1,0 +1,571 @@
+﻿@using HE.Remediation.Core.Enums
+@using System.Linq
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Check your information is correct for this application";
+    ViewData["FullWidth"] = true;
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["BackLink"] = Url.Action("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+@if (Model.RepresentationTypeId == (int)EApplicationRepresentationType.Representative)
+{
+    <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold">
+        Representative
+    </p>
+
+    <govuk-summary-list>
+
+        @if (Model.RepresentativeUKBased is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Are you based in the UK?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.RepresentativeUKBased ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("BasedInUk", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.RepresentativeIndividualOrCompany is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Individual or company?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.RepresentativeIndividualOrCompany
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividual", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.RepresentativeResponsibleEntityTypeId == (int)EResponsibleEntityType.Company)
+        {
+            if (!String.IsNullOrEmpty(Model.RepresentativeCompanyDetails))
+            {
+                List<string> details = Model.RepresentativeCompanyDetails.Split(',').ToList();
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Representative details check (Company)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @foreach (var item in details)
+                        {
+                            <span>@item<br></span>
+                        }
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+            }
+        }
+
+        @if (!String.IsNullOrEmpty(Model.RepresentativeDetails))
+        {
+            List<string> details = Model.RepresentativeDetails.Split(',').ToList();
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Representative details check @(Model.RepresentativeResponsibleEntityTypeId == (int)EResponsibleEntityType.Company ? "(Company)" : "(Individual)")
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in details)
+                    {
+                        <span>@item<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (!String.IsNullOrEmpty(Model.RepresentativeAddress))
+        {
+            List<string> details = Model.RepresentativeAddress.Split(',').ToList();
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Representative details check @(Model.RepresentativeResponsibleEntityTypeId == (int)EResponsibleEntityType.Company ? "(Company)" : "(Individual)")
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in details)
+                    {
+                        <span>@item<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+    </govuk-summary-list>
+}
+
+<p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold">
+    Responsible Entity
+</p>
+
+<govuk-summary-list>
+
+    @if (Model.ResponsibleEntityRelation is not null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Responsible entity relation
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.ResponsibleEntityRelation
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityRelation", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.ResponsibleEntityCompanyType is not null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What type of company is the Responsible Entity?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.ResponsibleEntityCompanyType
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+
+    @if (
+        Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.PrivateCompany ||
+        Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.RightToManageCompany ||
+        Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation ||
+        (
+            Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.Other &&
+            Model.ResponsibleEntityCompanySubTypeId == (int)EApplicationResponsibleEntityOrganisationSubType.PrivateTrust
+        )
+    )
+    {
+        @if (Model.ResponsibleEntityRegisteredInUK is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Is the Responsible Entity registered in the UK?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.ResponsibleEntityRegisteredInUK ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        if (!String.IsNullOrEmpty(Model.ResponsibleEntityCompanyDetails))
+        {
+            List<string> details = Model.ResponsibleEntityCompanyDetails.Split(',').ToList();
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    What are the company details of the Responsible Entity?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in details)
+                    {
+                        <span>@item<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        if (!String.IsNullOrEmpty(Model.ResponsibleEntityCompanyAddress))
+        {
+            List<string> details = Model.ResponsibleEntityCompanyAddress.Split(',').ToList();
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    What is the responsible entity’s company address?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in details)
+                    {
+                        <span>@item<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityCompanyAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        if (!String.IsNullOrEmpty(Model.ResponsibleEntityPrimaryContact))
+        {
+            List<string> details = Model.ResponsibleEntityPrimaryContact.Split(',').ToList();
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Who is the primary contact at the Responsible Entity?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in details)
+                    {
+                        <span>@item<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.EvidenceFiles.Any())
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Upload evidence of authorisation
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in Model.EvidenceFiles)
+                    {
+                        <span>@item.Name<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+    }
+
+    @if (
+    Model.ResponsibleEntityCompanyTypeId is not null &&
+    (
+    Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.Other &&
+    Model.ResponsibleEntityCompanySubTypeId is not null &&
+    Model.ResponsibleEntityCompanySubTypeId == (int)EApplicationResponsibleEntityOrganisationSubType.Individual
+    )
+    )
+    {
+        @if (Model.ResponsibleEntityRegisteredInUK is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Is the Responsible Entity registered in the UK?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.ResponsibleEntityRegisteredInUK ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        if (!String.IsNullOrEmpty(Model.ResponsibleEntityPrimaryContact))
+        {
+            List<string> details = Model.ResponsibleEntityPrimaryContact.Split(',').ToList();
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Who is the primary contact at the Responsible Entity?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in details)
+                    {
+                        <span>@item<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.EvidenceFiles.Any())
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Upload evidence of authorisation
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in Model.EvidenceFiles)
+                    {
+                        <span>@item.Name<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+    }
+
+    @if (Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+    {
+        @if (Model.ResponsibleEntitySharedOwners is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    How many shared owners
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ResponsibleEntitySharedOwners
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.ResponsibleEntityClaimingGrant is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Are you claiming a grant for the affordable units on the grounds of the works not being affordable to your organisation
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.ResponsibleEntityClaimingGrant ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ClaimingGrant", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.ConfirmedNotViable is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Has the Chief Executive confirmed that remediation works are not affordable?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.ConfirmedNotViable ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ConfirmedNotViable", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.EvidenceFiles.Any())
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Please provide evidence from the Chief Executive
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in Model.EvidenceFiles)
+                    {
+                        <span>@item.Name<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+    }
+
+    @if (Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.LocalAuthority)
+    {
+        @if (Model.ResponsibleEntitySharedOwners is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    How many shared owners
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ResponsibleEntitySharedOwners
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.ResponsibleEntityClaimingGrant is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Are you claiming a grant for the affordable units on the grounds of the works not being affordable to your organisation
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.ResponsibleEntityClaimingGrant ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ClaimingGrant", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+        
+        @if (Model.ConfirmedNotViable is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Has the Section 151 (S151) officer confirmed that these remediation works are not affordable?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @((bool)Model.ConfirmedNotViable ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ConfirmedNotViable", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.EvidenceFiles.Any())
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Please provide evidence from the S151 officer
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var item in Model.EvidenceFiles)
+                    {
+                        <span>@item.Name<br></span>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+    }
+
+</govuk-summary-list>
+
+@if (Model.BuildingRelationshipId != (int)EResponsibleEntityRelation.Freeholder && Model.FreeholderId != Guid.Empty)
+{
+    <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold">
+        Freeholder
+    </p>
+
+    <govuk-summary-list>
+
+        @if (Model.FreeholderIndividualOrCompany is not null)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Individual or company?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.FreeholderIndividualOrCompany
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyOrIndividual", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.FreeholderResponsibleEntityTypeId == (int)EResponsibleEntityType.Company)
+        {
+            if (!String.IsNullOrEmpty(Model.FreeholderCompanyDetails))
+            {
+                List<string> details = Model.FreeholderCompanyDetails.Split(',').ToList();
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Freeholder details check (Company)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @foreach (var item in details)
+                        {
+                            <span>@item<br></span>
+                        }
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+            }
+
+            if (!String.IsNullOrEmpty(Model.FreeholderAddress))
+            {
+                List<string> details = Model.FreeholderAddress.Split(',').ToList();
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Freeholder details check (Company Address)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @foreach (var item in details)
+                        {
+                            <span>@item<br></span>
+                        }
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Url.Action("FreeholderCompanyAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+            }
+        }
+        else
+        {
+            if (!String.IsNullOrEmpty(Model.FreeholderDetails))
+            {
+                List<string> details = Model.FreeholderDetails.Split(',').ToList();
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Freeholder details check (Individual)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @foreach (var item in details)
+                        {
+                            <span>@item<br></span>
+                        }
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Url.Action("FreeholderIndividualDetails", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+            }
+
+            if (!String.IsNullOrEmpty(Model.FreeholderAddress))
+            {
+                List<string> details = Model.FreeholderAddress.Split(',').ToList();
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Freeholder details check (Individual Address)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @foreach (var item in details)
+                        {
+                            <span>@item<br></span>
+                        }
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-action href="@Url.Action("FreeholderIndividualAddress", "ResponsibleEntities", new {returnUrl = ViewData["ReturnUrl"]})" visually-hidden-text="name">
+                        Change
+                    </govuk-summary-list-row-action>
+                </govuk-summary-list-row>
+            }
+        }        
+
+    </govuk-summary-list>
+}
+
+<h3 class="govuk-heading-s">Proceed to next step of your application</h3>
+<p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct, and that Homes England can contact the responsible entity to validate you have been authorised to apply on their behalf.</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CheckYourAnswers" method="post">
+    <govuk-button type="submit">Accept and save application</govuk-button>
+</form>

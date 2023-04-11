@@ -1,0 +1,65 @@
+﻿@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.SurveyInstructionDetailsViewModel
+
+@{
+    ViewData["Title"] = "Survey instruction details";
+    ViewData["BackLink"] = Url.Action("AssessorList", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FireRiskAssessorId" />
+        <govuk-error-summary-item asp-for="DateOfInstruction" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Survey instruction details</h1>
+
+<form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="SurveyInstructionDetails" method="post">
+
+	<p class="govuk-heading-s survey-instruction-details-selector-hint">Company you have instructed</p>
+
+    <govuk-select asp-for="FireRiskAssessorId" name="FireRiskAssessorId" class="govuk-!-width-full">
+        <govuk-select-label><span class="govuk-hint">Enter a company name</span></govuk-select-label>
+        @if (Model.FireRiskAssessorId == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        else
+        {
+            <govuk-select-item value="0">&nbsp;</govuk-select-item>
+        }
+        @foreach (var fireRiskAssessorCompany in Model.FireRiskAssessorCompanies)
+        {
+            @if (fireRiskAssessorCompany.Id == Model.FireRiskAssessorId.ToString())
+            {
+                <govuk-select-item value="@fireRiskAssessorCompany.Id" selected="true">@fireRiskAssessorCompany.CompanyName</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@fireRiskAssessorCompany.Id">@fireRiskAssessorCompany.CompanyName</govuk-select-item>
+            }
+        }
+    </govuk-select>
+    
+    <a class="govuk-link" href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", FireAccessorNotOnPanel = "true" })">
+        I cannot find the company on this list
+    </a>
+
+    <govuk-date-input asp-for="DateOfInstruction" name="DateOfInstruction">
+        <govuk-date-input-fieldset class="govuk-!-margin-top-5">
+            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                Date you instructed the company
+            </govuk-date-input-fieldset-legend>
+        </govuk-date-input-fieldset>
+        <govuk-date-input-label></govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+
+    <div class="comp-btn-group">
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,43 @@
+﻿@using HE.Remediation.Core.Interface
+@model HE.Remediation.WebApp.ViewModels.Administration.AdminSecondaryContactDetailsViewModel
+
+@{
+    ViewData["Title"] = "Complete your profile";
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        @if (!_adp.IsEnforcedFlow())
+        {
+            <a href="/Administration" class="govuk-back-link">Back</a>
+        }    
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="Name" />
+                <govuk-error-summary-item asp-for="ContactNumber" />
+                <govuk-error-summary-item asp-for="EmailAddress" />
+            </govuk-error-summary>
+            <span class="govuk-caption-xl">Complete your profile</span>
+            <h1 class="govuk-heading-xl">Please provide secondary contact information</h1>
+            <p class="govuk-body">Please provide details of a secondary contact at your company.</p>
+            <p class="govuk-body">We will only contact them in the event that your account has been
+                inactive for an extended period of time and there is an existing
+                application that you are no longer able to complete.</p>
+
+            <form asp-area="Administration" asp-controller="Account" asp-action="SecondaryContactDetails" method="post">
+                <govuk-input asp-for="Name" name="Name" input-class="govuk-input--width-10" inputmode="text" spellcheck="false">
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Secondary contact name</govuk-input-label>
+                </govuk-input>
+
+                <govuk-input asp-for="ContactNumber" name="ContactNumber" input-class="govuk-input--width-10" inputmode="text" spellcheck="false">
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Contact number</govuk-input-label>
+                </govuk-input>
+
+                <govuk-input asp-for="EmailAddress" name="EmailAddress" input-class="govuk-input--width-10" inputmode="text" spellcheck="false">
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Email address</govuk-input-label>
+                </govuk-input>
+
+                <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@{
+    ViewData["Backlink"] = Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
+}
+
+<h1 class="govuk-heading-xl">
+    Declaration
+</h1>
+
+<p class="govuk-body">I confirm that:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>I will tell Homes England if the application details change</li>
+    <li>The information I have provided is true and correct</li>
+    <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice">Homes England privacy notice</a>, which explains how we'll use and share your information'</li>
+    <li>I can apply for grant funding for the building in this application as a responsible entity or an authorised representative</li>
+</ul>
+
+<govuk-warning-text icon-fallback-text="Warning">
+    You may have to pay back any grant funding you receive if you submit untrue or incorrect information.
+</govuk-warning-text>
+
+<form asp-area="Declaration" asp-controller="Declaration" asp-action="ConfirmDeclaration" method="post">
+    <govuk-button type="submit">Confirm and continue</govuk-button>
+</form>
+<br/>

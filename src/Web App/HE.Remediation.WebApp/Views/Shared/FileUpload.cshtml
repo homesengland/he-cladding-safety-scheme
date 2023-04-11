@@ -1,0 +1,46 @@
+﻿@using HE.Remediation.WebApp.ViewModels.Shared
+@using HE.Remediation.Core.Enums
+@model FileUploadViewModel
+@{
+    var acceptedTypes = Model.AcceptedFileTypes?.Any() == true ? string.Join(",", Model.AcceptedFileTypes) : "*";
+}
+
+@if (@Model.AddedFiles is null || Model.AddedFiles.Count < Model.NumberOfFilesAllowed)
+{
+    <govuk-file-upload asp-for="File" name="File" input-accept="@acceptedTypes">
+        <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
+    </govuk-file-upload>
+    @if(Model.NumberOfFilesAllowed > 1)
+    {
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Add file</govuk-button>
+    }
+    
+}
+@if (Model.AddedFiles is { Count: > 0 })
+{
+    <h2 class="govuk-heading-m">Files added</h2>
+    <govuk-summary-list>
+        @for(var i = 0; i < Model.AddedFiles.Count; i++)
+        {
+            var file = Model.AddedFiles[i];
+            var count = i + 1;
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    File @count
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @file.Name @($"{@file.FileSize}")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Model.DeleteEndpoint?fileId=@file.Id">Delete</govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
+
+    </govuk-summary-list>
+    @for (var i = 0; i < Model.AddedFiles.Count; i++)
+    {
+        var file = Model.AddedFiles[i];
+        <input type="hidden" name="AddedFiles[@i].Id" value="@file.Id"/>
+        <input type="hidden" name="AddedFiles[@i].Name" value="@file.Name"/>
+        <input type="hidden" name="AddedFiles[@i].FileSize" value="@file.FileSize"/>
+    }
+}

@@ -1,0 +1,21 @@
+﻿@using HE.Remediation.Core.Enums
+@{
+    ViewData["Title"] = "You cannot proceed without getting confirmation from the Chief Executive that the works are not viable";
+    ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["ShowCancelAndExit"] = false;
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+<p class="govuk-body">
+    As you have not yet received confirmation from the Chief Executive that the remediation works are not viable, you will first need to get this before continuing.
+</p>
+<p class="govuk-body">
+    Please seek contact with the Chief Executive to discuss the works and associated costs of remedial works. 
+    Saving and exiting will keep this application in progress until you return with evidence.
+</p>
+
+<form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ConfirmedNotViableNotProceed">
+    @Html.Hidden("OrganisationType", value: EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+    @Html.Hidden("IsConfirmedNotViable", value: false)
+    <govuk-button name="button" value="Continue">Save and exit</govuk-button>
+</form>

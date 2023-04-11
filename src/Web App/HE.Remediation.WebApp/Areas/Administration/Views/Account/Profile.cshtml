@@ -1,0 +1,32 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Administration.UserResponsibleEntityTypeViewModel;
+@using HE.Remediation.Core.Enums
+@{
+    ViewData["Title"] = "Complete your profile";
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="ResponsibleEntityType" />
+            </govuk-error-summary>
+
+            <span class="govuk-caption-xl">Complete your profile</span>
+            <h1 class="govuk-heading-xl">How would you like to register</h1>
+            <p class="govuk-body">Please complete your details below.</p>
+            <p class="govuk-body">This will help autopopulate your forms on any new applications.</p>
+            <form asp-area="Administration" asp-controller="Account" asp-action="Profile" method="post">
+                <govuk-radios asp-for="ResponsibleEntityType">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">
+                            How would you like to register in the portal?
+                        </govuk-radios-fieldset-legend>
+                    </govuk-radios-fieldset>
+                    <govuk-radios-item value="@EResponsibleEntityType.Company">As a business or organisation</govuk-radios-item>
+                    <govuk-radios-item value="@EResponsibleEntityType.Individual">As an individual</govuk-radios-item>
+                </govuk-radios>
+
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

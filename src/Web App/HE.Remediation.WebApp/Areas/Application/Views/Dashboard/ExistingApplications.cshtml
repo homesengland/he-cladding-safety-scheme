@@ -1,0 +1,43 @@
+﻿@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Application.ExistingApplicationViewModel
+
+@{
+    ViewData["Title"] = "View existing applications";    
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">            
+                <h1 class="govuk-heading-xl">View existing applications</h1>
+                <p class="govuk-body">View all applications shared with you. Select a row to view the building application page.</p>
+
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">Building application ID</th>
+                            <th scope="col" class="govuk-table__header govuk-table__header">Unique building name</th>
+                            <th scope="col" class="govuk-table__header govuk-table__header">Date created</th>
+                            <th scope="col" class="govuk-table__header govuk-table__header">Stage</th>
+                            <th scope="col" class="govuk-table__header govuk-table__header">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                            @foreach (var application in Model.ApplicationList) {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell govuk-table__cell"><a class="govuk-link" href="@Url.Action("ExistingApplication", "Dashboard", new { Area = "Application", applicationId = @application.ApplicationId, applicationNumber = @application.ApplicationNumber })">@application.ApplicationNumber</a></td>
+                                    <td class="govuk-table__cell govuk-table__cell">@application.UniqueBuildingName</td>
+                                    <td class="govuk-table__cell govuk-table__cell">@application.DateCreated.ToString("dd/MM/yy")</td>
+                                    <td class="govuk-table__cell govuk-table__cell">@application.Stage.ToString().SplitCamelCase()</td>
+                                    <td><application-status-badge status="@application.Status"></application-status-badge></td>
+                                </tr>                                
+                            }       
+                    </tbody>
+                </table>    
+                                                   
+                <results-small-pager CurrentPage="@Model.CurrentPage" PageCount="@Model.PageCount" URIPrefix="ExistingApplications"></results-small-pager>
+           
+        </main>
+    </div>
+</div>

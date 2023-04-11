@@ -1,0 +1,27 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model AddressViewModel
+<govuk-fieldset>
+    <govuk-input asp-for="NameNumber" input-class="govuk-input--width-20">
+        <govuk-input-label class="govuk-!-font-weight-bold">Building name or number</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="AddressLine1" input-class="govuk-input--width-20">
+        <govuk-input-label class="govuk-!-font-weight-bold">Address line 1</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="AddressLine2" input-class="govuk-input--width-20">
+        <govuk-input-label class="govuk-!-font-weight-bold">Address line 2 (optional)</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="City" input-class="govuk-input--width-20">
+        <govuk-input-label class="govuk-!-font-weight-bold">Town or city</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="County" input-class="govuk-input--width-20">
+        <govuk-input-label class="govuk-!-font-weight-bold">County (optional)</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="Postcode" input-class="govuk-input--width-5">
+        <govuk-input-label class="govuk-!-font-weight-bold">Postcode</govuk-input-label>
+    </govuk-input>
+</govuk-fieldset>

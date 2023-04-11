@@ -1,0 +1,25 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@{
+    ViewData["Title"] = "What you'll need";
+    ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">
+    What you'll need
+</h1>
+
+<p class="govuk-body">You'll need the:</p>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>building address</li>
+    <li>number of storeys (starting from ground level – do not include any underground storeys)</li>
+    <li>number of residential units</li>
+    <li>number of any non-residential units (if any)</li>
+</ul>
+
+<h3 class="govuk-heading-s">Building height</h3>
+<p class="govuk-body">You have told us this building is 11 to 18 metres high. If it is not this height, it will not be eligible for funding at this time.</p>
+
+<govuk-button href="@Url.Action("BuildingUniqueName", "BuildingDetails", new {Area = "BuildingDetails"})">Continue</govuk-button>

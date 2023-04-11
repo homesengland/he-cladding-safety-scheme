@@ -1,0 +1,35 @@
+﻿﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model string
+
+@{
+    ViewData["Title"] = "Medium Rise Mediation";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">We&apos;ve sent you an email</h1>
+
+                    <p class="govuk-body">
+                        We&apos;ve sent an email to @Model. 
+                    </p>
+                    <p class="govuk-body">
+                        Check your spam folder if you can&apos;t see it in a few minutes.
+                    </p>
+                    <p class="govuk-body">
+                        If you don't receive the email after this time please access Sign in screen and 
+                        tell us you have forgotten your password.
+                        <br />
+                        We will then send you another email.
+                    </p>
+
+                    <div>
+                        <govuk-button is-start-button="false" href="@Url.Action("Login", "Authentication")">Sign in</govuk-button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

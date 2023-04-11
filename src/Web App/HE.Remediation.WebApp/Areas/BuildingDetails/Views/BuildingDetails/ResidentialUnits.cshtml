@@ -1,0 +1,47 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.ResidentialUnitsViewModel
+
+@{
+    ViewData["Title"] = "Units";
+    ViewData["Backlink"] = Url.Action("BuildingUniqueName", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ResidentialUnitsCount" />
+        <govuk-error-summary-item asp-for="NonResidentialUnits" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">
+    Units
+</h1>
+
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ResidentialUnits">
+    <govuk-input asp-for="ResidentialUnitsCount" name="ResidentialUnitsCount" input-class="govuk-input--width-5">
+        <govuk-input-label class="govuk-label--s">Number of residential units</govuk-input-label>
+        <govuk-input-hint>A residential unit is a private flat in a dwelling.</govuk-input-hint>
+    </govuk-input>
+
+    <govuk-radios asp-for="NonResidentialUnits" name="NonResidentialUnits">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Are there any non-residential units in this building?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-hint>
+                Can be called commercial units. For example, shops, offices or business premises.
+        </govuk-radios-hint>
+        <govuk-radios-item value="@ENoYes.Yes">Yes</govuk-radios-item>
+        <govuk-radios-item value="@ENoYes.No">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+    <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

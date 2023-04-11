@@ -1,0 +1,38 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model  HE.Remediation.WebApp.ViewModels.Application.LeaseHolderEvidenceViewModel
+@{
+    ViewData["Title"] = "Send update to leaseholders and tenants";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="/Application/TaskList" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-error-summary>
+                        <govuk-error-summary-item asp-for="File" />
+                    </govuk-error-summary>
+                    <span class="govuk-caption-xl">
+                        Send update to leaseholders and tenants
+                    </span>
+                    <h1 class="govuk-heading-xl">
+                        Upload evidence of your leaseholder and tenant update 
+                    </h1>
+
+                    <p class="govuk-body">You can upload up to 5 files.</p>
+                    <p class="govuk-body">Each file must be smaller than 20MB. and a .pdf file</p>
+                    <form method="post" asp-area="Application" asp-controller="LeaseholderEvidence" asp-action="Index" enctype="multipart/form-data">
+                        @await Html.PartialAsync("FileUpload", Model)
+                        <br/>
+                        <govuk-button class="gov-uk-link" name="SubmitAction" value="@(ESubmitAction.Continue)" type="submit">Save and Continue</govuk-button>
+                    </form>
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                    <a class="govuk-link" href="@Url.Action("Index", "TaskList", new {Area = "Application"})">Cancel and exit</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

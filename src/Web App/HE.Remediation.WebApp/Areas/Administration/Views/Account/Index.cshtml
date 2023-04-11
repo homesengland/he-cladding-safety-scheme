@@ -1,0 +1,86 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Administration.DashboardUserProfileViewModel
+
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.TagHelpers
+@{
+    ViewData["Title"] = "Settings dashboard";
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="/Application/Dashboard" class="govuk-back-link">Back</a>        
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div>
+                    <h1 class="govuk-heading-xl">Your Settings</h1>                    
+                    <p class="govuk-body">You can update your settings below, this will not affect any in progress applications.</p>
+                    
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <p class="govuk-body">
+                                <a class="govuk-!-font-size-24" href="@Url.Action("ContactDetails", "Account", new {Area = "Administration"})">
+                                    <b>Edit your contact details</b>
+                                </a>
+                            </p>
+                            <p class="govuk-body">Update your previously submitted content details</p>
+                            <hr />
+                        </div>                        
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <p class="govuk-body">
+                                <a class="govuk-!-font-size-24" href="@Url.Action("correspondanceaddress", "Account", new {Area = "Administration"})">
+                                    <b>Edit your personal correspondence address</b>
+                                </a>
+                            </p>
+                            <p class="govuk-body">Update your previously submitted correspondence address</p>
+                            <hr />
+                        </div>                        
+                    </div>
+
+                    @if (Model.ResponsibleEntityType == EResponsibleEntityType.Company)
+                    {
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-two-thirds">
+                        
+                                <p class="govuk-body">
+                                    <a class="govuk-!-font-size-24" href="@Url.Action("CompanyDetails", "Account", new {Area = "Administration"})">
+                                        <b>Edit your company details</b>
+                                    </a>
+                                </p>
+                                <p class="govuk-body">Update your previously submitted company details</p>
+                                <hr />
+                            </div>                        
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-two-thirds">
+                        
+                                <p class="govuk-body">
+                                    <a class="govuk-!-font-size-24" href="@Url.Action("CompanyAddress", "Account", new {Area = "Administration"})">
+                                        <b>Edit your company correspondence address</b>
+                                    </a>
+                                </p>
+                                <p class="govuk-body">Update your previously submitted company correspondence address</p>
+                                <hr />
+                            </div>                        
+                        </div>
+                    }
+                                        
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                        
+                            <p class="govuk-body">
+                                <a class="govuk-!-font-size-24" href="@Url.Action("SecondaryContactDetails", "Account", new {Area = "Administration"})">
+                                    <b>Edit your secondary contact details</b>
+                                </a>
+                            </p>
+                            <p class="govuk-body">Update your previously submitted secondary contact details</p>
+                            <hr />
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

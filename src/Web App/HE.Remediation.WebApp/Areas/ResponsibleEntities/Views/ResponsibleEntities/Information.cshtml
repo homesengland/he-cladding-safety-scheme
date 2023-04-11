@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Information about this section";
+    ViewData["BackLink"] = Url.Action("Index", "TaskList", new {Area = "Application"});
+}
+
+<h1 class="govuk-heading-xl">Information about this section</h1>
+<p class="govuk-body">
+    The Responsible Entity is the organisation that has the legal obligation or right to carry out remediation works. They are responsible for the external repair and maintenance of their buildings.
+</p>
+<p class="govuk-body">
+    The Responsible Entity may be the building freeholder or head leaseholder or a management company or Right To Manage (RTM) company who has primary responsibility for the repair of the property.
+</p>
+<p class="govuk-body">
+    Representatives of the Responsible Entity must be authorised to apply on behalf of the Responsible Entity. Evidence must be provided of this authorisation in order to complete the application. 
+</p>
+<p class="govuk-body">
+    The Representative is an administrative role only, helping coordinate the details of the remediation works, and is not taking on liability.
+</p>
+<p class="govuk-body">
+    There is no requirement to have a Representative.
+</p>
+
+<govuk-button href="@Url.Action("Representative", "ResponsibleEntities", new {Area = "ResponsibleEntities"})">Continue</govuk-button>

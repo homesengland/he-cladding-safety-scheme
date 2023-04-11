@@ -1,0 +1,29 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityUkRegisteredViewModel;
+@{
+    ViewData["Title"] = "Is the Responsible Entity registered in the UK?";
+    ViewData["BackLink"] = Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="UkRegistered"/>
+    </govuk-error-summary>
+}
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityUkRegistered" method="post">
+    <govuk-radios asp-for="UkRegistered">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

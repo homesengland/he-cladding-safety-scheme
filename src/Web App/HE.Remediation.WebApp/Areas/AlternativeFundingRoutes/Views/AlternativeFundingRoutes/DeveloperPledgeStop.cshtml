@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "You are not eligible to carry out this application";
+    ViewData["FullWidth"] = false;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-back-link href="@Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"})">Back</govuk-back-link>
+                <span class="govuk-caption-xl">Alternative routes of funding</span>
+                <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@ViewData["Title"]</h1>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    As the developer of your property has signed up to the Developer's Pledge, funding to your particular application cannot be allocated.
+                </p>
+            </div>
+            <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-inset-text">
+                    Please seek contact with the developer of your property to discuss the progress of remedial works
+                </div>
+            </div>
+        </div>
+        <form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="SetDeveloperPledgeStop">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-button>Return to home</govuk-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

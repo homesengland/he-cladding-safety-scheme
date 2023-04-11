@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "You are not eligible to carry out this application";
+    ViewData["ShowCancelAndExit"] = false;
+}
+
+<h1 class="govuk-heading-xl">You are not eligible to carry out this application</h1>
+
+<p class="govuk-body">
+    Private tenants or unaffordable work is only eligible for the remediation grant.
+</p>
+
+<h2 class="govuk-heading-m">What happens next</h2>
+
+<p class="govuk-body">
+    Unfortunately you are not eligible for a grant at this time. If anything changes then
+    you will be updated. In the meantime if the leaseholders and tenants of this building
+    have been informed of the current status of the building application already, they 
+    should be notified that it is on hold.
+</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="NotEligibleReturnHome" method="post">
+    <govuk-button type="submit">Return to home</govuk-button>
+</form>

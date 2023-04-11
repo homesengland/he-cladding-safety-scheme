@@ -1,0 +1,51 @@
+﻿@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.FireRiskAssessorDetailsViewModel
+
+@{
+    ViewData["Title"] = "Fire risk assessor details";
+    @*Removing file upload until this can be plumbed in properly*@
+    ViewData["BackLink"] = Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FirstName" />
+        <govuk-error-summary-item asp-for="LastName" />
+        <govuk-error-summary-item asp-for="CompanyName" />
+        <govuk-error-summary-item asp-for="CompanyNumber" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="Telephone" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Fire risk assessor details</h1>
+
+<form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="AssessorDetails" method="post">
+    <govuk-input asp-for="FirstName" name="FirstName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">First name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="LastName" name="LastName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Last name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="CompanyName" name="CompanyName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Company name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="CompanyNumber" name="CompanyNumber" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Company number</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="EmailAddress" name="EmailAddress" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Email address</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="Telephone" name="Telephone" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Telephone number</govuk-input-label>
+    </govuk-input>
+
+    <div class="comp-btn-group">
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

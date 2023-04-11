@@ -1,0 +1,27 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@{
+    ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
+}
+
+<h1 class="govuk-heading-xl">
+    Before you continue
+</h1>
+
+<p class="govuk-body">You cannot change your application answers after you continue.</p>
+
+<p class="govuk-body">Check your answers for the following sections before you continue:</p>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>Building details</li>
+    <li>Responsible entity details</li>
+    <li>Alternative routes of funding</li>
+    <li>Bank account details</li>
+</ul>
+
+<p class="govuk-body">You can still view the details you've entered after you continue, but you will not be able to change them.</p>
+
+<div class="comp-btn-group">
+    <govuk-button href="@Url.Action("Declaration", "Declaration", new {Area = "Declaration"})">Continue</govuk-button>
+    <govuk-button href="@Url.Action("Index", "TaskList", new {Area = "Application"})" class="govuk-button--secondary">Go back to task list</govuk-button>
+</div>

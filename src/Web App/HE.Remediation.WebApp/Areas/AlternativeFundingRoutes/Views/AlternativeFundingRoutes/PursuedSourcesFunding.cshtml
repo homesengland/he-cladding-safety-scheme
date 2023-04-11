@@ -1,0 +1,33 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.PursuedSourcesFundingViewModel
+@{
+    ViewData["Title"] = "Have you pursued other sources of funding?";
+    ViewData["BackLink"] = Url.Action("Information", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"});
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="PursuedSourcesFunding" />
+    </govuk-error-summary>
+}
+
+<form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="SetPursuedSourcesFunding">
+   
+    <govuk-radios class="govuk-!-margin-bottom-8" asp-for="PursuedSourcesFunding">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl govuk-!-margin-bottom-5">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@EPursuedSourcesFundingType.ExhaustedAllRoutes">Yes, I have exhausted all other routes of funding and am unable to claim any funding</govuk-radios-item>
+        <govuk-radios-item value="@EPursuedSourcesFundingType.PursuingOtherRoutes">Yes, I am in the process of pursuing other routes of funding</govuk-radios-item>
+        <govuk-radios-item value="@EPursuedSourcesFundingType.NotExhaustedAllRoutes">No, there are still other routes of funding that I could pursue</govuk-radios-item>
+    </govuk-radios>
+
+    <div class="comp-btn-group">
+    <govuk-button name="button" value="Continue">Save and continue</govuk-button>
+    <govuk-button name="button" value="Exit" class="govuk-button--secondary govuk-!-margin-left-4">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,31 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.BankAccount.AccountGrantPaidToViewModel
+
+@{
+    ViewData["Title"] = "Bank Account Details";
+    ViewData["BackLink"] = Url.Action("WhatYouWillNeedRepresentative", "BankAccount", new { Area = "BankAccount" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="BankDetailsRelationship" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Whose account will the grant be paid to?</h1>
+
+<form asp-area="BankAccount" asp-controller="BankAccount" asp-action="SetAccountGrantPaidTo" method="post">
+   
+    <p class="govuk-body">This includes any pre-tender support.</p>
+    <govuk-radios name="BankDetailsRelationship" asp-for="BankDetailsRelationship">
+        <govuk-radios-item value="@(EBankDetailsRelationship.MyAccount)">My account (representative)</govuk-radios-item>
+        <govuk-radios-item value="@(EBankDetailsRelationship.ResponsibleEntityAccount)">Responsible entity's account</govuk-radios-item>
+    </govuk-radios>
+
+    <div class="comp-btn-group">
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Bank Account Details";
+    ViewData["BackLink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
+}
+
+<h1 class="govuk-heading-xl">What you'll need</h1>
+
+<p class="govuk-body">You must use a UK bank account for the grant funding.</p>
+
+<p class="govuk-body">You'll need the:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>name on the account</li>
+    <li>account number</li>
+    <li>sort code</li>
+    <li>bank name</li>
+    <li>branch name</li>
+</ul>
+
+<p class="govuk-body">If the grant funding will be paid to you as the representative, the account must be protected by an accredited
+    <a href="https://www.gov.uk/client-money-protection-scheme-property-agents" target="_blank" class="govuk-link">client money protection scheme provider</a>, or an equivalent.</p>
+
+<p class="govuk-body">If the grant funding will be paid to the responsible entity, they must enter into a deed of trust. Please check your guidance.</p>
+
+<govuk-button href="@Url.Action("AccountGrantPaidTo", "BankAccount", new {Area = "BankAccount"})">Continue</govuk-button>

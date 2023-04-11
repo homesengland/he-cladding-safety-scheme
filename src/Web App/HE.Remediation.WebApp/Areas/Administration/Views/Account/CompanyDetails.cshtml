@@ -1,0 +1,47 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using InputTagHelper = Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper
+@model HE.Remediation.WebApp.ViewModels.Administration.CompanyDetailsViewModel
+
+@{
+    ViewData["Title"] = "Complete your profile";
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        @if (!_adp.IsEnforcedFlow())
+        {
+            <a href="/Administration" class="govuk-back-link">Back</a>
+        }                
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="CompanyName" />
+                <govuk-error-summary-item asp-for="CompanyRegistrationNumber" />
+                <govuk-error-summary-item asp-for="UserRoleInCompany" />
+            </govuk-error-summary>
+
+            <span class="govuk-caption-xl">Complete your profile</span>
+            <h1 class="govuk-heading-xl">Please provide your company details</h1>
+            <p class="govuk-body">Please complete your details below.</p>
+            <p class="govuk-body">This will help autopopulate your forms on any new applications.</p>
+            <h1 class="govuk-heading-m">What are your company details?</h1>
+
+            <form asp-area="Administration" asp-controller="Account" asp-action="CompanyDetails" method="post">
+                <govuk-input asp-for="CompanyName" name="CompanyName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Company name</govuk-input-label>
+                </govuk-input>
+
+                <govuk-input asp-for="CompanyRegistrationNumber" name="CompanyRegistrationNumber" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Company registration number</govuk-input-label>
+                </govuk-input>
+
+                <govuk-input asp-for="UserRoleInCompany" name="UserRoleInCompany" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                    <govuk-input-label is-page-heading="false" class="govuk-label--s">Your role in the company</govuk-input-label>
+                </govuk-input>
+
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>
