@@ -8,4 +8,5 @@ public class GetApplicationStatusResult
     public bool Submitted { get; set; }
     public EApplicationStatus Status { get; set; }
     public EApplicationStage Stage { get; set; }
+    public EApplicationInternalStatus InternalStatus { get; set; }
 }

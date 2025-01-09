@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -6,22 +7,24 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.SetN
 
 public class SetNotEligibleHandler : IRequestHandler<SetNotEligibleRequest>
 {
-    private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IApplicationRepository _applicationRepository;
 
-    public SetNotEligibleHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+    public SetNotEligibleHandler(IApplicationDataProvider applicationDataProvider, IApplicationRepository applicationRepository)
     {
-        _connection = connection;
         _applicationDataProvider = applicationDataProvider;
+        _applicationRepository = applicationRepository;
     }
 
     public async Task<Unit> Handle(SetNotEligibleRequest request, CancellationToken cancellationToken)
     {
-        await _connection.ExecuteAsync("UpdateApplicationDetailsStatus", new
-        {
-            ApplicationId = _applicationDataProvider.GetApplicationId(),
-            StatusId = EApplicationStatus.NotEligible
-        });
+        await _applicationRepository.UpdateApplicationStage(_applicationDataProvider.GetApplicationId(),
+            EApplicationStage.Closed);
+
+        await _applicationRepository.UpdateStatus(_applicationDataProvider.GetApplicationId(),
+            EApplicationStatus.ApplicationNotEligible,
+            "Applicant must be registered in the UK to apply for the remediation grant.");
+
         return Unit.Value;
     }
 }

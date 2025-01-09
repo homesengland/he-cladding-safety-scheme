@@ -16,8 +16,7 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
 
     public async Task<GetBuildingAddressResponse> GetBuildingAddress(Guid applicationId)
     {
-        return await _db.QuerySingleOrDefaultAsync<GetBuildingAddressResponse>("GetBuildingAddress", 
-                                                                               new { applicationId });
+        return await _db.QuerySingleOrDefaultAsync<GetBuildingAddressResponse>("GetBuildingAddress", new { applicationId });
     }
 
     public async Task InsertBuildingAddress(BuildingDetailsAddressDetails details, Guid applicationId)
@@ -34,9 +33,21 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
                     details.AddressLine1,
                     details.AddressLine2,
                     details.City,
-                    details.LocalAuthority,
+                    details.County,
                     details.Postcode,
-                    details.County
+                    details.LocalAuthority,
+                    details.SubBuildingName,
+                    details.BuildingName,
+                    details.BuildingNumber,
+                    details.Street,
+                    details.Town,
+                    details.AdminArea,
+                    details.UPRN,
+                    details.AddressLines,
+                    details.XCoordinate,
+                    details.YCoordinate,
+                    details.Toid,
+                    details.BuildingType
                 }
             );
 
@@ -47,19 +58,37 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
     }
 
     public async Task UpdateBuildingAddress(BuildingDetailsAddressDetails details, Guid applicationId)
-        {
-            await _db.ExecuteAsync("UpdateBuildingAddress",
-                new
-                {
-                    applicationId,
-                    details.NameNumber,
-                    details.AddressLine1,
-                    details.AddressLine2,
-                    details.City,
-                    details.LocalAuthority,
-                    details.Postcode,
-                    details.County
-                }
-            );
-        }
+    {
+        await _db.ExecuteAsync("UpdateBuildingAddress",
+            new
+            {
+                applicationId,
+                details.NameNumber,
+                details.AddressLine1,
+                details.AddressLine2,
+                details.City,
+                details.County,
+                details.Postcode,
+                details.LocalAuthority,
+                details.SubBuildingName,
+                details.BuildingName,
+                details.BuildingNumber,
+                details.Street,
+                details.Town,
+                details.AdminArea,
+                details.UPRN,
+                details.AddressLines,
+                details.XCoordinate,
+                details.YCoordinate,
+                details.Toid,
+                details.BuildingType
+            }
+        );
+    }
+
+    public async Task<string> GetBuildingUniqueName(Guid applicationId)
+    {
+        var uniqueName = await _db.QuerySingleOrDefaultAsync<string>(nameof(GetBuildingUniqueName), new { ApplicationId = applicationId });
+        return uniqueName;
+    }
 }

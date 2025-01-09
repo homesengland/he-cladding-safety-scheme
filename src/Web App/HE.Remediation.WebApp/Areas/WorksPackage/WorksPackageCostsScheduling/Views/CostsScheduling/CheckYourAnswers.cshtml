@@ -1,0 +1,326 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Cost Scheduling - Check your answers";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+    ViewData["BackLink"] = @Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+@using (Html.BeginForm())
+{
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-label--m">Quotes</span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full govuk-text-align-right">
+                            <a href=@Url.Action("SoughtQuotes", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling", returnUrl =  Url.Action("CheckYourAnswers", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling"})}) class="govuk-link">Change</a>
+                        </div>
+                    </div>
+                }
+                
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Did you obtain competitive bids for this work?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.CompetitiveBidsObtained.ToString())
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+    <div class="govuk-summary-list no-margin">
+        <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__key">
+                <span class="govuk-label--m">Subcontractors</span>
+            </div>
+            <div class="govuk-summary-list__value">
+                @if(!Model.IsSubmitted)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full govuk-text-align-right">
+                            <a href=@Url.Action("SubcontractorTeam", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling", returnUrl = Url.Action("CheckYourAnswers", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling"}) }) class="govuk-link">Change</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <table class="govuk-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">Subcontractor</th>
+                                <th scope="col" class="govuk-table__header">Company Registration number</th>
+                                <th scope="col" class="govuk-table__header">Company name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @for(var i = 0; i < Model.SubContractors.Count(); i++)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell ">
+                                        <b>Subcontractor @(i+1)</b>
+                                    </td>
+                                    <td class="govuk-table__cell">
+                                        @Model.SubContractors[i].CompanyRegistrationNumber
+                                    </td>
+                                    <td class="govuk-table__cell">
+                                        @Model.SubContractors[i].CompanyName
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            </div>
+    </div>
+    <div class="govuk-summary-list no-margin">
+        <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__key">
+                <span class="govuk-label--m">Cladding Systems</span>
+            </div>
+            <div class="govuk-summary-list__value">
+                @if (!Model.IsSubmitted)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full govuk-text-align-right">
+                            <a href=@Url.Action("FireRiskAppraisaltoExternalWalls", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling", returnUrl = Url.Action("CheckYourAnswers", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling"}) }) class="govuk-link">Change</a>
+                        </div>
+                    </div>
+                }
+                 
+            </div>
+        </div>
+    </div>
+    <div class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <div class=govuk-table>
+                <div class="govuk-table__body">
+
+                    @for(int i = 0; i< Model.CladdingSystems.Count(); i++)
+                    {
+                        <div class="govuk-table__row">
+                            <div class="govuk-table__cell">
+                                 <govuk-details open="false" class="no-margin">
+                                     <govuk-details-summary>
+                                         Cladding System @(i+1)
+                                     </govuk-details-summary>
+                                     <govuk-details-text>
+                                         <table class="govuk-table">
+                                             <tbody class="govuk-table__body">
+                                                 <tr class="govuk-table__row">
+                                                     <td class="govuk-summary-list__key no-border">
+                                                         <b>Is this being removed?</b>
+                                                     </td>
+                                                     <td class="govuk-summary-list__value no-border">
+                                                         @(Model.CladdingSystems[i].BeingRemoved ? "Yes": "No")
+                                                     </td>
+                                                 </tr>
+                                                 <tr>
+
+                                                 </tr>
+                                             </tbody>
+                                         </table>
+                                         <govuk-summary-list>
+                                             <govuk-summary-list-row>
+                                                 <govuk-summary-list-row-key>
+                                                     <span class="govuk-label--m">What is replacing this cladding system?</span>
+                                                 </govuk-summary-list-row-key>
+                                             </govuk-summary-list-row>
+                                             <govuk-summary-list-row>
+                                                 <govuk-summary-list-row-key>
+                                                     Cladding Type
+                                                 </govuk-summary-list-row-key>
+                                                 <govuk-summary-list-row-value>
+                                                     @Model.CladdingSystems[i].CladdingType
+                                                 </govuk-summary-list-row-value>
+                                             </govuk-summary-list-row>
+                                             <govuk-summary-list-row>
+                                                 <govuk-summary-list-row-key>
+                                                     Cladding manufacturer
+                                                 </govuk-summary-list-row-key>
+                                                 <govuk-summary-list-row-value>
+                                                     @Model.CladdingSystems[i].CladdingManufacturer
+                                                 </govuk-summary-list-row-value>
+                                             </govuk-summary-list-row>
+                                             <govuk-summary-list-row>
+                                                 <govuk-summary-list-row-key>
+                                                     Insulation material
+                                                 </govuk-summary-list-row-key>
+                                                 <govuk-summary-list-row-value>
+                                                     @Model.CladdingSystems[i].InsulationMaterial
+                                                 </govuk-summary-list-row-value>
+                                             </govuk-summary-list-row>
+                                             <govuk-summary-list-row>
+                                                 <govuk-summary-list-row-key class="no-border">
+                                                     Insulation manufacturer
+                                                 </govuk-summary-list-row-key>
+                                                 <govuk-summary-list-row-value>
+                                                     @Model.CladdingSystems[i].InsulationManufacturer
+                                                 </govuk-summary-list-row-value>
+                                             </govuk-summary-list-row>
+                                         </govuk-summary-list>
+                                     </govuk-details-text>
+                                 </govuk-details>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <govuk-summary-list class="margin-ten">
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-label--m">Total costs</span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full govuk-text-align-right">
+                            <a href=@Url.Action("Costs", "CostsScheduling",  new { Area = "WorksPackageCostsScheduling" }) class="govuk-link">Change</a>
+                        </div>
+                    </div>   
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Eligible Costs
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                £@Model.EligibleCosts.ToString("N0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Ineligible Costs
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                £@Model.IneligibleCosts.ToString("N0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Total
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                £@Model.TotalCosts.ToString("N0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+    <div class="govuk-summary-list">
+        <div class="govuk-summary-row">
+            <table class="govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <govuk-details open="false" class="no-margin">
+                              <govuk-details-summary>
+                                View cost description
+                              </govuk-details-summary>
+                              <govuk-details-text>
+                                  <table class="govuk-table">
+                                      <thead class="govuk-table__head">
+                                          <th scope="col" class="govuk-table__header govuk-summary-list__key">Works type</th>
+                                          <th scope="col" class="govuk-table__header govuk-summary-list__value">Description of works</th>
+                                      </thead>
+                                      <tbody>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__key">Removal of unsafe cladding</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value"></td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Removal of unsafe cladding system</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.RemovalOfCladdingDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__key">Installation of new cladding to replace unsafe cladding</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value"></td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">New cladding – including specification, insulation and other associated components to be installed </td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.NewCladdingDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.EligibleExternalDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Any internal mitigation works recommended in the FRAEW /PAS9980 assessment in lieu of cladding removal</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.EligibleInternalDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__key">Preliminaries, access costs, main contractor's overheads and profit</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value"></td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Main contractor's preliminaries </td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.MainContractorDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Access (e.g. scaffolding or mast climber) </td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.AccessDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Main contractor's overheads and profit </td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.OverheadsProfitDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Contractor's contingencies </td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.ContingenciesDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__key">Other costs</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value"></td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.FeasibilityDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Professional fees - post tender stage</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.PostTenderDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell govuk-summary-list__value">Property manager/leaseholder liaison costs </td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.PropertyManagerDescription</td>
+                                          </tr>
+                                          <tr class="govuk-table__row">
+                                              <td class="govuk-table__cell govuk-summary-list__value">Irrecoverable VAT on works and associated fees</td>
+                                              <td class="govuk-table__cell govuk-summary-list__value">@Model.VatDescription</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </govuk-details-text>
+                         </govuk-details>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted"/>
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button href="@Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" })">Continue</govuk-button>
+        </div>
+    }
+}

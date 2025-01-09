@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.BuildingHasSafetyRegulatorRegistrationCodeViewModel
+@{
+    ViewData["Title"] = "Do you have a Building Safety Regulator registration code?";
+    ViewData["BackLink"] = Url.Action("ConfirmBuildingHeight", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="BuildingHasSafetyRegulatorRegistrationCode" />
+    </govuk-error-summary>
+}
+
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="BuildingHasSafetyRegulatorRegistrationCode">
+    <h1 class="govuk-heading-xl">Do you have a Building Safety Regulator registration code?</h1>
+
+    <govuk-radios asp-for="BuildingHasSafetyRegulatorRegistrationCode">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false">
+                A Building Safety Regulator registration code is required for all buildings 18m and over
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item value="True">Yes</govuk-radios-item>
+        <govuk-radios-item value="False">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

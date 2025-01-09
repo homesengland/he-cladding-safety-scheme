@@ -1,0 +1,19 @@
+﻿using MediatR;
+
+namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetSubContractorRatings;
+
+public class SetSubContractorRatingsRequest : IRequest
+{
+    public SubContractorRating Ratings { get; set; }
+    public bool Complete { get; set; }
+}
+
+public class SubContractorRating : IRequest
+{
+    public Guid Id { get; set; }
+    public int QualityOfWork { get; set; }
+    public int ValueForMoney { get; set; }
+    public int Reliability { get; set; }
+    public int ConsiderationOfResidents { get; set; }
+    public int OverallSatisfaction { get; set; }
+}

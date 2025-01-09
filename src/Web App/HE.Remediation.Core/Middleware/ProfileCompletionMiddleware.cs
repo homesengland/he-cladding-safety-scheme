@@ -55,7 +55,13 @@ public class ProfileCompletionMiddleware
             return false;
         }
 
-        var ignorePaths = new List<string>() { "/Administration", "/Authentication/Logout" };
+        var ignorePaths = new List<string>() 
+        { 
+            "/Administration", 
+            "/Authentication/Logout",
+            "/Accessibility",
+            "/Cookies"
+        };
         if (ignorePaths.Any(segments => context.Request.Path.StartsWithSegments(segments,
                                                                                 StringComparison.OrdinalIgnoreCase)))
         {

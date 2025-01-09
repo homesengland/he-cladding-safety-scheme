@@ -32,7 +32,7 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
         [HttpPost(nameof(SubmitApplication))]
         public async Task<IActionResult> SubmitApplication()
         {
-            await _sender.Send(SetSubmitRequest.Request); 
+            await _sender.Send(SetSubmitRequest.Request);
             
             return RedirectToAction("Submitted", "Submit", new { area = "Application" });
         }

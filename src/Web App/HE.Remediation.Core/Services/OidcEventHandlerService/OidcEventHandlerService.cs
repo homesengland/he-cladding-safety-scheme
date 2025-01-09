@@ -9,7 +9,7 @@ public class OidcEventHandlerService
     private const string ErrorKey = "error";
     private const string ErrorDescriptionKey = "error_description";
 
-    private const string UnauthorisedDescriptor = "unauthorized";
+    private const string AccessDeniedDescriptor = "access_denied";
     private const string VerifyEmailDescriptor = "VERIFY_EMAIL:";
 
     public static Task HandleRemoteFailureError(RemoteFailureContext context)
@@ -24,7 +24,7 @@ public class OidcEventHandlerService
         var error = errorState[ErrorKey];
         var errorDescription = errorState[ErrorDescriptionKey].ToString();
 
-        if (error == UnauthorisedDescriptor && errorDescription.StartsWith(VerifyEmailDescriptor))
+        if (error == AccessDeniedDescriptor && errorDescription.StartsWith(VerifyEmailDescriptor))
         {
             var emailToVerify = errorDescription.Replace(VerifyEmailDescriptor, string.Empty);
             context.Response.Redirect($"/Authentication/EmailNotVerified?emailAddress={HttpUtility.UrlEncode(emailToVerify)}");

@@ -6,5 +6,6 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
     {
         public ENoYes? WorksRequired { get; set; }
         public ESubmitAction? SubmitAction { get; set; }
+        public string ReturnUrl { get; set; }
     }
 }

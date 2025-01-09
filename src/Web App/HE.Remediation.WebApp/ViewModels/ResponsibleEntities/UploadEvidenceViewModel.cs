@@ -9,6 +9,6 @@ public class UploadEvidenceViewModel : FileUploadViewModel
     public override string DeleteEndpoint => "/ResponsibleEntities/UploadEvidence/Delete";
     public override string[] AcceptedFileTypes => new[] { ".pdf" };
     public override int NumberOfFilesAllowed => 5;
-
+    public EResponsibleEntityUploadType UploadType { get; set; }
     public string ReturnUrl { get; set; }
 }

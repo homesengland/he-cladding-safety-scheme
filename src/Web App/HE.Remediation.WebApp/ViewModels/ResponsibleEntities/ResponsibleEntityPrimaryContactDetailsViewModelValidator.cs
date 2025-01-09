@@ -31,7 +31,15 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
                 .NotEmpty()
                 .WithMessage("Please enter a Phone number")
                 .NotValidTelephoneGB()
+                .When(x=> x.IsUkBased)
                 .WithMessage("Enter a Phone number, like 01632960001, 07700900982");
+
+            RuleFor(x => x.ContactNumber)
+                .NotEmpty()
+                .WithMessage("Please enter a Phone number")
+                .NotValidTelephoneInternational()
+                .When(x => !x.IsUkBased)
+                .WithMessage("Enter a Phone number, like +331632960001, +497700900982");
         }
     }
 }

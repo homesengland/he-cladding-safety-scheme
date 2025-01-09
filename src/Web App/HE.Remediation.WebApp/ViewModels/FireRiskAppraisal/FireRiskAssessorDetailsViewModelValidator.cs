@@ -15,7 +15,9 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 
             RuleFor(x => x.CompanyNumber)
                 .NotEmpty()
-                .WithMessage("Please enter a Company number");
+                .WithMessage("Please enter a Company number")
+                .Matches("^[a-zA-Z0-9]{8}$")
+                .WithMessage("Please enter a valid Company registration number");
 
             RuleFor(x => x.FirstName)
                 .NotEmpty()

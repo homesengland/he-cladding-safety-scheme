@@ -10,15 +10,18 @@ public class SetIsClaimingGrantHandler : IRequestHandler<SetIsClaimingGrantReque
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IResponsibleEntityRepository _responsibleEntityRepository;
+    private readonly IApplicationRepository _applicationRepository;
 
     public SetIsClaimingGrantHandler(
         IDbConnectionWrapper connection, 
         IApplicationDataProvider applicationDataProvider, 
-        IResponsibleEntityRepository responsibleEntityRepository)
+        IResponsibleEntityRepository responsibleEntityRepository,
+        IApplicationRepository applicationRepository)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
         _responsibleEntityRepository = responsibleEntityRepository;
+        _applicationRepository = applicationRepository;
     }
 
     public async Task<SetIsClaimingGrantResponse> Handle(SetIsClaimingGrantRequest request, CancellationToken cancellationToken)
@@ -29,6 +32,8 @@ public class SetIsClaimingGrantHandler : IRequestHandler<SetIsClaimingGrantReque
             ApplicationId = applicationId,
             request.IsClaimingGrant
         });
+
+        await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.ApplicationInProgress);
 
         var result = await _responsibleEntityRepository.GetResponsibleEntityCompanyType(applicationId);
         return new SetIsClaimingGrantResponse

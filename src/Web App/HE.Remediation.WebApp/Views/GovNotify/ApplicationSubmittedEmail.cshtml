@@ -1,0 +1,44 @@
+﻿@model HE.Remediation.Core.Services.GovNotify.ViewModels.GovNotifyEmailViewModel
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/gov-notify-footer.css">
+</head>
+<body>
+    <div class="head">
+        <img class="logo" src="img/LetterLogo.png" />
+        <span class="slogan">The Housing and Regeneration Agency</span>
+    </div>
+    <div class="body">
+        <div class="avoid-break">
+            <p>
+                Dear @Model.ContactFirstName @Model.ContactSurname,
+            </p>
+        </div>
+        <div class="avoid-break">
+            <strong>
+                Thank you for applying for remediation funding for @Model.BuildingName @Model.ReferenceNumber.
+            </strong>
+            <p>
+                We'll review your application and carry out our eligibility checks and FRAEW assurance. We may contact you or your FRAEW assessor 
+                if we need further information. Once we've made our eligibility decision, we'll confirm whether you are eligible for funding and 
+                the next steps.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                If you need further help, contact the Cladding Safety Scheme by emailing
+                <a href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>.
+                Please include the building’s name and number in the email subject line. Alternatively, you can call the team on 0300 323 0180.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Yours sincerely
+            </p>
+            <p>
+                The Cladding Safety Scheme Team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

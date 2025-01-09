@@ -9,6 +9,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetBankAccountDe
         public string BranchName { get; set; }
         public string AccountNumber { get; set; }
         public string SortCode { get; set; }
+        public string VatNumber { get; set; }
         public EApplicationRepresentationType? RepresentationType { get; set; }
     }
 }

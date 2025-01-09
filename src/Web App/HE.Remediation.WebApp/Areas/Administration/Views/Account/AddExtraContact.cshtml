@@ -17,10 +17,6 @@
             
             <form asp-area="Administration" asp-controller="Account" asp-action="AddExtraContact" method="post">
                 <govuk-radios asp-for="AddContact">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--m">                            
-                        </govuk-radios-fieldset-legend>
-                    </govuk-radios-fieldset>
                     <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
                     <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
                 </govuk-radios>

@@ -1,0 +1,63 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings.SubContractorCheckYourAnswersViewModel
+
+@foreach (var item in Model.SubContractorRatings.Select((item, index) => new {Index = index + 1, SubContractor = item}))
+{
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Sub-contractor @item.Index - @item.SubContractor.CompanyName</h2>
+            </govuk-summary-list-row-key>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action(Model.Action, new {id = item.SubContractor.Id, name = $"Sub-contractor {item.Index}", returnUrl = $"{Model.ReturnAction}"})">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Quality of work
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @item.SubContractor.QualityOfWork
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Value for money
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @item.SubContractor.ValueForMoney
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Reliability
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @item.SubContractor.Reliability
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Consideration of residents
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @item.SubContractor.ConsiderationOfResidents
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Overall satisfaction
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @item.SubContractor.OverallSatisfaction
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+}

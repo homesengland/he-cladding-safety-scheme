@@ -11,18 +11,27 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.DeleteLeaseHolderEvidenc
         private readonly IDbConnectionWrapper _dbConnection;
         private readonly IFileService _fileService;
         private readonly IFileRepository _fileRepository;
+        private readonly IApplicationDataProvider _applicationDataProvider;
 
-        public DeleteLeaseHolderEvidenceHandler(IDbConnectionWrapper dbConnection, IFileService fileService, IFileRepository fileRepository)
+        public DeleteLeaseHolderEvidenceHandler(
+            IDbConnectionWrapper dbConnection, 
+            IFileService fileService, 
+            IFileRepository fileRepository, 
+            IApplicationDataProvider applicationDataProvider
+        )
         {
             _dbConnection = dbConnection;
             _fileService = fileService;
             _fileRepository = fileRepository;
+            _applicationDataProvider = applicationDataProvider;
         }
         public async Task<Unit> Handle(DeleteLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
         {
+            var applicationId = _applicationDataProvider.GetApplicationId();
+
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                await _dbConnection.ExecuteAsync("DeleteLeaseHolderEvidence", new { request.FileId });
+                await _dbConnection.ExecuteAsync("DeleteLeaseHolderEvidence", new { ApplicationId = applicationId, request.FileId });
                 var result = await _fileRepository.DeleteFile(request.FileId);
 
                 await _fileService.DeleteFile($"{request.FileId}{result.Extension}");

@@ -23,5 +23,7 @@ namespace HE.Remediation.Core.Data.Repositories
         Task UpdateWallWorks(EWorkType WorkTypeId, string Description, Guid ApplicationId, Guid Id);
 
         Task DeleteFireRiskWallWorks(Guid Id);
+
+        Task ResetFireRiskWallWorks(Guid applicationId, EWorkType workType);
     }
 }

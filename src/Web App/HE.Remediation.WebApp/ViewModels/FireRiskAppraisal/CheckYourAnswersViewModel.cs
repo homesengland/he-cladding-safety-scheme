@@ -21,13 +21,11 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 
         public string PeerReviewPerson { get; set; }
 
-        public string UndertakingFirm { get; set; }
+        public decimal? FraewCost { get; set; }
 
-        public int? NumberOfStoreys { get; set; }    
+        public int? NumberOfStoreys { get; set; }
 
         public int? BuildingHeight { get; set; }
-
-        public ENoYes? BuildingInterimMeasures { get; set; }
 
         public EBasicComplexType? BasicComplexType { get; set; }
 
@@ -45,31 +43,42 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 
         public string RemediationSummary { get; set; }
 
-        public string JustifyRecommendation { get; set; }  
+        public string InterimMeasuresOtherText { get; set; }
+
+        public string SafetyRiskOtherText { get; set; }
+
+        public string OtherRiskMitigationOptionsConsidered { get; set; }
+        public string JustifyRecommendation { get; set; }
+
+        //interim measures
+        public EYesNoNonBoolean? BuildingInterimMeasures { get; set; }
+
+        public EEvacuationStrategy? EvacuationStrategyType { get; set; }
+
+        public int? NumberOfStairwells { get; set; }
+
+        public EYesNoNonBoolean? ExternalWallAndBalconiesPolicy { get; set; }
+
+        public EYesNoNonBoolean? FireAndResueAccessRestrictions { get; set; }
+
+        public string FireAndResueAccessRestrictionsText { get; set; }
+
+        public IEnumerable<EInterimMeasuresType> BuildingInterimMeasuresTypes { get; set; }
+
+        public int? RecommendTotalAreaCladding { get; set; }
 
         // lists/collections
-    
+
         public List<GetWallWorksListResult> InternalWorks { get; set; }
 
         public List<GetWallWorksListResult> ExternalWorks { get; set; }
 
         public List<CladdingSystemsListResult> CladdingSystems { get; set; }
-           
 
-        // old fields below
-        public bool FireRiskCompleted { get; set; }
-        public string AppraisalSurveyDetailsFireRiskAssessor { get; set; }
-        public DateTime? AppraisalSurveyDetailsDateOfInstruction { get; set; }
-        public DateTime? AppraisalSurveyDetailsSurveyDate { get; set; }
-        public string AssessorDetailsFirstName { get; set; }
-        public string AssessorDetailsLastName { get; set; }
-        public string AssessorDetailsCompanyName { get; set; }
-        public string AssessorDetailsCompanyNumber { get; set; }
-        public string AssessorDetailsEmailAddress { get; set; }
-        public string AssessorDetailsTelephone { get; set; }
-        public string SurveyInstructionDetailsFireRiskAssessor { get; set; }
-        public DateTime? SurveyInstructionDetailsDateOfInstruction { get; set; }
-        public string FRAEWFileName { get; set; }
+        public List<ERiskSafetyMitigationType> SafetyRiskMitigationOptions { get; set; }
+
+        public List<EInterimMeasuresType> InterimMeasureOptions { get; set; }
+
         public bool ReadOnly { get; set; }
     }
 }

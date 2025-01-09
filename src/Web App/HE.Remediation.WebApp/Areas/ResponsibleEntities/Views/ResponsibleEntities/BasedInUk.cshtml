@@ -1,7 +1,7 @@
 ﻿@using HE.Remediation.Core.Enums
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.BasedInUkViewModel
 @{
-    ViewData["Title"] = "Are you based in the UK?";
+    ViewData["Title"] = "As the Representative, are you based in the UK?";
     ViewData["BackLink"] = Url.Action("Representative", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
 }
 @section ErrorSummary
@@ -13,7 +13,7 @@
 <form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="BasedInUk">
     <govuk-radios asp-for="BasedInUk">
         <govuk-radios-fieldset>
-            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">Are you based in the UK?</govuk-radios-fieldset-legend>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">As the Representative, are you based in the UK?</govuk-radios-fieldset-legend>
         </govuk-radios-fieldset>
 
         <govuk-radios-item value="@(true)">Yes</govuk-radios-item>        

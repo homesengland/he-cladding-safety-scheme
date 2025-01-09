@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using HE.Remediation.Core.Exceptions;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.AcknowledgeNotification;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.GetPretender;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.Tasks;
 using HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExistingApplication;
@@ -26,9 +29,26 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
 
         #region "Dashboard"
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var response = await _sender.Send(GetPreTenderRequest.Request);
+
+            var viewModel = new DashboardViewModel
+            {
+                AlertCount = response.AlertCount,
+                NotificationMessage = response.NotificationMessage
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpGet("AcknowledgedNotification/{id:guid}")]
+        public async Task<IActionResult> AcknowledgedNotification([FromRoute] GetAcknowledgeNotificationRequest request)
+        {
+            await _sender.Send(request);
+
+            return RedirectToAction("Index", "StageDiagram");
         }
 
         #endregion
@@ -98,6 +118,25 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
         }
 
         #endregion
+
+        #region "Tasks"
+        public async Task<IActionResult> Tasks()
+        {
+            var response = await _sender.Send(GetTasksRequest.Request);
+
+            return View(response.Alerts);
+        }
+        #endregion
+
+        public IActionResult Complaints()
+        {
+            return View();
+        }
+
+        public IActionResult Appeals()
+        {
+            return View();
+        }
 
     }
 }

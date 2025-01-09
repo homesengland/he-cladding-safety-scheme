@@ -348,7 +348,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         [HttpPost(nameof(CompanyAddress))]
         public async Task<IActionResult> CompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -429,8 +429,8 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
 
             if (submitAction == ESubmitAction.FindAddress)
             {
-                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
-                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var request = new GetPostCodeRequest { PostCode = viewModel.PostCode };
+                var response = await _sender.Send(request);
                 var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
 
                 if (!newMappedModel.HaveResults)
@@ -484,7 +484,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         [HttpPost(nameof(CorrespondenceAddress))]
         public async Task<IActionResult> CorrespondenceAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, false);
             var validationResult = await validator.ValidateAsync(model);
             if (!validationResult.IsValid)
             {
@@ -589,8 +589,8 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
 
             if (submitAction == ESubmitAction.FindAddress)
             {
-                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
-                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var request = new GetPostCodeRequest { PostCode = viewModel.PostCode };
+                var response = await _sender.Send(request);
                 var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
 
                 if (!newMappedModel.HaveResults)

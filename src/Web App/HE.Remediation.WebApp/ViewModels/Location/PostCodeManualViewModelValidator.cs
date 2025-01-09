@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.WebApp.CustomPropertyValidators;
 
 namespace HE.Remediation.WebApp.ViewModels.Location;
 
 public class PostCodeManualViewModelValidator: AbstractValidator<PostCodeManualViewModel>
 {
-    public PostCodeManualViewModelValidator(bool CheckLocalAuthority)
+    private const int UKDropDownCountryValue = 1;
+
+    public PostCodeManualViewModelValidator(bool CheckLocalAuthority, bool CheckCountry)
     {
         RuleFor(x => x.NameNumber)
         .NotNull()
@@ -42,9 +45,36 @@ public class PostCodeManualViewModelValidator: AbstractValidator<PostCodeManualV
             .MaximumLength(150)
             .WithMessage("County cannot exceed 150 characters");
 
-        RuleFor(x => x.Postcode)
+        if (CheckCountry)
+        {            
+            RuleFor(x => x.CountryId)
+                            .NotNull()
+                            .WithMessage("Please select a country")
+                            .Must(BeValidCountryDropDownSelection)                
+                            .WithMessage("Please select a country");
+
+            RuleFor(x => x.Postcode)
+                    .NotEmpty()
+                    .WithMessage("Please enter a postcode");                    
+
+            // When Uk is selected, then also check the post code
+            When(x => x.CountryId == UKDropDownCountryValue,   () =>
+            {
+                RuleFor(x => x.Postcode)
+                    .ValidGovPostcode();                                       
+            });            
+        }
+        else
+        {
+            RuleFor(x => x.Postcode)
             .NotEmpty()
             .WithMessage("Please enter a postcode")
-            .ValidGovPostcode();                      
+            .ValidGovPostcode();                   
+        }
+    }
+
+    private bool BeValidCountryDropDownSelection(int? inputStr)
+    {
+        return ((inputStr != null) && (inputStr != 0));
     }
 }

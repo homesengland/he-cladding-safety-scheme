@@ -1,10 +1,15 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["ShowBackButton"] = ((bool)ViewData["ReadOnly"] == false);
+    if (ViewData.ContainsKey("BackLinkHidden"))
+    {
+        ViewData["ShowBackButton"] = (bool)ViewData["BackLinkHidden"] == false;
+    }
 }
 
 <div class="govuk-grid-row">
     <div class="@((bool)ViewData["FullWidth"] == false ? "govuk-grid-column-two-thirds" : "govuk-grid-column-full")">
-        @if ((bool)ViewData["ReadOnly"] == false)
+        @if ((bool)ViewData["ShowBackButton"])
         {
             <govuk-back-link href="@ViewData["BackLink"]">Back</govuk-back-link>
         }

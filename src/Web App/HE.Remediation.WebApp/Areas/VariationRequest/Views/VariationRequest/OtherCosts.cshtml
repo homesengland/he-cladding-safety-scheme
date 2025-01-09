@@ -1,0 +1,213 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.OtherCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action("Costs", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary            
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationFraewSurveyCostsAmountText" />
+        <govuk-error-summary-item asp-for="VariationFraewSurveyCostsDescription" />
+        <govuk-error-summary-item asp-for="VariationFeasibilityStageAmountText" />
+        <govuk-error-summary-item asp-for="VariationFeasibilityStageDescription" />
+        <govuk-error-summary-item asp-for="VariationPostTenderStageAmountText" />
+        <govuk-error-summary-item asp-for="VariationPostTenderStageDescription " />
+        <govuk-error-summary-item asp-for="VariationIrrecoverableVatAmountText" />
+        <govuk-error-summary-item asp-for="VariationIrrecoverableVatDescription" />
+        <govuk-error-summary-item asp-for="VariationPropertyManagerAmountText" />
+        <govuk-error-summary-item asp-for="VariationPropertyManagerDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Other costs</h1>
+
+<p class="govuk-body">Please identify the changes associated with this element of your costs schedule.</p>
+
+<form asp-controller="VariationRequest" asp-action="OtherCosts" asp-area="VariationRequest" method="post">
+
+    <p class="govuk-body-m"><strong>FRAEW survey costs</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageFraewSurveyCostsAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">n/a</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationFraewSurveyCostsAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationFraewSurveyCostsDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+
+    <p class="govuk-body-m"><strong>Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageFeasibilityStageAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageFeasibilityStageDescription</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationFeasibilityStageAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationFeasibilityStageDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Professional fees - post tender stage</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackagePostTenderStageAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackagePostTenderStageDescription</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationPostTenderStageAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationPostTenderStageDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Property manager/leaseholder liason costs</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackagePropertyManagerAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackagePropertyManagerDescription</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationPropertyManagerAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationPropertyManagerDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Irrecoverable VAT on works and associated fees</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageIrrecoverableVatAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageIrrecoverableVatDescription </td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationIrrecoverableVatAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationIrrecoverableVatDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="WorkPackageFeasibilityStageAmount" type="hidden" value="@Model.WorkPackageFeasibilityStageAmount" />
+    <input asp-for="WorkPackageFeasibilityStageDescription" type="hidden" value="@Model.WorkPackageFeasibilityStageDescription" />
+    <input asp-for="WorkPackagePostTenderStageAmount" type="hidden" value="@Model.WorkPackagePostTenderStageAmount" />
+    <input asp-for="WorkPackagePostTenderStageDescription" type="hidden" value="@Model.WorkPackagePostTenderStageDescription" />
+    <input asp-for="WorkPackageIrrecoverableVatAmount" type="hidden" value="@Model.WorkPackageIrrecoverableVatAmount" />
+    <input asp-for="WorkPackageIrrecoverableVatDescription" type="hidden" value="@Model.WorkPackageIrrecoverableVatDescription" />
+    <input asp-for="WorkPackagePropertyManagerAmount" type="hidden" value="@Model.WorkPackagePropertyManagerAmount" />
+    <input asp-for="WorkPackagePropertyManagerDescription" type="hidden" value="@Model.WorkPackagePropertyManagerDescription" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

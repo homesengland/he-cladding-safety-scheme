@@ -15,7 +15,10 @@
         public string BuildingLocalAuthority { get; set; }
         public string BuildingCounty { get; set; }
         public string BuildingPostcode { get; set; }
+        public bool BuildingHasSafetyRegulatorRegistrationCode { get; set; }
+        public string BuildingSafetyRegulatorRegistrationCode { get; set; }
         public bool PartOfDevelopment { get; set; }
+        public string DevelopmentName { get; set; }
         public int Storeys { get; set; }
         public DateTime? CorrectHeightConfirmedDate { get; set; }
         public bool OriginalDeveloperKnown { get; set; }

@@ -1,7 +1,4 @@
 ﻿using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.Services.UserService;
-using HE.Remediation.Core.Services.UserService.Enum;
-using HE.Remediation.Core.UseCase.Areas.Administration.AddExtraContact.SetExtraContact;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.SetReportDetails;
 using Moq;
 
@@ -22,7 +19,7 @@ public class SetReportDetailsTests
     }
 
     [Fact]
-    public async Task Handler_Sets_Extra_Contact_Status_And_Updates_DB()
+    public async Task Handler_Sets_Report_Details()
     {
         //Arrange        
         _connection.Setup(x => x.ExecuteAsync("InsertOrUpdateFireRiskAssessmentReportDetails", It.IsAny<object>()))                  

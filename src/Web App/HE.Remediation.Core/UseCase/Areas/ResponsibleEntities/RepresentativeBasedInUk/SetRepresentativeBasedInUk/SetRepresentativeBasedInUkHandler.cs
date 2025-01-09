@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentativeBasedInUk.SetRepresentativeBasedInUk;
@@ -7,11 +9,13 @@ public class SetRepresentativeBasedInUkHandler : IRequestHandler<SetRepresentati
 {
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IApplicationRepository _applicationRepository;
 
-    public SetRepresentativeBasedInUkHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+    public SetRepresentativeBasedInUkHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IApplicationRepository applicationRepository)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
+        _applicationRepository = applicationRepository;
     }
 
     public async Task<Unit> Handle(SetRepresentativeBasedInUkRequest request, CancellationToken cancellationToken)
@@ -27,6 +31,7 @@ public class SetRepresentativeBasedInUkHandler : IRequestHandler<SetRepresentati
             ApplicationId = _applicationDataProvider.GetApplicationId(),
             IsBasedInUk = isInUk
         });
-    }
 
+        await _applicationRepository.UpdateStatus(_applicationDataProvider.GetApplicationId(), EApplicationStatus.ApplicationInProgress);
+    }
 }

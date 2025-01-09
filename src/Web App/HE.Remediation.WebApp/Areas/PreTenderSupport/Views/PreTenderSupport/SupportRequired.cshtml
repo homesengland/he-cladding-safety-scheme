@@ -3,8 +3,10 @@
 @model HE.Remediation.WebApp.ViewModels.PreTenderSupport.SupportRequiredViewModel
 
 @{
-    ViewData["Title"] = "Claim pre-tender support";
-    ViewData["BackLink"] = Url.Action("ClaimPreTenderSupport", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" })
+        : Url.Action("ClaimPreTenderSupport", "PreTenderSupport", new { Area = "PreTenderSupport" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
@@ -14,23 +16,27 @@
     </govuk-error-summary>
 }
 
-<h1 class="govuk-heading-xl">Do you require pre-tender support?</h1>
+<h1 class="govuk-heading-xl">
+    Would you like to request Pre-Tender Support?
+</h1>
 
 <form asp-area="PreTenderSupport" asp-controller="PreTenderSupport" asp-action="SetSupportRequired" method="post">
-    <p class="govuk-body">This funding is to help financially support you to undertake the design, specification 
-        and/or the tender process required to start the remediation works.
+    <p class="govuk-body">                
+        If you do not claim this financial support now, you will be able to make a claim at a later date,
+        provided you have not submitted your works package, but if possible please tell us now if you
+        require this funding.        
     </p>
 
-    <p class="govuk-body">If you do not request this financial support now, you will be able to make a
-        claim at a later date, provided you have not submitted your work package.
-    </p>
     <govuk-radios name="SupportRequired" asp-for="SupportRequired">
-        <govuk-radios-item value="True">I <span class="govuk-!-font-weight-bold">do</span> require pre-tender support</govuk-radios-item>
-        <govuk-radios-item value="False">I <span class="govuk-!-font-weight-bold">do not</span> currently require pre-tender support</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="True">I <span class="govuk-!-font-weight-bold">do</span> require pre-tender support</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="False">I <span class="govuk-!-font-weight-bold">do not</span> currently require pre-tender support</govuk-radios-item>
     </govuk-radios>
+    
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted"/>
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <div class="comp-btn-group">
-        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
-        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
     </div>
 </form>

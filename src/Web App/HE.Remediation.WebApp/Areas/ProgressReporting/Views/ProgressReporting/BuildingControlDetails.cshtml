@@ -1,0 +1,195 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.BuildingControlDetailsViewModel
+@{
+    string backLink;
+
+    if (!string.IsNullOrEmpty(Model.ReturnUrl))
+    {
+        backLink = Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else if (Model.Version > 1)
+    {
+        backLink = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else
+    {
+        backLink = Url.Action("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = backLink;
+    ViewData["FullWidth"] = false;
+
+    var forecastDateInvalid = ViewData.ModelState.TryGetValue($"ForecastDateMonth", out var dateForecastMonthState) && dateForecastMonthState.ValidationState == ModelValidationState.Invalid || 
+        ViewData.ModelState.TryGetValue($"ForecastDateYear", out var dateForecastYearState) && dateForecastYearState.ValidationState == ModelValidationState.Invalid;
+
+    var actualDateInvalid = ViewData.ModelState.TryGetValue($"ActualDateMonth", out var dateActualMonthState) && dateActualMonthState.ValidationState == ModelValidationState.Invalid ||
+    ViewData.ModelState.TryGetValue($"ActualDateYear", out var dateActualYearState) && dateActualYearState.ValidationState == ModelValidationState.Invalid;
+
+    var validationDateInvalid = ViewData.ModelState.TryGetValue($"ValidationDateMonth", out var dateValidationMonthState) && dateValidationMonthState.ValidationState == ModelValidationState.Invalid ||
+        ViewData.ModelState.TryGetValue($"ValidationDateYear", out var dateValidationYearState) && dateValidationYearState.ValidationState == ModelValidationState.Invalid;
+
+    var decisionDateInvalid = ViewData.ModelState.TryGetValue($"DecisionDateMonth", out var dateDecisionMonthState) && dateDecisionMonthState.ValidationState == ModelValidationState.Invalid ||
+    ViewData.ModelState.TryGetValue($"DecisionDateYear", out var dateDecisionYearState) && dateDecisionYearState.ValidationState == ModelValidationState.Invalid;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ForecastDateMonth" />
+        <govuk-error-summary-item asp-for="ForecastDateYear" />
+        <govuk-error-summary-item asp-for="ActualDateMonth" />
+        <govuk-error-summary-item asp-for="ActualDateYear" />
+        <govuk-error-summary-item asp-for="ValidationDateMonth" />
+        <govuk-error-summary-item asp-for="ValidationDateYear" />
+        <govuk-error-summary-item asp-for="DecisionDateMonth" />
+        <govuk-error-summary-item asp-for="DecisionDateYear" />
+        <govuk-error-summary-item asp-for="Decision" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Building control approval for higher-risk buildings (Gateway 2)</h1>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="BuildingControlDetails" method="post">
+
+    <div class="govuk-form-group @(forecastDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="forecast-submission-date-hint">
+            <label class="govuk-label govuk-label--s">Gateway 2 Forecast Submission Date (optional)</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ForecastDateMonth" />
+            <govuk-error-message asp-for="ForecastDateYear" />
+            <div class="govuk-date-input" id="forecast-submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ForecastDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ForecastDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ForecastDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ForecastDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="govuk-form-group @(actualDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="actual-submission-date-hint">
+            <label class="govuk-label govuk-label--s">Gateway 2 Actual Submission Date (optional)</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ActualDateMonth" />
+            <govuk-error-message asp-for="ActualDateYear" />
+            <div class="govuk-date-input" id="actual-submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ActualDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ActualDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ActualDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ActualDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="govuk-form-group @(validationDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="validation-date-hint">
+            <label class="govuk-label govuk-label--s">Gateway 2 Validation Date (optional)</label>
+            <div class="govuk-hint">
+                The date when the BSR accepts your application as containing all the documents/information needed and starts to process these.
+                <br />
+                <br/>
+                For example, 8 2022
+                
+            </div>
+            <govuk-error-message asp-for="ValidationDateMonth" />
+            <govuk-error-message asp-for="ValidationDateYear" />
+            <div class="govuk-date-input" id="validation-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ValidationDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ValidationDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ValidationDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ValidationDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="govuk-form-group @(decisionDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="decision-date-hint">
+            <label class="govuk-label govuk-label--s">Gateway 2 Decision Date (optional)</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="DecisionDateMonth" />
+            <govuk-error-message asp-for="DecisionDateYear" />
+            <div class="govuk-date-input" id="decision-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="DecisionDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="DecisionDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="DecisionDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="DecisionDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="decision-date-hint">
+            <label class="govuk-label govuk-label--s govuk-!-margin-bottom-4">Decision (optional)</label>
+
+            <govuk-radios name="Decision" asp-for="Decision">
+                <govuk-radios-item value="@(true)">Approved</govuk-radios-item>
+                <govuk-radios-item value="@(false)">Rejected</govuk-radios-item>
+            </govuk-radios>
+        </fieldset>
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

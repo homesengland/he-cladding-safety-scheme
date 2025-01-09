@@ -5,8 +5,13 @@ namespace HE.Remediation.WebApp.Attributes.Routing;
 
 public class AreaRedirectAttribute : ActionFilterAttribute
 {
+    public AreaRedirectAttribute()
+    {
+        Order = 2;
+    }
+    
     private const string Redirect = nameof(Redirect);
-
+    
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         var headers = context.HttpContext.Request.Headers;

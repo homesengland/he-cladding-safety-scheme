@@ -21,7 +21,9 @@ namespace HE.Remediation.Core.Providers
             EntityTypeCookieIndex = 3,
             ProfileCompletenessCookieIndex = 4,
             SessionTimeCookieIndex = 5,      
-            DeclarationComplete = 6
+            DeclarationComplete = 6,
+            ProgressReportIdCookieIndex = 7,
+            PaymentRequestIdCookieIndex = 8
         }
 
         public ApplicationDataProvider(IHttpContextAccessor httpContextAccessor, IDataProtectionProvider dataProtectionProvider)
@@ -61,6 +63,40 @@ namespace HE.Remediation.Core.Providers
             }
 
             return (profileCompletion.IsWantSecondaryContactComplete == false);
+        }
+
+        public Guid GetPaymentRequestId()
+        {            
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var cookieArray = decryptedCookie.Split("_");
+            if ((int)(CookieValueTypes.PaymentRequestIdCookieIndex) >= cookieArray.Length)
+            {
+                return default;
+            }
+
+            var paymentRequestId = cookieArray[(int)(CookieValueTypes.PaymentRequestIdCookieIndex)];
+            return Guid.TryParse(paymentRequestId, out var id)
+                ? id
+                : default;
+        }
+
+        public Guid GetProgressReportId()
+        {            
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var cookieArray = decryptedCookie.Split("_");
+            if ((int)(CookieValueTypes.ProgressReportIdCookieIndex) >= cookieArray.Length)
+            {
+                return default;
+            }
+
+            var progressReportId = cookieArray[(int)(CookieValueTypes.ProgressReportIdCookieIndex)];
+            return Guid.TryParse(progressReportId, out var id)
+                ? id
+                : default;
         }
 
         public Guid GetApplicationId()
@@ -299,6 +335,20 @@ namespace HE.Remediation.Core.Providers
             SetCookieValue(string.Join("_", currentParts));
         }
 
+        public void SetPaymentRequestId(Guid paymentRequestId)
+        {
+            var currentParts = GetCookieParts();
+            currentParts[(int)(CookieValueTypes.PaymentRequestIdCookieIndex)] = paymentRequestId.ToString();
+            SetCookieValue(string.Join("_", currentParts));
+        }
+
+        public void SetProgressReportId(Guid progressReportId)
+        {
+            var currentParts = GetCookieParts();
+            currentParts[(int)(CookieValueTypes.ProgressReportIdCookieIndex)] = progressReportId.ToString();
+            SetCookieValue(string.Join("_", currentParts));
+        }
+
         public void SetApplicationId(Guid applicationId)
         {
             SetCookiePart((int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString());
@@ -333,7 +383,15 @@ namespace HE.Remediation.Core.Providers
         private string[] GetCookieParts()
         {
             var noOfCookieIndexes = Enum.GetValues(typeof(CookieValueTypes)).Length;
-            return GetDecryptedCookie()?.Split("_") ?? new string[ noOfCookieIndexes ];
+            var decryptedCookie = GetDecryptedCookie()?.Split("_");
+            if (decryptedCookie == null) return new string[ noOfCookieIndexes ];
+
+            if (decryptedCookie.Length < noOfCookieIndexes) 
+            { 
+                Array.Resize<string> (ref decryptedCookie, 
+                                      noOfCookieIndexes);
+            }
+            return decryptedCookie;
         }
 
         private void SetCookieValue(string value)

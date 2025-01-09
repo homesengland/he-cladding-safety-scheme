@@ -1,0 +1,39 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ClosingReport.ClosingReportInformationViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("Index", "StageDiagram", new {Area = "Application"});
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#practical-completion---scheme-exit" class="govuk-link govuk-!-margin-bottom-2">
+            Practical completion - scheme exit
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">About this section</h1>
+<p class="govuk-body">
+    In order to receive your final payment, up to the remaining 5% of your total costs, you will need to provide the following information to complete your project:
+</p>
+<ul class="govuk-list govuk-list--bullet govuk-!-padding-left-6">
+    <li>a <b>final cost report</b> that accounts for all eligible spend from your grant certifying officer</li>
+    <li>an exit FRAEW report and letter from a qualified fire risk assessor confirming that the recommended works in the FRAEW submitted with the application have been done and the risk has been reduced to a tolerable level in line with PAS9980:2022</li>
+    <li>a practical completion certificate</li>
+    <li>a Completion Certificate from your Building Control Body in respect of Building Regulations. For buildings over 18m this is the Gateway 3 certificate from the Building Safety Regulator</li>
+    <li>evidence that leaseholders and residents have been informed of practical completion of the project and provided with the link to the leaseholder feedback form</li>
+</ul>
+<p class="govuk-body">
+    We will also ask you for your feedback on the performance of your sub-contractors.
+</p>
+
+<govuk-warning-text icon-fallback-text="Warning">
+    Please note that once you initiate the final report you will not be able to submit any further variations for your project to request additional funds.
+</govuk-warning-text>
+<govuk-button href="@Url.Action("Confirmation", "ClosingReport", new {Area = "ClosingReport"})">Continue</govuk-button>

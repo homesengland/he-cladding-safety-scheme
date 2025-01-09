@@ -1,0 +1,38 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityResponsibleForGrantFundingViewModel;
+@{
+    ViewData["Title"] = "Are you responsible for signing the grant funding agreement?";
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ResponsibleForGrantFunding" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityResponsibleForGrantFunding" method="post">
+    <govuk-radios asp-for="ResponsibleForGrantFunding">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-5 govuk-!-font-weight-regular">
+                You can sign the Grant Funding Agreement if you are the Responsible Entity. You’ll be responsible for ensuring you meet the conditions of the agreement.
+                <br />
+                <br />
+                Representatives cannot sign on the Responsible Entity’s behalf
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="RepresentationType" type="hidden" value="@Model.RepresentationType" />
+    <input asp-for="OrganisationType" type="hidden" value="@Model.OrganisationType" />
+    <input asp-for="IsClaimingGrant" type="hidden" value="@Model.IsClaimingGrant" />
+    <input asp-for="HasOwners" type="hidden" value="@Model.HasOwners" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

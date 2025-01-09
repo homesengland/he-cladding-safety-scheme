@@ -1,7 +1,7 @@
-﻿using HE.Remediation.Core.Data.StoredProcedureParameters;
+﻿using System.Transactions;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
-using System.Transactions;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -35,6 +35,17 @@ public class ResponsibleEntityRepository : IResponsibleEntityRepository
 
         return result;
     }
+    
+    public async Task<bool?> GetResponsibleEntityUkRegistered(Guid applicationId)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<bool?>(
+            nameof(GetResponsibleEntityUkRegistered), new
+            {
+                ApplicationId = applicationId
+            });
+
+        return result;
+    }
 
     public async Task<GetResponsibleEntityCompanyTypeResult> GetResponsibleEntityCompanyType(Guid applicationId)
     {
@@ -46,7 +57,7 @@ public class ResponsibleEntityRepository : IResponsibleEntityRepository
 
         return result;
     }
-    
+
     public async Task UpdateFreeholderAddress(Guid applicationId, FreeholderAddressManualDetails addressDetails)
     {
         using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -59,11 +70,24 @@ public class ResponsibleEntityRepository : IResponsibleEntityRepository
                 addressDetails.AddressLine2,
                 addressDetails.City,
                 addressDetails.County,
-                addressDetails.Postcode
+                addressDetails.Postcode,
+                LocalAuthority = (string)null,
+                SubBuildingName = (string)null,
+                BuildingName = (string)null,
+                BuildingNumber = (string)null,
+                Street = (string)null,
+                Town = (string)null,
+                AdminArea = (string)null,
+                UPRN = (string)null,
+                AddressLines = (string)null,
+                XCoordinate = (string)null,
+                YCoordinate = (string)null,
+                Toid = (string)null,
+                BuildingType = (string)null
             });
 
             scope.Complete();
-        }        
+        }
     }
 
     public async Task InsertFreeholderAddress(Guid applicationId, FreeholderAddressManualDetails addressDetails)
@@ -81,12 +105,42 @@ public class ResponsibleEntityRepository : IResponsibleEntityRepository
                     addressDetails.AddressLine2,
                     addressDetails.City,
                     addressDetails.County,
-                    addressDetails.Postcode
+                    addressDetails.Postcode,
+                    LocalAuthority = (string)null,
+                    SubBuildingName = (string)null,
+                    BuildingName = (string)null,
+                    BuildingNumber = (string)null,
+                    Street = (string)null,
+                    Town = (string)null,
+                    AdminArea = (string)null,
+                    UPRN = (string)null,
+                    AddressLines = (string)null,
+                    XCoordinate = (string)null,
+                    YCoordinate = (string)null,
+                    Toid = (string)null,
+                    BuildingType = (string)null
                 });
 
             await _connection.ExecuteAsync("UpdateFreeholderAddressId", new { applicationId, addressId });
 
             scope.Complete();
         }
+    }
+
+    public async Task ResetResponsibleEntitiesSection(Guid applicationId)
+    {
+        await _connection.ExecuteAsync(
+            nameof(ResetResponsibleEntitiesSection),
+            new { applicationId });
+    }
+
+    public async Task<GetResponsibleEntityOrganisationAndRepresentationTypeResult> GetResponsibleEntityOrganisationAndRepresentationType(Guid applicationId)
+    {
+        var result =
+            await _connection.QuerySingleOrDefaultAsync<GetResponsibleEntityOrganisationAndRepresentationTypeResult>(
+                "GetResponsibleEntityOrganisationAndRepresentationType",
+                new { ApplicationId = applicationId });
+
+        return result;
     }
 }

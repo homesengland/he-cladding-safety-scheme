@@ -1,0 +1,128 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.ReviewPaymentRequestViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["BackLink"] = Url.Action("SubmitPayment", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <div class="app-card no-bottom-border">
+
+            <h2 class="govuk-heading-m">@(ViewData["CardTitle"] ?? "Funding details")</h2>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Total grant funding</h3>
+            <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw($"&pound;{(Model.TotalGrantFunding ?? 0):N0}")</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Grant paid to date</h3>
+            <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw(Model.GrantPaidToDate is not null ? $"&pound;{Model.GrantPaidToDate.Value:N0}" : "-")</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unprofiled funding</h3>
+
+            <p class="unprofiled-funding @(Model is { UnprofiledFunding: < 0 } ? "out-of-range-number-text" : "govuk-body") govuk-!-margin-top-0">
+                @if (Model is { UnprofiledFunding: < 0 })
+                {
+                    @Html.Raw($"-&pound;{Math.Abs(Model.UnprofiledFunding.Value).ToString("N0")}")
+                }
+                else
+                {
+                    @Html.Raw($"&pound;{(Model.UnprofiledFunding ?? 0).ToString("N0")}")
+                }
+            </p>
+
+            <div>
+                <button type="submit" form="costProfileForm" class="govuk-button govuk-button--secondary js-hidden" asp-action="RecalculateMilestones">Calculate</button>
+            </div>
+        </div>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Review payment request</h1>
+<p class="govuk-body">
+    Please check that the payment request below is correct.
+</p>
+
+<h2 class="govuk-heading-m govuk-!-margin-bottom-0">Payment information</h2>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="ReviewPaymentRequest">
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Payment request
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.PaymentRequestName
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        @if (Model.ChangeToMonthlyCost)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Requested amount
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Html.Raw(Model.RequestedAmount > 0 ? $"&pound;{Model.RequestedAmount.Value:N0}" : "&pound;0")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Scheduled amount
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.ScheduledAmount > 0 ? $"&pound;{Model.ScheduledAmount.Value:N0}" : "&pound;0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    @if (Model.AdditionalCost.HasValue)
+    {
+        <govuk-summary-list>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    @Model.AdditionalCostTitle
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Html.Raw(Model.AdditionalCost > 0 ? $"&pound;{Model.AdditionalCost.Value:N0}" : "&pound;0")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        </govuk-summary-list>
+    }
+
+
+
+    @if (Model.ChangeToMonthlyCost)
+    {
+        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
+            <div class="govuk-form-group">
+                <govuk-character-count name="ReasonForChange" max-length="1000" asp-for="ReasonForChange">
+                    <govuk-character-count-label class="govuk-label--s">
+                        What is the reason for the change?
+                    </govuk-character-count-label>
+                </govuk-character-count>
+            </div>
+        </div>
+    }
+
+    @Html.HiddenFor(x => @Model.PaymentRequestName)
+    @Html.HiddenFor(x => @Model.RequestedAmount)
+    @Html.HiddenFor(x => @Model.ScheduledAmount)
+
+    @Html.HiddenFor(x => @Model.TotalGrantFunding)
+    @Html.HiddenFor(x => @Model.GrantPaidToDate)
+    @Html.HiddenFor(x => @Model.UnprofiledFunding)
+
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+    @Html.HiddenFor(x => x.ChangeToMonthlyCost)
+    @Html.HiddenFor(x => x.ReturnUrl)
+
+    <govuk-button disabled="@readOnly" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+</form>

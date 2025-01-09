@@ -16,9 +16,9 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWorksRequi
         }
         public async Task<GetExternalWorksRequiredResponse> Handle(GetExternalWorksRequiredRequest request, CancellationToken cancellationToken)
         {
-            var applicaitonId = _applicationDataProvider.GetApplicationId();
+            var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var result = await _fireRiskWorksRepository.GetWorksRequired(applicaitonId);
+            var result = await _fireRiskWorksRepository.GetWorksRequired(applicationId);
 
             return new GetExternalWorksRequiredResponse
             {

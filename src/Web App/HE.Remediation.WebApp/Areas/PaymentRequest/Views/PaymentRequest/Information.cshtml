@@ -1,0 +1,44 @@
+﻿@model HE.Remediation.WebApp.ViewModels.PaymentRequest.PaymentRequestInformationViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["BackLink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" rel="noreferrer noopener" href="/CostScheduleTemplates/CSS cost schedule template_v1.1.xlsx" class="govuk-link govuk-!-margin-bottom-2">
+            Cost schedule template
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#variations" class="govuk-link govuk-!-margin-bottom-2">
+            Variation requests
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#payment-profile-start-on-site" class="govuk-link govuk-!-margin-bottom-2">
+            Payment profile
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#vat" class="govuk-link govuk-!-margin-bottom-2">
+            VAT guidance
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">About this section</h1>
+<p class="govuk-body">
+    On submission of this payment request you must:
+</p>
+<ul class="govuk-list govuk-list--bullet govuk-!-padding-left-6 govuk-!-margin-bottom-9">
+    <li>review and submit your claim and provide information if this is different from your cost profile</li>
+    <li>upload a cost report as prepared by your grant certifying officer to validate the qualifying expenditure of the request</li>
+    <li>tell us if there are any material changes to your project</li>
+</ul>
+
+<govuk-button disabled="@readOnly" href="@Url.Action("SubmitPayment", "PaymentRequest", new {Area = "PaymentRequest"})">Continue</govuk-button>

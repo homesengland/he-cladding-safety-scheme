@@ -4,8 +4,11 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibleForGFA.GetResponsibleEntityResponsibleForGrantFunding;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibleForGFA.SetResponsibleEntityResponsibleForGrantFunding;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrIndividual.GetFreeholderCompanyOrIndividual;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrIndividual.SetFreeholderCompanyOrIndividual;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.GetNotEligible;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.SetNotEligible;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentationCompanyOrIndividual.GetRepresentationCompanyOrIndividual;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentationCompanyOrIndividual.SetRepresentationCompanyOrIndividual;
@@ -21,6 +24,10 @@ using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityRel
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityRelation.SetResponsibleEntityRelation;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.GetResponsibleEntityUkRegistered;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.SetResponsibleEntityUkRegistered;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.GetGrantFundingSignatoryDetails;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.SetGrantFundingSignatoryDetails;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.DeleteGrantFundingSignatory;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.GetGrantFundingSignatories;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.Location;
 using HE.Remediation.WebApp.ViewModels.ResponsibleEntities;
@@ -138,18 +145,15 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
         #region NotEligible
         [HttpGet(nameof(NotEligible))]
-        public IActionResult NotEligible()
+        public async Task<IActionResult> NotEligible()
         {
-            if (!TempData.ContainsKey("BackLink"))
-            {
-                ViewData["BackLink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
-            }
-            else
-            {
-                ViewData["BackLink"] = TempData["BackLink"];
-            }
+            var response = await _sender.Send(GetNotEligibleRequest.Request);
 
-            return View();
+            ViewData["BackLink"] = !TempData.ContainsKey("BackLink")
+                ? Url.Action("Index", "TaskList", new { Area = "Application" })
+                : TempData["BackLink"];
+
+            return View("NotEligibleNotInUk");
         }
 
         [HttpPost(nameof(NotEligible))]
@@ -272,7 +276,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(RepresentationCompanyOrIndividualAddressDetails))]
         public async Task<IActionResult> RepresentationCompanyOrIndividualAddressDetails(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -353,8 +357,8 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (submitAction == ESubmitAction.FindAddress)
             {
-                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
-                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var request = new GetPostCodeRequest { PostCode = viewModel.PostCode };
+                var response = await _sender.Send(request);
                 var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
 
                 if (!newMappedModel.HaveResults)
@@ -390,8 +394,9 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         public async Task<IActionResult> ResponsibleEntityCompanyType(string returnUrl)
         {
             if (TempData.ContainsKey("CompanyOrIndividual"))
-            {
+            {                
                 ViewData["CompanyOrIndividual"] = TempData["CompanyOrIndividual"];
+                TempData["CompanyOrIndividual"] = ViewData["CompanyOrIndividual"];
             }
 
             var response = await _sender.Send(GetResponsibleEntityCompanyTypeRequest.Request);
@@ -432,12 +437,14 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             {
                 case EApplicationResponsibleEntityOrganisationType.PrivateCompany:
                 case EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation:
-                case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:                
+                case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:
+                case EApplicationResponsibleEntityOrganisationType.RegisteredProvider:
+                case EApplicationResponsibleEntityOrganisationType.LocalAuthority:
                     return RedirectToAction("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
                 case EApplicationResponsibleEntityOrganisationType.Other:
                     return RedirectToAction("ResponsibleEntityCompanySubType");
                 default:
-                    return RedirectToAction("LeaseholderOrPrivateOwner", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                    return RedirectToAction("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
         }
         #endregion
@@ -581,17 +588,27 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                     ||
                 (
                     model.UkRegistered!.Value &&
-                    response is { HasValidOrganisationTypes: true }
+                    response is { HasValidOrganisationTypes: true } 
                 )
-
+                    || 
+                (
+                    !model.UkRegistered!.Value && response is
+                    {
+                    HasRepresentative: true, HasRepresentativeUkBased: true,
+                    HasValidOrganisationTypes: true
+                })                            
             )
             {
                 return RedirectToAction("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
-            if (model.UkRegistered!.Value)
+            if ((model.UkRegistered!.Value) ||
+                (!model.UkRegistered!.Value &&
+                response is { HasRepresentative: true, HasRepresentativeUkBased: true }))
             {
-                return RedirectToAction("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return response.OrganisationType == EApplicationResponsibleEntityOrganisationType.LocalAuthority || response.OrganisationType == EApplicationResponsibleEntityOrganisationType.RegisteredProvider?
+                     RedirectToAction("ResponsibleEntityOrganisationDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
+                    : RedirectToAction("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             TempData["BackLink"] = Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
@@ -633,11 +650,56 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return RedirectToAction("Index", "TaskList", new { Area = "Application" });
             }
 
+            var addressAction = model.IsUkBased ? nameof(ResponsibleEntityCompanyAddress)
+                : nameof(ResponsibleEntityCompanyAddressManual);
+
+            var action = model.ReturnUrl is null
+                ? addressAction
+                : model.ReturnUrl;
+
+            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities", returnUrl = nameof(ResponsibleEntityCompanyDetails) });
+        }
+        #endregion
+
+        #region ResponsibleEntityCompanyDetails
+
+        [HttpGet(nameof(ResponsibleEntityOrganisationDetails))]
+        public async Task<IActionResult> ResponsibleEntityOrganisationDetails(string returnUrl)
+        {
+            var response = await _sender.Send(GetResponsibleEntityOrganisationDetailsRequest.Request);
+
+            var model = _mapper.Map<ResponsibleEntityOrganisationViewModel>(response);
+
+            model.ReturnUrl = returnUrl;
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(ResponsibleEntityOrganisationDetails))]
+        public async Task<IActionResult> ResponsibleEntityOrganisationDetails(ResponsibleEntityOrganisationViewModel model, ESubmitAction submitAction)
+        {
+            var validator = new ResponsibleEntityOrganisationViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetResponsibleEntityOrganisationDetailsRequest>(model);
+            await _sender.Send(request);
+
+            if (submitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
             var action = model.ReturnUrl is null
                 ? nameof(ResponsibleEntityCompanyAddress)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities", returnUrl = nameof(ResponsibleEntityOrganisationDetails) });
         }
         #endregion
 
@@ -651,8 +713,6 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             var model = _mapper.Map<PostCodeEntryViewModel>(response);
 
-            //var model = _mapper.Map<ResponsibleEntityCompanyAddressViewModel>(response);
-
             model.ReturnUrl = returnUrl;
 
             return View(model);
@@ -661,7 +721,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(ResponsibleEntityCompanyAddress))]
         public async Task<IActionResult> ResponsibleEntityCompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, true);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -695,7 +755,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             {
                 validationResult.AddToModelState(ModelState, String.Empty);
                 // need to set these properties on the output model if there is an error
-                return View("RepresentationCompanyOrIndividualAddressDetailsResults", viewModel);
+                return View("ResponsibleEntityCompanyAddressResults", viewModel);
             }
 
             var request = _mapper.Map<SetResponsibleEntityCompanyAddressRequest>(viewModel);
@@ -727,15 +787,13 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (submitAction == ESubmitAction.FindAddress)
             {
-                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
-                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var request = new GetPostCodeRequest { PostCode = viewModel.PostCode };
+                var response = await _sender.Send(request);
                 var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
 
                 if (!newMappedModel.HaveResults)
-                {                    
-                    var manualViewModel = _mapper.Map<PostCodeManualViewModel>(response);
-                    manualViewModel.Postcode = viewModel.PostCode;
-                    return View("ResponsibleEntityCompanyAddressManual", manualViewModel);
+                {
+                    return RedirectToAction("ResponsibleEntityCompanyAddressManual", new { postCode = viewModel.PostCode });
                 }
                 return View("ResponsibleEntityCompanyAddressResults", newMappedModel);
             }
@@ -779,17 +837,31 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             }
 
             var request = _mapper.Map<SetResponsibleEntityPrimaryContactDetailsRequest>(model);
-            await _sender.Send(request);
+            var response = await _sender.Send(request);
 
             if (submitAction == ESubmitAction.Exit)
             {
                 return RedirectToAction("Index", "TaskList", new { Area = "Application" });
             }
 
-            var action = model.ReturnUrl is null
-                ? nameof(UploadEvidence)
-                : model.ReturnUrl;
-
+            string action;
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                action = model.ReturnUrl;
+            }
+            else if (response.RepresentationType == EApplicationRepresentationType.Representative)
+            {
+                action = nameof(UploadRepresentEvidence);
+            }
+            else if (response.OrganisationType is EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+            {
+                action = nameof(LeaseholderOrPrivateOwner);
+            }
+            else
+            {
+                action = nameof(ResponsibleEntityResponsibleForGrantFunding);
+            }
+            
             return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" }); //Should navigate to story 48101 - UploadEvidenceOfAuthorisation
         }
         #endregion
@@ -937,7 +1009,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(FreeholderCompanyAddress))]
         public async Task<IActionResult> FreeholderCompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -1007,8 +1079,8 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (submitAction == ESubmitAction.FindAddress)
             {
-                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
-                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var request = new GetPostCodeRequest { PostCode = viewModel.PostCode };
+                var response = await _sender.Send(request);
                 var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
 
                 if (!newMappedModel.HaveResults)
@@ -1047,7 +1119,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(FreeholderIndividualAddress))]
         public async Task<IActionResult> FreeholderIndividualAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -1117,8 +1189,8 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (submitAction == ESubmitAction.FindAddress)
             {
-                GetPostCodeRequest.Request.PostCode = viewModel.PostCode;
-                var response = await _sender.Send(GetPostCodeRequest.Request);
+                var request = new GetPostCodeRequest { PostCode = viewModel.PostCode };
+                var response = await _sender.Send(request);
                 var newMappedModel = _mapper.Map<PostCodeSelectionViewModel>(response);
 
                 if (!newMappedModel.HaveResults)
@@ -1144,7 +1216,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(FreeholderIndividualAddressManual))]
         public async Task<IActionResult> FreeholderIndividualAddressManual(PostCodeManualViewModel viewModel, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false);
+            var validator = new PostCodeManualViewModelValidator(false, false);
             var validationResult = await validator.ValidateAsync(viewModel);
 
             if (!validationResult.IsValid)
@@ -1194,6 +1266,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (!validationResult.IsValid)
             {
+                ModelState.Clear();
                 validationResult.AddToModelState(ModelState, string.Empty);
                 return View(model);
             }
@@ -1256,11 +1329,174 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (model is { IsClaimingGrant: false, HasOwners: true })
             {
-                return RedirectToAction("CheckYourAnswers", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return RedirectToAction("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             TempData["BackLink"] = Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             return RedirectToAction("NotEligible", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+        #endregion
+
+        #region ResponsibleForGrantFunding
+        [HttpGet(nameof(ResponsibleEntityResponsibleForGrantFunding))]
+        public async Task<IActionResult> ResponsibleEntityResponsibleForGrantFunding(string returnUrl)
+        {
+            var response = await _sender.Send(GetResponsibleEntityResponsibleForGrantFundingRequest.Request);
+
+            var model = _mapper.Map<ResponsibleEntityResponsibleForGrantFundingViewModel>(response);
+
+            model.ReturnUrl = returnUrl;
+            ViewData["BackLink"] = GetBackLinkForResponsibleEntityResponsibleForGrantFunding(model);
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(ResponsibleEntityResponsibleForGrantFunding))]
+        public async Task<IActionResult> ResponsibleEntityResponsibleForGrantFunding(ResponsibleEntityResponsibleForGrantFundingViewModel model)
+        {
+            var validator = new ResponsibleEntityResponsibleForGrantFundingViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                ViewData["BackLink"] = GetBackLinkForResponsibleEntityResponsibleForGrantFunding(model);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetResponsibleEntityResponsibleForGrantFundingRequest>(model);
+            var response = await _sender.Send(request);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            if (model is { ResponsibleForGrantFunding: true } || response.SignatoriesAlreadyExist)
+            {
+                return RedirectToAction("GrantFundingSignatories", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+            else
+            {
+                return RedirectToAction("GrantFundingSignatoryDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+        }
+
+        private string GetBackLinkForResponsibleEntityResponsibleForGrantFunding(ResponsibleEntityResponsibleForGrantFundingViewModel model)
+        {
+            if (model.RepresentationType == EApplicationRepresentationType.ResponsibleEntity
+                && model.OrganisationType != EApplicationResponsibleEntityOrganisationType.LocalAuthority
+                && model.OrganisationType != EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+            {
+                return Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
+            if (model is { IsClaimingGrant: false, HasOwners: true })
+            {
+                return Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
+            if (model.OrganisationType is EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+            {
+                var uploadType = model.OrganisationType == EApplicationResponsibleEntityOrganisationType.LocalAuthority ? EResponsibleEntityUploadType.S151 : EResponsibleEntityUploadType.ChiefExec;
+                return Url.Action("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities", UploadType = uploadType });
+            }
+
+            if (model.RepresentationType == EApplicationRepresentationType.Representative)
+            {
+                return Url.Action("UploadRepresentEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
+            return Url.Action("Index", "TaskList", new { Area = "Application" });
+        }
+        #endregion
+
+        #region GrantFundingSignatories
+        [HttpGet(nameof(GrantFundingSignatories))]
+        public async Task<IActionResult> GrantFundingSignatories(string returnUrl)
+        {
+            var response = await _sender.Send(GetGrantFundingSignatoriesRequest.Request);
+
+            var signatories = _mapper.Map<List<GrantFundingSignatoryViewModel>>(response);
+            var model = new GrantFundingSignatoriesViewModel
+            {
+                GrantFundingSignatories = signatories,
+                ReturnUrl = returnUrl
+            };
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(GrantFundingSignatories))]
+        public async Task<IActionResult> GrantFundingSignatories(GrantFundingSignatoriesViewModel model)
+        {
+            var validator = new GrantFundingSignatoriesViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            return RedirectToAction("CheckYourAnswers", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+
+        [HttpGet(nameof(AddGrantFundingSignatory))]
+        public IActionResult AddGrantFundingSignatory(GrantFundingSignatoriesViewModel model)
+        {
+            return RedirectToAction("GrantFundingSignatoryDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+
+        [HttpGet(nameof(RemoveGrantFundingSignatory))]
+        public async Task<IActionResult> RemoveGrantFundingSignatory(Guid grantFundingSignatoryId)
+        {
+            await _sender.Send(new DeleteGrantFundingSignatoryRequest { GrantFundingSignatoryId = grantFundingSignatoryId });
+
+            return RedirectToAction("GrantFundingSignatories", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+
+        #endregion
+
+        #region GrantFundingSignatoryDetails
+        [HttpGet(nameof(GrantFundingSignatoryDetails))]
+        public async Task<IActionResult> GrantFundingSignatoryDetails(Guid? grantFundingSignatoryId, string returnUrl)
+        {
+            var response = await _sender.Send(new GetGrantFundingSignatoryDetailsRequest { GrantFundingSignatoryId = grantFundingSignatoryId });
+
+            var model = _mapper.Map<GrantFundingSignatoryDetailsViewModel>(response);
+
+            model.ReturnUrl = returnUrl;
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(GrantFundingSignatoryDetails))]
+        public async Task<IActionResult> GrantFundingSignatoryDetails(GrantFundingSignatoryDetailsViewModel model)
+        {
+            var validator = new GrantFundingSignatoryDetailsViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetGrantFundingSignatoryDetailsRequest>(model);
+            await _sender.Send(request);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            return RedirectToAction("GrantFundingSignatories", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -1314,26 +1550,30 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 : model.ReturnUrl;
 
             return RedirectToAction(action, "ResponsibleEntities",
-                new { Area = "ResponsibleEntities" });
+                new { Area = "ResponsibleEntities", UploadType = model.OrganisationType == EApplicationResponsibleEntityOrganisationType.LocalAuthority ? EResponsibleEntityUploadType.S151 : EResponsibleEntityUploadType.ChiefExec });
         }
         #endregion
 
-        #region UploadEvidence
-        [HttpGet(nameof(UploadEvidence))]
-        public async Task<IActionResult> UploadEvidence(string returnUrl)
+        [HttpGet(nameof(UploadRepresentEvidence))]
+        public async Task<IActionResult> UploadRepresentEvidence(string returnUrl)
         {
-            var response = await _sender.Send(GetUploadResponsibleEntitiesEvidenceRequest.Request);
+            var response = await _sender.Send(new GetUploadResponsibleEntitiesEvidenceRequest { UploadType = EResponsibleEntityUploadType.Represent });
 
             var model = _mapper.Map<UploadEvidenceViewModel>(response);
 
-            model.ReturnUrl = returnUrl;
+            model.ReturnUrl = returnUrl ?? nameof(UploadRepresentEvidence);
+            model.UploadType = EResponsibleEntityUploadType.Represent;
+            model.DeleteParameters = new Dictionary<string, string>
+            {
+                {"returnUrl", model.ReturnUrl }
+            };
 
             return View(model);
         }
 
-        [HttpPost(nameof(UploadEvidence))]
+        [HttpPost(nameof(UploadRepresentEvidence))]
         [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
-        public async Task<IActionResult> UploadEvidence(UploadEvidenceViewModel model)
+        public async Task<IActionResult> UploadRepresentEvidence(UploadEvidenceViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -1352,7 +1592,11 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (model.SubmitAction == ESubmitAction.Continue)
             {
-                return RedirectToAction("CheckYourAnswers", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return model.OrganisationType switch
+                {
+                    EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider => RedirectToAction("LeaseholderOrPrivateOwner", "ResponsibleEntities", new { Area = "ResponsibleEntities" }),
+                    _ => RedirectToAction("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" }),
+                };
             }
 
             try
@@ -1366,7 +1610,65 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return RedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+
+        #region UploadEvidence
+        [HttpGet(nameof(UploadEvidence))]
+        public async Task<IActionResult> UploadEvidence(string returnUrl, [FromQuery] EResponsibleEntityUploadType uploadType)
+        {
+            var response = await _sender.Send(new GetUploadResponsibleEntitiesEvidenceRequest { UploadType = uploadType });
+            
+            var model = _mapper.Map<UploadEvidenceViewModel>(response);
+
+            model.ReturnUrl = returnUrl;
+            model.UploadType = uploadType;
+
+            model.DeleteParameters = new Dictionary<string, string>
+            {
+                {"returnUrl", nameof(UploadEvidence) },
+                {"uploadType", model.UploadType.ToString() }
+            };
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(UploadEvidence))]
+        [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
+        public async Task<IActionResult> UploadEvidence(UploadEvidenceViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // this will happen when the request size limit is exceeded, the model is null so manually add the error message
+                ModelState.AddModelError(nameof(model.File), "The file is larger than 100mb");
+                return View(model);
+            }
+
+            var validator = new UploadEvidenceViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            if (model.SubmitAction == ESubmitAction.Continue)
+            {
+                return RedirectToAction("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
+            try
+            {
+                var request = _mapper.Map<SetUploadResponsibleEntitiesEvidenceRequest>(model);
+                await _sender.Send(request);
+            }
+            catch (InvalidFileException ex)
+            {
+                ModelState.AddModelError(nameof(model.File), ex.Message);
+                return View(model);
+            }
+
+            return RedirectToAction("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities", UploadType = model.UploadType });
         }
         #endregion
 
@@ -1376,7 +1678,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         public async Task<IActionResult> UploadEvidenceDelete([FromQuery] DeleteResponsibleEntitiesEvidenceRequest request)
         {
             await _sender.Send(request);
-            return RedirectToAction("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return RedirectToAction(request.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities", uploadType = request.UploadType });
         }
         #endregion
 
@@ -1394,6 +1696,33 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         {
             await _sender.Send(SetResponsibleEntityCompleteRequest.Request);
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+        #endregion
+
+        #region ChangeAnswers
+
+        [HttpGet(nameof(ChangeAnswers))]
+        public IActionResult ChangeAnswers()
+        {
+            return View(new ChangeAnswersViewModel());
+        }
+
+        [HttpPost(nameof(ChangeAnswers))]
+        public async Task<IActionResult> ChangeAnswers(ChangeAnswersViewModel model, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.Proceed == false)
+            {
+                return RedirectToAction("CheckYourAnswers");
+            }
+
+            await _sender.Send(new ResetResponsibleEntitiesSectionRequest(), cancellationToken);
+
+            return RedirectToAction("Information");
         }
         #endregion
     }

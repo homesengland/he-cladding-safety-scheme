@@ -1,0 +1,9 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using GovUk.Frontend.AspNetCore.TagHelpers
+
+<tr class="govuk-table__row bold-bottom-table-border">
+    <th class="govuk-table__header govuk-!-width-one-quarter govuk-!-padding-left-2">@ViewData["RowTitle"]</th>
+    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold govuk-!-padding-right-2">@Html.Raw(ViewData["SubmittedColumnTitle"] ?? "&nbsp")</th>
+    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold govuk-!-padding-right-2">@Html.Raw(ViewData["ConfirmedColumnTitle"] ?? "&nbsp")</th>
+    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__cell--numeric">Status</th>
+</tr>

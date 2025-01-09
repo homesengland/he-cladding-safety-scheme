@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Compile Remove="TagHelpers\PagerTagHelper.cs" />
-    <Compile Remove="ViewModels\Administration\ChangePasswordViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,14 +28,13 @@
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="ByteSize" Version="2.1.1" />
-    <PackageReference Include="DotNetEnv" Version="2.3.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="GovUk.Frontend.AspNetCore" Version="0.5.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.12" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
@@ -67,6 +65,67 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="Areas\PaymentRequest\Views\PaymentRequest\ThirdPartyContributionsChanged.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\ProgressReporting\Views\ProgressReporting\BuildingHasSafetyRegulatorRegistrationCode.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\ProgressReporting\Views\ProgressReporting\BuildingSafetyRegulatorRegistrationCode.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\ProgressReporting\Views\ProgressReporting\ExistingTeamMember.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\ProgressReporting\Views\ProgressReporting\PlanningPermissionPlannedSubmitDate.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="ViewModels\.filenesting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\GovNotify\ClosingReportSubmittedEmail.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddress.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\CheckYourAnswers.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\PracticalCompletion.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddress.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddressResults.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\StartedOnSiteMilestone\Views\StartedOnSiteMilestone\StartedOnSite.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageProjectTeam\Views\ProjectTeam\CheckYourAnswers.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddressResults.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageProjectTeam\Views\ProjectTeam\CheckYourAnswers.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\StartedOnSiteMilestone\Views\StartedOnSiteMilestone\StartedOnSite.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\PracticalCompletion.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\CheckYourAnswers.cshtml" />
+  </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="@((bool)ViewData["FullWidth"] == false ? "govuk-grid-column-two-thirds" : "govuk-grid-column-full")">
         @if ((bool)ViewData["ReadOnly"] == false)
         {
             <govuk-back-link href="@ViewData["BackLink"]">Back</govuk-back-link>

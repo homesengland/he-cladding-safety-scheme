@@ -17,4 +17,11 @@ public class PostCodeSelectionViewModel
     public bool NonResidentialUnits { get; set; }
 
     public EResponsibleEntityType ResponsibleEntityType { get; set; }
+
+    public string ApplicationReferenceNumber { get; set; }
+
+    public string BuildingName { get; set; }
+    public int ProgressReportVersion { get; set; }
+    public bool IsProgressReportGcoComplete { get; set; }
 }
+

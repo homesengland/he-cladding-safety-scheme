@@ -1,0 +1,55 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.DeclarationViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("CheckYourAnswers", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = false;
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="AwareProcess" />
+        <govuk-error-summary-item asp-for="AwareNoPrecedentForFuture" />
+        <govuk-error-summary-item asp-for="PredictionsAccurate" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Payment request declaration and submission</h1>
+<p class="govuk-body">
+    Before completing the declaration and submitting your payment request, please take a few moments
+    to check the information you've given us.
+</p>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="Declaration">
+
+
+    <govuk-checkboxes name="AwareProcess" asp-for="AwareProcess">
+        <govuk-checkboxes-item disabled="@readOnly" value="true" checked="@Model.AwareProcess">
+            I confirm that I am aware of the process and timeframes for submitting payment requests and
+            that failure to comply with this will result in delayed payments.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="AwareNoPrecedentForFuture" asp-for="AwareNoPrecedentForFuture">
+        <govuk-checkboxes-item disabled="@readOnly" value="true" checked="@Model.AwareNoPrecedentForFuture">
+            I confirm that I am aware that Homes England approves each variation on its individual merits
+            and that approval does not set a precedent for future varation requests.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="PredictionsAccurate" asp-for="PredictionsAccurate">
+        <govuk-checkboxes-item disabled="@readOnly" value="true" checked="@Model.PredictionsAccurate">
+            I confirm that I have profiled my costs as accurately as possible in accordance with my works
+            contract and that this excludes ineligible VAT.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+
+    <govuk-button name="SubmitAction" disabled="@readOnly" value="Continue">Confirm and submit</govuk-button>
+</form>

@@ -1,7 +1,7 @@
 ﻿@model HE.Remediation.WebApp.ViewModels.CookiesAcceptedViewModel
 
 @{
-    ViewData["Title"] = "Cookies on Cladding Safety Scheme";
+    ViewData["Title"] = "Cookies on Building Remediation Hub";
     var backLink = ViewData["Referer"] != null ? ViewData["Referer"] : Url.Action("Index", "LandingPage");
 }
 
@@ -17,7 +17,7 @@
 
                         <p class="govuk-body">Cookies are files saved on your phone, tablet or computer when you visit a website.</p>
                         <p class="govuk-body">
-                            We use cookies to make Cladding Safety Scheme work and collect information about how you use our service.
+                            We use cookies to make the Building Remediation Hub work and collect information about how you use our service.
                         </p>
                         <p class="govuk-body">
                             This page has a brief explanation of each type of cookie we use.
@@ -27,7 +27,7 @@
                         <p class="govuk-body">We use 2 types of cookie. You can choose which cookies you're happy for us to use.</p>
 
                         <h3 class="govuk-heading-m">Cookies that measure website use</h3>
-                        <p class="govuk-body">We use Google Analytics cookies to measure how you use Cladding Safety Scheme.</p>
+                        <p class="govuk-body">We use Google Analytics cookies to measure how you use the Building Remediation Hub.</p>
 
                         <p class="govuk-body">These cookies collect information about:</p>
                         <ul class="govuk-list govuk-list--bullet">
@@ -46,7 +46,7 @@
                             <tbody class="govuk-table__body">
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">_ga</td>
-                                    <td class="govuk-table__cell">These help us count how many people visit GOV.UK and other government digital services by tracking if you’ve visited before</td>
+                                    <td class="govuk-table__cell">These help us count how many people visit GOV.UK and other government digital services by tracking if you've visited before</td>
                                     <td class="govuk-table__cell">2 years</td>
                                 </tr>
                                 <tr class="govuk-table__row">
@@ -67,31 +67,8 @@
                             <govuk-radios-item value="@(false)">Do not use cookies that measure my website use</govuk-radios-item>
                         </govuk-radios>
 
-@*                        <h3 class="govuk-heading-m">Cookies that help with our communications and marketing</h3>
-                        <govuk-radios asp-for="AllowCommunicationsAndMarketing ">
-                            <govuk-radios-fieldset>
-                                <govuk-radios-fieldset-legend class="govuk-body">
-                                    These cookies may be set by third party websites and do things like measure how you view YouTube videos that are on GOV.UK.
-                                </govuk-radios-fieldset-legend>
-                            </govuk-radios-fieldset>
-                            <govuk-radios-item value="@(true)">Use cookies that help with communications and marketing</govuk-radios-item>
-                            <govuk-radios-item value="@(false)">Do not use cookies that help with communications and marketing</govuk-radios-item>
-                        </govuk-radios>*@
-@*
-                        <h3 class="govuk-heading-m">Cookies that remember your settings</h3>
-                        <govuk-radios asp-for="AllowRememberYourSettings ">
-                            <govuk-radios-fieldset>
-                                <govuk-radios-fieldset-legend class="govuk-body">
-                                    These cookies do things like remember your preferences and the choices you make, to personalise your experience of using the site.
-                                </govuk-radios-fieldset-legend>
-                            </govuk-radios-fieldset>
-                            <govuk-radios-item value="@(true)">Use cookies that remember my settings on the site</govuk-radios-item>
-                            <govuk-radios-item value="@(false)">Do not use cookies that remember my settings on the site</govuk-radios-item>
-                        </govuk-radios>*@
-
-
                         <h3 class="govuk-heading-m govuk-!-font-size-27">Strictly necessary cookies</h3>
-                        <p class="govuk-body">Essential cookies keep your information secure while you use Cladding Safety Scheme. We do not need to ask permission to use them..</p>
+                        <p class="govuk-body">Essential cookies keep your information secure while you use the Building Remediation Hub. We do not need to ask permission to use them.</p>
                         <table class="govuk-table">
                             <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
@@ -118,7 +95,7 @@
                                  </tr>
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">cookies_preferences_set</td>
-                                <td class="govuk-table__cell">Lets us know that you’ve saved your cookie consent settings</td>
+                                <td class="govuk-table__cell">Lets us know that you've saved your cookie consent settings</td>
                                 <td class="govuk-table__cell">1 year</td>
                             </tr>
                             </tbody>

@@ -2,8 +2,8 @@
 @model HE.Remediation.WebApp.ViewModels.Location.PostCodeEntryViewModel
 
 @{
-    ViewData["Title"] = "What is the company address of the Responsible Entity";
-    ViewData["BackLink"] = Url.Action("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["Title"] = "What is the registered company address of the Responsible Entity?";
+    ViewData["BackLink"] = Model.ReturnUrl ?? Url.Action("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary

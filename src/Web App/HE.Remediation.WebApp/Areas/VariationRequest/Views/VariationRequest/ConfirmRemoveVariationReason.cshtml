@@ -1,0 +1,41 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.ConfirmRemoveVariationReasonViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("VariationReason", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="@Model.Proceed" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Confirm variation removal</h1>
+
+<govuk-inset-text>Removing a variation will result in the data entered for the variation not being saved. Are you sure you wish to proceed?</govuk-inset-text>
+
+@using (Html.BeginForm())
+{
+    <govuk-radios asp-for="Proceed">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                Are you sure you wish to proceed?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@true">Yes, clear answers</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@false">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsCostVariation" type="hidden" value="@Model.IsCostVariation" />
+    <input asp-for="IsScopeVariation" type="hidden" value="@Model.IsScopeVariation" />
+    <input asp-for="IsTimescaleVariation" type="hidden" value="@Model.IsTimescaleVariation" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+}

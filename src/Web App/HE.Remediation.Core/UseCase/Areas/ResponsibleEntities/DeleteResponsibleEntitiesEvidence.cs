@@ -3,6 +3,7 @@ using HE.Remediation.Core.Services.FileService;
 using MediatR;
 using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -39,4 +40,6 @@ public class DeleteResponsibleEntitiesEvidenceHandler : IRequestHandler<DeleteRe
 public class DeleteResponsibleEntitiesEvidenceRequest : IRequest
 {
     public Guid FileId { get; set; }
+    public string ReturnUrl { get; set; }
+    public EResponsibleEntityUploadType UploadType { get; set; }
 }

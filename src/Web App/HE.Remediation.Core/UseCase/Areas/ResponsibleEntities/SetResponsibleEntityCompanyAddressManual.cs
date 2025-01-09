@@ -47,7 +47,21 @@ public class SetResponsibleEntityCompanyAddressManual : IRequestHandler<SetRespo
                 request.AddressLine2,
                 request.City,
                 request.County,
-                request.Postcode
+                request.Postcode,
+                request.CountryId,
+                LocalAuthority = (string)null,
+                SubBuildingName = (string)null,
+                BuildingName = (string)null,
+                BuildingNumber = (string)null,
+                Street = (string)null,
+                Town = (string)null,
+                AdminArea = (string)null,
+                UPRN = (string)null,
+                AddressLines = (string)null,
+                XCoordinate = (string)null,
+                YCoordinate = (string)null,
+                Toid = (string)null,
+                BuildingType = (string)null
             });
     }
 
@@ -66,7 +80,21 @@ public class SetResponsibleEntityCompanyAddressManual : IRequestHandler<SetRespo
                     request.AddressLine2,
                     request.City,
                     request.County,
-                    request.Postcode
+                    request.Postcode,
+                    request.CountryId,
+                    LocalAuthority = (string)null,
+                    SubBuildingName = (string)null,
+                    BuildingName = (string)null,
+                    BuildingNumber = (string)null,
+                    Street = (string)null,
+                    Town = (string)null,
+                    AdminArea = (string)null,
+                    UPRN = (string)null,
+                    AddressLines = (string)null,
+                    XCoordinate = (string)null,
+                    YCoordinate = (string)null,
+                    Toid = (string)null,
+                    BuildingType = (string)null
                 });
 
             await _connection.ExecuteAsync("UpdateResponsibleEntityCompanyAddressId", new { applicationId, addressId });
@@ -84,4 +112,6 @@ public class SetResponsibleEntityCompanyAddressManualRequest : IRequest
     public string City { get; set; }
     public string County { get; set; }
     public string Postcode { get; set; }
+
+    public int? CountryId { get; set; }
 }

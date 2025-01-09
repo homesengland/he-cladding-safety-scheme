@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HE.Remediation.WebApp.Areas.Declaration.Controllers
 {
     [Area("Declaration")]
-    [Route("BeforeYouContinue")]
+    [Route("Declaration")]
     public class DeclarationController : StartController
     {
         private readonly ISender _sender;
@@ -33,13 +33,22 @@ namespace HE.Remediation.WebApp.Areas.Declaration.Controllers
         [HttpGet(nameof(Declaration))]
         public IActionResult Declaration()
         {
+            if (TempData.TryGetValue("Error", out var message))
+            {
+                ModelState.AddModelError(string.Empty, message.ToString());
+            }
             return View();
         }
 
         [HttpPost(nameof(ConfirmDeclaration))]
         public async Task<IActionResult> ConfirmDeclaration()
         {
-            await _sender.Send(SetConfirmDeclarationRequest.Request);
+            var response = await _sender.Send(SetConfirmDeclarationRequest.Request);
+            if (!response.Success)
+            {
+                TempData["Error"] = response.ErrorMessage;
+                return RedirectToAction("Declaration", "Declaration", new { Area = "Declaration" });
+            }
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 

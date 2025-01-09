@@ -38,7 +38,20 @@ public class SetCorrespondenceAddressManualHandler : IRequestHandler<SetCorrespo
             request.AddressLine2,
             request.City,
             request.County,
-            request.Postcode
+            request.Postcode,
+            LocalAuthority = (string)null,
+            SubBuildingName = (string)null,
+            BuildingName = (string)null,
+            BuildingNumber = (string)null,
+            Street = (string)null,
+            Town = (string)null,
+            AdminArea = (string)null,
+            UPRN = (string)null,
+            AddressLines = (string)null,
+            XCoordinate = (string)null,
+            YCoordinate = (string)null,
+            Toid = (string)null,
+            BuildingType = (string)null
         });
 
         await _userService.SetUserProfileStageCompletionStatus(

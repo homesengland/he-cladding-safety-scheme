@@ -1,0 +1,22 @@
+﻿@model IReadOnlyCollection<HE.Remediation.Core.Services.Alert.Models.AlertViewModel>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <govuk-back-link href="/Application/Dashboard">Back</govuk-back-link>
+        <main class="govuk-main-wrapper">
+            <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+            <div class="govuk-grid-row">
+                <div class="govuk-body govuk-grid-column-two-thirds">
+                    @foreach (var alert in Model)
+                    {
+                        await Html.RenderPartialAsync("~/Views/Shared/Alert.cshtml", alert);
+                    }
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

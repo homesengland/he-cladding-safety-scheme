@@ -1,0 +1,158 @@
+﻿@using HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageCostsScheduling.Controllers
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.CostsDescriptionViewModel
+@{
+    ViewData["BackLink"] = Url.Action("Costs", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Tell us about your costs</h1>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <th class="govuk-table__header govuk-!-width-one-half">Works type</th>
+            <th class="govuk-table__header govuk-!-width-one-quarter">Description of works</th>
+            <th class="govuk-table__header govuk-!-width-one-quarter govuk-text-align-right">Change or Add</th>
+        </tr>
+    </thead>
+</table>
+
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Removal of unsafe cladding (optional)</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">Description</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("UnsafeCladdingCosts", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", ReturnUrl = nameof(CostsSchedulingController.CostsDescription) })" class="govuk-link">
+                        @(!string.IsNullOrEmpty(Model.UnsafeCladdingRemovalDescription) ? "Change" : "Add description")
+                    </a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Removal of unsafe cladding system</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.UnsafeCladdingRemovalDescription) ? Model.UnsafeCladdingRemovalDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Installation of new cladding to replace unsafe cladding (optional)</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">Description</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("InstallationOfCladdingCosts", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", ReturnUrl = nameof(CostsSchedulingController.CostsDescription) })" class="govuk-link">
+                        @(
+                            !string.IsNullOrEmpty(Model.NewCladdingDescription) || !string.IsNullOrEmpty(Model.ExternalWorksDescription) || !string.IsNullOrEmpty(Model.InternalWorksDescription)
+                            ? "Change"
+                            : "Add description"
+                            )
+                    </a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">New cladding – including specification, insulation and other associated components to be installed</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.NewCladdingDescription) ? Model.NewCladdingDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.ExternalWorksDescription) ? Model.ExternalWorksDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Any internal mitigation works recommended in the FRAEW /PAS9980 assessment in lieu of cladding removal</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.InternalWorksDescription) ? Model.InternalWorksDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Preliminaries, access costs, main contractor's overheads and profit </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">Description</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("PreliminaryCosts", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", ReturnUrl = nameof(CostsSchedulingController.CostsDescription) })" class="govuk-link">Change</a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Main contractor's preliminaries </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.MainContractorPreliminariesDescription) ? Model.MainContractorPreliminariesDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Access (e.g. scaffolding or mast climber) </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.AccessDescription) ? Model.AccessDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Main contractor's overheads and profit </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.MainContractorOverheadDescription) ? Model.MainContractorOverheadDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Contractor's contingencies </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.ContractorContingenciesDescription) ? Model.ContractorContingenciesDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Other costs</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">Description</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("OtherCosts", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", ReturnUrl = nameof(CostsSchedulingController.CostsDescription) })" class="govuk-link">Change</a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.FeasibilityStageDescription) ? Model.FeasibilityStageDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Professional fees - post tender stage </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.PostTenderStageDescription) ? Model.PostTenderStageDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Property manager/leaseholder liaison costs </td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.PropertyManagerDescription) ? Model.PropertyManagerDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Irrecoverable VAT on works and associated fees</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">@(!string.IsNullOrEmpty(Model.IrrecoverableVatDescription) ? Model.IrrecoverableVatDescription : "-")</td>
+            <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="comp-btn-group">
+    @if (!Model.IsSubmitted)
+    {
+        <govuk-button disabled="@Model.IsSubmitted" href="@Url.Action("IneligibleCost", "CostsScheduling", new {Area = "WorksPackageCostsScheduling" })">Continue</govuk-button>
+    }
+</div>

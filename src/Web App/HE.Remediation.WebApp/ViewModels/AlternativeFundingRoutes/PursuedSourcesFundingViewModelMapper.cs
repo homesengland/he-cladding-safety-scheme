@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.GetPursuedSourcesFunding;
 using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.SetPursuedSourcesFunding;
 
@@ -9,17 +8,8 @@ public class PursuedSourcesFundingViewModelMapper : Profile
 {
     public PursuedSourcesFundingViewModelMapper()
     {
-        CreateMap<PursuedSourcesFundingViewModel, SetPursuedSourcesFundingRequest>()
-            .ForMember(
-                x => x.CompleteSection, 
-                o => o.MapFrom(s => MapCompleteSection(s)));
+        CreateMap<PursuedSourcesFundingViewModel, SetPursuedSourcesFundingRequest>();
             
         CreateMap<GetPursuedSourcesFundingResponse, PursuedSourcesFundingViewModel>();
-    }
-
-    private static bool MapCompleteSection(PursuedSourcesFundingViewModel model)
-    {
-        return model.SubmitAction == ESubmitAction.Continue
-               && model.PursuedSourcesFunding != EPursuedSourcesFundingType.PursuingOtherRoutes;
     }
 }

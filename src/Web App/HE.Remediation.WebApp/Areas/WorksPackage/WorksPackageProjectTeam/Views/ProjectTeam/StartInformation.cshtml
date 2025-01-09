@@ -1,0 +1,34 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeam.StartInformationViewModel
+@{
+    ViewData["Title"] = "Project team - Information about this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Information about this section</h1>
+
+<p class="govuk-body">
+    Applicants must have and maintain a project directory of existing and proposed project team appointments.
+</p>
+<p class="govuk-body">
+    Please note that the same person can hold a number of roles. If a team member holds more than one role, you can use the dropdown menu to auto fill their details when you're telling us about their appointment to a new role.
+</p>
+<p class="govuk-body">
+    You must provide all the information we ask for for the key roles of lead contractor and lead designer. Where further roles have been filled on the project, details should be provided for these appointments. These can be added by selecting the 'Add appointment' button.
+</p>
+<p class="govuk-body">
+    Once the works package has been submitted, you must maintain the directory until the works are complete. Appointments can be reviewed and updated on the application overview page or in your monthly progress reports.
+</p>
+
+<form asp-area="WorksPackage" asp-controller="ProjectTeam" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

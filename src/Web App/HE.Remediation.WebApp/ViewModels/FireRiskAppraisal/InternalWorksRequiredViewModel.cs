@@ -9,4 +9,6 @@ public class InternalWorksRequiredViewModel
     public ENoYes? ExternalWorksRequired { get; set; }
 
     public ESubmitAction? SubmitAction { get; set; }
+
+    public string ReturnUrl { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
@@ -67,8 +68,6 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetLeaseholderEvidence
                     Size = request.File.Length
                 });
                 await _dbConnection.ExecuteAsync("InsertLeaseHolderEngagementFile", new { processFileResult.FileId, LeaseHolderId = leaseHolderEngagementId });
-
-                await _applicationRepository.UpdateStatusToInProgress(applicationId);
 
                 scope.Complete();
             }

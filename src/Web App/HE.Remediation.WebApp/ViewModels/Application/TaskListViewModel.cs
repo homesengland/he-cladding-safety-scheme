@@ -14,8 +14,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public ETaskStatus ApplicationBankDetailsStatusId { get; set; }
         public ETaskStatus ConfirmDeclarationStatusId { get; set; }
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
-        public string BackLink { get; set; }
-
+        
         public bool Phase2ReadyForDeclaration()
         {
             return ApplicationLeaseHolderEngagementStatusId == ETaskStatus.Completed
@@ -40,7 +39,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
 
         public bool Phase4Completed()
         {
-            return ApplicationStatusId != EApplicationStatus.NotStarted && ApplicationStatusId != EApplicationStatus.InProgress;
+            return ApplicationStatusId != EApplicationStatus.ApplicationNotStarted && ApplicationStatusId != EApplicationStatus.ApplicationInProgress;
         }
     }
 } 

@@ -2,7 +2,7 @@
 @using HE.Remediation.Core.Enums
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityRelationViewModel
 @{
-    ViewData["Title"] = "Which of these best describes the responsible entity in relation to the building?";
+    ViewData["Title"] = "Which of these best describes the Responsible Entity in relation to the building?";
     ViewData["BackLink"] = Model.RepresentationType == EApplicationRepresentationType.Representative
         ? Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
         : Url.Action("Representative", "ResponsibleEntities", new { Area = "ResponsibleEntities" });

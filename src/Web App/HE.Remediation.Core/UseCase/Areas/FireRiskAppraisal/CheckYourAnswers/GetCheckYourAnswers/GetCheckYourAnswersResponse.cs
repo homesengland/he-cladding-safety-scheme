@@ -5,8 +5,6 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.G
 
 public class GetCheckYourAnswersResponse
 {
-    // new fields below
-
     public string AppraisalReportFilename { get; set; }
 
     public string AppraisalSummaryFilename { get; set; }
@@ -21,13 +19,11 @@ public class GetCheckYourAnswersResponse
 
     public string PeerReviewPerson { get; set; }
 
-    public string UndertakingFirm { get; set; }
+    public decimal? FraewCost { get; set; }
 
-    public int? NumberOfStoreys { get; set; }    
+    public int? NumberOfStoreys { get; set; }
 
     public int? BuildingHeight { get; set; }
-
-    public ENoYes? BuildingInterimMeasures { get; set; }
 
     public EBasicComplexType? BasicComplexType { get; set; }
 
@@ -47,11 +43,19 @@ public class GetCheckYourAnswersResponse
 
     public ENoYes? RecommendBuildingInterim { get; set; }
 
+    public int? RecommendTotalAreaCladding { get; set; }
+
     public string CaveatsLimitations { get; set; }
 
     public string RemediationSummary { get; set; }
 
-    public string JustifyRecommendation { get; set; }  
+    public string JustifyRecommendation { get; set; }
+
+    public string InterimMeasuresOtherText { get; set; }
+
+    public string SafetyRiskOtherText { get; set; }
+
+    public string OtherRiskMitigationOptionsConsidered { get; set; }
 
     // lists/collections
 
@@ -61,21 +65,24 @@ public class GetCheckYourAnswersResponse
 
     public List<CladdingSystemsListResult> CladdingSystems { get; set; }
 
+    public List<ERiskSafetyMitigationType> SafetyRiskMitigationOptions { get; set; }
 
-    // old fields
+    public List<EInterimMeasuresType> InterimMeasureOptions { get; set; }
 
-    public bool FireRiskCompleted { get; set; }
-    public string AppraisalSurveyDetailsFireRiskAssessor { get; set; }
-    public DateTime? AppraisalSurveyDetailsDateOfInstruction { get; set; }
-    public DateTime? AppraisalSurveyDetailsSurveyDate { get; set; }
-    public string AssessorDetailsFirstName { get; set; }
-    public string AssessorDetailsLastName { get; set; }
-    public string AssessorDetailsCompanyName { get; set; }
-    public string AssessorDetailsCompanyNumber { get; set; }
-    public string AssessorDetailsEmailAddress { get; set; }
-    public string AssessorDetailsTelephone { get; set; }
-    public string SurveyInstructionDetailsFireRiskAssessor { get; set; }
-    public DateTime? SurveyInstructionDetailsDateOfInstruction { get; set; }
-    public string FRAEWFileName { get; set; }
     public bool ReadOnly { get; set; }
+
+    //interim measures
+    public EYesNoNonBoolean? BuildingInterimMeasures { get; set; }
+
+    public EEvacuationStrategy? EvacuationStrategyType { get; set; }
+
+    public int? NumberOfStairwells { get; set; }
+
+    public EYesNoNonBoolean? ExternalWallAndBalconiesPolicy { get; set; }
+
+    public EYesNoNonBoolean? FireAndResueAccessRestrictions { get; set; }
+
+    public string FireAndResueAccessRestrictionsText { get; set; }
+
+    public IEnumerable<EInterimMeasuresType> BuildingInterimMeasuresTypes { get; set; }
 }

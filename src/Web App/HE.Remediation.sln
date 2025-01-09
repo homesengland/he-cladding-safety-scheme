@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HE.Remediation.Entity", "HE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HE.Remediation.Core", "HE.Remediation.Core\HE.Remediation.Core.csproj", "{DD203751-859D-425A-BE63-5610E78F5AA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HE.Remediation.Core.Tests", "HE.Remediation.Core.Tests\HE.Remediation.Core.Tests.csproj", "{93DD25F0-2B70-4989-A367-78ED6A6ADF62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HE.Remediation.Core.Tests", "HE.Remediation.Core.Tests\HE.Remediation.Core.Tests.csproj", "{93DD25F0-2B70-4989-A367-78ED6A6ADF62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

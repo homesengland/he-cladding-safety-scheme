@@ -1,11 +1,16 @@
-﻿namespace HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal
+﻿namespace HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
+
+public class GetFireRiskAssessorListResult
 {
-    public class GetFireRiskAssessorListResult
+    public int Id { get; set; }
+    public string CompanyName { get; set; }
+    public string EmailAddress { get; set; }
+    public string Telephone { get; set; }
+    public IList<RegionResult> Regions { get; set; } = new List<RegionResult>();
+
+    public class RegionResult
     {
-        public string Id { get; set; }
-        public string CompanyName { get; set; }
-        public string RegionsCovered { get; set; }
-        public string EmailAddress { get; set; }
-        public string Telephone { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

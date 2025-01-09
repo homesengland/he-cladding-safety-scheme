@@ -24,6 +24,7 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public int? ResponsibleEntityCompanySubTypeId { get; set; }
         public bool? ResponsibleEntityRegisteredInUK { get; set; }
         public string ResponsibleEntityCompanyDetails { get; set; }
+        public string ResponsibleEntityOrganisationDetails { get; set; }
         public string ResponsibleEntityDetails { get; set; }
         public string ResponsibleEntityCompanyAddress { get; set; }
         public string ResponsibleEntityPrimaryContact { get; set; }
@@ -31,8 +32,12 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public string ResponsibleEntityAuthorisationEvidence { get; set; }
         public int? ResponsibleEntitySharedOwners { get; set; }
         public bool? ResponsibleEntityClaimingGrant { get; set; }
+        public bool? ResponsibleEntityResponsibleForGrantFunding { get; set; }
         public bool? ConfirmedNotViable { get; set; }
-        public List<EvidenceFile> EvidenceFiles { get; set; }
+        public List<EvidenceFile> RepresentEvidenceFiles { get; set; }
+        public List<EvidenceFile> S151EvidenceFiles { get; set; }
+        public List<EvidenceFile> CheifExecEvidenceFiles { get; set; }
+        public List<GrantFundingSignatory> GrantFundingSignatories { get; set; }
 
         public Guid? FreeholderId { get; set; }
         public int? FreeholderResponsibleEntityTypeId { get; set; }

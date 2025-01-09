@@ -1,7 +1,4 @@
-﻿using Azure.Core;
-using Castle.Components.DictionaryAdapter.Xml;
-using HE.Remediation.Core.Enums;
-using HE.Remediation.Core.Exceptions;
+﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;

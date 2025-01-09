@@ -4,7 +4,10 @@
 
 @{
     ViewData["Title"] = "Claim pre-tender support";
-    ViewData["Backlink"] = Url.Action("GrantFundingAgreement", "PreTenderSupport", new { Area = "PreTenderSupport" });
+
+    ViewData["BackLink"] = Model.bankRelationship == HE.Remediation.Core.Enums.EBankDetailsRelationship.ResponsibleEntityAccount 
+        ? Url.Action("Index", "StageDiagram", new { Area = "Application" })
+        : Url.Action("Index", "StageDiagram", new { Area = "Application" });
     ViewData["FullWidth"] = false;
 }
 
@@ -13,38 +16,48 @@
 </h1>
 
 <p class="govuk-body">
-    Advance Funding Support is financial assistance provided to applicants. It is a one-off payment, and makes
-    up part of the total allowance for the mid-rise grant funding.
+    Pre-Tender Support is available to help financially support you to undertake the design, specification and/or the tender process 
+    required to compile your works package and get to the point of delivering your remediation works.
+</p>
+<p class="govuk-body">
+    Pre-Tender Support is paid up front and will make up part of any grant funding available for your project. Costs funded through 
+    this support can be related to completion of the FRAEW, associated technical surveys and the project management, design 
+    and tendering of the eligible works. This should include obtaining competitive quotations/tenders for your project to 
+    evidence value for money.
+</p>
+
+<p class="govuk-body">
+    Pre-Tender Support is not normally available for housing associations (registered providers) or local authorities, as it 
+    is only provided to those applicants who do not have access to the required funds to complete the design, 
+    specification and tender of works.
 </p>
 
 <p class="govuk-body">
     You are eligible to claim:
     <br />
-    <span><b>@Model.EligibleClaimAmount.ToString("C0", CultureInfo.CurrentCulture)</b></span>
+    <span><b>&pound;@String.Format("{0:N2}", Model.PTFSClaimAmount)</b></span>
 </p>
 
 <p class="govuk-body">
-
+    This total is calculated from the area of unsafe cladding on your building, which is evidenced as an output of the FRAEW report. 
+    To access this funding, you will need to sign up to the terms of the Grant Funding Agreement.
 </p>
-
 <p class="govuk-body">
-    This total is calculated from the area of unsafe cladding on your building, which is evidenced as an output of the FRAEW report.
+    The building being deemed eligible or being approved for Pre-Tender Support is not confirmation that the works package 
+    containing the full works costs submission will be approved.
 </p>
+<govuk-inset-text>
+    <p class="govuk-body">
 
-<p class="govuk-body">
-    The building being deemed eligible or being approved for this funding is not confirmation that works costs submission will be approved.
-</p>
+        If the works do not proceed, your monthly reporting requirements are not fulfilled, or your works package is not approved, 
+        we reserve the right to recoup the value of this advance funding.
+    </p>
 
-<p class="govuk-body">
-    Costs at this stage of the application can be related to completion of the FRAEW, associated technical surveys and the design and tendering of the eligible works. As part of this claim, you will be asked where you have spent the funding during your monthly reporting obligations.
-</p>
+    <p class="govuk-body">
+        If your works package is approved, we will deal with any unspent balance of your Pre-Tender Support at that point by allowing 
+        you to use it as part of the remaining grant for the delivery of your remediation works.
+    </p>
 
-<p class="govuk-body">
-    If the works do not proceed, your monthly reporting obligations are not fulfilled, or your work package is not approved, we reserve the right to recoup the value of this advance funding.
-</p>
+</govuk-inset-text>
 
-<p class="govuk-body">
-    In order to access this funding, you will need to sign the pre-tender support agreement, the terms of which are non-negotiable.
-</p>
-
-<govuk-button href="@Url.Action("SupportRequired", "PreTenderSupport", new {Area = "PreTenderSupport"})">Start &gt;</govuk-button>
+<govuk-button href="@Url.Action("SupportRequired", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>

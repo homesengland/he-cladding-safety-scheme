@@ -1,0 +1,67 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.SummariseProgressViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("LeaseholdersInformedLast", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ProgressSummary" />
+        <govuk-error-summary-item asp-for="GoalSummary" />
+        <govuk-error-summary-item asp-for="IsSupportNeeded" />
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-xl">
+    Summarise your overall progress
+</h1>
+
+<p class="govuk-body">
+    Tell us about your overall progress this month and your goals for next month.
+</p>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="SummariseProgress" method="post">
+
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
+        <div class="govuk-form-group">
+            <govuk-character-count name="ProgressSummary" max-length="500" asp-for="ProgressSummary">
+                <govuk-character-count-label class="govuk-label--s">Summarise your progress this month</govuk-character-count-label>
+            </govuk-character-count>
+        </div>
+    </div>
+
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
+        <div class="govuk-form-group">
+            <govuk-character-count name="GoalSummary" max-length="500" asp-for="GoalSummary">
+                <govuk-character-count-label class="govuk-label--s">Summarise your goals for next month</govuk-character-count-label>
+            </govuk-character-count>
+        </div>
+    </div>
+
+    <govuk-radios asp-for="IsSupportNeeded">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                Do you need support?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@true">Yes</govuk-radios-item>
+        <govuk-radios-item value="@false">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

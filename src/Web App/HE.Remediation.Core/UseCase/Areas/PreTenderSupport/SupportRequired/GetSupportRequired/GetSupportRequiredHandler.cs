@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.GetSupportRequired
@@ -7,11 +8,16 @@ namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.Get
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IPreTenderRepository _preTenderRepository;
 
-        public GetSupportRequiredHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public GetSupportRequiredHandler(
+            IDbConnectionWrapper dbConnectionWrapper, 
+            IApplicationDataProvider applicationDataProvider, 
+            IPreTenderRepository preTenderRepository)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _preTenderRepository = preTenderRepository;
         }
 
         public async Task<GetSupportRequiredResponse> Handle(GetSupportRequiredRequest request, CancellationToken cancellationToken)
@@ -21,7 +27,17 @@ namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.Get
             var result = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetSupportRequiredResponse>("GetPreTenderSupportRequired",
                 new { applicationId });
 
-            return result ?? new GetSupportRequiredResponse();
+            var isSubmitted = await _preTenderRepository.IsPreTenderSubmitted(applicationId);
+
+            if (result is not null)
+            {
+                result.IsSubmitted = isSubmitted;
+            }
+
+            return result ?? new GetSupportRequiredResponse
+            {
+                IsSubmitted = isSubmitted
+            };
         }
     }
 }

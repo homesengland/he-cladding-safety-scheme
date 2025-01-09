@@ -1,0 +1,63 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.SubContractorRatingsViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action("SubContractors", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.LeaseholderResidentCommunication})
+        : Url.Action(Model.ReturnUrl, "ClosingReport", new {Area = "ClosingReport"});
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+    <div class="info-card ">
+        <h2 class="govuk-heading-m">Funding details</h2>
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Company</h3>
+        <p class="govuk-body govuk-!-margin-top-0">@Model.Ratings.CompanyName</p>
+        
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Company Number</h3>
+                <p class="govuk-body govuk-!-margin-top-0">@Model.Ratings.CompanyRegistrationNumber</p>
+        
+    </div>
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Ratings.QualityOfWork"/>
+        <govuk-error-summary-item asp-for="Ratings.ValueForMoney"/>
+        <govuk-error-summary-item asp-for="Ratings.Reliability"/>
+        <govuk-error-summary-item asp-for="Ratings.ConsiderationOfResidents"/>
+        <govuk-error-summary-item asp-for="Ratings.OverallSatisfaction"/>
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Provide ratings for @ViewContext.RouteData.Values["name"]</h1>
+
+<p class="govuk-body">
+    We would like to understand your experience of working with sub-contractors. Please provide a score between 1-5, 1 being very poor and 5 being excellent.
+</p>
+
+@using (Html.BeginForm())
+{
+    @await Html.PartialAsync("SubContractorSurvey/_Ratings", new SubContractorIndividualRatingsViewModel
+    {
+        Ratings = Model.Ratings
+    })
+
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+    @Html.HiddenFor(x => x.Ratings.Id)
+    @Html.HiddenFor(x => x.ReturnUrl)
+
+    @Html.HiddenFor(x => x.Ratings.CompanyName)
+    @Html.HiddenFor(x => x.Ratings.CompanyRegistrationNumber)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+}

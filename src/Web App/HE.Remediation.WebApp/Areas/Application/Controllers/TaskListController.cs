@@ -21,14 +21,12 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index(string backLink)
+        public async Task<IActionResult> Index()
         {
             var taskListResponse = await _sender.Send(GetTaskListRequest.Request);
 
             var viewModel = _mapper.Map<TaskListViewModel>(taskListResponse);
-
-            viewModel.BackLink = backLink;
-
+            
             return View(viewModel);
         }
     }

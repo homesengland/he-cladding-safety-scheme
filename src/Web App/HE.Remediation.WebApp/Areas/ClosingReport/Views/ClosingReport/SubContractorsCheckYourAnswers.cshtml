@@ -1,0 +1,24 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action("SubContractors", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.LeaseholderResidentCommunication})
+        : Url.Action(Model.ReturnUrl, "ClosingReport", new {Area = "ClosingReport"});
+    ViewData["FullWidth"] = true;
+
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Check your answers</h1>
+
+@await Html.PartialAsync("SubContractorSurvey/_CheckYourAnswers", new SubContractorCheckYourAnswersViewModel
+{
+    Action = "SubContractorRatings",
+    ReturnAction = "SubContractorsCheckYourAnswers",
+    IsSubmitted = Model.IsSubmitted,
+    SubContractorRatings = Model.SubContractorRatings
+})
+
+<govuk-button disabled="@Model.IsSubmitted" href="@Url.Action("SubmitPayment", "ClosingReport", new {Area = "ClosingReport"})">Continue</govuk-button>

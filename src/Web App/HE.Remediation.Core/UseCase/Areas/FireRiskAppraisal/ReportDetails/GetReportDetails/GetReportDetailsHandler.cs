@@ -29,16 +29,18 @@ public class GetReportDetailsHandler: IRequestHandler<GetReportDetailsRequest, G
         {
             AuthorsName = reportDetails?.AuthorsName,
             PeerReviewPerson = reportDetails?.PeerReviewPerson,
-            UndertakingFirm = reportDetails?.UndertakingFirm,
+            FraewCost = reportDetails?.FraewCost,
             NumberOfStoreys = reportDetails?.NumberOfStoreys,
             BuildingHeight = reportDetails?.BuildingHeight,
-            BuildingInterimMeasures = reportDetails?.BuildingInterimMeasures,
-            BasicComplexId = (EBasicComplexType)reportDetails?.BasicComplexId,
+            BasicComplexId = reportDetails?.BasicComplexId,
             BuildingAddress = buildingDetails?.BuildingAddress,
             FRAEWInstructedDate = buildingDetails?.FRAEWInstructedDate,
             BuildingName = buildingDetails?.BuildingName,
             FRAEWCompletedDate = buildingDetails?.FRAEWCompletedDate,
-            CompanyUndertakingReport = buildingDetails?.CompanyUndertakingReport
+            CompanyUndertakingReport = buildingDetails?.CompanyUndertakingReport,
+            ApplicationReferenceNumber = buildingDetails.ApplicationReferenceNumber,
+            PartOfDevelopment = buildingDetails.PartOfDevelopment,
+            Development = buildingDetails.Development
         };
 
         return response;

@@ -18,9 +18,9 @@ public class GetRecommendedWorksStartHandler : IRequestHandler<GetRecommendedWor
 
     public async Task<GetRecommendedWorksStartResponse> Handle(GetRecommendedWorksStartRequest request, CancellationToken cancellationToken)
     {
-        var applicaitonId = _applicationDataProvider.GetApplicationId();
+        var applicationId = _applicationDataProvider.GetApplicationId();
 
-        var result = await _fireRiskWorksRepository.GetWorksRequired(applicaitonId);
+        var result = await _fireRiskWorksRepository.GetWorksRequired(applicationId);
 
         return new GetRecommendedWorksStartResponse
         {

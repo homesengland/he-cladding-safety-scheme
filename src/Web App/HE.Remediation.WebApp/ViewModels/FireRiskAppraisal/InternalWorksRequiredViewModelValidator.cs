@@ -8,6 +8,6 @@ public class InternalWorksRequiredViewModelValidator: AbstractValidator<Internal
     {
         RuleFor(x => x.WorksRequired)
             .NotEmpty()
-            .WithMessage("Please select an option");
+            .WithMessage("Select an option");
     }
 }

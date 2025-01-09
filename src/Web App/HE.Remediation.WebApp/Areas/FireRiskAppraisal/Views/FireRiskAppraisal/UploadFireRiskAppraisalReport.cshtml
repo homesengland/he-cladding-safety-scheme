@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Upload fire risk appraisal report";
-    ViewData["BackLink"] = Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["BackLink"] = Url.Action("Guidance", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
     ViewData["FullWidth"] = false;
 
     var fraewAcceptedTypes = Model.FraewAcceptedFileTypes?.Any() == true ? string.Join(",", Model.FraewAcceptedFileTypes) : "*";
@@ -21,15 +21,16 @@
 }
 <h1 class="govuk-heading-xl">Upload fire risk appraisal summary and report</h1>
 
-<p class="govuk-body">Each file must be smaller than 50MB.</p>
-
 <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="UploadFireRiskAppraisalReport" method="post" enctype="multipart/form-data">
     <h3 class="govuk-heading-m">Upload FRAEW Report</h3>
+    
+    <p class="govuk-body">Each file must be smaller than 50MB, and a .pdf file.</p>
+
     @if (@Model.AddedFraew is null)
     {
-        <govuk-file-upload asp-for="Fraew" name="Fraew" input-accept="@fraewAcceptedTypes">
-            <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
-        </govuk-file-upload>
+        <govuk-file-Upload asp-for="Fraew" name="Fraew" input-accept="@fraewAcceptedTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
         
     }
     else
@@ -53,11 +54,14 @@
         <input type="hidden" name="AddedFraew.FileSize" value="@fraewFile.FileSize"/>
     }
     <h3 class="govuk-heading-m">Upload FRAEW Summary</h3>
+    
+    <p class="govuk-body">Each file must be smaller than 50MB, and a .xlsx file.</p>
+
     @if (@Model.AddedSummary is null)
     {
-        <govuk-file-upload asp-for="FraewSummary" name="FraewSummary" input-accept="@fraewSummaryTypes">
-            <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
-        </govuk-file-upload>
+        <govuk-file-Upload asp-for="FraewSummary" name="FraewSummary" input-accept="@fraewSummaryTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
         
     }
     else
@@ -80,6 +84,8 @@
         <input type="hidden" name="AddedSummary.Name" value="@summaryFile.Name"/>
         <input type="hidden" name="AddedSummary.FileSize" value="@summaryFile.FileSize"/>
     }
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <div class="comp-btn-group">
     <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>

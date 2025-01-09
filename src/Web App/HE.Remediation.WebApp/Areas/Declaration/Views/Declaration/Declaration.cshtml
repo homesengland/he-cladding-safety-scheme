@@ -5,6 +5,24 @@
     ViewData["Backlink"] = Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
 }
 
+@if (ViewData.ModelState.ContainsKey(string.Empty))
+{
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+            <h2 class="govuk-error-summary__title">
+                There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    <li>
+                        <a href="#">@ViewData.ModelState[string.Empty].Errors.First().ErrorMessage</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
 <h1 class="govuk-heading-xl">
     Declaration
 </h1>
@@ -13,9 +31,9 @@
 <ul class="govuk-list govuk-list--bullet">
     <li>I will tell Homes England if the application details change</li>
     <li>The information I have provided is true and correct</li>
-    <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice">Homes England privacy notice</a>, which explains how we'll use and share your information'</li>
-    <li>I can apply for grant funding for the building in this application as a responsible entity or an authorised representative</li>
-    <li>I agree any grant received under Cladding Safety Scheme will be treated as state subsidy. More information about state subsidy can found in the guidance you have received.</li>
+    <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information'</li>
+    <li>I can apply for grant funding for the building in this application as a Responsible Entity or an authorised Representative</li>
+    <li>I agree any grant funding received will be treated as state subsidy. More information about state subsidy can found in the guidance you have received.</li>
 </ul>
 
 <govuk-warning-text icon-fallback-text="Warning">

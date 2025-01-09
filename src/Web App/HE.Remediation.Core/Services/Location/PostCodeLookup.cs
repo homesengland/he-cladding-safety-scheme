@@ -1,5 +1,4 @@
 ﻿using HE.Remediation.Core.Exceptions;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
 
@@ -17,6 +16,22 @@ public class PostCodeLookup : IPostCodeLookup
     public async Task<PostCodeResults> SearchPostCode(string postCode)
     {           
         return await ObtainSearchResults(postCode);            
+    }
+
+    public async Task<PostCodeResults> SearchBuildings(string postcode)
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("ApimClient");
+            var httpResponse = await httpClient.GetAsync($"{Environment.GetEnvironmentVariable("APIM_BUILDING_LOOKUP_URI")}?postcode={postcode}");
+
+            await using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Bad call to web service. Message=" + ex.StackTrace);
+        }
     }
 
     private async Task<PostCodeResults> ObtainSearchResults(string searchPostCode)
@@ -61,5 +76,5 @@ public class PostCodeLookup : IPostCodeLookup
         {
             throw new Exception("Bad call to web service. Message=" + ex.StackTrace);                
         }
-    }        
+    }
 }

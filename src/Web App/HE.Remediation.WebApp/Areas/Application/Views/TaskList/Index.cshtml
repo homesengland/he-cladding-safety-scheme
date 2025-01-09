@@ -8,7 +8,7 @@
 
 <div class="text-center">
     <div class="govuk-width-container">
-        <a href="@(Model.BackLink ?? @Url.Action("Index", "Dashboard", new { Area = "Application" }))" class="govuk-back-link">Back</a>
+        <a href="@Url.Action("Index", "StageDiagram", new { Area = "Application" })" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
@@ -140,6 +140,12 @@
                                         {
                                             <span class="govuk-body">Submit</span>
                                         }
+
+                                        if ((int)Model.ApplicationStatusId > (int)EApplicationStatus.ApplicationSubmitted)
+                                        {
+                                            Model.ApplicationStatusId = EApplicationStatus.ApplicationSubmitted;
+                                        }
+
                                         <application-status-badge status="@Model.ApplicationStatusId"></application-status-badge>
                                     }
                                     else

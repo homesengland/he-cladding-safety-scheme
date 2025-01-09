@@ -2,7 +2,7 @@
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.SetSubmit
 {
-    public class SetSubmitRequest : IRequest<Unit>
+    public class SetSubmitRequest : IRequest
     {
         private SetSubmitRequest()
         {

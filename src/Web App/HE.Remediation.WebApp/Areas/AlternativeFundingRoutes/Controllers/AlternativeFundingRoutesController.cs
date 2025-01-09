@@ -66,16 +66,14 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
             var request = _mapper.Map<SetPursuedSourcesFundingRequest>(viewModel);
             await _sender.Send(request);
 
-            if (request.PursuedSourcesFunding is 
-                EPursuedSourcesFundingType.ExhaustedAllRoutes
-                or EPursuedSourcesFundingType.NotExhaustedAllRoutes)
+            if (viewModel.SubmitAction == ESubmitAction.Continue)
             {
-                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+                return request.PursuedSourcesFunding is EPursuedSourcesFundingType.PursuingOtherRoutes
+                    ? RedirectToAction("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                    : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
             }
 
-            return viewModel.SubmitAction == ESubmitAction.Continue 
-                ? RedirectToAction("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" }) 
-                : RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion
 

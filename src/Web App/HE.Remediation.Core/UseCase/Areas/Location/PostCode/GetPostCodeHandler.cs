@@ -27,7 +27,7 @@ public class GetPostCodeHandler : IRequestHandler<GetPostCodeRequest, GetPostCod
             throw new EntityNotFoundException("Could not fetch the User's id from within GetPostCodeHandler");
         }
 
-        var results = await _pcl.SearchPostCode(request.PostCode);        
+        var results = await _pcl.SearchPostCode(request.PostCode);
         return new GetPostCodeResponse(results);
     }
 }

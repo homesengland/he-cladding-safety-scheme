@@ -1,0 +1,48 @@
+﻿@model HE.Remediation.Core.Services.GovNotify.ViewModels.GovNotifyEmailViewModel
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/gov-notify-footer.css">
+</head>
+<body>
+    <div class="head">
+        <img class="logo" src="img/LetterLogo.png" />
+        <span class="slogan">The Housing and Regeneration Agency</span>
+    </div>
+    <div class="body">
+        <div class="avoid-break">
+            <p>
+                Dear @Model.ContactFirstName @Model.ContactSurname,
+            </p>
+        </div>
+        <div class="avoid-break">
+            <strong>
+                Thank you for submitting your works package for @Model.BuildingName @Model.ReferenceNumber.
+            </strong>
+            <p>
+                We will now commence our review process, which is likely to involve an independent cost consultant 
+                review.  We will endeavour to complete our review without needing to revert to you, but if we need 
+                to discuss any of the information you have provided, we will contact you.
+            </p>
+            <p>
+                You will receive a further email to confirm the outcome of your works package review in around 15 
+                working days. We will then also inform you of the next steps.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                If you need further help, contact the Cladding Safety Scheme by emailing
+                <a href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>.
+                Please include the building’s name and number in the email subject line. Alternatively, you can call the team on 0300 323 0180.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Yours sincerely
+            </p>
+            <p>
+                The Cladding Safety Scheme Team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

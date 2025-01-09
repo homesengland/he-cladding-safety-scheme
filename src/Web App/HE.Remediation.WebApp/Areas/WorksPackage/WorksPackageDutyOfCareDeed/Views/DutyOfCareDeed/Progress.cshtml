@@ -1,0 +1,59 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageDutyOfCareDeed.ProgressViewModel
+@{
+    ViewData["Title"] = "Compile works package - Duty of care deed";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">Duty of care deed</h1>
+
+<p class="govuk-body">
+    The duty of care deed will be emailed to the grant certifying officer. You can check on your grant certifying officer's progress at any time and we'll keep you updated by email.
+</p>
+
+<div class="govuk-flex-row">
+    <h2 class="govuk-heading-m">Status:</h2>
+    <task-status-inline-badge status="@Model.Status"></task-status-inline-badge>
+</div>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Action</th>
+            <th scope="col" class="govuk-table__header">Date</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell no-line-wrap">Sent to grant certifying officer</td>
+            <td class="govuk-table__cell no-line-wrap">
+                @if (Model.DateSentToGrantCertifyingOfficer is not null)
+                {
+                    @Model.DateSentToGrantCertifyingOfficer.Value.ToString("dd/MM/yy")
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell no-line-wrap">Signed by grant certifying officer</td>
+            <td class="govuk-table__cell no-line-wrap">
+                @if (Model.DateSignedByGrantCertifyingOfficer is not null)
+                {
+                    @Model.DateSignedByGrantCertifyingOfficer.Value.ToString("dd/MM/yy")
+                }
+                else
+                {
+                    <span>-</span>
+                }
+                </td>
+        </tr>
+    </tbody>
+</table>
+
+<govuk-button href=@Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" }) class="govuk-button--secondary">Return to task list</govuk-button>

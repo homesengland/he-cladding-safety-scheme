@@ -1,0 +1,31 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageKeyDates.ChangeAnswersViewModel
+@{
+    ViewData["Title"] = "Key dates - Clear your answers to this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("CheckYourAnswers", "KeyDates", new { Area = "WorksPackageKeyDates" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Clear your answers to this section</h1>
+
+<govuk-inset-text>Changing your answers in this section will require you to start this section again. Are you sure you wish to proceed?</govuk-inset-text>
+
+@using (Html.BeginForm())
+{
+    <govuk-radios asp-for="Proceed">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                Are you sure you wish to proceed?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@true">Yes, clear answers</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@false">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+}

@@ -1,0 +1,73 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageKeyDates.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Key dates - Check your answers";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;    
+    ViewData["BackLink"] = @Url.Action("KeyDates", "KeyDates", new { Area = "WorksPackageKeyDates" });
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+@using (Html.BeginForm())
+{
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-label--m">Confirm key dates</span>
+            </govuk-summary-list-row-key>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ChangeAnswers", "KeyDates")">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+    <govuk-summary-list>
+        @if (Model.StartDate.HasValue)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    When do you expect to start on site?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.StartDate.Value.ToString("MMMM yyyy")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+        @if (Model.UnsafeCladdingRemovalDate.HasValue)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    When do you expect to remove cladding?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.UnsafeCladdingRemovalDate.Value.ToString("MMMM yyyy")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+        @if (Model.ExpectedDateForCompletion.HasValue)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    When do you expect to complete your works?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ExpectedDateForCompletion.Value.ToString("MMMM yyyy")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    </govuk-summary-list>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted"/>
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+}

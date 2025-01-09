@@ -1,0 +1,460 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.FinalCheckYourAnswersViewModel
+@{
+    var @needsSupport = (Model.LeadDesignerNeedsSupport == true ||
+                         Model.OtherMembersNeedsSupport == true ||
+                         Model.QuotesNeedsSupport == true ||
+                         Model.PlanningPermissionNeedsSupport == true);
+
+    var @showSupportSection = (needsSupport ||
+                               Model.OtherMembersAppointed == false ||
+                               Model.LeadDesignerAppointed == false ||
+                               Model.QuotesSought == false ||
+                               Model.AppliedForPlanningPermission == false);
+
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = needsSupport
+        ? Url.Action("ReasonNeedsSupport", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["ReturnUrl"] = "FinalCheckYourAnswers";
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-text-align-right">
+        <a href=@Url.Action("ChangeAnswers", "ProgressReporting") class="govuk-link">Change your answers</a>
+    </div>
+</div>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you informed the leaseholders/residents about the progress of the application?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.LeaseholdersInformed!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you appointed a lead designer?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.LeadDesignerAppointed!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you appointed other members of your project team?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.OtherMembersAppointed!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you sought quotes or issued a tender?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.QuotesSought!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.QuotesSought == false)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Tell us why have you not sought quotes or issued a tender?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.NotReadyForTender ? "Not ready for tender" : "I don't plan on running an open tender")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Tell us why
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.QuotesNotSoughtReason
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Do you need support to seek quotes or issue a tender?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.QuotesNeedsSupport == true ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Do your works need planning permission?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.RequirePlanningPermission.HasValue ? HE.Remediation.Core.Helpers.EnumHelpers.GetText((EYesNoNonBoolean)Model.RequirePlanningPermission.Value) : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you applied for planning permission?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.AppliedForPlanningPermission == true ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    
+    @if (Model.AppliedForPlanningPermission == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What date was the application submitted?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PlanningPermissionSubmittedDate.HasValue ? Model.PlanningPermissionSubmittedDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What date was the application approved?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PlanningPermissionApprovedDate.HasValue ? Model.PlanningPermissionApprovedDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    else
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                When do you plan to submit your planning application?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PlanningPermissionPlannedSubmitDate.HasValue ? Model.PlanningPermissionPlannedSubmitDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.ShowBuildingSafetyRegulatorRegistration)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Do you have a Building Safety Regulator registration code?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingHasSafetyRegulatorRegistrationCode!.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        @if (Model.BuildingHasSafetyRegulatorRegistrationCode == true)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    What is your Building Safety Regulator registration code?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(!String.IsNullOrEmpty(Model.BuildingSafetyRegulatorRegistrationCode) ? Model.BuildingSafetyRegulatorRegistrationCode : "-")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    }
+
+    @if (Model.ExpectedWorksPackageSubmissionDate is not null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                When do you think you'll submit your works package?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.ExpectedWorksPackageSubmissionDate.Value.ToString("MM/yy")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Is your building over 18m in height?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.BuildingControlDetailsRequired == true ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.BuildingControlDetailsRequired == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Building Control Approval - Gateway 2 Forecast Submission Date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlForecastDate.HasValue ? Model.BuildingControlForecastDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Building Control Approval - Gateway 2 Actual Submission Date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlActualDate.HasValue ? Model.BuildingControlActualDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Building Control Approval - Gateway 2 Validation Date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlValidationDate.HasValue ? Model.BuildingControlValidationDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Building Control Approval - Gateway 2 Decision Date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlDecisionDate.HasValue ? Model.BuildingControlDecisionDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Building Control Approval - Decision
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlDecision.HasValue ? (Model.BuildingControlDecision.Value ? "Approved" : "Rejected") : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+</govuk-summary-list>
+
+
+@if (showSupportSection)
+{
+    <h2 class="govuk-heading-m">Support</h2>
+
+    <govuk-summary-list>
+
+        @if (Model.LeadDesignerAppointed == false)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Why have you not appointed a lead designer?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>  
+                    @Model.LeadDesignerNotAppointedReason                
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Do you need support appointing a lead designer?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.LeadDesignerNeedsSupport == true ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.OtherMembersAppointed == false)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Why have you not appointed other team members?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.OtherMembersNotAppointedReason
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Do you need support appointing a team?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.OtherMembersNeedsSupport == true ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.AppliedForPlanningPermission == false)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Why are you not applying for planning permission?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ReasonPlanningPermissionNotApplied
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Do you need support applying for planning permission?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.PlanningPermissionNeedsSupport == true ? "Yes" : "No")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (needsSupport)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    What kind of support do you need?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.SupportNeededReason
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    </govuk-summary-list>
+}
+
+@if (Model.HasGco.HasValue)
+{
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Have you appointed your grant certifying officer?</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(Model.HasGco.Value ? "Yes" : "No")</govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        @if (!string.IsNullOrEmpty(Model.TeamMember))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>Who is your grant certifying officer?</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    <div>@Model.TeamMember</div>
+                    <div class="govuk-!-font-size-16 govuk-hint">@Model.Role</div>
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.HasGcoAddress)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>Provide grant certifying officer's company address</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (!string.IsNullOrEmpty(Model.NameNumber))
+                    {
+                        <div>@Model.NameNumber</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AddressLine1))
+                    {
+                        <div>@Model.AddressLine1</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AddressLine2))
+                    {
+                        <div>@Model.AddressLine2</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.City))
+                    {
+                        <div>@Model.City</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.County))
+                    {
+                        <div>@Model.County</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Postcode))
+                    {
+                        <div>@Model.Postcode</div>
+                    }
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Signatory))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>Authorised signatory</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@Model.Signatory</govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SignatoryEmailAddress))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>Authorised signatory email address</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@Model.SignatoryEmailAddress</govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        @if (Model.DateAppointed.HasValue)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>Company’s Date of Appointment to the project</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@Model.DateAppointed.Value.ToString("dd MMMM yyyy")</govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    </govuk-summary-list>
+}
+
+@if (Model.TeamMembers != null && Model.TeamMembers.Any())
+{
+    <h2 class="govuk-heading-m">Team Members</h2>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Role</th>
+                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header">Company name</th>
+                <th scope="col" class="govuk-table__header">Change</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var teamMember in Model.TeamMembers)
+            {
+                <tr class="govuk-table__row">
+                    @if (teamMember.RoleId == (int)ETeamRole.Other)
+                    {
+                        <td class="govuk-table__cell no-line-wrap">@teamMember.OtherRole</td>
+                    }
+                    else
+                    {
+                        <td class="govuk-table__cell">@teamMember.RoleName.ToSentenceCase()</td>
+                    }
+                    <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
+                    <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
+                    <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("TeamMember", "ProgressReporting", new { Area = "ProgressReporting", TeamRole = teamMember.RoleId, TeamMemberId = teamMember.Id, ReturnUrl = ViewData["ReturnUrl"] })">Change</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Submit your report</h2>
+        <p class="govuk-body">
+            By submitting your report you are confirming that, to the best of your knowledge,
+            the details you're submitting are correct.
+        </p>
+    </div>
+</div>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="FinalCheckYourAnswers" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Submit</govuk-button>
+    </div>
+</form>
+

@@ -13,13 +13,13 @@
 }
 
 <h1 class="govuk-heading-xl">Do you know if the original developer of this building is still in business?</h1>
-<p class="govuk-body">This developer may have signed up to the Developer’s Pledge. </p>
+<p class="govuk-body">This developer may have signed up to the Developer's Pledge. </p>
 
 <p class="govuk-body">This means that they have agreed to cover the cost of the remediation works for this building. </p>
 
 <p class="govuk-body">You should get in touch with the developer to explore this route of funding. </p>
 
-<p class="govuk-body">To find out more, you can read about the <a class="govuk-link" href="https://www.gov.uk/guidance/list-of-developers-who-have-signed-building-safety-repairs-pledge" target="_blank">Developer's Pledge guidance.</a></p>
+<p class="govuk-body">To find out more, you can read about the <a class="govuk-link" href="https://www.gov.uk/guidance/list-of-developers-who-have-signed-building-safety-repairs-pledge" rel="noreferrer noopener" target="_blank">Developer's Pledge guidance.</a></p>
 <form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="DeveloperInBusiness">
     <govuk-radios asp-for="IsOriginalDeveloperStillInBusiness">
         <govuk-radios-item value="@(EApplicationDeveloperInBusinessType.Yes)">Yes</govuk-radios-item>

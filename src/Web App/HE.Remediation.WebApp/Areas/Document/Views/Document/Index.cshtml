@@ -1,0 +1,51 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Document.ApplicantDocumentsViewModel
+@{
+    ViewData["Title"] = "Documents";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReference})";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Files" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">View uploaded documents</h1>
+
+<p class="govuk-body">
+    View all documents uploaded during the application process. 
+    You will need to download a document by clicking on the file name in order to view it.
+</p>
+
+<form asp-area="Document" asp-controller="Document" asp-action="Index" method="get" class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half govuk-body">
+        <label asp-for="SearchTerm">Search by file name, type or stage</label>
+    </div>
+    <div class="govuk-grid-column-one-half">
+        <input class="govuk-input govuk-!-width-three-quarters govuk-!-margin-right-3" asp-for="SearchTerm" type="search" />
+        <govuk-button type="submit">Search</govuk-button>
+    </div>
+</form>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">File name</th>
+        <th scope="col" class="govuk-table__header">Document type</th>
+        <th scope="col" class="govuk-table__header">Date uploaded</th>
+        <th scope="col" class="govuk-table__header">Stage</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    @foreach (var file in Model.Files)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><a href="@Url.Action("Download", "Document", new { Area = "Document", FileId = file.Id })">@file.Filename</a></td>
+            <td class="govuk-table__cell">@file.Type</td>
+            <td class="govuk-table__cell">@file.UploadDate.ToString("dd/MM/yyyy")</td>
+            <td class="govuk-table__cell">@file.Category</td>
+        </tr>
+    }
+    </tbody>
+</table>

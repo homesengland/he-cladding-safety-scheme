@@ -18,13 +18,17 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _applicationDataProvider = applicationDataProvider;
             _responsibleEntityRepository = responsibleEntityRepository;
         }
-
+        
         public async Task<GetResponsibleEntityCompanyAddressResponse> Handle(GetResponsibleEntityCompanyAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
             var response = await GetResponsibleEntityCompanyAddress(applicationId);
-
+            var ukRegistered = await _responsibleEntityRepository.GetResponsibleEntityUkRegistered(applicationId);
+            
+            var countries = await _connection.QueryAsync<Country>("GetCountries");
+            response.Countries = countries?.ToList();
+            response.UkRegistered = ukRegistered;
             return response;
         }
 
@@ -39,7 +43,8 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                 AddressLine2 = address?.AddressLine2,
                 City = address?.City,
                 County = address?.County,
-                Postcode = address?.Postcode
+                Postcode = address?.Postcode,
+                CountryId = address?.CountryId
             };
         }
     }
@@ -59,5 +64,17 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         public string City { get; set; }
         public string County { get; set; }
         public string Postcode { get; set; }
+        public int? CountryId { get; set; }
+
+        public bool? UkRegistered { get; set; }
+
+        public List<Country> Countries { get; set; }
+    }
+
+    public class Country
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Order { get; set; }
     }
 }

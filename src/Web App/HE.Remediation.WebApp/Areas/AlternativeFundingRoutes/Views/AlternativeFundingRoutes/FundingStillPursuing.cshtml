@@ -22,7 +22,7 @@
         <govuk-checkboxes-hint>
             Please select all that apply.
         </govuk-checkboxes-hint>
-        <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.SignedUpDevelopersPledge)" value="@EFundingStillPursuing.SignedUpDevelopersPledge">Developer that has signed up to the Developer’s pledge</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.SignedUpDevelopersPledge)" value="@EFundingStillPursuing.SignedUpDevelopersPledge">Developer that has signed up to the Developer's pledge</govuk-checkboxes-item>
         <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.NotSignedUpDevelopersPledge)" value="@EFundingStillPursuing.NotSignedUpDevelopersPledge">Developer that has not signed up to the pledge, or freeholder</govuk-checkboxes-item>
         <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.ClaimAgainstContracter)" value="@EFundingStillPursuing.ClaimAgainstContracter">Warranty, insurance or other claim against contractor or design team</govuk-checkboxes-item>
         <govuk-checkboxes-item checked="@Model.FundingStillPursuing.Any(x => x == EFundingStillPursuing.Other)" value="@EFundingStillPursuing.Other">Other</govuk-checkboxes-item>

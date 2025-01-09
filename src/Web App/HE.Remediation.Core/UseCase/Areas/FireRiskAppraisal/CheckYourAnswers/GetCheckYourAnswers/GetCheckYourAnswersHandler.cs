@@ -1,9 +1,6 @@
-﻿using HE.Remediation.Core.Data;
-using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
+﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.GetWorksToCladdingSystems;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.GetCheckYourAnswers
@@ -13,10 +10,10 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.G
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
         private readonly IApplicationRepository _applicationRepository;
-        private readonly IFireRiskWorksRepository _fireRiskWorksRepository;        
+        private readonly IFireRiskWorksRepository _fireRiskWorksRepository;
 
-        public GetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, 
-                                          IDbConnectionWrapper db, 
+        public GetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider,
+                                          IDbConnectionWrapper db,
                                           IApplicationRepository applicationRepository,
                                           IFireRiskWorksRepository fireRiskWorksRepository)
         {
@@ -42,6 +39,11 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.G
                 ApplicationId = _applicationDataProvider.GetApplicationId()
             });
 
+            var safetyRiskOptionResponses = 
+                await _db.QueryAsync<ERiskSafetyMitigationType>("GetRecommendedWorksRiskMitigationResponsesForApplication", new { applicationId });
+            var interimMeasuresResponses =
+                await _db.QueryAsync<EInterimMeasuresType>("GetRecommendedWorksInterimMeasures", new { applicationId });
+
             var internalWorks = await _fireRiskWorksRepository.GetFireRiskWallWorks(applicationId,
                                                                                   EWorkType.Internal);
 
@@ -49,14 +51,20 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.G
                                                                                   EWorkType.External);
 
             var claddingSystems = await _fireRiskWorksRepository.GetFireRiskCladdingWorks(applicationId);
-            
+
             answers.CladdingSystems = claddingSystems;
             answers.InternalWorks = internalWorks;
             answers.ExternalWorks = externalWorks;
-
+            answers.SafetyRiskMitigationOptions = safetyRiskOptionResponses.ToList();
+            answers.InterimMeasureOptions = interimMeasuresResponses.ToList();
             answers.ReadOnly = applicationStatus.Submitted;
 
-            return answers ?? new GetCheckYourAnswersResponse();
+            answers.BuildingInterimMeasuresTypes = await _db.QueryAsync<EInterimMeasuresType>("GetFireRiskAssessmentBuildingInterimMeasuresTypes", new
+            {
+                ApplicationId = applicationId
+            });
+
+            return answers;
         }
     }
 }

@@ -18,4 +18,14 @@ public class SetRecommendedWorksRequest: IRequest<Unit>
     public string RemediationSummary { get; set; }
 
     public string JustifyRecommendation { get; set; }
+
+    public string OtherInterimMeasuresText { get; set; }
+
+    public string SafetyRiskOtherText { get; set; }
+
+    public string OtherRiskMitigationOptionsConsidered { get; set; }
+
+    public IEnumerable<EInterimMeasuresType> RecommendedInterimMeasuresTypes { get; set; }
+
+    public IEnumerable<ERiskSafetyMitigationType> RiskSafetyMitigationTypes { get; set; }
 }

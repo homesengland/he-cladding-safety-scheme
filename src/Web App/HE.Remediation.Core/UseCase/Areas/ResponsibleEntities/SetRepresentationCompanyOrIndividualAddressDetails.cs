@@ -21,20 +21,30 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             ParsedAddress parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
             if (parsedAddress != null)
             {
-                var paramsMap = new Dictionary<string, object>()
+                var applicationId = _applicationDataProvider.GetApplicationId();
+                await _connection.ExecuteAsync("SetRepresentationCompanyOrIndividualAddress",  new
                 {
-                    ["NameNumber"] = parsedAddress.NameNumber,
-                    ["AddressLine1"] = parsedAddress.AddressLine1,
-                    ["AddressLine2"] = string.Empty,
-                    ["City"] = parsedAddress.City,
-                    ["County"] = string.Empty,
-                    ["Postcode"] = parsedAddress.Postcode
-                };
-                
-                var parameters = new DynamicParameters(paramsMap);                
-                parameters.Add("@ApplicationId", _applicationDataProvider.GetApplicationId());
-
-                await _connection.ExecuteAsync("SetRepresentationCompanyOrIndividualAddress", parameters);
+                    ApplicationId = applicationId,
+                    parsedAddress.NameNumber,
+                    parsedAddress.AddressLine1,
+                    parsedAddress.AddressLine2,
+                    parsedAddress.City,
+                    parsedAddress.LocalAuthority,
+                    parsedAddress.County,
+                    parsedAddress.Postcode,
+                    parsedAddress.SubBuildingName,
+                    parsedAddress.BuildingName,
+                    parsedAddress.BuildingNumber,
+                    parsedAddress.Street,
+                    parsedAddress.Town,
+                    parsedAddress.AdminArea,
+                    parsedAddress.UPRN,
+                    parsedAddress.AddressLines,
+                    parsedAddress.XCoordinate,
+                    parsedAddress.YCoordinate,
+                    parsedAddress.Toid,
+                    parsedAddress.BuildingType
+                });
             }
             return Unit.Value;
         }

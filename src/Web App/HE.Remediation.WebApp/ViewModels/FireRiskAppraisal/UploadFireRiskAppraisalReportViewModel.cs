@@ -15,5 +15,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public Shared.File AddedSummary { get; set; }
 
         public IFormFile FraewSummary { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

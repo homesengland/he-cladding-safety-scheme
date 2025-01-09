@@ -1,7 +1,7 @@
 ﻿@using HE.Remediation.Core.Enums
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.FreeholderCompanyDetailsViewModel
 @{
-    ViewData["Title"] = "What are the company details of the freeholder";
+    ViewData["Title"] = "What are the company details of the freeholder?";
     ViewData["BackLink"] = Url.Action("FreeholderCompanyOrIndividual", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
 }
 @section ErrorSummary
@@ -47,7 +47,7 @@
         <govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20">
             <govuk-input-label class="govuk-label--s">Email address</govuk-input-label>
         </govuk-input>
-        <govuk-input asp-for="ContactNumber" input-class="govuk-input--width-20">
+        <govuk-input asp-for="ContactNumber" input-class="govuk-input--width-20" input-maxlength="20">
             <govuk-input-label class="govuk-label--s">Contact number</govuk-input-label>
         </govuk-input>
     </govuk-fieldset>

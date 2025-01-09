@@ -9,6 +9,7 @@ namespace HE.Remediation.WebApp.ViewModels.BankAccount
         public string BranchName { get; set; }
         public string AccountNumber { get; set; }
         public string SortCode { get; set; }
+        public string VatNumber { get; set; }
         public EApplicationRepresentationType? RepresentationType { get; set; }
         public ESubmitAction SubmitAction { get; set; }
     }

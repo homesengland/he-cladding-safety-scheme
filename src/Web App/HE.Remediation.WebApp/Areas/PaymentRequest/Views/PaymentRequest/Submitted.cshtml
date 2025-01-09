@@ -1,0 +1,35 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.SubmittedViewModel
+@{
+    ViewData["Title"] = "";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLinkHidden"] = true;
+    ViewData["ExitLinkHidden"] = true;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Your payment request
+                            has been successfully submitted
+                        </govuk-panel-title>
+                        <govuk-panel-body>
+                            Application ID<br /><strong>@Model.ApplicationReferenceNumber</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">
+                        Thank you for submitting your payment request.
+                    </p>
+
+                    <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" })>Return to home</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

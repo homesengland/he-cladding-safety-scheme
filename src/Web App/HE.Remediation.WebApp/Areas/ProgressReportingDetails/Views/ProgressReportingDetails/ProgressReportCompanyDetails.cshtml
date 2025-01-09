@@ -1,0 +1,152 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ProgressReportCompanyDetailsViewModel
+@{
+    var role = Model.Role != ETeamRole.Other ? Model.Role.ToString().SplitCamelCase() : Model.OtherRole;
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["BackLink"] = Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", ProgressReportId = Model.ProgressReportId });
+    ViewData["FullWidth"] = true;
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+}
+
+<h1 class="govuk-heading-xl">@($"{role} company details")</h1>
+
+<govuk-inset-text>
+    This progress report @(Model.SubmittedDate.HasValue ? $"was submitted {Model.SubmittedDate.Value:dd MMMM yyyy}" : "has not yet been submitted.")
+</govuk-inset-text>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company Name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CompanyName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company registration number
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CompanyRegistration
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.Name
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (!string.IsNullOrEmpty(Model.OtherRole) && Model.Role == ETeamRole.Other)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Role at company
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.OtherRole
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Email address
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.EmailAddress
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Primary contact number
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.PrimaryContactNumber
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.ContractSigned.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you formally signed a contract with this person?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ContractSigned.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.IndemnityInsurance.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Confirm that appropriate levels of Professional Indemnity Insurance and limits of liability,
+                for the risk associated and in accordance with industry best practice,
+                are in place for the @role and evidence of this is available on request.
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.IndemnityInsurance.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.IndemnityInsuranceReason) && Model.IndemnityInsurance == false)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Reason provided for not having appropriate levels of Professional Indemnity Insurance and limits of liability,
+                for the risk associated and in accordance with industry best practice.
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.IndemnityInsuranceReason
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.InvolvedInOriginalInstallation.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Was this @role involved in the original installation of the building cladding?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.InvolvedInOriginalInstallation.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.InvolvedRoleReason) && Model.InvolvedInOriginalInstallation == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Explanation of this @role's involvement in the original installation of the building cladding.
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.InvolvedRoleReason
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.ConsiderateConstructorSchemeType.HasValue && Model.Role == ETeamRole.LeadContractor)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Is your lead contractor signed up to the Considerate Constructors Scheme?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ConsiderateConstructorSchemeType != EConsiderateConstructorSchemeType.DontKnow ? Model.ConsiderateConstructorSchemeType.ToString() : "Don't know")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+<govuk-button href="@ViewData["BackLink"]" class="govuk-button--secondary">Return to progress report</govuk-button>

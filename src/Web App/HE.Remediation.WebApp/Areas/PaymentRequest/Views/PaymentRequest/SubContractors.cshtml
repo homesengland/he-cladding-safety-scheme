@@ -1,0 +1,30 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.SubcontractorSurvey.SubContractorsViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action("ProjectTeamOverview", "PaymentRequest", new {Area = "PaymentRequest", UploadType = EClosingReportFileType.LeaseholderResidentCommunication})
+        : Url.Action(Model.ReturnUrl, "PaymentRequest", new {Area = "PaymentRequest"});
+    ViewData["FullWidth"] = true;
+
+    var cantContinue = Model.SubContractors.Any(x => x.Status != ETaskStatus.Completed);
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Provide ratings for your sub-contractors</h1>
+
+<p class="govuk-body">
+    We would like to understand your experience of working with sub-contractors. Please provide a score between 1-5, 1 being very poor and 5 being excellent.
+</p>
+
+@await Html.PartialAsync("SubContractorSurvey/_OverviewTable", new SubContractorRatingsOverviewViewModel
+{
+    Action = "SubContractorRatings",
+    SubContractors = Model.SubContractors
+})
+
+@using (Html.BeginForm("SubContractorsCheckYourAnswers", "PaymentRequest", null, FormMethod.Get))
+{
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue" disabled="@(Model.IsSubmitted || cantContinue)">Continue</govuk-button>
+}

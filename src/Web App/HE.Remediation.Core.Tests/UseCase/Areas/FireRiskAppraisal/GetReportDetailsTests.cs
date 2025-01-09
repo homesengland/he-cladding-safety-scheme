@@ -35,7 +35,6 @@ public class GetReportDetailsTests
         {
             AuthorsName = "Author",
             PeerReviewPerson = "Peer person",
-            UndertakingFirm = "The company",
             NumberOfStoreys = 2,
             BuildingHeight = 12,
             BuildingInterimMeasures = ENoYes.Yes,
@@ -53,7 +52,7 @@ public class GetReportDetailsTests
 
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
-                                .Verifiable(); ;
+                                .Verifiable();
 
         //// Act
         var result = await _handler.Handle(GetReportDetailsRequest.Request, CancellationToken.None);
@@ -64,7 +63,6 @@ public class GetReportDetailsTests
         var resultValid = ((result != null) &&
                            (result.AuthorsName == "Author") &&
                            (result.PeerReviewPerson == "Peer person") &&
-                           (result.UndertakingFirm == "The company") &&
                            (result.BuildingAddress == "123 High Road, Dalston"));        
         Assert.True(resultValid);
         _connection.Verify();
@@ -100,7 +98,6 @@ public class GetReportDetailsTests
         var resultValid = ((result != null) &&
                            (result.AuthorsName == null) &&
                            (result.PeerReviewPerson == null) &&
-                           (result.UndertakingFirm == null) &&
                            (result.BuildingAddress == null));        
         Assert.True(resultValid);
         _connection.Verify();

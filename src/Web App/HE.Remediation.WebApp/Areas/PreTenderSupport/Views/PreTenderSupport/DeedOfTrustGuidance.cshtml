@@ -1,0 +1,27 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@{
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = Url.Action("ConfirmContactDetails", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["FullWidth"] = true;
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            Declaration of Bare Trust
+        </h1>
+        <p class="govuk-body">
+            We'll ask you to sign a Declaration of Bare Trust, agreeing to set up a trust account to hold all grant funds that 
+            you receive from the Cladding Safety Scheme.            
+        </p>
+
+        <p class="govuk-body">
+            We'll ask you to agree that you'll only withdraw funds from the account to pay for eligible project costs that we have agreed
+        </p>
+        
+        <govuk-button href="@Url.Action("CheckYourAnswers", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>
+    </div>
+    <div class="govuk-grid-column-one-third">        
+    </div>
+</div>

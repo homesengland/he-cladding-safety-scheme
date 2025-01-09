@@ -1,0 +1,30 @@
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
+using MediatR;
+
+namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetReviewPayment;
+
+public class SetReviewPaymentHandler : IRequestHandler<SetReviewPaymentRequest>
+{
+    private readonly IApplicationDataProvider _adp;
+    private readonly IClosingReportRepository _closingReportRequestRepository;
+
+    public SetReviewPaymentHandler(IApplicationDataProvider adp, 
+                                  IClosingReportRepository closingReportRepository)
+    {
+        _adp = adp;
+        _closingReportRequestRepository = closingReportRepository;
+    }
+
+    public async Task<Unit> Handle(SetReviewPaymentRequest request, CancellationToken cancellationToken)
+    {
+        var applicationId = _adp.GetApplicationId();
+
+        if (request.ChangeToMonthlyCost)
+        {
+            await _closingReportRequestRepository.UpdateClosingReportReasonForChange(applicationId, request.ReasonForChange);
+        }
+                        
+        return Unit.Value;
+    } 
+}

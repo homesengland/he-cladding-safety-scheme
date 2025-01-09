@@ -1,0 +1,47 @@
+﻿@model HE.Remediation.WebApp.ViewModels.PreTenderSupport.SubmittedViewModel
+
+@{
+    ViewData["Title"] = "Grant Funding Agreement Submitted";
+    ViewData["FullWidth"] = true;
+
+    // set form to read only to hide the back button
+    ViewData["ReadOnly"] = true;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row"> 
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Your request for a Grant Funding Agreement 
+                            has been successfully submitted.                            
+                        </govuk-panel-title>
+                        <govuk-panel-body>
+                            Application ID<br /><strong>@Model.ReferenceNumber</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">
+                        We'll send confirmation of your request for a Grant Funding Agreement to the email address you gave us.
+                    </p>
+
+                    <p class="govuk-body">
+                        We'll now review the information you've given us and get back in touch if we need to check anything with you. 
+                        We'll then send a copy of your Grant Funding Agreement to the email addresses provided via DocuSign, 
+                        and include a copy of it here on your online application.
+                    </p>
+
+                    <p class="govuk-body">
+                        We'll then require you to sign your Grant Funding Agreement. You will need to return it to us as soon 
+                        as possible and within 28 days.
+                    </p>
+                    
+                    <govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to home</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

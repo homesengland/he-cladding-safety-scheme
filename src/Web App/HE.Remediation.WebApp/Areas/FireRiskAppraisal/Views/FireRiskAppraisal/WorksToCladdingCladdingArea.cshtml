@@ -1,0 +1,29 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.WorksToCladdingCladdingAreaViewModel
+@{
+    ViewData["Title"] = "Works to cladding systems";
+    ViewData["FullWidth"] = false;
+
+    //ToDo: Change BackLink when previous page complete
+    ViewData["BackLink"] = Url.Action("WorksToCladdingSystems", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+
+    //ToDo: Change ReturnURL when previous page complete
+    ViewData["ReturnUrl"] = "CompletedAppraisal";
+}
+
+<govuk-error-summary>
+    <govuk-error-summary-item asp-for="RecommendedTotalAreaCladding" />
+</govuk-error-summary>
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+<p class="govuk-body">What is the approximate total area of the cladding which you are recommending is subject to full or partial remediation/mitigation to address life safety risk of the building?(Square metres)</p>
+
+<form asp-area="FireRiskAppraisal"  asp-controller="FireRiskAppraisal" asp-action="WorksToCladdingCladdingArea" method="post">
+    <govuk-input asp-for="RecommendedTotalAreaCladding" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Cladding Area</govuk-input-label>
+    </govuk-input>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+</form>

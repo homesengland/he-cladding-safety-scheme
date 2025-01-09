@@ -1,0 +1,118 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.LeadDesignerCompDetailsViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("AppointedLeadDesigner", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="CompanyName" />
+        <govuk-error-summary-item asp-for="CompanyRegistrationNumber" />
+        <govuk-error-summary-item asp-for="Name" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="PrimaryContactNumber" />
+        <govuk-error-summary-item asp-for="ContractSigned" />
+        <govuk-error-summary-item asp-for="IndemnityInsurance" />
+        <govuk-error-summary-item asp-for="LeadDesignerInvolvedInOriginalInstallation" />
+        <govuk-error-summary-item asp-for="IndemnityInsuranceReason" />
+        <govuk-error-summary-item asp-for="LeadDesignerInvolvedRoleReason" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Lead designer company details</h1>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="LeadDesignerCompDetails" method="post">
+
+    <govuk-fieldset>
+        <govuk-input asp-for="CompanyName" input-class="govuk-input--width-20">
+            <govuk-input-label class="govuk-label--s">Company name</govuk-input-label>
+        </govuk-input>
+        <govuk-input asp-for="CompanyRegistrationNumber" input-class="govuk-input--width-20" input-maxlength="8">
+            <govuk-input-label class="govuk-label--s">Company registration number</govuk-input-label>
+        </govuk-input>
+        <govuk-input asp-for="Name" input-class="govuk-input--width-20">
+            <govuk-input-label class="govuk-label--s">Lead designer name</govuk-input-label>
+        </govuk-input>
+        <govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20">
+            <govuk-input-label class="govuk-label--s">Email address</govuk-input-label>
+        </govuk-input>
+        <govuk-input asp-for="PrimaryContactNumber" input-class="govuk-input--width-20" input-maxlength="20">
+            <govuk-input-label class="govuk-label--s">Primary contact number</govuk-input-label>
+        </govuk-input>
+
+        <govuk-radios asp-for="ContractSigned">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                    Have you formally signed a contract with this company?
+                </govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+
+            <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+            <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+        </govuk-radios>
+
+        <govuk-radios asp-for="IndemnityInsurance">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                    Confirm that this firm holds appropriate levels of professional indemnity insurance
+                    and limits of liability for the proposed works in accordance with industry best practice
+                </govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+
+            <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+            <govuk-radios-item value="@(ENoYes.No)">
+                No
+                <govuk-radios-item-conditional>
+                    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="150">
+                        <div class="govuk-form-group">
+                            <govuk-character-count name="IndemnityInsuranceReason" max-length="150" asp-for="IndemnityInsuranceReason">
+                                <govuk-character-count-label class="govuk-label--s">
+                                    Provide a reason
+                                </govuk-character-count-label>
+                            </govuk-character-count>
+                        </div>
+                    </div>                    
+                </govuk-radios-item-conditional>
+            </govuk-radios-item>
+        </govuk-radios>
+
+        <govuk-radios asp-for="LeadDesignerInvolvedInOriginalInstallation">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                    Was this lead designer involved in the original installation of the building cladding?
+                </govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+
+            <govuk-radios-item value="@(ENoYes.Yes)">
+                Yes
+                <govuk-radios-item-conditional>
+                    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="150">
+                        <div class="govuk-form-group">
+                            <govuk-character-count name="LeadDesignerInvolvedRoleReason" max-length="150" asp-for="LeadDesignerInvolvedRoleReason">
+                                <govuk-character-count-label class="govuk-label--s">
+                                    Explain their role
+                                </govuk-character-count-label>
+                            </govuk-character-count>
+                        </div>
+                    </div>
+                </govuk-radios-item-conditional>
+            </govuk-radios-item>
+            <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+        </govuk-radios>
+
+    </govuk-fieldset>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

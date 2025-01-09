@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -8,11 +9,13 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.S
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
+        private readonly IApplicationRepository _applicationRepository;
 
-        public SetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db)
+        public SetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db, IApplicationRepository applicationRepository)
         {
             _applicationDataProvider = applicationDataProvider;
             _db = db;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
@@ -20,6 +23,9 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.S
             var applicationId = _applicationDataProvider.GetApplicationId();
 
             await UpdateFireRiskAppraisalStatus(applicationId, (int)ETaskStatus.Completed);
+
+            await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.FraewSubmitted);
+
             return Unit.Value;
         }
 

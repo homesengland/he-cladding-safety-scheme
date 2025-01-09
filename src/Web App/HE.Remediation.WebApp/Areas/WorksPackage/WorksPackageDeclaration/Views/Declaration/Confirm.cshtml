@@ -1,0 +1,56 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageDeclaration.ConfirmViewModel
+@{
+    ViewData["Title"] = "Full works and costs declaration";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="AllContractualRequirementsMet"/>
+        <govuk-error-summary-item asp-for="AllCostsReasonable"/>
+        <govuk-error-summary-item asp-for="AllCostsSetOutInFull" />
+        <govuk-error-summary-item asp-for="AcceptGrantAwardBasedOnCosts" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Declaration</h1>
+
+<p class="govuk-body">
+    Before completing the works package declaration, please check the information you've given us. Once you have submitted the works package, the review process will begin immediately, and the grant award will be calculated based on the figures you have provided.
+</p>
+<p class="govuk-body">
+    The works package that you submit should reflect the recommendations set out in your FRAEW summary.
+</p>
+
+@using (Html.BeginForm())
+{
+    <govuk-checkboxes name="AllContractualRequirementsMet" asp-for="AllContractualRequirementsMet">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.AllContractualRequirementsMet">Confirm that the works cover the recommendations specified in your FRAEW summary to fix cladding that poses a fire-safety risk to life</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="AllCostsReasonable" asp-for="AllCostsReasonable">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.AllCostsReasonable">Confirm that, to the best of your knowledge, all costs details are reasonable and correct</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="AllCostsSetOutInFull" asp-for="AllCostsSetOutInFull">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.AllCostsSetOutInFull">Confirm that all costs have been set out in full, with no apportionment and include the costs which have already been incurred in the pre-tender stage as well as future costs for the project</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="AcceptGrantAwardBasedOnCosts" asp-for="AcceptGrantAwardBasedOnCosts">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.AcceptGrantAwardBasedOnCosts">By submitting the works package, I accept that the grant award will be calculated based on the costs I have provided, as full and final figures</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+}

@@ -1,0 +1,59 @@
+﻿@using HE.Remediation.Core.Enums;
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.MilestonesViewModel
+@{
+    Layout = "~/Areas/ScheduleOfWorks/Views/Shared/_SideCardLayout.cshtml";
+
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
+        : Url.Action("FundingInformation", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["UseStickyInfoPanel"] = true;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        @foreach (var x in Model.Costs.MonthlyCosts.Select((value, index) => new { value, index }))
+        {
+            <govuk-error-summary-item asp-for="@Model.Costs.MonthlyCosts[x.index].AmountText" />
+        }
+        <govuk-error-summary-item asp-for="@Model.Costs.UnprofiledGrantFunding" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Profile your schedule of works</h1>
+
+@section InfoCardSection
+    {
+    <div class="info-card govuk-!-margin-bottom-4">
+        @await Html.PartialAsync("Costs/_FundingDetailsInfoCardPartial", Model.Costs)
+
+        <div>
+            <button type="submit" form="costProfileForm" class="govuk-button govuk-button--secondary js-hidden" asp-action="RecalculateMilestones">Calculate</button>
+        </div>
+    </div>
+}
+
+<form id="costProfileForm" asp-area="ScheduleOfWorks" asp-controller="ScheduleOfWorks" asp-action="Milestones" method="post">
+    @await Html.PartialAsync("Costs/_MonthlyCostsPartial", Model.Costs)
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+            <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>
+
+@section BodyEnd
+    {
+    <script src="~/js/monthlyCosts.js"></script>
+}

@@ -12,12 +12,20 @@
 }
 
 <govuk-error-summary>
+    
     <govuk-error-summary-item asp-for="CladdingSystemTypeId" />
+    <govuk-error-summary-item asp-for="OtherCladdingType"/>
+    <govuk-error-summary-item asp-for="CladdingManufacturerId" />
+    <govuk-error-summary-item asp-for="OtherCladdingManufacturer" />
     <govuk-error-summary-item asp-for="InsulationTypeId" />
+    <govuk-error-summary-item asp-for="OtherInsulationType"/>
+    <govuk-error-summary-item asp-for="InsulationManufacturerId" />
+    <govuk-error-summary-item asp-for="OtherInsulationManufacturer" />
+    
 </govuk-error-summary>
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
-<p class="govuk-body">Identify each of the cladding systems which contribute to the life safety risk of the building. For each cladding system identify the cladding type and the insulation material.</p>
+<p class="govuk-body">Identify each of the cladding systems which contribute to the life safety risk of the building. For each cladding system identify the cladding type and the insulation material as well as the relevant manufacturers where known.</p>
 
 <hr class="govuk-section-break govuk-section-break--m">
 <span class="govuk-caption-m">You can add a maximum of 20 cladding systems</span>
@@ -26,7 +34,7 @@
 <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="CladdingSystem" method="post">
     <input asp-for="FireRiskCladdingSystemsId" type="hidden" value="@Model.FireRiskCladdingSystemsId" />
     <govuk-select asp-for="CladdingSystemTypeId" name="CladdingSystemTypeId" class="govuk-!-width-full">
-        <govuk-select-label><span class="govuk-hint">Cladding type</span></govuk-select-label>
+        <govuk-select-label><strong>Cladding type</strong></govuk-select-label>
         @if (!Model.CladdingSystemTypeId.HasValue || Model.CladdingSystemTypeId.Value == 0)
         {
             <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
@@ -44,9 +52,35 @@
         }
     </govuk-select>
     
+    <govuk-input asp-for="OtherCladdingType">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify cladding material</govuk-input-label>
+    </govuk-input>
+
+    <govuk-select asp-for="CladdingManufacturerId" name="CladdingManufacturerId" class="govuk-!-width-full">
+        <govuk-select-label><strong>Cladding Manufacturer</strong></govuk-select-label>
+        @if (!Model.CladdingManufacturerId.HasValue || Model.CladdingManufacturerId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var manufacturer in Model.CladdingManufacturers)
+        {
+            @if (Model.CladdingManufacturerId.HasValue && manufacturer.Id == Model.CladdingManufacturerId.Value)
+            {
+                <govuk-select-item value="@manufacturer.Id" selected="true">@manufacturer.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@manufacturer.Id">@manufacturer.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
     
+    <govuk-input name="OtherCladdingManufacturer" asp-for="OtherCladdingManufacturer ">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify cladding manufacturer</govuk-input-label>
+    </govuk-input>    
+
     <govuk-select asp-for="InsulationTypeId" name="InsulationTypeId" class="govuk-!-width-full">
-        <govuk-select-label><span class="govuk-hint">Insulation material</span></govuk-select-label>
+        <govuk-select-label><strong>Insulation material</strong></govuk-select-label>
         @if (!Model.InsulationTypeId.HasValue || Model.InsulationTypeId.Value == 0)
         {
             <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
@@ -63,6 +97,33 @@
             }
         }
     </govuk-select>
+    
+    <govuk-input asp-for="OtherInsulationType">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify insulation material</govuk-input-label>
+    </govuk-input>
+    
+    <govuk-select asp-for="InsulationManufacturerId" name="InsulationManufacturerId" class="govuk-!-width-full">
+        <govuk-select-label><strong>Insulation Manufacturer</strong></govuk-select-label>
+        @if (!Model.InsulationManufacturerId.HasValue || Model.InsulationManufacturerId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var manufacturer in Model.InsulationManufacturers)
+        {
+            @if (Model.InsulationManufacturerId.HasValue && manufacturer.Id == Model.InsulationManufacturerId.Value)
+            {
+                <govuk-select-item value="@manufacturer.Id" selected="true">@manufacturer.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@manufacturer.Id">@manufacturer.Name</govuk-select-item>
+            }
+        } 
+    </govuk-select>
+    
+    <govuk-input name="OtherInsulationManufacturer" asp-for="OtherInsulationManufacturer">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify insulation manufacturer</govuk-input-label>
+    </govuk-input>
 
     <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
 </form>

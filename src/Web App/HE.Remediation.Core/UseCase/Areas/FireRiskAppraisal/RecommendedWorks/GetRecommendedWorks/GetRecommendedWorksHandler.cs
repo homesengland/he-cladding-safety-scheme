@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.RecommendedWorks.GetRecommendedWorks;
@@ -18,21 +19,32 @@ public class GetRecommendedWorksHandler: IRequestHandler<GetRecommendedWorksRequ
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
-        var buildingDetails = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<FRAEWBuildingDetails>("GetFRAEWBuildingDetails",
+        var buildingDetails = 
+            await _dbConnectionWrapper.QuerySingleOrDefaultAsync<FRAEWBuildingDetails>("GetFRAEWBuildingDetails",
                                                                                                            new { applicationId });
 
-        var recommendedDetails = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<FRAEWRecommendedWorkDetails>("GetApplicationFireRiskRecommendedWorksDetails",
+        var recommendedDetails = 
+            await _dbConnectionWrapper.QuerySingleOrDefaultAsync<FRAEWRecommendedWorkDetails>("GetApplicationFireRiskRecommendedWorksDetails",
                                                                                                            new { applicationId });
+        var interimMeasuresResponses = 
+            await _dbConnectionWrapper.QueryAsync<EInterimMeasuresType>("GetRecommendedWorksInterimMeasures", new { applicationId });
+
+        var riskMitigationResponses = 
+            await _dbConnectionWrapper.QueryAsync<ERiskSafetyMitigationType>("GetRecommendedWorksRiskMitigationResponsesForApplication", new { applicationId });
+
 
         if (recommendedDetails == null)
         {
             return new GetRecommendedWorksResponse
             {
+                ApplicationReferenceNumber = buildingDetails.ApplicationReferenceNumber,
                 BuildingAddress = buildingDetails.BuildingAddress,
                 FRAEWInstructedDate = buildingDetails.FRAEWInstructedDate,
                 BuildingName = buildingDetails.BuildingName,
                 FRAEWCompletedDate = buildingDetails.FRAEWCompletedDate,
-                CompanyUndertakingReport = buildingDetails.CompanyUndertakingReport
+                CompanyUndertakingReport = buildingDetails.CompanyUndertakingReport,
+                PartOfDevelopment = buildingDetails.PartOfDevelopment,
+                Development = buildingDetails.Development
             };
         }
 
@@ -41,7 +53,6 @@ public class GetRecommendedWorksHandler: IRequestHandler<GetRecommendedWorksRequ
             LifeSafetyRiskAssessment = recommendedDetails.LifeSafetyRiskAssessment,
             RecommendCladding = recommendedDetails.RecommendCladding,
             RecommendBuildingIntetim = recommendedDetails.RecommendBuildingIntetim,
-            RecommendedTotalAreaCladding = recommendedDetails.RecommendedTotalAreaCladding,
             CaveatsLimitations = recommendedDetails.CaveatsLimitations,
             RemediationSummary = recommendedDetails.RemediationSummary,
             JustifyRecommendation = recommendedDetails.JustifyRecommendation,
@@ -49,7 +60,13 @@ public class GetRecommendedWorksHandler: IRequestHandler<GetRecommendedWorksRequ
             FRAEWInstructedDate = buildingDetails.FRAEWInstructedDate,
             BuildingName = buildingDetails.BuildingName,
             FRAEWCompletedDate = buildingDetails.FRAEWCompletedDate,
-            CompanyUndertakingReport = buildingDetails.CompanyUndertakingReport
+            CompanyUndertakingReport = buildingDetails.CompanyUndertakingReport,
+            OtherInterimMeasuresText = recommendedDetails.InterimMeasuresOtherText,
+            RecommendedInterimMeasuresTypes = interimMeasuresResponses,
+            SafetyRiskOtherText = recommendedDetails.SafetyRiskOtherText,
+            RiskSafetyMitigationTypes = riskMitigationResponses,
+            OtherRiskMitigationOptionsConsidered = recommendedDetails.OtherRiskMitigationOptionsConsidered,
+            ApplicationReferenceNumber = buildingDetails.ApplicationReferenceNumber
         };
 
         return response;

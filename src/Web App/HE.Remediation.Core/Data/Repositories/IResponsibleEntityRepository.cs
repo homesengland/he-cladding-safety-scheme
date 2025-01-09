@@ -14,4 +14,10 @@ public interface IResponsibleEntityRepository
     Task UpdateFreeholderAddress(Guid applicationId, FreeholderAddressManualDetails addressDetails);
 
     Task InsertFreeholderAddress(Guid applicationId, FreeholderAddressManualDetails addressDetails);
+
+    Task ResetResponsibleEntitiesSection(Guid applicationId);
+
+    Task<GetResponsibleEntityOrganisationAndRepresentationTypeResult> GetResponsibleEntityOrganisationAndRepresentationType(Guid applicationId);
+
+    Task<bool?> GetResponsibleEntityUkRegistered(Guid applicationId);
 }

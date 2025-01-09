@@ -1,0 +1,56 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.DeclarationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("CheckYourAnswers", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ConfirmedAwareOfApproval" />
+        <govuk-error-summary-item asp-for="ConfirmedCostsReasonable" />
+        <govuk-error-summary-item asp-for="ConfirmedCoversRecommendations" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">Variation declaration and submission</h1>
+
+<p class="govuk-body">
+    Before completing the variation declaration and submission, please take a few moments to check the information you've given us.
+</p>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="Declaration" method="post">
+
+    <govuk-checkboxes name="ConfirmedAwareOfApproval" asp-for="ConfirmedAwareOfApproval">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ConfirmedAwareOfApproval">
+            I confirm that I am aware that Homes England approves each variation on its individual merits and that approval does not set a precedent for future variation requests.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="ConfirmedCostsReasonable" asp-for="ConfirmedCostsReasonable">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ConfirmedCostsReasonable">
+            I confirm that all cost details are reasonable and correct and have been profiled accurately in accordance with the works contract.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="ConfirmedCoversRecommendations" asp-for="ConfirmedCoversRecommendations">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ConfirmedCoversRecommendations">
+            I confirm that the works cover the recommendations as specified in the FRAEW summary to address the fire safety risks of the building.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Confirm and submit</govuk-button>
+        }
+    </div>
+</form>

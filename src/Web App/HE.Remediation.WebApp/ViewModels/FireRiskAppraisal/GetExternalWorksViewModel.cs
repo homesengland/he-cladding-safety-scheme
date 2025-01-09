@@ -5,6 +5,8 @@ public class GetExternalWorksViewModel
 {
     public List<ExternalWallWorks> WallWorks { get; set; }
 
+    public string ReturnUrl { get; set; }
+
     public class ExternalWallWorks
     {
         public Guid? Id { get; set; }  

@@ -1,0 +1,179 @@
+﻿@using HE.Remediation.Core.Enums;
+@using System.Globalization;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.ConfirmationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+        : Model.IsThirdPartyContributionVariation == true
+            ? Url.Action("ThirdPartyContribution", "VariationRequest", new { Area = "VariationRequest" })
+            : Model.IsCostVariation == true
+                ? Url.Action("Evidence", "VariationRequest", new { Area = "VariationRequest" })
+                : Model.IsScopeVariation == true
+                    ? Url.Action("AdjustScope", "VariationRequest", new { Area = "VariationRequest" })
+                    : Model.IsTimescaleVariation == true
+                        ? Url.Action("AdjustEndDate", "VariationRequest", new { Area = "VariationRequest" })
+                        : Url.Action("VariationReason", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+    ViewData["ReturnUrl"] = "Confirmation";
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationSummary" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">Review variation summary</h1>
+
+<p class="govuk-body">Please take the time to review your variation summary below.</p>
+
+<p class="govuk-heading-m">Variation summary</p>
+
+<govuk-summary-list>
+
+    @if (Model.IsCostVariation.GetValueOrDefault(false))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Original works package amount
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.TotalApprovedFunding is not null ? $"&pound;{Model.TotalApprovedFunding.Value:N0}" : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Variation requested
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.VariationRequested is not null ? $"&pound;{Model.VariationRequested.Value:N0}" : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row class="@(!Model.IsTimescaleVariation.GetValueOrDefault(false) && !Model.IsScopeVariation.GetValueOrDefault(false) ? "govuk-summary-list__row--no-border" : "")">
+            <govuk-summary-list-row-key>
+                Total requested amount
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.TotalRequestedAmount is not null ? $"&pound;{Model.TotalRequestedAmount.Value:N0}" : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.IsTimescaleVariation.GetValueOrDefault(false))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Has your end date changed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.NewEndMonth.HasValue ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row class="@(!Model.IsScopeVariation.GetValueOrDefault(false) ? "govuk-summary-list__row--no-border" : "")">
+            <govuk-summary-list-row-key>
+                What is your new end date?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @{
+                    if (Model.NewEndMonth.HasValue && Model.NewEndYear.HasValue)
+                    {
+                        <span>@CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName((int)Model.NewEndMonth) @Model.NewEndYear</span>
+                    }
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>        
+    }
+
+    @if (Model.IsScopeVariation.GetValueOrDefault(false))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Has your scope changed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(!String.IsNullOrEmpty(Model.ChangeOfScope) ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row class="govuk-summary-list__row--no-border">
+            <govuk-summary-list-row-key>
+                How has the scope of your project changed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.ChangeOfScope
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    
+    @if (Model.IsThirdPartyContributionVariation.GetValueOrDefault(false))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What type of contribution have you received?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @foreach (var contributionType in Model.ThirdPartyContributionTypes)
+                {
+                    <span>
+                        @contributionType<br /><br />
+                    </span>
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What was the value of the contribution?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                £@Model.ThirdPartyContributionAmount.ToString("N0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Please tell us more about the contribution
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ThirdPartyContributionNotes)
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+<hr class="govuk-section-break govuk-section-break--m">
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="Confirmation" method="post">
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationSummary" max-length="1000">
+        <govuk-character-count-label class="govuk-label--s">Summarise the reason for the variation</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsCostVariation " type="hidden" value="@Model.IsCostVariation" />
+    <input asp-for="IsScopeVariation" type="hidden" value="@Model.IsScopeVariation" />
+    <input asp-for="IsTimescaleVariation" type="hidden" value="@Model.IsTimescaleVariation" />
+    <input asp-for="NewEndMonth" type="hidden" value="@Model.NewEndMonth" />
+    <input asp-for="NewEndYear " type="hidden" value="@Model.NewEndYear" />
+    <input asp-for="ChangeOfScope" type="hidden" value="@Model.ChangeOfScope" />
+    <input asp-for="ChangeOfCosts" type="hidden" value="@Model.ChangeOfCosts" />
+    <input asp-for="TotalApprovedFunding" type="hidden" value="@Model.TotalApprovedFunding" />
+    <input asp-for="VariationRequested" type="hidden" value="@Model.VariationRequested" />
+    <input asp-for="TotalRequestedAmount" type="hidden" value="@Model.TotalRequestedAmount" />
+    <input asp-for="Duration" type="hidden" value="@Model.Duration" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

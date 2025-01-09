@@ -36,4 +36,6 @@ public class GetAreaProgressResponse
     public string Area { get; set; }
     public string Controller { get; set; }
     public string Action { get; set; }
+    public string RouteDataJson { get; set; }
+    public string AreaDataJson { get; set; }
 }

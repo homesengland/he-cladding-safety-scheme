@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -33,7 +34,5 @@ public class SetRepresentativeTypeHandler : IRequestHandler<SetRepresentativeTyp
             ApplicationId = applicationId,
             RepresentationTypeId = (int?)request.RepresentativeType
         });
-
-        await _applicationRepository.UpdateStatusToInProgress(applicationId);
     }
 }

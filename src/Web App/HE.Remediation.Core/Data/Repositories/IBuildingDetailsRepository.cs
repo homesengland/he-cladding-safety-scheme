@@ -10,4 +10,6 @@ public interface IBuildingDetailsRepository
     Task InsertBuildingAddress(BuildingDetailsAddressDetails details, Guid applicationId);
 
     Task UpdateBuildingAddress(BuildingDetailsAddressDetails details, Guid applicationId);
+
+    Task<string> GetBuildingUniqueName(Guid applicationId);
 }

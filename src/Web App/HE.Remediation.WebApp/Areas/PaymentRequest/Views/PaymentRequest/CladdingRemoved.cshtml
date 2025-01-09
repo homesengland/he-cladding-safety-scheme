@@ -1,0 +1,50 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.CladdingRemovedViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("ProjectDates", "PaymentRequest", new { Area = "PaymentRequest" });
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" class="govuk-link govuk-!-margin-bottom-2">
+            Unsafe cladding
+        </a>
+    </div>
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="UnsafeCladdingRemoved" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Has the unsafe cladding been removed in line with your FRAEW recommendation?</h1>
+<p class="govuk-body">
+    Tell us when the unsafe cladding has been removed.
+</p>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="CladdingRemoved">
+    <govuk-radios asp-for="UnsafeCladdingRemoved">
+
+        <govuk-radios-item disabled="@readOnly" value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@readOnly" value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,140 @@
+﻿@using HE.Remediation.Core.Extensions
+@* This is basically a copy of TeamMemeber (with some minor tweaks), but for the sake of not getting into a routing nightmare I've made this a separate view *@
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.GrantCertifyingOfficerDetailsViewModel
+@{
+    var pageTitle = Model.Role != ETeamRole.Other
+        ? $"{Model.Role.ToString().SplitCamelCase().ToSentenceCase()} company details"
+        : "Role in project team";
+
+    var action = !string.IsNullOrEmpty(Model.ReturnUrl) ? Model.ReturnUrl : "ConfirmGcoDetails";
+    var backLink = Url.Action(action, "ProgressReporting", new { Area = "ProgressReporting" });
+
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["BackLink"] = backLink;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="CompanyName" />
+        <govuk-error-summary-item asp-for="CompanyRegistration" />
+        <govuk-error-summary-item asp-for="Name" />
+        <govuk-error-summary-item asp-for="OtherRole" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="PrimaryContactNumber" />
+        <govuk-error-summary-item asp-for="ContractSigned" />
+        <govuk-error-summary-item asp-for="IndemnityInsurance" />
+        <govuk-error-summary-item asp-for="IndemnityInsuranceReason" />
+        <govuk-error-summary-item asp-for="InvolvedInOriginalInstallation" />
+        <govuk-error-summary-item asp-for="InvolvedRoleReason" />
+        <govuk-error-summary-item asp-for="ConsiderateConstructorSchemeType" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@pageTitle</h1>
+
+<form action="@Url.Action("GrantCertifyingOfficerDetails", "ProgressReporting", new {Area = "ProgressReporting", TeamRole = (ETeamRole?)null, TeamMemberId = (int?)null})" method="post">
+    <input asp-for="Role" type="hidden" value="@Model.Role" />
+    <input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ReturnUrl" value="@Model.ReturnUrl" type="hidden" />
+
+    <govuk-fieldset>
+        <govuk-input asp-for="CompanyName" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Company name</govuk-input-label>
+        </govuk-input>
+
+        <govuk-input asp-for="CompanyRegistration" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Company registration number</govuk-input-label>
+        </govuk-input>
+
+        <govuk-input asp-for="Name" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">@(Model.Role != ETeamRole.Other ? Model.Role.ToString().SplitCamelCase().ToSentenceCase() + " name" : "Name of person in role")</govuk-input-label>
+        </govuk-input>
+
+        @if (Model.Role == ETeamRole.Other)
+        {
+            <govuk-input asp-for="OtherRole" input-class="govuk-input--width-20">
+                <govuk-input-label class="gov-uk-label--s">Role at company</govuk-input-label>
+            </govuk-input>
+        }
+
+        <govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Email address</govuk-input-label>
+        </govuk-input>
+
+        <govuk-input asp-for="PrimaryContactNumber" input-class="govuk-input--width-20" input-maxlength="20">
+            <govuk-input-label class="gov-uk-label--s">Primary contact number</govuk-input-label>
+        </govuk-input>
+
+        <govuk-radios asp-for="ContractSigned">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                    Have you formally signed a contract with this company?
+                </govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+            <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+            <govuk-radios-item value="@(false)">No</govuk-radios-item>
+        </govuk-radios>
+
+        @if (Model.Role != ETeamRole.Other)
+        {
+            <govuk-radios asp-for="IndemnityInsurance">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                        Confirm that this firm holds appropriate levels of professional indemnity insurance and limits of liability for the proposed works in accordance with industry best practice
+                    </govuk-radios-fieldset-legend>
+                </govuk-radios-fieldset>
+                <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+                <govuk-radios-item value="@(false)">
+                    No
+                    <govuk-radios-item-conditional>
+                        <govuk-character-count asp-for="IndemnityInsuranceReason" max-length="150">
+                            <govuk-character-count-label>Provide a reason</govuk-character-count-label>
+                        </govuk-character-count>
+                    </govuk-radios-item-conditional>
+                </govuk-radios-item>
+            </govuk-radios>
+        }
+
+        <govuk-radios asp-for="InvolvedInOriginalInstallation">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                    Was this @(Model.Role != ETeamRole.Other ? Model.Role.ToString().SplitCamelCase().ToLower() : "contractor") involved in the original installation of the building cladding?
+                </govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+            <govuk-radios-item value="@(true)">
+                Yes
+                <govuk-radios-item-conditional>
+                    <govuk-character-count asp-for="InvolvedRoleReason" max-length="150">
+                        <govuk-character-count-label>Explain their role</govuk-character-count-label>
+                    </govuk-character-count>
+                </govuk-radios-item-conditional>
+            </govuk-radios-item>
+            <govuk-radios-item value="@(false)">No</govuk-radios-item>
+        </govuk-radios>
+    </govuk-fieldset>
+
+    @if (Model.Role == ETeamRole.LeadContractor)
+    {
+        <govuk-radios asp-for="ConsiderateConstructorSchemeType">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                    Is your lead contractor signed up to the Considerate Constructors Scheme?
+                </govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.Yes)">Yes</govuk-radios-item>
+            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.No)">No</govuk-radios-item>
+            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.DontKnow)">Don't Know</govuk-radios-item>
+        </govuk-radios>
+    }
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

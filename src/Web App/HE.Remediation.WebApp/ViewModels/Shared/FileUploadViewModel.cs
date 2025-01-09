@@ -10,5 +10,6 @@ namespace HE.Remediation.WebApp.ViewModels.Shared
         public abstract string[] AcceptedFileTypes { get; }
         public ESubmitAction SubmitAction { get; set; }
         public abstract int NumberOfFilesAllowed { get; }
+        public Dictionary<string,string> DeleteParameters { get; set; }
     }
 }

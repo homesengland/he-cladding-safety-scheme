@@ -1,0 +1,45 @@
+﻿@using HE.Remediation.Core.Enums;
+
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.LeaseholdersInformedLastViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="LeaseholdersInformedLastDate" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">When did you last update your leaseholders/residents on progress?</h1>
+
+
+<div class="text-center">
+    <div class="govuk-width-container">
+            <form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="LeaseholdersInformedLast" method="post">
+                <govuk-date-input asp-for="LeaseholdersInformedLastDate" name="LeaseholdersInformedLastDate">
+                    <govuk-date-input-fieldset class="govuk-!-margin-top-1">
+                        <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                            Date you last updated leaseholders/residents
+                        </govuk-date-input-fieldset-legend>
+                    </govuk-date-input-fieldset>
+                    <govuk-date-input-label></govuk-date-input-label>
+                    <govuk-date-input-hint>
+                        For example, 27 8 2022
+                    </govuk-date-input-hint>
+                </govuk-date-input>
+
+                <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+                <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+
+                <div class="comp-btn-group">
+                    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+                    <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+                </div>
+            </form>
+    </div>
+</div>

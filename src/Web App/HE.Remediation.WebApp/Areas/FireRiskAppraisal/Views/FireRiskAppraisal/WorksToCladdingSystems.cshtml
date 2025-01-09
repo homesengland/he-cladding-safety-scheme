@@ -9,7 +9,7 @@
     ViewData["FullWidth"] = false;
 
     //ToDo: Change BackLink when previous page complete
-    ViewData["BackLink"] = Url.Action("ReportDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["BackLink"] = Url.Action("InterimMeasures", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
 
     //ToDo: Change ReturnURL when previous page complete
     ViewData["ReturnUrl"] = "CheckYourAnswers";
@@ -59,7 +59,34 @@
                         Cladding type
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @x.value.CladdingSystemTypeName
+                        @if (x.value.CladdingSystemTypeName == "Other")
+                        {
+                            @(x.value.CladdingSystemTypeName)<text> - </text>@(x.value.OtherCladdingType)
+                        }
+                        else
+                        {
+                            @x.value.CladdingSystemTypeName
+                        }
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Cladding manufacturer
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            if (x.value.CladdingManufacturerName == "Other")
+                            {
+                                <span>@x.value.CladdingManufacturerName</span><span> - </span><span>@x.value.OtherCladdingManufacturer</span>
+                            }
+                            else
+                            {
+                                <span>@x.value.CladdingManufacturerName</span>
+                            }
+                        }
                     </dd>
                     <dd class="govuk-summary-list__actions">
 
@@ -70,7 +97,34 @@
                         Insulation material
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @x.value.InsulationTypeName
+                        @if (x.value.InsulationTypeName == "Other")
+                        {
+                            @(x.value.InsulationTypeName)<text> - </text>@(x.value.OtherInsulationType)
+                        }
+                        else
+                        {
+                            @x.value.InsulationTypeName
+                        }
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Insulation manufacturer
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            if (x.value.InsulationManufacturerName == "Other")
+                            {
+                                <span>@x.value.InsulationManufacturerName</span><span> - </span><span>@x.value.OtherInsulationManufacturer</span>
+                            }
+                            else
+                            {
+                                <span>@x.value.InsulationManufacturerName</span>
+                            }
+                        }
                     </dd>
                     <dd class="govuk-summary-list__actions">
 
@@ -82,7 +136,7 @@
     }
     else
     {
-        <p class="govuk-body">Identify each of the cladding systems which contribute to the life safety risk of the building. For each cladding system identify the cladding type and the insulation material.</p>
+        <p class="govuk-body">Identify each of the cladding systems which contribute to the life safety risk of the building. For each cladding system identify the cladding type and the insulation material as well as the relevant manufactures where known.</p>
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
         <span class="govuk-caption-m">No cladding systems have been added</span>
     }
@@ -94,6 +148,8 @@
     </govuk-button>
 
     <hr class="govuk-section-break govuk-section-break--s">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" type="submit">Continue</govuk-button>

@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNew
             var applicationId = await _db.QuerySingleOrDefaultAsync<Guid>("InsertApplication", new
             {
                 UserId = userId,
-                StatusId = EApplicationStatus.NotStarted,
+                StatusId = EApplicationStatus.ApplicationInProgress,
                 StageId = EApplicationStage.ApplyForGrant
             });
 

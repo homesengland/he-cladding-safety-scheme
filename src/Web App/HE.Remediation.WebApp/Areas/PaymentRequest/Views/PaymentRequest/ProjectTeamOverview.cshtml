@@ -1,0 +1,111 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.ProjectTeamViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["Backlink"] = ((Model.CostsChanged == true) || (Model.EndDateSlipped == true) || (Model.ThirdPartyContributionsChanged == true))
+        ? Url.Action("VariationRequired", "PaymentRequest", new { Area = "PaymentRequest" })
+        : Url.Action("ThirdPartyContributionsChanged", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = true;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+{
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item asp-for="MissingRoles">
+                Add missing team members
+                <ul>
+                    @foreach (var role in Model.MissingRoles)
+                    {
+                        <li>@role.ToString().SplitCamelCase().ToSentenceCase()</li>
+                    }
+                </ul>
+            </govuk-error-summary-item>
+        </govuk-error-summary>
+    }
+}
+
+<h1 class="govuk-heading-xl">Have any of your team members changed since last month?</h1>
+
+@using (Html.BeginForm())
+{
+    <div class="text-center">
+        <div class="govuk-width-container">
+            <main class="govuk-main-wrapper">
+                <h2 class="govuk-heading-m">Team members</h2>
+                @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+                {
+                    <table class="govuk-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">Role</th>
+                                <th scope="col" class="govuk-table__header">Name</th>
+                                <th scope="col" class="govuk-table__header">Company name</th>
+                                <th scope="col" colspan="2" class="govuk-table__header">Change or Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @foreach (var teamMember in Model.TeamMembers)
+                            {
+                                <tr class="govuk-table__row">
+                                    @if (teamMember.RoleId == (int)ETeamRole.Other)
+                                    {
+                                        <td class="govuk-table__cell no-line-wrap"><strong>@teamMember.OtherRole</strong></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="govuk-table__cell"><strong>@teamMember.RoleName.ToSentenceCase()</strong></td>
+                                    }
+                                    <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
+                                    <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
+                                    <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("TeamMember", "PaymentRequest", new { Area = "PaymentRequest", TeamRole = teamMember.RoleId, TeamMemberId = teamMember.Id, returnUrl = Model.ReturnUrl })">Change</a></td>
+                                    <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("RemoveMember", "PaymentRequest", new { Area = "PaymentRequest", TeamMemberId = teamMember.Id, returnUrl = Model.ReturnUrl })">Remove</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="no-results bottom-highlight govuk-body">
+                        There are no team members to show
+                    </div>
+                }
+                <govuk-button disabled="@readOnly" href="@Url.Action("AddRole", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = Model.ReturnUrl })" class="govuk-button--secondary">Add team member</govuk-button>
+            </main>
+        </div>
+    </div>
+
+    @if (Model.MissingRoles != null)
+    {
+        @foreach (var role in Model.MissingRoles)
+        {
+            <input asp-for="MissingRoles" type="hidden" value="@role" />
+        }
+    }    
+    @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+    {
+        @foreach (var x in Model.TeamMembers.Select((value, index) => new { value, index }))
+        {
+            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" value="@Model.TeamMembers[x.index].Id" />
+            <input asp-for="@Model.TeamMembers[x.index].RoleName" type="hidden" value="@Model.TeamMembers[x.index].RoleName" />            
+            <input asp-for="@Model.TeamMembers[x.index].RoleId" type="hidden" value="@Model.TeamMembers[x.index].RoleId" />
+            <input asp-for="@Model.TeamMembers[x.index].Name" type="hidden" value="@Model.TeamMembers[x.index].Name" />
+            <input asp-for="@Model.TeamMembers[x.index].CompanyName" type="hidden" value="@Model.TeamMembers[x.index].CompanyName" />
+            <input asp-for="@Model.TeamMembers[x.index].OtherRole" type="hidden" value="@Model.TeamMembers[x.index].OtherRole" />            
+        }
+    }
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>    
+}

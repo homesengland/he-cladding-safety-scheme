@@ -8,7 +8,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         {
             RuleFor(x => x.WorksRequired)
                 .NotEmpty()
-                .WithMessage("Please select an option");
+                .WithMessage("Select an option");
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.CostsChangedViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Model.UnsafeCladdingRemoved == true
+        ? Url.Action("ChangeCladdingRemovedDate", "PaymentRequest", new { Area = "PaymentRequest" })
+        : Url.Action("CladdingRemoved", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = false;
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="CostsChanged" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Have your costs changed?</h1>
+<p class="govuk-body">
+    You must tell us if there are changes to the costs of your project.
+</p>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="CostsChanged">
+    <govuk-radios asp-for="CostsChanged">
+
+        <govuk-radios-item disabled="@readOnly" value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@readOnly" value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

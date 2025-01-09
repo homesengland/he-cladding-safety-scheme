@@ -1,5 +1,4 @@
-﻿
-namespace HE.Remediation.Core.Enums;
+﻿namespace HE.Remediation.Core.Enums;
 
 public enum EReplacementCladding
 {

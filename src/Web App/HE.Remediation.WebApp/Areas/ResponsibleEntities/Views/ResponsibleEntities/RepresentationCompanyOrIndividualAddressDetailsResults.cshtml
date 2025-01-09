@@ -3,8 +3,8 @@
 @model HE.Remediation.WebApp.ViewModels.Location.PostCodeSelectionViewModel
 
 @{
-    ViewData["Title"] = "Check your information is correct for this application";
-    ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["Title"] = "As the Representative, what is your company address?";
+    ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
     ViewData["FullWidth"] = false;
 
     ViewData["ReturnUrl"] = "CompanyAddress";
@@ -21,7 +21,7 @@
 
 <p class="govuk-body">If the details used to create your account are not relevant for this application, you can change the response below. </p>
 
-<h2 class="govuk-heading-m">What is your@(Model.ResponsibleEntityType == EResponsibleEntityType.Company ? " Company " : " ")address?</h2>
+<h2 class="govuk-heading-m">As the Representative, what is your company address?</h2>
 
 <form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CompanyOrIndAddrDetailsPostCodeItemSelected">
                 

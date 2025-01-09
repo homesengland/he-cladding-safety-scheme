@@ -4,18 +4,16 @@
 @{
     ViewData["Title"] = "Report Details";
     ViewData["FullWidth"] = true;
-    ViewData["BackLink"] = Url.Action("Summary", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["BackLink"] = Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
 
 }
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="AuthorsName" />
-        <govuk-error-summary-item asp-for="PeerReviewPerson" />
-        <govuk-error-summary-item asp-for="UndertakingFirm" />
         <govuk-error-summary-item asp-for="NumberOfStoreys" />
         <govuk-error-summary-item asp-for="BuildingHeight" />
-        <govuk-error-summary-item asp-for="BuildingInterimMeasures" />
+        <govuk-error-summary-item asp-for="AuthorsName" />
+        <govuk-error-summary-item asp-for="PeerReviewPerson" />
         <govuk-error-summary-item asp-for="BasicComplexId" />
     </govuk-error-summary>
 }
@@ -29,18 +27,6 @@
 
                     <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="ReportDetails" method="post">
 
-                        <govuk-input asp-for="AuthorsName" name="AuthorsName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
-                            <govuk-input-label is-page-heading="false" class="govuk-label--s">Report authors name</govuk-input-label>
-                        </govuk-input>
-
-                        <govuk-input asp-for="PeerReviewPerson" name="PeerReviewPerson" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
-                            <govuk-input-label is-page-heading="false" class="govuk-label--s">Name of person conducting peer review</govuk-input-label>
-                        </govuk-input>
-
-                        <govuk-input asp-for="UndertakingFirm" name="UndertakingFirm" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
-                            <govuk-input-label is-page-heading="false" class="govuk-label--s">Firm undertaking report</govuk-input-label>
-                        </govuk-input>
-
                         <govuk-input asp-for="NumberOfStoreys" type="text" input-class="govuk-input--width-5" input-maxlength="3" input-pattern="[0-9]*">
                             <govuk-input-label class="govuk-label--s">How many storeys does the building have?</govuk-input-label>
                             <govuk-input-hint>Please enter the number of storeys starting at ground level but do not include underground storeys.</govuk-input-hint>
@@ -48,14 +34,17 @@
 
                         <govuk-input asp-for="BuildingHeight" type="text" input-class="govuk-input--width-5" input-maxlength="3" input-pattern="[0-9]*">
                             <govuk-input-label class="govuk-label--s">What is the height of the building in metres?</govuk-input-label>
-                            <govuk-input-hint>Please enter the number of metres including the ground level, in metres.(measured in accordance with Diagram D6 in approved document B)</govuk-input-hint>
+                            <govuk-input-hint>Please enter the number of metres including the ground level, in metres, including ground level (measured in accordance with the diagram below).</govuk-input-hint>
                         </govuk-input>
 
+                        <govuk-details open="false">
+                            <govuk-details-summary>
+                                How to measure height of the building
+                            </govuk-details-summary>
+                            <govuk-details-text>
+                                <h2 class="govuk-heading-m">How to measure the height of your building</h2>
 
-
-                        <h2 class="govuk-heading-m">How to measure the height of your building</h2>
-
-                        <p class="govuk-body">For a building to be eligible for the Cladding Safety Scheme grant, it should measure between 11 - 18 metres.</p>
+                        <p class="govuk-body">For a building to be eligible for grant funding, the height of the building must be over 11 metres.</p>
                         <p class="govuk-body">Use the image below as a guide when measuring the building height.</p>
                         <p class="govuk-body">You should measure from the lowest ground level up to the finished floor level of the top occupied story.</p>
                         <p class="govuk-body">Do not count the root-top plant room and any other storeys that are plant rooms.</p>
@@ -63,25 +52,29 @@
 
                         @*TODO government guidance here is to use an svg image because the image contains text and alt text should match the text in the image. (https://design-system.service.gov.uk/styles/images/)*@
                         <p class="govuk-body">
-                            <img src="~/img/buildingdetails/buildingheight.png" height="432" width="630"
-                                 alt="Height of top storey measured from upper floor surface of top floor to ground level on lowest side of building. Height of top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms." />
+                            <img src="~/img/buildingdetails/buildingheight.png" height="100%" width="100%" alt="" />
+                            <span>The height of top storey must be measured from upper floor surface of the top floor, to ground level on the lowest side of building. The height of the top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms.</span>
                         </p>
+                            </govuk-details-text>
+                        </govuk-details>
 
-                        <govuk-radios asp-for="BuildingInterimMeasures">
-                            <govuk-radios-fieldset>
-                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
-                                    Is this building in interim measures
-                                </govuk-radios-fieldset-legend>
-                            </govuk-radios-fieldset>
+                         <govuk-input asp-for="AuthorsName" name="AuthorsName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                            <govuk-input-label is-page-heading="false" class="govuk-label--s">Name of author of report</govuk-input-label>
+                        </govuk-input>
 
-                            <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
-                            <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
-                        </govuk-radios>
+                        <govuk-input asp-for="PeerReviewPerson" name="PeerReviewPerson" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                            <govuk-input-label is-page-heading="false" class="govuk-label--s">Name of person peer reviewing report</govuk-input-label>
+                        </govuk-input>
+                        
+                        <govuk-input asp-for="FraewCost" name="@nameof(Model.FraewCost)" input-class="govuk-input--width-20" inputmode="number">
+                            <govuk-input-label is-page-heading="false" class="govuk-label--s">Cost of FRAEW report (exclusive of VAT)</govuk-input-label>
+                            <govuk-input-prefix>&pound;</govuk-input-prefix>
+                        </govuk-input>
 
                         <govuk-radios asp-for="BasicComplexId">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
-                                    Is the assessment basic or complex?
+                                    Is the FRAEW assessment basic or complex?
                                 </govuk-radios-fieldset-legend>
                             </govuk-radios-fieldset>
 
@@ -93,66 +86,79 @@
                             <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
                             <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
                         </div>
+
+                        @Html.HiddenFor(x=> x.ReturnUrl)
+                        @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+                        @Html.HiddenFor(x=> x.BuildingName)
+                        @Html.HiddenFor(x=> x.BuildingAddress)
+                        @Html.HiddenFor(x=> x.Development)
+                        <input name="@($"{nameof(Model.FRAEWCompletedDate)}.{nameof(Model.FRAEWCompletedDate.Value.Day)}")" value="@Model.FRAEWCompletedDate?.Day" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWCompletedDate)}.{nameof(Model.FRAEWCompletedDate.Value.Month)}")" value="@Model.FRAEWCompletedDate?.Month" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWCompletedDate)}.{nameof(Model.FRAEWCompletedDate.Value.Year)}")" value="@Model.FRAEWCompletedDate?.Year" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWInstructedDate)}.{nameof(Model.FRAEWInstructedDate.Value.Day)}")" value="@Model.FRAEWInstructedDate?.Day" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWInstructedDate)}.{nameof(Model.FRAEWInstructedDate.Value.Month)}")" value="@Model.FRAEWInstructedDate?.Month" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWInstructedDate)}.{nameof(Model.FRAEWInstructedDate.Value.Year)}")" value="@Model.FRAEWInstructedDate?.Year" type="hidden" />
+                        @Html.HiddenFor(x=> x.CompanyUndertakingReport)
                     </form>
                 </div>
                 <div class="govuk-grid-column-one-third">
                     <hr class="related-content-separator-line" />
                     <h2 class="govuk-heading-m">Building Details</h2>
 
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Application Reference Number</div>
+                        <div class="govuk-body no-margin">@Model.ApplicationReferenceNumber</div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>                   
 
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Building name</div>
+                        <div class="govuk-body no-margin">@Model.BuildingName</div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
 
-                    <govuk-summary-list>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                Address of building                                
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @Model.BuildingAddress
-                            </govuk-summary-list-row-value>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                Company undertaking report          
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @Model.CompanyUndertakingReport
-                            </govuk-summary-list-row-value>
-                        </govuk-summary-list-row>
-
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                FRAEW instructed date
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @if (Model.FRAEWInstructedDate is not null)
-                                {
-                                    var instructedDate = Model.FRAEWInstructedDate;
-                                    <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
-                                }
-                            </govuk-summary-list-row-value>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                Building name
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @Model.BuildingName
-                            </govuk-summary-list-row-value>
-                        </govuk-summary-list-row>
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                FRAEW completed date
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @if (Model.FRAEWCompletedDate is not null)
-                                {
-                                    var completedDate = Model.FRAEWCompletedDate;
-                                    <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
-                                }
-                            </govuk-summary-list-row-value>
-                        </govuk-summary-list-row>                        
-                    </govuk-summary-list>
-
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Building Address Line 1</div>
+                        <div class="govuk-body no-margin">@Model.BuildingAddress</div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                    @if (Model.PartOfDevelopment.HasValue && Model.PartOfDevelopment.Value)
+                    {
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Block within wider development</div>
+                            <div class="govuk-body no-margin">@Model.Development</div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                    }
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">FRAEW instructed date</div>
+                        <div class="govuk-body no-margin">
+                            @if (Model.FRAEWInstructedDate is not null)
+                            {
+                                var instructedDate = Model.FRAEWInstructedDate;
+                                <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
+                            }
+                        </div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">FRAEW report completion date</div>
+                        <div class="govuk-body no-margin">
+                            @if (Model.FRAEWCompletedDate is not null)
+                            {
+                                var completedDate = Model.FRAEWCompletedDate;
+                                <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
+                            }
+                        </div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Firm undertaking report</div>
+                        <div class="govuk-body no-margin">
+                            @Model.CompanyUndertakingReport
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

@@ -1,0 +1,44 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageSubmit.SubmittedViewModel
+@{
+    ViewData["Title"] = "Compile works package - Works package submitted";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLinkHidden"] = true;
+    ViewData["ExitLinkHidden"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Works package submitted
+                        </govuk-panel-title>
+                        <govuk-panel-body>
+                            Application ID<br /><strong>@Model.ApplicationReferenceNumber</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">
+                        We'll email you to confirm that your application has been successfully submitted.  We may need to contact you to discuss or clarify the details in your submission.
+                    </p>
+                    <p class="govuk-body">
+                        Once we've done this, we'll send the Works Package Deed to the signatories you've provided to sign and return.
+                    </p>
+                    <p class="govuk-body">
+                        You can check the progress of your application in the Existing Applications section of your dashboard.                        
+                    </p>
+                    <p class="govuk-body">
+                        When your application has been evaluated, we'll email you and update your homepage to let you know what you need to do next.
+                    </p>
+
+                    <govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to home</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -58,7 +58,7 @@ namespace HE.Remediation.Core.Data.Repositories
                                                                                             Id
                                                                                         });
         }
-
+                
         public async Task DeleteFireRiskWallWorks(Guid Id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -97,6 +97,20 @@ namespace HE.Remediation.Core.Data.Repositories
                     @Id = Id,
                     @Description = Description,
                     @WorkTypeId = WorkTypeId
+                });            
+
+                scope.Complete();
+            }
+        }
+
+        public async Task ResetFireRiskWallWorks(Guid applicationId, EWorkType workType)
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await _dbConnection.ExecuteAsync(nameof(ResetFireRiskWallWorks), new
+                {                 
+                    ApplicationId = applicationId,
+                    WorkTypeId = workType
                 });            
 
                 scope.Complete();

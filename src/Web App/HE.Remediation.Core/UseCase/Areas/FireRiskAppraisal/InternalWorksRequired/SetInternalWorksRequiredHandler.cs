@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -17,9 +18,14 @@ public class SetInternalWorksRequiredHandler: IRequestHandler<SetInternalWorksRe
 
     public async Task<Unit> Handle(SetInternalWorksRequiredRequest request, CancellationToken cancellationToken)
     {
-        var applicaitonId = _applicationDataProvider.GetApplicationId();
+        var applicationId = _applicationDataProvider.GetApplicationId();
 
-        await _fireRiskWorksRepository.SetInternalWorksRequired(applicaitonId, request.WorkRequired);
+        await _fireRiskWorksRepository.SetInternalWorksRequired(applicationId, request.WorkRequired);
+
+        if (request.WorkRequired == ENoYes.No)
+        {
+            await _fireRiskWorksRepository.ResetFireRiskWallWorks(applicationId, EWorkType.Internal);
+        }
 
         return Unit.Value;
     }

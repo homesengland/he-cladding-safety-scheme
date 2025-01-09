@@ -2,8 +2,8 @@
 
 @{
     ViewData["Title"] = "Grant funding agreement";
-    ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
-    ViewData["FullWidth"] = true;
+    ViewData["Backlink"] = Url.Action("SupportRequired", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["FullWidth"] = true;    
 }
 
 
@@ -13,31 +13,25 @@
             @ViewData["Title"]
         </h1>
         <p class="govuk-body">
-            Homes England will provide the Funding to the Applicant on and subject to the terms of this
-            Agreement.
+            The Grant Funding Agreement is the contract for the provision of funds from the Cladding Safety Scheme to the 
+            applicant for completion of the remediation works specified in the eligibility letter.
         </p>
-
         <p class="govuk-body">
-            Homes England will provide PTS Funding to the Applicant following the occurrence of the PTS
-            Effective Date and on and subject to the terms of the PTS Agreement. Unless and until the
-            occurrence of the GFA Effective Date the Applicant will only be subject to the terms of the PTS
-            Provisions and the remaining terms of this Agreement shall not apply.
+            The Grant Funding Agreement contains the terms and conditions for the provision of these funds, including 
+            requirements on the applicant relating to designing, undertaking and reporting on the remediation works.
         </p>
-
         <p class="govuk-body">
-            After the occurrence of the GFA Effective Date the Applicant will be subject to all of the terms of this
-            Agreement save for Schedule 6
+            The Pre-Tender Support amount is available only to design and cost your remediation works and compile 
+            the works package. Once your works package has been submitted, we will notify you of the remaining grant 
+            funding amount approved to deliver your works and include this in the second section of 
+            the Grant Funding Agreement.
+        </p>
+        <p class="govuk-body">
+            More information on the Grant Funding Agreement is available in the guidance.
         </p>
 
-        <govuk-button href="@Url.Action("ClaimPreTenderSupport", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>
+        <govuk-button href="@Url.Action("ConfirmContactDetails", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>
     </div>
-    <div class="govuk-grid-column-one-third">
-
-        <hr class="related-content-separator-line" />
-        <h2 class="govuk-heading-m">Related Items</h2>
-        <a class="govuk-link" target="_blank" href="/">How pre-tender support is calculated</a>
-        <br /><br />
-        <a class="govuk-link" target="_blank" href="/">More</a>
-    </div>
+    
 </div>
     

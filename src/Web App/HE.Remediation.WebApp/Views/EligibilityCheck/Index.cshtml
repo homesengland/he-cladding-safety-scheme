@@ -36,16 +36,16 @@
                                 What is a residential building?
                             </govuk-details-summary>
                             <govuk-details-text>
-                                A building that has 2 or more flats with long leaseholders who pay a service charge
+                                A building that has one or more flats with long leaseholders who pay a service charge
                             </govuk-details-text>
                         </govuk-details>
 
                         <govuk-checkboxes name="AwareOfTheBuildingHeight" asp-for="AwareOfTheBuildingHeight">
-                            <govuk-checkboxes-item value="true">I am aware of the building height requirements for the Cladding Safety Scheme applications</govuk-checkboxes-item>
+                            <govuk-checkboxes-item value="true">I am aware of the building height requirements for the grant funding</govuk-checkboxes-item>
                         </govuk-checkboxes>
 
                         <govuk-checkboxes name="EligibleToCreateApplication" asp-for="EligibleToCreateApplication">
-                            <govuk-checkboxes-item value="true">I am eligible to create an application(s) for the Cladding Safety Scheme as either a responsible entity or authorised representative</govuk-checkboxes-item>
+                            <govuk-checkboxes-item value="true">I am eligible to create an application(s) for the grant funding as either a Responsible Entity or authorised Representative</govuk-checkboxes-item>
                         </govuk-checkboxes>
 
                         <govuk-details open="false">
@@ -53,26 +53,21 @@
                                 Who is eligible to apply?
                             </govuk-details-summary>
                             <govuk-details-text>
-                                <p class="govuk-body">In the private sector, applications are open to the Responsible Entity (or an agent acting on their behalf) that has a building that meets the eligibility criteria set out in the section below.</p>
+                                <p class="govuk-body">In the private sector, applications are open to the Responsible Entity (or an agent acting on their behalf) that has a building that meets the eligibility criteria. Please refer to the published guidance online for the relevant fund.</p>
 
-                                <p class="govuk-body">In the social sector, applications are open to the Responsible Entity for a building, usually the Registered Provider of Social Housing (RP) that has a building that meets the eligibility criteria set out in the section below.</p>
+                                <p class="govuk-body">In the social sector, applications are open to the Responsible Entity for a building, usually the Registered Provider of Social Housing (RP) that has a building that meets the eligibility criteria. Please refer to the published guidance online for the relevant fund.</p>
 
-                                <p class="govuk-body">Following receipt of your application, Homes England will review your application to establish if the legal criteria for access to the CSS have been satisfied and as to whether you are entitled to be treated as the correct Responsible Entity. </p>
+                                <p class="govuk-body">Following receipt of your application, Homes England will review your application to establish if the criteria for access to grant funding have been satisfied and as to whether you are entitled to be treated as the correct Responsible Entity. </p>
 
                                 <p class="govuk-body">Applications will not be accepted from leaseholders (unless they are the head leaseholder acting as the Responsible Entity), but they should encourage their landlords/building owners or managing agents for the building to register if costs of eligible works would otherwise be passed to leaseholders.</p>
 
-                                <p class="govuk-body">Applicants can appoint a representative to lead their application day-to-day and this may be a managing agent or the project manager.</p>
+                                <p class="govuk-body">Applicants can appoint a Representative to lead their application day-to-day and this may be a managing agent or the project manager.</p>
                             </govuk-details-text>
                         </govuk-details>
 
                         <govuk-checkboxes name="ReadGuidanceAndPoliciesRelated" asp-for="ReadGuidanceAndPoliciesRelated">
                             <govuk-checkboxes-item value="true">I have read the guidance and policies related to this service</govuk-checkboxes-item>
                         </govuk-checkboxes>
-
-                        <p class="govuk-body">
-                            If any of the above statements are incorrect, use the related links on
-                            the right hand side to find the correct service.
-                        </p>
 
                         <govuk-button type="submit">Continue</govuk-button>
                     </form>
@@ -85,6 +80,10 @@
                     <hr class="related-content-separator-line"/>
                     <h2 class="govuk-heading-m">Related items</h2>
                     <a asp-action="Login" asp-controller="Authentication" asp-area="" class="govuk-link">Sign in to continue or manage your existing grant application</a>
+                    <br/><br/>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview">Cladding Safety Scheme guidance</a>
+                    <br/><br/>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/guidance/building-safety-fund-guidance-for-new-applications-from-july-2022">Building Safety Fund guidance</a>
                 </div>
             </div>
         </main>

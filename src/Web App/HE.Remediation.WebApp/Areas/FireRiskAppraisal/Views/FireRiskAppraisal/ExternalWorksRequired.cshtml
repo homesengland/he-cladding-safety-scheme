@@ -2,14 +2,14 @@
 @model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.ExternalWorksRequiredViewModel
 @{
     ViewData["Title"] = "External works";
-    ViewData["BackLink"] = Url.Action("WorksToCladdingSystems", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["BackLink"] = Url.Action("WorksToCladdingCladdingArea", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
     ViewData["FullWidth"] = false;
 }
 
 <h1 class="govuk-heading-xl">External works</h1>
 
 <p class="govuk-heading-s">
-    Are there any other elements of the external wall in addition to the cladding systems(s) 
+    Are there any other elements of the external wall in addition to the cladding system(s) 
     which you are recommending are subject 
     to remediation/mitigation works to address the life safety risk you have identified?
 </p>
@@ -19,6 +19,8 @@
         <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
         <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
     </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and Continue</govuk-button>
     <govuk-button name="SubmitAction" class="govuk-button--secondary govuk-!-margin-left-4" value="@ESubmitAction.Exit">Save and return later</govuk-button>

@@ -51,12 +51,26 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                 new
                 {
                     ApplicationId = applicationId,
-                    NameNumber = parsedAddress.NameNumber,
-                    AddressLine1 = parsedAddress.AddressLine1,
-                    AddressLine2 = string.Empty,
-                    City = parsedAddress.City,
-                    County = string.Empty,
-                    Postcode = parsedAddress.Postcode
+                    parsedAddress.NameNumber,
+                    parsedAddress.AddressLine1,
+                    parsedAddress.AddressLine2,
+                    parsedAddress.City,
+                    parsedAddress.LocalAuthority,
+                    parsedAddress.County,
+                    parsedAddress.Postcode,
+                    parsedAddress.SubBuildingName,
+                    parsedAddress.BuildingName,
+                    parsedAddress.BuildingNumber,
+                    parsedAddress.Street,
+                    parsedAddress.Town,
+                    parsedAddress.AdminArea,
+                    parsedAddress.UPRN,
+                    parsedAddress.AddressLines,
+                    parsedAddress.XCoordinate,
+                    parsedAddress.YCoordinate,
+                    parsedAddress.Toid,
+                    parsedAddress.BuildingType,
+                    CountryId = (int?)null
                 });
         }
 
@@ -71,12 +85,26 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                     new
                     {
                         AddressId = addressId,
-                        NameNumber = parsedAddress.NameNumber,
-                        AddressLine1 = parsedAddress.AddressLine1,
-                        AddressLine2 = string.Empty,
-                        City = parsedAddress.City,
-                        County = string.Empty,
-                        Postcode = parsedAddress.Postcode
+                        parsedAddress.NameNumber,
+                        parsedAddress.AddressLine1,
+                        parsedAddress.AddressLine2,
+                        parsedAddress.City,
+                        parsedAddress.LocalAuthority,
+                        parsedAddress.County,
+                        parsedAddress.Postcode,
+                        parsedAddress.SubBuildingName,
+                        parsedAddress.BuildingName,
+                        parsedAddress.BuildingNumber,
+                        parsedAddress.Street,
+                        parsedAddress.Town,
+                        parsedAddress.AdminArea,
+                        parsedAddress.UPRN,
+                        parsedAddress.AddressLines,
+                        parsedAddress.XCoordinate,
+                        parsedAddress.YCoordinate,
+                        parsedAddress.Toid,
+                        parsedAddress.BuildingType,
+                        CountryId = (int?)null
                     });
 
                 await _connection.ExecuteAsync("UpdateResponsibleEntityCompanyAddressId", new { applicationId, addressId });

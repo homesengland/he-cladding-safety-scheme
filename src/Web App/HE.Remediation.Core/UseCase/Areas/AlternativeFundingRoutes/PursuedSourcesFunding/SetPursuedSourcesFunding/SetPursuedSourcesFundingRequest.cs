@@ -6,6 +6,5 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
     public class SetPursuedSourcesFundingRequest: IRequest<Unit>
     {
         public EPursuedSourcesFundingType? PursuedSourcesFunding { get; set; }
-        public bool CompleteSection { get; set; }
     }
 }

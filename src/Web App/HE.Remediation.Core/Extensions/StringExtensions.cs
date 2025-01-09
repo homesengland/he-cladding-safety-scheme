@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace HE.Remediation.Core.Extensions
 {
@@ -7,6 +8,13 @@ namespace HE.Remediation.Core.Extensions
         public static string SplitCamelCase(this string input)
         {
             return Regex.Replace(input, "(?<=[a-z])([A-Z])", " $1", RegexOptions.Compiled);
+        }
+
+        public static string ToSentenceCase(this string input)
+        {
+            return input is not null
+                ? string.Concat(input[0].ToString().ToUpper(), input[1..].ToLower())
+                : null;
         }
     }
 }

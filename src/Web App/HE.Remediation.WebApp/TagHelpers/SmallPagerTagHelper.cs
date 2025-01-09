@@ -23,7 +23,7 @@ namespace HE.Remediation.WebApp.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "SmallPagerTagHelper";
+            output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
              
             if ((CurrentPage == 1) && (PageCount == 1))

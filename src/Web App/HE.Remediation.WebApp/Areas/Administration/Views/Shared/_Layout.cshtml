@@ -15,10 +15,6 @@
                     @await RenderSectionAsync("ErrorSummary", false)
                     
                     @RenderBody()
-
-                    <div>
-                        <a class="govuk-link" href="@Url.Action("Index", "TaskList", new { Area = "Application" })"></a>
-                    </div>
                 </main>
             </div>
         </div>

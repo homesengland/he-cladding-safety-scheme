@@ -17,9 +17,11 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
 
             RuleFor(x => x.CompanyRegistrationNumber)
                 .NotEmpty()
-                .WithMessage("Please enter a Company registration number")
+                .WithMessage("Enter a Company registration number")
+                .MaximumLength(8)
+                .WithMessage("Company registration number must be 8 characters or less")
                 .Matches("^[a-zA-Z0-9]{8}$")
-                .WithMessage("Please enter a valid Company registration number");
+                .WithMessage("Company registration number must only contain letters and numbers");
 
             RuleFor(x => x.FirstName)
                 .NotEmpty()

@@ -1,0 +1,188 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.TaskListViewModel
+@{
+    ViewData["Title"] = "Compile a works package";
+    ViewData["HideTitle"] = true;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">Compile a works package</h1>
+                    
+                    <p class="govuk-body">View the steps you'll need to complete to compile and submit your works package.</p>
+
+                    <h2 class="govuk-heading-m">IMPORTANT</h2>
+
+                    <p class="govuk-body">
+                        You must only start this section when you are ready to input and submit your works
+                        package. You must have appointed your full project team, have confirmed your project dates, and be ready
+                        to schedule your project costs before you start to open the links below. There is a downloadable CSV file
+                        that is included In this section, to allow you to prepare your project costs ahead of submission.
+                    </p>
+
+                    <p class="govuk-body">Once you have started the compile a works package section, it must be completed within 10 working days.</p>
+
+                    <p class="govuk-body">For information about compiling your works package, please refer to the guidance links on this page.</p>
+
+                    <ol class="app-task-list">
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">1. </span> Project team
+                            </h3>
+                            <ul class="app-task-list__items">
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "ProjectTeam", new { Area = "WorksPackageProjectTeam" })" aria-describedby="list-convictions-status">
+                                            Project team
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.ProjectTeamStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    @if (Model.ProjectTeamStatusId != ETaskStatus.Completed)
+                                    {
+                                        <span class="govuk-body">Grant certifying officer details</span>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+                                    }
+                                    else
+                                    {
+                                        <span class="app-task-list__task-name">
+                                            <a class="govuk-link" href="@(Model.GrantCertifyingOfficerStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" }) : Url.Action("Start", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" }))" aria-describedby="list-convictions-status">
+                                                Grant certifying officer details
+                                            </a>
+                                        </span>
+                                        <task-list-status-badge status="@Model.GrantCertifyingOfficerStatusId"></task-list-status-badge>
+                                    }
+                                </li>
+                                <li class="app-task-list__item">
+                                    @if (Model.ProjectTeamStatusId != ETaskStatus.Completed)
+                                    {
+                                        <span class="govuk-body">Duty of care deed</span>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+                                    }
+                                    else
+                                    {
+                                        <span class="app-task-list__task-name">
+                                            <a class="govuk-link" href="@Url.Action("Start", "DutyOfCareDeed", new { Area = "WorksPackageDutyOfCareDeed" })" aria-describedby="list-convictions-status">
+                                                Duty of care deed
+                                            </a>
+                                        </span>
+                                        <task-list-status-badge status="@Model.DutyOfCareDeedStatusId"></task-list-status-badge>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">2. </span> Project details
+                            </h3>
+                            <ul class="app-task-list__items">
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.PlanningPermissionStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "PlanningPermission", new { Area = "WorksPackagePlanningPermission" }) : Url.Action("Start", "PlanningPermission", new { Area = "WorksPackagePlanningPermission" }))" aria-describedby="list-convictions-status">
+                                            Planning permission
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.PlanningPermissionStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })" aria-describedby="list-convictions-status">
+                                            Costs scheduling
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.CostsScheduleStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions" })" aria-describedby="list-convictions-status">
+                                            Third party contributions
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.ThirdPartyContributionsStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.KeyDatesStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "KeyDates", new { Area = "WorksPackageKeyDates" }) : Url.Action("Start", "KeyDates", new { Area = "WorksPackageKeyDates" }))" aria-describedby="list-convictions-status">
+                                            Key dates
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.KeyDatesStatusId"></task-list-status-badge>
+                                </li>
+
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "Signatories", new { Area = "WorksPackageSignatories" })" aria-describedby="list-convictions-status">
+                                            Signatories
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.SignatoriesStatusId"></task-list-status-badge>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">3. </span> Statement of responsibilities
+                            </h3>
+                            <ul class="app-task-list__items">
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "Declaration", new { Area = "WorksPackageDeclaration" })" aria-describedby="list-convictions-status">
+                                            Full works and costs declaration
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.DeclarationStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    @if (Model.CannotSubmit)
+                                    {
+                                        <span class="govuk-body">Submit</span>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+                                    }
+                                    else
+                                    {
+                                        <span class="app-task-list__task-name">
+                                            <a class="govuk-link" href="@(Model.IsSubmitted ? Url.Action("Submitted", "Submit", new { Area = "WorksPackageSubmit" }) : Url.Action("Start", "Submit", new { Area = "WorksPackageSubmit" }))" aria-describedby="list-convictions-status">
+                                                Submit
+                                            </a>
+                                        </span>
+                                        <task-list-status-badge status="@(Model.IsSubmitted ? @ETaskStatus.Completed : @ETaskStatus.NotStarted)"></task-list-status-badge>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <govuk-inset-text>
+                        The duty of care deed must be signed by your nominated grant certifying officer before you can submit your works package.
+                    </govuk-inset-text>
+
+                    <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">In this section</h2>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#compiling-your-works-package">Compiling your works package</a>
+                    <br /><br />
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#the-grant-certifying-officer-and-duty-of-care-deed">The grant certifying officer and duty of care deed</a>
+                    <br /><br />
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#cost-schedule">Cost schedule</a>
+                    <br /><br />
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#vat">VAT</a>
+                    <br /><br />
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#works-package-review">Works package review</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

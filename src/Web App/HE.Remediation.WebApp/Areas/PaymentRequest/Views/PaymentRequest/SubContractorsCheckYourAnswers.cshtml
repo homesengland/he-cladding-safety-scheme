@@ -1,0 +1,24 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.SubcontractorSurvey.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action("SubContractors", "PaymentRequest", new {Area = "PaymentRequest"})
+        : Url.Action(Model.ReturnUrl, "PaymentRequest", new {Area = "PaymentRequest"});
+    ViewData["FullWidth"] = true;
+
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Check your answers</h1>
+
+@await Html.PartialAsync("SubContractorSurvey/_CheckYourAnswers", new SubContractorCheckYourAnswersViewModel
+{
+    Action = "SubContractorRatings",
+    ReturnAction = "SubContractorsCheckYourAnswers",
+    IsSubmitted = Model.IsSubmitted,
+    SubContractorRatings = Model.SubContractorRatings
+})
+
+<govuk-button disabled="@Model.IsSubmitted" href="@Url.Action("CheckYourAnswers", "PaymentRequest", new {Area = "PaymentRequest"})">Continue</govuk-button>

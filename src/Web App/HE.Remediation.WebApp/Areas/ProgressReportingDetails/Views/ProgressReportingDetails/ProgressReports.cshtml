@@ -1,0 +1,30 @@
+﻿@using HE.Remediation.WebApp.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ProgressReportsViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+    ViewData["ReadOnly"] = false;
+}
+
+<h1 class="govuk-heading-xl">Progress reports</h1>
+
+@foreach (var progressReportItem in Model.ProgressReports)
+{
+    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+        <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", progressReportId = @progressReportItem.Id.ToString() } )" class="govuk-link">@progressReportItem.DateCreated.Value.ToString("MMMM yyyy")</a>
+    </div>
+    <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+        <p class="govuk-body">
+            View progress report details for @progressReportItem.DateCreated.Value.ToString("MMMM yyyy")
+        </p>
+        <div class="govuk-flex-row">
+            <progress-report-status-badge is-previous="@Model.ProgressReports.Any(x => x.DateCreated > @progressReportItem.DateCreated)" due="@progressReportItem.DateDue" submitted="@progressReportItem.DateSubmitted" show-date="true"></progress-report-status-badge>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    </div>
+}
+
+<govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>

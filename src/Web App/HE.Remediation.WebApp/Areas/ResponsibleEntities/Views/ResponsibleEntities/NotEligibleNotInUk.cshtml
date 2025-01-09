@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "You are not eligible to carry out this application";
+    ViewData["ShowCancelAndExit"] = false;
+}
+
+<h1 class="govuk-heading-xl">You are not eligible to carry out this application</h1>
+
+<p class="govuk-body">
+    An applicant must be registered in the UK to apply for the remediation grant. 
+</p>
+
+<p class="govuk-body">
+    If the Responsible Entity is registered in a foreign country, they must have allocated a UK-registered Representative to carry out the application on their behalf.  
+</p>
+
+<h2 class="govuk-heading-m">What happens next</h2>
+
+<p class="govuk-body">
+    You should get in contact with the Responsible Entity that you began this application on behalf of to let them know they require a UK-based Representative to start a new application. 
+</p>
+
+<p class="govuk-body">
+    If the leaseholders and tenants of this building have been informed of the current status of the building application already, they should be notified that it is on hold. 
+</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="NotEligibleReturnHome" method="post">
+    <govuk-button type="submit">Return to home</govuk-button>
+</form>

@@ -2,7 +2,7 @@
 
 namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
 {
-    public class SetConfirmDeclarationRequest : IRequest<Unit>
+    public class SetConfirmDeclarationRequest : IRequest<SetConfirmDeclarationResponse>
     {
         private SetConfirmDeclarationRequest()
         {

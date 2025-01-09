@@ -1,0 +1,22 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings.SubContractorRatingsOverviewViewModel
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Sub-contractor</th>
+        <th scope="col" class="govuk-table__header">Company</th>
+        <th scope="col" class="govuk-table__header">Company Number</th>
+        <th scope="col" colspan="2" class="govuk-table__header">Status</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    @foreach (var item in Model.SubContractors.Select((item, index) => new {Index = index + 1, SubContractor = item}))
+    {
+        <tr  class="govuk-table__row">
+            <td class="govuk-table__cell"> <a class="govuk-link" href="@Url.Action(Model.Action, new { id = item.SubContractor.Id, name = $"Sub-contractor {item.Index}" })">Sub-contractor @item.Index</a></td>
+            <td class="govuk-table__cell">@item.SubContractor.CompanyName</td>
+            <td class="govuk-table__cell">@item.SubContractor.CompanyRegistrationNumber</td>
+            <td class="govuk-table__cell"><task-list-status-badge status="@item.SubContractor.Status"></task-list-status-badge></td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,61 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ReasonNoOtherMembersViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="OtherMembersNotAppointedReason" />
+        <govuk-error-summary-item asp-for="OtherMembersNeedsSupport" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Why have you not appointed other team members?</h1>
+
+<p class="govuk-body">
+    We encourage you to appoint your professional team as soon as you can to get your project moving.
+</p>
+<p class="govuk-body">
+    If you have not assembled a team within two months of us confirming that the building is eligible for the fund, we'll get in touch to discuss any barriers you've come up against or support you need.
+</p>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="ReasonNoOtherMembers" method="post">
+
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="150">
+        <div class="govuk-form-group">
+            <govuk-character-count name="OtherMembersNotAppointedReason" max-length="150" asp-for="OtherMembersNotAppointedReason">
+                <govuk-character-count-label class="govuk-hint">
+                    Tell us why you have not appointed a project team
+                </govuk-character-count-label>
+            </govuk-character-count>
+        </div>
+    </div>
+
+    <govuk-radios asp-for="OtherMembersNeedsSupport">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Do you need support?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

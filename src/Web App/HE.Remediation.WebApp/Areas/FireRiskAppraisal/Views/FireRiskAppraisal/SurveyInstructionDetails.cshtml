@@ -46,7 +46,7 @@
     {
         var company = Model.FireRiskAssessorCompanies[i];
         <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.CompanyName))" value="@company.CompanyName"/>
-        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i]@(nameof(company.Id))" value="@company.Id" />
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.Id))" value="@company.Id" />
     }
 
     <a class="govuk-link" href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", FireAccessorNotOnPanel = "true" })">
@@ -59,7 +59,7 @@
                 Date you instructed the company
             </govuk-date-input-fieldset-legend>
         </govuk-date-input-fieldset>
-        <govuk-date-input-label></govuk-date-input-label>
+        <govuk-date-input-label></govuk-date-input-label>        
         <govuk-date-input-hint>
             For example, 27 8 2022
         </govuk-date-input-hint>

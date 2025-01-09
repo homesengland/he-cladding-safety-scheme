@@ -16,6 +16,7 @@ public class GetAddInternalWallWorksHandler: IRequestHandler<GetAddInternalWallW
         _fireRiskWorksRepository = fireRiskWorksRepository; 
         _applicationDataProvider = applicationDataProvider;
     }
+
     public async Task<GetAddInternalWallWorksResponse> Handle(GetAddInternalWallWorksRequest request, CancellationToken cancellationToken)
     {
         if (request?.Id is not null)

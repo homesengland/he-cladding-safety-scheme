@@ -6,7 +6,9 @@ namespace HE.Remediation.WebApp.ViewModels.PreTenderSupport
     {
         public SupportRequiredViewModelValidator()
         {
-
+            RuleFor(x => x.SupportRequired)
+                .NotNull()
+                .WithMessage("Select an option");
         }
     }
 }

@@ -44,12 +44,33 @@
                                 <govuk-summary-list-row-value>
                                     @Model.WallWorks[itemCounter].Description
                                 </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-action href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString(), ElementNo = @itemCounter+1 })" visually-hidden-text="name">
-                                    Change
-                                </govuk-summary-list-row-action>
-                                <govuk-summary-list-row-action href="@Url.Action("DeleteExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString() })" visually-hidden-text="name">
-                                    Remove
-                                </govuk-summary-list-row-action>
+
+                                @if (Model.ReturnUrl is not null)
+                                {
+                                    <govuk-summary-list-row-action href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString(), ElementNo = @itemCounter+1, returnUrl = Model.ReturnUrl })" visually-hidden-text="name">
+                                        Change
+                                    </govuk-summary-list-row-action>
+                                }
+                                else
+                                {
+                                    <govuk-summary-list-row-action href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString(), ElementNo = @itemCounter+1 })" visually-hidden-text="name">
+                                        Change
+                                    </govuk-summary-list-row-action>
+                                }
+
+                                @if (Model.ReturnUrl is not null)
+                                {
+                                    <govuk-summary-list-row-action href="@Url.Action("DeleteExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString(), returnUrl = Model.ReturnUrl })" visually-hidden-text="name">
+                                        Remove
+                                    </govuk-summary-list-row-action>                                    
+                                }
+                                else
+                                {
+                                    <govuk-summary-list-row-action href="@Url.Action("DeleteExternalWallWorks", "FireRiskAppraisal", new { Id = @Model.WallWorks[itemCounter].Id.ToString() })" visually-hidden-text="name">
+                                        Remove
+                                    </govuk-summary-list-row-action>
+                                }
+                                
                             </govuk-summary-list-row>
                         </govuk-summary-list>
 
@@ -57,21 +78,38 @@
                     }
 
                     int wallWorksCount = Model.WallWorks == null ? 0 : Model.WallWorks.Count;
-                    <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1 })" class="govuk-button--secondary">Add another element</govuk-button>
+                    @if (Model.ReturnUrl is not null)
+                    {
+                        <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1, returnUrl = Model.ReturnUrl })" class="govuk-button--secondary">Add another element</govuk-button>
+                    }
+                    else
+                    {
+                        <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1 })" class="govuk-button--secondary">Add another element</govuk-button>
+                    }
                 }
                 else
                 {
                     int wallWorksCount = Model.WallWorks == null ? 0 : Model.WallWorks.Count;
 
-                    <p class="govuk-body">You can add a maximum of 20 external walls</p>
+                    <p class="govuk-body">You can add a maximum of 20 external wall elements</p>
                     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-                    <span class="govuk-caption-m">No external works have been added</span>
+                    <span class="govuk-caption-m">No external wall elements have been added</span>
                     <br/>
-                    <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1 })" class="govuk-button--secondary">Add external wall</govuk-button>
+
+                    @if (Model.ReturnUrl is not null)
+                    {
+                        <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1, returnUrl = Model.ReturnUrl })" class="govuk-button--secondary">Add external elements</govuk-button>
+                    }
+                    else
+                    {
+                        <govuk-button href="@Url.Action("AddExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", ElementNo=wallWorksCount+1 })" class="govuk-button--secondary">Add external elements</govuk-button>
+                    }
                 }
 
                 <br/>
+
+                @Html.HiddenFor(x=> x.ReturnUrl)
 
                 <div class="comp-btn-group">
                     <govuk-button name="SubmitAction" type="submit">Continue</govuk-button>

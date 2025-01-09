@@ -1,5 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
@@ -18,18 +19,20 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
         private readonly IDbConnectionWrapper _dbConnection;
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly FileServiceSettings _fileServiceSettings;
+        private readonly IApplicationRepository _applicationRepository;
 
         private const string FraewFilePropertyName = "Fraew";
         private const string FraewSummaryFilePropertyName = "FraewSummary";
 
         public UploadFireRiskAppraisalReportHandler(IFileService fileService, IDbConnectionWrapper dbConnection, IApplicationDataProvider applicationDataProvider, IOptionsSnapshot<FileServiceSettings> fileServiceSettings,
-            IFileRepository fileRepository)
+            IFileRepository fileRepository, IApplicationRepository applicationRepository)
         {
             _fileService = fileService;
             _dbConnection = dbConnection;
             _applicationDataProvider = applicationDataProvider;
             _fileServiceSettings = fileServiceSettings.Value;
             _fileRepository = fileRepository;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<Unit> Handle(UploadFireRiskAppraisalReportRequest request, CancellationToken cancellationToken)
@@ -63,6 +66,8 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
                     await _fileRepository.InsertFile(new InsertFileParameters { Extension = Path.GetExtension(request.SummaryFile.FileName), Id = fraewSummaryResult.FileId, MimeType = fraewSummaryResult.MimeType, Name = request.SummaryFile.FileName, Size = request.SummaryFile.Length });
                     await _dbConnection.ExecuteAsync("InsertFraewSummaryForApplication", new { fraewSummaryResult.FileId, applicationId });
                 }
+
+                await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.FraewUploaded);
 
                 scope.Complete();
             }

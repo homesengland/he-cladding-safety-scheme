@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -17,9 +18,14 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWorksRequi
 
         public async Task<Unit> Handle(SetExternalWorksRequiredRequest request, CancellationToken cancellationToken)
         {
-            var applicaitonId = _applicationDataProvider.GetApplicationId();
+            var applicationId = _applicationDataProvider.GetApplicationId();
 
-            await _fireRiskWorksRepository.SetExternalWorksRequired(applicaitonId, request.WorkRequired);
+            await _fireRiskWorksRepository.SetExternalWorksRequired(applicationId, request.WorkRequired);
+
+            if (request.WorkRequired == ENoYes.No)
+            {
+                await _fireRiskWorksRepository.ResetFireRiskWallWorks(applicationId, EWorkType.External);
+            }
 
             return Unit.Value;
         }

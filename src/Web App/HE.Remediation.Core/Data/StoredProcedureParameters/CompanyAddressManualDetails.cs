@@ -9,4 +9,5 @@ public class CompanyAddressManualDetails
     public string City { get; set; }
     public string County { get; set; }
     public string Postcode { get; set; }
+    public int? CountryId { get; set; }
 }

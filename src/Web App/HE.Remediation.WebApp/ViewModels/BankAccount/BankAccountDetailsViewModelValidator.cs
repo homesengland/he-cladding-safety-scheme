@@ -29,6 +29,10 @@ namespace HE.Remediation.WebApp.ViewModels.BankAccount
                 .WithMessage("Please enter a valid sort code")
                 .Matches(@"^[0-9]{6}$")
                 .WithMessage("Must be 6 digits long");
+
+            RuleFor(x => x.VatNumber)
+                .Matches(@"^[A-Za-z]{2}[0-9]{9}$")
+                .WithMessage("Please enter a valid VAT number");
         }
     }
 }

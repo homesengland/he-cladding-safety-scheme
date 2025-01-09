@@ -1,0 +1,34 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeEntryViewModel
+@{
+    ViewData["Title"] = "Grant certifying officer - What is the grant certifying officer's company address?";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = ViewData["Backlink"] ?? Url.Action("GrantCertifyingOfficerDetails", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="PostCode" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What is the grant certifying officer's company address?</h1>
+
+<form asp-area="WorksPackage" asp-controller="GrantCertifyingOfficer" asp-action="GrantCertifyingOfficerAddressDetailsPostCodeItemEntered" method="get">
+    <govuk-fieldset>
+        <partial name="_PostCodeLookupPartial" view-data="ViewData" />
+    </govuk-fieldset>
+
+<a href="@Url.Action("GrantCertifyingOfficerAddressDetailsManual", "GrantCertifyingOfficer", new { area = "WorksPackageGrantCertifyingOfficer"})" class="govuk-link">Enter Address Manually</a>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.FindAddress)">Find Address</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

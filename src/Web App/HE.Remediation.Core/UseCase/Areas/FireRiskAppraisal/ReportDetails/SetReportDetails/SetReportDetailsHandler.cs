@@ -4,7 +4,7 @@ using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.SetReportDetails;
 
-public class SetReportDetailsHandler: IRequestHandler<SetReportDetailsRequest, Unit>
+public class SetReportDetailsHandler : IRequestHandler<SetReportDetailsRequest, Unit>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IDbConnectionWrapper _db;
@@ -32,10 +32,10 @@ public class SetReportDetailsHandler: IRequestHandler<SetReportDetailsRequest, U
                 applicationId,
                 request.AuthorsName,
                 request.PeerReviewPerson,
-                request.UndertakingFirm,
+                request.FraewCost,
+                request.CompanyUndertakingReport,
                 request.NumberOfStoreys,
                 request.BuildingHeight,
-                request.BuildingInterimMeasures,
                 request.BasicComplexId
             });
 

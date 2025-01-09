@@ -1,0 +1,91 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.CladdingSystemViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("FireRiskAppraisalToExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", FireRiskCladdingSystemsId = Model.FireRiskCladdingSystemsId, CladdingSystemIndex = Model.CladdingSystemIndex });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IsBeingRemoved" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Cladding system @(Model.CladdingSystemIndex + 1)</h1>
+
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">FRAEW details</h2>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding type
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CladdingSystemTypeName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding manufacturer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CladdingManufacturerName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Insulation type
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.InsulationTypeName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Insulation manufacturer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.InsulationManufacturerName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+@using (Html.BeginForm())
+{
+    <govuk-radios asp-for="IsBeingRemoved">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Is this being removed?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(EReplacementCladding.Full)">Yes, fully</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(EReplacementCladding.Partial)">Yes, partially</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(EReplacementCladding.None)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="FireRiskCladdingSystemsId" type="hidden" value="@Model.FireRiskCladdingSystemsId" />
+    <input asp-for="CladdingSystemIndex" type="hidden" value="@Model.CladdingSystemIndex" />    
+    <input asp-for="CladdingSystemTypeName" type="hidden" value="@Model.CladdingSystemTypeName" />
+    <input asp-for="CladdingManufacturerName" type="hidden" value="@Model.CladdingManufacturerName" />
+    <input asp-for="InsulationTypeName" type="hidden" value="@Model.InsulationTypeName" />
+    <input asp-for="InsulationManufacturerName" type="hidden" value="@Model.InsulationManufacturerName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+}

@@ -2,6 +2,8 @@
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddExternalWallWorks;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddInternalWallWorks;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.GetAppraisalSurveyDetails;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.SetAppraisalSurveyDetails;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorDetails.GetAssessorDetails;
@@ -11,31 +13,35 @@ using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.GetCh
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.SetCheckYourAnswers;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CompletedAppraisal.GetCompletedAppraisal;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CompletedAppraisal.SetCompletedAppraisal;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWallWorks;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWorksRequired;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.FireRiskAssessorListPdf;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InterimMeasures.GetInterimMeasures;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InterimMeasures.SetInterimMeasures;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InternalWallWorks;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InternalWorksRequired;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.RecommendedWorks.GetRecommendedWorks;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.RecommendedWorks.SetRecommendedWorks;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.RecommendedWorksStart.GetRecommendedWorksStart;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.GetReportDetails;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.SetReportDetails;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWorksRequired;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetails.GetSurveyInstructionDetails;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetails.SetSurveyInstructionDetails;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.DeleteFireRiskAppraisalReport;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.UploadFireRiskAppraisalReport;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.CladdingArea;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.DeleteCladdingSystem;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.GetCladdingSystem;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.GetWorksToCladdingSystems;
+using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.SetCladdingArea;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.SetCladdingSystem;
+using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.FireRiskAppraisal;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWallWorks;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InternalWorksRequired;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddExternalWallWorks;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddInternalWallWorks;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InternalWallWorks;
-using System;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.RecommendedWorksStart.GetRecommendedWorksStart;
 
 namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 {
@@ -47,7 +53,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         private readonly IMapper _mapper;
 
         public FireRiskAppraisalController(ISender sender, IMapper mapper)
-            :base(sender)
+            : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
@@ -145,7 +151,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             }
 
             validationResult.AddToModelState(ModelState, String.Empty);
-            
+
             return View("SurveyInstructionDetails", viewModel);
         }
 
@@ -154,11 +160,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region Appraisal Survey Details
 
         [HttpGet(nameof(AppraisalSurveyDetails))]
-        public async Task<IActionResult> AppraisalSurveyDetails()
+        public async Task<IActionResult> AppraisalSurveyDetails(string returnUrl)
         {
             var appraisalSurveyDetailsResponse = await _sender.Send(GetAppraisalSurveyDetailsRequest.Request);
 
             var viewModel = _mapper.Map<AppraisalSurveyDetailsViewModel>(appraisalSurveyDetailsResponse);
+            viewModel.ReturnUrl = returnUrl;
 
             return View(viewModel);
         }
@@ -199,25 +206,22 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
                 await _sender.Send(request);
 
-                if (viewModel.SubmitAction == ESubmitAction.Continue)
+                var action = nameof(Guidance);
+                if (viewModel.FireAccessorNotOnPanel)
                 {
-                    if (viewModel.FireAccessorNotOnPanel)
-                    {
-                        return RedirectToAction("GuidanceNotOnPanel", "FireRiskAppraisal", new { area = "FireRiskAppraisal" });                                            
-                    }
-                    else
-                    {
-                        return RedirectToAction("Guidance", "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
-                    }                      
+                    action = nameof(GuidanceNotOnPanel);
                 }
+                action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
-                return RedirectToAction("Index", "TaskList", new { area = "Application" });
+                return viewModel.SubmitAction == ESubmitAction.Continue 
+                                    ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                                    : RedirectToAction("Index", "TaskList", new { Area = "Application" });                
             }
 
             validationResult.AddToModelState(ModelState, String.Empty);
-            
+
             if (viewModel.FireAccessorNotOnPanel)
-            {                
+            {
                 return View("AppraisalSurveyDetailsNotOnPanel", viewModel);
             }
             else
@@ -237,7 +241,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region Fire Risk Assessor Details
 
         [HttpGet(nameof(AssessorDetails))]
-        public async Task<IActionResult>  AssessorDetails()
+        public async Task<IActionResult> AssessorDetails()
         {
             var response = await _sender.Send(GetAssessorDetailsRequest.Request);
             var model = _mapper.Map<FireRiskAssessorDetailsViewModel>(response);
@@ -271,7 +275,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region Upload Fire Risk Appraisal Report
 
         [HttpGet(nameof(UploadFireRiskAppraisalReport))]
-        public async Task<IActionResult> UploadFireRiskAppraisalReport()
+        public async Task<IActionResult> UploadFireRiskAppraisalReport(string returnUrl)
         {
             var file = await _sender.Send(new GetFireRiskReportAppraisalReportRequest());
 
@@ -281,7 +285,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             var model = new UploadFireRiskAppraisalReportViewModel
             {
                 AddedFraew = fraewFile,
-                AddedSummary = summaryFile
+                AddedSummary = summaryFile,
+                ReturnUrl = returnUrl
             };
 
             return View(model);
@@ -291,6 +296,26 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
         public async Task<IActionResult> UploadFireRiskAppraisalReport(UploadFireRiskAppraisalReportViewModel viewModel, ESubmitAction submitAction)
         {
+            if (!ModelState.IsValid)
+            {
+                // this will happen when the request size limit is exceeded, the model is null so manually add the error message
+                var file = await _sender.Send(new GetFireRiskReportAppraisalReportRequest());
+
+                var fraewFile = _mapper.Map<ViewModels.Shared.File>(file.FraewFile);
+                var summaryFile = _mapper.Map<ViewModels.Shared.File>(file.SummaryFile);
+
+                viewModel = new UploadFireRiskAppraisalReportViewModel
+                {
+                    AddedFraew = fraewFile,
+                    AddedSummary = summaryFile
+                };
+
+                ModelState.AddModelError(nameof(viewModel.Fraew), "Your files collectively are greater than 100mb");
+                ModelState.AddModelError(nameof(viewModel.FraewSummary), "Your files collectively are greater than 100mb");
+
+                return View(viewModel);
+            }
+
             var validator = new UploadFireRiskAppraisalReportViewModelValidator();
             var validationResult = await validator.ValidateAsync(viewModel);
 
@@ -310,15 +335,19 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             }
             catch (InvalidFileException ex)
             {
-                foreach(var error in ex.Errors)
+                foreach (var error in ex.Errors)
                 {
                     ModelState.AddModelError(error.Key, error.Value);
                 }
-                
+
                 return View(viewModel);
             }
 
-            return submitAction == ESubmitAction.Continue ? RedirectToAction("Summary", "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+            var action = nameof(ReportDetails);
+            action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
+
+            return submitAction == ESubmitAction.Continue 
+                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
@@ -349,13 +378,14 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
         #region External Works
         [HttpGet(nameof(ExternalWorksRequired))]
-        public async Task<IActionResult> ExternalWorksRequired()
+        public async Task<IActionResult> ExternalWorksRequired(string returnUrl)
         {
             var response = await _sender.Send(new GetExternalWorksRequiredRequest());
 
             var model = new ExternalWorksRequiredViewModel
             {
-                WorksRequired = response.WorksRequired
+                WorksRequired = response.WorksRequired,
+                ReturnUrl = returnUrl   
             };
 
             return View(model);
@@ -381,9 +411,19 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                     ? nameof(ExternalWallWorks)
                     : nameof(InternalWorksRequired);
 
+                if (viewModel.ReturnUrl is not null)
+                {
+                    if (viewModel.WorksRequired!.Value == ENoYes.Yes)
+                    {
+                        return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
+                    }
+
+                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+                }
+                
                 return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
             }
-            
+
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
@@ -392,14 +432,15 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region External Walls Works
 
         [HttpGet(nameof(ExternalWallWorks))]
-        public async Task<IActionResult> ExternalWallWorks()
+        public async Task<IActionResult> ExternalWallWorks(string returnUrl)
         {
             var response = await _sender.Send(GetExternalWallWorksRequest.Request);
             var wallWorks = _mapper.Map<List<GetExternalWorksViewModel.ExternalWallWorks>>(response);
 
             var outputModel = new GetExternalWorksViewModel()
             {
-                WallWorks = wallWorks
+                WallWorks = wallWorks,
+                ReturnUrl = returnUrl
             };
             return View(outputModel);
         }
@@ -409,8 +450,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         {
             if (viewModel.WallWorks?.Count > 0)
             {
-                return RedirectToAction("InternalWorksRequired", "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+                if (viewModel.ReturnUrl is not null)
+                {
+                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });    
+                }
 
+                return RedirectToAction(nameof(InternalWorksRequired), "FireRiskAppraisal", new { area = "FireRiskAppraisal" });    
             }
 
             ModelState.AddModelError("WallWorks", "Enter at least one external wall element");
@@ -420,13 +465,18 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
 
         [HttpGet("DeleteExternalWallWorks/{Id?}")]
-        public async Task<IActionResult> DeleteExternalWallWorks(Guid? Id)
+        public async Task<IActionResult> DeleteExternalWallWorks(Guid? Id, string returnUrl)
         {
             var request = new SetDeleteExternalWallWorksRequest
             {
                 Id = Id.HasValue ? Id.Value : null
             };
             await _sender.Send(request);
+
+            if (returnUrl is not null)
+            {
+                return RedirectToAction("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = returnUrl });
+            }
 
             return RedirectToAction("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
         }
@@ -436,8 +486,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region "Add External Wall Works"
 
         [HttpGet("AddExternalWallWorks/{Id?}")]
-        public async Task<IActionResult> AddExternalWallWorks(Guid? Id, int elementNo)
-        {            
+        public async Task<IActionResult> AddExternalWallWorks(Guid? Id, int elementNo, string returnUrl)
+        {
             var request = new GetAddExternalWallWorksRequest
             {
                 Id = Id
@@ -452,10 +502,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             }
 
             model.ElementNo = elementNo;
+            model.ReturnUrl = returnUrl;
+
             return View(model);
         }
 
-        
+
         [HttpPost("AddExternalWallWorks/{Id?}")]
         public async Task<IActionResult> AddExternalWallWorks(ExternalWorksDetailViewModel viewModel, ESubmitAction submitAction)
         {
@@ -470,22 +522,28 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
             var request = _mapper.Map<SetAddExternalWallWorksRequest>(viewModel);
             await _sender.Send(request);
-            
-            return RedirectToAction("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });                
+
+            if (viewModel.ReturnUrl is not null)
+            {
+                return RedirectToAction("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
+            }            
+
+            return RedirectToAction("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
         }
 
         #endregion
 
         #region Internal Works
         [HttpGet(nameof(InternalWorksRequired))]
-        public async Task<IActionResult> InternalWorksRequired()
+        public async Task<IActionResult> InternalWorksRequired(string returnUrl)
         {
             var response = await _sender.Send(new GetInternalWorksRequiredRequest());
 
             var model = new InternalWorksRequiredViewModel
             {
                 WorksRequired = response.WorksRequired,
-                ExternalWorksRequired = response.ExternalWorksRequired
+                ExternalWorksRequired = response.ExternalWorksRequired,
+                ReturnUrl = returnUrl
             };
 
             return View(model);
@@ -511,6 +569,16 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                     ? nameof(InternalWallWorks)
                     : nameof(RecommendedWorksStart);
 
+                if (viewModel.ReturnUrl is not null)
+                {
+                    if (viewModel.WorksRequired!.Value == ENoYes.Yes)
+                    {
+                        return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
+                    }
+
+                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+                }
+
                 return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
             }
 
@@ -522,8 +590,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region "Add Internal Wall Works"
 
         [HttpGet("AddInternalWallWorks/{Id?}")]
-        public async Task<IActionResult> AddInternalWallWorks(Guid? Id, int elementNo)
-        {            
+        public async Task<IActionResult> AddInternalWallWorks(Guid? Id, int elementNo, string returnUrl)
+        {
             var request = new GetAddInternalWallWorksRequest
             {
                 Id = Id
@@ -538,10 +606,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             }
 
             model.ElementNo = elementNo;
+            model.ReturnUrl = returnUrl;
+
             return View(model);
         }
 
-        
+
         [HttpPost("AddInternalWallWorks/{Id?}")]
         public async Task<IActionResult> AddInternalWallWorks(InternalWorksDetailViewModel viewModel, ESubmitAction submitAction)
         {
@@ -556,8 +626,13 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
             var request = _mapper.Map<SetAddInternalWallWorksRequest>(viewModel);
             await _sender.Send(request);
-            
-            return RedirectToAction("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });                
+
+            if (viewModel.ReturnUrl is not null)
+            {
+                return RedirectToAction("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
+            }            
+
+            return RedirectToAction("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
         }
 
         #endregion
@@ -565,14 +640,15 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region Internal Walls Works
 
         [HttpGet(nameof(InternalWallWorks))]
-        public async Task<IActionResult> InternalWallWorks()
+        public async Task<IActionResult> InternalWallWorks(string returnUrl)
         {
             var response = await _sender.Send(GetInternalWallWorksRequest.Request);
             var wallWorks = _mapper.Map<List<GetInternalWorksViewModel.InternalWallWorks>>(response);
 
             var outputModel = new GetInternalWorksViewModel()
             {
-                WallWorks = wallWorks
+                WallWorks = wallWorks,
+                ReturnUrl = returnUrl
             };
             return View(outputModel);
         }
@@ -582,7 +658,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         {
             if (viewModel.WallWorks?.Count > 0)
             {
-                return RedirectToAction("RecommendedWorksStart", "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+                if (viewModel.ReturnUrl is not null)
+                {
+                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });    
+                }
+
+                return RedirectToAction(nameof(RecommendedWorksStart), "FireRiskAppraisal", new { area = "FireRiskAppraisal" });   
             }
 
             ModelState.AddModelError("WallWorks", "Enter at least one internal wall element");
@@ -591,13 +672,18 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         }
 
         [HttpGet("DeleteInternalWallWorks/{Id}")]
-        public async Task<IActionResult> DeleteInternalWallWorks(Guid Id)
+        public async Task<IActionResult> DeleteInternalWallWorks(Guid Id, string returnUrl)
         {
             var request = new SetDeleteInternalWallWorksRequest
             {
                 Id = Id
             };
             await _sender.Send(request);
+
+            if (returnUrl is not null)
+            {
+                return RedirectToAction("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = returnUrl });
+            }
 
             return RedirectToAction("InternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
         }
@@ -625,13 +711,16 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region "Recommended Works"
 
         [HttpGet("RecommendedWorks")]
-        public async Task<IActionResult> RecommendedWorks()
-        {            
+        public async Task<IActionResult> RecommendedWorks(string returnUrl)
+        {
             var response = await _sender.Send(GetRecommendedWorksRequest.Request);
             var model = _mapper.Map<GetRecommendedWorksViewModel>(response);
+
+            model.ReturnUrl = returnUrl;
+
             return View(model);
         }
-        
+
         [HttpPost(nameof(RecommendedWorks))]
         public async Task<IActionResult> RecommendedWorks(GetRecommendedWorksViewModel viewModel, ESubmitAction submitAction)
         {
@@ -641,18 +730,19 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
             if (!validationResult.IsValid)
             {
+                ModelState.Clear();
                 validationResult.AddToModelState(ModelState, String.Empty);
                 return View("RecommendedWorks", viewModel);
             }
             var request = _mapper.Map<SetRecommendedWorksRequest>(viewModel);
             await _sender.Send(request);
 
-            if (submitAction == ESubmitAction.Continue)
-            {                
-                return RedirectToAction("CheckYourAnswers", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
-            }
-            // TODO - story points to wrong link, it should be the application task list?
-            return RedirectToAction("Index", "TaskList", new { area = "Application" });
+            var action = nameof(CheckYourAnswers);
+            action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
+
+            return submitAction == ESubmitAction.Continue 
+                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                : RedirectToAction("Index", "TaskList", new { Area = "Application" });            
         }
 
         #endregion
@@ -660,13 +750,15 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         #region "Report Details"
 
         [HttpGet("ReportDetails")]
-        public async Task<IActionResult> ReportDetails()
-        {            
+        public async Task<IActionResult> ReportDetails(string returnUrl)
+        {
             var response = await _sender.Send(GetReportDetailsRequest.Request);
             var model = _mapper.Map<GetReportDetailsViewModel>(response);
+            model.ReturnUrl = returnUrl;
+
             return View(model);
         }
-        
+
         [HttpPost(nameof(ReportDetails))]
         public async Task<IActionResult> ReportDetails(GetReportDetailsViewModel viewModel, ESubmitAction submitAction)
         {
@@ -682,13 +774,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             var request = _mapper.Map<SetReportDetailsRequest>(viewModel);
             await _sender.Send(request);
 
-            if (submitAction == ESubmitAction.Continue)
-            {
-                // This needs to go to the CladdingSystems page
-                return RedirectToAction("WorksToCladdingSystems", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
-            }
-            // TODO - story points to wrong link, it should be the application task list?
-            return RedirectToAction("Index", "TaskList", new { area = "Application" });
+            var action = nameof(InterimMeasures);
+            action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
+
+            return submitAction == ESubmitAction.Continue 
+                                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                                : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
         #endregion
@@ -705,21 +796,23 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 InternalWorksRequired = response.InternalWorksRequired
             };
 
-            return View(model);            
-        }        
+            return View(model);
+        }
 
         #endregion
 
         #region Works To Cladding Systems
+
         [HttpGet(nameof(WorksToCladdingSystems))]
-        public async Task<IActionResult> WorksToCladdingSystems()
+        public async Task<IActionResult> WorksToCladdingSystems(string returnUrl)
         {
             var response = await _sender.Send(GetWorksToCladdingSystemsRequest.Request);
             var list = _mapper.Map<IEnumerable<SelectedWorksToCladdingSystemsViewModel>>(response);
 
             var vm = new WorksToCladdingSystemsViewModel
             {
-                SelectedWorksToCladdingSystem = list
+                SelectedWorksToCladdingSystem = list,
+                ReturnUrl = returnUrl
             };
             return View(vm);
         }
@@ -729,11 +822,19 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         {
             if (viewModel.SelectedWorksToCladdingSystem != null && viewModel.SelectedWorksToCladdingSystem.ToList().Count > 0)
             {
-                return RedirectToAction("ExternalWorksRequired", "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+                var action = nameof(WorksToCladdingCladdingArea);
+                action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
+             
+                return RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+            }
+
+            if (viewModel.ReturnUrl is not null)
+            {
+                return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
             }
 
             ModelState.AddModelError("SelectedWorksToCladdingSystem", "Enter at least one cladding systems element");
-
+            
             return View("WorksToCladdingSystems", viewModel);
         }
 
@@ -744,7 +845,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             {
                 FireRiskCladdingSystemsId = fireRiskCladdingSystemsId
             };
- 
+
             var response = await _sender.Send(request);
             var claddingSystem = _mapper.Map<CladdingSystemViewModel>(response);
 
@@ -765,6 +866,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
                 viewModel.CladdingTypes = claddingSystem.CladdingTypes;
                 viewModel.InsulationTypes = claddingSystem.InsulationTypes;
+                viewModel.CladdingManufacturers = claddingSystem.CladdingManufacturers;
+                viewModel.InsulationManufacturers = claddingSystem.InsulationManufacturers;
 
                 validationResult.AddToModelState(ModelState, string.Empty);
                 return View(viewModel);
@@ -787,6 +890,49 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
             return RedirectToAction("WorksToCladdingSystems", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
         }
+
+        [HttpGet(nameof(WorksToCladdingCladdingArea))]
+        public async Task<IActionResult> WorksToCladdingCladdingArea(string returnUrl)
+        {
+            var request = new GetTotalCladdingAreaRequest();
+
+            var response = await _sender.Send(request);
+
+            var claddingArea = _mapper.Map<WorksToCladdingCladdingAreaViewModel>(response);
+            if (claddingArea is null) { claddingArea = new WorksToCladdingCladdingAreaViewModel(); }                             
+            
+            claddingArea.ReturnUrl = returnUrl;
+
+            return View(claddingArea);
+        }
+
+        [HttpPost(nameof(WorksToCladdingCladdingArea))]
+        public async Task<IActionResult> WorksToCladdingCladdingArea(WorksToCladdingCladdingAreaViewModel viewModel)
+        {
+            var validator = new WorksToCladdingCladdingAreaViewModelValidator();
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                var request = new GetTotalCladdingAreaRequest();
+
+                var response = await _sender.Send(request);
+                
+                var claddingArea = _mapper.Map<WorksToCladdingCladdingAreaViewModel>(response);
+                if (claddingArea is null) { claddingArea = new WorksToCladdingCladdingAreaViewModel(); }                 
+
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(claddingArea);
+            }
+
+            var req = new SetCladdingAreaRequest { RecommendedCladdingArea = viewModel.RecommendedTotalAreaCladding };
+            await _sender.Send(req);
+
+            var action = nameof(ExternalWorksRequired);
+            action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
+            
+            return RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+        }
         #endregion
 
         #region Summary Guidance
@@ -807,6 +953,57 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             return View();
         }
 
+        #endregion
+
+        #region Interim Measures
+
+        [HttpGet("InterimMeasures")]
+        public async Task<IActionResult> InterimMeasures(string returnUrl)
+        {
+            var response = await _sender.Send(GetInterimMeasuresRequest.Request);
+            var model = _mapper.Map<GetInterimMeasuresViewModel>(response);
+
+            model.ReturnUrl = returnUrl;
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(InterimMeasures))]
+        public async Task<IActionResult> InterimMeasures(GetInterimMeasuresViewModel viewModel, ESubmitAction submitAction)
+        {
+            var validator = new GetInterimMeasuresViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, String.Empty);
+                return View("InterimMeasures", viewModel);
+            }
+
+            var request = _mapper.Map<SetInterimMeasuresRequest>(viewModel);
+            await _sender.Send(request);
+
+            var action = nameof(WorksToCladdingSystems);
+            action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
+
+            return submitAction == ESubmitAction.Continue 
+                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                : RedirectToAction("Index", "TaskList", new { Area = "Application" });            
+        }
+
+        #endregion
+
+        #region Fire Risk Assessor List PDF
+
+        [AllowAnonymous]
+        [HttpGet(nameof(FireRiskAssessorListPdf))]
+        [ExcludeRouteRecording]
+        public async Task<IActionResult> FireRiskAssessorListPdf()
+        {
+            var file = await _sender.Send(FireRiskAssessorListPdfRequest.Request);
+            return File(file, "application/pdf", "Fire Risk Assessor List.pdf");
+        }
         #endregion
     }
 }

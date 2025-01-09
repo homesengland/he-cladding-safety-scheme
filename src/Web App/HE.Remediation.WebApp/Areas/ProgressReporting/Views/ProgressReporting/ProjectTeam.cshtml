@@ -1,0 +1,70 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ProjectTeamViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">Tell us about your project team</h1>
+
+<p class="govuk-body">
+    Tell us about any firms that have been appointed to project manage, design, cost and undertake your works package.
+</p>
+<p class="govuk-body">
+    Please tell us as soon as you appoint them. You can add or review further entries each month until your team is complete.
+</p>
+
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <h2 class="govuk-heading-m">Team Members</h2>
+            @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+            {
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">Role</th>
+                            <th scope="col" class="govuk-table__header">Name</th>
+                            <th scope="col" class="govuk-table__header">Company name</th>
+                            <th scope="col" colspan="2" class="govuk-table__header">Change or Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @foreach (var teamMember in Model.TeamMembers)
+                        {
+                            <tr class="govuk-table__row">
+                                @if (teamMember.RoleId == (int)ETeamRole.Other)
+                                {
+                                    <td class="govuk-table__cell no-line-wrap"><strong>@teamMember.OtherRole</strong></td>
+                                }
+                                else
+                                {
+                                    <td class="govuk-table__cell"><strong>@teamMember.RoleName.ToSentenceCase()</strong></td>
+                                }
+                                <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
+                                <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
+                                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("TeamMember", "ProgressReporting", new { Area = "ProgressReporting", TeamRole = teamMember.RoleId, TeamMemberId = teamMember.Id })">Change</a></td>
+                                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("RemoveMember", "ProgressReporting", new { Area = "ProgressReporting", TeamMemberId = teamMember.Id })">Remove</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="no-results bottom-highlight govuk-body">
+                    There are no team members to show
+                </div>
+            }
+            <govuk-button href="@Url.Action("AddRole", "ProgressReporting", new { Area = "ProgressReporting" })" class="govuk-button--secondary">Add team member</govuk-button>
+        </main>
+    </div>
+</div>
+
+<govuk-button href=@(Url.Action("ProjectTeamContinue", "ProgressReporting", new { Area = "ProgressReporting" }))>Continue</govuk-button>

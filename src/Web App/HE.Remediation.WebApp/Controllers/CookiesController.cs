@@ -85,7 +85,7 @@ namespace HE.Remediation.WebApp.Controllers
             }
 
             var viewModel = JsonConvert.DeserializeObject<CookiesAcceptedViewModel>(cookiePolicy);
-            viewModel.GoogleAnalyticsId = analyticsId.Replace("G-", "");
+            viewModel.GoogleAnalyticsId = analyticsId?.Replace("G-", "");
 
             return viewModel;
         }

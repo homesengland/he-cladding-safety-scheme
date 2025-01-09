@@ -6,8 +6,7 @@
 }
 
 @section Head {
-     <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
         <!-- Google tag (gtag.js) -->
         <script src="https://www.googletagmanager.com/gtag/js?id=@(AnalyticsProvider.GetAnalyticsId())"></script>
         <script id="sitejs" data-analytics-id="@AnalyticsProvider.GetAnalyticsId()" src="~/js/site.js"></script>
@@ -40,7 +39,7 @@
             <div class="govuk-width-container">
                 <div class="govuk-header__service-name">
                     <div href="#" class="govuk-header__service-name govuk-caption-l">
-                        <strong>Apply for the Cladding Safety Scheme</strong>
+                        <strong>Building Remediation Hub</strong>
                     </div>
                     @if (User.Identity is {IsAuthenticated: true })
                     {
@@ -57,7 +56,7 @@
 @section BeforeContent {
     <govuk-phase-banner>
         <govuk-phase-banner-tag>BETA</govuk-phase-banner-tag>
-        This is a new service - your <a href="https://forms.office.com/e/28uuB07XWG" target="_blank" class="govuk-link">feedback</a> will help us to improve it.
+        This is a new service - your <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=aeKo-hEIOEWC500pAJIZv70AqgXWPftOscH1n6LMtXVUOUNXNFVFOVJFUlhOWEMyNFpKQUJGQU42OS4u" rel="noreferrer noopener" target="_blank" class="govuk-link">feedback</a> will help us to improve it.
     </govuk-phase-banner>
 }
 
@@ -71,12 +70,17 @@
                     <h2 class="govuk-visually-hidden">Support links</h2>
                     <ul class="govuk-footer__inline-list">
                         <li class="govuk-footer__inline-list-item">
+                            <a class="govuk-footer__link" href="@Url.Action("Index", "Accessibility", new {Area = String.Empty})">
+                                Accessibility
+                            </a>
+                        </li>
+                        <li class="govuk-footer__inline-list-item">
                             <a class="govuk-footer__link" href="@Url.Action("Index", "Cookies", new {Area = String.Empty})">
                                 Cookies
                             </a>
                         </li>
                         <li class="govuk-footer__inline-list-item">
-                            <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice" target="_blank">
+                            <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">
                                 Privacy
                             </a>                            
                         </li>
@@ -98,4 +102,8 @@
             </div>
         </div>
     </footer>
+}
+
+@section BodyEnd {
+    @RenderSection("BodyEnd", false)
 }

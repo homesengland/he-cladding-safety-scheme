@@ -1,7 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.Services.Location;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using MediatR;
@@ -13,17 +12,14 @@ public class SetBuildingAddressHandler : IRequestHandler<SetBuildingAddressReque
 {
     private readonly IDbConnectionWrapper _dbConnectionWrapper;
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IPostCodeLookup _postCodeLookup;
     private readonly IBuildingDetailsRepository _buildingDetailsRepo;
 
     public SetBuildingAddressHandler(IDbConnectionWrapper dbConnectionWrapper,
                                      IApplicationDataProvider applicationDataProvider,
-                                     IPostCodeLookup postCodeLookup,
                                      IBuildingDetailsRepository buildingDetailsRepo)
     {
         _dbConnectionWrapper = dbConnectionWrapper;
         _applicationDataProvider = applicationDataProvider;
-        _postCodeLookup = postCodeLookup;
         _buildingDetailsRepo = buildingDetailsRepo;
     }
 
@@ -31,17 +27,30 @@ public class SetBuildingAddressHandler : IRequestHandler<SetBuildingAddressReque
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
-        var parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
+        var parsedAddress = PostCodeUtility.ParseBuildingLookupJson(request.SelectedAddressId);
         if (parsedAddress != null)
         {
-            BuildingDetailsAddressDetails details = new BuildingDetailsAddressDetails
+            var details = new BuildingDetailsAddressDetails
             {
                 NameNumber = parsedAddress.NameNumber,
                 AddressLine1 = parsedAddress.AddressLine1,
                 AddressLine2 = parsedAddress.AddressLine2,
                 City = parsedAddress.City,
+                LocalAuthority = parsedAddress.LocalAuthority,
                 County = parsedAddress.County,
-                Postcode = parsedAddress.Postcode
+                Postcode = parsedAddress.Postcode,
+                SubBuildingName = parsedAddress.SubBuildingName,
+                BuildingName = parsedAddress.BuildingName,
+                BuildingNumber = parsedAddress.BuildingNumber,
+                Street = parsedAddress.Street,
+                Town = parsedAddress.Town,
+                AdminArea = parsedAddress.AdminArea,
+                UPRN = parsedAddress.UPRN,
+                AddressLines = parsedAddress.AddressLines,
+                XCoordinate = parsedAddress.XCoordinate,
+                YCoordinate = parsedAddress.YCoordinate,
+                Toid = parsedAddress.Toid,
+                BuildingType = parsedAddress.BuildingType
             };
 
             // push to repo

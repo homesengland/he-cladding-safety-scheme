@@ -1,0 +1,153 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.FinalCheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = !Model.IsSubmitted
+        ? Url.Action("Upload", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.FinalCost})
+        : Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Check your answers</h1>
+
+<govuk-summary-list>    
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Upload exit FRAEW report
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.ExitFraewFiles != null)
+            {
+                @foreach (var item in Model.ExitFraewFiles)
+                {
+                    <span>
+                        @item.Name<br>
+                    </span>
+                }
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Upload", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.ExitFraew})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>    
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Upload practical completion certificate
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.PracticalCompletionCertificateFiles != null)
+            {
+                @foreach (var item in Model.PracticalCompletionCertificateFiles)
+                {
+                    <span>
+                        @item.Name<br>
+                    </span>
+                }
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Upload", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.PracticalCompletionCertificate})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Upload signed off building regulations evidence
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.BuildingRegulationsFiles != null)
+            {
+                @foreach (var item in Model.BuildingRegulationsFiles)
+                {
+                    <span>
+                        @item.Name<br>
+                    </span>
+                }
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Upload", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.BuildingRegulations})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+        
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Upload evidence of communication with leaseholders
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.LeaseholderResidentCommunication != null)
+            {
+                @foreach (var item in Model.LeaseholderResidentCommunication)
+                {
+                    <span>
+                        @item.Name<br>
+                    </span>
+                }
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Upload", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.LeaseholderResidentCommunication})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Final payment request
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model.FinalPaymentRequest > 0 ? $"&pound;{Model.FinalPaymentRequest.Value:N0}" : "&pound;0")
+        </govuk-summary-list-row-value>
+
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("SubmitPayment", "ClosingReport")" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Upload cost report
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.FinalCostFiles != null)
+            {
+                @foreach (var item in Model.FinalCostFiles)
+                {
+                    <span>
+                        @item.Name<br>
+                    </span> 
+                }
+            }
+        </govuk-summary-list-row-value>
+
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Upload", "ClosingReport", new {Area = "ClosingReport", UploadType = EClosingReportFileType.FinalCost})" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+ 
+@if (!Model.IsSubmitted)
+{
+    <govuk-button disabled="@Model.IsSubmitted" href="@Url.Action("Declaration", "ClosingReport", new {Area = "ClosingReport"})">Continue</govuk-button>
+}

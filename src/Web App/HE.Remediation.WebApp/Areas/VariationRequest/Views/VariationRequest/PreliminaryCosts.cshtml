@@ -1,0 +1,181 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.PreliminaryCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action("Costs", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationMainContractorPreliminariesAmountText" />
+        <govuk-error-summary-item asp-for="VariationMainContractorPreliminariesDescription" />
+        <govuk-error-summary-item asp-for="VariationAccessAmountText" />
+        <govuk-error-summary-item asp-for="VariationAccessDescription " />
+        <govuk-error-summary-item asp-for="VariationOverheadsAndProfitAmountText" />
+        <govuk-error-summary-item asp-for="VariationOverheadsAndProfitDescription" />
+        <govuk-error-summary-item asp-for="VariationContractorContingenciesAmountText" />
+        <govuk-error-summary-item asp-for="VariationContractorContingenciesDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Preliminaries, access costs,  main contractor's overheads and profit </h1>
+
+<p class="govuk-body">Please identify the changes associated with this element of your costs schedule.</p>
+
+<form asp-controller="VariationRequest" asp-action="PreliminaryCosts" asp-area="VariationRequest" method="post">
+
+    <p class="govuk-body-m"><strong>Main contractor’s preliminaries</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">
+                            £@Model.WorkPackageMainContractorPreliminariesAmount.GetValueOrDefault(0).ToString("N0")
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageMainContractorPreliminariesDescription</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationMainContractorPreliminariesAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationMainContractorPreliminariesDescription " max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Access (e.g. scaffolding or mast climber)</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageAccessAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageAccessDescription</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationAccessAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationAccessDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Main contractor's overheads and profit</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageOverheadsAndProfitAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageOverheadsAndProfitDescription </td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationOverheadsAndProfitAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationOverheadsAndProfitDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Contractor’s contingencies</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageContractorContingenciesAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageContractorContingenciesDescription </td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationContractorContingenciesAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationContractorContingenciesDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="WorkPackageMainContractorPreliminariesAmount" type="hidden" value="@Model.WorkPackageMainContractorPreliminariesAmount" />
+    <input asp-for="WorkPackageMainContractorPreliminariesDescription" type="hidden" value="@Model.WorkPackageMainContractorPreliminariesDescription" />
+    <input asp-for="WorkPackageAccessAmount" type="hidden" value="@Model.WorkPackageAccessAmount" />
+    <input asp-for="WorkPackageAccessDescription" type="hidden" value="@Model.WorkPackageAccessDescription" />
+    <input asp-for="WorkPackageOverheadsAndProfitAmount" type="hidden" value="@Model.WorkPackageOverheadsAndProfitAmount" />
+    <input asp-for="WorkPackageOverheadsAndProfitDescription" type="hidden" value="@Model.WorkPackageOverheadsAndProfitDescription" />
+    <input asp-for="WorkPackageContractorContingenciesAmount" type="hidden" value="@Model.WorkPackageContractorContingenciesAmount" />
+    <input asp-for="WorkPackageContractorContingenciesDescription" type="hidden" value="@Model.WorkPackageContractorContingenciesDescription" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>
+

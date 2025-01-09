@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.DeleteCladdingSystem;
@@ -7,11 +9,15 @@ public class DeleteCladdingSystemHandler : IRequestHandler<DeleteCladdingSystemR
 {
     private readonly IDbConnectionWrapper _dbConnectionWrapper;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IFireRiskWorksRepository _fireRiskWorksRepository;
+    private readonly IFireRiskAppraisalRepository _fireRiskAppraisalRepository;
 
-    public DeleteCladdingSystemHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+    public DeleteCladdingSystemHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider, IFireRiskWorksRepository fireRiskWorksRepository, IFireRiskAppraisalRepository fireRiskAppraisalRepository)
     {
         _dbConnectionWrapper = dbConnectionWrapper;
         _applicationDataProvider = applicationDataProvider;
+        _fireRiskWorksRepository = fireRiskWorksRepository;
+        _fireRiskAppraisalRepository = fireRiskAppraisalRepository;
     }
 
     public async Task<Unit> Handle(DeleteCladdingSystemRequest request, CancellationToken cancellationToken)
@@ -24,6 +30,12 @@ public class DeleteCladdingSystemHandler : IRequestHandler<DeleteCladdingSystemR
                     ApplicationId = applicationId,
                     request.FireRiskCladdingSystemsId
                 });
+
+        var claddingSystems = await _fireRiskWorksRepository.GetFireRiskCladdingWorks(applicationId);
+
+        if (claddingSystems.Count == 0)
+            await _fireRiskAppraisalRepository.UpdateStatusToInProgress();
+
         return Unit.Value;
     }
 }

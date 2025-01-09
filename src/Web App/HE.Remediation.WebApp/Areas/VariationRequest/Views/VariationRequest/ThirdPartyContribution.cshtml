@@ -1,0 +1,66 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.ThirdPartyContributionViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+        : Model.IsCostsVariation == true
+            ? Url.Action("Evidence", "VariationRequest", new { Area = "VariationRequest" })
+            : Model.IsScopeVariation == true
+                ? Url.Action("AdjustScope", "VariationRequest", new { Area = "VariationRequest" })
+                : Model.IsTimescaleVariation == true
+                    ? Url.Action("AdjustEndDate", "VariationRequest", new { Area = "VariationRequest" })
+                    : Url.Action("VariationReason", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ContributionPursuingTypes" />
+        <govuk-error-summary-item asp-for="ContributionAmount" />
+        <govuk-error-summary-item asp-for="ContributionNotes" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Tell us about the third party contribution</h1>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="ThirdPartyContribution" method="post">
+    <govuk-checkboxes name="ContributionPursuingTypes" asp-for="ContributionPursuingTypes">
+        <govuk-checkboxes-fieldset>
+            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--s">
+                What type of contribution have you received?
+            </govuk-checkboxes-fieldset-legend>
+        </govuk-checkboxes-fieldset>
+        <govuk-checkboxes-hint>
+            Please select all that apply.
+        </govuk-checkboxes-hint>
+        <govuk-checkboxes-item checked="@Model.ContributionPursuingTypes.Any(x => x == EFundingStillPursuing.SignedUpDevelopersPledge)" value="@EFundingStillPursuing.SignedUpDevelopersPledge">Developer that has signed up to the Developer's pledge</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.ContributionPursuingTypes.Any(x => x == EFundingStillPursuing.NotSignedUpDevelopersPledge)" value="@EFundingStillPursuing.NotSignedUpDevelopersPledge">Developer that has not signed up to the pledge, or freeholder</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.ContributionPursuingTypes.Any(x => x == EFundingStillPursuing.ClaimAgainstContracter)" value="@EFundingStillPursuing.ClaimAgainstContracter">Warranty, insurance or other claim against contractor or design team</govuk-checkboxes-item>
+        <govuk-checkboxes-item checked="@Model.ContributionPursuingTypes.Any(x => x == EFundingStillPursuing.Other)" value="@EFundingStillPursuing.Other">Other</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-input asp-for="ContributionAmount" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label class="govuk-heading-s govuk-!-font-weight-bold">What was the value of the contribution?</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count asp-for="ContributionNotes" max-length="500">
+        <govuk-character-count-label class="govuk-heading-s govuk-!-font-weight-bold">Please tell us more about the contribution</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="IsTimescaleVariation " type="hidden" value="@Model.IsTimescaleVariation" />
+    <input asp-for="IsScopeVariation" type="hidden" value="@Model.IsScopeVariation" />
+    <input asp-for="IsCostsVariation" type="hidden" value="@Model.IsCostsVariation" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted"/>
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

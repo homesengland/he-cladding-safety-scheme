@@ -33,12 +33,13 @@
                 {
                     <govuk-select-item value="@currentLocation.Value">@currentLocation.Key</govuk-select-item>                    
                 }
-            </govuk-select>                
+            </govuk-select>                            
 
             @for (var currentLocation = 0; currentLocation < Model.OutputLocations.Count; currentLocation++)
             {
                 var location = Model.OutputLocations[currentLocation];
-                <input type="hidden" name="outputLocations[@currentLocation]" value="@location"/>               
+                <input type="hidden" name="outputLocations[@currentLocation].Key" value="@location.Key" />
+                <input type="hidden" name="outputLocations[@currentLocation].Value" value="@location.Value" />
             }
             <input type="hidden" name="HaveResults" value="true"/>               
         }        

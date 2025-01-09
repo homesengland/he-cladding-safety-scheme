@@ -31,7 +31,8 @@ public class GetUploadResponsibleEntitiesEvidenceHandler : IRequestHandler<GetUp
                 return result;
             }, new
             {
-                ApplicationId = _applicationDataProvider.GetApplicationId()
+                ApplicationId = _applicationDataProvider.GetApplicationId(),
+                UploadType = request.UploadType
             });
 
         return result;
@@ -51,9 +52,5 @@ public class GetUploadResponsibleEntitiesEvidenceResponse
 
 public class GetUploadResponsibleEntitiesEvidenceRequest : IRequest<GetUploadResponsibleEntitiesEvidenceResponse>
 {
-    private GetUploadResponsibleEntitiesEvidenceRequest()
-    {
-    }
-
-    public static readonly GetUploadResponsibleEntitiesEvidenceRequest Request = new();
+    public EResponsibleEntityUploadType UploadType { get; set; }
 }

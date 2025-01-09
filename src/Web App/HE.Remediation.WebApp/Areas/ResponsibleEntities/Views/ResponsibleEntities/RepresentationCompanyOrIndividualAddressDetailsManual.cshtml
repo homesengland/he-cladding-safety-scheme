@@ -1,7 +1,7 @@
 ﻿@using HE.Remediation.Core.Enums
 @model HE.Remediation.WebApp.ViewModels.Location.PostCodeManualViewModel
 @{
-    ViewData["Title"] = "Check your information is correct for this application";
+    ViewData["Title"] = "As the Representative, what is your company address?";
     ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
 }
 @section ErrorSummary
@@ -19,7 +19,7 @@
 
 <p class="govuk-body">If the details used to create your account are not relevant for this application, you can change the response below. </p>
 
-<h2 class="govuk-heading-m">What is your@(Model.ResponsibleEntityType == EResponsibleEntityType.Company ? " Company " : " ")address?</h2>
+<h2 class="govuk-heading-m">As the Representative, what is your company address?</h2>
 
 <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="RepresentationCompanyOrIndividualAddressDetails" method="post">
     <partial name="_AddressPartial" view-data="ViewData" />

@@ -9,7 +9,7 @@ public class FRAEWRecommendedWorkDetails
 
     public EReplacementCladding RecommendCladding { get; set; }
 
-    public ENoYes RecommendBuildingIntetim { get; set; }
+    public ENoYes? RecommendBuildingIntetim { get; set; }
 
     public int RecommendedTotalAreaCladding { get; set; }
 
@@ -18,4 +18,13 @@ public class FRAEWRecommendedWorkDetails
     public string RemediationSummary { get; set; }
 
     public string JustifyRecommendation { get; set; }
+
+    public string InterimMeasuresOtherText { get; set; }
+
+    public string SafetyRiskOtherText { get; set; }
+
+    public string OtherRiskMitigationOptionsConsidered { get; set; }
+    
+
+
 }

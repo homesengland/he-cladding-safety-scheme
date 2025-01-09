@@ -7,4 +7,6 @@ public class ExternalWorksDetailViewModel
     public string Description { get; set; }
 
     public int ElementNo { get; set; }
+
+    public string ReturnUrl { get; set; }
 }

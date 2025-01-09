@@ -1,0 +1,43 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ApprovedScheduleOfWorks.StartInformationViewModel
+@{
+    Layout = "~/Areas/ApprovedScheduleOfWorks/Views/Shared/_SideCardLayout.cshtml";
+
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related items</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will fund
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-not-fund" class="govuk-link">
+            What we will not fund
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    You've submitted your project cost profile and told us how you expect to spend the grant funding over the duration of this project.
+</p>
+<p class="govuk-body">
+    As outlined in the Grant Funding Agreement, we’ll pay you monthly in arrears, following the submission of a valid claim.  This must be signed by your grant certifying officer and supported by a cost report.
+</p>
+<p class="govuk-body">
+    We have made some adjustments to ensure you have sufficient funds to cover unprecedented costs as well as retaining a small amount to be paid on completion once we receive an exit FRAEW, practical completion certificate and building regulations approval.
+</p>
+
+<form asp-area="ApprovedScheduleOfWorks" asp-controller="ApprovedScheduleOfWorks" asp-action="StartInformation" method="post">
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

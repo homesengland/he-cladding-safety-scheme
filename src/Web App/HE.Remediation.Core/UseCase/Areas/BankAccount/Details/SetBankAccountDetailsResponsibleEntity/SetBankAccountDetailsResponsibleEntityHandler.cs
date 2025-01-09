@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetBankAccountDe
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            await _dbConnectionWrapper.ExecuteAsync("UpsertBankAccountDetailsResponsibleEntity", new { applicationId, request.NameOnTheAccount, request.BankName, request.BranchName, request.AccountNumber, request.SortCode });
+            await _dbConnectionWrapper.ExecuteAsync("UpsertBankAccountDetailsResponsibleEntity", new { applicationId, request.NameOnTheAccount, request.BankName, request.BranchName, request.AccountNumber, request.SortCode, request.VatNumber });
         }
     }
 }

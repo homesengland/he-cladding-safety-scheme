@@ -1,0 +1,98 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.UploadBuildingControlViewModel;
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
+        : Url.Action("UploadWorksContract", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+
+    var acceptedTypes = Model.AcceptedFileTypes?.Any() == true ? string.Join(",", Model.AcceptedFileTypes) : "*";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Upload building control approval</h1>
+
+<p class="govuk-body">
+    Upload works contract and full plans/Gateway 2 approval for building regulations.
+</p>
+<p class="govuk-body">
+    Please upload:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>evidence of full plans approval in respect of the building regulations for your works (If your building is over 18 metres high this will be Gateway 2 approval from the Building Safety Regulator)</li>
+</ul>
+
+<div class="govuk-hint">
+    You can upload up to 5 files.
+</div>
+<div class="govuk-hint">
+    Each file must be smaller than 50MB.
+</div>
+<div class="govuk-hint">
+    File format must be PDF.
+</div>
+
+
+<form asp-area="ScheduleOfWorks" asp-controller="ScheduleOfWorks" asp-action="UploadBuildingControl" method="post" enctype="multipart/form-data">
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    @if ((Model.AddedFiles is null || Model.AddedFiles.Count < Model.NumberOfFilesAllowed) && !Model.IsSubmitted)
+    {
+        <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
+        @if (Model.NumberOfFilesAllowed > 1)
+        {
+            <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Add file</govuk-button>
+        }
+    }
+
+    @if (Model.AddedFiles is { Count: > 0 })
+    {
+        <h2 class="govuk-heading-m">Files added</h2>
+        <govuk-summary-list>
+            @for (var i = 0; i < Model.AddedFiles.Count; i++)
+            {
+                var file = Model.AddedFiles[i];
+                var deleteEndpoint = $"{Model.DeleteEndpoint}?fileId={file.Id}{(!string.IsNullOrEmpty(Model.ReturnUrl) ? $"&returnUrl={Model.ReturnUrl}" : "")}";
+                var count = i + 1;
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        File @count
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @file.Name @($"{@file.FileSize}")
+                    </govuk-summary-list-row-value>
+                    @if (!Model.IsSubmitted)
+                    {
+                        <govuk-summary-list-row-action href="@deleteEndpoint">Delete</govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+            }
+        </govuk-summary-list>
+        @for (var i = 0; i < Model.AddedFiles.Count; i++)
+        {
+            var file = Model.AddedFiles[i];
+            <input type="hidden" name="AddedFiles[@i].Id" value="@file.Id" />
+            <input type="hidden" name="AddedFiles[@i].Name" value="@file.Name" />
+            <input type="hidden" name="AddedFiles[@i].FileSize" value="@file.FileSize" />
+        }
+    }
+    <br />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,244 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.HaveAnyAnswersChangedViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["BackLink"] = Url.Action("ProjectTeamOverview", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Have any of your answers changed since last month?</h1>
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+    @if (Model.HasGco.HasValue)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Have you appointed your grant certifying officer?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.HasGco.Value ? "Yes" : "No")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        if (!string.IsNullOrEmpty(Model.TeamMember))
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Who is your grant certifying officer?</td>
+                    <td class="govuk-table__cell govuk-!-width-one-half">
+                    <div>@Model.TeamMember</div>
+                        <div class="govuk-!-font-size-16 govuk-hint govuk-!-margin-0">@Model.Role</div>
+                </td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("WhoIsTheGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+            </tr>
+        }
+
+        if (Model.HasGcoAddress)
+        {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell govuk-!-font-weight-bold">Provide grant certifying officer's company address</td>
+                    <td class="govuk-table__cell govuk-!-width-one-half">
+                        @if (!string.IsNullOrEmpty(Model.NameNumber))
+                        {
+                            <div>@Model.NameNumber</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.AddressLine1))
+                        {
+                            <div>@Model.AddressLine1</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.AddressLine2))
+                        {
+                            <div>@Model.AddressLine2</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.City))
+                        {
+                            <div>@Model.City</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.County))
+                        {
+                            <div>@Model.County</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Postcode))
+                        {
+                            <div>@Model.Postcode</div>
+                        }
+                    </td>
+                    <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("GrantCertifyingOfficerAddress", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+                </tr>
+        }
+
+        if (!string.IsNullOrEmpty(Model.Signatory))
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Authorised signatory</td>
+                <td class="govuk-table__cell govuk-!-width-one-half">@Model.Signatory</td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+            </tr>
+        }
+
+        if (!string.IsNullOrEmpty(Model.SignatoryEmailAddress))
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Authorised signatory email address</td>
+                <td class="govuk-table__cell govuk-!-width-one-half">@Model.SignatoryEmailAddress</td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+            </tr>
+        }
+
+        if (Model.DateAppointed.HasValue)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Company’s Date of Appointment to the project</td>
+                <td class="govuk-table__cell govuk-!-width-one-half">@Model.DateAppointed.Value.ToString("dd MMMM yyyy")</td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+            </tr>
+        }
+    }
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell govuk-!-font-weight-bold">Have you sought quotes or issued a tender?</td>
+        <td class="govuk-table__cell govuk-!-width-one-half">@(Model.HasSoughtQuotes ? "Yes" : "No")</td>
+        <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+    </tr>
+
+    @if (Model.HasSoughtQuotes == false)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Tell us why have you not sought quotes or issued a tender?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.NotReadyForTender ? "Not ready for tender" : "I don't plan on running an open tender")</td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Tell us why</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Model.QuotesNotSoughtReason</td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell govuk-!-font-weight-bold">Do your works need planning permission?</td>
+        <td class="govuk-table__cell govuk-!-width-one-half">@(HE.Remediation.Core.Helpers.EnumHelpers.GetText((EYesNoNonBoolean)Model.NeedsPlanningPermission))</td>
+        <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+    </tr>
+    @if (Model.AppliedForPlanningPermission.HasValue)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Have you applied for planning permission?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.AppliedForPlanningPermission.Value ? "Yes" : "No")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("AppliedPlanning", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+    @if (Model.PlanningPermissionSubmittedDate.HasValue)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">What date was the application submitted?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.PlanningPermissionSubmittedDate.Value.ToString("MMMM yyyy"))</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("PlanningPermissionDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+    @if (Model.PlanningPermissionApprovedDate.HasValue)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">What date was the application approved?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.PlanningPermissionApprovedDate.Value.ToString("MMMM yyyy"))</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("PlanningPermissionDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+    @if (Model.PlanningPermissionPlannedSubmitDate.HasValue)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">When do you plan to submit your application?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.PlanningPermissionPlannedSubmitDate.Value.ToString("MMMM yyyy"))</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("PlanningPermissionPlannedSubmitDate", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ReasonPlanningPermissionNotApplied))
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Why have you not applied for planning permission?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Model.ReasonPlanningPermissionNotApplied</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("ReasonPlanningNotApplied", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+    @if (Model.PlanningPermissionNeedsSupport.HasValue)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Do you need support?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.PlanningPermissionNeedsSupport.Value ? "Yes" : "No")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("ReasonPlanningNotApplied", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell govuk-!-font-weight-bold">Is your building over 18m in height?</td>
+        <td class="govuk-table__cell govuk-!-width-one-half">@(Model.BuildingControlRequired == true ? "Yes" : "No")</td>
+        <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+    </tr>
+    @if (Model.BuildingControlRequired == true)
+    {
+        <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Building Control Approval - Gateway 2 Forecast Submission Date</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.BuildingControlForecastSubmissionDate?.ToString("MM/yy") ?? "-")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Building Control Approval - Gateway 2 Actual Submission Date</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.BuildingControlActualSubmissionDate?.ToString("MM/yy") ?? "-")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Building Control Approval - Gateway 2 Validation Date</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.BuildingControlValidationDate?.ToString("MM/yy") ?? "-")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">Building Control Approval - Gateway 2 Decision Date</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.BuildingControlDecisionDate?.ToString("MM/yy") ?? "-")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Building Control Approval - Decision</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(!Model.BuildingControlDecision.HasValue ? "-" : Model.BuildingControlDecision == true ? "Approved" : "Rejected")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }        
+    
+    @if (!Model.PreviouslyShownBsr && !Model.CurrentlyShowBsr && Model.BuildingHasSafetyRegulatorRegistrationCode != true)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Do you have a Building Safety Regulator registration code?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(!Model.BuildingHasSafetyRegulatorRegistrationCode.HasValue ? "-" : "No")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+    }
+
+    @if (Model.PreviouslyShownBsr || Model.CurrentlyShowBsr)
+    {
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Do you have a Building Safety Regulator registration code?</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@(Model.BuildingHasSafetyRegulatorRegistrationCode == true ? "Yes" : "No")</td>
+            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+        </tr>
+
+        @if (!string.IsNullOrWhiteSpace(Model.BuildingSafetyRegulatorRegistrationCode))
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-font-weight-bold">What is your Building Safety Regulator registration code?</td>
+                <td class="govuk-table__cell govuk-!-width-one-half">@Model.BuildingSafetyRegulatorRegistrationCode</td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("BuildingSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+            </tr>
+        }
+    }
+
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell govuk-!-font-weight-bold">When do you think you'll submit your works package?</td>
+        <td class="govuk-table__cell govuk-!-width-one-half">@(Model.WorksPackageEstimateDate.ToString("MMMM yyyy"))</td>
+        <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
+    </tr>
+    </tbody>
+</table>
+<div class="comp-btn-group">
+    <govuk-button href="@Url.Action("LeaseholdersInformedLast", "ProgressReporting", new {Area = "ProgressReporting"})">Continue</govuk-button>
+</div>

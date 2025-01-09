@@ -1,0 +1,78 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.DeclarationViewModel
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("FinalCheckYourAnswers", "ClosingReport", new { Area = "ClosingReport" });
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+    {
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>    
+        <govuk-error-summary-item asp-for="DateOfCompletion" />
+        <govuk-error-summary-item asp-for="LifeSafetyRiskAssessment" />
+        <govuk-error-summary-item asp-for="DischargedObligations" />
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Final payment declaration and submission</h1>
+<p class="govuk-body">
+    Before completing the final payment declaration and submission, please be aware that our expectation
+    is having undertaken remediation in line with PAS9980:2022, that responses will be either low or medium tolerable.    
+</p>
+
+<p class="govuk-body">
+    Please be aware that if you tick any of the other options, we will be in touch to clarify your reply.
+</p>
+
+@using (Html.BeginForm())
+{
+
+    <govuk-date-input asp-for="DateOfCompletion" name="DateOfCompletion" disabled="@Model.IsSubmitted">
+        <govuk-date-input-fieldset class="govuk-!-margin-top-5">
+            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                Date of practical completion
+            </govuk-date-input-fieldset-legend>
+        </govuk-date-input-fieldset>
+        <govuk-date-input-label></govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+
+    <govuk-radios asp-for="LifeSafetyRiskAssessment">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Please provide the current risk assessment from the Fire Risk Appraisal of
+                External Walls (FRAEW) carried out following completion of the works
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.Low)">Low</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.MediumTolerable)">Medium - tolerable</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.MediumActionRequired)">Medium - action required</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.High)">High</govuk-radios-item>
+    </govuk-radios>
+
+    <govuk-checkboxes asp-for="DischargedObligations">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.DischargedObligations">
+            I understand that the Cladding Safety System has discharged its obligations and that there is no further opportunity to claim funding.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input name="@($"{nameof(Model.ApplicationCreationDate)}.{nameof(Model.ApplicationCreationDate.Value.Day)}")" value="@Model.ApplicationCreationDate?.Day" type="hidden" />
+    <input name="@($"{nameof(Model.ApplicationCreationDate)}.{nameof(Model.ApplicationCreationDate.Value.Month)}")" value="@Model.ApplicationCreationDate?.Month" type="hidden" />
+    <input name="@($"{nameof(Model.ApplicationCreationDate)}.{nameof(Model.ApplicationCreationDate.Value.Year)}")" value="@Model.ApplicationCreationDate?.Year" type="hidden" />
+
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+
+    <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Continue">Confirm and submit</govuk-button>
+}

@@ -1,18 +1,23 @@
-﻿using Auth0.AspNetCore.Authentication;
-using Amazon.Extensions.NETCore.Setup;
+﻿using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
+using Auth0.AspNetCore.Authentication;
 using HE.Remediation.Core.IoC;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
-using System.Data;
-using System.Reflection;
 using HE.Remediation.Core.Middleware;
 using HE.Remediation.Core.Services.OidcEventHandlerService;
-using Microsoft.Extensions.Configuration;
+using HE.Remediation.Core.TypeHandlers;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Syncfusion.Licensing;
+using System.Data;
+using System.Reflection;
+using HE.Remediation.Core.Services.GovNotify;
+using HE.Remediation.Core.Services.GovNotify.Models;
+using HE.Remediation.Core.Services.Communication;
 
 namespace HE.Remediation.Core.Extensions
 {
@@ -44,8 +49,14 @@ namespace HE.Remediation.Core.Extensions
 
             services.AddServicesDependencies(builder.Configuration);
 
-            services.AddAuth0WebAppAuthentication(options => {
-                options.Domain = builder.Configuration["AUTH0_DOMAIN"] 
+            builder.Services.AddSingleton<IBackgroundEmailCommunicationQueue, BackgroundEmailCommunicationQueue>();
+            builder.Services.AddHostedService<EmailCommunicationHostedService>();
+
+            services.AddGovNotifyService(builder.Configuration);
+
+            services.AddAuth0WebAppAuthentication(options =>
+            {
+                options.Domain = builder.Configuration["AUTH0_DOMAIN"]
                                     ?? throw new InvalidOperationException("The AUTH0_DOMAIN configuration value has not been specified");
                 options.ClientId = builder.Configuration["AUTH0_CLIENTID"]
                                     ?? throw new InvalidOperationException("The AUTH0_CLIENTID configuration value has not been specified");
@@ -59,6 +70,31 @@ namespace HE.Remediation.Core.Extensions
             {
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
+            TypeHandlerRegistry.RegisterHandlers();
+
+            SyncfusionLicenseProvider.RegisterLicense("NRAiBiAaIQQuGjN/V0Z+WE9EaFxKVmJLYVB3WmpQdldgdVRMZVVbQX9PIiBoS35RdUVlW3hfcXRXQ2FfVER1");
+        }
+
+        private static IServiceCollection AddGovNotifyService(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.Configure<GovNotifySettings>(configuration.GetSection(nameof(GovNotifySettings)));
+
+            services.AddScoped<IGovNotifyService, GovNotifyService>();
+
+            services.AddHttpClient(GovNotifyServiceConstants.GovNotifyHttpClientName, client =>
+            {
+                client.BaseAddress = new Uri(configuration["BASE_APIM_ENDPOINT"]
+                                             ?? throw new InvalidOperationException(
+                                                 "The BASE_APIM_ENDPOINT configuration value has not been specified"));
+
+                client.DefaultRequestHeaders.Add("X-APIM-PROXY-KEY",
+                    Environment.GetEnvironmentVariable("APIM_PROXY_API_KEY")
+                    ?? throw new InvalidOperationException(
+                        "The APIM_PROXY_API_KEY configuration value has not been specified"));
+            });
+
+            return services;
         }
     }
 }

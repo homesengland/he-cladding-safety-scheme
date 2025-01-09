@@ -39,13 +39,7 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
                 request.PursuedSourcesFunding
             });
 
-            await _db.ExecuteAsync("UpdateAlternateFundingTaskStatus", new
-            {
-                ApplicationId = applicationId,
-                TaskStatusId = (int)(request.CompleteSection ? ETaskStatus.Completed : ETaskStatus.InProgress)
-            });
-
-            await _applicationRepository.UpdateStatusToInProgress(applicationId);
+            await _applicationRepository.UpdateStatus(_applicationDataProvider.GetApplicationId(), EApplicationStatus.ApplicationInProgress);
 
             scope.Complete();
         }

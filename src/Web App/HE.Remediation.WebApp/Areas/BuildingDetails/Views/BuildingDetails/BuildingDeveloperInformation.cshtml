@@ -2,7 +2,9 @@
 @model HE.Remediation.WebApp.ViewModels.BuildingDetails.BuildingDeveloperInformationViewModel
 @{
     ViewData["Title"] = "Building developer information";
-    ViewData["BackLink"] = Url.Action("ConfirmBuildingHeight", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["BackLink"] = Model.BuildingHasSafetyRegulatorRegistrationCode.HasValue && Model.BuildingHasSafetyRegulatorRegistrationCode.Value
+        ? Url.Action("BuildingSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" })
+        : Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary

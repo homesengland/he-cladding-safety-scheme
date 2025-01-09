@@ -1,0 +1,54 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.TotalCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action("IneligibleCosts", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">Total costs</h1>
+@using (Html.BeginForm())
+{
+    <div class="govuk-section-break--visible"></div>
+    <table class="govuk-table border-top">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Eligible costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Html.Raw(Model.OverallTotal > 0 ? $"&pound;{Model.EligibleTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">
+                    @if (!Model.IsSubmitted)
+                    {
+                        <a href="@Url.Action("Costs", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })" class="govuk-link">Change</a>
+                    }
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-one-half govuk-!-font-weight-bold">Ineligible costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Html.Raw(Model.OverallTotal > 0 ? $"&pound;{Model.IneligibleAmount:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">
+                    @if (!Model.IsSubmitted)
+                    {
+                        <a href="@Url.Action("IneligibleCosts", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })" class="govuk-link">Change</a>
+                    }
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Html.Raw(Model.OverallTotal > 0 ? $"&pound;{Model.OverallTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+}

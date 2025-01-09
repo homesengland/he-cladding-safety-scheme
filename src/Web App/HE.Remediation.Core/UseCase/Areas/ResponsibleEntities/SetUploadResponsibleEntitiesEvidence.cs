@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
@@ -51,7 +52,8 @@ public class SetUploadResponsibleEntitiesEvidenceHandler : IRequestHandler<SetUp
             await _connection.ExecuteAsync("InsertResponsibleEntitiesEvidence", new
             {
                 ApplicationId = _applicationDataProvider.GetApplicationId(),
-                fileResult.FileId
+                fileResult.FileId,
+                request.UploadType
             });
 
 
@@ -65,4 +67,5 @@ public class SetUploadResponsibleEntitiesEvidenceHandler : IRequestHandler<SetUp
 public class SetUploadResponsibleEntitiesEvidenceRequest : IRequest
 {
     public IFormFile File { get; set; }
+    public EResponsibleEntityUploadType UploadType { get; set; }
 }

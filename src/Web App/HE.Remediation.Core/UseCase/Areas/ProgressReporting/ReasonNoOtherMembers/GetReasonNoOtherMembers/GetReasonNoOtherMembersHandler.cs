@@ -1,0 +1,41 @@
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
+using MediatR;
+
+namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoOtherMembers.GetReasonNoOtherMembers;
+
+public class GetReasonNoOtherMembersHandler : IRequestHandler<GetReasonNoOtherMembersRequest, GetReasonNoOtherMembersResponse>
+{
+    private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IApplicationRepository _applicationRepository;
+    private readonly IBuildingDetailsRepository _buildingDetailsRepository;
+    private readonly IProgressReportingRepository _progressReportingRepository;
+
+    public GetReasonNoOtherMembersHandler(IApplicationDataProvider applicationDataProvider,
+                                          IBuildingDetailsRepository buildingDetailsRepository,
+                                          IApplicationRepository applicationRepository,
+                                          IProgressReportingRepository progressReportingRepository)
+    {
+        _applicationDataProvider = applicationDataProvider;
+        _buildingDetailsRepository = buildingDetailsRepository;
+        _applicationRepository = applicationRepository;
+        _progressReportingRepository = progressReportingRepository;
+    }
+
+    public async Task<GetReasonNoOtherMembersResponse> Handle(GetReasonNoOtherMembersRequest request, CancellationToken cancellationToken)
+    {
+        var applicationId = _applicationDataProvider.GetApplicationId();
+
+        var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
+        var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
+
+        var otherMembersNotAppointed = await _progressReportingRepository.GetProgressReportOtherMembersNotAppointedReason();
+        return new GetReasonNoOtherMembersResponse
+        {
+            BuildingName = buildingName,
+            ApplicationReferenceNumber = applicationReferenceNumber,
+            OtherMembersNotAppointedReason = otherMembersNotAppointed?.OtherMembersNotAppointedReason,
+            OtherMembersNeedsSupport = otherMembersNotAppointed?.OtherMembersNeedsSupport
+        };
+    }
+}

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.SessionTimeout;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -10,6 +11,13 @@ public class CookieApplicationAuthoriseFilter : IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
+        var allowAnonymous = context.HttpContext.GetEndpoint()?.Metadata.GetMetadata<IAllowAnonymous>();
+
+        if (allowAnonymous is not null)
+        {
+            return;
+        }
+
         if (context.HttpContext.User.Identity is not { IsAuthenticated: true })
         {
             context.Result = new RedirectResult("/Authentication/Login");

@@ -6,6 +6,8 @@ public class ResponsibleEntityUkRegisteredViewModel
 {
     public bool? UkRegistered { get; set; }
 
+    public bool? HasRepresentativeUkBased { get; set; }
+
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
 }

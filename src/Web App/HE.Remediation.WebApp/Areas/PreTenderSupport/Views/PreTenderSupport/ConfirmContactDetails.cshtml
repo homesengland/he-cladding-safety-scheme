@@ -1,0 +1,68 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.PreTenderSupport.ConfirmContactDetailsViewModel
+
+@{
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = Url.Action("GrantFundingAgreement", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["FullWidth"] = false;
+
+    var continueAction = Model.BankDetailsRelationship == HE.Remediation.Core.Enums.EBankDetailsRelationship.MyAccount 
+    ? "CheckYourAnswers" : "DeedOfTrustGuidance";
+}
+
+<h1 class="govuk-heading-xl">Confirm contact details for the person who should sign the agreement</h1>
+
+
+@if ((Model.Signatures != null) && (Model.Signatures.Count > 0))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+
+            @for (var itemCounter = 0; itemCounter < Model.Signatures.Count; itemCounter++)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            Signatory @((itemCounter + 1).ToString())               
+                        </p>
+                    </div>
+                </div>
+
+                <govuk-summary-list>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Name
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.Signatures[itemCounter].FullName
+                        </govuk-summary-list-row-value>
+                    </govuk-summary-list-row>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Role
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.Signatures[itemCounter].Role
+                        </govuk-summary-list-row-value>
+                    </govuk-summary-list-row>
+                </govuk-summary-list>
+                <govuk-summary-list>
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Email address
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.Signatures[itemCounter].EmailAddress
+                        </govuk-summary-list-row-value>
+
+                        <govuk-summary-list-row-action href="@Url.Action("EditContactEmail", "PreTenderSupport", new { Id = Model.Signatures[itemCounter].Id.ToString() })" visually-hidden-text="name">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                </govuk-summary-list>
+            }
+        </div>
+    </div>
+}
+
+<govuk-button href="@Url.Action(@continueAction, "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>

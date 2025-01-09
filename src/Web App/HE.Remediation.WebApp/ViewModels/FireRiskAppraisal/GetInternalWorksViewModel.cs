@@ -4,6 +4,8 @@ public class GetInternalWorksViewModel
 {
     public List<InternalWallWorks> WallWorks { get; set; }
 
+    public string ReturnUrl { get; set; }
+
     public class InternalWallWorks
     {
         public Guid Id { get; set; }  

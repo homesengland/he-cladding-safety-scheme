@@ -8,7 +8,7 @@ public class GetReportDetailsViewModelValidator: AbstractValidator<GetReportDeta
     {
         RuleFor(x => x.AuthorsName)
             .NotEmpty()
-            .WithMessage("Please enter a Authors name")
+            .WithMessage("Please enter name of author of report")
             .MaximumLength(150)
             .WithMessage("Authors name cannot exceed 150 characters");
 
@@ -17,12 +17,6 @@ public class GetReportDetailsViewModelValidator: AbstractValidator<GetReportDeta
             .WithMessage("Please enter a persons name")
             .MaximumLength(150)
             .WithMessage("The persons name cannot exceed 150 characters");
-
-        RuleFor(x => x.UndertakingFirm)
-            .NotEmpty()
-            .WithMessage("Please enter a firm undertaking review")
-            .MaximumLength(150)
-            .WithMessage("Firm undertaking review cannot exceed 150 characters");
 
         RuleFor(x => x.NumberOfStoreys)
             .NotEmpty()
@@ -36,11 +30,16 @@ public class GetReportDetailsViewModelValidator: AbstractValidator<GetReportDeta
             .NotEmpty()
             .WithMessage("Enter a height in meters")
             .GreaterThanOrEqualTo(11)
-            .LessThanOrEqualTo(18)                
-            .WithMessage("Please enter a height between 11 and 18 metres");
+            .WithMessage("The height of the building must be 11m or more");
 
          RuleFor(x => x.BasicComplexId)
                 .NotEmpty()
-                .WithMessage("Please select an option");
+                .WithMessage("Select an option");
+
+         RuleFor(x => x.FraewCost)
+             .NotEmpty()
+             .WithMessage("Enter the cost of FRAEW report")
+             .GreaterThanOrEqualTo(0)
+             .WithMessage("Enter a positive number");
     }
 }

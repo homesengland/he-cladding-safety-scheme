@@ -1,0 +1,188 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Helpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ProgressReportDetailsViewModel
+@{
+    ViewData["Title"] = $"{Model.DateCreated:MMMM yyyy} Progress Report";
+    ViewData["BackLink"] = Url.Action("ProgressReports", "ProgressReportingDetails", new { Area = "ProgressReportingDetails" });
+    ViewData["FullWidth"] = true;
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+
+    string reportSubmittedExpiredText;
+    if (Model.DateSubmitted.HasValue)
+    {
+        reportSubmittedExpiredText = $"This progress report was submitted {Model.DateSubmitted.Value:dd MMMM yyyy}.";
+    }
+    else if (Model.NextReportExists)
+    {
+        reportSubmittedExpiredText = "This progress report has expired.";
+    }
+    else
+    {
+        reportSubmittedExpiredText = "This progress report has not yet been submitted.";
+    }
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+
+<govuk-inset-text>
+    @reportSubmittedExpiredText
+</govuk-inset-text>
+
+<govuk-summary-list>
+    @if (Model.LeaseholdersInformed.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you informed leaseholder of progress made on the application?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.LeaseholdersInformed.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.LeadDesignerAppointed.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you appointed a lead designer?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.LeadDesignerAppointed.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.OtherMembersAppointed.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you appointed other members of your project team?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.OtherMembersAppointed.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.QuotesSought.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you sought quotes or issued a tender?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.QuotesSought.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        @if (Model.QuotesSought == false)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Tell us why have you not sought quotes or issued a tender?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.NotReadyForTender ? "Not ready for tender" : "I don't plan on running an open tender")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Tell us why
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.QuotesNotSoughtReason
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    }
+
+    @if (Model.RequirePlanningPermission.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Do your works require planning permission?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(EnumHelpers.GetText((EYesNoNonBoolean)Model.RequirePlanningPermission))
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.AppliedForPlanningPermission.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you applied for permission?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.AppliedForPlanningPermission.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ReasonPlanningPermissionNotApplied))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What is the reason for not applying?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.ReasonPlanningPermissionNotApplied
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.ExpectedWorksPackageSubmissionDate.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                When do you think you'll submit your works package?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ExpectedWorksPackageSubmissionDate.Value.ToString("MM/yy"))
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.SpentAnyFunding.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you spent /committed any amount of your pre-tender support funding
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.SpentAnyFunding.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+<h2 class="govuk-heading-m">Team Members</h2>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header">Role</th>
+            <th class="govuk-table__header">Name</th>
+            <th class="govuk-table__header">Company name</th>
+            <th class="govuk-table__header">View details</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var teamMember in Model.TeamMembers)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@(teamMember.Role != ETeamRole.Other ? teamMember.Role.ToString().SplitCamelCase() : teamMember.OtherRole)</td>
+                <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
+                <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
+                <td class="govuk-table__cell"><a href="@Url.Action("ProgressReportCompanyDetails", "ProgressReportingDetails", new {Area = "ProgressReportingDetails", TeamMemberId = teamMember.Id})">View details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<govuk-button href="@ViewData["BackLink"]" class="govuk-button--secondary">Return to report list</govuk-button>

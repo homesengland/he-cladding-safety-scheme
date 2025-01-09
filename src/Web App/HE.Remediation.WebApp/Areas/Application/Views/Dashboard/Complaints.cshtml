@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Making a complaint";
+    ViewData["FullWidth"] = false;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <govuk-back-link href="/Application/Dashboard">Back</govuk-back-link>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row"> 
+                <div class="govuk-body govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+                    <p class="govuk-body">We will take all complaints we receive very seriously.</p>
+                    <h2 class="govuk-heading-m">What we can help with</h2>                                            
+                    <p class="govuk-body">
+                        If you are unhappy with a policy or the eligibility criteria for the Cladding Safety Scheme or the Building Safety Fund, complaints should be directed towards:
+                    </p>
+                    <p class="govuk-body">
+                        <a rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/organisations/department-for-levelling-up-housing-and-communities/about/complaints-procedure" class="govuk-link">Complaints procedure - Department for Levelling Up, Housing and Communities - GOV.UK (www.gov.uk)</a>
+                    </p>
+                    <p class="govuk-body">
+                        If you are unhappy with the service you receive from Homes England through the Building Remediation Hub and you wish to complain,
+                        complaints should be directed towards <a class="govuk-link" href="mailto: complaints@claddingsafetyscheme.co.uk"> complaints@claddingsafetyscheme.co.uk</a>
+                    </p>
+                    <p class="govuk-body">
+                        We will consider complaints:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>where you are unhappy with the way we have responded to an enquiry or the time that we took to respond (or if we didn’t respond)</li>                        
+                        <li>where you have concerns about the conduct of our staff</li>
+                        <li>if you think we have not followed a formal process when dealing with a complaint</li>
+                        <li>about any incorrect action or failure to take action or investigate</li>
+                        <li>if we made inaccurate or misleading statements</li>
+                    </ul>
+
+                    <govuk-button href="/Application/Dashboard" class="govuk-button--secondary govuk-!-margin-top-3">Return to homepage</govuk-button>
+                </div>
+            </div>                        
+        </main>
+    </div>
+</div>
