@@ -3,22 +3,24 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.InformedLeaseholder.SetInformedLeaseholder;
 
 public class SetInformedLeaseholderHandler : IRequestHandler<SetInformedLeaseholderRequest>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly IProgressReportingRepository _progressReportingRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetInformedLeaseholderHandler(IApplicationDataProvider applicationDataProvider,
-                                         IApplicationRepository applicationRepository,
-                                         IProgressReportingRepository progressReportingRepository)
+    public SetInformedLeaseholderHandler(
+        IApplicationDataProvider applicationDataProvider,
+        IProgressReportingRepository progressReportingRepository, 
+        IStatusTransitionService statusTransitionService)
     {
         _applicationDataProvider = applicationDataProvider;
-        _applicationRepository = applicationRepository;
         _progressReportingRepository = progressReportingRepository;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetInformedLeaseholderRequest request, CancellationToken cancellationToken)
@@ -32,7 +34,7 @@ public class SetInformedLeaseholderHandler : IRequestHandler<SetInformedLeasehol
 
         if (progressReportVersion == 1)
         {
-            await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.PrimaryReportInProgress);
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PrimaryReportInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();

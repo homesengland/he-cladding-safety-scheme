@@ -52,7 +52,8 @@ public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMembe
             Name = teamMember.Name,
             TeamMemberId = teamMember.TeamMemberId,
             IsSubmitted = isSubmitted,
-            HasChasCertification = teamMember.HasChasCertification
+            HasChasCertification = teamMember.HasChasCertification,
+            ConsiderateConstructorSchemeReason = teamMember.ConsiderateConstructorSchemeReason
         };
     }
 }

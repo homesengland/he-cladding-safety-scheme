@@ -1,7 +1,5 @@
-﻿
-using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedLeadDesigner.GetAppointedLeadDesigner;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectTeam.GetProjectTeam;

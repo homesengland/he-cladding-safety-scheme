@@ -95,5 +95,23 @@ public class TeamMemberViewModelValidator : AbstractValidator<TeamMemberViewMode
                 .IsInEnum()
                 .WithMessage("Select an option - Considerate Constructor Scheme Type");
         });
+
+        When(x => x.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.No, () =>
+        {
+            RuleFor(x => x.ConsiderateConstructorSchemeReasonNo)
+                .NotEmpty()
+                .WithMessage("Enter reason why your lead contract is not signed up to the Considerate Constructors Scheme")
+                .MaximumLength(500)
+                .WithMessage("Reason cannot exceed 500 characters");
+        });
+
+        When(x => x.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.DontKnow, () =>
+        {
+            RuleFor(x => x.ConsiderateConstructorSchemeReasonDontKnow)
+                .NotEmpty()
+                .WithMessage("Enter reason why your lead contract is not signed up to the Considerate Constructors Scheme")
+                .MaximumLength(500)
+                .WithMessage("Reason cannot exceed 500 characters");
+        });
     }
 }

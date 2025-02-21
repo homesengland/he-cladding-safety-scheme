@@ -19,4 +19,6 @@ public class ProgressReportSummaryViewModel
     public DateTime? DateDue { get; set; }
 
     public DateTime? DateSubmitted { get; set; }
+
+    public int Version { get; set; }
 }

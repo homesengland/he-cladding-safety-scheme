@@ -7,7 +7,7 @@ public class GetAppointedOtherMembersResponse
 
     public string BuildingName { get; set; }
 
-    public bool? LeadDeveloperAppointed { get; set; }
+    public bool? LeaseholdersInformed { get; set; }
 
     public bool? OtherMembersAppointed { get; set; }
 }

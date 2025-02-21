@@ -2,6 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.SetAppraisalSurveyDetails;
 using Moq;
 
@@ -11,7 +12,7 @@ public class SetAppraisalSurveyDetailsTests
 {
     private readonly Mock<IApplicationDataProvider> _applicationDataProvider;
     private readonly Mock<IDbConnectionWrapper> _connection;
-    private readonly Mock<IApplicationRepository> _applicationRepository;
+    private readonly Mock<IStatusTransitionService> _statusTransitionService;
 
     private readonly SetAppraisalSurveyDetailsHandler _handler;
         
@@ -19,11 +20,11 @@ public class SetAppraisalSurveyDetailsTests
     {
         _connection = new Mock<IDbConnectionWrapper>(MockBehavior.Strict);
         _applicationDataProvider = new Mock<IApplicationDataProvider>(MockBehavior.Strict);
-        _applicationRepository = new Mock<IApplicationRepository>(MockBehavior.Strict);
+        _statusTransitionService = new Mock<IStatusTransitionService>();
 
         _handler = new SetAppraisalSurveyDetailsHandler(_connection.Object,
                                                         _applicationDataProvider.Object,
-                                                        _applicationRepository.Object);
+                                                        _statusTransitionService.Object);
     }
 
     [Fact]
@@ -38,17 +39,7 @@ public class SetAppraisalSurveyDetailsTests
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
 
-        _applicationRepository.Setup(x => x.GetApplicationStatus(It.IsAny<Guid>()))
-            .Returns(Task.FromResult(new GetApplicationStatusResult
-            {
-                DeclarationConfirmed = false,
-                Stage = EApplicationStage.ApplyForGrant,
-                Status = EApplicationStatus.ApplicationInProgress,
-                Submitted = false
-            }))
-            .Verifiable();
-
-        _applicationRepository.Setup(x => x.UpdateInternalStatus(It.IsAny<Guid>(), It.IsAny<EApplicationInternalStatus>()))
+        _statusTransitionService.Setup(x => x.TransitionToInternalStatus(It.IsAny<EApplicationInternalStatus>(), null, It.IsAny<Guid[]>()))
             .Returns(Task.CompletedTask)
             .Verifiable();
 

@@ -2,14 +2,11 @@
 {
     public static class ValidUkBasedPostcode
     {
+        private static readonly string[] ExcludedPostcodes = { "JE", "GY", "IM" };
+
         public static bool BeAUkBasedPostcode(string postCode)
         {
-            List<string> excludedPostcodes = new List<string>();
-            excludedPostcodes.Add("JE");
-            excludedPostcodes.Add("GY");
-            excludedPostcodes.Add("IM");
-
-            return !excludedPostcodes.Contains(postCode.Substring(0, 2));
+            return !string.IsNullOrWhiteSpace(postCode) && !ExcludedPostcodes.Contains(postCode.Substring(0, 2));
         }
     }
 }

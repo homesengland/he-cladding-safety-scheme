@@ -1,6 +1,6 @@
-﻿using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.SetCheckYourAnswers
@@ -9,13 +9,16 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.S
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
-        private readonly IApplicationRepository _applicationRepository;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public SetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db, IApplicationRepository applicationRepository)
+        public SetCheckYourAnswersHandler(
+            IApplicationDataProvider applicationDataProvider, 
+            IDbConnectionWrapper db, 
+            IStatusTransitionService statusTransitionService)
         {
             _applicationDataProvider = applicationDataProvider;
             _db = db;
-            _applicationRepository = applicationRepository;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
@@ -24,7 +27,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.S
 
             await UpdateFireRiskAppraisalStatus(applicationId, (int)ETaskStatus.Completed);
 
-            await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.FraewSubmitted);
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewSubmitted, applicationIds: applicationId);
 
             return Unit.Value;
         }

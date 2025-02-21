@@ -18,4 +18,5 @@ public class UpsertTeamMemberParameters
     public string InvolvedRoleReason { get; set; }
     public int? ConsiderateConstructorSchemeTypeId { get; set; }
     public bool? HasChasCertification { get; set; }
+    public string ConsiderateConstructorSchemeReason { get; set; }
 }

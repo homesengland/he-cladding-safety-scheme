@@ -19,6 +19,7 @@ public class TeamMemberCheckYourAnswersViewModel
     public string InvolvedRoleReason { get; set; }
     public EConsiderateConstructorSchemeType? ConsiderateConstructorSchemeType { get; set; }
     public bool? HasChasCertification { get; set; }
+    public string ConsiderateConstructorSchemeReason { get; set; }
 
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }

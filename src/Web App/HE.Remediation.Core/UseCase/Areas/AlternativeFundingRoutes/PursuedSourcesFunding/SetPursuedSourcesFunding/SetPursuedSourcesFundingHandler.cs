@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
-using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.SetPursuedSourcesFunding
@@ -10,15 +10,16 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
-        private readonly IApplicationRepository _applicationRepository;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public SetPursuedSourcesFundingHandler(IApplicationDataProvider applicationDataProvider, 
-                                               IDbConnectionWrapper db,
-                                               IApplicationRepository applicationRepository)
+        public SetPursuedSourcesFundingHandler(
+            IApplicationDataProvider applicationDataProvider, 
+            IDbConnectionWrapper db, 
+            IStatusTransitionService statusTransitionService)
         {
             _applicationDataProvider = applicationDataProvider;
             _db = db;
-            _applicationRepository = applicationRepository;     
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(SetPursuedSourcesFundingRequest request, CancellationToken cancellationToken)
@@ -39,7 +40,7 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
                 request.PursuedSourcesFunding
             });
 
-            await _applicationRepository.UpdateStatus(_applicationDataProvider.GetApplicationId(), EApplicationStatus.ApplicationInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.ApplicationInProgress, applicationIds: applicationId);
 
             scope.Complete();
         }

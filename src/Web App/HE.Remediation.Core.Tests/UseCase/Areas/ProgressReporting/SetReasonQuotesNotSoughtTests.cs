@@ -49,6 +49,9 @@ public class SetReasonQuotesNotSoughtTests : TestBase
                                     .Returns(Task.CompletedTask)
                                     .Verifiable();
 
+        var dateInFiveWorkingDays = DateTime.UtcNow.AddDays(5);
+        _dateRepository.Setup(x => x.AddWorkingDays(It.IsAny<AddWorkingDaysParameters>())).ReturnsAsync(dateInFiveWorkingDays);
+
         var applicationId = Guid.NewGuid();
         _applicationDataProvider.Setup(x => x.GetApplicationId())
             .Returns(applicationId)
@@ -61,7 +64,7 @@ public class SetReasonQuotesNotSoughtTests : TestBase
             .ReturnsAsync(taskType)
             .Verifiable();
 
-        if (request.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.IDontPlanToo)
+        if (request.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.IDontPlanTo)
         {
             _taskRepository
             .Setup(x => x.InsertTask(It.Is<InsertTaskParameters>(obj =>
@@ -69,8 +72,8 @@ public class SetReasonQuotesNotSoughtTests : TestBase
                 && obj.AssignedToTeamId == (int)ETeam.DaviesOps
                 && obj.AssignedToUserId == null
                 && obj.CreatedByUserId == null
-                && obj.Description == "Please review reason for not seeking quotes or issuing a tender"
-                && obj.RequiredByDate == DateOnly.FromDateTime(DateTime.UtcNow.AddDays(5))
+                && obj.Description == "Please contact applicant as not planning on running open tender"
+                && obj.RequiredByDate == DateOnly.FromDateTime(dateInFiveWorkingDays)
                 && obj.TopicId == null
                 && obj.Notes == string.Empty
                 && obj.TaskStatus == ETaskStatus.NotStarted.ToString()

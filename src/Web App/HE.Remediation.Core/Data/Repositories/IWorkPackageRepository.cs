@@ -31,6 +31,8 @@ public interface IWorkPackageRepository
 
     Task<bool> IsCladdingBeingRemoved();
 
+    Task<bool> IsSignedUpToConsiderateConstructorsScheme(Guid applicationId);
+
     #region Grant funding officer
 
     Task<IReadOnlyCollection<GrantCertifyingOfficerCandidateResult>> GetGrantCertifyingOfficerCandidates();

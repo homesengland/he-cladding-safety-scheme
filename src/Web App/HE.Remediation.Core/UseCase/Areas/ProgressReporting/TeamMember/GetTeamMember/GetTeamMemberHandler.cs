@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -57,7 +58,9 @@ public class GetTeamMemberHandler : IRequestHandler<GetTeamMemberRequest, GetTea
             InvolvedRoleReason = teamMember?.InvolvedRoleReason,
             Name = teamMember?.Name,
             Version = version,
-            HasChasCertification = teamMember?.HasChasCertification
+            HasChasCertification = teamMember?.HasChasCertification,
+            ConsiderateConstructorSchemeReasonNo = teamMember?.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.No ? teamMember.ConsiderateConstructorSchemeReason : null,
+            ConsiderateConstructorSchemeReasonDontKnow = teamMember?.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.DontKnow ? teamMember.ConsiderateConstructorSchemeReason : null
         };
     }
 }

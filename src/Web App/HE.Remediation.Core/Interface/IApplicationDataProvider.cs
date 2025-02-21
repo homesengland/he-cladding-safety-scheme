@@ -42,5 +42,9 @@ namespace HE.Remediation.Core.Interface
         void SetPaymentRequestId(Guid paymentRequestId);
 
         Guid GetPaymentRequestId();
+
+        string GetApplicationEmailAddress();
+
+        void SetApplicationIdAndEmailAddress(Guid applicationId, string emailAddress);
     }
 }

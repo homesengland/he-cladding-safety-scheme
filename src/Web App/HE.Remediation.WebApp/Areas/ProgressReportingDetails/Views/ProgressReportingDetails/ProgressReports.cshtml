@@ -14,7 +14,7 @@
 @foreach (var progressReportItem in Model.ProgressReports)
 {
     <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-        <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", progressReportId = @progressReportItem.Id.ToString() } )" class="govuk-link">@progressReportItem.DateCreated.Value.ToString("MMMM yyyy")</a>
+        <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", progressReportId = @progressReportItem.Id.ToString() } )" class="govuk-link">@(progressReportItem.Version == 1 ?"Primary progress report":@progressReportItem.DateCreated.Value.ToString("MMMM yyyy"))</a>
     </div>
     <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
         <p class="govuk-body">

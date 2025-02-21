@@ -2,33 +2,11 @@
 @using GovUk.Frontend.AspNetCore.TagHelpers
 @model HE.Remediation.WebApp.ViewModels.ProgressReporting.SoughtQuotesViewModel
 @{
-
-    string backLink;
-
-    if (!string.IsNullOrEmpty(Model.ReturnUrl))
-    {
-        backLink = Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-    }
-    else if (Model.Version > 1)
-    {
-        backLink = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
-    }
-    else if (Model.HasGco)
-    {
-        backLink = Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" });
-    }
-    else if (Model.OtherMembersAppointed == false)
-    {
-        backLink = Url.Action("ReasonNoOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
-    }
-    else
-    {
-        backLink = Url.Action("ProjectTeam", "ProgressReporting", new { Area = "ProgressReporting" });
-    }
-
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["BackLink"] = backLink;
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
@@ -55,7 +33,6 @@
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
-    <input asp-for="OtherMembersAppointed" type="hidden" value="@Model.OtherMembersAppointed" />
     <input asp-for="Version" type="hidden" value="@Model.Version" />
 
     <div class="comp-btn-group">

@@ -145,17 +145,31 @@
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
     }
-
-    @if (Model.ConsiderateConstructorSchemeType.HasValue && Model.Role == ETeamRole.LeadContractor)
+    @if (Model.Role == ETeamRole.LeadContractor)
     {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Is your lead contractor signed up to the Considerate Constructors Scheme?
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.ConsiderateConstructorSchemeType != EConsiderateConstructorSchemeType.DontKnow ? Model.ConsiderateConstructorSchemeType.ToString() : "Don't know")
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
+        if (Model.ConsiderateConstructorSchemeType.HasValue)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Is your lead contractor signed up to the Considerate Constructors Scheme?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.ConsiderateConstructorSchemeType != EConsiderateConstructorSchemeType.DontKnow ? Model.ConsiderateConstructorSchemeType.ToString() : "Don't know")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+
+        if (!string.IsNullOrWhiteSpace(Model.ConsiderateConstructorSchemeReason))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Reason your lead contractor has not signed up to the Considerate Constructors Scheme?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ConsiderateConstructorSchemeReason
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
     }
     
     @if (Model.HasChasCertification.HasValue)

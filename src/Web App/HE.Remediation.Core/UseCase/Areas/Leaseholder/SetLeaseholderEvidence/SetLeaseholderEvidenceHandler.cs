@@ -19,22 +19,19 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetLeaseholderEvidence
         private readonly IFileService _fileService;
         private readonly IFileRepository _fileRepository;
         private readonly FileServiceSettings _fileServiceSettings;
-        private readonly IApplicationRepository _applicationRepository;
 
         public SetLeaseholderEvidenceHandler(
             IDbConnectionWrapper dbConnection,
             IApplicationDataProvider applicationIdProvider,
             IFileService fileService,
             IFileRepository fileRepository,
-            IOptions<FileServiceSettings> fileServiceSettings,
-            IApplicationRepository applicationRepository)
+            IOptions<FileServiceSettings> fileServiceSettings)
         {
             _applicationDataProvider = applicationIdProvider;
             _dbConnection = dbConnection;
             _fileService = fileService;
             _fileRepository = fileRepository;
             _fileServiceSettings = fileServiceSettings.Value;
-            _applicationRepository = applicationRepository;
         }
 
         public async Task<Unit> Handle(SetLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)

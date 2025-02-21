@@ -18,13 +18,13 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExisti
         public async Task<Unit> Handle(SetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
             var cookieUserId = _applicationDataProvider.GetUserId();
-            var userId = await _db.QuerySingleOrDefaultAsync<Guid?>("GetUserIdByApplicationId", new { request.ApplicationId });
-            if ((cookieUserId.HasValue || userId.HasValue) && cookieUserId != userId)
+            var userIdAndEmailAddress = await _db.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", new { request.ApplicationId });
+            if ((cookieUserId.HasValue || userIdAndEmailAddress.UserId.HasValue) && cookieUserId != userIdAndEmailAddress.UserId.Value)
             {
                 throw new EntityNotFoundException("Application not found.");
             }
 
-            _applicationDataProvider.SetApplicationId(request.ApplicationId);
+            _applicationDataProvider.SetApplicationIdAndEmailAddress(request.ApplicationId, userIdAndEmailAddress.EmailAddress);
             
             return Unit.Value;
         }

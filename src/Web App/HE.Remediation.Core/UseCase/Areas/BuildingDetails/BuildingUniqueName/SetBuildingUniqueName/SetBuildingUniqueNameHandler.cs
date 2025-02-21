@@ -11,17 +11,14 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.S
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
-        private readonly IApplicationRepository _applicationRepository;
         private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
         public SetBuildingUniqueNameHandler(IDbConnectionWrapper dbConnectionWrapper, 
-                                            IApplicationDataProvider applicationDataProvider,
-                                            IApplicationRepository applicationRepository, 
+                                            IApplicationDataProvider applicationDataProvider, 
                                             IBuildingDetailsRepository buildingDetailsRepository)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
-            _applicationRepository = applicationRepository;
             _buildingDetailsRepository = buildingDetailsRepository;
         }
 

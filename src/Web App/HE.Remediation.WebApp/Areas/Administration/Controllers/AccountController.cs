@@ -348,7 +348,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         [HttpPost(nameof(CompanyAddress))]
         public async Task<IActionResult> CompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -484,7 +484,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         [HttpPost(nameof(CorrespondenceAddress))]
         public async Task<IActionResult> CorrespondenceAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(model);
             if (!validationResult.IsValid)
             {

@@ -1,6 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.SetResponsibleEntityUkRegistered;
@@ -10,14 +11,18 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IResponsibleEntityRepository _responsibleEntityRepository;
-    private readonly IApplicationRepository _applicationRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetResponsibleEntityUkRegisteredHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IResponsibleEntityRepository responsibleEntityRepository, IApplicationRepository applicationRepository)
+    public SetResponsibleEntityUkRegisteredHandler(
+        IDbConnectionWrapper connection, 
+        IApplicationDataProvider applicationDataProvider, 
+        IResponsibleEntityRepository responsibleEntityRepository, 
+        IStatusTransitionService statusTransitionService)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
         _responsibleEntityRepository = responsibleEntityRepository;
-        _applicationRepository = applicationRepository;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<SetResponsibleEntityUkRegisteredResponse> Handle(SetResponsibleEntityUkRegisteredRequest request, CancellationToken cancellationToken)
@@ -26,7 +31,7 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
 
         await SetResponsibleEntityUkRegistered(applicationId, request);
 
-        await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.ApplicationInProgress);
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.ApplicationInProgress, applicationIds: applicationId);
 
         return await GetRepresentativeUKStatusAndOrganisationTypes(applicationId);
     }

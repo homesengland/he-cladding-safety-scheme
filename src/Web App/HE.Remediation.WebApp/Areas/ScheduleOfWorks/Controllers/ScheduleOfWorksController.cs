@@ -437,15 +437,8 @@ public class ScheduleOfWorksController : StartController
 
         if (!validationResult.IsValid)
         {
-            var allowSaveAndReturnLater = viewModel.SubmitAction == ESubmitAction.Exit
-                && validationResult.ToDictionary().TryGetValue("Costs.UnprofiledGrantFunding", out var unprofiledGrantFundingErrors)
-                && unprofiledGrantFundingErrors.Length == validationResult.Errors.Count;
-
-            if (!allowSaveAndReturnLater)
-            {
-                validationResult.AddToModelState(ModelState, string.Empty);
-                return View(viewModel);
-            }
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
         }
 
         var request = _mapper.Map<SetCostsRequest>(viewModel.Costs);

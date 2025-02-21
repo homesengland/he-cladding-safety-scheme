@@ -111,7 +111,7 @@
                             <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-three-quarters">
-                                        <a href="@Url.Action("Start", "ProgressReporting", new { Area = "ProgressReporting", Id = @currentReport.Id } )" class="govuk-link">@currentReport.DateCreated.ToString("MMMM") progress report</a>
+                                        <a href="@Url.Action("Start", "ProgressReporting", new { Area = "ProgressReporting", Id = @currentReport.Id } )" class="govuk-link">@(currentReport.Version == 1 ? "Primary progress report" : $"{currentReport.DateCreated.ToString("MMMM")} progress report")</a>
                                     </div>
                                     <div class="govuk-grid-column-one-quarter">
                                         @if ((@currentReport.DateDue is not null && @currentReport.DateDue.Value.Date < DateTime.Today) ||
@@ -146,7 +146,7 @@
                                 <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                                     <div class="govuk-grid-row">
                                         <div class="govuk-grid-column-three-quarters">
-                                            <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", ProgressReportId = @previousReport.Id } )" class="govuk-link">@previousReport.DateCreated.ToString("MMMM") progress report</a>
+                                            <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", ProgressReportId = @previousReport.Id } )" class="govuk-link">@(previousReport.Version == 1 ? "Primary progress report" : $"{previousReport.DateCreated.ToString("MMMM")} progress report")</a>
                                         </div>
                                         <div class="govuk-grid-column-one-quarter">
                                             @if ((@previousReport.DateDue is not null && @previousReport.DateDue.Value.Date < DateTime.Today) ||
@@ -466,7 +466,7 @@
                         </div>
                     }
 
-                    @if (Model.Stage == EApplicationStage.WorksPackage && Model.HasWorkPackage && !Model.IsWorkPackageSubmitted)
+                    @if (Model.Stage == EApplicationStage.WorksPackage && Model.HasWorkPackage && !Model.IsWorkPackageSubmitted && Model.HasThePrimaryReportBeenSubmitted)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <a href="@Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" } )" class="govuk-link">Compile works package</a>

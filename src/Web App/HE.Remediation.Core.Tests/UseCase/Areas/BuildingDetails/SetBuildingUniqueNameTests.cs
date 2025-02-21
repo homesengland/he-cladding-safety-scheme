@@ -11,7 +11,6 @@ public class SetBuildingUniqueNameTests
 {
     private readonly Mock<IApplicationDataProvider> _applicationDataProvider;
     private readonly Mock<IDbConnectionWrapper> _connection;
-    private readonly Mock<IApplicationRepository> _applicationRepository;
     private readonly Mock<IBuildingDetailsRepository> _buildingDetailsRepository;
     
 
@@ -21,12 +20,10 @@ public class SetBuildingUniqueNameTests
     {       
         _connection = new Mock<IDbConnectionWrapper>(MockBehavior.Strict);
         _applicationDataProvider = new Mock<IApplicationDataProvider>(MockBehavior.Strict);
-        _applicationRepository = new Mock<IApplicationRepository>(MockBehavior.Strict);
         _buildingDetailsRepository = new Mock<IBuildingDetailsRepository>(MockBehavior.Strict);        
 
         _handler = new SetBuildingUniqueNameHandler(_connection.Object,
                                                     _applicationDataProvider.Object,
-                                                    _applicationRepository.Object,
                                                     _buildingDetailsRepository.Object);
     }
 
@@ -78,10 +75,6 @@ public class SetBuildingUniqueNameTests
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
-
-        _applicationRepository.Setup(x => x.UpdateStatus(It.IsAny<Guid>(), EApplicationStatus.ApplicationInProgress))
-                              .Returns(Task.CompletedTask)
-                              .Verifiable();
 
         //// Act
         var result = await _handler.Handle(new SetBuildingUniqueNameRequest(), CancellationToken.None);

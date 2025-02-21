@@ -16,8 +16,6 @@ public class SetEvidenceHandler : IRequestHandler<SetEvidenceRequest>
     private readonly IFileService _fileService;
     private readonly FileServiceSettings _fileServiceSettings;
 
-    private const string FilePropertyName = "File";
-
     public SetEvidenceHandler(
         IProgressReportingRepository progressReportingRepository,
         IFileRepository fileRepository,
@@ -58,18 +56,11 @@ public class SetEvidenceHandler : IRequestHandler<SetEvidenceRequest>
 
     private async Task ValidateFile(SetEvidenceRequest request)
     {
-        var existingFile = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFile();
+        var existingFiles = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFiles();
 
-        var errors = new List<KeyValuePair<string, string>>();
-
-        if (existingFile is null && request.File is null)
+        if (existingFiles.Count == 0 && request.File is null)
         {
-            errors.Add(new KeyValuePair<string, string>(FilePropertyName, "File is required"));
-        }
-
-        if (errors.Any())
-        {
-            throw new InvalidFileException(errors);
+            throw new InvalidFileException("File is required", nameof(request.File));
         }
     }
 }

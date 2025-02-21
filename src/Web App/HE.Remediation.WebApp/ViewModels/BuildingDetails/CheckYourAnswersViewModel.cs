@@ -15,6 +15,7 @@
         public string BuildingLocalAuthority { get; set; }
         public string BuildingCounty { get; set; }
         public string BuildingPostcode { get; set; }
+        public string LocalAuthorityCostCentreDescription { get; set; }
         public bool BuildingHasSafetyRegulatorRegistrationCode { get; set; }
         public string BuildingSafetyRegulatorRegistrationCode { get; set; }
         public bool PartOfDevelopment { get; set; }

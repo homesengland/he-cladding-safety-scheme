@@ -6,9 +6,9 @@
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
         ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
-        : Model.LeadDeveloperAppointed == false
-            ? Url.Action("ReasonNoDesigner", "ProgressReporting", new { Area = "ProgressReporting" })
-            : Url.Action("LeadDesignerCompDetails", "ProgressReporting", new { Area = "ProgressReporting" });
+        : Model.LeaseholdersInformed == false
+            ? Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("UploadEvidence", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = true;
 }
 @section ErrorSummary
@@ -17,7 +17,7 @@
         <govuk-error-summary-item asp-for="OtherMembersAppointed" />
     </govuk-error-summary>
 }
-<h1 class="govuk-heading-xl">Have you appointed other team members of your project team?</h1>
+<h1 class="govuk-heading-xl">Have you appointed any members of your project team?</h1>
 
 <form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="AppointedOtherMembers" method="post">
 
@@ -29,7 +29,7 @@
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
-    <input asp-for="LeadDeveloperAppointed" type="hidden" value="@Model.LeadDeveloperAppointed" />
+    <input asp-for="LeaseholdersInformed" type="hidden" value="@Model.LeaseholdersInformed" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>

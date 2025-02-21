@@ -5,31 +5,33 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Submit.Set;
 
 public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly IVariationRequestRepository _variationRequestRepository;
     private readonly ITaskRepository _taskRepository;
     private readonly IDateRepository _dateRepository;
     private readonly ICommunicationService _communicationService;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetSubmitHandler(IApplicationDataProvider applicationDataProvider,
-                            IApplicationRepository applicationRepository,
-                            IVariationRequestRepository variationRequestRepository,
-                            ITaskRepository taskRepository,
-                            IDateRepository dateRepository,
-                            ICommunicationService communicationService)
+    public SetSubmitHandler(
+        IApplicationDataProvider applicationDataProvider,
+        IVariationRequestRepository variationRequestRepository,
+        ITaskRepository taskRepository,
+        IDateRepository dateRepository,
+        ICommunicationService communicationService, 
+        IStatusTransitionService statusTransitionService)
     {
         _applicationDataProvider = applicationDataProvider;
-        _applicationRepository = applicationRepository;
         _variationRequestRepository = variationRequestRepository;
         _taskRepository = taskRepository;
         _dateRepository = dateRepository;
         _communicationService = communicationService;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
@@ -57,7 +59,7 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
             TopicId = taskType.TopicId
         });
 
-        await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.VariationSubmitted);
+        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.VariationSubmitted, applicationIds: applicationId);
 
         await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest
         (

@@ -24,7 +24,7 @@
 <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="UploadFireRiskAppraisalReport" method="post" enctype="multipart/form-data">
     <h3 class="govuk-heading-m">Upload FRAEW Report</h3>
     
-    <p class="govuk-body">Each file must be smaller than 50MB, and a .pdf file.</p>
+    <p class="govuk-body">Each file must be smaller than 100MB, and a .pdf file.</p>
 
     @if (@Model.AddedFraew is null)
     {
@@ -55,7 +55,7 @@
     }
     <h3 class="govuk-heading-m">Upload FRAEW Summary</h3>
     
-    <p class="govuk-body">Each file must be smaller than 50MB, and a .xlsx file.</p>
+    <p class="govuk-body">Each file must be smaller than 100MB, and a .xlsx file.</p>
 
     @if (@Model.AddedSummary is null)
     {

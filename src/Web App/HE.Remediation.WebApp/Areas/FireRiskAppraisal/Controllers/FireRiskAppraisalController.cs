@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
+using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddExternalWallWorks;

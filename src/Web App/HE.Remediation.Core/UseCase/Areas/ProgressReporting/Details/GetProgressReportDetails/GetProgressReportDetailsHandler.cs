@@ -13,9 +13,9 @@ public class GetProgressReportDetailsHandler : IRequestHandler<GetProgressReport
     private readonly IApplicationDataProvider _applicationDataProvider;
 
     public GetProgressReportDetailsHandler(
-        IApplicationRepository applicationRepository, 
-        IBuildingDetailsRepository buildingDetailsRepository, 
-        IProgressReportingRepository progressReportingRepository, 
+        IApplicationRepository applicationRepository,
+        IBuildingDetailsRepository buildingDetailsRepository,
+        IProgressReportingRepository progressReportingRepository,
         IApplicationDataProvider applicationDataProvider)
     {
         _applicationRepository = applicationRepository;
@@ -34,32 +34,53 @@ public class GetProgressReportDetailsHandler : IRequestHandler<GetProgressReport
 
         var details = await _progressReportingRepository.GetProgressReportDetails(applicationId, request.ProgressReportId);
 
+        var summariseProgress = await _progressReportingRepository.GetProgressReportProgressSummary();
+
         return new GetProgressReportDetailsResponse
         {
-            ApplicationReferenceNumber = reference,
-            AppliedForPlanningPermission = details.AppliedForPlanningPermission,
-            BuildingName = buildingName,
-            DateCreated = details.DateCreated,
-            DateSubmitted = details.DateSubmitted,
-            NextReportExists = details.NextReportExists,
-            ExpectedWorksPackageSubmissionDate = details.ExpectedWorksPackageSubmissionDate,
-            LeadDesignerAppointed = details.LeadDesignerAppointed,
-            LeaseholdersInformed = details.LeaseholdersInformed,
-            OtherMembersAppointed = details.OtherMembersAppointed,
-            QuotesSought = details.QuotesSought,
-            WhyYouHaveNotSoughtQuotes = details.WhyYouHaveNotSoughtQuotes,
-            QuotesNotSoughtReason = details.QuotesNotSoughtReason,
-            ReasonPlanningPermissionNotApplied = details.ReasonPlanningPermissionNotApplied,
-            RequirePlanningPermission = details.RequirePlanningPermission,
-            SpentAnyFunding = details.SpentAnyFunding,
+	        ApplicationReferenceNumber = reference,
+	        AppliedForPlanningPermission = details.AppliedForPlanningPermission,
+	        BuildingName = buildingName,
+	        DateCreated = details.DateCreated,
+	        DateSubmitted = details.DateSubmitted,
+	        IntentToProceedType = details.IntentToProceedType,
+	        NextReportExists = details.NextReportExists,
+	        ExpectedWorksPackageSubmissionDate = details.ExpectedWorksPackageSubmissionDate,
+	        LeadDesignerAppointed = details.LeadDesignerAppointed,
+	        LeaseholdersInformed = details.LeaseholdersInformed,
+	        OtherMembersAppointed = details.OtherMembersAppointed,
+	        QuotesSought = details.QuotesSought,
+	        WhyYouHaveNotSoughtQuotes = details.WhyYouHaveNotSoughtQuotes,
+	        QuotesNotSoughtReason = details.QuotesNotSoughtReason,
+	        ReasonPlanningPermissionNotApplied = details.ReasonPlanningPermissionNotApplied,
+	        RequirePlanningPermission = details.RequirePlanningPermission,
+	        SpentAnyFunding = details.SpentAnyFunding,
+	        version = details.Version,
+	        GoalSummary = summariseProgress.GoalSummary,
+	        ProgressSummary = summariseProgress.ProgressSummary,
+	        IsSupportNeeded = summariseProgress.RequiresSupport,
+	        BuildingControlRequired = details.BuildingControlRequired,
+	        HasAppliedForBuildingControl = details.HasAppliedForBuildingControl,
+	        BuildingControlForecastSubmissionDate = details.BuildingControlForecastSubmissionDate,
+	        BuildingControlForecastInformation = details.BuildingControlForecastInformation,
+	        BuildingControlActualSubmissionDate = details.BuildingControlActualSubmissionDate,
+	        BuildingControlActualSubmissionInformation = details.BuildingControlActualSubmissionInformation,
+	        BuildingControlApplicationReference = details.BuildingControlApplicationReference,
+	        BuildingControlValidationDate = details.BuildingControlValidationDate,
+	        BuildingControlValidationInformation = details.BuildingControlValidationInformation,
+	        BuildingControlDecisionDate = details.BuildingControlDecisionDate,
+	        BuildingControlDecisionInformation = details.BuildingControlDecisionInformation,
+	        BuildingControlDecision = details.BuildingControlDecision,
+            ExpectedStartDateOnSite = details.ExpectedStartDateOnSite,
+			
             TeamMembers = details.TeamMembers.Select(x => new GetProgressReportDetailsResponse.TeamMember
-            {
-                Id = x.Id,
-                Name = x.Name,
-                CompanyName = x.CompanyName,
-                OtherRole = x.OtherRole,
-                Role = x.Role
-            }).ToList()
+	        {
+		        Id = x.Id,
+		        Name = x.Name,
+		        CompanyName = x.CompanyName,
+		        OtherRole = x.OtherRole,
+		        Role = x.Role
+	        }).ToList()
         };
     }
 }

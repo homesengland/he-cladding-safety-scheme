@@ -1,0 +1,42 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.HaveYouAppliedForBuildingControlViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Model.Version > 1
+        ? Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+
+    var title = Model.BuildingControlRequired == true
+        ? "Have you applied for building control approval for higher-risk buildings (Gateway 2)?"
+        : "Have you applied for building control approval through the full plans approval process?";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="HasAppliedForBuildingControl" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@title</h1>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="HaveYouAppliedForBuildingControl" method="post">
+    
+    <govuk-radios asp-for="HasAppliedForBuildingControl">
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+    
+    <input asp-for="BuildingControlRequired" type="hidden" value="@Model.BuildingControlRequired"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="Version" type="hidden" value="@Model.Version"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

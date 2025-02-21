@@ -4,6 +4,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetDeclaration;
 
@@ -13,16 +14,20 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
     private readonly IClosingReportRepository _closingRequestRepository;
     private readonly IApplicationRepository _applicationRepository;
     private readonly ICommunicationService _communicationService;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetDeclarationHandler(IApplicationDataProvider adp, 
-                                 IClosingReportRepository closingRequestRepository, 
-                                 IApplicationRepository applicationRepository,
-                                 ICommunicationService communicationService)
+    public SetDeclarationHandler(
+        IApplicationDataProvider adp,
+        IClosingReportRepository closingRequestRepository,
+        IApplicationRepository applicationRepository,
+        ICommunicationService communicationService, 
+        IStatusTransitionService statusTransitionService)
     {
         _adp = adp;
         _closingRequestRepository = closingRequestRepository;
         _applicationRepository = applicationRepository;
         _communicationService = communicationService;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
@@ -35,7 +40,7 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
         await _closingRequestRepository.UpdateClosingReportLifeSafetyRiskAssessment(applicationId, request.LifeSafetyRiskAssessment);
         await _closingRequestRepository.UpdateClosingReportToSubmitted(applicationId);
 
-        await _applicationRepository.UpdateInternalStatus(applicationId, Enums.EApplicationInternalStatus.ClosingReportSubmitted);
+        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.ClosingReportSubmitted, applicationIds: applicationId);
         await _applicationRepository.UpdateApplicationStage(applicationId, EApplicationStage.WorksCompleted);
 
         await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest

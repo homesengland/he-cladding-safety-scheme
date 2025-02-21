@@ -23,7 +23,8 @@ namespace HE.Remediation.Core.Providers
             SessionTimeCookieIndex = 5,      
             DeclarationComplete = 6,
             ProgressReportIdCookieIndex = 7,
-            PaymentRequestIdCookieIndex = 8
+            PaymentRequestIdCookieIndex = 8,
+            AppIdEmailAddressCookieIndex = 9
         }
 
         public ApplicationDataProvider(IHttpContextAccessor httpContextAccessor, IDataProtectionProvider dataProtectionProvider)
@@ -354,6 +355,27 @@ namespace HE.Remediation.Core.Providers
             SetCookiePart((int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString());
         }
 
+        public void SetApplicationIdAndEmailAddress(Guid applicationId, string emailAddress)
+        {
+            Dictionary<int, string> indexesAndValues = new Dictionary<int, string>()
+            {
+                {(int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString()},
+                {(int)(CookieValueTypes.AppIdEmailAddressCookieIndex), emailAddress}
+            };
+
+            SetCookieParts(indexesAndValues);
+        }
+
+        public string GetApplicationEmailAddress()
+        {
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var emailAddress = decryptedCookie.Split("_")[(int)(CookieValueTypes.AppIdEmailAddressCookieIndex)];
+
+            return emailAddress;
+        }
+
         public void SetSessionTimeout()
         {
             var currentParts = GetCookieParts();
@@ -418,6 +440,19 @@ namespace HE.Remediation.Core.Providers
                 parts[index] = value;
                 SetCookieValue(string.Join("_", parts));
             }            
+        }
+
+        private void SetCookieParts(IDictionary<int, string> indexAndValues)
+        {            
+            var parts = GetCookieParts();
+            foreach (var indexAndValue in indexAndValues)
+            {
+                if (indexAndValue.Key < parts.Length)
+                {
+                    parts[indexAndValue.Key] = indexAndValue.Value;
+                    SetCookieValue(string.Join("_", parts));
+                }
+            }
         }
         
         private UserProfileCompletionModel ObtainProfileCompletionValue(int profileCompletionValue)

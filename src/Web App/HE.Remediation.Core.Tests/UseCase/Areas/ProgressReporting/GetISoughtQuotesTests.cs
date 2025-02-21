@@ -53,16 +53,6 @@ public class GetSoughtQuotesTests : TestBase
         _progressReportingRepository.Setup(x => x.GetProgressReportQuotesSought())
                                     .ReturnsAsync(true)
                                     .Verifiable();
-        _progressReportingRepository.Setup(x => x.GetProgressReportOtherMembersAppointed())
-                                    .ReturnsAsync(true)
-                                    .Verifiable();
-
-        var hasGco = Fixture.Create<bool>();
-
-        _progressReportingRepository.Setup(x => x.GetHasGrantCertifyingOfficer())
-            .ReturnsAsync(hasGco)
-            .Verifiable();
-
 
         var version = Fixture.Create<int>();
         _progressReportingRepository.Setup(x => x.GetProgressReportVersion())
@@ -75,13 +65,13 @@ public class GetSoughtQuotesTests : TestBase
         //// Assert
         Assert.NotNull(result);
 
-        var resultValid = ((result != null) &&
-                           (result.ApplicationReferenceNumber == ApplicationReference) &&
-                           (result.BuildingName == BuildingName) &&
-                           (result.QuotesSought == true) &&
-                           (result.OtherMembersAppointed == true) &&
-                           (result.Version == version) &&
-                           (result.HasGco == hasGco));
+        var resultValid = (result is
+                           {
+                               ApplicationReferenceNumber: ApplicationReference, 
+                               BuildingName: BuildingName, 
+                               QuotesSought: true
+                           } &&
+                           (result.Version == version));
         Assert.True(resultValid);
 
         _applicationDataProvider.Verify();

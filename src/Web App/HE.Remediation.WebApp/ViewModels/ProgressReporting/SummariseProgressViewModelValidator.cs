@@ -12,15 +12,9 @@ namespace HE.Remediation.WebApp.ViewModels.ProgressReporting
 
             RuleFor(x => x.ProgressSummary)
                 .NotEmpty()
-                .WithMessage("Enter a summary of this month's progress")
-                .MaximumLength(500)
-                .WithMessage("Summary of this month's progress cannot exceed 500 characters");
-
-            RuleFor(x => x.GoalSummary)
-                .NotEmpty()
-                .WithMessage("Enter a summary of next month's goals")
-                .MaximumLength(500)
-                .WithMessage("Summary of next month's progress cannot exceed 500 characters");
+                .WithMessage("Enter a summary of your risks and blockers this month")
+                .MaximumLength(1000)
+                .WithMessage("Summary of your risks and blockers cannot exceed 1000 characters");
         }
     }
 }

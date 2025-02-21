@@ -31,7 +31,7 @@ public class CheckYourAnswersViewModel : PaymentRequestBaseViewModel
     public bool UnsafeCladdingAlreadyRemoved { get; set; }
 
     public List<PaymentRequestCostFile> PaymentRequestCostFiles { get; set; }
-
+    public IList<string> PaymentRequestInvoiceFileNames { get; set; }
     public List<GetTeamMembersResult> TeamMembers { get; set; }    
 }
 

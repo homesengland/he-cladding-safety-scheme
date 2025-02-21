@@ -100,6 +100,7 @@ namespace HE.Remediation.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseExceptionLoggingMiddleware();
             app.UseProfileCompletionMiddleware();
 
             app.MapHealthChecks("/health");

@@ -4,20 +4,24 @@ using MediatR;
 using System.Transactions;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.VariationReason.Set;
 
 public class SetVariationReasonHandler : IRequestHandler<SetVariationReasonRequest>
 {
     private readonly IVariationRequestRepository _variationRequestRepository;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetVariationReasonHandler(IVariationRequestRepository variationRequestRepository, IApplicationRepository applicationRepository, IApplicationDataProvider applicationDataProvider)
+    public SetVariationReasonHandler(
+        IVariationRequestRepository variationRequestRepository, 
+        IApplicationDataProvider applicationDataProvider, 
+        IStatusTransitionService statusTransitionService)
     {
         _variationRequestRepository = variationRequestRepository;
-        _applicationRepository = applicationRepository;
         _applicationDataProvider = applicationDataProvider;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetVariationReasonRequest request, CancellationToken cancellationToken)
@@ -34,7 +38,7 @@ public class SetVariationReasonHandler : IRequestHandler<SetVariationReasonReque
             IsThirdPartyContributionVariation = request.IsThirdPartyContributionVariation
         });
 
-        await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.VariationInProgress);
+        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.VariationInProgress, applicationIds: applicationId);
 
         scope.Complete();
 

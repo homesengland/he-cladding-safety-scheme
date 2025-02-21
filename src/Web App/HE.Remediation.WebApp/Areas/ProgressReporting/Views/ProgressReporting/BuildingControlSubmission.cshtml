@@ -1,0 +1,94 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.BuildingControlSubmissionViewModel
+
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Model.Version > 1
+        ? Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("HaveYouAppliedForBuildingControl", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+
+    var title = Model.BuildingControlRequired == true
+        ? "Building control approval for higher-risk buildings (Gateway 2)"
+        : "Building control approval for buildings under 7 storeys and under 18m in height";
+
+    var dateLabel = Model.BuildingControlRequired == true
+        ? "Gateway 2 Actual Submission Date (optional)"
+        : "Actual Submission Date (optional)";
+
+    var submissionDateInvalid = ViewData.ModelState.TryGetValue(nameof(Model.SubmissionDateMonth), out var dateForecastMonthState) && dateForecastMonthState.ValidationState == ModelValidationState.Invalid || 
+                              ViewData.ModelState.TryGetValue(nameof(Model.SubmissionDateYear), out var dateForecastYearState) && dateForecastYearState.ValidationState == ModelValidationState.Invalid;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SubmissionDateMonth" />
+        <govuk-error-summary-item asp-for="SubmissionDateYear" />
+        <govuk-error-summary-item asp-for="BuildingControlApplicationReference" />
+        <govuk-error-summary-item asp-for="SubmissionInformation" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@title</h1>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="BuildingControlSubmission" method="post">
+    <div class="govuk-form-group @(submissionDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="forecast-submission-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="SubmissionDateMonth">@dateLabel</label>
+            <div class="govuk-hint">
+                Please enter the date you submitted your application. If you don't
+                have it now, you can add this information in a future progress report.
+                Include any supporting details in the additional information box below.
+            </div>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="SubmissionDateMonth" />
+            <govuk-error-message asp-for="SubmissionDateYear" />
+            <div class="govuk-date-input" id="forecast-submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="SubmissionDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="SubmissionDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="SubmissionDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="SubmissionDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    @if (Model.BuildingControlRequired == true)
+    {
+        <govuk-input asp-for="BuildingControlApplicationReference" class="govuk-!-width-three-quarters">
+            <govuk-input-label class="govuk-label--s">Gateway 2 application reference</govuk-input-label>
+        </govuk-input>
+    }
+
+    <govuk-character-count asp-for="SubmissionInformation" max-length="1000">
+        <govuk-character-count-label>
+            Additional information and supporting details
+        </govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="BuildingControlRequired" type="hidden" value="@Model.BuildingControlRequired"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="Version" type="hidden" value="@Model.Version"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

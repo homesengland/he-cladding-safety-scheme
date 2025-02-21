@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -25,12 +26,18 @@ public class GetWhenSubmitHandler : IRequestHandler<GetWhenSubmitRequest, GetWhe
     public async Task<GetWhenSubmitResponse> Handle(GetWhenSubmitRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
+        var progressReportId = _applicationDataProvider.GetProgressReportId();
 
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
         var submissionDate = await _progressReportingRepository.GetProgressReportExpectedWorksPackageSubmissionDate();
-        var buildingControlRequired = await _progressReportingRepository.GetBuildingControlRequired();
+        var hasAppliedForBuildingControl = await _progressReportingRepository.GetHasAppliedForBuildingControl(
+	        new GetHasAppliedForBuildingControlParameters
+	        {
+		        ApplicationId = applicationId,
+		        ProgressReportId = progressReportId
+	        });
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
@@ -38,7 +45,7 @@ public class GetWhenSubmitHandler : IRequestHandler<GetWhenSubmitRequest, GetWhe
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            BuildingControlRequired = buildingControlRequired,
+            HasAppliedForBuildingControl = hasAppliedForBuildingControl.HasAppliedForBuildingControl,
             SubmissionMonth = submissionDate?.Month,
             SubmissionYear = submissionDate?.Year,
             Version = version

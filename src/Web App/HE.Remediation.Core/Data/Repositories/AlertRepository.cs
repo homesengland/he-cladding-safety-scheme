@@ -19,4 +19,8 @@ public class AlertRepository : IAlertRepository
         return alerts;
     }
 
+    public async Task InsertAlert(InsertAlertParameters parameters)
+    {
+        await _connection.ExecuteAsync("InsertAlert", parameters);
+    }
 }

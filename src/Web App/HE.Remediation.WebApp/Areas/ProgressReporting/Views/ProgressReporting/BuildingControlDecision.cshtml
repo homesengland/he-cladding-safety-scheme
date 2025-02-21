@@ -1,0 +1,99 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.BuildingControlDecisionViewModel
+
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Model.Version > 1
+        ? Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("BuildingControlValidation", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+
+    var title = Model.BuildingControlRequired == true
+        ? "Building control approval for higher-risk buildings (Gateway 2)"
+        : "Building control approval for buildings under 7 storeys and under 18m in height";
+
+    var dateLabel = Model.BuildingControlRequired == true
+        ? "Gateway 2 Decision Date (optional)"
+        : "Decision Date (optional)";
+
+    var decisionDateInvalid = ViewData.ModelState.TryGetValue(nameof(Model.DecisionDateMonth), out var dateForecastMonthState) && dateForecastMonthState.ValidationState == ModelValidationState.Invalid ||
+                              ViewData.ModelState.TryGetValue(nameof(Model.DecisionDateYear), out var dateForecastYearState) && dateForecastYearState.ValidationState == ModelValidationState.Invalid;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="DecisionDateMonth" />
+        <govuk-error-summary-item asp-for="DecisionDateYear" />
+        <govuk-error-summary-item asp-for="DecisionInformation" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@title</h1>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="BuildingControlDecision" method="post">
+    <div class="govuk-form-group @(decisionDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="forecast-submission-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="DecisionDateMonth">@dateLabel</label>
+            <div class="govuk-hint">
+                Please enter when you received the approval or rejection. 
+                If you don't have it now, you can add this information in a future progress report. 
+                Include any supporting details in the additional information box.
+            </div>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="DecisionDateMonth" />
+            <govuk-error-message asp-for="DecisionDateYear" />
+            <div class="govuk-date-input" id="forecast-submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="DecisionDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="DecisionDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="DecisionDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="DecisionDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    <div class="govuk-!-margin-bottom-6">
+        <label asp-for="Decision" class="govuk-label--m">Decision (optional)</label>
+    </div>
+    <govuk-radios asp-for="Decision">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--s">
+                Decision
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@true">Approved</govuk-radios-item>
+        <govuk-radios-item value="@false">Rejected</govuk-radios-item>
+    </govuk-radios>
+
+    <govuk-character-count asp-for="DecisionInformation" max-length="1000">
+        <govuk-character-count-label class="govuk-label--s">
+            Additional information and supporting details
+        </govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="BuildingControlRequired" type="hidden" value="@Model.BuildingControlRequired" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

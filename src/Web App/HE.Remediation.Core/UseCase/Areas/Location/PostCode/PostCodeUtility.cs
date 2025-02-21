@@ -37,7 +37,8 @@ public static class PostCodeUtility
             XCoordinate = parsedXCoordinate,
             YCoordinate = parsedYCoordinate,
             Toid = address.Toid,
-            BuildingType = address.BuildingType
+            BuildingType = address.BuildingType,
+            LocalAuthority = address.Locality ?? address.AdminArea
         };
     }
 
@@ -52,7 +53,7 @@ public static class PostCodeUtility
         {
             NameNumber = address?.BuildingName ?? address?.BuildingNumber,
             AddressLine1 = !string.IsNullOrEmpty(address?.BuildingName) && !string.IsNullOrEmpty(address.BuildingNumber) ? $"{address.BuildingNumber} {address.Street}" : address?.Street,
-            LocalAuthority = address?.Locality,
+            LocalAuthority = address?.Locality ?? address?.AdminArea,
             City = address?.Town,
             Postcode = address?.Postcode,
             SubBuildingName = address?.SubBuildingName,

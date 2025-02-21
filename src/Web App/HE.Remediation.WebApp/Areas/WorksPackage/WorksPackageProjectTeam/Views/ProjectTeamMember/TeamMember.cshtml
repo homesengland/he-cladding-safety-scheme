@@ -137,9 +137,24 @@
                     Is your lead contractor signed up to the Considerate Constructors Scheme?
                 </govuk-radios-fieldset-legend>
             </govuk-radios-fieldset>
+            <govuk-radios-hint class="text-override-colour-default">(Being part of the Considerate Constructors Scheme is a contractual requirement)</govuk-radios-hint>
             <govuk-radios-item value="@(EConsiderateConstructorSchemeType.Yes)">Yes</govuk-radios-item>
-            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.No)">No</govuk-radios-item>
-            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.DontKnow)">Don't Know</govuk-radios-item>
+            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.No)">
+                No
+                <govuk-radios-item-conditional>
+                    <govuk-character-count asp-for="ConsiderateConstructorSchemeReasonNo" max-length="500">
+                        <govuk-character-count-label>Provide a reason</govuk-character-count-label>
+                    </govuk-character-count>
+                </govuk-radios-item-conditional>
+            </govuk-radios-item>
+            <govuk-radios-item value="@(EConsiderateConstructorSchemeType.DontKnow)">
+                Don't Know
+                <govuk-radios-item-conditional>
+                    <govuk-character-count asp-for="ConsiderateConstructorSchemeReasonDontKnow" max-length="500">
+                        <govuk-character-count-label>Provide a reason</govuk-character-count-label>
+                    </govuk-character-count>
+                </govuk-radios-item-conditional>
+            </govuk-radios-item>
         </govuk-radios>
 
         <govuk-radios asp-for="HasChasCertification">

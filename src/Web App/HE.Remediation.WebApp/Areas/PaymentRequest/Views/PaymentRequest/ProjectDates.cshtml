@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Monthly payment request";
     ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
-    ViewData["BackLink"] = Url.Action("UploadCostReport", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["BackLink"] = Url.Action("Invoices", "PaymentRequest", new { Area = "PaymentRequest" });
     ViewData["FullWidth"] = false;
 
     var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));

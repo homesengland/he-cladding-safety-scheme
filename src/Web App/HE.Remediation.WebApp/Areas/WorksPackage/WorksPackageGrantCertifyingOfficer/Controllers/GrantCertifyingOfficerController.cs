@@ -224,7 +224,7 @@ public class GrantCertifyingOfficerController : StartController
     [HttpPost(nameof(GrantCertifyingOfficerAddressDetails))]
     public async Task<IActionResult> GrantCertifyingOfficerAddressDetails(PostCodeManualViewModel model, ESubmitAction submitAction)
     {
-        var validator = new PostCodeManualViewModelValidator(false, false);
+        var validator = new PostCodeManualViewModelValidator(false);
         var validationResult = await validator.ValidateAsync(model);
 
         if (!validationResult.IsValid)

@@ -29,9 +29,7 @@ public class GetSoughtQuotesHandler : IRequestHandler<GetSoughtQuotesRequest, Ge
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-        var otherMembersAppointed = await _progressReportingRepository.GetProgressReportOtherMembersAppointed();
         var quotesSought = await _progressReportingRepository.GetProgressReportQuotesSought();
-        var hasGco = await _progressReportingRepository.GetHasGrantCertifyingOfficer();
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
@@ -39,10 +37,8 @@ public class GetSoughtQuotesHandler : IRequestHandler<GetSoughtQuotesRequest, Ge
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            OtherMembersAppointed = otherMembersAppointed,
             QuotesSought = quotesSought,
-            Version = version,
-            HasGco = hasGco ?? false
+            Version = version
         };
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ByteSizeLib;
 using HE.Remediation.Core.Data.StoredProcedureResults.PaymentRequest;
-using HE.Remediation.Core.UseCase.Areas.PaymentRequest.CostReport.GetCostReport;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.CostReport.SetCostReport;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetUploadCostReport;
 
@@ -11,10 +10,6 @@ public class UploadCostReportViewModelMapper : Profile
 {
     public UploadCostReportViewModelMapper()
     {
-        CreateMap<GetCostResponse, UploadCostReportViewModel>()
-            .ForMember(x => x.File, o => o.Ignore())
-            .ForMember(x => x.AddedFile, o => o.MapFrom(f => f.File));
-
         CreateMap<UploadCostReportViewModel, SetCostRequest>();
 
         CreateMap<GetUploadCostReportResponse, UploadCostReportViewModel>();

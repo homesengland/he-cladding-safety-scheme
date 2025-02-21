@@ -6,6 +6,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.SetSubmit
 {
@@ -16,19 +17,22 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.SetSubmit
         private readonly IApplicationRepository _applicationRepository;
         private readonly ITaskRepository _taskRepository;
         private readonly ICommunicationService _communicationService;
-
+        private readonly IStatusTransitionService _statusTransitionService;
 
         public SetSubmitHandler(IDbConnectionWrapper dbConnectionWrapper,
             IApplicationDataProvider applicationDataProvider,
             IApplicationRepository applicationRepository,
             ITaskRepository taskRepository,
-            ICommunicationService communicationService)
+            ICommunicationService communicationService, 
+            IStatusTransitionService statusTransitionService)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
             _applicationRepository = applicationRepository;
             _taskRepository = taskRepository;
-            _communicationService = communicationService; ;
+            _communicationService = communicationService;
+            _statusTransitionService = statusTransitionService;
+            ;
         }
 
         public async Task<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
@@ -49,7 +53,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.SetSubmit
                 ApplicationId = applicationId
             });
 
-            await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.FinalApplicationSubmitted);
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FinalApplicationSubmitted, applicationIds: applicationId);
 
             var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Eligibility", "Start eligibility checks"));
 

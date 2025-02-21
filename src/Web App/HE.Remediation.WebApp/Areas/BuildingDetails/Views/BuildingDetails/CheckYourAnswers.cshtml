@@ -91,6 +91,17 @@
 </govuk-summary-list-row>
 <govuk-summary-list-row>
     <govuk-summary-list-row-key>
+        Local authority
+    </govuk-summary-list-row-key>
+	<govuk-summary-list-row-value>
+		@if (!String.IsNullOrEmpty(Model.LocalAuthorityCostCentreDescription))
+		{
+			@Model.LocalAuthorityCostCentreDescription
+		}
+	</govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
         Is this building part of a development?
     </govuk-summary-list-row-key>
     <govuk-summary-list-row-value>

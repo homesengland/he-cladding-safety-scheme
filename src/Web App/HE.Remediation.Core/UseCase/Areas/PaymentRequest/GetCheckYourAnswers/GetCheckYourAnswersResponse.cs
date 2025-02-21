@@ -29,6 +29,7 @@ public class GetCheckYourAnswersResponse
     public decimal? AdditionalCostAmount { get; set; }
     
     public List<PaymentRequestCostFile> PaymentRequestCostFiles { get; set; }
+    public IList<string> PaymentRequestInvoiceFileNames { get; set; }
 
     public List<GetTeamMembersResult> TeamMembers { get; set; }
 

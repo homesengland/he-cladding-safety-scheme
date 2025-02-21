@@ -55,12 +55,19 @@ public class GetHaveAnyAnswersChangedHandler : IRequestHandler<GetHaveAnyAnswers
                 CurrentlyShowBsr = answers.CurrentlyShowBsr,
                 BuildingHasSafetyRegulatorRegistrationCode = answers.BuildingHasSafetyRegulatorRegistrationCode,
                 BuildingSafetyRegulatorRegistrationCode = answers.BuildingSafetyRegulatorRegistrationCode,
+                HasAppliedForBuildingControl = answers.HasAppliedForBuildingControl,
                 BuildingControlForecastSubmissionDate = answers.BuildingControlForecastSubmissionDate,
+                BuildingControlForecastInformation = answers.BuildingControlForecastInformation,
                 BuildingControlActualSubmissionDate = answers.BuildingControlActualSubmissionDate,
+                BuildingControlActualSubmissionInformation = answers.BuildingControlActualSubmissionInformation,
+                BuildingControlApplicationReference = answers.BuildingControlApplicationReference,
                 BuildingControlDecisionDate = answers.BuildingControlDecisionDate,
+                BuildingControlDecisionInformation = answers.BuildingControlDecisionInformation,
                 BuildingControlValidationDate = answers.BuildingControlValidationDate,
+                BuildingControlValidationInformation = answers.BuildingControlValidationInformation,
                 BuildingControlDecision = answers.BuildingControlDecision,
                 WorksPackageEstimateDate = answers.ExpectedWorksPackageSubmissionDate,
+                ExpectedStartDateOnSite = answers.ExpectedStartDateOnSite,
                 HasGco = gcoAnswers?.HasGco,
                 TeamMember = gcoAnswers?.TeamMember,
                 Role = gcoAnswers?.Role,
@@ -72,7 +79,8 @@ public class GetHaveAnyAnswersChangedHandler : IRequestHandler<GetHaveAnyAnswers
                 Postcode = gcoAnswers?.Postcode,
                 Signatory = gcoAnswers?.Signatory,
                 SignatoryEmailAddress = gcoAnswers?.SignatoryEmailAddress,
-                DateAppointed = gcoAnswers?.DateAppointed
+                DateAppointed = gcoAnswers?.DateAppointed,
+                IntentToProceed = answers.IntentToProceedType
             } :
             throw new EntityNotFoundException("Answers not found");
     }

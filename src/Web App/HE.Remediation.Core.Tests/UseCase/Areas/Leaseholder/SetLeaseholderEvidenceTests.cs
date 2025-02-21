@@ -18,7 +18,6 @@ public class SetLeaseholderEvidenceTests
     private readonly Mock<IFileService> _fileService;
     private readonly Mock<IFileRepository> _fileRepository;
     private readonly Mock<IOptions<FileServiceSettings>> _fileServiceSettings;
-    private readonly Mock<IApplicationRepository> _applicationRepository;
 
     private readonly SetLeaseholderEvidenceHandler _handler;
         
@@ -29,7 +28,6 @@ public class SetLeaseholderEvidenceTests
         _fileService = new Mock<IFileService>(MockBehavior.Strict);
         _fileRepository = new Mock<IFileRepository>(MockBehavior.Strict);
         _fileServiceSettings = new Mock<IOptions<FileServiceSettings>>(MockBehavior.Strict);
-        _applicationRepository = new Mock<IApplicationRepository>(MockBehavior.Strict);
 
         _fileServiceSettings.Setup(x => x.Value).Returns(new FileServiceSettings());
                 
@@ -37,8 +35,7 @@ public class SetLeaseholderEvidenceTests
                                                      _applicationDataProvider.Object,
                                                      _fileService.Object,
                                                      _fileRepository.Object,
-                                                     _fileServiceSettings.Object,
-                                                     _applicationRepository.Object);
+                                                     _fileServiceSettings.Object);
     }
 
     [Fact]
@@ -57,10 +54,6 @@ public class SetLeaseholderEvidenceTests
         _connection.Setup(x => x.ExecuteAsync("InsertLeaseHolderEngagementFile", It.IsAny<object>()))                  
                                 .Returns(Task.CompletedTask)
                                 .Verifiable();
-
-        _applicationRepository.Setup(x => x.UpdateStatus(It.IsAny<Guid>(), EApplicationStatus.ApplicationInProgress))
-                              .Returns(Task.CompletedTask)
-                              .Verifiable();  
 
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())

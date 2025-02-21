@@ -55,6 +55,8 @@ using ProjectDatesViewModelValidator = HE.Remediation.WebApp.ViewModels.PaymentR
 using SubmittedViewModel = HE.Remediation.WebApp.ViewModels.PaymentRequest.SubmittedViewModel;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetThirdPartyContributionsChanged;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetThirdPartyContributionsChanged;
+using HE.Remediation.Core.Attributes;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest;
 
 namespace HE.Remediation.WebApp.Areas.PaymentRequest.Controllers;
 
@@ -292,7 +294,7 @@ public class PaymentRequestController : StartController
         if (!ModelState.IsValid)
         {
             // this will happen when the request size limit is exceeded, the model is null so manually add the error message
-            ModelState.AddModelError("Files", "One more more files are larger than 20mb");
+            ModelState.AddModelError("File", "One more more files are larger than 20mb");
             return View(model);
         }
 
@@ -306,7 +308,7 @@ public class PaymentRequestController : StartController
 
         if (model.SubmitAction == ESubmitAction.Continue)
         {
-            var action = nameof(ProjectDates);
+            var action = nameof(Invoices);
             action = model.ReturnUrl is null ? action : model.ReturnUrl;
 
             return RedirectToAction(action, "PaymentRequest", new {area = "PaymentRequest"});
@@ -339,6 +341,7 @@ public class PaymentRequestController : StartController
     }
 
     [HttpGet(nameof(UploadCostReport) + "/Delete")]
+    [UserIdentityMustBeTheApplicationUser]
     public async Task<IActionResult> UploadCostReportDelete([FromQuery] Guid fileId, [FromQuery] string returnUrl)
     {
         await _sender.Send(new DeleteCostRequest
@@ -348,6 +351,62 @@ public class PaymentRequestController : StartController
         });
         return RedirectToAction("UploadCostReport", "PaymentRequest",
             new {Area = "PaymentRequest", returnUrl = returnUrl});
+    }
+
+    #endregion
+
+    #region Upload Invoices
+
+    [HttpGet(nameof(Invoices))]
+    public async Task<IActionResult> Invoices(string returnUrl, CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetPaymentRequestInvoicesRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<InvoicesViewModel>(response);
+        viewModel.ReturnUrl = returnUrl;
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(Invoices))]
+    [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
+    public async Task<IActionResult> Invoices(InvoicesViewModel model, CancellationToken cancellationToken)
+    {
+        if (!ModelState.IsValid)
+        {
+            // this will happen when the request size limit is exceeded, the model is null so manually add the error message
+            ModelState.AddModelError(nameof(model.File), "One more more files are larger than 100mb");
+            return View(model);
+        }
+
+        var validator = new InvoicesViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        if (model.SubmitAction == ESubmitAction.Upload)
+        {
+            var request = _mapper.Map<SetPaymentRequestInvoiceRequest>(model);
+            await _sender.Send(request, cancellationToken);
+            return RedirectToAction("Invoices", "PaymentRequest", new { Area = "PaymentRequest" });
+        }
+
+        if (model.SubmitAction == ESubmitAction.Continue)
+        {
+            var action = !string.IsNullOrWhiteSpace(model.ReturnUrl) ? model.ReturnUrl : nameof(ProjectDates);
+            return RedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
+        }
+
+        return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+    }
+
+    [HttpGet(nameof(Invoices) + "/Delete")]
+    public async Task<IActionResult> DeleteInvoice([FromQuery] DeletePaymentRequestInvoiceRequest request, CancellationToken cancellationToken)
+    {
+        await _sender.Send(request, cancellationToken);
+        return RedirectToAction("Invoices", "PaymentRequest", new { Area = "PaymentRequest", ReturnUrl = request.ReturnUrl });
     }
 
     #endregion

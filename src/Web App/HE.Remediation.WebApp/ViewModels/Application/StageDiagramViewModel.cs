@@ -52,4 +52,6 @@ public class StageDiagramViewModel
     public EPaymentRequestTaskStatus? ClosingReportStatus { get; set; }
 
     public bool ClosingReportStarted { get; set; }
+
+    public bool HasThePrimaryReportBeenSubmitted { get; set; }
 }

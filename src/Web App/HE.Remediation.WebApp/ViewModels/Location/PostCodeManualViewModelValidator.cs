@@ -8,7 +8,7 @@ public class PostCodeManualViewModelValidator: AbstractValidator<PostCodeManualV
 {
     private const int UKDropDownCountryValue = 1;
 
-    public PostCodeManualViewModelValidator(bool CheckLocalAuthority, bool CheckCountry)
+    public PostCodeManualViewModelValidator(bool CheckCountry)
     {
         RuleFor(x => x.NameNumber)
         .NotNull()
@@ -31,15 +31,6 @@ public class PostCodeManualViewModelValidator: AbstractValidator<PostCodeManualV
             .WithMessage("Please enter a town or city")
             .MaximumLength(150)
             .WithMessage("Town or city cannot exceed 150 characters");
-
-        if (CheckLocalAuthority)
-        {
-            RuleFor(x => x.LocalAuthority)
-            .NotNull()
-            .WithMessage("Local Authority must be entered")
-            .MaximumLength(150)
-            .WithMessage("Local Authority cannot exceed 150 characters");
-        }
 
         RuleFor(x => x.County)
             .MaximumLength(150)

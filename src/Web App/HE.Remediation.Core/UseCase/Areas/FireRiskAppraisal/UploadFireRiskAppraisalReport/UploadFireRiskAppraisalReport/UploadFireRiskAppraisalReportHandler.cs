@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.UploadFireRiskAppraisalReport
 {
@@ -19,20 +20,25 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
         private readonly IDbConnectionWrapper _dbConnection;
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly FileServiceSettings _fileServiceSettings;
-        private readonly IApplicationRepository _applicationRepository;
+        private readonly IStatusTransitionService _statusTransitionService;
 
         private const string FraewFilePropertyName = "Fraew";
         private const string FraewSummaryFilePropertyName = "FraewSummary";
 
-        public UploadFireRiskAppraisalReportHandler(IFileService fileService, IDbConnectionWrapper dbConnection, IApplicationDataProvider applicationDataProvider, IOptionsSnapshot<FileServiceSettings> fileServiceSettings,
-            IFileRepository fileRepository, IApplicationRepository applicationRepository)
+        public UploadFireRiskAppraisalReportHandler(
+            IFileService fileService, 
+            IDbConnectionWrapper dbConnection, 
+            IApplicationDataProvider applicationDataProvider, 
+            IOptions<FileServiceSettings> fileServiceSettings,
+            IFileRepository fileRepository, 
+            IStatusTransitionService statusTransitionService)
         {
             _fileService = fileService;
             _dbConnection = dbConnection;
             _applicationDataProvider = applicationDataProvider;
             _fileServiceSettings = fileServiceSettings.Value;
             _fileRepository = fileRepository;
-            _applicationRepository = applicationRepository;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(UploadFireRiskAppraisalReportRequest request, CancellationToken cancellationToken)
@@ -67,7 +73,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
                     await _dbConnection.ExecuteAsync("InsertFraewSummaryForApplication", new { fraewSummaryResult.FileId, applicationId });
                 }
 
-                await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.FraewUploaded);
+                await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewUploaded, applicationIds: applicationId);
 
                 scope.Complete();
             }

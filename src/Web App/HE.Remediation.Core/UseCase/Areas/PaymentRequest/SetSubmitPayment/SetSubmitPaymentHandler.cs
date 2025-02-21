@@ -4,20 +4,22 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetSubmitPayment;
 
 public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly IPaymentRequestRepository _paymentRequestRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetSubmitPaymentHandler(IPaymentRequestRepository paymentRequestRepository,
-        IApplicationDataProvider applicationDataProvider,
-        IApplicationRepository applicationRepository)
+    public SetSubmitPaymentHandler(
+        IPaymentRequestRepository paymentRequestRepository,
+        IApplicationDataProvider applicationDataProvider, 
+        IStatusTransitionService statusTransitionService)
     {
-        _applicationRepository = applicationRepository;
+        _statusTransitionService = statusTransitionService;
         _paymentRequestRepository = paymentRequestRepository;
         _applicationDataProvider = applicationDataProvider;
     }
@@ -57,7 +59,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest>
         }
 
         await _paymentRequestRepository.UpdatePaymentRequestAmount(paymentRequestId, request.CurrentMonth.Amount ?? 0);
-        await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.PaymentRequestInProgress);
+        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PaymentRequestInProgress, applicationIds: applicationId);
 
         await _paymentRequestRepository.UpdatePaymentRequestTaskStatus(paymentRequestId, EPaymentRequestTaskStatus.InProgress);
 
@@ -81,7 +83,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest>
             return false;
         }
 
-        var newItem = newCosts.Where(x => x.Id == originalCost.Id).FirstOrDefault();
+        var newItem = newCosts.FirstOrDefault(x => x.Id == originalCost.Id);
         if (newItem is not null)
         {
             return (newItem.Amount != originalCost.Amount);
@@ -98,7 +100,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest>
             return null;
         }
 
-        var currentMonthPayment = existingCostsProfile.Where(x => x.Type == EPaymentRequestCostType.CurrentPayment).FirstOrDefault();
+        var currentMonthPayment = existingCostsProfile.FirstOrDefault(x => x.Type == EPaymentRequestCostType.CurrentPayment);
         if (currentMonthPayment != null)
         {
             return new UpdateCostParameters

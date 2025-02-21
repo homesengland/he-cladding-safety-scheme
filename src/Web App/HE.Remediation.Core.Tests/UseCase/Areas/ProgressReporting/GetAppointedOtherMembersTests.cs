@@ -49,9 +49,11 @@ public class GetAppointedOtherMembersTests
                                   .ReturnsAsync(BuildingName)
                                   .Verifiable();
 
-        _progressReportingRepository.Setup(x => x.GetProgressReportLeadDesignerAppointed())
+        _progressReportingRepository.Setup(x => x.GetProgressReportLeaseholdersInformed())
                                     .ReturnsAsync(true)
-                                    .Verifiable(); _progressReportingRepository.Setup(x => x.GetProgressReportOtherMembersAppointed())
+                                    .Verifiable(); 
+        
+        _progressReportingRepository.Setup(x => x.GetProgressReportOtherMembersAppointed())
                                     .ReturnsAsync(true)
                                     .Verifiable();
 
@@ -65,7 +67,7 @@ public class GetAppointedOtherMembersTests
                            (result.ApplicationReferenceNumber == ApplicationReference) &&
                            (result.BuildingName == BuildingName) &&
                            (result.OtherMembersAppointed == true) &&
-                           (result.LeadDeveloperAppointed == true));
+                           (result.LeaseholdersInformed == true));
         Assert.True(resultValid);
 
         _applicationDataProvider.Verify();

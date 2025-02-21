@@ -1,5 +1,4 @@
 ﻿@using HE.Remediation.Core.Enums;
-@using GovUk.Frontend.AspNetCore.TagHelpers
 @model HE.Remediation.WebApp.ViewModels.ProgressReporting.WhenSubmitViewModel
 @{
     string backLink;
@@ -12,13 +11,13 @@
     {
         backLink = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
     }
-    else if (Model.BuildingControlRequired == true)
+    else if (Model.HasAppliedForBuildingControl == true)
     {
-        backLink = Url.Action("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" });
+        backLink = Url.Action("BuildingControlDecision", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     else
     {
-        backLink = Url.Action("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" });
+        backLink = Url.Action("BuildingControlForecast", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     ViewData["Title"] = "Progress Reporting";
@@ -68,6 +67,7 @@
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
     <input asp-for="Version" type="hidden" value="@Model.Version" />
+    <input asp-for="HasAppliedForBuildingControl" type="hidden" value="@Model.HasAppliedForBuildingControl" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>

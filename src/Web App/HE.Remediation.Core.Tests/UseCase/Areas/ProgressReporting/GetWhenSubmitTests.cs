@@ -1,5 +1,7 @@
 ﻿using AutoFixture;
 using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenSubmit.GetWhenSubmit;
 using Moq;
@@ -37,11 +39,16 @@ public class GetWhenSubmitTests : TestBase
     {
         //Arrange
         var applicationId = Guid.NewGuid();
+        var progressReportId = Guid.NewGuid();
         var submissionDate = DateTime.Parse("2023-06-30");
 
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(applicationId)
                                 .Verifiable();
+
+        _applicationDataProvider.Setup(x => x.GetProgressReportId())
+            .Returns(progressReportId)
+            .Verifiable();
 
         _applicationRepository.Setup(x => x.GetApplicationReferenceNumber(applicationId))
                                .ReturnsAsync(ApplicationReference)
@@ -54,9 +61,16 @@ public class GetWhenSubmitTests : TestBase
         _progressReportingRepository.Setup(x => x.GetProgressReportExpectedWorksPackageSubmissionDate())
                                     .ReturnsAsync(submissionDate)
                                     .Verifiable();
-        _progressReportingRepository.Setup(x => x.GetBuildingControlRequired())
-                                    .ReturnsAsync(true)
-                                    .Verifiable();
+        _progressReportingRepository.Setup(x => x.GetHasAppliedForBuildingControl(
+                It.Is<GetHasAppliedForBuildingControlParameters>(obj =>
+                    obj.ApplicationId == applicationId
+                    && obj.ProgressReportId == progressReportId)))
+            .ReturnsAsync(() => new GetHasAppliedForBuildingControlResult
+            {
+                BuildingControlRequired = true,
+                HasAppliedForBuildingControl = true
+            })
+            .Verifiable();
 
         var version = Fixture.Create<int>();
         _progressReportingRepository.Setup(x => x.GetProgressReportVersion())

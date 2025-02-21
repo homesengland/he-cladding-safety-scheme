@@ -4,6 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Submit.Set;
@@ -15,18 +16,22 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
     private readonly IScheduleOfWorksRepository _scheduleOfWorksRepository;
     private readonly ITaskRepository _taskRepository;
     private readonly ICommunicationService _communicationService;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetSubmitHandler(IApplicationDataProvider applicationDataProvider,
-                            IApplicationRepository applicationRepository,
-                            IScheduleOfWorksRepository scheduleOfWorksRepository,
-                            ITaskRepository taskRepository,
-                            ICommunicationService communicationService)
+    public SetSubmitHandler(
+        IApplicationDataProvider applicationDataProvider,
+        IApplicationRepository applicationRepository,
+        IScheduleOfWorksRepository scheduleOfWorksRepository,
+        ITaskRepository taskRepository,
+        ICommunicationService communicationService, 
+        IStatusTransitionService statusTransitionService)
     {
         _applicationDataProvider = applicationDataProvider;
         _applicationRepository = applicationRepository;
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
         _taskRepository = taskRepository;
         _communicationService = communicationService;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
@@ -36,7 +41,7 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
         await _scheduleOfWorksRepository.SubmitScheduleOfWorks();
 
         var applicationId = _applicationDataProvider.GetApplicationId();
-        await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.ScheduleOfWorksSubmitted);
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.ScheduleOfWorksSubmitted, applicationIds: applicationId);
 
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Schedule of works checks", "Review schedule of works submission"));
 
@@ -48,7 +53,7 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
             AssignedToTeamId = (int)ETeam.DaviesOps,
             AssignedToUserId = null,
             CreatedByUserId = null,
-            Description = $"Please review the schedule of works submitted and complete the required checks",
+            Description = "Please review the schedule of works submitted and complete the required checks",
             RequiredByDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3)),
             TaskStatus = ETaskStatus.NotStarted.ToString(),
             TaskTypeId = taskType.Id

@@ -1,6 +1,8 @@
-﻿using HE.Remediation.Core.Data.Repositories;
+﻿using System.Transactions;
+using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.SetFundingStillPursuing
@@ -10,12 +12,18 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IApplicationRepository _applicationRepository;
         private readonly IDbConnectionWrapper _db;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public SetFundingStillPursuingHandler(IApplicationDataProvider applicationDataProvider, IApplicationRepository applicationRepository, IDbConnectionWrapper db)
+        public SetFundingStillPursuingHandler(
+            IApplicationDataProvider applicationDataProvider, 
+            IApplicationRepository applicationRepository, 
+            IDbConnectionWrapper db, 
+            IStatusTransitionService statusTransitionService)
         {
             _applicationDataProvider = applicationDataProvider;
             _applicationRepository = applicationRepository;
             _db = db;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(SetFundingStillPursuingRequest request, CancellationToken cancellationToken)
@@ -28,25 +36,13 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var hasDeveloperPledgeAnswer =
-                request.FundingStillPursuing != null && request.FundingStillPursuing.Any(x => x == EFundingStillPursuing.SignedUpDevelopersPledge);
-
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            
             await _db.ExecuteAsync("UpsertFundingStillPursuing", new { applicationId, FundingStillPursuing = string.Join(",", request.FundingStillPursuing.Select(x => (int)x)) });
+            
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.ApplicationInProgress, applicationIds: applicationId);
 
-            if (hasDeveloperPledgeAnswer)
-            {
-                await _applicationRepository.UpdateApplicationStage(_applicationDataProvider.GetApplicationId(),
-                    EApplicationStage.Closed);
-
-                await _applicationRepository.UpdateStatus(_applicationDataProvider.GetApplicationId(),
-                    EApplicationStatus.ApplicationNotEligible,
-                    "Developer that has signed up to the Developer's pledge.");
-            }
-            else
-            {
-                await _applicationRepository.UpdateStatus(_applicationDataProvider.GetApplicationId(),
-                    EApplicationStatus.ApplicationInProgress);
-            }
+            scope.Complete();
         }
     }
 }

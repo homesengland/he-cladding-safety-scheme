@@ -2,6 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Set;
@@ -9,16 +10,17 @@ namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Set;
 public class SetWorksContractHandler : IRequestHandler<SetWorksContractRequest, Unit>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly IScheduleOfWorksRepository _scheduleOfWorksRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetWorksContractHandler(IApplicationDataProvider applicationDataProvider,
-                                   IApplicationRepository applicationRepository,
-                                   IScheduleOfWorksRepository scheduleOfWorksRepository)
+    public SetWorksContractHandler(
+        IApplicationDataProvider applicationDataProvider,
+        IScheduleOfWorksRepository scheduleOfWorksRepository, 
+        IStatusTransitionService statusTransitionService)
     {
         _applicationDataProvider = applicationDataProvider;
-        _applicationRepository = applicationRepository;
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetWorksContractRequest request, CancellationToken cancellationToken)
@@ -32,7 +34,7 @@ public class SetWorksContractHandler : IRequestHandler<SetWorksContractRequest, 
         }
 
         var applicationId = _applicationDataProvider.GetApplicationId();
-        await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.ScheduleOfWorksInProgress);
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.ScheduleOfWorksInProgress, applicationIds: applicationId);
 
         scope.Complete();
 

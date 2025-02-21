@@ -34,7 +34,14 @@ public class SetReasonQuotesNotSoughtHandler : IRequestHandler<SetReasonQuotesNo
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Progress Report",
             "Review"));
 
-        if (request.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.IDontPlanToo)
+        // next working day - weekends and holidays are in DateReference table
+        var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
+        {
+            Date = DateTime.UtcNow.Date,
+            WorkingDays = 5
+        });
+
+        if (request.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.IDontPlanTo)
         {
             await _taskRepository.InsertTask(new InsertTaskParameters
             {
@@ -42,8 +49,8 @@ public class SetReasonQuotesNotSoughtHandler : IRequestHandler<SetReasonQuotesNo
                 AssignedToTeamId = (int)ETeam.DaviesOps,
                 AssignedToUserId = null,
                 CreatedByUserId = null,
-                Description = "Please review reason for not seeking quotes or issuing a tender",
-                RequiredByDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(5)),
+                Description = "Please contact applicant as not planning on running open tender",
+                RequiredByDate = DateOnly.FromDateTime(dueDate),
                 TaskStatus = ETaskStatus.NotStarted.ToString(),
                 TaskTypeId = taskType.Id
             });

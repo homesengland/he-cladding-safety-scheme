@@ -50,7 +50,7 @@ public class ResetResponsibleEntitiesSectionHandlerTests : TestBase
 
         foreach (var file in files)
             _mockFileService
-                .Setup(x => x.DeleteFile(file.Name + file.Extension))
+                .Setup(x => x.DeleteFile(file.Id + file.Extension))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 

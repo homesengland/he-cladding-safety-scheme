@@ -6,4 +6,5 @@ namespace HE.Remediation.Core.Data.Repositories;
 public interface IAlertRepository
 {
     Task<IReadOnlyCollection<GetAlertsResult>> GetAlerts(GetAlertsParameters parameters);
+    Task InsertAlert(InsertAlertParameters parameters);
 }

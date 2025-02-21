@@ -29,14 +29,14 @@ public class GetAppointedOtherMembersHandler : IRequestHandler<GetAppointedOther
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-        var leadDeveloperAppointed = await _progressReportingRepository.GetProgressReportLeadDesignerAppointed();
         var otherMembersAppointed = await _progressReportingRepository.GetProgressReportOtherMembersAppointed();
+        var leaseholdersInformed = await _progressReportingRepository.GetProgressReportLeaseholdersInformed();
 
         return new GetAppointedOtherMembersResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            LeadDeveloperAppointed = leadDeveloperAppointed,
+            LeaseholdersInformed = leaseholdersInformed,
             OtherMembersAppointed = otherMembersAppointed
         };
     }

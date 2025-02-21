@@ -30,13 +30,13 @@ public class GetEvidenceHandler : IRequestHandler<GetEvidenceRequest, GetEvidenc
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-        var fileResult = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFile();
+        var files = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFiles();
 
         var response = new GetEvidenceResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            File = fileResult
+            AddedFiles = files
         };
 
         return response;

@@ -276,7 +276,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(RepresentationCompanyOrIndividualAddressDetails))]
         public async Task<IActionResult> RepresentationCompanyOrIndividualAddressDetails(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -721,7 +721,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(ResponsibleEntityCompanyAddress))]
         public async Task<IActionResult> ResponsibleEntityCompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, true);
+            var validator = new PostCodeManualViewModelValidator(true);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -1009,7 +1009,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(FreeholderCompanyAddress))]
         public async Task<IActionResult> FreeholderCompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -1119,7 +1119,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(FreeholderIndividualAddress))]
         public async Task<IActionResult> FreeholderIndividualAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(model);
 
             if (!validationResult.IsValid)
@@ -1216,7 +1216,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(FreeholderIndividualAddressManual))]
         public async Task<IActionResult> FreeholderIndividualAddressManual(PostCodeManualViewModel viewModel, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(false, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(viewModel);
 
             if (!validationResult.IsValid)

@@ -3,6 +3,6 @@
 public enum EWhyYouHaveNotSoughtQuotes
 {
     NotReadyForTender = 1,
-    IDontPlanToo = 2,
+    IDontPlanTo = 2,
 }
 

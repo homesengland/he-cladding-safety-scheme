@@ -10,7 +10,8 @@
     ViewData["Readonly"] = Model.IsSubmitted;
 
     var isRolesError = ViewData.ModelState.Any(x => x.Key == nameof(Model.MissingRoles));
-    var isChasCertificationError = ViewData.ModelState.Any(x => x.Key == nameof(Model.HasChasCertificationValue));
+    var isChasCertificationError = Model.HasChasCertificationValue == false &&
+                               ViewData.ModelState.ContainsKey(nameof(Model.HasChasCertificationValue));
 }
 
 @section ErrorSummary

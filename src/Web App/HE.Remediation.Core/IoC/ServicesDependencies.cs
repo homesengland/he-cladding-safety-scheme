@@ -19,6 +19,7 @@ using HE.Remediation.Core.Services.RazorRenderer;
 using VirusScanner.Client.Interfaces;
 using VirusScanner.Client.Services;
 using HE.Remediation.Core.Services.Communication;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.IoC;
 
@@ -41,6 +42,7 @@ public static class ServicesDependencies
         services.AddScoped<IPostCodeLookup, PostCodeLookup>();
         services.AddScoped<IRazorRenderer, RazorRenderer>();
         services.AddScoped<IPdfRenderer, PdfRenderer>();
+        services.AddScoped<IStatusTransitionService, StatusTransitionService>();
 
         services.Configure<FileServiceSettings>(configuration.GetSection(nameof(FileServiceSettings)));
         services.Configure<VirusScanningSettings>(configuration);
@@ -90,5 +92,7 @@ public static class ServicesDependencies
         services.AddScoped<IMilestoneRepository, MilestoneRepository>();
         services.AddScoped<ICommunicationRepository, CommunicationRepository>();
         services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddScoped<ILocalAuthorityCostCentreRepository, LocalAuthorityCostCentreRepository>();
+        services.AddScoped<IGrantFundingRepository, GrantFundingRepository>();
     }
 }

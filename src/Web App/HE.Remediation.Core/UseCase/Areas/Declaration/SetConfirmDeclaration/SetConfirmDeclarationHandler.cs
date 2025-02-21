@@ -1,6 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
@@ -10,12 +11,18 @@ namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public SetConfirmDeclarationHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider, IApplicationRepository applicationRepository)
+        public SetConfirmDeclarationHandler(
+            IDbConnectionWrapper dbConnectionWrapper, 
+            IApplicationDataProvider applicationDataProvider, 
+            IApplicationRepository applicationRepository, 
+            IStatusTransitionService statusTransitionService)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
             _applicationRepository = applicationRepository;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<SetConfirmDeclarationResponse> Handle(SetConfirmDeclarationRequest request, CancellationToken cancellationToken)
@@ -34,14 +41,11 @@ namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
             };
         }
 
-        private async Task<Unit> UpdateConfirmDeclarationRequest(Guid applicationId)
+        private async Task UpdateConfirmDeclarationRequest(Guid applicationId)
         {
-            
             await _dbConnectionWrapper.ExecuteAsync("UpdateConfirmDeclaration", new { applicationId });
 
-            await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.InitialApplicationSubmitted);
-
-            return Unit.Value;
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.InitialApplicationSubmitted, applicationIds: applicationId);
         }
 
         private async Task<bool> CanSubmit(Guid applicationId)

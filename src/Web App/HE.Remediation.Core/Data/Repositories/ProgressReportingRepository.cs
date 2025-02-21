@@ -182,73 +182,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
         scope.Complete();
     }
 
-    public async Task<bool?> GetProgressReportLeadDesignerAppointed()
-    {
-        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
-        {
-            return null;
-        }
-
-        return await _connection.QuerySingleOrDefaultAsync<bool?>("GetProgressReportLeadDesignerAppointed", new
-        {
-            ApplicationId = applicationId,
-            ProgressReportId = progressReportId
-        });
-    }
-
-    public async Task UpdateLeadDesignerAppointed(bool? leadDesignerAppointed)
-    {
-        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
-        {
-            return;
-        }
-
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
-        await _connection.ExecuteAsync("UpdateProgressReportLeadDesignerAppointed", new
-        {
-            ApplicationId = applicationId,
-            ProgressReportId = progressReportId,
-            LeadDesignerAppointed = leadDesignerAppointed
-        });
-
-        scope.Complete();
-    }
-
-    public async Task<ProgressReportLeadDesignerNotAppointedReasonResult> GetProgressReportLeadDesignerNotAppointedReason()
-    {
-        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
-        {
-            return null;
-        }
-
-        return await _connection.QuerySingleOrDefaultAsync<ProgressReportLeadDesignerNotAppointedReasonResult>("GetProgressReportLeadDesignerNotAppointedReason", new
-        {
-            ApplicationId = applicationId,
-            ProgressReportId = progressReportId
-        });
-    }
-
-    public async Task UpdateLeadDesignerNotAppointedReason(string leadDesignerNotAppointedReason, bool? leadDesignerNeedsSupport)
-    {
-        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
-        {
-            return;
-        }
-
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
-        await _connection.ExecuteAsync("UpdateProgressReportLeadDesignerNotAppointedReason", new
-        {
-            ApplicationId = applicationId,
-            ProgressReportId = progressReportId,
-            LeadDesignerNotAppointedReason = leadDesignerNotAppointedReason,
-            LeadDesignerNeedsSupport = leadDesignerNeedsSupport
-        });
-
-        scope.Complete();
-    }
-
     public async Task<bool?> GetProgressReportOtherMembersAppointed()
     {
         if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
@@ -641,6 +574,20 @@ public class ProgressReportingRepository : IProgressReportingRepository
         });
     }
 
+    public async Task<DateTime?> GetProgressReportExpectedStartDateOnSite()
+    {
+        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<DateTime?>("GetProgressReportExpectedStartDateOnSite", new
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId
+        });
+    }
+
     public async Task UpdateProgressReportExpectedWorksPackageSubmissionDate(DateTime? submissionDate)
     {
         if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
@@ -659,6 +606,26 @@ public class ProgressReportingRepository : IProgressReportingRepository
 
         scope.Complete();
     }
+
+    public async Task UpdateProgressReportExpectedStartDateOnSite(DateTime? expectedStartDateOnSite)
+    {
+        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
+        {
+            return;
+        }
+
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        await _connection.ExecuteAsync("UpdateProgressReportExpectedStartDateOnSite", new
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId,
+            ExpectedStartDateOnSite = expectedStartDateOnSite
+        });
+
+        scope.Complete();
+    }
+
     public async Task<DateTime?> GetProgressReportPlanningPermissionPlannedSubmitDate()
     {
         if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
@@ -952,14 +919,14 @@ public class ProgressReportingRepository : IProgressReportingRepository
         return result;
     }
 
-    public async Task<FileResult> GetProgressReportLeaseholdersInformedFile()
+    public async Task<IReadOnlyCollection<FileResult>> GetProgressReportLeaseholdersInformedFiles()
     {
         if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
         {
             return null;
         }
 
-        return await _connection.QuerySingleOrDefaultAsync<FileResult>("GetProgressReportLeaseholdersInformedFile", new
+        return await _connection.QueryAsync<FileResult>("GetProgressReportLeaseholdersInformedFiles", new
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId
@@ -1152,7 +1119,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
             ProgressSummary = request.ProgressSummary,
-            GoalSummary = request.GoalSummary,
             RequiresSupport = request.IsSupportNeeded
         });
 
@@ -1217,28 +1183,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
         }
 
         await _connection.ExecuteAsync(nameof(UpdateBuildingControlRequired), new { applicationId, progressReportId, buildingControlRequired });
-    }
-
-    public Task<ProgressReportGetBuildingControlDetailsResult> GetBuildingControlDetails()
-    {
-        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
-        {
-            return null;
-        }
-
-        var result = _connection.QuerySingleOrDefaultAsync<ProgressReportGetBuildingControlDetailsResult>(nameof(GetBuildingControlDetails), new { applicationId, progressReportId });
-
-        return result;
-    }
-
-    public async Task UpdateBuildingControlDetails(ProgressReportUpdateBuildingControlDetails parameters)
-    {
-        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
-        {
-            return;
-        }
-
-        await _connection.ExecuteAsync(nameof(UpdateBuildingControlDetails), new { applicationId, progressReportId, parameters.ForecastDate, parameters.ActualDate, parameters.ValidationDate, parameters.DecisionDate, parameters.Decision });
     }
 
     public async Task<bool?> GetHasGrantCertifyingOfficer()
@@ -1477,5 +1421,76 @@ public class ProgressReportingRepository : IProgressReportingRepository
             });
 
         return result;
+    }
+
+    public async Task<EIntentToProceedType?> GetIntentToProceedType(GetIntentToProceedTypeParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<EIntentToProceedType?>(nameof(GetIntentToProceedType), parameters);
+        return result;
+    }
+
+    public async Task UpdateIntentToProceedType(UpdateIntentToProceedTypeParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateIntentToProceedType), parameters);
+    }
+
+    public async Task RemoveProgressReportLeaseholderInformationDocument(RemoveProgressReportLeaseholderInformationDocumentParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(RemoveProgressReportLeaseholderInformationDocument), parameters);
+    }
+
+    public async Task<GetBuildingControlDecisionResult> GetBuildingControlDecision(GetBuildingControlDecisionParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<GetBuildingControlDecisionResult>(nameof(GetBuildingControlDecision), parameters);
+        return result;
+    }
+
+    public async Task UpdateBuildingControlDecision(UpdateBuildingControlDecisionParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateBuildingControlDecision), parameters);
+    }
+
+    public async Task<GetBuildingControlForecastResult> GetBuildingControlForecast(GetBuildingControlForecastParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<GetBuildingControlForecastResult>(nameof(GetBuildingControlForecast), parameters);
+        return result;
+    }
+
+    public async Task UpdateBuildingControlForecast(UpdateBuildingControlForecastParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateBuildingControlForecast), parameters);
+    }
+
+    public async Task<GetBuildingControlSubmissionResult> GetBuildingControlSubmission(GetBuildingControlSubmissionParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<GetBuildingControlSubmissionResult>(nameof(GetBuildingControlSubmission), parameters);
+        return result;
+    }
+
+    public async Task UpdateBuildingControlSubmission(UpdateBuildingControlSubmissionParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateBuildingControlSubmission), parameters);
+    }
+
+    public async Task<GetBuildingControlValidationResult> GetBuildingControlValidation(GetBuildingControlValidationParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<GetBuildingControlValidationResult>(nameof(GetBuildingControlValidation), parameters);
+        return result;
+    }
+
+    public async Task UpdateBuildingControlValidation(UpdateBuildingControlValidationParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateBuildingControlValidation), parameters);
+    }
+
+    public async Task<GetHasAppliedForBuildingControlResult> GetHasAppliedForBuildingControl(GetHasAppliedForBuildingControlParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<GetHasAppliedForBuildingControlResult>(nameof(GetHasAppliedForBuildingControl), parameters);
+        return result;
+    }
+
+    public async Task UpdateHasAppliedForBuildingControl(UpdateHasAppliedForBuildingControlParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateHasAppliedForBuildingControl), parameters);
     }
 }

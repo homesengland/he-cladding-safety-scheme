@@ -1089,3 +1089,7 @@ input.right-aligned {
 .hidden {
     display: none;
 }
+
+.text-override-colour-default {
+    color: #0b0c0c !important;
+}

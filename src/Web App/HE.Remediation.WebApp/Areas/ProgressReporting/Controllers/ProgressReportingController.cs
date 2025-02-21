@@ -8,13 +8,9 @@ using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AddRole.GetAddRole;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AddRole.SetAddRole;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppliedForPlanningPermission.GetAppliedForPlanningPermission;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppliedForPlanningPermission.SetAppliedForPlanningPermission;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedLeadDesigner.GetAppointedLeadDesigner;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedLeadDesigner.SetAppointedLeadDesigner;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedOtherMembers.GetAppointedOtherMembers;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedOtherMembers.SetAppointedOtherMembers;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.GetBuildingControlDetails;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.GetBuildingControlRequired;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.UpdateBuildingControlDetails;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.UpdateBuildingControlRequired;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ChangeAnswers;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.Evidence.DeleteEvidence;
@@ -25,8 +21,6 @@ using HE.Remediation.Core.UseCase.Areas.ProgressReporting.FinalCheckYourAnswers.
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.HaveAnyAnswersChanged;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.InformedLeaseholder.GetInformedLeaseholder;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.InformedLeaseholder.SetInformedLeaseholder;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeadDesignerCompanyDetails.GetLeadDesignerCompanyDetails;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeadDesignerCompanyDetails.SetLeadDesignerCompanyDetails;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeaseholderInformedLast;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermissionDetails.GetPlanningPermissionDetails;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermissionDetails.SetPlanningPermissionDetails;
@@ -38,8 +32,6 @@ using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProgressSupport.SetPro
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectTeam.GetProjectTeam;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNeedsSupport.GetReasonNeedsSupport;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNeedsSupport.SetReasonNeedsSupport;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoDesigner.GetReasonNoDesigner;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoDesigner.SetReasonNoDesigner;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoOtherMembers.GetReasonNoOtherMembers;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoOtherMembers.SetReasonNoOtherMembers;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonPlanningNotApplied.GetReasonPlanningNotApplied;
@@ -75,6 +67,9 @@ using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingHasSafetyRegul
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingSafetyRegulatorRegistrationCode.GetBuildingSafetyRegulatorRegistrationCode;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingSafetyRegulatorRegistrationCode.SetBuildingSafetyRegulatorRegistrationCode;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ExistingTeamMember;
+using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.GetWhenStartOnSite;
+using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.SetWhenStartOnSite;
+using HE.Remediation.Core.Attributes;
 
 namespace HE.Remediation.WebApp.Areas.ProgressReporting.Controllers;
 
@@ -193,7 +188,7 @@ public class ProgressReportingController : StartController
                     return RedirectToAction("UploadEvidence", "ProgressReporting", new { Area = "ProgressReporting" });
                 }
 
-                return RedirectToAction("AppointedLeadDesigner", "ProgressReporting", new { Area = "ProgressReporting" });
+                return RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
@@ -233,6 +228,10 @@ public class ProgressReportingController : StartController
         {
             var request = _mapper.Map<SetEvidenceRequest>(viewModel);
             await _sender.Send(request);
+            if (viewModel.SubmitAction == ESubmitAction.Upload)
+            {
+                return RedirectToAction("UploadEvidence", "ProgressReporting", new { Area = "ProgressReporting" });
+            }
         }
         catch (InvalidFileException ex)
         {
@@ -249,14 +248,12 @@ public class ProgressReportingController : StartController
             }
 
             return View(viewModel);
+
         }
 
-        if (viewModel.SubmitAction == ESubmitAction.Continue)
-        {
-            return RedirectToAction("AppointedLeadDesigner", "ProgressReporting", new { area = "ProgressReporting" });
-        }
-
-        return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+        return viewModel.SubmitAction == ESubmitAction.Continue 
+            ? RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { area = "ProgressReporting" }) 
+            : RedirectToAction("Index", "StageDiagram", new { area = "Application" });
     }
 
     [HttpGet(nameof(UploadEvidence) + "/Delete")]
@@ -268,143 +265,6 @@ public class ProgressReportingController : StartController
         });
         return RedirectToAction("UploadEvidence", "ProgressReporting", new { Area = "ProgressReporting" });
     }
-    #endregion
-
-    #region Appointed Lead Designer
-
-    [HttpGet(nameof(AppointedLeadDesigner))]
-    public async Task<IActionResult> AppointedLeadDesigner(string returnUrl)
-    {
-        var response = await _sender.Send(GetAppointedLeadDesignerRequest.Request);
-        var viewModel = _mapper.Map<AppointedLeadDesignerViewModel>(response);
-
-        viewModel.ReturnUrl = returnUrl;
-
-        return View(viewModel);
-    }
-
-    [HttpPost(nameof(AppointedLeadDesigner))]
-    public async Task<IActionResult> AppointedLeadDesigner(AppointedLeadDesignerViewModel viewModel, ESubmitAction submitAction)
-    {
-        var validator = new AppointedLeadDesignerViewModelValidator();
-
-        var validationResult = await validator.ValidateAsync(viewModel);
-        if (validationResult.IsValid)
-        {
-            var request = _mapper.Map<SetAppointedLeadDesignerRequest>(viewModel);
-
-            await _sender.Send(request);
-
-            if (viewModel.ReturnUrl is not null)
-            {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            if (viewModel.SubmitAction == ESubmitAction.Continue)
-            {
-                if (request.LeadDesignerAppointed == true)
-                {
-                    return RedirectToAction("LeadDesignerCompDetails", "ProgressReporting", new { Area = "ProgressReporting" });
-                }
-
-                return RedirectToAction("ReasonNoDesigner", "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
-        }
-
-        validationResult.AddToModelState(ModelState, String.Empty);
-
-        return View(viewModel);
-    }
-
-    #endregion
-
-    #region Reason haven't appointed lead designer
-
-    [HttpGet(nameof(ReasonNoDesigner))]
-    public async Task<IActionResult> ReasonNoDesigner(string returnUrl)
-    {
-        var response = await _sender.Send(GetReasonNoDesignerRequest.Request);
-        var viewModel = _mapper.Map<ReasonNoDesignerViewModel>(response);
-
-        viewModel.ReturnUrl = returnUrl;
-        return View(viewModel);
-    }
-
-    [HttpPost(nameof(ReasonNoDesigner))]
-    public async Task<IActionResult> ReasonNoDesigner(ReasonNoDesignerViewModel viewModel, ESubmitAction submitAction)
-    {
-        var validator = new ReasonNoDesignerViewModelValidator();
-
-        var validationResult = await validator.ValidateAsync(viewModel);
-        if (validationResult.IsValid)
-        {
-            var request = _mapper.Map<SetReasonNoDesignerRequest>(viewModel);
-
-            await _sender.Send(request);
-
-            if (viewModel.ReturnUrl is not null)
-            {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            if (viewModel.SubmitAction == ESubmitAction.Continue)
-            {
-                return RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
-        }
-
-        validationResult.AddToModelState(ModelState, String.Empty);
-
-        return View(viewModel);
-    }
-
-    #endregion
-
-    #region Lead Designer Company details
-
-    [HttpGet(nameof(LeadDesignerCompDetails))]
-    public async Task<IActionResult> LeadDesignerCompDetails()
-    {
-        var response = await _sender.Send(GetLeadDesignerCompanyDetailsRequest.Request);
-        var viewModel = _mapper.Map<LeadDesignerCompDetailsViewModel>(response);
-        viewModel.ReturnUrl = string.Empty;
-        return View(viewModel);
-    }
-
-    [HttpPost(nameof(LeadDesignerCompDetails))]
-    public async Task<IActionResult> LeadDesignerCompDetails(LeadDesignerCompDetailsViewModel viewModel, ESubmitAction submitAction)
-    {
-        var validator = new LeadDesignerCompDetailsViewModelValidator();
-
-        var validationResult = await validator.ValidateAsync(viewModel);
-        if (validationResult.IsValid)
-        {
-            var request = _mapper.Map<SetLeadDesignerCompanyDetailsRequest>(viewModel);
-
-            await _sender.Send(request);
-
-            if (viewModel.ReturnUrl is not null)
-            {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            if (viewModel.SubmitAction == ESubmitAction.Continue)
-            {
-                return RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
-        }
-
-        validationResult.AddToModelState(ModelState, String.Empty);
-
-        return View("LeadDesignerCompDetails", viewModel);
-    }
-
     #endregion
 
     #region Have you appointed other team members
@@ -487,7 +347,7 @@ public class ProgressReportingController : StartController
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
             {
-                return RedirectToAction("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" });
+                return RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
@@ -518,7 +378,7 @@ public class ProgressReportingController : StartController
         var response = await _sender.Send(ProjectTeamContinueRequest.Request, cancellationToken);
         return response.HasCertifyingOfficerRoles
             ? RedirectToAction("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })
-            : RedirectToAction("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" });
+            : RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     #endregion
@@ -545,11 +405,12 @@ public class ProgressReportingController : StartController
         if (validationResult.IsValid)
         {
             var request = _mapper.Map<SetAddRoleRequest>(viewModel);
-            await _sender.Send(request);
+            var response = await _sender.Send(request);
 
             if (submitAction == ESubmitAction.Continue)
             {
-                return RedirectToAction("ExistingTeamMember", "ProgressReporting", new { Area = "ProgressReporting", TeamRole = (int)viewModel.TeamRole });
+                return response.CanChooseExistingMembers ? RedirectToAction("ExistingTeamMember", "ProgressReporting", new { Area = "ProgressReporting", TeamRole = (int)viewModel.TeamRole })
+                      : RedirectToAction("TeamMember", new { TeamRole = (int)viewModel.TeamRole.Value });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
@@ -808,7 +669,7 @@ public class ProgressReportingController : StartController
                 }
 
                 return RedirectToAction("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" });
-            }      
+            }
         }
 
         validationResult.AddToModelState(ModelState, String.Empty);
@@ -851,7 +712,7 @@ public class ProgressReportingController : StartController
             {
                 return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
-            
+
             if (request.PermissionRequired == EYesNoNonBoolean.Yes)
             {
                 return RedirectToAction("AppliedPlanning", "ProgressReporting", new { Area = "ProgressReporting" });
@@ -905,12 +766,12 @@ public class ProgressReportingController : StartController
             {
                 return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
-            
+
             if (request.AppliedForPlanningPermission == true)
             {
                 return RedirectToAction("PlanningPermissionDetails", "ProgressReporting", new { Area = "ProgressReporting" });
             }
-            
+
             return RedirectToAction("PlanningPermissionPlannedSubmitDate", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
@@ -998,7 +859,7 @@ public class ProgressReportingController : StartController
             {
                 return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
-            
+
             if (viewModel.Version > 1)
             {
                 return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
@@ -1008,7 +869,7 @@ public class ProgressReportingController : StartController
             {
                 return RedirectToAction("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" });
             }
-            
+
             return RedirectToAction("BuildingHasSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
@@ -1069,7 +930,7 @@ public class ProgressReportingController : StartController
             {
                 return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
-            
+
             return RedirectToAction("RequireBuildingSafetyRegulatoryRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
@@ -1112,7 +973,7 @@ public class ProgressReportingController : StartController
         var action = !string.IsNullOrEmpty(model.ReturnUrl)
             ? model.ReturnUrl
             : model.BuildingHasSafetyRegulatorRegistrationCode == true
-                ? nameof(BuildingSafetyRegulatorRegistrationCode) 
+                ? nameof(BuildingSafetyRegulatorRegistrationCode)
                 : model.Version > 1
                     ? nameof(HaveAnyAnswersChanged)
                     : nameof(BuildingControlRequired);
@@ -1151,8 +1012,8 @@ public class ProgressReportingController : StartController
 
         var action = !string.IsNullOrWhiteSpace(model.ReturnUrl)
             ? model.ReturnUrl
-            : model.Version > 1 
-                ? nameof(HaveAnyAnswersChanged) 
+            : model.Version > 1
+                ? nameof(HaveAnyAnswersChanged)
                 : nameof(BuildingControlRequired);
 
         return RedirectToAction(action, "ProgressReporting", new { Area = "ProgressReporting" });
@@ -1188,54 +1049,175 @@ public class ProgressReportingController : StartController
 
         await _sender.Send(request);
 
+        return model.SubmitAction == ESubmitAction.Continue
+            ? RedirectToAction("HaveYouAppliedForBuildingControl", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+    }
+    #endregion
+
+    #region Have you applied for building control
+    [HttpGet(nameof(HaveYouAppliedForBuildingControl))]
+    public async Task<IActionResult> HaveYouAppliedForBuildingControl(CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetHasAppliedForBuildingControlRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<HaveYouAppliedForBuildingControlViewModel>(response);
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(HaveYouAppliedForBuildingControl))]
+    public async Task<IActionResult> HaveYouAppliedForBuildingControl(HaveYouAppliedForBuildingControlViewModel model, CancellationToken cancellationToken)
+    {
+        var validator = new HaveYouAppliedForBuildingControlViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetHasAppliedForBuildingControlRequest>(model);
+        await _sender.Send(request, cancellationToken);
+
         if (model.SubmitAction == ESubmitAction.Exit)
         {
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
         }
 
-        if (model.BuildingControlRequired == true)
-        {
-            return RedirectToAction("BuildingControlDetails", "ProgressReporting", new { Area = "ProgressReporting" });
-        }
-
-        return RedirectToAction("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" });
+        return model.HasAppliedForBuildingControl == false
+            ? RedirectToAction("BuildingControlForecast", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("BuildingControlSubmission", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     #endregion
 
-    #region Building control approval for higher-risk buildings (Gateway 2)
-    [HttpGet(nameof(BuildingControlDetails))]
-    public async Task<IActionResult> BuildingControlDetails(string returnUrl)
+    #region Building control forecase submission date
+    [HttpGet(nameof(BuildingControlForecast))]
+    public async Task<IActionResult> BuildingControlForecast(CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(GetBuildingControlDetailsRequest.Request);
-
-        var viewModel = _mapper.Map<BuildingControlDetailsViewModel>(result);
-
+        var response = await _sender.Send(GetBuildingControlForecastRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<BuildingControlForecastViewModel>(response);
         return View(viewModel);
     }
 
-    [HttpPost(nameof(BuildingControlDetails))]
-    public async Task<IActionResult> BuildingControlDetails(BuildingControlDetailsViewModel model, ESubmitAction submitAction)
+    [HttpPost(nameof(BuildingControlForecast))]
+    public async Task<IActionResult> BuildingControlForecast(BuildingControlForecastViewModel model, CancellationToken cancellationToken)
     {
-        var validator = new BuildingControlDetailsViewModelValidator();
-
-        var validationResult = await validator.ValidateAsync(model);
+        var validator = new BuildingControlForecastViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            validationResult.AddToModelState(ModelState, String.Empty);
+            validationResult.AddToModelState(ModelState, string.Empty);
             return View(model);
         }
 
-        var request = _mapper.Map<UpdateBuildingControlDetailsRequest>(model);
+        var request = _mapper.Map<SetBuildingControlForecastRequest>(model);
+        await _sender.Send(request, cancellationToken);
 
-        await _sender.Send(request);
-
-        if (submitAction == ESubmitAction.Continue)
+        if (model.SubmitAction == ESubmitAction.Exit)
         {
-            return RedirectToAction("WhenSubmit", "ProgressReporting", new { area = "ProgressReporting" });
+            return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+        return model.Version == 1
+            ? RedirectToAction("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    #endregion
+
+    #region Building control submission
+    [HttpGet(nameof(BuildingControlSubmission))]
+    public async Task<IActionResult> BuildingControlSubmission(CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetBuildingControlSubmissionRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<BuildingControlSubmissionViewModel>(response);
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(BuildingControlSubmission))]
+    public async Task<IActionResult> BuildingControlSubmission(BuildingControlSubmissionViewModel model, CancellationToken cancellationToken)
+    {
+        var validator = new BuildingControlSubmissionViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetBuildingControlSubmissionRequest>(model);
+        await _sender.Send(request, cancellationToken);
+
+        return model.SubmitAction == ESubmitAction.Exit 
+            ? RedirectToAction("Index", "StageDiagram", new { Area = "Application" }) 
+            : RedirectToAction("BuildingControlValidation", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    #endregion
+
+    #region Building control validation
+    [HttpGet(nameof(BuildingControlValidation))]
+    public async Task<IActionResult> BuildingControlValidation(CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetBuildingControlValidationRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<BuildingControlValidationViewModel>(response);
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(BuildingControlValidation))]
+    public async Task<IActionResult> BuildingControlValidation(BuildingControlValidationViewModel model, CancellationToken cancellationToken)
+    {
+        var validator = new BuildingControlValidationViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetBuildingControlValidationRequest>(model);
+        await _sender.Send(request, cancellationToken);
+
+        return model.SubmitAction == ESubmitAction.Exit
+            ? RedirectToAction("Index", "StageDiagram", new { Area = "Application" }) 
+            : RedirectToAction("BuildingControlDecision", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    #endregion
+
+    #region Building control decision
+    [HttpGet(nameof(BuildingControlDecision))]
+    public async Task<IActionResult> BuildingControlDecision(CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetBuildingControlDecisionRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<BuildingControlDecisionViewModel>(response);
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(BuildingControlDecision))]
+    public async Task<IActionResult> BuildingControlDecision(BuildingControlDecisionViewModel model, CancellationToken cancellationToken)
+    {
+        var validator = new BuildingControlDecisionViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetBuildingControlDecisionRequest>(model);
+        await _sender.Send(request, cancellationToken);
+
+        if (model.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+        }
+
+        return model.Version == 1
+            ? RedirectToAction("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+
     }
     #endregion
 
@@ -1283,7 +1265,7 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("ReasonNeedsSupport", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
-            return RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
+            return RedirectToAction("WhenStartOnSite", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
         validationResult.AddToModelState(ModelState, String.Empty);
@@ -1291,7 +1273,56 @@ public class ProgressReportingController : StartController
         return View(viewModel);
     }
 
-    #endregion    
+    #endregion
+
+    #region When do you think you'll start on site?
+
+    [HttpGet(nameof(WhenStartOnSite))]
+    public async Task<IActionResult> WhenStartOnSite(string returnUrl)
+    {
+        var response = await _sender.Send(GetWhenStartOnSiteRequest.Request);
+        var viewModel = _mapper.Map<WhenStartOnSiteViewModel>(response);
+
+        viewModel.ReturnUrl = returnUrl;
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(WhenStartOnSite))]
+    public async Task<IActionResult> WhenStartOnSite(WhenStartOnSiteViewModel viewModel)
+    {
+        var validator = new WhenStartOnSiteViewModelValidator();
+
+        var validationResult = await validator.ValidateAsync(viewModel);
+        if (validationResult.IsValid)
+        {
+            var request = _mapper.Map<SetWhenStartOnSiteRequest>(viewModel);
+
+        var response = await _sender.Send(request);
+
+        if (viewModel.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+        }
+
+        if (viewModel.ReturnUrl is not null)
+        {
+            return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        if (viewModel.Version > 1)
+        {
+            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    validationResult.AddToModelState(ModelState, String.Empty);
+
+        return View(viewModel);
+    }
+
+    #endregion
 
     #region What kind of support do you need? 
 
@@ -1747,7 +1778,7 @@ public class ProgressReportingController : StartController
     [HttpPost(nameof(GrantCertifyingOfficerAddress))]
     public async Task<IActionResult> GrantCertifyingOfficerAddress(PostCodeManualViewModel viewModel, ESubmitAction submitAction, CancellationToken cancellationToken)
     {
-        var validator = new PostCodeManualViewModelValidator(false, false);
+        var validator = new PostCodeManualViewModelValidator(false);
         var validationResult = await validator.ValidateAsync(viewModel, cancellationToken);
 
         if (!validationResult.IsValid)
@@ -1876,6 +1907,44 @@ public class ProgressReportingController : StartController
         }
 
         return viewModel.Version == 1
+            ? RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    #endregion
+
+    #region Intent To Proceed
+
+    [HttpGet(nameof(IntentToProceed))]
+    public async Task<IActionResult> IntentToProceed(CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetIntentToProceedRequest.Request, cancellationToken);
+        var model = _mapper.Map<IntentToProceedViewModel>(response);
+        return View(model);
+    }
+
+    [HttpPost(nameof(IntentToProceed))]
+    public async Task<IActionResult> IntentToProceed(IntentToProceedViewModel model, CancellationToken cancellationToken)
+    {
+        var validator = new IntentToProceedViewModelValidator();
+
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetIntentToProceedRequest>(model);
+        await _sender.Send(request, cancellationToken);
+
+        if (model.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+        }
+
+        return model.Version == 1
             ? RedirectToAction("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" })
             : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
     }

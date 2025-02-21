@@ -13,34 +13,25 @@
 {
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="ProgressSummary" />
-        <govuk-error-summary-item asp-for="GoalSummary" />
         <govuk-error-summary-item asp-for="IsSupportNeeded" />
     </govuk-error-summary>
 }
 
 
 <h1 class="govuk-heading-xl">
-    Summarise your overall progress
+    Summarise your risks and blockers
 </h1>
 
 <p class="govuk-body">
-    Tell us about your overall progress this month and your goals for next month.
+    Tell us about your risks and blockers to achieving a start on site.
 </p>
 
 <form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="SummariseProgress" method="post">
 
-    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
         <div class="govuk-form-group">
-            <govuk-character-count name="ProgressSummary" max-length="500" asp-for="ProgressSummary">
-                <govuk-character-count-label class="govuk-label--s">Summarise your progress this month</govuk-character-count-label>
-            </govuk-character-count>
-        </div>
-    </div>
-
-    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
-        <div class="govuk-form-group">
-            <govuk-character-count name="GoalSummary" max-length="500" asp-for="GoalSummary">
-                <govuk-character-count-label class="govuk-label--s">Summarise your goals for next month</govuk-character-count-label>
+            <govuk-character-count name="ProgressSummary" max-length="1000" asp-for="ProgressSummary">
+                <govuk-character-count-label class="govuk-label--s">Summarise your risks and blockers this month</govuk-character-count-label>
             </govuk-character-count>
         </div>
     </div>

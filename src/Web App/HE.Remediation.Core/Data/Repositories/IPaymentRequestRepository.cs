@@ -84,4 +84,7 @@ public interface IPaymentRequestRepository
     Task<int?> GetPaymentRequestVersion(Guid paymentRequestId);
 
     Task<int?> GetPaymentRequestProjectDuration(Guid paymentRequestId);
+    Task<IReadOnlyCollection<GetPaymentRequestInvoiceFilesResult>> GetPaymentRequestInvoiceFiles(GetPaymentRequestInvoiceFilesParameters parameters);
+    Task InsertPaymentRequestInvoiceFile(InsertPaymentRequestInvoiceFileParameters parameters);
+    Task DeletePaymentRequestInvoiceFile(DeletePaymentRequestInvoiceFileParameters parameters);
 }

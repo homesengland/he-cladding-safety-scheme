@@ -5,6 +5,7 @@ using System.Transactions;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.FinalCheckYourAnswers.SetFinalCheckYourAnswers;
 
@@ -14,24 +15,26 @@ public class SetFinalCheckYourAnswersHandler : IRequestHandler<SetFinalCheckYour
     private readonly IProgressReportingRepository _progressReportingRepository;
     private readonly ITaskRepository _taskRepository;
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository;
     private readonly ISupportTicketRepository _supportTicketRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
+    private readonly IAlertRepository _alertRepository;
 
     public SetFinalCheckYourAnswersHandler(
             IDateTimeProvider dateTimeProvider,
             IProgressReportingRepository progressReportingRepository,
             ITaskRepository taskRepository,
             IApplicationDataProvider applicationDataProvider,
-            IApplicationRepository applicationRepository,
             ISupportTicketRepository supportTicketRepository, 
-            IDateRepository dateRepository)
+            IStatusTransitionService statusTransitionService,
+            IAlertRepository alertRepository)
     {
         _progressReportingRepository = progressReportingRepository;
         _dateTimeProvider = dateTimeProvider;
         _taskRepository = taskRepository;
         _applicationDataProvider = applicationDataProvider;
-        _applicationRepository = applicationRepository;
         _supportTicketRepository = supportTicketRepository;
+        _statusTransitionService = statusTransitionService;
+        _alertRepository = alertRepository;
     }
 
     public async Task<Unit> Handle(SetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
@@ -42,7 +45,13 @@ public class SetFinalCheckYourAnswersHandler : IRequestHandler<SetFinalCheckYour
             
         await _progressReportingRepository.UpdateProgressReportDateSubmitted(_dateTimeProvider.UtcNow);
 
-        await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.PrimaryReportSubmitted);
+        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PrimaryReportSubmitted, applicationIds: applicationId);
+
+        await _alertRepository.InsertAlert(new InsertAlertParameters
+        {
+            ApplicationId = applicationId,
+            AlertTypeId = (int)EAlertType.WorksPackage
+        });
 
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Progress Report", "Support request"));
         var supportNeeds = await _progressReportingRepository.GetProgressReportSupportNeeds();

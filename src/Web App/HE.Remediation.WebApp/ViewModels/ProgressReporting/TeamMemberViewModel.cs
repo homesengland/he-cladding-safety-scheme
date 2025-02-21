@@ -19,6 +19,8 @@ public class TeamMemberViewModel
     public string InvolvedRoleReason { get; set; }
     public EConsiderateConstructorSchemeType? ConsiderateConstructorSchemeType { get; set; }
     public bool? HasChasCertification { get; set; }
+    public string ConsiderateConstructorSchemeReasonNo { get; set; }
+    public string ConsiderateConstructorSchemeReasonDontKnow { get; set; }
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
 

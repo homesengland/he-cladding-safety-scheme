@@ -9,7 +9,6 @@ namespace HE.Remediation.WebApp.ViewModels.ProgressReporting
         public ESubmitAction SubmitAction { get; set; }
         public string ReturnUrl { get; set; }
         public string ProgressSummary { get; set; }
-        public string GoalSummary { get; set; }
         public bool? IsSupportNeeded { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.TaskList.GetTaskList;
 using HE.Remediation.WebApp.Attributes.Authorisation;
@@ -11,6 +12,7 @@ namespace HE.Remediation.WebApp.Areas.WorksPackage.Controllers;
 [Area("WorksPackage")]
 [Route("WorksPackage")]
 [CookieApplicationAuthorise]
+[UserIdentityMustBeTheApplicationUser]
 public class WorkPackageController  : Controller
 {
     private readonly ISender _sender;

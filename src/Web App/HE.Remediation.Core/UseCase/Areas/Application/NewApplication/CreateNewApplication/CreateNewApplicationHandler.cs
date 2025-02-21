@@ -28,7 +28,9 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNew
                 StageId = EApplicationStage.ApplyForGrant
             });
 
-            _applicationDataProvider.SetApplicationId(applicationId);
+            var userIdAndEmailAddress = await _db.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", new { applicationId });
+
+            _applicationDataProvider.SetApplicationIdAndEmailAddress(applicationId, userIdAndEmailAddress.EmailAddress);
 
             return Unit.Value;
         }

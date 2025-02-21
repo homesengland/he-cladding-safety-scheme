@@ -9,5 +9,5 @@ public class GetEvidenceResponse
 
     public string BuildingName { get; set; }
 
-    public FileResult File { get; set; }
+    public IReadOnlyCollection<FileResult> AddedFiles { get; set; }
 }

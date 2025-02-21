@@ -28,18 +28,18 @@ public class ChangeYourAnswersHandler : IRequestHandler<ChangeYourAnswersRequest
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await DeleteEvidenceFile();
+        await DeleteEvidenceFiles();
         await _progressReportingRepository.ResetProgressReport();
 
         scope.Complete();
     }
 
-    private async Task DeleteEvidenceFile()
+    private async Task DeleteEvidenceFiles()
     {
-        var file = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFile();
-        if (file != null)
-        {            
-            await _fileService.DeleteFile(file.Name + file.Extension);
+        var files = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFiles();
+        foreach(var file in files)
+        {
+            await _fileService.DeleteFile($"{file.Id}{file.Extension}");
         }
     }
 }

@@ -21,7 +21,7 @@ public class GetStageDiagramResponse
     public bool HasSubmittedProgressReports { get; set; }
 
     public bool IsScheduleOfWorksSubmitted { get; set; }
-    
+
     public bool IsScheduleOfWorksApproved { get; set; }
 
     public bool HasScheduleOfWorks { get; set; }
@@ -33,7 +33,7 @@ public class GetStageDiagramResponse
     public bool HasSubmittedPaymentRequests { get; set; }
 
     public bool HasInProgressVariationRequest { get; set; }
-    
+
     public bool IsVariationRequestSubmitted { get; set; }
 
     public DateTime? StartedOnSiteMilestoneDate { get; set; }
@@ -50,4 +50,11 @@ public class GetStageDiagramResponse
     public bool ShowClosingReport { get; set; }
     public EPaymentRequestTaskStatus? ClosingReportStatus { get; set; }
     public bool ClosingReportStarted { get; set; }
+    public bool HasThePrimaryReportBeenSubmitted
+    {
+        get
+        {
+            return HasSubmittedProgressReports && ProgressReports.Any(x => x.Version == 1 && x.DateSubmitted.HasValue);
+        }
+    }
 }

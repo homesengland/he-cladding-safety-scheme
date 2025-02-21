@@ -5,8 +5,6 @@ namespace HE.Remediation.WebApp.ViewModels.Location;
 
 public class PostCodeManualViewModel : AddressViewModel
 {
-    public string LocalAuthority { get; set; }
-
     public string ReturnUrl { get; set; }
 
     public bool NonResidentialUnits { get; set; }

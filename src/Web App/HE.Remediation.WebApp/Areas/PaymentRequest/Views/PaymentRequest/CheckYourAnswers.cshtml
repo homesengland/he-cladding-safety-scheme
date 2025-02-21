@@ -109,7 +109,30 @@
     
 </govuk-summary-list>
 
-
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Invoices</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Invoices", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Documents</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @foreach (var fileName in Model.PaymentRequestInvoiceFileNames)
+            {
+                @fileName<br/>
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
 
 <govuk-summary-list>
 

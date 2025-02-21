@@ -1,6 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetails.SetSurveyInstructionDetails;
 using Moq;
 
@@ -10,7 +11,7 @@ public class SetSurveyInstructionDetailsTests
 {
     private readonly Mock<IApplicationDataProvider> _applicationDataProvider;
     private readonly Mock<IDbConnectionWrapper> _connection;
-    private readonly Mock<IApplicationRepository> _applicationRepository;
+    private readonly Mock<IStatusTransitionService> _statusTransitionService;
 
     private readonly SetSurveyInstructionDetailsHandler _handler;
         
@@ -18,9 +19,12 @@ public class SetSurveyInstructionDetailsTests
     {
         _connection = new Mock<IDbConnectionWrapper>(MockBehavior.Strict);
         _applicationDataProvider = new Mock<IApplicationDataProvider>(MockBehavior.Strict);
-        _applicationRepository = new Mock<IApplicationRepository>(MockBehavior.Strict);
+        _statusTransitionService = new Mock<IStatusTransitionService>();
 
-        _handler = new SetSurveyInstructionDetailsHandler(_connection.Object, _applicationDataProvider.Object, _applicationRepository.Object);
+        _handler = new SetSurveyInstructionDetailsHandler(
+            _connection.Object, 
+            _applicationDataProvider.Object, 
+            _statusTransitionService.Object);
     }
 
     [Fact]
@@ -35,7 +39,7 @@ public class SetSurveyInstructionDetailsTests
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
 
-        _applicationRepository.Setup(x => x.UpdateInternalStatus(It.IsAny<Guid>(), It.IsAny<EApplicationInternalStatus>()))
+        _statusTransitionService.Setup(x => x.TransitionToInternalStatus(It.IsAny<EApplicationInternalStatus>(), null, It.IsAny<Guid[]>()))
             .Returns(Task.CompletedTask)
             .Verifiable();
 

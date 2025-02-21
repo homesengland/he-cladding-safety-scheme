@@ -1,5 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam;
+using HE.Remediation.Core.Enums;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.TeamMember.Set;
@@ -15,6 +16,13 @@ public class UpdateTeamMemberHandler : IRequestHandler<UpdateTeamMemberRequest, 
 
     public async Task<Guid> Handle(UpdateTeamMemberRequest request, CancellationToken cancellationToken)
     {
+        var considerateConstructorSchemeReason = request.ConsiderateConstructorSchemeType switch
+        {
+            EConsiderateConstructorSchemeType.No => request.ConsiderateConstructorSchemeReasonNo,
+            EConsiderateConstructorSchemeType.DontKnow => request.ConsiderateConstructorSchemeReasonDontKnow,
+            _ => null
+        };
+
         var teamMemberId = await _workPackageRepository.UpsertTeamMember(new UpsertTeamMemberParameters
         {
             CompanyName = request.CompanyName,
@@ -31,7 +39,8 @@ public class UpdateTeamMemberHandler : IRequestHandler<UpdateTeamMemberRequest, 
             PrimaryContactNumber = request.PrimaryContactNumber,
             TeamMemberId = request.TeamMemberId,
             TeamRoleId = (int)request.Role,
-            HasChasCertification = request.HasChasCertification
+            HasChasCertification = request.HasChasCertification,
+            ConsiderateConstructorSchemeReason = considerateConstructorSchemeReason
         });
 
         return teamMemberId;

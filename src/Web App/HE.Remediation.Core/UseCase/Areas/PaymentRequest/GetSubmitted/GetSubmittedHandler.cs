@@ -3,6 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetSubmitted;
@@ -15,13 +16,16 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
     private readonly ITaskRepository _taskRepository;
     private readonly IDateRepository _dateRepository;
     private readonly ICommunicationService _communicationService;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public GetSubmittedHandler(IApplicationDataProvider applicationDataProvider,
-                               IApplicationRepository applicationRepository,
-                               IPaymentRequestRepository paymentRequestRepository,
-                               ITaskRepository taskRepository,
-                               IDateRepository dateRepository,
-                               ICommunicationService communicationService)
+    public GetSubmittedHandler(
+        IApplicationDataProvider applicationDataProvider,
+        IApplicationRepository applicationRepository,
+        IPaymentRequestRepository paymentRequestRepository,
+        ITaskRepository taskRepository,
+        IDateRepository dateRepository,
+        ICommunicationService communicationService, 
+        IStatusTransitionService statusTransitionService)
     {
         _applicationDataProvider = applicationDataProvider;
         _applicationRepository = applicationRepository;
@@ -29,6 +33,7 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
         _taskRepository = taskRepository;
         _dateRepository = dateRepository;
         _communicationService = communicationService;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<GetSubmittedResponse> Handle(GetSubmittedRequest request, CancellationToken cancellationToken)
@@ -38,7 +43,7 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
 
         await _paymentRequestRepository.SubmitPaymentRequest(paymentRequestId);
 
-        await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.PaymentRequestSubmitted);
+        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PaymentRequestSubmitted, applicationIds: applicationId);
 
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Payment Request Checks", "Review Submitted Payment Request"));
         var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters

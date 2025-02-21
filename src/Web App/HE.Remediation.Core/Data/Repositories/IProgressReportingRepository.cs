@@ -23,14 +23,6 @@ public interface IProgressReportingRepository
 
     Task<bool?> GetProgressReportLeaseholdersInformed();
 
-    Task<bool?> GetProgressReportLeadDesignerAppointed();
-
-    Task UpdateLeadDesignerAppointed(bool? leadDesignerAppointed);
-
-    Task<ProgressReportLeadDesignerNotAppointedReasonResult> GetProgressReportLeadDesignerNotAppointedReason();
-
-    Task UpdateLeadDesignerNotAppointedReason(string leadDesignerNotAppointedReason, bool? leadDesignerNeedsSupport);
-
     Task<bool?> GetProgressReportOtherMembersAppointed();
 
     Task UpdateOtherMembersAppointed(bool? otherMembersAppointed);
@@ -71,7 +63,11 @@ public interface IProgressReportingRepository
 
     Task<DateTime?> GetProgressReportExpectedWorksPackageSubmissionDate();
 
+    Task<DateTime?> GetProgressReportExpectedStartDateOnSite();
+
     Task UpdateProgressReportExpectedWorksPackageSubmissionDate(DateTime? submissionDate);
+
+    Task UpdateProgressReportExpectedStartDateOnSite(DateTime? expectedStartDateOnSite);
 
     Task<DateTime?> GetProgressReportPlanningPermissionPlannedSubmitDate();
 
@@ -109,7 +105,7 @@ public interface IProgressReportingRepository
 
     Task<GetProgressReportResult> GetProgressReportDetails(Guid applicationId, Guid progressReportId);
 
-    Task<FileResult> GetProgressReportLeaseholdersInformedFile();
+    Task<IReadOnlyCollection<FileResult>> GetProgressReportLeaseholdersInformedFiles();
 
     Task UpdateProgressReportLeaseholdersInformedFileId(Guid? fileId);
 
@@ -151,10 +147,6 @@ public interface IProgressReportingRepository
     Task<bool?> GetBuildingControlRequired();
 
     Task UpdateBuildingControlRequired(bool buildingControlRequired);
-
-    Task<ProgressReportGetBuildingControlDetailsResult> GetBuildingControlDetails();
-
-    Task UpdateBuildingControlDetails(ProgressReportUpdateBuildingControlDetails parameters);
     Task<bool?> GetHasGrantCertifyingOfficer();
     Task UpdateHasGrantCertifyingOfficer(bool hasGco);
     Task<Guid?> GetGrantCertifyingOfficerTeamMember();
@@ -171,4 +163,18 @@ public interface IProgressReportingRepository
     Task<bool> IsGrantCertifyingOfficerComplete();
     Task SetDutyOfCareDeedTaskRaised(bool taskRaised);
     Task<bool> GetDutyOfCareDeedTaskRaised();
+    Task<EIntentToProceedType?> GetIntentToProceedType(GetIntentToProceedTypeParameters parameters);
+    Task UpdateIntentToProceedType(UpdateIntentToProceedTypeParameters parameters);
+    Task RemoveProgressReportLeaseholderInformationDocument(RemoveProgressReportLeaseholderInformationDocumentParameters parameters);
+
+    Task<GetBuildingControlDecisionResult> GetBuildingControlDecision(GetBuildingControlDecisionParameters parameters);
+    Task UpdateBuildingControlDecision(UpdateBuildingControlDecisionParameters parameters);
+    Task<GetBuildingControlForecastResult> GetBuildingControlForecast(GetBuildingControlForecastParameters parameters);
+    Task UpdateBuildingControlForecast(UpdateBuildingControlForecastParameters parameters);
+    Task<GetBuildingControlSubmissionResult> GetBuildingControlSubmission(GetBuildingControlSubmissionParameters parameters);
+    Task UpdateBuildingControlSubmission(UpdateBuildingControlSubmissionParameters parameters);
+    Task<GetBuildingControlValidationResult> GetBuildingControlValidation(GetBuildingControlValidationParameters parameters);
+    Task UpdateBuildingControlValidation(UpdateBuildingControlValidationParameters parameters);
+    Task<GetHasAppliedForBuildingControlResult> GetHasAppliedForBuildingControl(GetHasAppliedForBuildingControlParameters parameters);
+    Task UpdateHasAppliedForBuildingControl(UpdateHasAppliedForBuildingControlParameters parameters);
 }

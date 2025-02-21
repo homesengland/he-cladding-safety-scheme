@@ -31,7 +31,7 @@
 
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
-            Summarise your progress this month
+            Summarise your risks and blockers
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
             @if (!String.IsNullOrEmpty(Model.ThisMonthProgressSummary))
@@ -44,20 +44,6 @@
         </govuk-summary-list-row-action>
     </govuk-summary-list-row>
 
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Summarise your goals for next month
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @if (!String.IsNullOrEmpty(Model.NextMonthProgressSummary))
-            {
-                <span>@Model.NextMonthProgressSummary<br></span>
-            }
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("SummariseProgress", "ProgressReporting")" visually-hidden-text="name">
-            Change
-        </govuk-summary-list-row-action>
-    </govuk-summary-list-row>
 
 </govuk-summary-list>
 

@@ -21,6 +21,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.GetDe
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.SetDeveloperContacted;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperInBusiness.GetDeveloperInBusiness;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperInBusiness.SetDeveloperInBusiness;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.LocalAuthority.GetLocalAuthorityCostCentre;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.LocalAuthority.SetLocalAuthorityCostCentre;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.NameOfDevelopment.GetNameOfDevelopment;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.NameOfDevelopment.SetNameOfDevelopment;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.NonResidentialUnits.GetNonResidentialUnits;
@@ -366,7 +368,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             if (submitAction == ESubmitAction.Continue)
             {
                 var action = viewModel.ReturnUrl is null
-                             ? nameof(BuildingPartOfDevelopment)
+                             ? nameof(ProvideLocalAuthority)
                              : viewModel.ReturnUrl;
 
                 return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
@@ -433,7 +435,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
         [HttpPost(nameof(ProvideBuildingAddressManual))]
         public async Task<IActionResult> ProvideBuildingAddressManual(PostCodeManualViewModel viewModel, ESubmitAction submitAction)
         {
-            var validator = new PostCodeManualViewModelValidator(true, false);
+            var validator = new PostCodeManualViewModelValidator(false);
             var validationResult = await validator.ValidateAsync(viewModel);
 
             if (!validationResult.IsValid)
@@ -451,11 +453,53 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             }
 
             var action = viewModel.ReturnUrl is null
+                ? nameof(ProvideLocalAuthority)
+                : viewModel.ReturnUrl;
+
+            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+        }
+        #endregion
+
+        #region Local Authority
+
+        [HttpGet(nameof(ProvideLocalAuthority))]
+        public async Task<IActionResult> ProvideLocalAuthority(string returnUrl)
+        {
+            var response = await _sender.Send(GetLocalAuthorityCostCentreRequest.Request);
+
+            var viewModel = _mapper.Map<LocalAuthorityCostCentreViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(ProvideLocalAuthority))]
+        public async Task<IActionResult> ProvideLocalAuthority(LocalAuthorityCostCentreViewModel viewModel, ESubmitAction submitAction)
+        {
+            var validator = new LocalAuthorityCostCentreViewModelValidator();
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(viewModel);
+            }
+
+            var request = _mapper.Map<SetLocalAuthorityCostCentreRequest>(viewModel);
+            await _sender.Send(request);
+
+            if (submitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            var action = viewModel.ReturnUrl is null
                 ? nameof(BuildingPartOfDevelopment)
                 : viewModel.ReturnUrl;
 
             return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
+
         #endregion
 
         #region Building Developer Information

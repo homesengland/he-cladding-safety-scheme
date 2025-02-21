@@ -20,4 +20,6 @@ public class UpdateTeamMemberRequest : IRequest<Guid>
     public string InvolvedRoleReason { get; set; }
     public EConsiderateConstructorSchemeType? ConsiderateConstructorSchemeType { get; set; }
     public bool? HasChasCertification { get; set; }
+    public string ConsiderateConstructorSchemeReasonNo { get; set; }
+    public string ConsiderateConstructorSchemeReasonDontKnow { get; set; }
 }

@@ -49,6 +49,7 @@ public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMembe
             ConsiderateConstructorSchemeType = teamMember.ConsiderateConstructorSchemeType,
             InvolvedRoleReason = teamMember.InvolvedRoleReason,
             HasChasCertification = teamMember.HasChasCertification,
+            ConsiderateConstructorSchemeReason = teamMember.ConsiderateConstructorSchemeReason,
             Name = teamMember.Name,
             TeamMemberId = teamMember.TeamMemberId,
             Version = version

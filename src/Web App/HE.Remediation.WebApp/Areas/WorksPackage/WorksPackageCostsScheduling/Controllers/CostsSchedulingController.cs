@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
+using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.BaseInformation.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CheckYourAnswers;

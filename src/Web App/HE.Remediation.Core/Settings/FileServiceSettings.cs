@@ -13,6 +13,7 @@
         public UploadSectionSettings PaymentRequestEvidence { get; set; }
         public UploadSectionSettings VariationRequestEvidence { get; set; }
         public UploadSectionSettings ClosingReport { get; set; }
+        public UploadSectionSettings PaymentRequestInvoice { get; set; }
     }
 
     public class UploadSectionSettings

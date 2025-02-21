@@ -28,7 +28,6 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
     public class SetSummariseProgressRequest : IRequest
     {
         public string ProgressSummary { get; set; }
-        public string GoalSummary { get; set; }
         public bool? IsSupportNeeded { get; set; }
     }
 }

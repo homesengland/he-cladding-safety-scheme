@@ -19,9 +19,9 @@ using System.Transactions;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ThirdPartyContributions;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ThirdPartyContributions;
-using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
 using System.Data;
 using HE.Remediation.Core.Extensions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -29,15 +29,15 @@ public class WorkPackageRepository : IWorkPackageRepository
 {
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
     public WorkPackageRepository(IDbConnectionWrapper connection,
-        IApplicationDataProvider applicationDataProvider,
-        IApplicationRepository applicationRepository)
+        IApplicationDataProvider applicationDataProvider, 
+        IStatusTransitionService statusTransitionService)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
-        _applicationRepository = applicationRepository;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<WorkPackageTaskListSummaryResult> GetWorkPackageTaskListSummary()
@@ -108,6 +108,15 @@ public class WorkPackageRepository : IWorkPackageRepository
         {
             ApplicationId = applicationId
         });
+    }
+
+    public async Task<bool> IsSignedUpToConsiderateConstructorsScheme(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<bool>(nameof(IsSignedUpToConsiderateConstructorsScheme), parameters);
+        return result;
     }
 
     #region Grant funding officer
@@ -521,7 +530,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -557,7 +566,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
 
         await _connection.ExecuteAsync("InsertWorkPackageSignatories", new
         {
@@ -649,7 +658,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -766,7 +775,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -885,7 +894,7 @@ public class WorkPackageRepository : IWorkPackageRepository
             parameters.AcceptGrantAwardBasedOnCosts
         });
 
-        await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
 
         scope.Complete();
     }
@@ -943,7 +952,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -1013,7 +1022,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -1205,7 +1214,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -1800,7 +1809,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _applicationRepository.UpdateStatus(applicationId, EApplicationStatus.WorksPackageInProgress);
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();

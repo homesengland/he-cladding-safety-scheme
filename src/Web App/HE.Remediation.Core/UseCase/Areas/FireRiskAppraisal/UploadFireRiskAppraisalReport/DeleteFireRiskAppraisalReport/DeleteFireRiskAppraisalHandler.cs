@@ -5,6 +5,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.DeleteFireRiskAppraisalReport
 {
@@ -15,16 +16,22 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IFileRepository _fileRepository;
         private readonly IFireRiskAppraisalRepository _fireRiskAppraisalRepository;
-        private readonly IApplicationRepository _applicationRepository;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public DeleteFireRiskAppraisalHandler(IDbConnectionWrapper dbConnection, IFileService fileService, IApplicationDataProvider applicationDataProvider, IFileRepository fileRepository, IFireRiskAppraisalRepository fireRiskAppraisalRepository, IApplicationRepository applicationRepository)
+        public DeleteFireRiskAppraisalHandler(
+            IDbConnectionWrapper dbConnection, 
+            IFileService fileService, 
+            IApplicationDataProvider applicationDataProvider, 
+            IFileRepository fileRepository, 
+            IFireRiskAppraisalRepository fireRiskAppraisalRepository, 
+            IStatusTransitionService statusTransitionService)
         {
             _dbConnection = dbConnection;
             _fileService = fileService;
             _applicationDataProvider = applicationDataProvider;
             _fileRepository = fileRepository;
             _fireRiskAppraisalRepository = fireRiskAppraisalRepository;
-            _applicationRepository = applicationRepository;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(DeleteFireRiskAppraisalRequest request, CancellationToken cancellationToken)
@@ -40,7 +47,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
 
                 await _fireRiskAppraisalRepository.UpdateStatusToInProgress();
 
-                await _applicationRepository.UpdateInternalStatus(applicationId, EApplicationInternalStatus.FraewInstructed);
+                await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewInstructed, applicationIds: applicationId);
 
                 scope.Complete();
             }

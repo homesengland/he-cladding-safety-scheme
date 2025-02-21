@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
@@ -39,6 +40,12 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             .Select(f => new PaymentRequestCostFile { Name = f.Name })
             .ToList();
 
+        var invoiceFiles = await _paymentRequestRepository.GetPaymentRequestInvoiceFiles(new GetPaymentRequestInvoiceFilesParameters
+        {
+            ApplicationId = applicationId,
+            PaymentRequestId = paymentRequestId
+        });
+
         var teamMembers = await _paymentRequestRepository.GetPaymentRequestTeamMembers();
 
         var keyDates = await _paymentRequestRepository.GetLatestWorkPackageKeyDates(paymentRequestId, true);
@@ -52,7 +59,7 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
         {
             throw new EntityNotFoundException("Cannot locate cost profile for schedule of work.");
         }
-        var currentPayment = costsProfile.Where(x => x.Type == EPaymentRequestCostType.CurrentPayment).FirstOrDefault();
+        var currentPayment = costsProfile.FirstOrDefault(x => x.Type == EPaymentRequestCostType.CurrentPayment);
         var additionalPayment = costsProfile.FirstOrDefault(x => x.Type == EPaymentRequestCostType.AdditionalPayment);
 
         var isSubmitted = await _paymentRequestRepository.IsPaymentRequestSubmitted(paymentRequestId);
@@ -78,6 +85,7 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             AdditionalCostMonthTitle = additionalPayment?.ItemName,
             AdditionalCostAmount = additionalPayment?.ConfirmedValue,
             PaymentRequestCostFiles = paymentRequestCostFileNames,
+            PaymentRequestInvoiceFileNames = invoiceFiles.Select(x => x.Name).ToList(),
             TeamMembers = teamMembers,
             UnsafeCladdingAlreadyRemoved = unsafeCladdingAlreadyRemoved,
             BuildingName = buildingName,

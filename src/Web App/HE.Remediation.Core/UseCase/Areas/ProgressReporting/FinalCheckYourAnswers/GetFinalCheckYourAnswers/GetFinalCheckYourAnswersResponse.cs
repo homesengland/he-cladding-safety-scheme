@@ -34,11 +34,15 @@ public class GetFinalCheckYourAnswersResponse
     public string OtherMembersNotAppointedReason { get; set; }
 
     public string ReasonPlanningPermissionNotApplied { get; set; }
+    public EIntentToProceedType? IntentToProceedType { get; set; }
+    
     public EWhyYouHaveNotSoughtQuotes? WhyYouHaveNotSoughtQuotes { get; set; }
 
     public string QuotesNotSoughtReason { get; set; }
 
     public DateTime? ExpectedWorksPackageSubmissionDate { get; set; }
+
+    public DateTime? ExpectedStartDateOnSite { get; set; }
 
     public bool? LeadDesignerNeedsSupport { get; set; }
 
@@ -56,10 +60,16 @@ public class GetFinalCheckYourAnswersResponse
 
     public string BuildingName { get; set; }
     public bool? BuildingControlDetailsRequired { get; set; }
+    public bool? HasAppliedForBuildingControl { get; set; }
     public DateTime? BuildingControlForecastDate { get; set; }
+    public string BuildingControlForecastInformation { get; set; }
     public DateTime? BuildingControlActualDate { get; set; }
+    public string BuildingControlActualInformation { get; set; }
+    public string BuildingControlApplicationReference { get; set; }
     public DateTime? BuildingControlValidationDate { get; set; }
+    public string BuildingControlValidationInformation { get; set; }
     public DateTime? BuildingControlDecisionDate { get; set; }
+    public string BuildingControlDecisionInformation { get; set; }
     public bool? BuildingControlDecision { get; set; }
 
     public bool? HasGco { get; set; }

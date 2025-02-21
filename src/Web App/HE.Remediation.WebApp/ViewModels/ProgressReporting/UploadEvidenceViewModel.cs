@@ -1,22 +1,17 @@
-﻿using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.WebApp.ViewModels.Shared;
 
 namespace HE.Remediation.WebApp.ViewModels.ProgressReporting;
 
-public class UploadEvidenceViewModel
+public class UploadEvidenceViewModel : FileUploadViewModel
 {
     public string ApplicationReferenceNumber { get; set; }
 
     public string BuildingName { get; set; }
 
-    public string DeleteEndpoint => "/ProgressReporting/UploadEvidence/Delete";
+    public override string DeleteEndpoint => "/ProgressReporting/UploadEvidence/Delete";
 
-    public string[] AcceptedFileTypes => new[] { ".pdf" };
-
-    public Shared.File AddedFile { get; set; }
-
-    public IFormFile File { get; set; }
-
-    public ESubmitAction SubmitAction { get; set; }
+    public override string[] AcceptedFileTypes => new[] { ".pdf" };
+    public override int NumberOfFilesAllowed => 5;
 
     public string ReturnUrl { get; set; }
 }

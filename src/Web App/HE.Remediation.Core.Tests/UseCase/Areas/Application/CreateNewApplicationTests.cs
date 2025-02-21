@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.Application.NewApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication;
 using Moq;
 
@@ -24,15 +25,21 @@ public class CreateNewApplicationTests
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<Guid>("InsertApplication", It.IsAny<object>()))
             .ReturnsAsync(Guid.NewGuid())
             .Verifiable();
+
+        _connection.Setup(x => x.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", It.IsAny<object>()))
+            .ReturnsAsync(new UserIdAndEmailAddress { EmailAddress = "example@example.com", UserId = Guid.NewGuid()
+            })
+            .Verifiable();
             
         _applicationDataProvider.Setup(x => x.GetUserId())
                                 .Returns(Guid.NewGuid())
                                 .Verifiable(); 
 
-        _applicationDataProvider.Setup(x => x.SetApplicationId(It.IsAny<Guid>()))                                
-                                .Verifiable(); 
+        _applicationDataProvider.Setup(x => x.SetApplicationIdAndEmailAddress(It.IsAny<Guid>(), It.IsAny<string>()))
+        .Verifiable();
 
-        //// Act
+
+        // Act
         var result = await _handler.Handle(CreateNewApplicationRequest.Request, CancellationToken.None);
 
         // Assert

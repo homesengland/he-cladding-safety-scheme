@@ -1,6 +1,6 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy AS base
 RUN apt-get update && \ 
 apt-get install -yq --no-install-recommends \ 
 libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \ 
@@ -12,7 +12,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS build
+ENV ASPNETCORE_HTTP_PORTS=80
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
 WORKDIR /src
 COPY ["HE.Remediation.WebApp/HE.Remediation.WebApp.csproj", "HE.Remediation.WebApp/"]
 RUN dotnet restore "HE.Remediation.WebApp/HE.Remediation.WebApp.csproj"

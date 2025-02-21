@@ -8,7 +8,7 @@ public class WhenSubmitViewModel
     public string BuildingName { get; set; }
     public int? SubmissionMonth { get; set; }
     public int? SubmissionYear { get; set; }
-    public bool? BuildingControlRequired { get; set; }
+    public bool? HasAppliedForBuildingControl { get; set; }
     public int Version { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }

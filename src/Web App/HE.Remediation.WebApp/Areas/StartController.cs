@@ -1,4 +1,5 @@
 using System.Text.Json;
+using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.UseCase.Areas.AreaProgress;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.Attributes.Routing;
@@ -10,6 +11,7 @@ namespace HE.Remediation.WebApp.Areas;
 [CookieApplicationAuthorise]
 [AreaRedirect]
 [RecordRoute]
+[UserIdentityMustBeTheApplicationUser]
 public abstract class StartController : Controller
 {
     private readonly ISender _sender;

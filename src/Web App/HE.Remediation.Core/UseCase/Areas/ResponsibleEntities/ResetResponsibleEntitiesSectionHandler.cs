@@ -58,7 +58,7 @@ internal class ResetResponsibleEntitiesSectionHandler : IRequestHandler<ResetRes
         var evidenceFiles = await _applicationRepository.GetResponsibleEntityEvidenceFiles(applicationId);
 
         var deleteFileTasks = evidenceFiles
-            .Select(f => f.Name + f.Extension)
+            .Select(f => f.Id + f.Extension)
             .Select(_fileService.DeleteFile);
 
         await Task.WhenAll(deleteFileTasks);

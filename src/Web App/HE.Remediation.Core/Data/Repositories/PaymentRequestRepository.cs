@@ -459,4 +459,20 @@ public class PaymentRequestRepository : IPaymentRequestRepository
             PaymentRequestId = paymentRequestId
         });
     }
+
+    public async Task<IReadOnlyCollection<GetPaymentRequestInvoiceFilesResult>> GetPaymentRequestInvoiceFiles(GetPaymentRequestInvoiceFilesParameters parameters)
+    {
+        var results = await _connection.QueryAsync<GetPaymentRequestInvoiceFilesResult>(nameof(GetPaymentRequestInvoiceFiles), parameters);
+        return results;
+    }
+
+    public async Task InsertPaymentRequestInvoiceFile(InsertPaymentRequestInvoiceFileParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(InsertPaymentRequestInvoiceFile), parameters);
+    }
+
+    public async Task DeletePaymentRequestInvoiceFile(DeletePaymentRequestInvoiceFileParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(DeletePaymentRequestInvoiceFile), parameters);
+    }
 }

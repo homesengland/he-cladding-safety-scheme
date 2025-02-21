@@ -5,9 +5,6 @@
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["Backlink"] = Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = true;
-
-    var acceptedFileTypes = Model.AcceptedFileTypes?.Any() == true ? string.Join(",", Model.AcceptedFileTypes) : "*";
-    var file = Model.AddedFile;
 }
 @section ErrorSummary
     {
@@ -22,34 +19,14 @@
 
 <p class="govuk-caption-m">This can be a copy of an email or other communication you have sent. If possible please don't send personal details (e.g. names) of residents.</p>
 
+<p class="govuk-body">You can upload up to 5 files.</p>
+
 <p class="govuk-body">Each file must be smaller than 50MB, and a .pdf file.</p>
 
 <form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="UploadEvidence" method="post" enctype="multipart/form-data">
-    @if (@Model.AddedFile is null)
-    {
-        <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedFileTypes">
-            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
-        </govuk-file-Upload>
-    }
-    else
-    {
-        <h2 class="govuk-heading-m">Files added</h2>
-        <govuk-summary-list>
-            <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
-                    File
-                </govuk-summary-list-row-key>
-                <govuk-summary-list-row-value>
-                    @Model.AddedFile.Name @($"{@Model.AddedFile.FileSize}")
-                </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Model.DeleteEndpoint?fileId=@Model.AddedFile.Id">Delete</govuk-summary-list-row-action>
-            </govuk-summary-list-row>
-        </govuk-summary-list>
-
-        <input type="hidden" name="AddedFile.Id" value="@file.Id" />
-        <input type="hidden" name="AddedFile.Name" value="@file.Name" />
-        <input type="hidden" name="AddedFile.FileSize" value="@file.FileSize" />
-    }
+    
+    @await Html.PartialAsync("FileUpload", Model)
+    <br/>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
