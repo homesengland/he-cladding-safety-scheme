@@ -5,6 +5,7 @@
 @using HE.Remediation.WebApp.TagHelpers
 @{
     ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = false;
 }
 <div class="text-center">
     <div class="govuk-width-container">
@@ -33,7 +34,8 @@
                     <govuk-input-label is-page-heading="false" class="govuk-label--s">Last name</govuk-input-label>
                 </govuk-input>
 
-                <govuk-input asp-for="ContactNumber" name="ContactNumber" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                <govuk-input asp-for="ContactNumber" name="ContactNumber" input-class="govuk-input--width-20" 
+                    inputmode="numeric" pattern="[0-9]*" spellcheck="false" input-maxlength="20">
                     <govuk-input-label is-page-heading="false" class="govuk-label--s">Contact number</govuk-input-label>
                 </govuk-input>
                 

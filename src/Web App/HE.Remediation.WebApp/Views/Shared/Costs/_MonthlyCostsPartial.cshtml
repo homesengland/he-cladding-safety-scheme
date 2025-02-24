@@ -1,0 +1,291 @@
+﻿@*
+    Usage
+        @await Html.PartialAsync("Costs/_MonthlyCostsPartial", Model.Costs)
+
+    Error summary items need to be defined on the calling page:
+        <govuk-error-summary>
+            @foreach (var x in Model.Costs.MonthlyCosts.Select((value, index) => new { value, index }))
+            {
+                <govuk-error-summary-item asp-for="@Model.Costs.MonthlyCosts[x.index].AmountText" />
+            }
+        </govuk-error-summary>
+*@
+
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Shared.CostsViewModel
+
+@{
+    const string modelNamePrefix = "Costs";
+    var readOnly = (bool?)ViewData["ReadOnly"] == true;
+    var skipValue = Model.IsPaymentRequest ? 1 : 0;
+    var takeValue = Model.IsPaymentRequest ? Model.MonthlyCosts.Count - 2 : Model.MonthlyCosts.Count;
+}
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Months (@Model.MonthlyCosts?.Count months)</th>
+            <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">Monthly allocation (&pound;)</th>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Grant paid to date</th>
+            <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @if (Model.IsPtfsPaymentPaid == true)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">PTFS payment</td>
+                <td class="govuk-table__cell govuk-text-align-right">
+                    <govuk-input asp-for="@Model.PtfsPaymentText" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+                </td>
+            </tr>
+        }
+
+        @if (Model.IsAdditionalPtfsPaid == true)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">Additional PTFS payment</td>
+                <td class="govuk-table__cell govuk-text-align-right">
+                    <govuk-input asp-for="@Model.AdditionalPtfsPayment" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+                </td>
+            </tr>
+        }
+
+        <tr class="govuk-table__row govuk-!-font-weight-bold">
+            <td class="govuk-table__cell govuk-!-padding-left-2">Grant paid to date total</td>
+            <td class="govuk-table__cell govuk-text-align-right">&pound;@Model.TotalGrantPaidToDate?.ToString("N0")</td>
+        </tr>
+    </tbody>
+</table>
+
+@if (Model.IsPaymentRequest)
+{
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Payment request</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">
+                    <label class="govuk-label" for="@(modelNamePrefix)_FirstMonthCost__AmountText">
+                        @(Model.FirstMonthCost?.MonthDate is not null ? Model.FirstMonthCost.MonthDate.Value.ToString("MMMM yyyy") : "")
+                    </label>
+                </td>
+                <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-top-0 govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+
+                    <govuk-input asp-for="@Model.FirstMonthCost.AmountText"
+                                 id="@(modelNamePrefix)_FirstMonthCost__AmountText"
+                                 name="@(modelNamePrefix).FirstMonthCost.AmountText"
+                                 input-class="govuk-!-width-full govuk-!-margin-0 right-aligned monthly-cost-input" 
+                                 input-inputmode="numeric" 
+                                 disabled="@readOnly">
+
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>                        
+                    </govuk-input>
+
+                    <input asp-for="@Model.FirstMonthCost.Id" 
+                           id="@(modelNamePrefix)_FirstMonthCost__Id" 
+                           name="@(modelNamePrefix).FirstMonthCost.Id" 
+                           type="hidden" 
+                           value="@Model.FirstMonthCost.Id" />
+
+                    <input asp-for="@Model.FirstMonthCost.MonthDate" 
+                           id="@(modelNamePrefix)_FirstMonthCost__MonthDate" 
+                           name="@(modelNamePrefix).FirstMonthCost.MonthDate" 
+                           type="hidden" 
+                           value="@Model.FirstMonthCost.MonthDate" />
+
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">
+                    Additional 15% of project costs
+                </td>
+                <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-top-0 govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+                    
+                    <govuk-input asp-for="@Model.FirstMonthAdditionalCost.AmountText"
+                                 id="@(modelNamePrefix)_FirstMonthAdditionalCost__AmountText"
+                                 name="@(modelNamePrefix).FirstMonthAdditionalCost.AmountText"
+                                 input-class="govuk-!-width-full govuk-!-margin-0 right-aligned monthly-cost-input" 
+                                 input-inputmode="numeric" 
+                                 disabled="@readOnly">
+                    
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+                    <input asp-for="@Model.FirstMonthAdditionalCost.Id" 
+                           id="@(modelNamePrefix)_FirstMonthAdditionalCost__Id" 
+                           name="@(modelNamePrefix).FirstMonthAdditionalCost.Id" 
+                           type="hidden" 
+                           value="@Model.FirstMonthAdditionalCost.Id" />
+
+                    <input asp-for="@Model.FirstMonthAdditionalCost.MonthDate" 
+                           id="@(modelNamePrefix)_FirstMonthAdditionalCost__MonthDate" 
+                           name="@(modelNamePrefix).FirstMonthAdditionalCost.MonthDate" 
+                           type="hidden" 
+                           value="@Model.FirstMonthAdditionalCost.MonthDate" />
+                </td>
+            </tr>
+            <tr class="govuk-table__row govuk-!-font-weight-bold">
+                <td class="govuk-table__cell govuk-!-padding-left-2">Total</td>
+                <td class="govuk-table__cell govuk-text-align-right">&pound;<span class="monthly-costs-total">@Model.CurrentMonthTotal?.ToString("N0")</span></td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+
+<table class="govuk-table monthly-costs-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Monthly cost profile</th>
+            <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @if (Model.MonthlyCosts is not null && Model.MonthlyCosts.Any())
+        {
+            @foreach (var x in Model.MonthlyCosts.Select((value, index) => new { value, index }).Skip(@skipValue).Take(takeValue))
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell govuk-!-padding-left-2">
+                        <label class="govuk-label" for="@(modelNamePrefix)_MonthlyCosts_@(x.index)__AmountText">
+                            @(Model.MonthlyCosts[x.index].MonthDate is not null ? Model.MonthlyCosts[x.index].MonthDate.Value.ToString("MMMM yyyy") : "")
+                        </label>
+                    </td>
+                    <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-0">
+                        <govuk-input asp-for="@Model.MonthlyCosts[x.index].AmountText" id="@(modelNamePrefix)_MonthlyCosts_@(x.index)__AmountText" name="@(modelNamePrefix).MonthlyCosts[@(x.index)].AmountText" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned monthly-cost-input" input-inputmode="numeric" disabled="@readOnly">
+                            <govuk-input-label></govuk-input-label>
+                            <govuk-input-prefix>&pound;</govuk-input-prefix>
+                            @{
+                                var monthlyCostKey = $"{modelNamePrefix}.MonthlyCosts[{x.index}].AmountText";
+                                if (ViewData.ModelState.TryGetValue(monthlyCostKey, out var monthlyCostState)
+                                && monthlyCostState.ValidationState == ModelValidationState.Invalid)
+                                {
+                                    foreach (var error in monthlyCostState.Errors)
+                                    {
+                                        <govuk-input-error-message>@error.ErrorMessage</govuk-input-error-message>
+                                    }
+                                }
+                            }
+                        </govuk-input>
+                        <input asp-for="@Model.MonthlyCosts[x.index].Id" id="@(modelNamePrefix)_MonthlyCosts_@(x.index)__Id" name="@(modelNamePrefix).MonthlyCosts[@(x.index)].Id" type="hidden" value="@x.value.Id" />
+                        <input asp-for="@Model.MonthlyCosts[x.index].MonthDate" id="@(modelNamePrefix)_MonthlyCosts_@(x.index)__MonthDate" name="@(modelNamePrefix).MonthlyCosts[@(x.index)].MonthDate" type="hidden" value="@x.value.MonthDate" />
+                    </td>
+                </tr>
+            }
+        }
+
+        <tr class="govuk-table__row govuk-!-font-weight-bold">
+            <td class="govuk-table__cell govuk-!-padding-left-2">Monthly cost profile total</td>
+            <td class="govuk-table__cell govuk-text-align-right">&pound;<span class="monthly-costs-total">@Model.MonthlyCostsTotal?.ToString("N0")</span></td>
+        </tr>
+    </tbody>
+</table>
+
+@if (Model.IsPaymentRequest)
+{
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Final month</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">
+                    <label class="govuk-label" for="@(modelNamePrefix)_FirstMonthCost__AmountText">
+                        5% of project costs
+                    </label>
+                </td>
+                <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-top-0 govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+                    <govuk-input asp-for="@Model.FinalMonthCost.AmountText"
+                                 id="@(modelNamePrefix)_FinalMonthCost__AmountText"
+                                 name="@(modelNamePrefix).FinalMonthCost.AmountText"
+                                 input-class="govuk-!-width-full govuk-!-margin-0 right-aligned monthly-cost-input" 
+                                 input-inputmode="numeric" 
+                                 disabled="@readOnly">
+                        
+                                 <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>                        
+                    </govuk-input>
+
+                    <input asp-for="@Model.FinalMonthCost.Id"
+                           id="@(modelNamePrefix)_FinalMonthCost__Id"
+                           name="@(modelNamePrefix).FinalMonthCost.Id"
+                           type="hidden"
+                           value="@Model.FinalMonthCost.Id" />
+
+                    <input asp-for="@Model.FinalMonthCost.MonthDate"
+                           id="@(modelNamePrefix)_FinalMonthCost__MonthDate"
+                           name="@(modelNamePrefix).FinalMonthCost.MonthDate"
+                           type="hidden"
+                           value="@Model.FinalMonthCost.MonthDate" />
+                </td>
+            </tr>
+            
+            <tr class="govuk-table__row govuk-!-font-weight-bold">
+                <td class="govuk-table__cell govuk-!-padding-left-2">Total</td>
+                <td class="govuk-table__cell govuk-text-align-right">&pound;<span class="monthly-costs-total">@Model.MonthlyCostsTotal?.ToString("N0")</span></td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td colspan="2">
+                <div id="@(modelNamePrefix)_UnprofiledGrantFunding" class="@(ViewData.ModelState.TryGetValue($"{modelNamePrefix}.UnprofiledGrantFunding", out var unprofiledGrantFundingState) && unprofiledGrantFundingState.ValidationState == ModelValidationState.Invalid ? "govuk-form-group govuk-form-group--error" : string.Empty) govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+                    @if (unprofiledGrantFundingState?.ValidationState == ModelValidationState.Invalid)
+                    {
+                        foreach (var error in unprofiledGrantFundingState.Errors)
+                        {
+                            <govuk-error-message class="govuk-!-padding-top-3 govuk-!-padding-right-9">
+                                <govuk-input-error-message>@error.ErrorMessage</govuk-input-error-message>
+                            </govuk-error-message>
+                        }
+                    }
+                </div>
+            </td>
+        </tr>
+        <tr class="govuk-table__row govuk-!-font-weight-bold">
+            <td class="govuk-table__cell govuk-!-padding-left-2">Unprofiled grant funding</td>
+            <td class="govuk-table__cell govuk-text-align-right unprofiled-funding @(Model is { UnprofiledGrantFunding: < 0 } ? "out-of-range-number-text" : "")">
+                @if (Model is { UnprofiledGrantFunding: < 0 })
+                {
+                    @Html.Raw($"-&pound;{Math.Abs(Model.UnprofiledGrantFunding.Value).ToString("N0")}")
+                }
+                else
+                {
+                    @Html.Raw($"&pound;{(Model.UnprofiledGrantFunding ?? 0).ToString("N0")}")
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<input id="@(modelNamePrefix)_ProjectStartDate" name="@(modelNamePrefix).ProjectStartDate" type="hidden" value="@Model.ProjectStartDate" />
+<input id="@(modelNamePrefix)_ProjectEndDate" name="@(modelNamePrefix).ProjectEndDate" type="hidden" value="@Model.ProjectEndDate" />
+<input id="@(modelNamePrefix)_ApprovedGrantFunding" name="@(modelNamePrefix).ApprovedGrantFunding" type="hidden" value="@Model.ApprovedGrantFunding" class="approved-grant-funding" />
+<input id="@(modelNamePrefix)_IsPtfsPaymentPaid" name="@(modelNamePrefix).IsPtfsPaymentPaid" type="hidden" value="@Model.IsPtfsPaymentPaid.ToString()" />
+<input id="@(modelNamePrefix)_PtfsPayment" name="@(modelNamePrefix).PtfsPayment" type="hidden" value="@Model.PtfsPayment" />
+<input id="@(modelNamePrefix)_PtfsPaymentText" name="@(modelNamePrefix).PtfsPaymentText" type="hidden" value="@Model.PtfsPaymentText" />
+<input id="@(modelNamePrefix)_GrantPaidToDate" name="@(modelNamePrefix).GrantPaidToDate" type="hidden" value="@Model.GrantPaidToDate" class="grant-paid-to-date" />
+<input id="@(modelNamePrefix)_TotalGrantPaidToDate" name="@(modelNamePrefix).TotalGrantPaidToDate" type="hidden" value="@Model.TotalGrantPaidToDate" />
+<input id="@(modelNamePrefix)_UnprofiledGrantFunding" name="@(modelNamePrefix).UnprofiledGrantFunding" type="hidden" value="@Model.UnprofiledGrantFunding" />
+<input id="@(modelNamePrefix)_IsPaymentRequest" name="@(modelNamePrefix).IsPaymentRequest" type="hidden" value="@Model.IsPaymentRequest" />

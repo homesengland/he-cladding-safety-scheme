@@ -1,0 +1,43 @@
+﻿@model HE.Remediation.Core.Services.GovNotify.ViewModels.GovNotifyEmailViewModel
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/gov-notify-footer.css">
+</head>
+<body>
+    <div class="head">
+        <img class="logo" src="img/LetterLogo.png" />
+        <span class="slogan">The Housing and Regeneration Agency</span>
+    </div>
+    <div class="body">
+        <div class="avoid-break">
+            <p>
+                Dear @Model.ContactFirstName @Model.ContactSurname,
+            </p>
+        </div>
+        <div class="avoid-break">
+            <strong>
+                Thank you for submitting your closing report and final account payment request for @Model.BuildingName @Model.ReferenceNumber.
+            </strong>
+            <p>
+                If we need to discuss the information you have provided, we’ll contact you.  You will receive a further email to confirm 
+                when the closing report and payment have been approved.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                If you need further help, contact the Cladding Safety Scheme by emailing
+                <a href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>.
+                Please include the building’s name and number in the email subject line. Alternatively, you can call the team on 0300 323 0180.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Yours sincerely
+            </p>
+            <p>
+                The Cladding Safety Scheme Team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

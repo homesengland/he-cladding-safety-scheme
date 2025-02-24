@@ -1,34 +1,31 @@
-﻿@using HE.Remediation.Core.Enums
-@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RepresentationCompanyOrIndividualAddressDetailsViewModel;
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeEntryViewModel
 @{
-    ViewData["Title"] = "Check your information is correct for this application";
+    ViewData["Title"] = "As the Representative, what is your company address?";
     ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="NameNumber"/>
-        <govuk-error-summary-item asp-for="AddressLine1"/>
-        <govuk-error-summary-item asp-for="AddressLine2"/>
-        <govuk-error-summary-item asp-for="City"/>
-        <govuk-error-summary-item asp-for="County"/>
-        <govuk-error-summary-item asp-for="Postcode"/>
+        <govuk-error-summary-item asp-for="PostCode" />        
     </govuk-error-summary>
 }
 <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
 
 <p class="govuk-body">If the details used to create your account are not relevant for this application, you can change the response below. </p>
 
-<h2 class="govuk-heading-m">What is your@(Model.ResponsibleEntityType == EResponsibleEntityType.Company ? " Company " : " ")address?</h2>
-
-<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="RepresentationCompanyOrIndividualAddressDetails" method="post">
-    <partial name="_AddressPartial" view-data="ViewData" />
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CompanyOrIndAddrDetailsPostCodeItemEntered" method="get">
+    <govuk-fieldset>
+        <partial name="_PostCodeLookupPartial" view-data="ViewData" />        
+    </govuk-fieldset>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     
+    <a href="@Url.Action("RepresentationCompanyOrIndividualAddressDetailsManual", "ResponsibleEntities", new { area = "ResponsibleEntities"})" class="govuk-link" >Enter Address Manually</a>
     <div class="comp-btn-group">
-        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
-        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.FindAddress)">Find Address</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
     </div>
-
 </form>

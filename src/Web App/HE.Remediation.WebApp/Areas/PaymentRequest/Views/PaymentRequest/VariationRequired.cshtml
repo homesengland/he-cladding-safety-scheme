@@ -1,0 +1,51 @@
+﻿@model HE.Remediation.WebApp.ViewModels.PaymentRequest.VariationRequiredViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("ThirdPartyContributionsChanged", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["ReturnURL"] = Model.ReturnUrl != null ? Model.ReturnUrl : "ProjectTeamOverview";
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#variations" class="govuk-link govuk-!-margin-bottom-2">
+            Variations
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Variation required</h1>
+<p class="govuk-body">
+    You have told us that there have been changes to your project that involve@(Model.EndDateSlipped == true && Model.CostsChanged == true ? " either:" : ":")
+</p>
+<ul class="govuk-list govuk-list--bullet govuk-!-padding-left-6 govuk-!-margin-bottom-4">
+    @if (Model.EndDateSlipped)
+    {
+        <li>changes to the timescale</li>
+    }
+    @if (Model.CostsChanged == true)
+    {
+        <li>changes to the costs</li>
+    }
+    @if (Model.ThirdPartyContributionsChanged == true)
+    {
+        <li>changes to the third party contributions</li>
+    }
+</ul>
+
+<p class="govuk-body">
+    You will need to complete a variation on this basis. This can be actioned on your application dashboard. Please ensure you submit
+    this in a timely manner so it can be reviewed.
+</p>
+
+@Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+@Html.HiddenFor(x=> x.BuildingName)
+@Html.HiddenFor(x=> x.ReturnUrl)
+
+<govuk-button disabled="@readOnly" href="@Url.Action(ViewData["ReturnURL"].ToString(), "PaymentRequest", new {Area = "PaymentRequest"})">Continue</govuk-button>

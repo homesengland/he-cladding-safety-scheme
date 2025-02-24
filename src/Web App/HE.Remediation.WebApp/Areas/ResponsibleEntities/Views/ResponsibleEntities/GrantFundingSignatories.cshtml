@@ -1,0 +1,84 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.WebApp.ViewModels.ResponsibleEntities;
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.GrantFundingSignatoriesViewModel;
+
+@{
+    ViewData["Title"] = "Tell us who is responsible for signing the grant funding agreement";
+    ViewData["BackLink"] = Url.Action("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="GrantFundingSignatories" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+<span class="govuk-caption-m">You can add a maximum of 2 signatories</span>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="GrantFundingSignatories" method="post">
+    @{
+        var GrantFundingSignatories = Model.GrantFundingSignatories?.ToList() ?? new List<GrantFundingSignatoryViewModel>();
+        var maximumNumberOfSignatories = 2;
+    }
+
+    @foreach (var x in GrantFundingSignatories.Select((value, index) => new { value, index }))
+    {
+        <input asp-for="@GrantFundingSignatories[x.index].Id" type="hidden" value="@GrantFundingSignatories[x.index].Id" />
+        <input asp-for="@GrantFundingSignatories[x.index].FullName" type="hidden" value="@GrantFundingSignatories[x.index].FullName" />
+        <input asp-for="@GrantFundingSignatories[x.index].EmailAddress" type="hidden" value="@GrantFundingSignatories[x.index].EmailAddress" />
+        <input asp-for="@GrantFundingSignatories[x.index].Role" type="hidden" value="@GrantFundingSignatories[x.index].Role" />
+
+        <govuk-summary-list>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Signatory @(x.index + 1)
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-action href="@Url.Action("GrantFundingSignatoryDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities", GrantFundingSignatoryId = x.value.Id.ToString() })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+                <govuk-summary-list-row-action href="@Url.Action("RemoveGrantFundingSignatory", "ResponsibleEntities", new { Area = "ResponsibleEntities", GrantFundingSignatoryId = x.value.Id.ToString() })" visually-hidden-text="name">
+                    Remove
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        </govuk-summary-list>
+
+        <govuk-summary-list>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Name
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @x.value.FullName
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Email
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @x.value.EmailAddress
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            @if (!string.IsNullOrEmpty(x.value.Role))
+            {
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Role
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @x.value.Role
+                    </govuk-summary-list-row-value>
+                </govuk-summary-list-row>
+            }
+        </govuk-summary-list>
+    }
+
+    @if (GrantFundingSignatories.Count() < maximumNumberOfSignatories)
+    {
+        <govuk-button href="@Url.Action("AddGrantFundingSignatory", "ResponsibleEntities", new { Area = "ResponsibleEntities" })" class="govuk-button--secondary">Add more signatories</govuk-button>
+    }
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>
+    </div>
+</form>

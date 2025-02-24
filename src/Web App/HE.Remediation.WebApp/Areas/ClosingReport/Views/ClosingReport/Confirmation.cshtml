@@ -1,0 +1,67 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ClosingReport.ConfirmationViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("Information", "ClosingReport", new {Area = "ClosingReport"});
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FinalCostReport"/>
+        <govuk-error-summary-item asp-for="ExitFraew"/>
+        <govuk-error-summary-item asp-for="CompletionCertificate"/>
+        <govuk-error-summary-item asp-for="InformedPracticalCompletion"/>
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Confirmation of required information</h1>
+<p class="govuk-body">
+    In order to submit your final payment request you must confirm that you have the required information to complete this section.
+    <br/>
+    <br/>
+    By selecting to confirm and submit below you will initiate the final payment process and will not 
+    be able to create any further variations to your project.
+    <br/>
+    <br/>
+    I confirm that I have the following information to upload in support of this project:
+</p>
+
+@using (Html.BeginForm())
+{
+    <govuk-checkboxes asp-for="FinalCostReport">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.FinalCostReport">
+            A final cost report that accounts for all eligible spend from our grant certifying officer
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes asp-for="ExitFraew">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ExitFraew">
+            An exit FRAEW report and letter from a qualified fire risk assessor confirming that the recommended works in the FRAEW submitted with the application have been done and the risk has been reduced to a tolerable level in line with PAS9980:2022
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes asp-for="CompletionCertificate">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.CompletionCertificate">
+            A Completion Certificate from a Building Control Body in respect of Building Regulations. For buildings over 18m this is the Gateway 3 certificate from the Building Safety Regulator
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes asp-for="InformedPracticalCompletion">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.InformedPracticalCompletion">
+            Evidence that leaseholders and residents have been informed of practical completion of the project and provided with the link to the leaseholder feedback form
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+
+    <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Continue">Confirm and submit</govuk-button>
+}

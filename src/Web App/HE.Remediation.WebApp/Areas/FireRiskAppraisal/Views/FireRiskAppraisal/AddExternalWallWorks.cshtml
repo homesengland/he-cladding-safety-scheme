@@ -1,0 +1,47 @@
+﻿@using HE.Remediation.Core.Interface
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.ExternalWorksDetailViewModel
+
+@{
+    ViewData["Title"] = "Complete your profile";
+    ViewData["BackLink"] = Url.Action("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+    ViewData["AddedHeading"] = "What are the other external elements you are recommending?";
+}
+@section ErrorSummary
+{
+<govuk-error-summary>
+    <govuk-error-summary-item asp-for="Description" />
+</govuk-error-summary>
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <h1 class="govuk-heading-xl">@ViewData["AddedHeading"]</h1>
+
+            <span class="govuk-caption-m">You can add multiple external wall elements</span>
+            <br/>
+            <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="AddExternalWallWorks" method="post">
+
+                <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
+                    <div class="govuk-form-group">
+                        <govuk-character-count name="Description" max-length="1000" asp-for="Description">
+                            <govuk-character-count-label class="govuk-label--s">
+                                Other external wall element @Model.ElementNo.ToString()
+                            </govuk-character-count-label>
+                        </govuk-character-count>
+                    </div>
+
+                    <div id="with-hint-info" class="govuk-hint govuk-character-count__message">
+                        You have 1000 characters
+                    </div>
+                </div>
+
+                <input asp-for="ElementNo" type="hidden" value="@Model.ElementNo.ToString()" />
+                <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+                <br />
+                <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

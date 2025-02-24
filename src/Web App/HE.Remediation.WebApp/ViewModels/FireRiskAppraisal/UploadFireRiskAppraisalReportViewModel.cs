@@ -2,12 +2,20 @@
 
 namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 {
-    public class UploadFireRiskAppraisalReportViewModel : FileUploadViewModel
+    public class UploadFireRiskAppraisalReportViewModel
     {
-        public override string DeleteEndpoint => "/FireRiskAppraisal/DeleteReport";
+        public string DeleteEndpoint => "/FireRiskAppraisal/DeleteReport";
+        public string[] FraewAcceptedFileTypes => new[] { ".pdf" };
+        public string[] FraewSummaryAcceptedFileTypes => new[] { ".xlsx" };
 
-        public override string[] AcceptedFileTypes => new[] { ".pdf" };
+        public Shared.File AddedFraew { get; set; }
 
-        public override int NumberOfFilesAllowed => 1;
+        public IFormFile Fraew { get; set; }
+
+        public Shared.File AddedSummary { get; set; }
+
+        public IFormFile FraewSummary { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

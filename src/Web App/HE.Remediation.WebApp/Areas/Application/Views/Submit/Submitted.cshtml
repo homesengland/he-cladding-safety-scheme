@@ -1,7 +1,7 @@
 ﻿@model HE.Remediation.WebApp.ViewModels.Application.SubmittedViewModel
 
 @{
-    ViewData["Title"] = "Submit Building Application";
+    ViewData["Title"] = "Application submitted";
 }
 
 <div class="text-center">
@@ -9,14 +9,16 @@
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                    <govuk-panel heading-level="2">
-                        <govuk-panel-title>Application complete</govuk-panel-title>
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Application complete                       
+                        </govuk-panel-title>
                         <govuk-panel-body>
                             Application ID<br/><strong>@Model.ReferenceNumber</strong>
                         </govuk-panel-body>
                     </govuk-panel>
 
-                    <h3 class="govuk-heading-m">What happens next</h3>
+                    <h2 class="govuk-heading-m">What happens next</h2>
 
                     <p class="govuk-body">Confirmation of your application submission will be sent to your email account.</p>
 

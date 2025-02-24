@@ -21,14 +21,18 @@ namespace HE.Remediation.WebApp.ViewModels.BankAccount
             RuleFor(x => x.AccountNumber)
                 .NotEmpty()
                 .WithMessage("Please enter a valid account number")
-                .Must(x => x.ToString().Length >= 6 && x.ToString().Length <= 8)
+                .Matches(@"^[0-9]{6,8}$")
                 .WithMessage("Must be between 6 and 8 digits long");
 
             RuleFor(x => x.SortCode)
                 .NotEmpty()
                 .WithMessage("Please enter a valid sort code")
-                .Must(x => x.ToString().Length == 6)
+                .Matches(@"^[0-9]{6}$")
                 .WithMessage("Must be 6 digits long");
+
+            RuleFor(x => x.VatNumber)
+                .Matches(@"^[A-Za-z]{2}[0-9]{9}$")
+                .WithMessage("Please enter a valid VAT number");
         }
     }
 }

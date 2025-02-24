@@ -1,0 +1,80 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.ChangeProjectDatesViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("ProjectDates", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = false;
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ProjectDateEndMonth" />
+        <govuk-error-summary-item asp-for="ProjectDateEndYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">What are your new project dates?</h1>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="ChangeProjectDates">
+
+    <h2 class="govuk-heading-s">End Date</h2>
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="end-date-hint">
+            <div id="end-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ProjectDateEndMonth" />
+            <govuk-error-message asp-for="ProjectDateEndYear" />
+            <div class="govuk-date-input" id="submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ProjectDateEndMonth">
+                            Month
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled asp-for="ProjectDateEndMonth" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ProjectDateEndMonth" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ProjectDateEndYear">
+                            Year
+                        </label>
+
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled asp-for="ProjectDateEndYear" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ProjectDateEndYear" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <input name="@($"{nameof(Model.ExpectedStartDate)}.{nameof(Model.ExpectedStartDate.Value.Day)}")" value="@Model.ExpectedStartDate?.Day" type="hidden" />
+    <input name="@($"{nameof(Model.ExpectedStartDate)}.{nameof(Model.ExpectedStartDate.Value.Month)}")" value="@Model.ExpectedStartDate?.Month" type="hidden" />
+    <input name="@($"{nameof(Model.ExpectedStartDate)}.{nameof(Model.ExpectedStartDate.Value.Year)}")" value="@Model.ExpectedStartDate?.Year" type="hidden" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@readOnly" name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button disabled="@readOnly" name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

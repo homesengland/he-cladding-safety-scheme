@@ -65,7 +65,7 @@ public class SetUserResponsibleEntityTypeHandler : IRequestHandler<SetUserRespon
             EResponsibleEntityType.Company => SetUpCompanyCompletionSteps(),
             EResponsibleEntityType.Individual => SetUpIndividualCompletionSteps(),
             _ => throw new ArgumentOutOfRangeException(
-                $"Cannot set up completion steps because an invalid responsible entity type has been selected ({(int) request.ResponsibleEntityType}).")
+                $"Cannot set up completion steps because an invalid Responsible Entity type has been selected ({(int) request.ResponsibleEntityType}).")
         });
 
         await _db.ExecuteAsync("SetUserResponsibleEntityTypeByUserId", new

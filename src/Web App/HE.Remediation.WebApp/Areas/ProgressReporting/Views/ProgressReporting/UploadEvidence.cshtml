@@ -1,0 +1,40 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.UploadEvidenceViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = true;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Upload communication evidence</h1>
+
+<h2 class="govuk-heading-s">Please upload evidence of your communication with leaseholders and residents.</h2>
+
+<p class="govuk-caption-m">This can be a copy of an email or other communication you have sent. If possible please don't send personal details (e.g. names) of residents.</p>
+
+<p class="govuk-body">You can upload up to 5 files.</p>
+
+<p class="govuk-body">Each file must be smaller than 50MB, and a .pdf file.</p>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="UploadEvidence" method="post" enctype="multipart/form-data">
+    
+    @await Html.PartialAsync("FileUpload", Model)
+    <br/>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

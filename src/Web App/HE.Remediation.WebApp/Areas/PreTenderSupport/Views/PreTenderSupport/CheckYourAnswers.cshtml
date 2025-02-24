@@ -1,0 +1,96 @@
+﻿@model HE.Remediation.WebApp.ViewModels.PreTenderSupport.CheckYourAnswersViewModel
+
+@{
+    var backAction = Model.BankDetailsRelationship == HE.Remediation.Core.Enums.EBankDetailsRelationship.MyAccount ? "ConfirmContactDetails" : "DeedOfTrustGuidance";
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["BackLink"] = Url.Action(backAction, "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["FullWidth"] = true;    
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Would you like to request Pre-Tender Support?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.SupportRequired != null)
+            {
+                string supportDisplayText = Model.SupportRequired.Value ? "I do require pre-tender support" : 
+                                                                          "I do not require pre-tender support";
+                <span>@supportDisplayText<br></span>
+            }
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("SupportRequired", "PreTenderSupport", new { returnUrl = ViewData["ReturnUrl"] })">
+                Change
+        </govuk-summary-list-row-action>            
+    </govuk-summary-list-row>    
+
+</govuk-summary-list>
+
+@if ((Model.Signatures != null) && (Model.Signatures.Count > 0))
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+
+            @for (var itemCounter = 0; itemCounter < Model.Signatures.Count; itemCounter++)
+            {
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        
+                    </div>                    
+                </div>
+
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-half govuk-text-align-left govuk-!-font-size-24 govuk-!-font-weight-bold">
+                        <p class="govuk-heading-m">Signatory @((itemCounter + 1).ToString())</p>
+                    </div>
+                    <div class="govuk-grid-column-one-half govuk-text-align-right govuk-!-font-size-19">
+                        <a class="govuk-link" href="@Url.Action("EditContactEmail", "PreTenderSupport", new { Id = Model.Signatures[itemCounter].Id.ToString(), returnUrl = "CheckYourAnswers" })">Change</a>
+                    </div>
+                </div>
+
+                <govuk-summary-list>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Name
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.Signatures[itemCounter].FullName
+                        </govuk-summary-list-row-value>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Role
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.Signatures[itemCounter].Role
+                        </govuk-summary-list-row-value>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Email address
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.Signatures[itemCounter].EmailAddress
+                        </govuk-summary-list-row-value>
+                        
+                    </govuk-summary-list-row>
+                </govuk-summary-list>
+            }
+        </div>
+    </div>
+}
+
+    <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+
+<form asp-area="PreTenderSupport" asp-controller="PreTenderSupport" asp-action="Submitted" method="post">
+    <govuk-button type="submit">Submit</govuk-button>
+</form>

@@ -10,6 +10,8 @@ public class ConfirmBuildingHeightViewModelValidator : AbstractValidator<Confirm
             .NotEmpty()
             .WithMessage("Enter a number of storeys")
             .GreaterThan(0)
-            .WithMessage("Enter a number of storeys");
+            .WithMessage("Enter a number of storeys")
+            .LessThanOrEqualTo(999)
+            .WithMessage("No more than 999 can be entered");
     }
 }

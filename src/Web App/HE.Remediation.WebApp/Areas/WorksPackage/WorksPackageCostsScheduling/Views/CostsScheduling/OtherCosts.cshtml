@@ -1,0 +1,104 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.OtherCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action(Model.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FraewSurveyAmountText" />
+        <govuk-error-summary-item asp-for="FeasibilityStageAmountText" />
+        <govuk-error-summary-item asp-for="FeasibilityStageDescription" />
+        <govuk-error-summary-item asp-for="PostTenderStageAmountText" />
+        <govuk-error-summary-item asp-for="PostTenderStageDescription" />
+        <govuk-error-summary-item asp-for="PropertyManagerAmountText" />
+        <govuk-error-summary-item asp-for="PropertyManagerDescription" />
+        <govuk-error-summary-item asp-for="IrrecoverableVatAmountText" />
+        <govuk-error-summary-item asp-for="IrrecoverableVatDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Other costs </h1>
+
+<p class="govuk-body">If you're telling us about costs, please tell us how the money is being spent.</p>
+
+<form asp-controller="CostsScheduling" asp-action="OtherCosts" asp-area="WorksPackageCostsScheduling" method="post">
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">
+                    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">FRAEW details</h2>
+                </td>
+                <td class="govuk-table__cell govuk-!-width-one-half">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-full">
+                    <h2 class="govuk-heading-s">FRAEW survey costs</h2>
+                    <govuk-input disabled="@Model.IsSubmitted" asp-for="FraewSurveyAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+                        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="govuk-heading-s">Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="FeasibilityStageAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="FeasibilityStageDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Professional fees - post tender stage</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="PostTenderStageAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled ="@Model.IsSubmitted" asp-for="PostTenderStageDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Property manager/leaseholder liaison costs</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="PropertyManagerAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="PropertyManagerDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Irrecoverable VAT on works and associated fees</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="IrrecoverableVatAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="IrrecoverableVatDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

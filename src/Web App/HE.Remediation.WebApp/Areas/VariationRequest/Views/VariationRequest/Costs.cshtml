@@ -1,0 +1,256 @@
+﻿@using HE.Remediation.Core.Enums;
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.CostsViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("AboutAdjustCosts", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationCostsValidation" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Tell us about your costs</h1>
+
+<form asp-controller="VariationRequest" asp-action="Costs" asp-area="VariationRequest">
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-!-padding-bottom-6">Works type</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">Eligible costs (&pound;)</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">Variation (&pound;)</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">Total requested amount (&pound;)</th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Removal of unsafe cladding</td>
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-table__cell--numeric">
+                    @if (!Model.IsSubmitted)
+                    {
+                        <a href="@Url.Action("UnsafeCladdingCosts", "VariationRequest", new { Area = "VariationRequest", })" class="govuk-link">
+                            Edit costs
+                        </a>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Removal of unsafe cladding system or mitigation works in lieu</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.UnsafeCladdingRemovalAmount > 0 ? $"&pound;{Model.UnsafeCladdingRemovalAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationUnsafeCladdingRemovalAmount > 0 ? $"&pound;{Model.VariationUnsafeCladdingRemovalAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.UnsafeCladdingTotal > 0 ? $"&pound;{Model.UnsafeCladdingTotal:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-!-font-weight-bold govuk-!-padding-bottom-6">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.UnsafeCladdingRemovalAmount > 0 ? $"&pound;{Model.UnsafeCladdingRemovalAmount:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.VariationUnsafeCladdingRemovalAmount > 0 ? $"&pound;{Model.VariationUnsafeCladdingRemovalAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.UnsafeCladdingTotal > 0 ? $"&pound;{Model.UnsafeCladdingTotal:N0}" : "-")</td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" asp-for="UnsafeCladdingRemovalAmount" value="@Model.UnsafeCladdingRemovalAmount" />
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Installation of new cladding as replacement to unsafe non-ACM cladding</td>
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-table__cell--numeric">
+                    @if (!Model.IsSubmitted)
+                    {
+                        <a href="@Url.Action("InstallationOfCladdingCosts", "VariationRequest", new { Area = "VariationRequest", })" class="govuk-link">
+                            Edit costs
+                        </a>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">New cladding – including specification, insulation and other associated components to be installed</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.NewCladdingAmount > 0 ? $"&pound;{Model.NewCladdingAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationNewCladdingAmount > 0 ? $"&pound;{Model.VariationNewCladdingAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalNewCladdingAmount > 0 ? $"&pound;{Model.TotalNewCladdingAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.ExternalWorksAmount > 0 ? $"&pound;{Model.ExternalWorksAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationExternalWorksAmount > 0 ? $"&pound;{Model.VariationExternalWorksAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalExternalWorksAmount > 0 ? $"&pound;{Model.TotalExternalWorksAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Any internal mitigation works recommended in the FRAEW /PAS9980 assessment in lieu of cladding removal</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.InternalWorksAmount > 0 ? $"&pound;{Model.InternalWorksAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationInternalWorksAmount > 0 ? $"&pound;{Model.VariationInternalWorksAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalInternalWorksAmount > 0 ? $"&pound;{Model.TotalInternalWorksAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-!-font-weight-bold govuk-!-padding-bottom-6">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.InstallationTotal > 0 ? $"&pound;{Model.InstallationTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.VariationInstallationTotal > 0 ? $"&pound;{Model.VariationInstallationTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.TotalRequestedInternalWorksAmount > 0 ? $"&pound;{Model.TotalRequestedInternalWorksAmount:N0}" : "-")</td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" asp-for="NewCladdingAmount" value="@Model.NewCladdingAmount" />
+    <input type="hidden" asp-for="ExternalWorksAmount" value="@Model.ExternalWorksAmount" />
+    <input type="hidden" asp-for="InternalWorksAmount" value="@Model.InternalWorksAmount" />
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Preliminaries, access costs, main contractor's overheads and profit </td>
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-table__cell--numeric">
+                    @if (!Model.IsSubmitted)
+                    {
+                        <a href="@Url.Action("PreliminaryCosts", "VariationRequest", new { Area = "VariationRequest", })" class="govuk-link">
+                            Edit costs
+                        </a>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Main contractor's preliminaries</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.MainContractorPreliminariesAmount > 0 ? $"&pound;{Model.MainContractorPreliminariesAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationMainContractorPreliminariesAmount > 0 ? $"&pound;{Model.VariationMainContractorPreliminariesAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalMainContractorPreliminariesAmount > 0 ? $"&pound;{Model.TotalMainContractorPreliminariesAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Access (e.g. scaffolding or mast climber)</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.AccessAmount > 0 ? $"&pound;{Model.AccessAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationAccessAmount > 0 ? $"&pound;{Model.VariationAccessAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalAccessAmount > 0 ? $"&pound;{Model.TotalAccessAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Main contractor's overheads and profit</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.MainContractorOverheadAmount > 0 ? $"&pound;{Model.MainContractorOverheadAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationMainContractorOverheadAmount > 0 ? $"&pound;{Model.VariationMainContractorOverheadAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalMainContractorOverheadAmount > 0 ? $"&pound;{Model.TotalMainContractorOverheadAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Contractor's contingencies</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.ContractorContingenciesAmount > 0 ? $"&pound;{Model.ContractorContingenciesAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationContractorContingenciesAmount > 0 ? $"&pound;{Model.VariationContractorContingenciesAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalContractorContingenciesAmount > 0 ? $"&pound;{Model.TotalContractorContingenciesAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-!-font-weight-bold govuk-!-padding-bottom-6">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.PreliminariesTotal > 0 ? $"&pound;{Model.PreliminariesTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.VariationPreliminariesTotal > 0 ? $"&pound;{Model.VariationPreliminariesTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.TotalRequestedPreliminariesTotal > 0 ? $"&pound;{Model.TotalRequestedPreliminariesTotal:N0}" : "-")</td>
+
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" asp-for="MainContractorPreliminariesAmount" value="@Model.MainContractorPreliminariesAmount" />
+    <input type="hidden" asp-for="AccessAmount" value="@Model.AccessAmount" />
+    <input type="hidden" asp-for="MainContractorOverheadAmount" value="@Model.MainContractorOverheadAmount" />
+    <input type="hidden" asp-for="ContractorContingenciesAmount" value="@Model.ContractorContingenciesAmount" />
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Other costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-table__cell--numeric">
+                    @if (!Model.IsSubmitted)
+                    {
+                        <a href="@Url.Action("OtherCosts", "VariationRequest", new { Area = "VariationRequest", })" class="govuk-link">
+                            Edit costs
+                        </a>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">FRAEW survey costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.FraewSurveyAmount > 0 ? $"&pound;{Model.FraewSurveyAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationFraewSurveyAmount > 0 ? $"&pound;{Model.VariationFraewSurveyAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalFraewSurveyAmount > 0 ? $"&pound;{Model.TotalFraewSurveyAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.FeasibilityStageAmount > 0 ? $"&pound;{Model.FeasibilityStageAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationFeasibilityStageAmount > 0 ? $"&pound;{Model.VariationFeasibilityStageAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalFeasibilityStageAmount > 0 ? $"&pound;{Model.TotalFeasibilityStageAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Professional fees - post tender stage </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.PostTenderStageAmount > 0 ? $"&pound;{Model.PostTenderStageAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationPostTenderStageAmount > 0 ? $"&pound;{Model.VariationPostTenderStageAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalPostTenderStageAmount > 0 ? $"&pound;{Model.TotalPostTenderStageAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Property manager/leaseholder liaison costs </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.PropertyManagerAmount > 0 ? $"&pound;{Model.PropertyManagerAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationPropertyManagerAmount > 0 ? $"&pound;{Model.VariationPropertyManagerAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalPropertyManagerAmount > 0 ? $"&pound;{Model.TotalPropertyManagerAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter">Irrecoverable VAT on works and associated fees</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.IrrecoverableVatAmount > 0 ? $"&pound;{Model.IrrecoverableVatAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.VariationIrrecoverableVatAmount > 0 ? $"&pound;{Model.VariationIrrecoverableVatAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">@Html.Raw(Model.TotalIrrecoverableVatAmount > 0 ? $"&pound;{Model.TotalIrrecoverableVatAmount.Value:N0}" : "-")</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-!-font-weight-bold govuk-!-padding-bottom-6">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.OtherCostsTotal > 0 ? $"&pound;{Model.OtherCostsTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.VariationOtherCostsTotal > 0 ? $"&pound;{Model.VariationOtherCostsTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold">@Html.Raw(Model.RequestedTotalOtherCosts > 0 ? $"&pound;{Model.RequestedTotalOtherCosts:N0}" : "-")</td>
+
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" asp-for="FraewSurveyAmount" value="@Model.FraewSurveyAmount" />
+    <input type="hidden" asp-for="FeasibilityStageAmount" value="@Model.FeasibilityStageAmount" />
+    <input type="hidden" asp-for="PostTenderStageAmount" value="@Model.PostTenderStageAmount" />
+    <input type="hidden" asp-for="PropertyManagerAmount" value="@Model.PropertyManagerAmount" />
+    <input type="hidden" asp-for="IrrecoverableVatAmount" value="@Model.IrrecoverableVatAmount" />
+
+    <table class="govuk-table govuk-!-margin-bottom-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-!-font-weight-bold govuk-!-padding-bottom-6 govuk-!-padding-top-6">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold govuk-!-padding-bottom-6 govuk-!-padding-top-6">@Html.Raw(Model.OverallTotal > 0 ? $"&pound;{Model.OverallTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold govuk-!-padding-bottom-6 govuk-!-padding-top-6">@Html.Raw(Model.VariationOverallTotal > 0 ? $"&pound;{Model.VariationOverallTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-font-weight-bold govuk-!-padding-bottom-6 govuk-!-padding-top-6">@Html.Raw(Model.RequestedOverallTotal > 0 ? $"&pound;{Model.RequestedOverallTotal:N0}" : "-")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

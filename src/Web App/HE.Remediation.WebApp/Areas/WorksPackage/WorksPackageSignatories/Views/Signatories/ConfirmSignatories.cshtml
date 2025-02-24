@@ -1,0 +1,75 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageSignatories.ConfirmSignatoriesViewModel
+@{
+    ViewData["Title"] = "Signatories - Confirm the signatories are the same as you previously told us";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="AreSignatoriesCorrect"/>
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Confirm the signatories are the same as you previously told us</h1>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <span class="govuk-label--m">Signatories</span>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+    @if (Model.Signatories is not null && Model.Signatories.Any())
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Primary signatory
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.Signatories.First()
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    @if (Model.Signatories is not null && Model.Signatories.Count() > 1)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Secondary signatory
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.Signatories.Last()
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+</govuk-summary-list>
+
+
+<form asp-area="WorksPackageSignatories" asp-controller="Signatories" asp-action="ConfirmSignatories" method="post">
+    <h2 class="govuk-label--s">Are these still the correct signatories for the Responsible Entity to sign the works package deed?</h2>
+    <p class="govuk-body">If you answer as No, we will contact you to discuss who should sign your works package deed.</p>
+    <govuk-radios name="AreSignatoriesCorrect" asp-for="AreSignatoriesCorrect" class="govuk-!-margin-top-4">
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(false)">
+            No
+        </govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+
+    @if (Model.Signatories is not null && Model.Signatories.Any())
+    {
+        @foreach (var signatory in Model.Signatories)
+        {
+            <input asp-for="Signatories" type="hidden" value="@signatory" />
+        }
+    }
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

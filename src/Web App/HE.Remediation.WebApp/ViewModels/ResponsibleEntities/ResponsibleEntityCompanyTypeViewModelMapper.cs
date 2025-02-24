@@ -9,7 +9,6 @@ public class ResponsibleEntityCompanyTypeViewModelMapper : Profile
     public ResponsibleEntityCompanyTypeViewModelMapper()
     {
         CreateMap<GetResponsibleEntityCompanyTypeResponse, ResponsibleEntityCompanyTypeViewModel>();
-
         CreateMap<ResponsibleEntityCompanyTypeViewModel, SetResponsibleEntityCompanyTypeRequest>();
     }
 }

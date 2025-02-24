@@ -1,0 +1,229 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageGrantCertifyingOfficer.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Grant certifying officer - Check your answers";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLinkHidden"] = true;
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+@if (!Model.IsSubmitted)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full govuk-text-align-right">
+            <a href=@Url.Action("ChangeAnswers", "GrantCertifyingOfficer") class="govuk-link">Change your answers</a>
+        </div>
+    </div>
+}
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-label--m govuk-!-margin-bottom-0">Grant certifying officer</h2>
+        </govuk-summary-list-row-key>        
+        <govuk-summary-list-row-value>            
+        </govuk-summary-list-row-value>
+        
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.Name
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Project role
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.RoleName.ToSentenceCase()
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-label--m govuk-!-margin-bottom-0">Grant certifying officer details</h2>
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CompanyName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company registration number
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CompanyRegistrationNumber
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.EmailAddress is not null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Email address
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.EmailAddress
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.PrimaryContactNumber is not null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Primary contact number
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.PrimaryContactNumber
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.ContractSigned.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you formally signed a contract with this person?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ContractSigned.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.IndemnityInsurance.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Are appropriate levels of professional indemnity insurance and limits of liability, for the risks associated and in accordance with industry best practice, in place?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.IndemnityInsurance.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.InvolvedInOriginalInstallation.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Was the @Model.RoleName?.ToLower() involved in the original installation of cladding on this building?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.InvolvedInOriginalInstallation.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-label--m govuk-!-margin-bottom-0">Address</h2>
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company address
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.CompanyNameNumber) && !String.IsNullOrEmpty(Model.CompanyAddressLine1))
+            {
+                <span>@(!string.IsNullOrEmpty(Model.CompanyNameNumber) ? $"{Model.CompanyNameNumber} " : string.Empty)@(!string.IsNullOrEmpty(Model.CompanyAddressLine1) ? Model.CompanyAddressLine1 : string.Empty)<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.CompanyAddressLine2))
+            {
+                <span>@Model.CompanyAddressLine2<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.CompanyCity))
+            {
+                <span>@Model.CompanyCity<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.CompanyCounty))
+            {
+                <span>@Model.CompanyCounty<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.CompanyPostcode))
+            {
+                <span>@Model.CompanyPostcode<br></span>
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-label--m govuk-!-margin-bottom-0">Grant certifying officer authorised signatories</h2>
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Authorised signatory
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.AuthorisedSignatory1
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Email address
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.AuthorisedSignatory1EmailAddress
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company’s Date of Appointment to the project
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.CompaniesDateOfAppointment?.ToString("dd/MM/yy"))
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+
+<form asp-area="WorksPackage" asp-controller="GrantCertifyingOfficer" asp-action="CheckYourAnswers" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+</form>
+

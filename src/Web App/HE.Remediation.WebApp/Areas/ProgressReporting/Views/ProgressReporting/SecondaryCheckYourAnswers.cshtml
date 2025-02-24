@@ -1,0 +1,118 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.SecondaryCheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Model.HelpNeeded.HasValue && Model.HelpNeeded.Value
+        ? Url.Action("ProgressSupport", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("SummariseProgress", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = true;
+} 
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            When did you last update your leaseholders/residents on progress?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.LastUpdate.HasValue)
+            {
+                <span>@Model.LastUpdate.Value.ToString("dd MMMM yyyy")<br></span>
+            }
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("LeaseholdersInformedLast", "ProgressReporting")" visually-hidden-text="name">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Summarise your risks and blockers
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.ThisMonthProgressSummary))
+            {
+                <span>@Model.ThisMonthProgressSummary<br></span>
+            }
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("SummariseProgress", "ProgressReporting")" visually-hidden-text="name">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+
+</govuk-summary-list>
+
+
+
+@if (Model.HelpNeeded.HasValue && Model.HelpNeeded.Value)
+{
+    <h2 class="govuk-heading-m">What kind of support do you need?</h2>
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Type of support
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @{
+                    if (Model.SupportTypes.Any())
+                    {
+                        var supportTypes = new List<string>();
+
+                        foreach (var supportType in Model.SupportTypes)
+                        {
+                            supportTypes.Add(HE.Remediation.Core.Helpers.EnumHelpers.GetText(supportType));
+                        }
+                        <span>@string.Join(", ", supportTypes)</span>
+                    }
+                    else
+                    {
+                        <span>None</span>
+                    }
+                }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ProgressSupport", "ProgressReporting")" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Tell us about the support you need
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (!String.IsNullOrEmpty(Model.SupportNeededReason))
+                {
+                    <span>@Model.SupportNeededReason<br></span>
+                }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ProgressSupport", "ProgressReporting")" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Proceed to next step of your application</h2>
+        <p class="govuk-body">
+            By submitting this notification you are confirming that, to the best of
+            your knowledge, the details you are providing are correct.
+        </p>
+    </div>
+</div>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="SecondaryCheckYourAnswers" method="post">
+
+    <input asp-for="SubmitAction" type="hidden" value="@Model.SubmitAction" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Submit</govuk-button>
+    </div>
+</form>

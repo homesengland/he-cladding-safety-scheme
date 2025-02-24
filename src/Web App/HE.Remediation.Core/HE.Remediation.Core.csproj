@@ -1,16 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
-    <EmbeddedResource Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
-    <None Remove="UseCase\Areas\ResponsibleEntities\RepresentationCompanyOrIndividualAddressDetails\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
@@ -25,13 +19,15 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.0.0" />
+    <PackageReference Include="Syncfusion.HtmlToPdfConverter.Net.Linux" Version="20.4.0.48" />
+    <PackageReference Include="Syncfusion.HtmlToPdfConverter.Net.Windows" Version="20.4.0.48" />
+    <PackageReference Include="Syncfusion.Licensing" Version="20.4.0.48" />
     <PackageReference Include="VirusScanner.Client" Version="1.0.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\StoredProcedureParameters\" />
     <Folder Include="Services\OidcEventHandlerService\" />
-    <Folder Include="Services\FireAssessorList\" />
+    <Folder Include="Services\RazorRenderer\Models\" />
     <Folder Include="Services\UserService\Model\" />
     <Folder Include="Services\UserService\Enum\" />
     <Folder Include="UseCase\Areas\Administration\CompanyAddress\GetCompanyAddressForCurrentUser\" />
@@ -44,11 +40,27 @@
     <Folder Include="UseCase\Areas\BuildingDetails\DeveloperContacted\SetDeveloperContacted\" />
     <Folder Include="UseCase\Areas\BuildingDetails\DeveloperInBusiness\GetDeveloperInBusiness\" />
     <Folder Include="UseCase\Areas\BuildingDetails\DeveloperInBusiness\SetDeveloperInBusiness\" />
-    <Folder Include="UseCase\Areas\RegisteredProvider\" />
+    <Folder Include="UseCase\Areas\AreaProgress\" />
+    <Folder Include="UseCase\Areas\Document\" />
+    <Folder Include="UseCase\Areas\PracticalCompletionMilestone\" />
+    <Folder Include="UseCase\Areas\StartedOnSiteMilestone\" />
+    <Folder Include="UseCase\Areas\ProgressReporting\Details\GetProgressReportCompanyDetails\" />
+    <Folder Include="UseCase\Areas\ProgressReporting\Details\GetProgressReportDetails\" />
+    <Folder Include="UseCase\Areas\ProgressReporting\ProgressReportVersion\" />
+    <Folder Include="UseCase\Areas\ResponsibleEntities\NotEligible\GetNotEligible\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\NotEligible\SetNotEligible\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityCompanyType\GetResponsibleEntityCompanyType\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityCompanyType\SetResponsibleEntityCompanyType\" />
     <Folder Include="UseCase\Areas\ResponsibleEntities\ResponsibleEntityUkRegistered\GetResponsibleEntityUkRegistered\" />
+    <Folder Include="UseCase\Areas\WorkPackage\WorkPackageCostsScheduling\Costs\UnsafeCladding\" />
+    <Folder Include="UseCase\Areas\WorkPackage\WorkPackageProjectTeamMember\TeamMember\" />
+    <Folder Include="UseCase\Areas\WorkPackage\WorkPackageProjectTeam\CheckYourAnswers\" />
+    <Folder Include="UseCase\Areas\WorkPackage\WorkPackageProjectTeam\RegulatoryCompliance\" />    
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
 </Project>

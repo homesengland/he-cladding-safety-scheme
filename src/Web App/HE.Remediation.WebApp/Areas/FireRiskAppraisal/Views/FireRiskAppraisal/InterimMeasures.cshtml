@@ -1,0 +1,154 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.GetInterimMeasuresViewModel
+
+@{
+    ViewData["Title"] = "Interim Measures, Strategies and Access";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLink"] = Url.Action("ReportDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="BuildingInterimMeasures" />
+        <govuk-error-summary-item asp-for="BuildingInterimMeasuresTypes" />
+        <govuk-error-summary-item asp-for="BuildingInterimMeasuresText" />
+        <govuk-error-summary-item asp-for="EvacuationStrategyType" />
+        <govuk-error-summary-item asp-for="EvacuationStrategyText" />
+        <govuk-error-summary-item asp-for="NumberOfStairwellsPrompt" />
+        <govuk-error-summary-item asp-for="NumberOfStairwells" />
+        <govuk-error-summary-item asp-for="ExternalWallAndBalconiesPolicy" />
+        <govuk-error-summary-item asp-for="FireAndResueAccessRestrictions" />
+        <govuk-error-summary-item asp-for="FireAndResueAccessRestrictionsText" />
+    </govuk-error-summary>
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+                    <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="InterimMeasures" method="post">
+
+                        <govuk-radios asp-for="BuildingInterimMeasures">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Is this building in interim measures?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.Yes)">Yes</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.No)">No</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.DontKnow)">I don't know</govuk-radios-item>
+                        </govuk-radios>
+
+                        <govuk-checkboxes asp-for="BuildingInterimMeasuresTypes">
+                            <govuk-checkboxes-fieldset>
+                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
+                                    If yes, what type of interim measures are in place?
+                                </govuk-checkboxes-fieldset-legend>
+                            </govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-hint>
+                                You can select more than one if applicable
+                            </govuk-checkboxes-hint>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.CommonFireAlarm)" value="@EInterimMeasuresType.CommonFireAlarm">Common fire alarm</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.WakingWatch)" value="@EInterimMeasuresType.WakingWatch">Waking watch</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.EvacuationManagement)" value="@EInterimMeasuresType.EvacuationManagement">Evacuation management</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.SimultaneousEvacuationStrategy)" value="@EInterimMeasuresType.SimultaneousEvacuationStrategy">Simultaneous evacuation strategy</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.FireHeatSmokeDetection)" value="@EInterimMeasuresType.FireHeatSmokeDetection">Fire, heat, smoke detection</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.FireSupressionSystem)" value="@EInterimMeasuresType.FireSupressionSystem">Fire suppression system</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.BuildingInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.Other)" value="@EInterimMeasuresType.Other">
+                                Other (Please specify)
+                                <govuk-checkboxes-item-conditional>
+                                    <govuk-input asp-for="BuildingInterimMeasuresText" input-class="govuk-!-width-full">
+                                        <govuk-input-label>Please enter other interim measures in place</govuk-input-label>
+                                    </govuk-input>
+                                </govuk-checkboxes-item-conditional>
+                            </govuk-checkboxes-item>
+                        </govuk-checkboxes>
+
+                        <govuk-radios asp-for="EvacuationStrategyType">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    What is the current evacuation strategy?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+                            <govuk-radios-item value="@(EEvacuationStrategy.SimultaneousEvacuation)">Simultaneous evacuation</govuk-radios-item>
+                            <govuk-radios-item value="@(EEvacuationStrategy.StayPut)">Stay put</govuk-radios-item>
+                            <govuk-radios-item value="@(EEvacuationStrategy.TemporarySimultaneousEvacuation)">Temporary simultaneous evacuation</govuk-radios-item>
+                            <govuk-radios-item value="@(EEvacuationStrategy.NotApplicable)">Not applicable</govuk-radios-item>
+                            <govuk-radios-item value="@(EEvacuationStrategy.NotCaptured)">Not captured</govuk-radios-item>
+                            <govuk-radios-item value="@(EEvacuationStrategy.Other)">
+                                Other (Please specify)
+                                <govuk-radios-item-conditional>
+                                    <govuk-input asp-for="EvacuationStrategyText" input-class="govuk-!-width-full">
+                                        <govuk-input-label>Please enter other current evacuation strategy</govuk-input-label>
+                                    </govuk-input>
+                                </govuk-radios-item-conditional>
+                            </govuk-radios-item>
+                        </govuk-radios>
+
+                        <govuk-radios asp-for="NumberOfStairwellsPrompt">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Do you know the number of stairwells?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+                            <govuk-radios-item value="@(ENoYes.Yes)">
+                                Yes                     
+                                <govuk-radios-item-conditional>
+                                    <govuk-input asp-for="NumberOfStairwells" type="text" input-class="govuk-input--width-5" input-maxlength="10" input-pattern="[0-9]*">
+                                        <govuk-input-label>What are the number of stairwells?</govuk-input-label>
+                                    </govuk-input>
+                                </govuk-radios-item-conditional>
+                            </govuk-radios-item>
+
+                            <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+                        </govuk-radios>
+
+                        <govuk-radios asp-for="ExternalWallAndBalconiesPolicy">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Are there management policies in place for the external wall and balconies (if applicable)?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.Yes)">Yes</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.No)">No</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.DontKnow)">I don't know</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.NotApplicable)">Not applicable</govuk-radios-item>
+                        </govuk-radios>
+
+                        <govuk-radios asp-for="FireAndResueAccessRestrictions">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Does the building have any fire & rescue service access restrictions?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.Yes)">Yes</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.No)">No</govuk-radios-item>
+                            <govuk-radios-item value="@(EYesNoNonBoolean.DontKnow)">I don't know</govuk-radios-item>
+                        </govuk-radios>
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="150">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="FireAndResueAccessRestrictionsText" max-length="150" asp-for="FireAndResueAccessRestrictionsText">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        If yes, what are the fire & rescue service access restrictions?
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+                        </div>
+
+                        <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+                        <div class="comp-btn-group">
+                            <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+                            <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

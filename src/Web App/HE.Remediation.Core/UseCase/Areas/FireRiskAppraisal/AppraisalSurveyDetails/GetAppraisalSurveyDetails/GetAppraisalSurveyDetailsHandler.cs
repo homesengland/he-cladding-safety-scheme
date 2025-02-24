@@ -1,4 +1,4 @@
-﻿using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -8,9 +8,9 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
-        private readonly IFireAssessorListRepository _fireAssessorListService;
+        private readonly IFireRiskAppraisalRepository _fireAssessorListService;
 
-        public GetAppraisalSurveyDetailsHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider, IFireAssessorListRepository fireAssessorListService)
+        public GetAppraisalSurveyDetailsHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider, IFireRiskAppraisalRepository fireAssessorListService)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;

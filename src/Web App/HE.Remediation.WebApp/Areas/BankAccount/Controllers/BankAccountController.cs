@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.BankAccount.CheckYourAnswers.GetCheckYourAnswers;
+using HE.Remediation.Core.UseCase.Areas.BankAccount.CheckYourAnswers.SetCheckYourAnswers;
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetAccountGrantPaidTo;
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetBankAccountDetailsRepresentative;
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetBankAccountDetailsResponsibleEntity;
+using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetVerificationContact;
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetAccountGrantPaidTo;
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetBankAccountDetailsRepresentative;
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetBankAccountDetailsResponsibleEntity;
+using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetVerificationContact;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.GetRepresentativeType;
-using HE.Remediation.WebApp.Authorisation;
 using HE.Remediation.WebApp.ViewModels.BankAccount;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,17 +20,19 @@ namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers
 {
     [Area("BankAccount")]
     [Route("BankAccount")]
-    [CookieApplicationAuthorise]
-    public class BankAccountController : Controller
+    public class BankAccountController : StartController
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
 
         public BankAccountController(ISender sender, IMapper mapper)
+            : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
         }
+
+        protected override IActionResult DefaultStart => RedirectToAction("WhatYouWillNeed", "BankAccount", new { Area = "BankAccount" });
 
         #region "What You'll Need"
 
@@ -35,19 +40,12 @@ namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers
         public async Task<IActionResult> WhatYouWillNeed()
         {
             var response = await _sender.Send(GetRepresentativeTypeRequest.Request);
-
             if (response.RepresentativeType == EApplicationRepresentationType.Representative)
             {
                 return View("WhatYouWillNeedRepresentative");
             }
-            
-            return View("WhatYouWillNeedResponsibleEntity");
-        }
 
-        [HttpGet(nameof(WhatYouWillNeedRepresentative))]
-        public IActionResult WhatYouWillNeedRepresentative()
-        {
-            return View("WhatYouWillNeedRepresentative");
+            return View("WhatYouWillNeedResponsibleEntity");
         }
 
         #endregion
@@ -78,7 +76,7 @@ namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers
 
                 await _sender.Send(request);
 
-                return RedirectToAction("Index", "TaskList", new { area = "Application" });
+                return RedirectToAction("VerificationContact", "BankAccount", new { area = "BankAccount" });
             }
 
             validationResult.AddToModelState(ModelState, String.Empty);
@@ -114,7 +112,7 @@ namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers
 
                 await _sender.Send(request);
 
-                return RedirectToAction("Index", "TaskList", new { area = "Application" });
+                return RedirectToAction("VerificationContact", "BankAccount", new { area = "BankAccount" });
             }
 
             validationResult.AddToModelState(ModelState, String.Empty);
@@ -167,6 +165,53 @@ namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers
             return View("AccountGrantPaidTo", viewModel);
         }
 
+        #endregion
+
+        #region Verification Contact
+
+        [HttpGet(nameof(VerificationContact))]
+        public async Task<IActionResult> VerificationContact(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetVerificationContactRequest.Request, cancellationToken);
+            var model = _mapper.Map<VerificationContactViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(VerificationContact))]
+        public async Task<IActionResult> VerificationContact(VerificationContactViewModel viewModel, CancellationToken cancellationToken)
+        {
+            var validator = new VerificationContactViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(viewModel, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(viewModel);
+            }
+
+            var request = _mapper.Map<SetVerificationContactRequest>(viewModel);
+            await _sender.Send(request, cancellationToken);
+
+            return RedirectToAction("CheckYourAnswers", "BankAccount", new { Area = "BankAccount" });
+        }
+        #endregion
+
+        #region Check Your Answers
+        [HttpGet(nameof(CheckYourAnswers))]
+        public async Task<IActionResult> CheckYourAnswers()
+        {
+            var response = await _sender.Send(GetCheckYourAnswersRequest.Request);
+
+            return View(_mapper.Map<CheckYourAnswersViewModel>(response));
+        }
+
+        [HttpPost(nameof(CheckYourAnswers))]
+        public async Task<IActionResult> CheckYourAnswers(CheckYourAnswersViewModel viewModel)
+        {
+            await _sender.Send(SetCheckYourAnswersRequest.Request);
+            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
         #endregion
     }
 }

@@ -1,0 +1,43 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.SoughtQuotesViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="QuotesSought" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Have you sought quotes or issued a tender?</h1>
+
+<p class="govuk-body">
+    We expect that you will procure work via a competitive tender process to ensure costs are reasonable. If you believe you have a justifiable reason
+    not to undertake a competitive tender, please select no, and tell us more on the next page. This will require our approval in advance.
+</p>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="SoughtQuotes" method="post">
+
+    <govuk-radios name="QuotesSought" asp-for="QuotesSought">
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

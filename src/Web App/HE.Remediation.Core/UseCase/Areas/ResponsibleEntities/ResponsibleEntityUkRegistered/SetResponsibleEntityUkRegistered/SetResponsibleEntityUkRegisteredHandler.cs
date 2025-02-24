@@ -1,6 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.SetResponsibleEntityUkRegistered;
@@ -10,12 +11,18 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IResponsibleEntityRepository _responsibleEntityRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
-    public SetResponsibleEntityUkRegisteredHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IResponsibleEntityRepository responsibleEntityRepository)
+    public SetResponsibleEntityUkRegisteredHandler(
+        IDbConnectionWrapper connection, 
+        IApplicationDataProvider applicationDataProvider, 
+        IResponsibleEntityRepository responsibleEntityRepository, 
+        IStatusTransitionService statusTransitionService)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
         _responsibleEntityRepository = responsibleEntityRepository;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<SetResponsibleEntityUkRegisteredResponse> Handle(SetResponsibleEntityUkRegisteredRequest request, CancellationToken cancellationToken)
@@ -23,6 +30,8 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
         var applicationId = _applicationDataProvider.GetApplicationId();
 
         await SetResponsibleEntityUkRegistered(applicationId, request);
+
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.ApplicationInProgress, applicationIds: applicationId);
 
         return await GetRepresentativeUKStatusAndOrganisationTypes(applicationId);
     }
@@ -46,6 +55,11 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
 
         var responsibleEntityCompanyType = await _responsibleEntityRepository.GetResponsibleEntityCompanyType(applicationId);
 
+        var hasRepresentativeUkBased = await _connection.QuerySingleOrDefaultAsync<bool?>("GetRepresentativeBasedInUk", new 
+        { 
+            applicationId 
+        });
+        
         var hasValidOrganisationTypes =
             responsibleEntityCompanyType.OrganisationType == Enums.EApplicationResponsibleEntityOrganisationType.Other &&
             responsibleEntityCompanyType.OrganisationSubType == Enums.EApplicationResponsibleEntityOrganisationSubType.Individual
@@ -55,7 +69,9 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
         return new SetResponsibleEntityUkRegisteredResponse
         {
             HasRepresentative = hasRepresentative,
-            HasValidOrganisationTypes = hasValidOrganisationTypes
+            HasValidOrganisationTypes = hasValidOrganisationTypes,
+            OrganisationType = responsibleEntityCompanyType.OrganisationType,
+            HasRepresentativeUkBased = hasRepresentativeUkBased
         };
     }
 }

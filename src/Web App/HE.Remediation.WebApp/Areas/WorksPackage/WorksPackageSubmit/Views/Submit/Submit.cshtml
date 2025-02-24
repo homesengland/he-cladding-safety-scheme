@@ -1,0 +1,31 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageSubmit.SubmitViewModel
+@{
+    ViewData["Title"] = "Compile works package - Submit a works package";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">Submit a works package</h1>
+
+<p class="govuk-body">Submit this works package once you have entered all the relevant information.</p>
+
+<p class="govuk-body">Before you submit, you'll need to confirm that:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>
+        you consent to your data being used in line with our 
+        <a href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice#cladding-safety-scheme-previously-known-as-the-medium-rise-scheme" rel="noreferrer noopener" target="_blank">
+            privacy policy
+        </a>
+    </li>
+    <li>to the best of your knowledge, all the information you've provided is correct</li>
+</ul>
+
+<form asp-area="WorksPackageSubmit" asp-controller="Submit" asp-action="Submit" method="post">
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Confirm and submit</govuk-button>
+    </div>
+</form>

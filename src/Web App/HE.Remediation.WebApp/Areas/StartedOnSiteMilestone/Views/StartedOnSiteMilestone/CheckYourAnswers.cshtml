@@ -1,0 +1,29 @@
+﻿@model HE.Remediation.WebApp.ViewModels.StartedOnSiteMilestone.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Milestone - Check your answers";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+
+    ViewData["BackLink"] = Url.Action("StartedOnSite", "StartedOnSiteMilestone", new { Area = "StartedOnSiteMilestone" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>What date did work start on site?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@(Model.StartedOnSiteDate.HasValue ? Model.StartedOnSiteDate.Value.ToString("dd/MM/yyyy") : "-")</govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("StartedOnSite", "StartedOnSiteMilestone", new { Area = "StartedOnSiteMilestone" })">
+                Change your answers
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<form asp-area="StartedOnSiteMilestone" asp-controller="StartedOnSiteMilestone" asp-action="SubmitCheckYourAnswers" method="post">
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction">Continue</govuk-button>
+    </div>
+</form>

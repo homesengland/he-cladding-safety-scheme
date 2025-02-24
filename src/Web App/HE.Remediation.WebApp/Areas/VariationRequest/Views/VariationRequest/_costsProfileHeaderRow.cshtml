@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using GovUk.Frontend.AspNetCore.TagHelpers
+
+<tr class="govuk-table__row bold-bottom-table-border">
+    <th class="govuk-table__header govuk-!-width-one-third govuk-!-padding-left-2">@ViewData["RowTitle"]</th>
+    <th class="govuk-table__header govuk-!-width-one-third govuk-table__cell--numeric govuk-!-font-weight-bold govuk-!-padding-right-2">@Html.Raw(ViewData["AmountColumnTitle"] ?? "&nbsp")</th>
+    <th class="govuk-table__header govuk-text-align-right govuk-!-width-one-third govuk-!-font-weight-bold govuk-!-padding-right-2">@Html.Raw(ViewData["StatusColumnTitle"] ?? "&nbsp")</th>
+</tr>

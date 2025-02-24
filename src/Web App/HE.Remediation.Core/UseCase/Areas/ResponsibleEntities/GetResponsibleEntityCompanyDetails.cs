@@ -33,6 +33,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
     {
         public string CompanyName { get; set; }
         public string CompanyRegistrationNumber { get; set; }
+        public bool IsUkBased { get; set; }
     }
 
     public class GetResponsibleEntityCompanyDetailsRequest : IRequest<GetResponsibleEntityCompanyDetailsResponse>

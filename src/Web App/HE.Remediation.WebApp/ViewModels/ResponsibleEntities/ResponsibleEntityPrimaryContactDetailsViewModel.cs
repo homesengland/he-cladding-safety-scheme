@@ -7,6 +7,7 @@
         public string EmailAddress { get; set; }
         public string ContactNumber { get; set; }
         public bool IsIndividuelOrganisationSubType { get; set; }
+        public bool IsUkBased { get; set; }
 
         public string ReturnUrl { get; set; }
     }

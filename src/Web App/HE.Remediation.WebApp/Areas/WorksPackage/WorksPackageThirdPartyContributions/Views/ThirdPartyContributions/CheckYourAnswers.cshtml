@@ -1,0 +1,84 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageThirdPartyContributions.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Third Party Contributions - Check your answers";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+    ViewData["BackLink"] = Model.IsSubmitted
+        ? Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" })
+        : (Model.PursuingThirdPartyContribution ? Url.Action("ThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackage" }) : Url.Action("PursuingThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackage" }));
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+@using (Html.BeginForm())
+{
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-label--m">Questions</span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full govuk-text-align-right">
+                            <a href=@Url.Action("ChangeYourAnswers", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions", returnUrl = Url.Action("CheckYourAnswers", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions"})}) class="govuk-link">Change your answers</a>
+                        </div>
+                    </div>
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Are you pursuing any third party contributions?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PursuingThirdPartyContribution ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        @if (Model.PursuingThirdPartyContribution)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    What type of contribution have you received?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @foreach (var contributionType in Model.ContributionTypes)
+                    {
+                        <span>
+                            @contributionType<br /><br />
+                        </span>
+                    }
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    What was the value of the contribution?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    £@Model.ContributionAmount.ToString("N0")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Please tell us more about the contribution
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.ContributionNotes)
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    </govuk-summary-list>
+
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted"/>
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+}

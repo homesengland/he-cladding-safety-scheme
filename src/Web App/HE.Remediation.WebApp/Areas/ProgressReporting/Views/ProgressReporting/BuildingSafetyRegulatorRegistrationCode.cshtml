@@ -1,0 +1,50 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.BuildingSafetyRegulatorRegistrationCodeViewModel
+@{
+    string backLink;
+
+    if (!string.IsNullOrEmpty(Model.ReturnUrl))
+    {
+        backLink = Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else if (Model.Version > 1)
+    {
+        backLink = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else
+    {
+        backLink = Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = backLink;
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="BuildingSafetyRegulatorRegistrationCode" />
+    </govuk-error-summary>
+}
+
+<form method="post" asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="BuildingSafetyRegulatorRegistrationCode">
+    <govuk-fieldset>
+        <govuk-input asp-for="BuildingSafetyRegulatorRegistrationCode" input-class="govuk-input--width-20">
+            <govuk-input-label is-page-heading="true" class="govuk-label--xl">
+                What is your Building Safety Regulator registration code?
+            </govuk-input-label>
+        </govuk-input>
+    </govuk-fieldset>
+    
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

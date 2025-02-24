@@ -1,0 +1,21 @@
+﻿@model HE.Remediation.Core.Services.Alert.Models.AlertViewModel
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <h2 class="govuk-heading-m">@Html.Raw(Model.Title)</h2>
+
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+        @if (!Model.IsAcknowledged)
+        {
+            <task-status-badge task-status="New"></task-status-badge>
+        }
+    </div>
+</div>
+<p class="govuk-body">Received @Model.DateCreated.ToString("dd MMMM yyyy")</p>
+<a class="govuk-link" href="@Url.Action("AcknowledgedNotification", "Dashboard", new { Id = Model.AlertId })">
+    <strong>View application</strong>
+</a>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

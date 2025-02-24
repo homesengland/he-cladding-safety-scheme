@@ -1,0 +1,36 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageGrantCertifyingOfficer.StartInformationViewModel
+@{
+    ViewData["Title"] = "Grant certifying officer - Information about this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Information about this section</h1>
+
+<p class="govuk-body">
+    A grant certifying officer must be appointed before you can submit your works package. They will need to sign a duty of care deed, act on the applicants behalf and ensure that costs and claims represents fair value.
+</p>
+<p class="govuk-body">
+    The grant certifying officer is typically your quantity surveyor or project manager if they are also fulfilling the quantity surveyor. The grant certifying officer cannot be the lead contractor, i.e. the company that is signing the building contract and carrying out the works.
+</p>
+<p class="govuk-body">
+    This person will be expected to:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Be qualified in their field</li>
+    <li>Be a member of a professional body</li>
+    <li>Hold Professional Indemnity Insurance</li>
+    <li>Be knowledgeable about the relevant technical principles involved</li>
+</ul>
+
+<form asp-area="WorksPackage" asp-controller="GrantCertifyingOfficer" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>
+

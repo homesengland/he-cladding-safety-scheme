@@ -1,0 +1,135 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.CostProfileViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("StartInformation", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Current cost profile</h1>
+
+<div class="govuk-grid-row info-cards">
+    <div class="govuk-grid-column-one-quarter">
+        <div class="info-card-bottom-border">
+            <h2 class="govuk-heading-s govuk-!-font-size-16">Approved grant funding</h2>
+            <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                @Html.Raw(Model.ApprovedGrantFunding is not null ? $"&pound;{Model.ApprovedGrantFunding.Value:N0}" : "-")
+            </p>
+        </div>
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+        <div class="info-card-bottom-border">
+            <h2 class="govuk-heading-s govuk-!-font-size-16">Grant paid to date</h2>
+            <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                @Html.Raw(Model.GrantPaidToDate is not null ? $"&pound;{Model.GrantPaidToDate.Value:N0}" : "-")
+            </p>
+        </div>
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+        <div class="info-card-bottom-border">
+            <h2 class="govuk-heading-s govuk-!-font-size-16">Unclaimed grant funding</h2>
+            <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                @Html.Raw(Model.UnclaimedGrantFunding is not null ? $"&pound;{Model.UnclaimedGrantFunding.Value:N0}" : "-")
+            </p>
+        </div>
+    </div>
+    <div class="govuk-grid-column-one-quarter">
+        <div class="info-card-bottom-border">
+            <h2 class="govuk-heading-s govuk-!-font-size-16">Duration</h2>
+            <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                @Model.ProjectDuration months
+            </p>
+        </div>
+    </div>
+</div>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        @await Html.PartialAsync("_costsProfileHeaderRow", new ViewDataDictionary(ViewData)
+        {
+        { "RowTitle", "Cost type" },
+        { "AmountColumnTitle", "Amount (£)" },
+        { "StatusColumnTitle", "Status" }
+        })
+    </thead>
+</table>
+
+@if (Model.CostsProfile is not null && Model.CostsProfile.Any())
+{
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            @await Html.PartialAsync("_costsProfileHeaderRow", new ViewDataDictionary(ViewData)
+        {
+        { "RowTitle", "Grant paid to date" }
+        })
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var item in Model.CostsProfile.Where(x => x.Type == EScheduleOfWorksCostType.GrantPaidToDate))
+            {
+                @await Html.PartialAsync("_costsProfileItemRow", item)
+            }
+        </tbody>
+    </table>
+
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            @await Html.PartialAsync("_costsProfileHeaderRow", new ViewDataDictionary(ViewData)
+        {
+        { "RowTitle", "Monthly cost profile" }
+        })
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var item in Model.CostsProfile.Where(x => x.Type == EScheduleOfWorksCostType.InitialPayment))
+            {
+                @await Html.PartialAsync("_costsProfileItemRow", item)
+            }
+
+            @foreach (var item in Model.CostsProfile.Where(x => x.Type == EScheduleOfWorksCostType.MonthlyCosts))
+            {
+                @await Html.PartialAsync("_costsProfileItemRow", item)
+            }
+        </tbody>
+    </table>
+
+    var finalPayment = Model.CostsProfile.FirstOrDefault(x => x.Type == EScheduleOfWorksCostType.FinalPayment);
+    @if (finalPayment is not null)
+    {
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                @await Html.PartialAsync("_costsProfileHeaderRow", new ViewDataDictionary(ViewData)
+        {
+        { "RowTitle", "Final payment" }
+        })
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    @await Html.PartialAsync("_costsProfileItemRow", finalPayment)
+            </tbody>
+        </table>
+    }
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-third govuk-!-font-weight-bold govuk-!-padding-left-2">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-third govuk-!-font-weight-bold govuk-table__cell--numeric govuk-!-padding-right-2">
+                    @Html.Raw(Model.TotalAmount is not null ? $"&pound;{Model.TotalAmount.Value:N0}" : "-")
+                </td>
+                <td class="govuk-table__cell govuk-!-width-one-third">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="CostProfile" method="post">
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsThirdPartyContributionVariation" type="hidden" value="@Model.IsThirdPartyContributionVariation" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

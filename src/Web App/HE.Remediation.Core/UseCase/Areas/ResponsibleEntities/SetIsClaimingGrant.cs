@@ -1,6 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
@@ -10,15 +11,18 @@ public class SetIsClaimingGrantHandler : IRequestHandler<SetIsClaimingGrantReque
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IResponsibleEntityRepository _responsibleEntityRepository;
+    private readonly IStatusTransitionService _statusTransitionService;
 
     public SetIsClaimingGrantHandler(
         IDbConnectionWrapper connection, 
         IApplicationDataProvider applicationDataProvider, 
-        IResponsibleEntityRepository responsibleEntityRepository)
+        IResponsibleEntityRepository responsibleEntityRepository,
+        IStatusTransitionService statusTransitionService)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
         _responsibleEntityRepository = responsibleEntityRepository;
+        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<SetIsClaimingGrantResponse> Handle(SetIsClaimingGrantRequest request, CancellationToken cancellationToken)
@@ -29,6 +33,8 @@ public class SetIsClaimingGrantHandler : IRequestHandler<SetIsClaimingGrantReque
             ApplicationId = applicationId,
             request.IsClaimingGrant
         });
+
+        await _statusTransitionService.TransitionToStatus(EApplicationStatus.ApplicationInProgress, applicationIds: applicationId);
 
         var result = await _responsibleEntityRepository.GetResponsibleEntityCompanyType(applicationId);
         return new SetIsClaimingGrantResponse

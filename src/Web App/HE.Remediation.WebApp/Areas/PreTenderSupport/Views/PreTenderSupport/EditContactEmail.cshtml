@@ -1,0 +1,53 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PreTenderSupport.EditContactDetailsViewModel
+
+@{
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" })
+        : Url.Action("ConfirmContactDetails", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="EmailAddress" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Edit contact email</h1>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+
+            
+                <govuk-summary-list>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Name
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @Model.FullName
+                        </govuk-summary-list-row-value>
+                    </govuk-summary-list-row>
+                    
+                </govuk-summary-list>
+               
+        <form asp-area="PreTenderSupport" asp-controller="PreTenderSupport" asp-action="EditContactEmail" method="post">
+            <govuk-input asp-for="EmailAddress" name="EmailAddress" input-class="govuk-input--width-20" inputmode="email" spellcheck="false" disabled="@Model.IsSubmitted">
+                <govuk-input-label is-page-heading="false" class="govuk-label--s">Email</govuk-input-label>
+            </govuk-input>
+            
+            <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+            <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+           
+            <div class="comp-btn-group">
+                <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+                <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+            </div>
+        </form>
+
+        </div>
+    </div>

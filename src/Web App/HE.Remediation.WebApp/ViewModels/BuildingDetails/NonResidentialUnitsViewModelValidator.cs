@@ -8,10 +8,10 @@ namespace HE.Remediation.WebApp.ViewModels.BuildingDetails
         {
             RuleFor(x => x.NonResidentialUnitsCount)
                 .NotEmpty()
-                .WithMessage("Enter a number of residential units")
+                .WithMessage("Enter a number of non-residential units")
                 .GreaterThan(0)
-                .WithMessage("Enter a number of residential units")
-                .LessThan(999)
+                .WithMessage("Enter a number of non-residential units")
+                .LessThanOrEqualTo(999)
                 .WithMessage("No more than 999 can be entered");
         }
     }

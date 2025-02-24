@@ -1,0 +1,106 @@
+﻿@model HE.Remediation.WebApp.ViewModels.BankAccount.CheckYourAnswersViewModel
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+
+@{
+    ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
+    ViewData["BackLink"] = Url.Action("VerificationContact", "BankAccount", new { Area = "BankAccount" });
+    ViewData["ReadOnly"] = Model.ReadOnly;
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.ReadOnly ? "Your answers" : "Check your answers")</h1>
+
+<govuk-summary-list>
+    @if (Model.RepresentationType != EResponsibleEntityRepresentationType.ResponsibleEntity)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Whose account will the grant be paid to?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Enum.GetName(typeof(EBankDetailsRelationship), Model.BankDetailsRelationship)!.SplitCamelCase())
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AccountGrantPaidTo", "BankAccount", new { returnUrl = ViewData["ReturnUrl"] })">Change</govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Bank account details
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.NameOnTheAccount))
+            {
+                <span>@Model.NameOnTheAccount<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.BankName))
+            {
+                <span>@Model.BankName<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.BranchName))
+            {
+                <span>@Model.BranchName<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.AccountNumber))
+            {
+                <span>@Model.AccountNumber<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.SortCode))
+            {
+                <span>@Model.SortCode<br></span>
+            }
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action(Model.BankDetailsRelationship == EBankDetailsRelationship.MyAccount ? "BankAccountDetailsRepresentative" : "BankAccountDetailsResponsibleEntity", "BankAccount", new { returnUrl = ViewData["ReturnUrl"] })">Change</govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    @if (!String.IsNullOrEmpty(Model.VatNumber))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Company VAT number
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.VatNumber
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action(Model.BankDetailsRelationship == EBankDetailsRelationship.MyAccount ? "BankAccountDetailsRepresentative" : "BankAccountDetailsResponsibleEntity", "BankAccount", new { returnUrl = ViewData["ReturnUrl"] })">Change</govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Contact Name</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@Model.VerificationContactName</govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("VerificationContact", "BankAccount", new {Area = "BankAccount", returnUrl = ViewData["ReturnUrl"]})">Change</govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Contact Number</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@Model.VerificationContactNumber</govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("VerificationContact", "BankAccount", new {Area = "BankAccount", returnUrl = ViewData["ReturnUrl"]})">Change</govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+@if (!Model.ReadOnly)
+{
+    <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+
+    <form asp-area="BankAccount" asp-controller="BankAccount" asp-action="CheckYourAnswers" method="post">
+        <govuk-button type="submit">Accept and save application</govuk-button>
+    </form>
+}

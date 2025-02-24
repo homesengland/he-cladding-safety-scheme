@@ -1,0 +1,41 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.StartInformationViewModel
+@{
+    Layout = "~/Areas/VariationRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#variations" class="govuk-link govuk-!-margin-bottom-2">
+            Variations
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">About this section</h1>
+
+<p class="govuk-body">
+    If your project changes in cost, timings or scope, or you have received third party contributions, you will be required to submit a variation which details the changes.
+</p>
+
+<p class="govuk-body">
+    Variations will be reviewed and we may need to contact you if anything requires further explanation.
+</p>
+
+<p class="govuk-body govuk-!-margin-bottom-9">
+    For registered providers and local authorities, where a proportion of the costs are being met through grant, you must remember to show your total project costs and not a proportion.  We will apply the proportion afterwards.
+</p>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

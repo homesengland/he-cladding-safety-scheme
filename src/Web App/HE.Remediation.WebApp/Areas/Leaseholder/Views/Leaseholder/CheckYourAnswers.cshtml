@@ -1,0 +1,44 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Leaseholder.CheckYourAnswersViewModel
+
+@{
+    ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
+    ViewData["BackLink"] = Url.Action("Evidence", "Leaseholder", new { Area = "Leaseholder" });
+    ViewData["ReadOnly"] = Model.ReadOnly;
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.ReadOnly ? "Your answers" : "Check your answers")</h1>
+
+<govuk-summary-list>
+    @if (Model.LeaseHolderEvidenceFiles.Any())
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Upload evidence of lease holders
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @foreach (var item in Model.LeaseHolderEvidenceFiles)
+                {
+                    <span>@item.Name<br></span>
+                }
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("Evidence", "Leaseholder", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+@if (!Model.ReadOnly)
+{
+    <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+
+    <form asp-area="Leaseholder" asp-controller="Leaseholder" asp-action="CheckYourAnswers" method="post">
+        <govuk-button type="submit">Accept and save application</govuk-button>
+    </form>
+}

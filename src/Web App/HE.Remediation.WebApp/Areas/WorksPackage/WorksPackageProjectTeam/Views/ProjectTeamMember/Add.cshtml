@@ -1,0 +1,42 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeamMember.AddViewModel
+@{
+    ViewData["Title"] = "Project team - What role do you want to add?";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("ProjectTeam", "ProjectTeam", new { Area = "WorksPackageProjectTeam" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="TeamRole"/>
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What role do you want to add?</h1>
+
+@using (Html.BeginForm())
+{
+    <govuk-radios class="govuk-!-margin-bottom-8" asp-for="TeamRole">
+        @foreach (var role in Model.AvailableTeamRoles)
+        {
+            <govuk-radios-item value="@role">@role.ToString().SplitCamelCase().ToSentenceCase()</govuk-radios-item>
+        }
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+
+    @foreach (var role in Model.AvailableTeamRoles)
+    {
+        <input value="@role" name="AvailableTeamRoles" type="hidden"/>
+    }
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+}

@@ -1,0 +1,96 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.VariationReasonViewModel
+@{
+    Layout = "~/Areas/VariationRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+          ? Url.Action(Model.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+          : Url.Action("CostProfile", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationSelection"/>
+    </govuk-error-summary>
+}
+
+@section InfoCardSection
+{
+    <div class="info-card govuk-!-margin-bottom-4">
+        <h2 class="govuk-heading-m">Funding details</h2>
+
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Approved grant funding</h3>
+        <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw($"&pound;{(Model.ApprovedGrantFunding ?? 0):N0}")</p>
+
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Grant paid to date</h3>
+        <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw(Model.GrantPaidToDate is not null ? $"&pound;{Model.GrantPaidToDate.Value:N0}" : "-")</p>
+
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unclaimed grant funding</h3>
+        <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw(Model.UnclaimedGrantFunding is not null ? $"&pound;{Model.UnclaimedGrantFunding.Value:N0}" : "-")</p>
+    </div>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">What is the reason for the variation?</h1>
+
+<p class="govuk-body">
+    You must tell us if there have been any changes to your project. This could include:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>
+        changes to project timing that result in your projected end date being over 2 months from the stated end date
+    </li>
+    <li>
+        changes to eligible costs
+    </li>
+    <li>
+        changes to scope of the project irrespective of impact on time and cost
+    </li>
+    <li>
+        changes to third party contributions for the project
+    </li>
+</ul>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="VariationReason" method="post">
+
+    <h2 class="govuk-heading-m">
+        Have there been any changes to your project?
+    </h2>
+
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationSelection" />
+    </govuk-error-summary>
+
+    <govuk-checkboxes name="IsTimescaleVariation" asp-for="IsTimescaleVariation">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.IsTimescaleVariation">Timescale</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="IsCostVariation" asp-for="IsCostVariation">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.IsCostVariation">Cost</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="IsScopeVariation" asp-for="IsScopeVariation">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.IsScopeVariation">Scope</govuk-checkboxes-item>
+    </govuk-checkboxes>
+    
+    <govuk-checkboxes name="IsThirdPartyContributionVariation" asp-for="IsThirdPartyContributionVariation">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.IsThirdPartyContributionVariation">Third party contribution</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApprovedGrantFunding" type="hidden" value="@Model.ApprovedGrantFunding" />
+    <input asp-for="GrantPaidToDate" type="hidden" value="@Model.GrantPaidToDate" />
+    <input asp-for="UnclaimedGrantFunding" type="hidden" value="@Model.UnclaimedGrantFunding" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

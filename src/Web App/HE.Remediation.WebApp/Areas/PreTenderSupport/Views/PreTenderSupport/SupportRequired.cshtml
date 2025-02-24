@@ -1,0 +1,42 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.PreTenderSupport.SupportRequiredViewModel
+
+@{
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" })
+        : Url.Action("ClaimPreTenderSupport", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SupportRequired" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">
+    Would you like to request Pre-Tender Support?
+</h1>
+
+<form asp-area="PreTenderSupport" asp-controller="PreTenderSupport" asp-action="SetSupportRequired" method="post">
+    <p class="govuk-body">                
+        If you do not claim this financial support now, you will be able to make a claim at a later date,
+        provided you have not submitted your works package, but if possible please tell us now if you
+        require this funding.        
+    </p>
+
+    <govuk-radios name="SupportRequired" asp-for="SupportRequired">
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="True">I <span class="govuk-!-font-weight-bold">do</span> require pre-tender support</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="False">I <span class="govuk-!-font-weight-bold">do not</span> currently require pre-tender support</govuk-radios-item>
+    </govuk-radios>
+    
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted"/>
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

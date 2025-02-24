@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
+using HE.Remediation.WebApp.ViewModels.Location;
 
 namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
 {
@@ -9,6 +10,7 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         {
             CreateMap<GetFreeholderAddressResponse, FreeholderAddressViewModel>();
             CreateMap<FreeholderAddressViewModel, SetFreeholderAddressRequest>();
+            CreateMap<FreeholderAddressViewModel, PostCodeEntryViewModel>();
         }
     }
 }

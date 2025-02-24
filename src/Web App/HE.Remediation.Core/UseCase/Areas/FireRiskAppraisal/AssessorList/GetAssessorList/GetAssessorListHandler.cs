@@ -1,6 +1,9 @@
-﻿using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
+using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Settings;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorList.GetAssessorList
 {
@@ -8,9 +11,12 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorList.GetAs
     {
         private readonly IDbConnectionWrapper _db;
         private readonly IApplicationDataProvider _applicationDataProvider;
-        private readonly IFireAssessorListRepository _fireAssessorListService;
+        private readonly IFireRiskAppraisalRepository _fireAssessorListService;
 
-        public GetAssessorListHandler(IDbConnectionWrapper db, IApplicationDataProvider applicationDataProvider, IFireAssessorListRepository fireAssessorListService)
+        public GetAssessorListHandler(
+            IDbConnectionWrapper db,
+            IApplicationDataProvider applicationDataProvider,
+            IFireRiskAppraisalRepository fireAssessorListService)
         {
             _db = db;
             _applicationDataProvider = applicationDataProvider;
@@ -23,11 +29,14 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorList.GetAs
 
             var applicationReferenceNumber = await _db.QuerySingleOrDefaultAsync<string>("GetApplicationReferenceNumber", new { applicationId });
 
+            var assessorList = await _fireAssessorListService.GetFireAssessorList();
+            assessorList.Shuffle();
+
             return new GetAssessorListResponse
             {
                 ApplicationId = applicationId,
                 ApplicationReferenceNumber = applicationReferenceNumber,
-                AssessorList = await _fireAssessorListService.GetFireAssessorList()
+                AssessorList = assessorList
             };
         }
     }

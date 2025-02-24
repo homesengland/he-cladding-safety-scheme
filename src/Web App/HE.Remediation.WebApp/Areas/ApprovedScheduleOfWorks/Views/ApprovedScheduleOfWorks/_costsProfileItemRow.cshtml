@@ -1,0 +1,17 @@
+﻿@using HE.Remediation.Core.Enums;
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ApprovedScheduleOfWorks.CostProfileItemViewModel
+
+<tr class="govuk-table__row">
+    <td class="govuk-table__cell govuk-!-padding-left-2 govuk-!-padding-right-1">@Model.ItemName</td>
+    <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-padding-right-2">
+        @Html.Raw(Model.Value is not null ? $"&pound;{Model.Value.Value:N0}" : "-")
+    </td>
+    <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-padding-right-2">
+        @Html.Raw(Model.ConfirmedValue is not null ? $"&pound;{Model.ConfirmedValue.Value:N0}" : "-")
+    </td>
+    <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-right-2">
+        <payment-status-badge status="@Model.Status"></payment-status-badge>
+    </td>
+</tr>

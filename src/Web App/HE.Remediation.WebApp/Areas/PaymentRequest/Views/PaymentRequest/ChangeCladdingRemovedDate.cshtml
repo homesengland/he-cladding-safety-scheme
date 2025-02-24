@@ -1,0 +1,84 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.ChangeCladdingRemovedDateViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("CladdingRemoved", "PaymentRequest", new { Area = "PaymentRequest" });
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" class="govuk-link govuk-!-margin-bottom-2">
+            Unsafe cladding
+        </a>
+    </div>
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="DateRemovedMonth" />
+        <govuk-error-summary-item asp-for="DateRemovedYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">What date was it removed?</h1>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="ChangeCladdingRemovedDate">
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="start-date-hint">
+            <div id="start-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="DateRemovedMonth" />
+            <govuk-error-message asp-for="DateRemovedYear" />
+            <div class="govuk-date-input" id="submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="DateRemovedMonth">
+                            Month
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled asp-for="DateRemovedMonth" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="DateRemovedMonth" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="DateRemovedYear">
+                            Year
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled asp-for="DateRemovedYear" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="DateRemovedYear" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

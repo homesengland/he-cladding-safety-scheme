@@ -3,10 +3,12 @@
     public enum EApplicationStage
     {
         ApplyForGrant = 1,
-        SignGrantFundingAgreement = 2,
-        AddWorksPlan = 3,
-        WorksStarted = 4,
+        GrantFundingAgreement = 2,
+        WorksPackage = 3,
+        WorksDelivery = 4,
         WorksCompleted = 5,
-        Variation = 6
+        CounterSignInProgress = 6,
+        BuildingComplete = 7,
+        Closed = 8
     }
 }

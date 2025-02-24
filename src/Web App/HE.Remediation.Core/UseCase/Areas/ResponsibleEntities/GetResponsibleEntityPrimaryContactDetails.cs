@@ -45,6 +45,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string ContactNumber { get; set; }
+        public bool IsUkBased { get; set; }
         public EApplicationResponsibleEntityOrganisationType? OrganisationType { get; set; }
         public EApplicationResponsibleEntityOrganisationSubType? OrganisationSubType { get; set; }
     }

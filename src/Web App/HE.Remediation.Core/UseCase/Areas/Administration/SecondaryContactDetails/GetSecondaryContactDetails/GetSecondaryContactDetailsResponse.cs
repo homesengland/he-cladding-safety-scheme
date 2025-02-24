@@ -1,12 +1,11 @@
 ﻿
-namespace HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.GetSecondaryContactDetails
-{    
-    public class GetSecondaryContactDetailsResponse
-    {
-        public string Name { get;set; }
+namespace HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.GetSecondaryContactDetails;
 
-        public string ContactNumber { get;set; }
+public class GetSecondaryContactDetailsResponse
+{
+    public string Name { get;set; }
 
-        public string EmailAddress { get;set; }
-    }
+    public string ContactNumber { get;set; }
+
+    public string EmailAddress { get;set; }
 }

@@ -11,9 +11,7 @@
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="OrganisationType"/>
-        <govuk-error-summary-item asp-for="OrganisationSubType"/>
-        <govuk-error-summary-item asp-for="OrganisationSubTypeDescription"/>
+        <govuk-error-summary-item asp-for="OrganisationType"/>        
     </govuk-error-summary>
 }
 <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityCompanyType">
@@ -29,23 +27,7 @@
         <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation)">Resident-led organisation</govuk-radios-item>
         <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RegisteredProvider)">Registered Provider</govuk-radios-item>
         <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.LocalAuthority)">Local Authority</govuk-radios-item>
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.Other)">
-            Other
-            <govuk-radios-item-conditional>
-                <govuk-radios asp-for="OrganisationSubType">
-                    <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationSubType.Individual)">Individual</govuk-radios-item>
-                    <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationSubType.PrivateTrust)">Private Trust</govuk-radios-item>
-                    <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationSubType.OtherCompanyType)">
-                        Other company type
-                        <govuk-radios-item-conditional>
-                            <govuk-input asp-for="OrganisationSubTypeDescription" input-class="govuk-input--width-10">
-                                <govuk-input-label>Please describe company type</govuk-input-label>
-                            </govuk-input>
-                        </govuk-radios-item-conditional>
-                    </govuk-radios-item>
-                </govuk-radios>
-            </govuk-radios-item-conditional>
-        </govuk-radios-item>
+        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.Other)">Other</govuk-radios-item>
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />

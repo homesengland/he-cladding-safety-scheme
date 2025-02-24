@@ -24,12 +24,13 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNew
             var applicationId = await _db.QuerySingleOrDefaultAsync<Guid>("InsertApplication", new
             {
                 UserId = userId,
-                CompanyId = default(Guid?), //TODO: determine company id
-                StatusId = EApplicationStatus.InProgress,
+                StatusId = EApplicationStatus.ApplicationInProgress,
                 StageId = EApplicationStage.ApplyForGrant
             });
 
-            _applicationDataProvider.SetApplicationId(applicationId);
+            var userIdAndEmailAddress = await _db.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", new { applicationId });
+
+            _applicationDataProvider.SetApplicationIdAndEmailAddress(applicationId, userIdAndEmailAddress.EmailAddress);
 
             return Unit.Value;
         }

@@ -1,0 +1,56 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackagePlanningPermission.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Planning permission - Check your answers";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+    ViewData["BackLinkHidden"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+<form asp-area="WorksPackage" asp-controller="PlanningPermission" asp-action="CheckYourAnswers" method="post">
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full govuk-text-align-right">
+                <a href=@Url.Action("ChangeAnswers", "PlanningPermission") class="govuk-link">Change your answers</a>
+            </div>
+        </div>
+    }
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Do your works need planning permission?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PermissionRequired.HasValue && Model.PermissionRequired.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        @if (Model.PermissionRequired.HasValue && !Model.PermissionRequired.Value)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Why do you not need planning permission for your works?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ReasonPermissionNotRequired
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    </govuk-summary-list>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+</form>

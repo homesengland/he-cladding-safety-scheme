@@ -1,0 +1,40 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.AppliedPlanningViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
+            : Model.Version > 1
+                ? Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })
+                : Url.Action("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = true;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="AppliedForPlanningPermission" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Have you applied for planning permission?</h1>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="AppliedPlanning" method="post">
+
+    <govuk-radios name="AppliedForPlanningPermission" asp-for="AppliedForPlanningPermission">
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

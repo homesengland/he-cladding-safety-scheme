@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.GetBuildingUniqueName;
 using MediatR;
 using System.Transactions;
@@ -9,20 +11,24 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.S
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
-        public SetBuildingUniqueNameHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public SetBuildingUniqueNameHandler(IDbConnectionWrapper dbConnectionWrapper, 
+                                            IApplicationDataProvider applicationDataProvider, 
+                                            IBuildingDetailsRepository buildingDetailsRepository)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _buildingDetailsRepository = buildingDetailsRepository;
         }
 
         public async Task<Unit> Handle(SetBuildingUniqueNameRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var response = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingUniqueNameResponse>("GetBuildingUniqueName", new { applicationId });
+            var uniqueName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-            if (response is not null)
+            if (!string.IsNullOrEmpty(uniqueName))
             {
                 await UpdateUniqueBuildingName(request, applicationId);
                 return Unit.Value;

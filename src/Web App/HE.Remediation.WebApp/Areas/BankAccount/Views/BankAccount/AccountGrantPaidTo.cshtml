@@ -5,7 +5,8 @@
 
 @{
     ViewData["Title"] = "Bank Account Details";
-    ViewData["BackLink"] = Url.Action("WhatYouWillNeedRepresentative", "BankAccount", new { Area = "BankAccount" });
+    ViewData["BackLink"] = Url.Action("WhatYouWillNeed", "BankAccount", new { Area = "BankAccount" });
+    ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
 {
@@ -20,8 +21,8 @@
    
     <p class="govuk-body">This includes any pre-tender support.</p>
     <govuk-radios name="BankDetailsRelationship" asp-for="BankDetailsRelationship">
-        <govuk-radios-item value="@(EBankDetailsRelationship.MyAccount)">My account (representative)</govuk-radios-item>
-        <govuk-radios-item value="@(EBankDetailsRelationship.ResponsibleEntityAccount)">Responsible entity's account</govuk-radios-item>
+        <govuk-radios-item value="@(EBankDetailsRelationship.MyAccount)">My account (Representative)</govuk-radios-item>
+        <govuk-radios-item value="@(EBankDetailsRelationship.ResponsibleEntityAccount)">Responsible Entity's account</govuk-radios-item>
     </govuk-radios>
 
     <div class="comp-btn-group">

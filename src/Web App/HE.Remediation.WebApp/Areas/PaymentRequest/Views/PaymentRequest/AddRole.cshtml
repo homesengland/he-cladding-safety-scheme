@@ -1,0 +1,45 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.AddRoleViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["BackLink"] = Url.Action("ProjectTeamOverview", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = true;
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="TeamRole" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What role do you want to add?</h1>
+
+<form asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="AddRole" method="post">
+
+    <govuk-radios class="govuk-!-margin-bottom-8" asp-for="TeamRole">
+        @foreach (var role in Model.AvailableTeamRoles)
+        {
+            <govuk-radios-item disabled="@readOnly" value="@role">@role.ToString().SplitCamelCase().ToSentenceCase()</govuk-radios-item>
+        }
+    </govuk-radios>
+
+    @for (var i = 0; i < Model.AvailableTeamRoles.Count; i++)
+    {
+        <input asp-for="@Model.AvailableTeamRoles[i]" type="hidden" value="@Model.AvailableTeamRoles[i]" />
+    }
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

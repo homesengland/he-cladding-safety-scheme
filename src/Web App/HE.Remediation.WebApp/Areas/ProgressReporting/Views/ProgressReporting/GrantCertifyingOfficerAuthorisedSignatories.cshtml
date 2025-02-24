@@ -1,0 +1,92 @@
+﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.GrantCertifyingOfficerSignatoriesViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Model.Version == 1 || !Model.IsGcoComplete
+        ? Url.Action("GrantCertifyingOfficerAddress", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = true;
+
+    var companiesDateOfAppointmentInvalid = ViewData.ModelState.TryGetValue(nameof(Model.DateAppointedDay), out var dateCompaniesAppointmentDayState) && dateCompaniesAppointmentDayState.ValidationState == ModelValidationState.Invalid || 
+                                            ViewData.ModelState.TryGetValue(nameof(Model.DateAppointedMonth), out var dateCompaniesAppointmentMonthState) && dateCompaniesAppointmentMonthState.ValidationState == ModelValidationState.Invalid ||
+                                            ViewData.ModelState.TryGetValue(nameof(Model.DateAppointedYear), out var dateCompaniesAppointmentYearState) && dateCompaniesAppointmentYearState.ValidationState == ModelValidationState.Invalid;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Signatory" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="DateAppointedDay" />
+        <govuk-error-summary-item asp-for="DateAppointedMonth" />
+        <govuk-error-summary-item asp-for="DateAppointedYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Please tell us who will sign the Duty of Care deed on behalf of the company</h1>
+
+<p class="govuk-body">Please supply the authorised signatory and contact email address, for the firm that is providing the Grant Certifying Officer. This is required in order to enter the firm into a duty of care deed.</p>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="GrantCertifyingOfficerAuthorisedSignatories" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+    <input asp-for="IsGcoComplete" type="hidden" value="@Model.IsGcoComplete" />
+
+    <govuk-fieldset>
+        <govuk-input asp-for="Signatory" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Authorised signatory</govuk-input-label>
+        </govuk-input>
+
+        <govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Email address</govuk-input-label>
+        </govuk-input>
+
+        <div class="govuk-form-group @(companiesDateOfAppointmentInvalid ? "govuk-form-group--error" : string.Empty)">
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="companiesDateOfAppointment-submission-date-hint">
+                <label class="govuk-label govuk-label--s">Company’s Date of Appointment to the project</label>
+                <div class="govuk-hint">
+                    For example, 18 8 2022
+                </div>
+                <govuk-error-message asp-for="DateAppointedDay" />
+                <govuk-error-message asp-for="DateAppointedMonth" />
+                <govuk-error-message asp-for="DateAppointedYear" />
+                <div class="govuk-date-input" id="companiesDateOfAppointment-submission-date">
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" asp-for="DateAppointedDay">
+                                Day
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="DateAppointedDay" type="number" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" asp-for="DateAppointedMonth">
+                                Month
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="DateAppointedMonth" type="number" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" asp-for="DateAppointedYear">
+                                Year
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="DateAppointedYear" type="number" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </govuk-fieldset>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

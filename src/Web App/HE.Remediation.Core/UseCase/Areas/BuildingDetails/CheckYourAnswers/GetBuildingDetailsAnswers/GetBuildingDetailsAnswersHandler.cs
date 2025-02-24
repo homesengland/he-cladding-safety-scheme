@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.GetBuildingDetailsAnswers
@@ -7,13 +8,16 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Get
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IApplicationRepository _applicationRepository;
 
         public GetBuildingDetailsAnswersHandler(
             IDbConnectionWrapper dbConnectionWrapper,
-            IApplicationDataProvider applicationDataProvider)
+            IApplicationDataProvider applicationDataProvider,
+            IApplicationRepository applicationRepository)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<GetBuildingDetailsAnswersResponse> Handle(GetBuildingDetailsAnswersRequest request, CancellationToken cancellationToken)
@@ -27,9 +31,13 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Get
 
         private async Task<GetBuildingDetailsAnswersResponse> GetBuildingDetailsAnswers(Guid applicationId)
         {
-            var result = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingDetailsAnswersResponse>("GetBuildingDetailsAnswers", new { applicationId });
+            var applicationStatus = await _applicationRepository.GetApplicationStatus(applicationId);
 
-            return result ?? new GetBuildingDetailsAnswersResponse();
+            var answers = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingDetailsAnswersResponse>("GetBuildingDetailsAnswers", new { applicationId });
+
+            answers.ReadOnly = applicationStatus.DeclarationConfirmed;
+
+            return answers ?? new GetBuildingDetailsAnswersResponse();
         }
     }
 }

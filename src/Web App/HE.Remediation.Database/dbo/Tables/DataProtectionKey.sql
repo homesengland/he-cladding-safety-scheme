@@ -1,6 +1,0 @@
-﻿CREATE TABLE [dbo].[DataProtectionKey]
-(
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[FriendlyName] NVARCHAR(MAX) NULL,
-	[Xml] NVARCHAR(MAX) NULL
-)

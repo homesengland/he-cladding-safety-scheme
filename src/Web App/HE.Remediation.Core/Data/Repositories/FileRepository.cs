@@ -24,6 +24,7 @@ public class FileRepository : IFileRepository
     {
         var parameters = new DynamicParameters();
         parameters.Add("@FileId", fileId);
+        parameters.Add("@UserId", (Guid?)null);
         parameters.Add("@Extension", dbType: DbType.StringFixedLength, size: 150, direction: ParameterDirection.Output);
         await _connection.ExecuteAsync("DeleteFile", parameters);
 

@@ -1,0 +1,82 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.PreliminaryCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action(Model.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="MainContractorPreliminariesAmountText" />
+        <govuk-error-summary-item asp-for="MainContractorPreliminariesDescription" />
+        <govuk-error-summary-item asp-for="AccessAmountText" />
+        <govuk-error-summary-item asp-for="AccessDescription" />
+        <govuk-error-summary-item asp-for="MainContractorOverheadAmountText" />
+        <govuk-error-summary-item asp-for="MainContractorOverheadDescription" />
+        <govuk-error-summary-item asp-for="ContractorContingenciesAmountText" />
+        <govuk-error-summary-item asp-for="ContractorContingenciesDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Preliminaries, access costs,  main contractor's overheads and profit </h1>
+
+<p class="govuk-body">If you're telling us about costs, please tell us how the money is being spent.</p>
+
+<form asp-controller="CostsScheduling" asp-action="PreliminaryCosts" asp-area="WorksPackageCostsScheduling" method="post">
+    <h2 class="govuk-heading-s">Main contractor's preliminaries</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="MainContractorPreliminariesAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="MainContractorPreliminariesDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Access (e.g. scaffolding or mast climber) </h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="AccessAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="AccessDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Main contractor's overheads and profit</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="MainContractorOverheadAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="MainContractorOverheadDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Contractor's contingencies</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="ContractorContingenciesAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="ContractorContingenciesDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

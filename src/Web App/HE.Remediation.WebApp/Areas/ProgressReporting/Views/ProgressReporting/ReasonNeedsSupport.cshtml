@@ -1,0 +1,66 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ReasonNeedsSupportViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SupportNeededReason" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What kind of support do you need?</h1>
+
+<p class="govuk-body">You have told us you need support in these areas:</p>
+<ul class ="govuk-list govuk-list--bullet">
+    @if (Model.LeadDesignerNeedsSupport == true)
+    {
+        <li>Appointing a lead designer</li>
+    }
+    @if (Model.OtherMembersNeedsSupport == true)
+    {
+        <li>Appointing other team members</li>
+    }
+    @if (Model.QuotesNeedsSupport  == true)
+    {
+    <li>Seeking quotes or issuing a tender</li>
+    }
+    @if (Model.PlanningPermissionNeedsSupport == true)
+    {
+        <li>Applying for planning permission</li>
+    }
+</ul>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="ReasonNeedsSupport" method="post">
+
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
+        <div class="govuk-form-group">
+            <govuk-character-count name="SupportNeededReason" max-length="500" asp-for="SupportNeededReason">
+                <govuk-character-count-label class="govuk-hint">
+                    Tell us about the support you need
+                </govuk-character-count-label>
+            </govuk-character-count>
+        </div>
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="LeadDesignerNeedsSupport" type="hidden" value="@Model.LeadDesignerNeedsSupport" />
+    <input asp-for="OtherMembersNeedsSupport" type="hidden" value="@Model.OtherMembersNeedsSupport" />
+    <input asp-for="QuotesNeedsSupport" type="hidden" value="@Model.QuotesNeedsSupport" />
+    <input asp-for="PlanningPermissionNeedsSupport" type="hidden" value="@Model.PlanningPermissionNeedsSupport" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

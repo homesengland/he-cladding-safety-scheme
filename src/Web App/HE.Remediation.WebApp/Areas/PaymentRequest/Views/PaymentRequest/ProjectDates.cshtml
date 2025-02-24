@@ -1,0 +1,74 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.ProjectDatesViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("Invoices", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = false;
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ProjectDatesChanged" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Project dates</h1>
+<p class="govuk-body">
+    You must tell us if there are changes to the anticipated project dates.
+</p>
+
+<h2 class="govuk-heading-m">Key Dates</h2>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Expected start date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ExpectedStartDate.HasValue ? Model.ExpectedStartDate.Value.ToString("MM/yyyy") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Expected end date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ExpectedEndDate.HasValue ? Model.ExpectedEndDate.Value.ToString("MM/yyyy") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="ProjectDates">
+    <govuk-radios asp-for="ProjectDatesChanged">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Have your project dates changed?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item disabled="@readOnly" value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@readOnly" value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    @Html.HiddenFor(x=> x.IsFirstPaymentRequest)
+
+    <input name="@($"{nameof(Model.ExpectedStartDate)}.{nameof(Model.ExpectedStartDate.Value.Day)}")" value="@Model.ExpectedStartDate?.Day" type="hidden" />
+    <input name="@($"{nameof(Model.ExpectedStartDate)}.{nameof(Model.ExpectedStartDate.Value.Month)}")" value="@Model.ExpectedStartDate?.Month" type="hidden" />
+    <input name="@($"{nameof(Model.ExpectedStartDate)}.{nameof(Model.ExpectedStartDate.Value.Year)}")" value="@Model.ExpectedStartDate?.Year" type="hidden" />
+
+    <input name="@($"{nameof(Model.ExpectedEndDate)}.{nameof(Model.ExpectedEndDate.Value.Day)}")" value="@Model.ExpectedEndDate?.Day" type="hidden" />
+    <input name="@($"{nameof(Model.ExpectedEndDate)}.{nameof(Model.ExpectedEndDate.Value.Month)}")" value="@Model.ExpectedEndDate?.Month" type="hidden" />
+    <input name="@($"{nameof(Model.ExpectedEndDate)}.{nameof(Model.ExpectedEndDate.Value.Year)}")" value="@Model.ExpectedEndDate?.Year" type="hidden" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@readOnly" name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button disabled="@readOnly" name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

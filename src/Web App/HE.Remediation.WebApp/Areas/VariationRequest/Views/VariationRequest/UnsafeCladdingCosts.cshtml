@@ -1,0 +1,70 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.UnsafeCladdingCostsViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("Costs", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationRemovalOfCladdingAmountText" />
+        <govuk-error-summary-item asp-for="VariationRemovalOfCladdingDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Removal of unsafe cladding</h1>
+
+<p class="govuk-body">Please identify the changes associated with this element of your costs schedule.</p>
+
+ <form asp-controller="VariationRequest" asp-action="UnsafeCladdingCosts" asp-area="VariationRequest" method="post">
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m" style="border-bottom: 1px solid #b1b4b6; padding-bottom: 10px;">Removal of unsafe cladding</caption>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageRemovalOfCladdingAmount.GetValueOrDefault(0).ToString("N0")</td>
+               </tr>
+                <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageRemovalOfCladdingDescription</td>
+                </tr>
+            </tbody>
+        </table>        
+        </govuk-details-text>
+    </govuk-details>
+
+    <p class="govuk-body govuk-!-font-weight-bold">Removal of unsafe cladding system</p>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationRemovalOfCladdingAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationRemovalOfCladdingDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="WorkPackageRemovalOfCladdingAmount" type="hidden" value="@Model.WorkPackageRemovalOfCladdingAmount" />
+    <input asp-for="WorkPackageRemovalOfCladdingDescription" type="hidden" value="@Model.WorkPackageRemovalOfCladdingDescription" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

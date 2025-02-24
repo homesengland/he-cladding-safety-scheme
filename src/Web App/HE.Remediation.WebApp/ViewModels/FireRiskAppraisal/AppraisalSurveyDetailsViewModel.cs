@@ -10,5 +10,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public List<FireRiskAssessorCompanyViewModel> FireRiskAssessorCompanies { get; set; }
         public bool FireAccessorNotOnPanel { get; set; }
         public ESubmitAction SubmitAction { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

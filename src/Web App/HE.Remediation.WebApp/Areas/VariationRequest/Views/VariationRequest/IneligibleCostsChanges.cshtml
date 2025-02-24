@@ -1,0 +1,80 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.IneligibleCostsChangesViewModel
+@{
+    Layout = "~/Areas/VariationRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["BackLink"] = Url.Action("IneligibleCosts", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will fund
+        </a>
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-not-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will not fund
+        </a>
+    </div>
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationIneligibleAmountText" />
+        <govuk-error-summary-item asp-for="VariationIneligibleDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Tell us about changes to costs that are not eligible for funding</h1>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="IneligibleCostsChanges" method="post">
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m" style="border-bottom: 1px solid #b1b4b6; padding-bottom: 10px;">Ineligible costs</caption>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageIneligibleAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageIneligibleDescription
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationIneligibleAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT (£)</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationIneligibleDescription" max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="WorkPackageIneligibleAmount" type="hidden" value="@Model.WorkPackageIneligibleAmount" />
+    <input asp-for="WorkPackageIneligibleDescription" type="hidden" value="@Model.WorkPackageIneligibleDescription" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "What are the company details of the Responsible Entity?";
     ViewData["BackLink"] = Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    var companyRegNumberMaxLength = Model.IsUkBased ? 8 : 20;
 }
 @section ErrorSummary
 {
@@ -22,11 +23,12 @@
             <govuk-input-label is-page-heading="true" class="govuk-label--s">Company Name</govuk-input-label>
     </govuk-input>
 
-    <govuk-input asp-for="CompanyRegistrationNumber" input-class="govuk-input--width-20">
+    <govuk-input asp-for="CompanyRegistrationNumber" input-class="govuk-input--width-20" input-maxlength="@companyRegNumberMaxLength">
         <govuk-input-label is-page-heading="true" class="govuk-label--s">Company registration number</govuk-input-label>
     </govuk-input>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="IsUkBased" type="hidden" value="@Model.IsUkBased" />
 
     <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
     <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary govuk-!-margin-left-4">Save and return later</govuk-button>

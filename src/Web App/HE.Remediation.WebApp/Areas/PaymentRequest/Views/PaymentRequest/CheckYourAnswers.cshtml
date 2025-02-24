@@ -1,0 +1,336 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.CheckYourAnswersViewModel
+
+@{  
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["BackLink"] = readOnly
+        ? Url.Action("Index", "StageDiagram", new { Area = "Application" })
+        : Url.Action(Model.ReturnUrl, "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = true;
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Payment request</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("SubmitPayment", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Payment request for @Model.PaymentRequestName
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+        @if (!Model.IsExpired)
+        {
+            @Html.Raw(Model.CurrentMonthCost > 0 ? $"&pound;{Model.CurrentMonthCost.Value:N0}" : "&pound;0")
+        }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>   
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Scheduled amount for @Model.PaymentRequestName
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model.ScheduledAmount > 0 ? $"&pound;{Model.ScheduledAmount.Value:N0}" : "&pound;0")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    @if (!string.IsNullOrWhiteSpace(Model.ReasonForChange))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Reason for change
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ReasonForChange != null ? Model.ReasonForChange : string.Empty)
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    
+    @if (Model.AdditionalCostAmount != null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                @Model.AdditionalCostMonthTitle
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.AdditionalCostAmount > 0 ? $"&pound;{Model.AdditionalCostAmount.Value:N0}" : "&pound;0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    
+</govuk-summary-list>
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Cost report</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("UploadCostReport", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Documents
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.PaymentRequestCostFiles.Any())
+            {
+                @foreach (var costFile in Model.PaymentRequestCostFiles)
+                {
+                    <span>@costFile.Name<br></span>
+                }
+            }            
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Invoices</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Invoices", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Documents</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @foreach (var fileName in Model.PaymentRequestInvoiceFileNames)
+            {
+                @fileName<br/>
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Project dates</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ProjectDates", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have your project dates changed?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ProjectDatesChanged.HasValue ? (Model.ProjectDatesChanged == true ? "Yes" : "No") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.ProjectDatesChanged.GetValueOrDefault(false) == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Start date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ExpectedStartDate.HasValue ? Model.ExpectedStartDate.Value.ToString("MMMM yyyy") : string.Empty)
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                End date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ExpectedEndDate.HasValue ? Model.ExpectedEndDate.Value.ToString("MMMM yyyy") : string.Empty)
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Cladding</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {            
+            @if(!Model.UnsafeCladdingAlreadyRemoved)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("CladdingRemoved", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }            
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Has the unsafe cladding been removed?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.UnsafeCladdingRemoved.HasValue ? (Model.UnsafeCladdingRemoved == true ? "Yes" : "No") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.UnsafeCladdingRemoved.GetValueOrDefault(false) == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What date was it removed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.UnsafeCladdingRemoved.GetValueOrDefault(false) == true)
+                {
+                    @(Model.UnsafeCladdingRemovedDate.HasValue ? Model.UnsafeCladdingRemovedDate.Value.ToString("MMMM yyyy") : string.Empty)
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }    
+</govuk-summary-list>
+
+
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Project costs</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("CostsChanged", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have your costs changed?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.CostsChanged.HasValue ? (Model.CostsChanged == true ? "Yes" : "No") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>    
+</govuk-summary-list>
+
+
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Third Party Contributions</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ThirdPartyContributionsChanged", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you received any third party contributions?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ThirdPartyContributionsChanged.HasValue ? (Model.ThirdPartyContributionsChanged == true ? "Yes" : "No") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>    
+</govuk-summary-list>
+
+
+
+@if (Model.TeamMembers != null && Model.TeamMembers.Any())
+{
+    <govuk-summary-list class="govuk-!-margin-bottom-0">
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Team</h2>
+            </govuk-summary-list-row-key>
+            @if (!readOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ProjectTeamOverview", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
+    </govuk-summary-list>
+
+    <table class="govuk-table govuk-!-margin-top-0">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header govuk-!-padding-left-2">Role</th>
+                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header">Company name</th>                
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var teamMember in Model.TeamMembers)
+            {
+                <tr class="govuk-table__row">
+                    @if (teamMember.RoleId == (int)ETeamRole.Other)
+                    {
+                        <td class="govuk-table__cell no-line-wrap govuk-!-padding-left-2"><strong>@teamMember.OtherRole</strong></td>
+                    }
+                    else
+                    {
+                        <td class="govuk-table__cell govuk-!-padding-left-2"><strong>@teamMember.RoleName.ToSentenceCase()</strong></td>
+                    }
+                    <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
+                    <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (readOnly)
+{
+    <govuk-button href="@Url.Action("Index", "StageDiagram", new {Area = "Application"})">Continue</govuk-button>
+}
+else
+{
+    <govuk-button disabled="@readOnly" href="@Url.Action("Declaration", "PaymentRequest", new {Area = "PaymentRequest"})">Continue</govuk-button>
+}

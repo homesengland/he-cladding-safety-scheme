@@ -1,13 +1,26 @@
-﻿@{
+﻿@inject HE.Remediation.Core.Interface.IAnalyticsDataProivder AnalyticsProvider
+@{
     Layout = "_GovUkPageTemplate";
     var logoutUrl = Url.Action("Logout", "Authentication", new { Area = "" });
+
+}
+
+@section Head {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <!-- Google tag (gtag.js) -->
+        <script src="https://www.googletagmanager.com/gtag/js?id=@(AnalyticsProvider.GetAnalyticsId())"></script>
+        <script id="sitejs" data-analytics-id="@AnalyticsProvider.GetAnalyticsId()" src="~/js/site.js"></script>
 }
 
 @section Header {
+    @if (Context.Request.Cookies["cookies_preferences_set"] != "true")
+    {
+        @await Html.PartialAsync("_CookieBanner.cshtml");
+    }
     <header class="govuk-header " role="banner" data-module="govuk-header">
         <div class="govuk-header__container govuk-width-container">
             <div class="govuk-header__logo">
-                <a class="govuk-header__link govuk-header__link--homepage">
+                <div class="govuk-header__link govuk-header__link--homepage">
                     <span class="govuk-header__logotype">
                         <!--[if gt IE 8]><!-->
                         <svg aria-hidden="true" focusable="false" class="govuk-header__logotype-crown" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 97" height="30" width="36">
@@ -21,13 +34,13 @@
                             GOV.UK
                         </span>
                     </span>
-                </a>
+                </div>
             </div>
             <div class="govuk-width-container">
                 <div class="govuk-header__service-name">
-                    <a href="#" class="govuk-header__link govuk-header__service-name govuk-caption-l">
-                        <strong>Apply for the Cladding Safety Scheme</strong>
-                    </a>
+                    <div href="#" class="govuk-header__service-name govuk-caption-l">
+                        <strong>Building Remediation Hub</strong>
+                    </div>
                     @if (User.Identity is {IsAuthenticated: true })
                     {
                         <a href="@logoutUrl" class="govuk-header__link govuk-header__service-name logout">
@@ -43,7 +56,7 @@
 @section BeforeContent {
     <govuk-phase-banner>
         <govuk-phase-banner-tag>BETA</govuk-phase-banner-tag>
-        This is a new service - your <a href="https://forms.office.com/e/28uuB07XWG" target="_blank" class="govuk-link">feedback</a> will help us to improve it.
+        This is a new service - your <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=aeKo-hEIOEWC500pAJIZv70AqgXWPftOscH1n6LMtXVUOUNXNFVFOVJFUlhOWEMyNFpKQUJGQU42OS4u" rel="noreferrer noopener" target="_blank" class="govuk-link">feedback</a> will help us to improve it.
     </govuk-phase-banner>
 }
 
@@ -57,7 +70,7 @@
                     <h2 class="govuk-visually-hidden">Support links</h2>
                     <ul class="govuk-footer__inline-list">
                         <li class="govuk-footer__inline-list-item">
-                            <a class="govuk-footer__link" href="#1">
+                            <a class="govuk-footer__link" href="@Url.Action("Index", "Accessibility", new {Area = String.Empty})">
                                 Accessibility
                             </a>
                         </li>
@@ -67,9 +80,9 @@
                             </a>
                         </li>
                         <li class="govuk-footer__inline-list-item">
-                            <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice">
+                            <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">
                                 Privacy
-                            </a>
+                            </a>                            
                         </li>
                     </ul>
                     <div class="govuk-footer__meta-custom">
@@ -89,4 +102,8 @@
             </div>
         </div>
     </footer>
+}
+
+@section BodyEnd {
+    @RenderSection("BodyEnd", false)
 }

@@ -1,0 +1,63 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using System.Globalization;
+@model HE.Remediation.WebApp.ViewModels.PreTenderSupport.ClaimPreTenderSupportViewModel
+
+@{
+    ViewData["Title"] = "Claim pre-tender support";
+
+    ViewData["BackLink"] = Model.bankRelationship == HE.Remediation.Core.Enums.EBankDetailsRelationship.ResponsibleEntityAccount 
+        ? Url.Action("Index", "StageDiagram", new { Area = "Application" })
+        : Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">
+    Claim pre-tender support for your application
+</h1>
+
+<p class="govuk-body">
+    Pre-Tender Support is available to help financially support you to undertake the design, specification and/or the tender process 
+    required to compile your works package and get to the point of delivering your remediation works.
+</p>
+<p class="govuk-body">
+    Pre-Tender Support is paid up front and will make up part of any grant funding available for your project. Costs funded through 
+    this support can be related to completion of the FRAEW, associated technical surveys and the project management, design 
+    and tendering of the eligible works. This should include obtaining competitive quotations/tenders for your project to 
+    evidence value for money.
+</p>
+
+<p class="govuk-body">
+    Pre-Tender Support is not normally available for housing associations (registered providers) or local authorities, as it 
+    is only provided to those applicants who do not have access to the required funds to complete the design, 
+    specification and tender of works.
+</p>
+
+<p class="govuk-body">
+    You are eligible to claim:
+    <br />
+    <span><b>&pound;@String.Format("{0:N2}", Model.PTFSClaimAmount)</b></span>
+</p>
+
+<p class="govuk-body">
+    This total is calculated from the area of unsafe cladding on your building, which is evidenced as an output of the FRAEW report. 
+    To access this funding, you will need to sign up to the terms of the Grant Funding Agreement.
+</p>
+<p class="govuk-body">
+    The building being deemed eligible or being approved for Pre-Tender Support is not confirmation that the works package 
+    containing the full works costs submission will be approved.
+</p>
+<govuk-inset-text>
+    <p class="govuk-body">
+
+        If the works do not proceed, your monthly reporting requirements are not fulfilled, or your works package is not approved, 
+        we reserve the right to recoup the value of this advance funding.
+    </p>
+
+    <p class="govuk-body">
+        If your works package is approved, we will deal with any unspent balance of your Pre-Tender Support at that point by allowing 
+        you to use it as part of the remaining grant for the delivery of your remediation works.
+    </p>
+
+</govuk-inset-text>
+
+<govuk-button href="@Url.Action("SupportRequired", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>

@@ -1,0 +1,32 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.InternalWorksRequiredViewModel
+@{
+    ViewData["Title"] = "Internal mitigation works";
+    ViewData["BackLink"] = Model.ExternalWorksRequired == ENoYes.Yes ?
+                           Url.Action("ExternalWallWorks", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" }) :
+                           Url.Action("ExternalWorksRequired", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-heading-s">
+    Are there any internal works which you are recommending to address the life safety risk you have identified?
+</p>
+
+<p class="govuk-body">
+Only complete this section if you are proposing internal works in lieu of removal of cladding systems as a more proportionate alternative. 
+Internal works are eligible but only if they are a more proportionate alternative to replacing the cladding system(s) or other external wall elements. 
+Internal works that do no fit this definition are ineligible for the Cladding Safety Scheme.</p>
+
+<form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="InternalWorksRequired" method="post">
+    <govuk-radios asp-for="WorksRequired">
+        <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and Continue</govuk-button>
+    <govuk-button name="SubmitAction" class="govuk-button--secondary govuk-!-margin-left-4" value="@ESubmitAction.Exit">Save and return later</govuk-button>
+</form>

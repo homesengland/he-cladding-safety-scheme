@@ -1,186 +1,242 @@
 ﻿@model HE.Remediation.WebApp.ViewModels.BuildingDetails.CheckYourAnswersViewModel
 @{
-    ViewData["Title"] = "Check your answers";
-    ViewData["BackLink"] = Url.Action("BuildingDeveloperInformation", "BuildingDetails", new { Area = "BuildingDetails" });
+    var backLink = Model.ReturnURL;
+    ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
+    ViewData["BackLink"] = String.IsNullOrWhiteSpace(backLink) ? @Url.Action("Index", "TaskList", new { Area = "Application" }) :
+                            backLink;
+
+    ViewData["ReadOnly"] = Model.ReadOnly;
     ViewData["ReturnUrl"] = "CheckYourAnswers";
     ViewData["FullWidth"] = true;
+    
+    ViewData["BackLinkHidden"] = true;
 }
 
-<h1 class="govuk-heading-xl">Check your answers</h1>
+<h1 class="govuk-heading-xl">@(Model.ReadOnly ? "Your answers" : "Check your answers")</h1>
+@if (!Model.ReadOnly)
+        {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full govuk-text-align-right">
+                <a href=@Url.Action("ChangeAnswers", "BuildingDetails") class="govuk-link">Change your answers</a>
+            </div>
+        </div>
+        }
 
 <govuk-summary-list>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        What name do you want to give the building?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @Model.BuildingUniqueName
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Number of residential units?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @Model.ResidentialUnitsCount
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Are there any non-residential units in the building?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @(Model.NonResidentialUnits ? "Yes" : "No")
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+@if (Model.NonResidentialUnits)
+{
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
-            What name do you want to give the building?
+            How many non-residential units are there in this building?
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-            @Model.BuildingUniqueName
+            @Model.NonResidentialUnitsCount
         </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("BuildingUniqueName", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+}
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Building address
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @if (!String.IsNullOrEmpty(Model.BuildingNameNumber) || !String.IsNullOrEmpty(Model.BuildingAddressLine1))
+        {
+            <span>@(!string.IsNullOrEmpty(Model.BuildingNameNumber) ? $"{Model.BuildingNameNumber} " : string.Empty)@(!string.IsNullOrEmpty(Model.BuildingAddressLine1) ? Model.BuildingAddressLine1 : string.Empty)<br></span>
+        }
+        @if (!String.IsNullOrEmpty(Model.BuildingAddressLine2))
+        {
+            <span>@Model.BuildingAddressLine2<br></span>
+        }
+        @if (!String.IsNullOrEmpty(Model.BuildingCity))
+        {
+            <span>@Model.BuildingCity<br></span>
+        }
+        @if (!String.IsNullOrEmpty(Model.BuildingLocalAuthority))
+        {
+            <span>@Model.BuildingLocalAuthority<br></span>
+        }
+        @if (!String.IsNullOrEmpty(Model.BuildingCounty))
+        {
+            <span>@Model.BuildingCounty<br></span>
+        }
+        @if (!String.IsNullOrEmpty(Model.BuildingPostcode))
+        {
+            <span>@Model.BuildingPostcode<br></span>
+        }
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Local authority
+    </govuk-summary-list-row-key>
+	<govuk-summary-list-row-value>
+		@if (!String.IsNullOrEmpty(Model.LocalAuthorityCostCentreDescription))
+		{
+			@Model.LocalAuthorityCostCentreDescription
+		}
+	</govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Is this building part of a development?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @(Model.PartOfDevelopment ? "Yes" : "No")
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+@if (Model.PartOfDevelopment)
+{
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            What is the name of the development this building is part of?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.DevelopmentName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+}
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        How many storeys does the building have?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @Model.Storeys
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Confirm the building is over 11 metres or 11-18 metres if the building is located in London?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @(Model.CorrectHeightConfirmedDate is not null ? "Yes" : "No")
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Do you have a Building Safety Regulator registration code?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @(Model.BuildingHasSafetyRegulatorRegistrationCode ? "Yes" : "No")
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+    @if (!String.IsNullOrEmpty(Model.BuildingSafetyRegulatorRegistrationCode))
+{
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            What is your Building Safety Regulator registration code?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.BuildingSafetyRegulatorRegistrationCode
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+}
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
+        Do you know who the original developer for this building was?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @(Model.OriginalDeveloperKnown ? "Yes" : "No")
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+@if (!String.IsNullOrEmpty(Model.DeveloperCompanyName))
+{
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Developer company name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.DeveloperCompanyName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+}
+@if (!String.IsNullOrEmpty(Model.DeveloperNameNumber))
+{
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Developer company address
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.DeveloperNameNumber))
+            {
+                <span>@Model.DeveloperNameNumber<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.DeveloperAddressLine1))
+            {
+                <span>@Model.DeveloperAddressLine1<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.DeveloperAddressline2))
+            {
+                <span>@Model.DeveloperAddressline2<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.DeveloperCity))
+            {
+                <span>@Model.DeveloperCity<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.DeveloperCounty))
+            {
+                <span>@Model.DeveloperCounty<br></span>
+            }
+            @if (!String.IsNullOrEmpty(Model.DeveloperPostcode))
+            {
+                <span>@Model.DeveloperPostcode<br></span>
+            }
+        </govuk-summary-list-row-value>
     </govuk-summary-list-row>
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
-            Number of residential units?
+            Do you know if the original developer of this building is still in business?
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-            @Model.ResidentialUnitsCount
+            @Model.DeveloperStillInBusiness
         </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("ResidentialUnits", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
     </govuk-summary-list-row>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Are there any non-residential units in the building?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.NonResidentialUnits ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("ResidentialUnits", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-    @if (Model.NonResidentialUnits)
+    @if (@Model.DeveloperStillInBusiness != null)
     {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                How many non-residential units are there in this building?
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.NonResidentialUnitsCount
-            </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("NonResidentialUnits", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-        </govuk-summary-list-row>
-    }
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Building address
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @if (!String.IsNullOrEmpty(Model.BuildingNameNumber) && !String.IsNullOrEmpty(Model.BuildingAddressLine1))
+            if (Model.DeveloperStillInBusiness.ToUpper() == "YES")
             {
-                <span>@Model.BuildingNameNumber @Model.BuildingAddressLine1<br></span>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Have you contacted the developer about remediation works on this building (addressing fire safety risks related to unsafe non-ACM cladding)?
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.DeveloperContacted ? "Yes" : "No")
+                    </govuk-summary-list-row-value>                              
+                </govuk-summary-list-row>
             }
-            @if (!String.IsNullOrEmpty(Model.BuildingAddressLine2))
-            {
-                <span>@Model.BuildingAddressLine2<br></span>
-            }
-            @if (!String.IsNullOrEmpty(Model.BuildingCity))
-            {
-                <span>@Model.BuildingCity<br></span>
-            }
-            @if (!String.IsNullOrEmpty(Model.BuildingLocalAuthority))
-            {
-                <span>@Model.BuildingLocalAuthority<br></span>
-            }
-            @if (!String.IsNullOrEmpty(Model.BuildingCounty))
-            {
-                <span>@Model.BuildingCounty<br></span>
-            }
-            @if (!String.IsNullOrEmpty(Model.BuildingPostcode))
-            {
-                <span>@Model.BuildingPostcode<br></span>
-            }
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("ProvideBuildingAddress", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Is this building part of a development?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.PartOfDevelopment ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("BuildingPartOfDevelopment", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            How many storeys does the building have?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @Model.Storeys
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("ConfirmBuildingHeight", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Confirm the building is between 11 metres and 18 metres in height?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.CorrectHeightConfirmedDate is not null ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-    </govuk-summary-list-row>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Do you know who the original developer for this building was?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.OriginalDeveloperKnown ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("BuildingDeveloperInformation", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-    @if (!String.IsNullOrEmpty(Model.DeveloperCompanyName))
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Developer company name
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.DeveloperCompanyName
-            </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("BuildingDeveloperInformation", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-        </govuk-summary-list-row>
-    }
-    @if (!String.IsNullOrEmpty(Model.DeveloperNameNumber))
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Developer company address
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @if (!String.IsNullOrEmpty(Model.DeveloperNameNumber) && !String.IsNullOrEmpty(Model.DeveloperAddressLine1))
-                {
-                    <span>@Model.DeveloperNameNumber @Model.DeveloperAddressLine1<br></span>
-                }
-                @if (!String.IsNullOrEmpty(Model.DeveloperAddressline2))
-                {
-                    <span>@Model.DeveloperAddressline2<br></span>
-                }
-                @if (!String.IsNullOrEmpty(Model.DeveloperCity))
-                {
-                    <span>@Model.DeveloperCity<br></span>
-                }
-                @if (!String.IsNullOrEmpty(Model.DeveloperCounty))
-                {
-                    <span>@Model.DeveloperCounty<br></span>
-                }
-                @if (!String.IsNullOrEmpty(Model.DeveloperPostcode))
-                {
-                    <span>@Model.DeveloperPostcode<br></span>
-                }
-            </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("BuildingDeveloperInformation", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-        </govuk-summary-list-row>
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Do you know if the original developer of this building is still in business?
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.DeveloperStillInBusiness
-            </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("DeveloperInBusiness", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-        </govuk-summary-list-row>
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Have you contacted the developer about remediation works on this building (addressing fire safety risks related to unsafe non-ACM cladding)?
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.DeveloperContacted ? "Yes" : "No")
-            </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("DeveloperContacted", "BuildingDetails", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-        </govuk-summary-list-row>
-    }
+    }    
+}
 </govuk-summary-list>
 
-<h3 class="govuk-heading-s">Proceed to next step of your application</h3>
-<p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+@if (!Model.ReadOnly)
+{
+    <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
+    <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
 
-<form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="CheckYourAnswers" method="post">
-    <govuk-button type="submit">Accept and save application</govuk-button>
-</form>
+    <form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="CheckYourAnswers" method="post">
+        <govuk-button type="submit">Accept and save application</govuk-button>
+    </form>
+}

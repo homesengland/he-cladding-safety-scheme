@@ -1,0 +1,62 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageGrantCertifyingOfficer.SelectViewModel
+@{
+    ViewData["Title"] = "Grant certifying officer - Who is your grant certifying officer?";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("StartInformation", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SelectedProjectTeamMemberId" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Who is your grant certifying officer?</h1>
+
+<p class="govuk-body">
+    Your grant certifying officer must hold the role of either project manager or quantity surveyor
+</p>
+
+<form asp-area="WorksPackage" asp-controller="GrantCertifyingOfficer" asp-action="SelectGrantCertifyingOfficer" method="post">
+
+    <govuk-radios asp-for="SelectedProjectTeamMemberId">
+        @if (Model.Candidates is not null && Model.Candidates.Any())
+        {
+            @foreach (var candidate in Model.Candidates)
+            {
+                <govuk-radios-item disabled="@Model.IsSubmitted" value="@candidate.ProjectTeamMemberId">
+                    @candidate.Name
+                    <div class="govuk-hint">
+                        @candidate.RoleName.ToSentenceCase()
+                    </div>
+                </govuk-radios-item>
+            }
+        }
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    @if (Model.Candidates is not null && Model.Candidates.Any())
+    {
+        var Candidates = Model.Candidates.ToList();
+        @foreach (var x in Candidates.Select((value, index) => new { value, index }))
+        {
+            <input asp-for="@Candidates[x.index].ProjectTeamMemberId" type="hidden" />
+            <input asp-for="@Candidates[x.index].Name" type="hidden" />
+            <input asp-for="@Candidates[x.index].RoleId" type="hidden" />
+            <input asp-for="@Candidates[x.index].RoleName" type="hidden" />
+        }
+    }
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

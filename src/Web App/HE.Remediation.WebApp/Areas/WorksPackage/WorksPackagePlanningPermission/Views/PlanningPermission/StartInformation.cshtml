@@ -1,0 +1,29 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackagePlanningPermission.StartInformationViewModel
+@{
+    ViewData["Title"] = "Planning permission - About this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<form asp-area="WorksPackage" asp-controller="PlanningPermission" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <p class="govuk-body">
+        In the following section we'll ask you about planning approval that may be needed for your works.
+    </p>
+    <p class="govuk-body">
+        If your works need planning permission, we will not ask you to upload evidence at this stage.
+    </p>
+    <p class="govuk-body">
+        You can find more information about planning permission and the kind of evidence you may be asked to provide in the guidance.
+    </p>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

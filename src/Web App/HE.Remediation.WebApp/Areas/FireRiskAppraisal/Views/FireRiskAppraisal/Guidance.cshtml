@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Fire risk appraisal summary";
+    ViewData["BackLink"] = Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["FullWidth"] = true;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+
+                    <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+                    <p class="govuk-body">
+                        Your assessor should be aware that they are required to provide a summary on the approved template, along with the full FRAEW report.                        
+                    </p>
+
+                    <p class="govuk-body">
+                            You can still download one here to send them if required. The template should be completed by your
+                            assessor. You will then need to enter the data from the template when the assessor returns it to 
+                            you.
+                    </p>
+
+                    <p class="govuk-body">
+                        Please enter the information your FRAEW assessor has completed on the summary template
+                        over the next few pages. The information should come from the FRAEW summary template and
+                        be a straight copy across the application system. If there is missing information
+                        on the summary, please raise this with your FRAEW assessor and get them to provide any missing information.
+                    </p>
+
+                    <div class="comp-btn-group">
+                        <govuk-button href="@Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })">Continue</govuk-button>
+                    </div>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">In this section</h2>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="/FireAssessorList/CSS_FRAEW Summary_V3.2.xlsx">Download FRAEW summary template</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

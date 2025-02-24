@@ -1,0 +1,53 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.WhoIsTheGrantCertifyingOfficerViewModel
+@{
+    ViewData["Title"] = "Progress Reporting";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Model.Version == 1 || !Model.IsGcoComplete
+        ? Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ProjectTeamMemberId" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Who is your grant certifying officer?</h1>
+
+<p class="govuk-body">
+    Your grant certifying officer must hold the role of either project manager or quantity surveyor
+</p>
+
+<form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="WhoIsTheGrantCertifyingOfficer" method="post">
+    <govuk-radios asp-for="ProjectTeamMemberId">
+        @foreach (var teamMember in Model.TeamMembers)
+        {
+            <govuk-radios-item value="@teamMember.Id">
+                @teamMember.Name
+                <govuk-radios-item-hint>@teamMember.Role</govuk-radios-item-hint>
+            </govuk-radios-item>
+        }
+    </govuk-radios>
+    
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+    <input asp-for="IsGcoComplete" type="hidden" value="@Model.IsGcoComplete" />
+
+    @for (var i = 0; i < Model.TeamMembers.Count; i++)
+    {
+        <input name="TeamMembers[@i].Id" type="hidden" value="@Model.TeamMembers[i].Id" />
+        <input name="TeamMembers[@i].Name" type="hidden" value="@Model.TeamMembers[i].Name" />
+        <input name="TeamMembers[@i].Role" type="hidden" value="@Model.TeamMembers[i].Role" />
+    }
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

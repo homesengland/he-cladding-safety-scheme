@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
@@ -7,11 +8,15 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
     {
         private readonly IDbConnectionWrapper _connection;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IResponsibleEntityRepository _responsibleEntityRepository;
 
-        public GetFreeholderAddressHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+        public GetFreeholderAddressHandler(IDbConnectionWrapper connection, 
+                                           IApplicationDataProvider applicationDataProvider,
+                                           IResponsibleEntityRepository responsibleEntityRepository)
         {
             _connection = connection;
             _applicationDataProvider = applicationDataProvider;
+            _responsibleEntityRepository = responsibleEntityRepository;
         }
 
         public async Task<GetFreeholderAddressResponse> Handle(GetFreeholderAddressRequest request, CancellationToken cancellationToken)
@@ -25,9 +30,23 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 
         private async Task<GetFreeholderAddressResponse> GetFreeholderAddress(Guid applicationId)
         {
-            var response = await _connection.QuerySingleOrDefaultAsync<GetFreeholderAddressResponse>("GetFreeholderAddress", new { applicationId });
+            var address = await _responsibleEntityRepository.GetFreeholderAddress(applicationId);        
+            if (address is null)
+            {
+                return new GetFreeholderAddressResponse();
+            }
 
-            return response ?? new GetFreeholderAddressResponse();
+            var response = new GetFreeholderAddressResponse
+            {
+                NameNumber = address.NameNumber,
+                AddressLine1 = address.AddressLine1,
+                AddressLine2 = address.AddressLine2,
+                City = address.City,
+                County = address.County,
+                Postcode = address.Postcode
+            };
+
+            return response;
         }
     }
 

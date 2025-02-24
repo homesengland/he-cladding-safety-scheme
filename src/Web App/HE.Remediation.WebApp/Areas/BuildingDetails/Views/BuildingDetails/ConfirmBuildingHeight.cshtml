@@ -15,34 +15,34 @@
 <h1 class="govuk-heading-xl">Confirm the building height</h1>
 
 <p class="govuk-body">Please provide details of the building that is eligible for remediation work.</p>
-<p class="govuk-body">You will need to measure the building’s height and enter that information on this page.</p>
+<p class="govuk-body">You will need to measure the building's height and enter that information on this page.</p>
 
 <h2 class="govuk-heading-m">How to measure the height of your building</h2>
 
-<p class="govuk-body">Medium Rise means between 11.00 metres and 17.70 metres when measured in accordance with diagram D6 of Approved Document B.</p>
+<p class="govuk-body">Eligible buildings must be over 11 metres, and measured in accordance with the diagram below.</p>
 
 
 @*TODO government guidance here is to use an svg image because the image contains text and alt text should match the text in the image. (https://design-system.service.gov.uk/styles/images/)*@
-<p class="govuk-body">
-    <img src="~/img/buildingdetails/buildingheight.png" height="432" width="630"
-     alt="Height of top storey measured from upper floor surface of top floor to ground level on lowest side of building. Height of top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms."/>
+<p class="govuk-body imageDescription">
+    <img src="~/img/buildingdetails/buildingheight.png" height="100%" width="100%" title="Building height details" alt=""/>
+    <span>The height of top storey must be measured from upper floor surface of the top floor, to ground level on the lowest side of building. The height of the top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms.</span>
 </p>
 
 <p class="govuk-body">The measurement should be taken from the lowest external ground level to the finished floor level of the top occupied storey. Following this diagram involves measuring external ground level in the same location as you measure the height of the floor level of the top occupied storey.</p>
 <p class="govuk-body">The ground levels used to measure the building height must be immediately adjacent to the application building and not at a remote part of the development.</p>
-<p class="govuk-body">If your building is of varying height, it is the height of the highest residential floor which is relevant when measured in accordance with diagram D6 above from Approved document B.</p>
-<p class="govuk-body">For the purposes of determining height eligibility for the Cladding Safety Scheme, the “top occupied storey” does not include any top storeys or roofs consisting exclusively of plant rooms or maintenance areas, non-residential facilities (such as storage or drying rooms or gyms) or external amenity (such as bars or roof gardens) or areas similar to these, even though people may regularly be present in such areas
+<p class="govuk-body">If your building is of varying height, it is the height of the highest residential floor which is relevant when measured in accordance with the diagram above.</p>
+<p class="govuk-body">For the purposes of determining height eligibility, the “top occupied storey” does not include any top storeys or roofs consisting exclusively of plant rooms or maintenance areas, non-residential facilities (such as storage or drying rooms or gyms) or external amenity (such as bars or roof gardens) or areas similar to these, even though people may regularly be present in such areas
 </p>
 
 
 
 <form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ConfirmBuildingHeight" method="post">
-    <govuk-input asp-for="NumberOfStoreys" type="number" input-novalidate="" input-class="govuk-input--width-5">
+    <govuk-input asp-for="NumberOfStoreys" type="number" input-class="govuk-input--width-5" input-maxlength="3" input-pattern="[0-9]*">
         <govuk-input-label class="govuk-label--s">How many storeys does the building have?</govuk-input-label>
         <govuk-input-hint>Please enter the number of storeys starting at ground level but do not include underground storeys.</govuk-input-hint>
     </govuk-input>
 
-    <p class="govuk-body"><strong>I confirm the building is between 11 metres and 18 metres height when measured according to the image above?</strong></p>
+    <p class="govuk-body"><strong>I confirm the building is over 11 metres, and measured in accordance with the diagram above.</strong></p>
 
     @if (Model.CorrectHeightConfirmedDate is not null)
     {

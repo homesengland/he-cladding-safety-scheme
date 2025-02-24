@@ -21,7 +21,7 @@
 <div class="govuk-grid-row govuk-!-margin-bottom-5 govuk-!-margin-top-5">
     <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-m govuk-!-display-inline-block">Application ID:</span>
-        <span class="govuk-body govuk-!-font-weight-bold govuk-!-padding-left-2">@Model.ApplicationReferenceNumber</span>
+        <span class="govuk-body govuk-!-padding-left-2"><strong>@Model.ApplicationReferenceNumber</strong></span>
     </div>
 </div>
 
@@ -42,9 +42,7 @@
                 <td class="govuk-table__cell">@company.CompanyName</td>
                 <td class="govuk-table__cell">@company.RegionsCovered</td>
                 <td class="govuk-table__cell">@company.EmailAddress</td>
-                <td class="govuk-table__cell">
-                    <span class="govuk-text-align-right">@company.Telephone</span>
-                </td>
+                <td class="govuk-table__cell govuk-text-align-right">@company.Telephone</td>
             </tr>
         }
     }
@@ -52,14 +50,14 @@
 </table>
 
 <h2 class="govuk-heading-m">Printable version</h2>
-<a class="govuk-link" target="_blank" href="/FireAssessorList/Fire Risk Assessors v1.1 27.01.pdf">View a printable version of this list</a>
+<a class="govuk-link" href="@Url.Action("FireRiskAssessorListPdf", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })">View a printable version of this list</a>
 
-<h2 class="govuk-heading-m govuk-!-margin-top-4">If you’ve booked a FRAEW survey</h2>
+<h2 class="govuk-heading-m govuk-!-margin-top-4">If you've booked a FRAEW survey</h2>
 <p class="govuk-body govuk-!-margin-bottom-9">
-    Add details of the company you’ve instructed and when you instructed <br/> them.
+    Add details of the company you've instructed and when you instructed <br/> them.
 </p>
 
 <div class="comp-btn-group">
-<govuk-button href="@((bool)ViewData["FireAccessorNotOnPanel"] ? Url.Action("AppraisalSurveyDetailsNotOnPanel", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"}) : Url.Action("SurveyInstructionDetails", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"}))">Add survey</govuk-button>
+<govuk-button href="@((bool)ViewData["FireAccessorNotOnPanel"] ? Url.Action("AppraisalSurveyDetailsNotOnPanel", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"}) : Url.Action("SurveyInstructionDetails", "FireRiskAppraisal", new {Area = "FireRiskAppraisal"}))">Add instruction details</govuk-button>
 <govuk-button href="@Url.Action("Index", "TaskList", new {Area = "Application"})">Save and return later</govuk-button>
 </div>

@@ -1,0 +1,44 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.AdjustScopeViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+      ? Url.Action(Model.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+      : Model.IsTimescaleVariation == true
+        ? Url.Action("AdjustEndDate", "VariationRequest", new { Area = "VariationRequest" })
+        : Url.Action("VariationReason", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ChangeOfScope" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">How has the scope of your project changed?</h1>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="AdjustScope" method="post">
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="ChangeOfScope" max-length="1000">
+        <govuk-character-count-label>Provide description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="IsTimescaleVariation" type="hidden" value="@Model.IsTimescaleVariation" />
+    <input asp-for="IsCostsVariation" type="hidden" value="@Model.IsCostsVariation" />
+    <input asp-for="IsThirdPartyContributionVariation" type="hidden" value="@Model.IsThirdPartyContributionVariation" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

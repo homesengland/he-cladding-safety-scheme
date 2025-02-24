@@ -34,5 +34,17 @@ namespace HE.Remediation.Core.Interface
         }
 
         bool IsEnforcedFlow();
+
+        void SetProgressReportId(Guid progressReportId);       
+
+        Guid GetProgressReportId();
+
+        void SetPaymentRequestId(Guid paymentRequestId);
+
+        Guid GetPaymentRequestId();
+
+        string GetApplicationEmailAddress();
+
+        void SetApplicationIdAndEmailAddress(Guid applicationId, string emailAddress);
     }
 }

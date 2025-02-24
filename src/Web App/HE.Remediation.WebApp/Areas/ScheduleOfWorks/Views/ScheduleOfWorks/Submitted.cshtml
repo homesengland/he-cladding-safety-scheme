@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.SubmittedViewModel
+@{
+    ViewData["Title"] = "Schedule Of Works Submitted";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLinkHidden"] = true;
+    ViewData["ExitLinkHidden"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Your schedule of works has been successfully submitted
+                        </govuk-panel-title>
+                        <govuk-panel-body>
+                            Application ID<br /><strong>@Model.ApplicationReferenceNumber</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">
+                        Thank you for submitting your schedule of works.  
+                        We'll review this and be in touch if we have any queries and to confirm your payment schedule.
+                    </p>
+                    <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" })>Return to home</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

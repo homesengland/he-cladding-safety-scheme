@@ -1,17 +1,24 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetails.SetSurveyInstructionDetails
 {
-    public class SetSurveyInstructionDetailsHandler : IRequestHandler<SetSurveyInstructionDetailsRequest, Unit>
+    public class SetSurveyInstructionDetailsHandler : IRequestHandler<SetSurveyInstructionDetailsRequest>
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public SetSurveyInstructionDetailsHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public SetSurveyInstructionDetailsHandler(
+            IDbConnectionWrapper dbConnectionWrapper, 
+            IApplicationDataProvider applicationDataProvider, 
+            IStatusTransitionService statusTransitionService)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(SetSurveyInstructionDetailsRequest request, CancellationToken cancellationToken)
@@ -20,13 +27,13 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionD
             return Unit.Value;
         }
 
-        private async Task<Unit> InsertSurveyInstructionDetailsRequest(SetSurveyInstructionDetailsRequest request)
+        private async Task InsertSurveyInstructionDetailsRequest(SetSurveyInstructionDetailsRequest request)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
             await _dbConnectionWrapper.ExecuteAsync("InsertOrUpdateSurveyInstructionDetails", new { applicationId, request.FireRiskAssessorId, request.DateOfInstruction });
 
-            return Unit.Value;
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewInstructed, applicationIds: applicationId);
         }
     }
 }

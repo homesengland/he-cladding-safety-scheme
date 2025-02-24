@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Making an appeal";    
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <govuk-back-link href="/Application/Dashboard">Back</govuk-back-link>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row"> 
+                <div class="govuk-body govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@ViewData["Title"]</h1>
+                    <p class="govuk-body">
+                        An applicant for grant funding can make an appeal to us if:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>Your application was refused by the Cladding Safety Scheme and you believe the decision was procedurally incorrect</li>
+                        <li>
+                            You have additional information that was not considered when a decision was reached                            
+                        </li>
+                    </ul>
+                    <p class="govuk-body">
+                        If you wish to appeal, please direct all correspondence and supporting evidence to <a class="govuk-link" href="mailto: appeals@claddingsafetyscheme.co.uk">appeals@claddingsafetyscheme.co.uk</a>
+                    </p>
+                    <p class="govuk-body">
+                        Appeals must be received in writing within 30 working days of the decision that you wish to appeal. Please include your Building Application ID and the building name in the subject header of the appeal email.
+                    </p>
+                    <govuk-button href="/Application/Dashboard" class="govuk-button--secondary govuk-!-margin-top-3">Return to homepage</govuk-button>
+                </div>
+            </div>                        
+        </main>
+    </div>
+</div>

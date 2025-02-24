@@ -1,0 +1,101 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.StartInformationViewModel
+@{
+    Layout = "~/Areas/WorksPackage/Views/Shared/_SideCardLayout.cshtml";
+    
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#submission-and-funding-decision-on-your-full-works-application" class="govuk-link govuk-!-margin-bottom-2">
+            Submission and funding decision on your works package
+        </a>
+        
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will fund
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-not-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will not fund
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#social-sector-applicants" class="govuk-link govuk-!-margin-bottom-2">
+            Social sector applicants
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#vat" class="govuk-link govuk-!-margin-bottom-2">
+            VAT
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#cost-schedule" class="govuk-link govuk-!-margin-bottom-2">
+            Cost Schedule
+        </a>
+    </div>
+}
+
+@section IntroductionSection
+{
+    <h1 class="govuk-heading-xl">About this section</h1>
+
+    <p class="govuk-body">
+        The next section will be focussed around costs schedule and remediation works.
+    </p>
+    <p class="govuk-body">
+        We will ask you information about:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>quotes and tenders</li>
+        <li>sub-contractors</li>
+        <li>cladding systems that may be removed or installed as part of these works</li>
+        <li>details of the manufacturers, if known.</li>
+    </ul>
+
+    <p class="govuk-body">
+        You will be asked to provide the total costs of your construction contract
+        plus any professional fees associated with managing the work (including managing agents).
+    </p>
+    <p class="govuk-body">
+        Please include all costs that you have incurred or will incur as part of the works. This must include costs covered by any pre tender support payments you have received. This will become your total grant request.
+    </p>
+    <p class="govuk-body">
+        If it helps, you can download a template to share with your project team. You'll need to share the information with us in the following pages.
+    </p>
+
+    <section class="gem-c-attachment govuk-!-margin-left-2">
+        <div class="gem-c-attachment__thumbnail">
+            <svg class="gem-c-attachment__thumbnail-image" version="1.1" viewBox="0 0 99 140" width="99" height="140" aria-hidden="true">
+                <path d="M12 12h75v27H12zm0 47h18.75v63H12zm55 2v59H51V61h16m2-2H49v63h20V59z" stroke-width="0"></path>
+                <path d="M49 61.05V120H32.8V61.05H49m2-2H30.75v63H51V59zm34 2V120H69.05V61.05H85m2-2H67v63h20V59z" stroke-width="0"></path>
+                <path d="M30 68.5h56.5M30 77.34h56.5M30 112.7h56.5M30 95.02h56.5M30 86.18h56.5M30 103.86h56.5" fill="none" stroke-miterlimit="10" stroke-width="2"></path>
+            </svg>
+        </div>
+        <div class="gem-c-attachment__details">
+            <h2 class="gem-c-attachment__title attachment__title">Cost schedule template (XLSX)</h2>
+            <a class="govuk-link govuk-!-font-size-19" rel="noreferrer noopener" target="_blank" href="/CostScheduleTemplates/CSS cost schedule template_v1.1.xlsx">Download XLSX (74 KB)</a>
+        </div>
+    </section>
+
+    <p class="govuk-body govuk-!-margin-top-3">
+        All costs should be submitted excluding VAT. At the end of your claim you will be able to include an entry for VAT that you cannot reclaim which is termed irrecoverable VAT' in the schedule.
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-8">
+        If you are a local authority or a registered provider, please ensure you include the full, actual costs of works and do not apply any apportionments to the costs. Your grant award will be 
+        calculated to reflect the proportion of units that are eligible for funding as part of the review process. Submitting incorrect costs may result in a delay to your application or an incorrect 
+        grant award calculation.
+    </p>
+
+    <form asp-area="WorksPackageCostsScheduling" asp-controller="CostsScheduling" asp-action="StartInformation" method="post">
+
+        <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    </form>
+}

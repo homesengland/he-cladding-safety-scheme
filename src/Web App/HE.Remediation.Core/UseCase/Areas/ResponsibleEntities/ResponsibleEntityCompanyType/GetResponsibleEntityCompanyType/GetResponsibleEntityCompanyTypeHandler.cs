@@ -25,8 +25,6 @@ public class GetResponsibleEntityCompanyTypeHandler : IRequestHandler<GetRespons
         return new GetResponsibleEntityCompanyTypeResponse
         {
             OrganisationType = result?.OrganisationType,
-            OrganisationSubType = result?.OrganisationSubType,
-            OrganisationSubTypeDescription = result?.OrganisationSubTypeDescription,
             ResponsibleEntityRelationType = result?.ResponsibleEntityRelationType
         };
     }

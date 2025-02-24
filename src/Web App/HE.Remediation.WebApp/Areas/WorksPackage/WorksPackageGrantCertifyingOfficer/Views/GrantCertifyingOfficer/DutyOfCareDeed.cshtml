@@ -1,0 +1,44 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageGrantCertifyingOfficer.DutyOfCareDeedViewModel
+@{
+    ViewData["Title"] = "Grant certifying officer - Duty of care deed";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("CheckYourAnswers", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">Duty of care deed</h1>
+
+<h2 class="govuk-heading-m">We've emailed the duty of care deed to the grant certifying officer.</h2>
+
+<p class="govuk-body">
+    The deed is a legal contract between Homes England and the grant certifying officer. You can view an example deed below.
+</p>
+
+<p class="govuk-body">
+    <a href="https://www.gov.uk/government/publications/cladding-safety-scheme-grant-funding-agreement-and-associated-legal-documents" rel="noreferrer noopener" target="_blank">
+        View duty of care deed template online
+    </a>
+</p>
+
+<p class="govuk-body">
+    Please note that a works package submission is not complete until the deed has been signed and submitted by the grant certifying officer.
+</p>
+
+<p class="govuk-body">
+    We'll let you know if the grant certifying officer has signed and submitted the deed or if we're still waiting for it. You can also check on your online account.
+</p>
+
+<p class="govuk-body">
+    You do not need to do anything more at this time.
+</p>
+
+<form asp-area="WorksPackage" asp-controller="GrantCertifyingOfficer" asp-action="DutyOfCareDeed" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>
+

@@ -5,7 +5,6 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntit
 public class GetResponsibleEntityCompanyTypeResponse
 {
     public EApplicationResponsibleEntityOrganisationType? OrganisationType { get; set; }
-    public EApplicationResponsibleEntityOrganisationSubType? OrganisationSubType { get; set; }
-    public string OrganisationSubTypeDescription { get; set; }
+    
     public EResponsibleEntityRelation? ResponsibleEntityRelationType { get; set; }
 }

@@ -1,0 +1,39 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.StartInformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In this section you will need to provide us with information on your project delivery. This includes:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>uploading your signed works contract</li>
+    <li>confirmation of the month you will request your first grant payment and current forecast completion date for your project. We will ask you to provide your actual start on site date after your Schedule of Works has been approved, and practical completion date later in the process.</li>
+    <li>a monthly cashflow for your eligible costs (covering both the works and all associated fees for the project team) that you submitted as part of your works package</li>
+</ul>
+
+<p class="govuk-body">
+    Your  monthly cashflow should include works and fees for the project team, including any ineligible VAT that you cannot reclaim.
+</p>
+<p class="govuk-body">
+    Your contractor and project team should be able to provide you with the information to complete the profile. 
+    We appreciate timings can change, but this cashflow will give us important information about when you will complete your project and the likely timing of grant payments.
+</p>
+<p class="govuk-body">
+    The start date of your payment schedule must be a month in the future – you cannot schedule a payment in the same month your Schedule of Works is submitted. If you have scheduled future payments whilst this section is in progress, but have moved into the next month by the time you submit the Schedule of Works, the system will ask you to start this section again.
+</p>
+
+<form asp-area="ScheduleOfWorks" asp-controller="ScheduleOfWorks" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

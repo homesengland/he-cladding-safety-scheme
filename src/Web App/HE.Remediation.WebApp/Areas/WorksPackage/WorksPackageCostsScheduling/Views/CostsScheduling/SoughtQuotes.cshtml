@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.SoughtQuotesViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = !string.IsNullOrWhiteSpace(Model.ReturnUrl)? Model.ReturnUrl : Url.Action("StartInformation", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SoughtQuotes"/>
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Did you obtain competitive bids for this work?</h1>
+
+<form asp-area="WorksPackageCostsScheduling" asp-controller="CostsScheduling" asp-action="SoughtQuotes" method="post">
+
+    <govuk-radios asp-for="SoughtQuotes">
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

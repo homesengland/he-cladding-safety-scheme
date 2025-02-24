@@ -1,23 +1,21 @@
 ﻿@using HE.Remediation.Core.Enums
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.UploadEvidenceViewModel
 @{
-    switch (Model.OrganisationType)
+    switch (Model.UploadType)
     {
-        case EApplicationResponsibleEntityOrganisationType.LocalAuthority:
-            ViewData["Title"] = "Please provide evidence from the S151 officer";
-            ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
-            break;
-        case EApplicationResponsibleEntityOrganisationType.RegisteredProvider:
-            ViewData["Title"] = "Please provide evidence from the Chief Executive";
-            ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
-            break;
-        case EApplicationResponsibleEntityOrganisationType.PrivateCompany:
-        case EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation:
-        case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:
-        case EApplicationResponsibleEntityOrganisationType.Other:
+        case EResponsibleEntityUploadType.Represent: 
             ViewData["Title"] = "Upload evidence that you can represent the Responsible Entity";
             ViewData["BackLink"] = Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             break;
+        case EResponsibleEntityUploadType.S151:
+            ViewData["Title"] = "Please provide evidence from the S151 officer";
+            ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+        case EResponsibleEntityUploadType.ChiefExec:
+            ViewData["Title"] = "Please provide evidence from the Chief Executive";
+            ViewData["BackLink"] = Url.Action("ConfirmedNotViable", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+
     }
 }
 @section ErrorSummary
@@ -29,12 +27,13 @@
 <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
 
 <p class="govuk-caption-m">You can upload up to 5 files.</p>
-<p class="govuk-caption-m">Each file must be smaller than 20mb.</p>
+<p class="govuk-caption-m">Each file must be smaller than 20mb, and a .pdf file</p>
 
 <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="UploadEvidence" method="post" enctype="multipart/form-data">
     @await Html.PartialAsync("FileUpload", Model)
     <br/>
     @Html.Hidden(nameof(Model.OrganisationType), Model.OrganisationType)
+    @Html.Hidden(nameof(Model.UploadType), Model.UploadType)
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 

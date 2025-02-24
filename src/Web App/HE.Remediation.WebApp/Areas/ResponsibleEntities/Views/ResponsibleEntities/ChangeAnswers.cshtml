@@ -1,0 +1,25 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ChangeAnswersViewModel
+@{
+    ViewData["Title"] = "Clear your answers to this section";
+    ViewData["BackLink"] = Url.Action("CheckYourAnswers", "ResponsibleEntities");
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<govuk-inset-text>Changing your answers in this section will require you to start this section again. Are you sure you wish to proceed?</govuk-inset-text>
+
+@using (Html.BeginForm())
+{
+    <govuk-radios asp-for="Proceed">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+                Are you sure you wish to proceed?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@true">Yes, clear answers</govuk-radios-item>
+        <govuk-radios-item value="@false">No</govuk-radios-item>
+    </govuk-radios>
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+}

@@ -1,0 +1,47 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.UploadCostReportViewModel
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("ReviewPaymentRequest", "PaymentRequest", new { Area = "PaymentRequest" });
+
+    var readOnly = ((Model.IsSubmitted == true) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#monthly-grant-claims-progress-monitoring-and-variations" class="govuk-link govuk-!-margin-bottom-2">
+            Monthly grant claims, progress monitoring and variations
+        </a>
+    </div>
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Upload cost report</h1>
+<p class="govuk-body">
+    Please upload a cost report prepared and signed by your grant certifying officer detailing the qualifying expenditure incurred.
+</p>
+
+<p class="govuk-caption-m">You can upload up to 5 files.</p>
+<p class="govuk-caption-m">Each file must be smaller than 20mb.</p>
+
+<form asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="UploadCostReport" method="post" enctype="multipart/form-data">
+    @await Html.PartialAsync("FileUpload", Model)
+    <br />
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Continue)" type="submit">Save and continue</govuk-button>
+</form>

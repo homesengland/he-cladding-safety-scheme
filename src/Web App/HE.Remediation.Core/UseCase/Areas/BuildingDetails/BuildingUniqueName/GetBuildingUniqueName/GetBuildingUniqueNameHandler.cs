@@ -1,17 +1,20 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.GetBuildingUniqueName
 {
     public class GetBuildingUniqueNameHandler : IRequestHandler<GetBuildingUniqueNameRequest, GetBuildingUniqueNameResponse>
     {
-        private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
-        public GetBuildingUniqueNameHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public GetBuildingUniqueNameHandler(
+            IApplicationDataProvider applicationDataProvider, 
+            IBuildingDetailsRepository buildingDetailsRepository)
         {
-            _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _buildingDetailsRepository = buildingDetailsRepository;
         }
 
         public async Task<GetBuildingUniqueNameResponse> Handle(GetBuildingUniqueNameRequest request, CancellationToken cancellationToken)
@@ -23,9 +26,12 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.G
 
         private async Task<GetBuildingUniqueNameResponse> GetBuildingUniqueName(Guid applicationId)
         {
-            var result = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingUniqueNameResponse>("GetBuildingUniqueName", new { applicationId });
+            var uniqueName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-            return result ?? new GetBuildingUniqueNameResponse();
+            return new GetBuildingUniqueNameResponse
+            {
+                UniqueName = uniqueName
+            };
         }
     }
 }

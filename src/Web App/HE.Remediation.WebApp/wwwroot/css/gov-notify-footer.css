@@ -1,0 +1,99 @@
+﻿@page {
+    margin: 5mm 15mm;
+}
+
+html {
+    height: 100%;
+    font-size: 11pt;
+    font-family: Corbel;
+}
+
+body {
+    background: #fff;
+    margin: 0; /* Margin set in renderer directly */
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #000;
+    height: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.head {
+    width: 100%;
+    height: 25mm;
+    margin: 0 0 9.5mm 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.head .logo {
+    height: 21.6mm;
+    width: 22.3mm;
+}
+
+.head .slogan {
+    font-size: 15pt;
+}
+
+table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+td {
+    /*font-size: 0.9rem;*/
+    vertical-align: top;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+}
+
+td {
+    text-align: right;
+    width: 55%;
+}
+
+td:first-child {
+    width: 45%;
+    color: rgb(0, 78, 48);
+    font-weight: bold;
+}
+
+td.email {
+    max-width: 250px
+}
+
+.body {
+    line-height: 1.3em;
+}
+
+.body .freeholder-address-container {
+    display: flex;
+    align-items: flex-end;
+    height: 26.8mm;
+    width: 95.4mm;
+    margin: 0 0 28.7mm 9.6mm;
+}
+
+.body .freeholder-address-container .freeholder-address {
+    text-align: left;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-left: 3px;
+}
+
+.footer-text {
+    font-size: 9pt;
+}
+
+.footer .logo {
+    height: 10.1mm;
+    width: 34.9mm;
+}

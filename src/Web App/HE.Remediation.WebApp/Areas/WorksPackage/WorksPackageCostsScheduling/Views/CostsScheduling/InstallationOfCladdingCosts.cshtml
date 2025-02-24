@@ -1,0 +1,70 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.InstallationOfCladdingCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action(Model.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary 
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="NewCladdingAmountText" />
+        <govuk-error-summary-item asp-for="NewCladdingDescription" />
+        <govuk-error-summary-item asp-for="ExternalWorksAmountText" />
+        <govuk-error-summary-item asp-for="ExternalWorksDescription" />
+        <govuk-error-summary-item asp-for="InternalWorksAmountText" />
+        <govuk-error-summary-item asp-for="InternalWorksDescription" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Installation of new cladding </h1>
+
+<p class="govuk-body">If you're telling us about costs, please tell us how the money is being spent.</p>
+
+<form asp-controller="CostsScheduling" asp-action="InstallationOfCladdingCosts" asp-area="WorksPackageCostsScheduling" method="post">
+
+    <h2 class="govuk-heading-s">New cladding – including specification, insulation and other associated components to be installed (optional)</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="NewCladdingAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="NewCladdingDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment (optional)</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="ExternalWorksAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="ExternalWorksDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <h2 class="govuk-heading-s">Any internal mitigation works recommended in the FRAEW/PAS9980 assessment in lieu of cladding removal (optional)</h2>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="InternalWorksAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="InternalWorksDescription" max-length="500">
+        <govuk-character-count-label>Description</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

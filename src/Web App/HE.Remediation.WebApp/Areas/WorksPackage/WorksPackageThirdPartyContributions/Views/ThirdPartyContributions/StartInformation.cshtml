@@ -1,0 +1,28 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.StartInformationViewModel
+@{
+    Layout = "~/Areas/WorksPackage/Views/Shared/_SideCardLayout.cshtml";
+    
+    ViewData["Title"] = "Third party contributions - About this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In the following section we'll ask you about third party contributions for your works.
+</p>
+<p class="govuk-body">
+    You can read more about it in your Grant Funding Agreement.
+</p>
+
+<form asp-area="WorksPackageThirdPartyContributions" asp-controller="ThirdPartyContributions" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

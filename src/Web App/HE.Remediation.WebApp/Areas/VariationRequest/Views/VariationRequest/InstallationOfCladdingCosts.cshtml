@@ -1,0 +1,143 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.InstallationOfCladdingCostsViewModel
+@{
+    ViewData["BackLink"] = Url.Action("Costs", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="VariationNewCladdingAmountText" />
+        <govuk-error-summary-item asp-for="VariationNewCladdingDescription" />
+        <govuk-error-summary-item asp-for="VariationOtherEligibleWorkToExternalWallAmountText" />
+        <govuk-error-summary-item asp-for="VariationOtherEligibleWorkToExternalWallDescription" />
+        <govuk-error-summary-item asp-for="VariationInternalMitigationWorksAmountText" />
+        <govuk-error-summary-item asp-for="VariationInternalMitigationWorksDescription" />
+    </govuk-error-summary>
+}
+ 
+
+<h1 class="govuk-heading-xl">Installation of new cladding</h1>
+
+<p class="govuk-body">Please identify the changes associated with this element of your costs schedule.</p>
+
+<form asp-controller="VariationRequest" asp-action="InstallationOfCladdingCosts" asp-area="VariationRequest" method="post">
+
+    <p class="govuk-body-m"><strong>New cladding – including specification, insulation and other associated components to be installed (optional)</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions 
+        </govuk-details-summary>
+        <govuk-details-text>
+        <table class="govuk-table">
+            <div style="border-bottom: 1px solid #b1b4b6;"></div>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageNewCladdingAmount.GetValueOrDefault(0).ToString("N0")</td>
+               </tr>
+                <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageNewCladdingDescription</td>
+                </tr>
+            </tbody>
+        </table>        
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationNewCladdingAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationNewCladdingDescription " max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment (optional)</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageOtherEligibleWorkToExternalWallAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageOtherEligibleWorkToExternalWallDescription</td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationOtherEligibleWorkToExternalWallAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationOtherEligibleWorkToExternalWallDescription  " max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <p class="govuk-body-m"><strong>Any internal mitigation works recommended in the FRAEW /PAS9980 assessment in lieu of cladding removal (optional)</strong></p>
+
+    <govuk-details open="false">
+        <govuk-details-summary>
+            Show previous costs and descriptions
+        </govuk-details-summary>
+        <govuk-details-text>
+            <table class="govuk-table">
+                <div style="border-bottom: 1px solid #b1b4b6;"></div>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Costs excluding VAT</th>
+                        <td class="govuk-table__cell govuk-!-width-one-third">£@Model.WorkPackageInternalMitigationWorksAmount.GetValueOrDefault(0).ToString("N0")</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__cell govuk-body">Description</th>
+                        <td class="govuk-table__cell govuk-!-width-two-thirds">@Model.WorkPackageInternalMitigationWorksDescription </td>
+                    </tr>
+                </tbody>
+            </table>
+        </govuk-details-text>
+    </govuk-details>
+
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="VariationInternalMitigationWorksAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Additional costs excluding VAT</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="VariationInternalMitigationWorksDescription  " max-length="500">
+        <govuk-character-count-label>Describe the work associated with the changes to costs.</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="WorkPackageNewCladdingAmount" type="hidden" value="@Model.WorkPackageNewCladdingAmount" />
+    <input asp-for="WorkPackageNewCladdingDescription" type="hidden" value="@Model.WorkPackageNewCladdingDescription" />
+    <input asp-for="WorkPackageOtherEligibleWorkToExternalWallAmount" type="hidden" value="@Model.WorkPackageOtherEligibleWorkToExternalWallAmount" />
+    <input asp-for="WorkPackageOtherEligibleWorkToExternalWallDescription" type="hidden" value="@Model.WorkPackageOtherEligibleWorkToExternalWallDescription" />
+    <input asp-for="WorkPackageInternalMitigationWorksAmount" type="hidden" value="@Model.WorkPackageInternalMitigationWorksAmount" />
+    <input asp-for="WorkPackageInternalMitigationWorksDescription" type="hidden" value="@Model.WorkPackageInternalMitigationWorksDescription" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

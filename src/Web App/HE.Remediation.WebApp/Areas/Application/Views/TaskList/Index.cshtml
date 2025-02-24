@@ -8,7 +8,7 @@
 
 <div class="text-center">
     <div class="govuk-width-container">
-        <a href="@Url.Action("Index", "Dashboard", new { Area = "Application" })" class="govuk-back-link">Back</a>
+        <a href="@Url.Action("Index", "StageDiagram", new { Area = "Application" })" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
@@ -24,77 +24,41 @@
 
                     <p class="govuk-body">View the required steps to submit a new application.</p>
 
-                    <ol class="app-task-list">
+                    <ol class="app-task-list">                        
                         <li>
                             <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">1. </span> Agree before you start
+                                <span class="app-task-list__section-number">1. </span> Prepare application
                             </h2>
                             <ul class="app-task-list__items">
                                 <li class="app-task-list__item">
                                     <span class="app-task-list__task-name">
-                                        @if (!Model.Phase2Completed())
-                                        {
-                                            <a class="govuk-link" href="LeaseholderEngagement" aria-describedby="read-declaration-status">
-                                                Leaseholder engagement agreement
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="govuk-body">Leaseholder engagement agreement</span>
-                                        }
-                                    </span>
-                                    <task-list-status-badge status="@Model.ApplicationLeaseHolderEngagementStatusId"></task-list-status-badge>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">2. </span> Prepare application
-                            </h2>
-                            <ul class="app-task-list__items">
-                                <li class="app-task-list__item">
-                                    <span class="app-task-list__task-name">
-                                        @if (!Model.Phase2Completed())
-                                        {
-                                            <a class="govuk-link" href="@(Model.ApplicationBuildingDetailsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "BuildingDetails" , new { Area="BuildingDetails" }) : Url.Action("WhatYoullNeed", "BuildingDetails" , new { Area="BuildingDetails" }))" aria-describedby="contact-details-status">
-                                                Building details
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="govuk-body">Building details</span>
-                                        }
+                                        <a class="govuk-link" href="@(Model.ApplicationBuildingDetailsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "BuildingDetails" , new { Area="BuildingDetails" }) : Url.Action("Start", "BuildingDetails" , new { Area="BuildingDetails" }))" aria-describedby="list-convictions-status">
+                                            Building details
+                                        </a>
                                     </span>
                                     <task-list-status-badge status="@Model.ApplicationBuildingDetailsStatusId"></task-list-status-badge>
                                 </li>
                                 <li class="app-task-list__item">
                                     <span class="app-task-list__task-name">
-                                        @if (!Model.Phase2Completed())
-                                        {
-                                            <a class="govuk-link" href="@(Model.ApplicationResponsibleEntityStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "ResponsibleEntities" , new { Area="ResponsibleEntities" }) : Url.Action("Start", "ResponsibleEntities" , new { Area="ResponsibleEntities" }))" aria-describedby="contact-details-status">
-                                                Responsible Entity details
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="govuk-body">Responsible Entity details</span>
-                                        }
+                                        <a class="govuk-link" href="@(Model.ApplicationResponsibleEntityStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "ResponsibleEntities" , new { Area="ResponsibleEntities" }) : Url.Action("Start", "ResponsibleEntities" , new { Area="ResponsibleEntities" }))" aria-describedby="list-convictions-status">
+                                            Responsible Entity details
+                                        </a>
                                     </span>
                                     <task-list-status-badge status="@Model.ApplicationResponsibleEntityStatusId"></task-list-status-badge>
                                 </li>
                                 <li class="app-task-list__item">
                                     <span class="app-task-list__task-name">
-                                        @if (!Model.Phase2Completed())
-                                        {
-                                            <a class="govuk-link" href="@(Model.ApplicationFundingRoutesStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "AlternativeFundingRoutes" , new { Area="AlternativeFundingRoutes" }) : Url.Action("Information", "AlternativeFundingRoutes" , new { Area="AlternativeFundingRoutes" }))" aria-describedby="list-convictions-status">
-                                                Alternate routes of funding
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="govuk-body">Alternate routes of funding</span>
-                                        }
+                                        <a class="govuk-link" href="@(Model.ApplicationLeaseHolderEngagementStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "Leaseholder" , new { Area="Leaseholder" }) : Url.Action("Start", "Leaseholder" , new { Area="Leaseholder" }))" aria-describedby="list-convictions-status">
+                                            Leaseholder engagement agreement
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.ApplicationLeaseHolderEngagementStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.ApplicationFundingRoutesStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "AlternativeFundingRoutes" , new { Area="AlternativeFundingRoutes" }) : Url.Action("Start", "AlternativeFundingRoutes" , new { Area="AlternativeFundingRoutes" }))" aria-describedby="list-convictions-status">
+                                            Alternate routes of funding
+                                        </a>
                                     </span>
                                     <task-list-status-badge status="@Model.ApplicationFundingRoutesStatusId"></task-list-status-badge>
                                 </li>
@@ -102,18 +66,13 @@
                                     @if (Model.ApplicationResponsibleEntityStatusId == ETaskStatus.NotStarted)
                                     {
                                         <span class="govuk-body">Bank account information</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="eligibility-status">Cannot Start Yet</strong>
-                                    }
-                                    else if (!Model.Phase2Completed())
-                                    {
-                                        <a class="govuk-link" href="@Url.Action("WhatYouWillNeed", "BankAccount", new { Area = "BankAccount" })" aria-describedby="list-convictions-status">
-                                            Bank account information
-                                        </a>
-                                        <task-list-status-badge status="@Model.ApplicationBankDetailsStatusId"></task-list-status-badge>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="bank-account-eligibility-status">Cannot Start Yet</strong>
                                     }
                                     else
                                     {
-                                        <span class="govuk-body">Bank account information</span>
+                                        <a class="govuk-link" href="@(Model.ApplicationBankDetailsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "BankAccount" , new { Area="BankAccount" }) : Url.Action("Start", "BankAccount" , new { Area="BankAccount" }))" aria-describedby="list-convictions-status">
+                                            Bank account information
+                                        </a>
                                         <task-list-status-badge status="@Model.ApplicationBankDetailsStatusId"></task-list-status-badge>
                                     }
                                 </li>
@@ -122,7 +81,7 @@
                                     {
                                         if (!Model.Phase2Completed())
                                         {
-                                            <a class="govuk-link" href="@Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" })" aria-describedby="list-convictions-status">
+                                            <a class="govuk-link" href="@Url.Action("Start", "Declaration", new { Area = "Declaration" })" aria-describedby="list-convictions-status">
                                                 Declaration
                                             </a>
                                         }
@@ -135,7 +94,7 @@
                                     else
                                     {
                                         <span class="govuk-body">Declaration</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="eligibility-status">Cannot Start Yet</strong>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="declaration-eligibility-status">Cannot Start Yet</strong>
                                     }
                                 </li>
                             </ul>
@@ -143,28 +102,21 @@
 
                         <li>
                             <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">3. </span> Get a fire risk appraisal
+                                <span class="app-task-list__section-number">2. </span> Get a fire risk appraisal
                             </h2>
                             <ul class="app-task-list__items">
                                 <li class="app-task-list__item">
                                     @if (Model.Phase2Completed())
                                     {
-                                        if (!Model.Phase4Completed())
-                                        {
-                                            <a class="govuk-link" href="@Url.Action("WhatYouWillNeed", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })" aria-describedby="list-convictions-status">
-                                                Fire Risk Appraisal
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <span class="govuk-body">Fire Risk Appraisal</span>
-                                        }
+                                        <a class="govuk-link" href="@(Model.ApplicationFireRiskAssessmentStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "FireRiskAppraisal" , new { Area="FireRiskAppraisal" }) : Url.Action("Start", "FireRiskAppraisal" , new { Area="FireRiskAppraisal" }))" aria-describedby="list-convictions-status">
+                                            Fire Risk Appraisal
+                                        </a>
                                         <task-list-status-badge status="@Model.ApplicationFireRiskAssessmentStatusId"></task-list-status-badge>
                                     }
                                     else
                                     {
                                         <span class="govuk-body">Fire Risk Appraisal</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="eligibility-status">Cannot Start Yet</strong>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="fraew-eligibility-status">Cannot Start Yet</strong>
                                     }
                                 </li>
                             </ul>
@@ -172,7 +124,7 @@
 
                         <li>
                             <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">4. </span> Submit application
+                                <span class="app-task-list__section-number">3. </span> Submit application
                             </h2>
                             <ul class="app-task-list__items">
                                 <li class="app-task-list__item">
@@ -188,12 +140,18 @@
                                         {
                                             <span class="govuk-body">Submit</span>
                                         }
+
+                                        if ((int)Model.ApplicationStatusId > (int)EApplicationStatus.ApplicationSubmitted)
+                                        {
+                                            Model.ApplicationStatusId = EApplicationStatus.ApplicationSubmitted;
+                                        }
+
                                         <application-status-badge status="@Model.ApplicationStatusId"></application-status-badge>
                                     }
                                     else
                                     {
                                         <span class="govuk-body">Submit</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="eligibility-status">Cannot Complete</strong>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="submit-eligibility-status">Cannot Complete</strong>
                                     }
                                 </li>
                             </ul>

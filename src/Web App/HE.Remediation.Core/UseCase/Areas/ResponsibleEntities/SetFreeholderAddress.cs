@@ -1,5 +1,7 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
+using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using MediatR;
 using System.Transactions;
 
@@ -9,49 +11,68 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
     {
         private readonly IDbConnectionWrapper _connection;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IResponsibleEntityRepository _responsibleEntityRepository;
 
         public SetFreeholderAddressHandler
         (
                 IDbConnectionWrapper connection,
-                IApplicationDataProvider applicationDataProvider
+                IApplicationDataProvider applicationDataProvider,
+                IResponsibleEntityRepository responsibleEntityRepository
         )
         {
             _connection = connection;
             _applicationDataProvider = applicationDataProvider;
+            _responsibleEntityRepository = responsibleEntityRepository;
         }
 
         public async Task<Unit> Handle(SetFreeholderAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
-
-            var response = await _connection.QuerySingleOrDefaultAsync<GetBuildingAddressResponse>("GetFreeholderAddress", new { applicationId });
-
-            if (response is not null)
+            ParsedAddress parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
+            if (parsedAddress != null)
             {
-                await UpdateFreeholderAddress(applicationId, request);
-                return Unit.Value;
+                var address = await _responsibleEntityRepository.GetFreeholderAddress(applicationId);        
+                if (address is not null)
+                {
+                    await UpdateFreeholderAddress(applicationId, parsedAddress);
+                    return Unit.Value;
+                }
+
+                await InsertFreeholderAddress(applicationId, parsedAddress);
             }
 
-            await InsertFreeholderAddress(applicationId, request);
             return Unit.Value;
         }
 
-        private async Task UpdateFreeholderAddress(Guid applicationId, SetFreeholderAddressRequest request)
+        private async Task UpdateFreeholderAddress(Guid applicationId, ParsedAddress parsedAddress)
         {
             await _connection.ExecuteAsync("UpdateFreeholderAddress",
                 new
                 {
-                    applicationId,
-                    request.NameNumber,
-                    request.AddressLine1,
-                    request.AddressLine2,
-                    request.City,
-                    request.County,
-                    request.Postcode
+                    ApplicationId = applicationId,
+                    parsedAddress.NameNumber,
+                    parsedAddress.AddressLine1,
+                    parsedAddress.AddressLine2,
+                    parsedAddress.City,
+                    parsedAddress.LocalAuthority,
+                    parsedAddress.County,
+                    parsedAddress.Postcode,
+                    parsedAddress.SubBuildingName,
+                    parsedAddress.BuildingName,
+                    parsedAddress.BuildingNumber,
+                    parsedAddress.Street,
+                    parsedAddress.Town,
+                    parsedAddress.AdminArea,
+                    parsedAddress.UPRN,
+                    parsedAddress.AddressLines,
+                    parsedAddress.XCoordinate,
+                    parsedAddress.YCoordinate,
+                    parsedAddress.Toid,
+                    parsedAddress.BuildingType
                 });
         }
 
-        private async Task InsertFreeholderAddress(Guid applicationId, SetFreeholderAddressRequest request)
+        private async Task InsertFreeholderAddress(Guid applicationId, ParsedAddress parsedAddress)
         {
             var addressId = Guid.NewGuid();
 
@@ -60,13 +81,26 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                 await _connection.ExecuteAsync("InsertFreeholderAddress",
                     new
                     {
-                        addressId,
-                        request.NameNumber,
-                        request.AddressLine1,
-                        request.AddressLine2,
-                        request.City,
-                        request.County,
-                        request.Postcode
+                        AddressId = addressId,
+                        parsedAddress.NameNumber,
+                        parsedAddress.AddressLine1,
+                        parsedAddress.AddressLine2,
+                        parsedAddress.City,
+                        parsedAddress.LocalAuthority,
+                        parsedAddress.County,
+                        parsedAddress.Postcode,
+                        parsedAddress.SubBuildingName,
+                        parsedAddress.BuildingName,
+                        parsedAddress.BuildingNumber,
+                        parsedAddress.Street,
+                        parsedAddress.Town,
+                        parsedAddress.AdminArea,
+                        parsedAddress.UPRN,
+                        parsedAddress.AddressLines,
+                        parsedAddress.XCoordinate,
+                        parsedAddress.YCoordinate,
+                        parsedAddress.Toid,
+                        parsedAddress.BuildingType
                     });
 
                 await _connection.ExecuteAsync("UpdateFreeholderAddressId", new { applicationId, addressId });
@@ -78,11 +112,6 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 
     public class SetFreeholderAddressRequest : IRequest
     {
-        public string NameNumber { get; set; }
-        public string AddressLine1 { get; set; }
-        public string AddressLine2 { get; set; }
-        public string City { get; set; }
-        public string County { get; set; }
-        public string Postcode { get; set; }
+        public string SelectedAddressId { get; set; }
     }
 }

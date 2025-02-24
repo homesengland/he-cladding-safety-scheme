@@ -1,0 +1,56 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Location.PostCodeManualViewModel
+@{
+    ViewData["Title"] = "What is the registered company address of the Responsible Entity?";
+    ViewData["BackLink"] = Url.Action("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="NameNumber"/>
+        <govuk-error-summary-item asp-for="AddressLine1"/>
+        <govuk-error-summary-item asp-for="AddressLine2"/>
+        <govuk-error-summary-item asp-for="City"/>
+        <govuk-error-summary-item asp-for="County"/>        
+        <govuk-error-summary-item asp-for="Postcode"/>
+        <govuk-error-summary-item asp-for="CountryId" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityCompanyAddress" method="post">
+    
+    <partial name="_AddressPartial" view-data="ViewData" />
+
+    @if (Model.UkRegistered == true)
+    {
+        <input type="hidden" name="CountryId" id="CountryId" value="1" />
+    }
+    else
+    {
+        <govuk-select asp-for="CountryId" name="CountryId" class="govuk-!-width-full" aria-label="Select Country">
+
+            <govuk-select-label><b>Country</b></govuk-select-label>
+            <govuk-select-item value="0">&nbsp;</govuk-select-item>
+            @foreach (var currentCountry in Model.Countries)
+            {
+                <govuk-select-item value="@currentCountry.Id.ToString()">@currentCountry.Name</govuk-select-item>
+            }
+        </govuk-select>
+    }
+
+    
+    @for (var currentCountry = 0; currentCountry < Model.Countries.Count; currentCountry++)
+    {
+        var location = Model.Countries[currentCountry];
+        <input type="hidden" name="Countries[@currentCountry].Id" value="@location.Id.ToString()" />
+        <input type="hidden" name="Countries[@currentCountry].Name" value="@location.Name" />
+    }
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

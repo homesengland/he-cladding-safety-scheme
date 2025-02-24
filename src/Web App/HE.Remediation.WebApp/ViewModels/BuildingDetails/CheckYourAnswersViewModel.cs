@@ -2,6 +2,8 @@
 {
     public class CheckYourAnswersViewModel
     {
+        public string ReturnURL { get; set; }
+
         public string BuildingUniqueName { get; set; }
         public int ResidentialUnitsCount { get; set; }
         public bool NonResidentialUnits { get; set; }
@@ -13,7 +15,11 @@
         public string BuildingLocalAuthority { get; set; }
         public string BuildingCounty { get; set; }
         public string BuildingPostcode { get; set; }
+        public string LocalAuthorityCostCentreDescription { get; set; }
+        public bool BuildingHasSafetyRegulatorRegistrationCode { get; set; }
+        public string BuildingSafetyRegulatorRegistrationCode { get; set; }
         public bool PartOfDevelopment { get; set; }
+        public string DevelopmentName { get; set; }
         public int Storeys { get; set; }
         public DateTime? CorrectHeightConfirmedDate { get; set; }
         public bool OriginalDeveloperKnown { get; set; }
@@ -26,5 +32,6 @@
         public string DeveloperPostcode { get; set; }
         public string DeveloperStillInBusiness { get; set; }
         public bool DeveloperContacted { get; set; }
+        public bool ReadOnly { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text;
 using HE.Remediation.Core.Enums;
-using HE.Remediation.Core.Extensions;
 
 namespace HE.Remediation.WebApp.TagHelpers
 {
@@ -11,13 +10,23 @@ namespace HE.Remediation.WebApp.TagHelpers
         [HtmlAttributeName("stage")]
         public EApplicationStage ApplicationStage { get; set; }
 
+        [HtmlAttributeName("text-only")]
+        public bool? TextOnly { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "ApplicationStageTagHelper";
+            output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
 
             var sb = new StringBuilder();
-            sb.AppendFormat($"<span class=\"govuk-body\">{GetStageName(ApplicationStage)}</span>");
+            if (TextOnly == true)
+            {
+                sb.AppendFormat(GetStageName(ApplicationStage));
+            }
+            else
+            {
+                sb.AppendFormat($"<span class=\"govuk-body\">{GetStageName(ApplicationStage)}</span>");
+            }
 
             output.PreContent.SetHtmlContent(sb.ToString());
         }
@@ -28,16 +37,18 @@ namespace HE.Remediation.WebApp.TagHelpers
             {
                 case EApplicationStage.ApplyForGrant:
                     return "Apply for grant";
-                case EApplicationStage.SignGrantFundingAgreement:
-                    return "Sign grant funding agreement";
-                case EApplicationStage.AddWorksPlan:
-                    return "Add works plan";
-                case EApplicationStage.WorksStarted:
-                    return "Works started";
+                case EApplicationStage.GrantFundingAgreement:
+                    return "Grant funding agreement";
+                case EApplicationStage.WorksPackage:
+                    return "Works package";
+                case EApplicationStage.WorksDelivery:
+                    return "Works delivery";
                 case EApplicationStage.WorksCompleted:
-                    return "Works completed";
-                case EApplicationStage.Variation:
-                    return "Variation";
+                    return "Works completion";
+                case EApplicationStage.BuildingComplete:
+                    return "Building complete";
+                case EApplicationStage.Closed:
+                    return "Closed";
             }
             return "";
         }

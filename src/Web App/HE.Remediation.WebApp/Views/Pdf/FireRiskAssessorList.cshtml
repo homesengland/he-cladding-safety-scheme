@@ -1,0 +1,33 @@
+﻿@model IEnumerable<HE.Remediation.Core.Services.RazorRenderer.Models.FireRiskAssessorViewModel>
+@{
+    var domain = $"{Context.Request.Scheme}://{Context.Request.Host}";
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="@(domain)/govuk-frontend-3.9.1.min.css">
+</head>
+<body>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header govuk-!-font-size-24">Company names</th>
+                <th class="govuk-table__header govuk-!-font-size-24">Regions covered</th>
+                <th class="govuk-table__header govuk-!-font-size-24">Email address</th>
+                <th class="govuk-table__header govuk-!-font-size-24 govuk-text-align-right">Telephone number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var assessor in Model)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell govuk-!-font-size-24">@assessor.Name</td>
+                    <td class="govuk-table__cell govuk-!-font-size-24">@assessor.Regions</td>
+                    <td class="govuk-table__cell govuk-!-font-size-24">@assessor.EmailAddress</td>
+                    <td class="govuk-table__cell govuk-!-font-size-24 govuk-text-align-right">@assessor.Telephone</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

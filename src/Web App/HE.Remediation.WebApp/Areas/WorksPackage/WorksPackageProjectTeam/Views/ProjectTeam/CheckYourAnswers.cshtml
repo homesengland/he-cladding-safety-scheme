@@ -1,0 +1,52 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Helpers
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeam.ProjectTeamCheckYourAnswersViewModel
+
+@{
+    ViewData["Title"] = "Project Team - Check Your Answers";
+    ViewData["BackLink"] = Url.Action("RegulatoryCompliance", "ProjectTeam", new { Area = "WorksPackageProjectTeam" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check Your Answers</h1>
+
+<h2 class="govuk-heading-m">Team Members</h2>
+<govuk-summary-list>
+    @foreach (var teamMember in Model.TeamMembers)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                @(teamMember.Role == ETeamRole.Other ? teamMember.OtherRole : EnumHelpers.GetText(teamMember.Role, false))
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                <div>@teamMember.Name</div>
+                <div>@teamMember.CompanyName</div>
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("TeamMember", "ProjectTeamMember", new { Area = "WorksPackageProjectTeam", TeamRole = (int)teamMember.Role, TeamMemberId = teamMember.Id })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Who is responsible for your regulatory compliance
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            <div>@Model.RegulatoryCompliancePerson</div>
+            <div class="govuk-!-font-size-16 govuk-hint govuk-!-margin-0">@Model.RegulatoryCompliancePersonRole</div>
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("RegulatoryCompliance", "ProjectTeam", new { Area = "WorksPackageProjectTeam" })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<form asp-area="WorksPackageProjectTeam" asp-controller="ProjectTeam" asp-action="SetCheckYourAnswers" method="post">
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Submit</govuk-button>
+    </div>
+</form>

@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.SetAppraisalSurveyDetails
@@ -7,11 +9,16 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IStatusTransitionService _statusTransitionService;
 
-        public SetAppraisalSurveyDetailsHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public SetAppraisalSurveyDetailsHandler(
+            IDbConnectionWrapper dbConnectionWrapper, 
+            IApplicationDataProvider applicationDataProvider, 
+            IStatusTransitionService statusTransitionService)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _statusTransitionService = statusTransitionService;
         }
 
         public async Task<Unit> Handle(SetAppraisalSurveyDetailsRequest request, CancellationToken cancellationToken)
@@ -20,13 +27,13 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
             return Unit.Value;
         }
 
-        private async Task<Unit> InsertAppraisalSurveyDetailsRequest(SetAppraisalSurveyDetailsRequest request)
+        private async Task InsertAppraisalSurveyDetailsRequest(SetAppraisalSurveyDetailsRequest request)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
             await _dbConnectionWrapper.ExecuteAsync("InsertOrUpdateAppraisalSurveyDetails", new { applicationId, request.FireRiskAssessorId, request.DateOfInstruction, request.SurveyDate });
 
-            return Unit.Value;
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewInstructed, applicationIds: applicationId);
         }
     }
 }

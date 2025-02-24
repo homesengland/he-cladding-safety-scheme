@@ -1,0 +1,153 @@
+﻿@using HE.Remediation.Core.Enums;
+@using System.Globalization;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.DescriptionsViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("Costs", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["FullWidth"] = true;
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["ReturnUrl"] = "Descriptions";
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">Tell us about your works</h1>
+
+<p class="govuk-body">Please review and make any necessary amends to the description of works.</p>
+
+<table class="govuk-table govuk-!-margin-bottom-0">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-bottom-6">Works type</th>
+            <th class="govuk-table__header govuk-!-width-one-half">Description of works</th>
+        </tr>
+    </thead>
+</table>
+
+<table class="govuk-table govuk-!-margin-bottom-0">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Removal of unsafe cladding</td>
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-text-align-right">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("UnsafeCladdingCosts", "VariationRequest", new { Area = "VariationRequest", ReturnUrl = ViewData["ReturnUrl"] })" class="govuk-link">
+                        Change
+                    </a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Removal of unsafe cladding system or mitigation works in lieu</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationRemovalOfCladdingDescription) ? Model.VariationRemovalOfCladdingDescription : "-")</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="govuk-table govuk-!-margin-bottom-0">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Installation of new cladding to replace unsafe cladding</td>
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-text-align-right">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("InstallationOfCladdingCosts", "VariationRequest", new { Area = "VariationRequest", ReturnUrl = ViewData["ReturnUrl"] })" class="govuk-link">
+                        Change
+                    </a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">New cladding – including specification, insulation and other associated components to be installed</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationNewCladdingDescription) ? Model.VariationNewCladdingDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationOtherEligibleWorkToExternalWallDescription) ? Model.VariationOtherEligibleWorkToExternalWallDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Any internal mitigation works recommended in the FRAEW /PAS9980 assessment in lieu of cladding removal</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationInternalMitigationWorksDescription) ? Model.VariationInternalMitigationWorksDescription : "-")</td>
+
+        </tr>
+    </tbody>
+</table>
+
+<table class="govuk-table govuk-!-margin-bottom-0">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Preliminaries, access costs,  main contractor’s overheads and profit</td>
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-text-align-right">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("PreliminaryCosts", "VariationRequest", new { Area = "VariationRequest", ReturnUrl = ViewData["ReturnUrl"] })" class="govuk-link">
+                        Change
+                    </a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Main contractor’s preliminaries</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationMainContractorPreliminariesDescription) ? Model.VariationMainContractorPreliminariesDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Access (e.g. scaffolding or mast climber)</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationAccessDescription) ? Model.VariationAccessDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Main contractor's overheads and profit</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationOverheadsAndProfitDescription) ? Model.VariationOverheadsAndProfitDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row bold-bottom-table-border">
+            <td class="govuk-table__cell govuk-!-width-one-half">Contractor’s contingencies</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationContractorContingenciesDescription) ? Model.VariationContractorContingenciesDescription : "-")</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="govuk-table govuk-!-margin-bottom-0">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Other costs</td>
+            <td class="govuk-table__cell govuk-!-width-one-half govuk-text-align-right">
+                @if (!Model.IsSubmitted)
+                {
+                    <a href="@Url.Action("OtherCosts", "VariationRequest", new { Area = "VariationRequest", ReturnUrl = ViewData["ReturnUrl"] })" class="govuk-link">
+                        Change
+                    </a>
+                }
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">FRAEW survey costs</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationFraewSurveyCostsDescription) ? Model.VariationFraewSurveyCostsDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationFeasibilityStageDescription) ? Model.VariationFeasibilityStageDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Professional fees - post tender stage</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationPostTenderStageDescription) ? Model.VariationPostTenderStageDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Property manager/leaseholder liaison costs</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationPropertyManagerDescription) ? Model.VariationPropertyManagerDescription : "-")</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-!-width-one-half">Irrecoverable VAT on works and associated fees</td>
+            <td class="govuk-table__cell govuk-!-width-one-half">@Html.Raw(!String.IsNullOrEmpty(Model.VariationIrrecoverableVatDescription) ? Model.VariationIrrecoverableVatDescription : "-")</td>
+        </tr>
+    </tbody>
+</table>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="Descriptions" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        }
+    </div>
+
+</form>

@@ -7,9 +7,9 @@
 
 @if (@Model.AddedFiles is null || Model.AddedFiles.Count < Model.NumberOfFilesAllowed)
 {
-    <govuk-file-upload asp-for="File" name="File" input-accept="@acceptedTypes">
-        <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
-    </govuk-file-upload>
+    <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedTypes">
+        <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+    </govuk-file-Upload>
     @if(Model.NumberOfFilesAllowed > 1)
     {
         <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Add file</govuk-button>
@@ -23,6 +23,14 @@
         @for(var i = 0; i < Model.AddedFiles.Count; i++)
         {
             var file = Model.AddedFiles[i];
+            var extraDeleteParameters = string.Empty;
+
+            if(Model.DeleteParameters != null && Model.DeleteParameters.Any())
+            {
+                extraDeleteParameters = string.Join("&", Model.DeleteParameters.Select(x => $"{x.Key}={x.Value}"));
+            }
+
+            var deleteEndpoint = $"{Model.DeleteEndpoint}?fileId={file.Id}&{extraDeleteParameters}";
             var count = i + 1;
             <govuk-summary-list-row>
                 <govuk-summary-list-row-key>
@@ -31,7 +39,7 @@
                 <govuk-summary-list-row-value>
                     @file.Name @($"{@file.FileSize}")
                 </govuk-summary-list-row-value>
-                <govuk-summary-list-row-action href="@Model.DeleteEndpoint?fileId=@file.Id">Delete</govuk-summary-list-row-action>
+                <govuk-summary-list-row-action href="@deleteEndpoint">Delete</govuk-summary-list-row-action>
             </govuk-summary-list-row>
         }
 

@@ -1,0 +1,53 @@
+﻿@* 
+   Usage
+     @await Html.PartialAsync("Costs/_FundingDetailsInfoCardPartial", Model.Costs)
+   If you need to change the h2 title, pass a view dictionary:
+     @await Html.PartialAsync("Costs/_FundingDetailsInfoCardPartial", Model, new ViewDataDictionary(ViewData) { { "CardTitle", "New title" }})
+*@
+
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Shared.CostsViewModel
+
+<h2 class="govuk-heading-m">@(ViewData["CardTitle"] ?? "Funding Details")</h2>
+
+@if (Model.IsPaymentRequest)
+{
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Total grant funding</h3>
+    <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw($"&pound;{(Model.TotalGrantFunding ?? 0):N0}")</p>
+}
+else
+{
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Start date</h3>
+    <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-3">@(Model.ProjectStartDate is not null ? Model.ProjectStartDate.Value.ToString("MM/yyyy") : "-")</p>
+
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">End date</h3>
+    <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@(Model.ProjectEndDate is not null ? Model.ProjectEndDate.Value.ToString("MM/yyyy") : "-")</p>
+
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Approved grant funding</h3>
+    <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw($"&pound;{(Model.ApprovedGrantFunding ?? 0):N0}")</p>
+}
+
+
+<h3 class="govuk-heading-s govuk-!-margin-bottom-1">Grant paid to date</h3>
+<p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw(Model.GrantPaidToDate is not null ? $"&pound;{Model.GrantPaidToDate.Value:N0}" : "-")</p>
+
+@if (Model.IsPaymentRequest)
+{
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unprofiled funding</h3>
+}
+else
+{
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unprofiled grant funding</h3>
+}
+
+<p class="unprofiled-funding @(Model is { UnprofiledGrantFunding: < 0 } ? "out-of-range-number-text" : "govuk-body") govuk-!-margin-top-0">
+    @if (Model is { UnprofiledGrantFunding: < 0 })
+    {
+        @Html.Raw($"-&pound;{Math.Abs(Model.UnprofiledGrantFunding.Value).ToString("N0")}")
+    }
+    else
+    {
+        @Html.Raw($"&pound;{(Model.UnprofiledGrantFunding ?? 0).ToString("N0")}")
+    }
+</p>
+

@@ -1,0 +1,197 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeam.ProjectTeamViewModel
+@{
+    ViewData["Title"] = "Project team - Tell us about your project team";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("StartInformation", "ProjectTeam", new { Area = "WorksPackageProjectTeam" });
+    ViewData["FullWidth"] = true;
+    ViewData["Readonly"] = Model.IsSubmitted;
+
+    var isRolesError = ViewData.ModelState.Any(x => x.Key == nameof(Model.MissingRoles));
+    var isChasCertificationError = Model.HasChasCertificationValue == false &&
+                               ViewData.ModelState.ContainsKey(nameof(Model.HasChasCertificationValue));
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        @if (isRolesError)
+        {
+            <govuk-error-summary-item asp-for="MissingRoles">
+                Add missing team members
+                <ul>
+                    @foreach (var role in Model.MissingRoles)
+                    {
+                        <li>@role.ToString().SplitCamelCase().ToSentenceCase()</li>
+                    }
+                </ul>
+            </govuk-error-summary-item>
+        }
+
+        <govuk-error-summary-item asp-for="HasChasCertificationValue"/>
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Tell us about your project team</h1>
+
+<p class="govuk-body">
+    Please tell us about any firms that have been appointed to project manage, design, cost and undertake your works package.
+</p>
+<p class="govuk-body">
+    Please tell us as soon as you appoint them. You can add or review entries each month until your project team is complete.
+</p>
+<p class="govuk-body">
+    If you've already told us about your team's members in a previous section, you'll be able to change or update the information before submitting your works package.
+</p>
+
+@if (Model.IsCopy)
+{
+    <div class="govuk-inset-text">
+        You've saved information about team members during your progress report but have not submitted it. We've pulled through that information for you to use here. Changing information about team members will also be updated in your progress report.
+    </div>
+}
+@using (Html.BeginForm())
+{
+    <div class="@(isRolesError ? "govuk-form-group--error" : string.Empty)">
+        <h2 class="govuk-heading-m">Team members</h2>
+        @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+        {
+            @if (isRolesError)
+            {
+                <div class="govuk-form-group govuk-form-group--error">
+                    <p id="MissingRoles" class="govuk-error-message">
+                        Add missing team members
+                    </p>
+                </div>
+            }
+
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Role</th>
+                    <th scope="col" class="govuk-table__header">Email</th>
+                    <th scope="col" class="govuk-table__header">Company name</th>
+                    @if (!Model.IsSubmitted)
+                    {
+                        <th scope="col" colspan="2" class="govuk-table__header">Change or Remove</th>
+                    }
+                    else
+                    {
+                        <th scope="col" colspan="2" class="govuk-table__header">View</th>
+                    }
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                @foreach (var teamMember in Model.TeamMembers)
+                {
+                    <tr class="govuk-table__row">
+                        @if (teamMember.Role == ETeamRole.Other)
+                        {
+                            <td class="govuk-table__cell no-line-wrap">
+                                <strong>@teamMember.OtherRole</strong>
+                            </td>
+                        }
+                        else
+                        {
+                            if (teamMember.Role == ETeamRole.LeadContractor && isChasCertificationError)
+                            {
+                                <td class="govuk-table__cell">
+                                    <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
+                                        <strong id="@nameof(Model.HasChasCertificationValue)" class="govuk-error-message govuk-!-margin-bottom-0">@teamMember.Role.ToString().SplitCamelCase().ToSentenceCase()</strong>
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="govuk-table__cell">
+                                    <strong>@teamMember.Role.ToString().SplitCamelCase().ToSentenceCase()</strong>
+                                </td>
+                            }
+                        }
+                        <td class="govuk-table__cell no-line-wrap">
+                            @if (teamMember.Role == ETeamRole.LeadContractor && isChasCertificationError)
+                            {
+                                <span class="govuk-error-message govuk-!-margin-bottom-0">@teamMember.EmailAddress</span>
+                            }
+                            else
+                            {
+                                @teamMember.EmailAddress
+                            }
+                        </td>
+                        <td class="govuk-table__cell no-line-wrap">
+                            @if (teamMember.Role == ETeamRole.LeadContractor && isChasCertificationError)
+                            {
+                                <span class="govuk-error-message govuk-!-margin-bottom-0">@teamMember.CompanyName</span>
+                            }
+                            else
+                            {
+                                @teamMember.CompanyName
+                            }
+                        </td>
+                        @if (!Model.IsSubmitted)
+                        {
+                            <td class="govuk-table__cell">
+                                <a class="govuk-link" href="@Url.Action("TeamMember", "ProjectTeamMember", new { Area = "WorksPackageProjectTeam", TeamRole = (int)teamMember.Role, TeamMemberId = teamMember.Id })">Change</a>
+                            </td>
+                        }
+                        @if (!Model.IsSubmitted)
+                        {
+                            <td class="govuk-table__cell">
+                                <a class="govuk-link" href="@Url.Action("RemoveMember", "ProjectTeamMember", new { Area = "WorksPackageProjectTeam", TeamMemberId = teamMember.Id })">Remove</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="govuk-table__cell" colspan="2">
+                                <a class="govuk-link" href="@Url.Action("CheckYourAnswers", "ProjectTeamMember", new { Area = "WorksPackageProjectTeam", TeamRole = (int)teamMember.Role, TeamMemberId = teamMember.Id })">View</a>
+                            </td>
+                        }
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="no-results bottom-highlight govuk-body">
+                There are no team members to show
+            </div>
+        }
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button href="@Url.Action("Add", "ProjectTeamMember")" class="govuk-button--secondary">Add team member</govuk-button>
+        }
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="HasChasCertificationValue" type="hidden" value="@Model.HasChasCertificationValue" />
+
+    @foreach (var role in Model.MissingRoles)
+    {
+        <input value="@role" name="MissingRoles" type="hidden" />
+    }
+
+    @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+    {
+        @foreach (var x in Model.TeamMembers.Select((value, index) => new { value, index }))
+        {
+            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" value="@Model.TeamMembers[x.index].Id" />
+            <input asp-for="@Model.TeamMembers[x.index].Role" type="hidden" value="@Model.TeamMembers[x.index].Role" />
+            <input asp-for="@Model.TeamMembers[x.index].OtherRole" type="hidden" value="@Model.TeamMembers[x.index].OtherRole" />
+            <input asp-for="@Model.TeamMembers[x.index].EmailAddress" type="hidden" value="@Model.TeamMembers[x.index].EmailAddress" />
+            <input asp-for="@Model.TeamMembers[x.index].CompanyName" type="hidden" value="@Model.TeamMembers[x.index].CompanyName" />
+        }
+    }
+
+    @if(!@Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        </div>
+    }
+}

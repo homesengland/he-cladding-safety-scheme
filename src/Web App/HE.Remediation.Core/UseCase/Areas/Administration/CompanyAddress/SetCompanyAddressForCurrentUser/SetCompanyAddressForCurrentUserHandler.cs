@@ -2,6 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
+using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CompanyAddress.SetCompanyAddressForCurrentUser;
@@ -29,25 +30,41 @@ public class SetCompanyAddressForCurrentUserHandler : IRequestHandler<SetCompany
                 "Cannot set current user company address because the current user could be determined.");
         }
 
-        await _db.ExecuteAsync("UpdateCompanyAddressByUserId", new
-        {
-            userId,
-            request.NameNumber,
-            request.AddressLine1,
-            request.AddressLine2,
-            request.City,
-            request.County,
-            request.Postcode
-        });
+        ParsedAddress parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
+        if (parsedAddress != null)
+        {            
+            await _db.ExecuteAsync("UpdateCompanyAddressByUserId", new
+            {
+                userId,
+                parsedAddress.NameNumber,
+                parsedAddress.AddressLine1,
+                parsedAddress.AddressLine2,
+                parsedAddress.City,
+                parsedAddress.LocalAuthority,
+                parsedAddress.County,
+                parsedAddress.Postcode,
+                parsedAddress.SubBuildingName,
+                parsedAddress.BuildingName,
+                parsedAddress.BuildingNumber,
+                parsedAddress.Street,
+                parsedAddress.Town,
+                parsedAddress.AdminArea,
+                parsedAddress.UPRN,
+                parsedAddress.AddressLines,
+                parsedAddress.XCoordinate,
+                parsedAddress.YCoordinate,
+                parsedAddress.Toid,
+                parsedAddress.BuildingType
+            });                
 
-        await _userService.SetUserProfileStageCompletionStatus(
+            await _userService.SetUserProfileStageCompletionStatus(
             EUserProfileStage.CompanyAddress,
             userId.Value,
             true);
 
-        _adp.SetUserProfileStageCompletionStatus(
-            EUserProfileStage.CompanyAddress);
-
+            _adp.SetUserProfileStageCompletionStatus(EUserProfileStage.CompanyAddress);
+        }
+        
         return Unit.Value;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
 
 namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 {

@@ -1,4 +1,4 @@
-﻿using HE.Remediation.Core.Data.StoredProcedureResults;
+﻿using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetails.GetSurveyInstructionDetails
 {

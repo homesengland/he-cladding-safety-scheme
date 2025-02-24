@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewData["Title"] = "Accessibility Statement";    
+    var backLink = ViewData["Referer"] != null ? ViewData["Referer"] : Url.Action("Index", "LandingPage");
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper govuk-!-padding-top-0">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    
+                    <govuk-back-link href="@backLink">Back</govuk-back-link>
+                    <h1 class="govuk-heading-xl govuk-!-padding-top-5">@ViewData["Title"]</h1>
+
+                    <p class="govuk-body">
+                        This service is part of the wider GOV.UK website. There's a separate 
+                        <a class="govuk-link" href="https://www.gov.uk/help/accessibility-statement" rel="noreferrer noopener" target="_blank">
+                            Accessibility statement for the main GOV.UK website.</a>                        
+                    </p>
+                    <p class="govuk-body">
+                        This page only contains information about the 
+                        <a class="govuk-link" href="https://claddingsafetyscheme.homesengland.org.uk/" rel="noreferrer noopener" target="_blank">
+                            Building Remediation Hub.
+                        </a>
+                    </p>
+
+                    <h2 class="govuk-heading-m">Using this service</h2>
+
+                    <p class="govuk-body">
+                    This website is run by the Homes England. It is designed to be used by as many people as possible. 
+                    The text should be clear and simple to understand. You should be able to:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>zoom in up to 300% without problems</li>
+                        <li>navigate most of the website using just a keyboard</li>
+                        <li>navigate most of the website using speech recognition software</li>
+                        <li>use most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-m">How accessible this website is</h2>
+                    
+                    <p class="govuk-body">Parts of this website are not fully accessible. For example:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>a document in XLSX format is not accessible</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-m">Feedback and contact information </h2>
+                    
+                    <p class="govuk-body">If you have difficultly using this service, contact us: </p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>Email: <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a></li>
+                        <li>Phone: 0300 323 0180 (Monday to Friday, 8am to 6pm, excluding bank holidays)</li>                        
+                    </ul>
+
+                    <p class="govuk-body">In your message, include:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>the web address (URL) of the content</li>
+                        <li>your email address and name</li>
+                        <li>the format you need</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-m">Reporting accessibility problems with this website</h2>
+
+                    <p class="govuk-body">If you find any problems that are not listed on this page or you think we're not meeting 
+                        the accessibility requirements, contact: <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>
+                    </p>
+
+                    <h2 class="govuk-heading-m">Enforcement procedure</h2>
+                    
+                    <p class="govuk-body">The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public 
+                        Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the 'accessibility regulations').
+                    </p>
+
+                    <p class="govuk-body">If you're not happy with how we respond to your complaint, contact the:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>
+                            <a class="govuk-link" href="https://www.equalityadvisoryservice.com/" rel="noreferrer noopener" target="_blank">
+                                Equality Advisory and Support Service (EASS)</a>  if you live in England, Scotland, or Wales</li>
+                        <li>
+                            <a class="govuk-link" href="https://www.equalityni.org/contactus" rel="noreferrer noopener" target="_blank">
+                            Equality Commission for Northern Ireland (ECNI)</a> if you live in Northern Ireland</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-m">Technical information about this website's accessibility </h2>
+                    
+                    <p class="govuk-body">This site is designed to be as accessible in accordance with the Public Sector Bodies 
+                        (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018. </p>
+
+
+                    <h2 class="govuk-heading-m">Compliance status</h2>
+                    
+                    <p class="govuk-body">This website is compliant with the  
+                        <a class="govuk-link" href="https://www.w3.org/TR/WCAG21/" rel="noreferrer noopener" target="_blank">
+                            Web Content Accessibility Guidelines version 2.1 </a> AA standard.
+                    </p>
+
+                    <h2 class="govuk-heading-m">Non-accessible content</h2>
+                    
+                    <p class="govuk-body">The content listed below is non-accessible for the following reasons.</p>
+
+                    <h2 class="govuk-heading-m">Grant funding application</h2>
+                    
+                    <ol class="govuk-list govuk-list--number govuk-!-padding-left-6">
+                        <li>The downloadable Fire Risk Assessment of External Walls summary excel document has merged cells 
+                            and does not contain alternative text on the Homes England Logo. </li>
+                    </ol>
+
+                    <h2 class="govuk-heading-m">How we tested this website </h2>
+                    
+                    <p class="govuk-body">
+                        We use the Web Content Accessibility Guidelines V2.1 level A and level AA to test how accessible GOV.UK is.</p>
+                    <p class="govuk-body">We used the Website Accessibility Conformance Evaluation Methodology (WCAG-EM) approach to 
+                        decide on a sample of pages to test.</p>
+                    <p class="govuk-body">The service:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>follows the GOV.UK frontend framework</li>
+                        <li>passes key accessibility benchmarks 'out of the box'</li>
+                    </ul>
+
+                    <p class="govuk-body">This service has also been:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>checked for compliance with WCAG 2.1 AA using both automated and manual testing</li>
+                    </ul>
+
+                    <h2 class="govuk-heading-m">What we're doing to improve accessibility </h2>
+
+                    <p class="govuk-body">We are still testing the service to identify possible accessible improvements.</p>
+                    <p class="govuk-body">We are working to remove the requirement for the Excel summary document and provide an accessible alternative.</p>
+
+                    <h2 class="govuk-heading-m">Preparation of this accessibility statement</h2>
+      
+                    <govuk-inset-text>
+                        This statement was prepared in March 2023. It was last reviewed in April 2023.
+                    </govuk-inset-text>
+
+                    <p class="govuk-body">Last updated April 2023</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.GetCompanyAddress;
 using MediatR;
 using System.Transactions;
@@ -9,20 +10,23 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.S
     {
         private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IResponsibleEntityRepository _responsibleEntityRepository;
 
-        public SetCompanyAddressHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public SetCompanyAddressHandler(IDbConnectionWrapper dbConnectionWrapper, 
+                                        IApplicationDataProvider applicationDataProvider,
+                                        IResponsibleEntityRepository responsibleEntityRepository)
         {
             _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _responsibleEntityRepository = responsibleEntityRepository;
         }
 
         public async Task<Unit> Handle(SetCompanyAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var response = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetCompanyAddressResponse>("GetResponsibleEntityCompanyAddress", new { applicationId });
-
-            if (response is not null)
+            var address = await _responsibleEntityRepository.GetCompanyAddress(applicationId);
+            if (address is not null)
             {
                 await UpdateCompanyAddress(applicationId, request);
                 return Unit.Value;

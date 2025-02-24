@@ -1,30 +1,34 @@
 ﻿using FileSignatures;
-using System.Reflection;
+using HE.Remediation.Core.Settings;
 
 namespace HE.Remediation.Core.Services.FileService
 {
-    public class CustomFileFormatInspector: FileFormatInspector, ICustomFileFormatInspector
+    public class CustomFileFormatInspector : ICustomFileFormatInspector
     {
-        private readonly IEnumerable<FileFormat> _formats;
+        private readonly IFileFormatInspector _fileFormatInspector;
 
-        public CustomFileFormatInspector() : base()
+        public CustomFileFormatInspector(IFileFormatInspector fileFormatInspector)
         {
-            _formats = FileFormatLocator.GetFormats(Assembly.GetExecutingAssembly(), true);
+            _fileFormatInspector = fileFormatInspector;
         }
 
-        public FileFormat GetFileFormat(Stream stream, string extension)
+        public FileFormat GetFileFormat(Stream stream, string extension, UploadSectionSettings settings)
         {
-            var formats = _formats.Where(x => x.Extension.ToLower() == extension.ToLower());
+            var format = _fileFormatInspector.DetermineFileFormat(stream);
 
-            foreach (var format in formats)
+            var ext = $"{format?.Extension.ToLower()}";
+
+            if (IsValidExtension(ext, settings))
             {
-                var isMatch = format.IsMatch(stream);
-
-                if (isMatch)
-                    return format;
-            }
+                return format;
+            };
 
             return null;
+        }
+
+        public bool IsValidExtension(string ext, UploadSectionSettings settings)
+        {
+            return settings.AcceptedFileTypes.Contains(ext.ToLower()) ? true : false;
         }
     }
 }

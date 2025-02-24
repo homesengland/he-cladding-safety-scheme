@@ -1,0 +1,38 @@
+﻿@model HE.Remediation.WebApp.ViewModels.PaymentRequest.ThirdPartyContributionsChangedViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("CostsChanged", "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = false;
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ThirdPartyContributionsChanged" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Have you received any third party contributions?</h1>
+<p class="govuk-body">
+    You must tell us if you have received any third party contributions for your project.
+</p>
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="ThirdPartyContributionsChanged">
+    <govuk-radios asp-for="ThirdPartyContributionsChanged">
+
+        <govuk-radios-item disabled="@readOnly" value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@readOnly" value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

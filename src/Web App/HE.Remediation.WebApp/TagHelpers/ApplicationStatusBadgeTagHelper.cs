@@ -13,11 +13,12 @@ namespace HE.Remediation.WebApp.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "ApplicationStatusBadgeTagHelper";
+            output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
 
             var sb = new StringBuilder();
-            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", Enum.GetName(typeof(EApplicationStatus), ApplicationStatus)!.SplitCamelCase(), GetCssClass(ApplicationStatus));
+            var description = ApplicationStatus.GetEnumDisplayName() ?? Enum.GetName(typeof(EApplicationStatus), ApplicationStatus)!.SplitCamelCase();
+            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", description, GetCssClass(ApplicationStatus));
 
             output.PreContent.SetHtmlContent(sb.ToString());
         }
@@ -26,11 +27,11 @@ namespace HE.Remediation.WebApp.TagHelpers
         {
             switch (status)
             {
-                case EApplicationStatus.InProgress:
+                case EApplicationStatus.ApplicationInProgress:
                     return "govuk-tag--blue";
-                case EApplicationStatus.InReview:
+                case EApplicationStatus.ApplicationInReview:
                     return "govuk-tag--blue";
-                case EApplicationStatus.Approved:
+                case EApplicationStatus.ApplicationApproved:
                     return "govuk-tag--green";
                 case EApplicationStatus.Completed:
                     return ""; //Blank return the correct darker blue colour status per the GDS documentation

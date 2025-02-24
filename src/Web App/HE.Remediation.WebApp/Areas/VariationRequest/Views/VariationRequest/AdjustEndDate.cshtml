@@ -1,0 +1,62 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.AdjustEndDateViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+      ? Url.Action(Model.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+      : Url.Action("VariationReason", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="NewEndMonth" />
+        <govuk-error-summary-item asp-for="NewEndYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">What is your new end date?</h1>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="AdjustEndDate" method="post">
+
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="adjust-end-date-hint">
+            <div id="adjust-end-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <div class="govuk-date-input" id="adjust-end-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="NewEndMonth">
+                            Month
+                        </label>
+                        <input disabled="@Model.IsSubmitted" class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="NewEndMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="NewEndYear">
+                            Year
+                        </label>
+                        <input disabled="@Model.IsSubmitted" class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="NewEndYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

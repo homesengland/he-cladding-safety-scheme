@@ -1,0 +1,57 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ExistingTeamMemberViewModel
+@{
+    ViewData["Title"] = "Project team - Are these details the same as a previous appointment?";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("AddRole", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SameAsPrevious"/>
+        <govuk-error-summary-item asp-for="SelectedPreviousTeamMember"/>
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Are these details the same as a previous appointment?</h1>
+
+@using (Html.BeginForm())
+{
+    <govuk-radios asp-for="SameAsPrevious">
+        <govuk-radios-item value="@(true)">
+            Yes
+            <govuk-radios-item-conditional>
+                 <govuk-select asp-for="SelectedPreviousTeamMember" name="SelectedPreviousTeamMember" class="govuk-!-width-full" aria-label="Select team member">
+                     <govuk-select-label><b>Choose name</b></govuk-select-label>
+                        @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+                        {
+                            foreach (var teamMember in Model.TeamMembers)
+                            {
+                                <govuk-select-item value="@teamMember.Id.ToString()">@teamMember.Name</govuk-select-item>
+                            }
+                        }
+                    </govuk-select>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    @if (Model.TeamMembers != null && Model.TeamMembers.Any())
+    {
+        foreach (var x in Model.TeamMembers.Select((value, index) => new { value, index }))
+        {
+            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" value="@Model.TeamMembers[x.index].Id" />
+            <input asp-for="@Model.TeamMembers[x.index].Name" type="hidden" value="@Model.TeamMembers[x.index].Name" />
+        }
+    }
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+}

@@ -1,0 +1,36 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Administration.ContactInfoConsentViewModel
+@{
+    ViewData["Title"] = "Complete your profile";
+    ViewData["FullWidth"] = false;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="UserConsent" />
+            </govuk-error-summary>
+
+            <span class="govuk-caption-xl">Complete your profile</span>
+            <h1 class="govuk-heading-xl">How we may use your contact information</h1>
+
+            <p class="govuk-body">We will primarily use your information to assess your application for 
+                the Cladding Safety Scheme and for on-going administration following funding agreement.
+            </p>
+            <p class="govuk-body">
+                <a href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice#cladding-safety-scheme-previously-known-as-the-medium-rise-scheme" rel="noreferrer noopener" target="_blank">
+                    Homes England: privacy notice - GOV.UK (www.gov.uk)</a>
+            </p>
+            
+            <form asp-area="Administration" asp-controller="Account" asp-action="ContactInfoConsent" method="post">
+                <govuk-radios asp-for="UserConsent">
+                    <govuk-radios-item value="@(ENoYes.Yes)">Yes, I consent</govuk-radios-item>
+                    <govuk-radios-item value="@(ENoYes.No)">No, I do not consent</govuk-radios-item>
+                </govuk-radios>
+
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

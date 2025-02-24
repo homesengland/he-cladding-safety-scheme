@@ -15,8 +15,8 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
             RuleFor(x => x.CompanyRegistrationNumber)
                 .NotEmpty()
                 .WithMessage("Please enter a Company registration number")
-                .MaximumLength(150)
-                .WithMessage("Company registration cannot exceed 150 characters");
+                .Matches("^[a-zA-Z0-9]{8}$")
+                .WithMessage("Please enter a valid Company registration number");
         }
     }
 }

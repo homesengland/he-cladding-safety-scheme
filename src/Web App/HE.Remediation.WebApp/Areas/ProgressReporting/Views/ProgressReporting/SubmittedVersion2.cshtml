@@ -1,0 +1,40 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ProgressReporting.SubmittedViewModel
+@{
+    ViewData["Title"] = "";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLinkHidden"] = true;
+    ViewData["ExitLinkHidden"] = true;
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Your progress report 
+                            has been successfully submitted
+                        </govuk-panel-title>
+                        <govuk-panel-body>
+                            Application ID<br /><strong>@Model.ApplicationReferenceNumber</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">
+                        Thank you for submitting your progress report.  
+                        We'll use it to track the progress of your works and we'll get in touch if we need more information about anything you've told us.
+                    </p>
+                    <p class="govuk-body">
+                        If you've asked for support, we'll review your request within 10 days and be in touch.
+                    </p>
+
+                    <govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to home</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+

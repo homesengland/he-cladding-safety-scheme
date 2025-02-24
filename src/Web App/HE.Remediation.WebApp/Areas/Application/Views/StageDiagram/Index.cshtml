@@ -1,83 +1,533 @@
-﻿@using HE.Remediation.WebApp.TagHelpers
+@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.TagHelpers
 @model HE.Remediation.WebApp.ViewModels.Application.StageDiagramViewModel
 
 @{
-    ViewData["Title"] = Model.UniqueBuildingName;    
+    ViewData["Title"] = Model.UniqueBuildingName;
 }
 
 <div class="text-center">
     <div class="govuk-width-container">
-        <a href="@Url.Action("Index", "Dashboard", new {Area = "Application"})" class="govuk-back-link">Back</a>
+        <a href="@Url.Action("ExistingApplications", "Dashboard", new { area = "Application"})" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                    
+
                     <span class="govuk-caption-xl">@Model.ApplicationNumber</span>
                     <h1 class="govuk-heading-xl">@Model.UniqueBuildingName</h1>
-                    
+
                     <div class="govuk-flex-row">
-                        <h1 class="govuk-heading-m">Application status:</h1>
+                        <h2 class="govuk-heading-m">Application status:</h2>
                         <application-status-badge class="govuk-!-margin-left-2" status="@Model.Status"></application-status-badge>
                     </div>
-                    
+
                     <div class="govuk-flex-row">
-                        <h1 class="govuk-heading-m">Application stage:</h1>
+                        <h2 class="govuk-heading-m">Application stage:</h2>
                         <application-stage-text class="govuk-!-margin-left-2" stage="@Model.Stage"></application-stage-text>
                     </div>
 
-                    <div class="ggovuk-!-margin-top-5">
-                        <h1 class="govuk-heading-m govuk-!-margin-bottom-2">Stages:</h1>
-                        <application-stages-list stage="@Model.Stage"></application-stages-list>
-                    </div>
-
-                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
-                        <p class="govuk-body">
-                            Once submitted, you application will be reviewed to determine eligibility for the Cladding Safety Scheme funding. Once the review is complete you will be notified of the outcome via email and here along with any further actions that are required.
-                        </p>
-                    </div>
-
-                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
-                        <h1 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-display-inline">Your application was submitted on:</h1>
-                        <span class="govuk-body">@Model.DateCreated.ToShortDateString()</span>
-                    </div>
-
-                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
-                        <p class="govuk-body">
-                            You can check the details of the submitted application below.
-                        </p>
-                    </div>
-
+                    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Stages:</h2>
+                    <application-stages-list stage="@Model.Stage"></application-stages-list>
+                    
                     <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-                        <a href="@Url.Action("Index", "TaskList", new {Area = "Application"})" class="govuk-link">Application details</a>
+                        <a href="@Url.Action("Index", "Document", new { Area = "Document" })" class="govuk-link">View uploaded documents</a>
                     </div>
-
                     <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
                         <p class="govuk-body">
-                            View previously submitted application details
+                            View all previously uploaded documents related to this application.
                         </p>
                         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
                     </div>
 
-                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
-                        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">What happens next</h1>
+                    @if (Model.Stage == EApplicationStage.ApplyForGrant)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                            <p class="govuk-body">
+                                Once submitted, your application will be reviewed to determine eligibility for grant funding. Once the review is complete you will be notified of the outcome via email and here along with any further actions that are required.
+                            </p>
+                        </div>
+
+                        @if (Model.SubmittedDate is not null)
+                        {
+                            <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-display-inline">Your application was submitted on:</h3>
+                                <span class="govuk-body">@Model.SubmittedDate.Value.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        }
+
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                            <p class="govuk-body">
+                                You can check the details of the submitted application below.
+                            </p>
+                        </div>
+                    }
+                    else if (Model.Stage == EApplicationStage.GrantFundingAgreement)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                            <p class="govuk-body">
+                                Your building application has been approved. We will now begin work to issue your Grant Funding Agreement.
+                            </p>
+
+                            <p class="govuk-body">
+                                Please refer to your eligibility letter, which will give you further information, including whether you 
+                                are eligible for Pre-Tender Support Funding and if so, the amount you will be paid.
+                            </p>
+
+                            <p class="govuk-body">
+                                If you do not want to receive Pre-Tender Support Funding or if you need to change the signatories for the
+                                Grant Funding Agreement, please email <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a> 
+                                as soon as possible.
+                            </p>
+
+                            <p class="govuk-body">
+                                Once the Grant Funding Agreement has been completed, you will be able to begin monthly reporting and to 
+                                compile your works package.
+                            </p>
+                            
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+                    else if (Model.Stage == EApplicationStage.WorksPackage)
+                    {
                         <p class="govuk-body">
-                            An eligibility decision will be made on your application.
+                            By now, you should be making progress appointing your professional team and on the design and tendering stages of your works package.
+                            You can tell us about them when you're ready. If you need support, you can get in touch with us at:
+                        </p>
+
+                        <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>
+
+                        <br />
+                        <br />
+
+                        <p class="govuk-body">
+                            We'll check on your progress every month throughout the application process. Please get your report to us as soon as
+                            possible when it's due as it lets us track your progress towards submitting your works package.
+                        </p>
+
+                        @if (Model.ProgressReports.Any())
+                        {
+                            var currentReport = Model.ProgressReports.ElementAt(0);
+
+                            <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                                <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-three-quarters">
+                                        <a href="@Url.Action("Start", "ProgressReporting", new { Area = "ProgressReporting", Id = @currentReport.Id } )" class="govuk-link">@(currentReport.Version == 1 ? "Primary progress report" : $"{currentReport.DateCreated.ToString("MMMM")} progress report")</a>
+                                    </div>
+                                    <div class="govuk-grid-column-one-quarter">
+                                        @if ((@currentReport.DateDue is not null && @currentReport.DateDue.Value.Date < DateTime.Today) ||
+                                       @currentReport.DateSubmitted is not null)
+                                        {
+                                            <div class="govuk-flex-row">
+                                                <progress-report-status-badge due="@currentReport.DateDue" submitted="@currentReport.DateSubmitted"></progress-report-status-badge>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                                <p class="govuk-body">
+                                    Fill out the report to update on your progress with works preparation.
+                                    <br />
+                                    <br />
+
+                                    @if (@currentReport.DateDue is not null)
+                                    {
+                                        <b>Report due:</b>
+                                        <span>@currentReport.DateDue.Value.ToString("dd MMM yyyy")</span>
+                                    }
+                                </p>
+                                <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                            </div>
+
+                            if (Model.ProgressReports.Count > 1)
+                            {
+                                var previousReport = Model.ProgressReports.ElementAt(1);
+
+                                <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-three-quarters">
+                                            <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", ProgressReportId = @previousReport.Id } )" class="govuk-link">@(previousReport.Version == 1 ? "Primary progress report" : $"{previousReport.DateCreated.ToString("MMMM")} progress report")</a>
+                                        </div>
+                                        <div class="govuk-grid-column-one-quarter">
+                                            @if ((@previousReport.DateDue is not null && @previousReport.DateDue.Value.Date < DateTime.Today) ||
+                                           @previousReport.DateSubmitted is not null)
+                                            {
+                                                <div class="govuk-flex-row">
+                                                    <progress-report-status-badge is-previous="@true" due="@previousReport.DateDue" submitted="@previousReport.DateSubmitted"></progress-report-status-badge>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                                    <p class="govuk-body">
+                                        Fill out the report to update on your progress with works preparation.
+                                        <br />
+                                        <br />
+
+                                        @if (@previousReport.DateDue is not null)
+                                        {
+                                            <b>Report due:</b>
+                                            <span>@previousReport.DateDue.Value.ToString("dd MMM yyyy")</span>
+                                        }
+                                    </p>
+                                    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                                </div>
+                            }
+                        }
+                    }
+
+                    @if (Model.Stage == EApplicationStage.WorksDelivery)
+                    {
+                        if (Model.ShowClosingReport)
+                        {
+                            <p class="govuk-body">
+                                In this section you will be asked for a number of documents to support your final retained payment of up to 
+                                a maximum of 5%. A full list of the documents required appears on the 'About this section' page to follow.
+                            </p>
+                            <p class="govuk-body">
+                                Before starting this final payment request, please contact us if you do require 
+                                funding greater than the retained 5%.
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="govuk-body">
+                                You must submit monthly updates to inform us of progress. You can submit payment requests in line with your cost profile
+                                and you must tell us if there are any changes to your project.
+                            </p>
+                        }
+                        
+                        <p class="govuk-body">
+                            If you need support you can get in touch with us at:
+                        </p>
+
+                        <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>
+                    }
+                    @if (Model.Stage == EApplicationStage.WorksCompleted)
+                    {
+                        <p class="govuk-body">
+                            In this section you will be asked for a number of documents to support your final retained payment of up to 
+                            a maximum of 5%. A full list of the documents required appears on the 'About this section' page to follow.
                         </p>
                         <p class="govuk-body">
-                            Provided your application has been approved, you will be required to carry out the following actions:
+                            Before starting this final payment request, please contact us if you do require 
+                            funding greater than the retained 5%.
                         </p>
+                        <p class="govuk-body">
+                            If you need support you can get in touch with us at:
+                        </p>
+
+                        <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>
+                    }
+                
+                    @if (Model.Stage == EApplicationStage.WorksDelivery && Model.PaymentRequests.Any())
+                    {
+                        <h2 class="govuk-heading-m govuk-!-margin-top-5">Notifications</h2>
+                    }
+
+                    @if (Model.Stage == EApplicationStage.WorksDelivery)
+                    {
+                        @if (!Model.ShowClosingReport && Model.PaymentRequests.Any(pr => !pr.IsFinalPayment))
+                        {
+                            var currentPaymentRequest = Model.PaymentRequests.ElementAt(0);
+
+                            <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                                <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-three-quarters">
+                                        <div class="govuk-flex-row">
+                                            <a href="@Url.Action("Start", "PaymentRequest", new { Area = "PaymentRequest", Id = currentPaymentRequest.Id } )" class="govuk-link">@currentPaymentRequest.CreatedDate!.Value.ToString("MMMM") payment request</a>                                            
+                                            @if ((currentPaymentRequest.IsExpired) && (!currentPaymentRequest.IsSubmitted))
+                                            {
+                                                <payment-request-task-status-badge expired="true" status="@currentPaymentRequest.TaskStatusId"></payment-request-task-status-badge>
+                                            }
+                                            else
+                                            {
+                                                <payment-request-task-status-badge status="@currentPaymentRequest.TaskStatusId"></payment-request-task-status-badge>
+                                            }                                                                                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                                <p class="govuk-body">
+                                    Fill out the payment request for works completed in the previous month.
+                                    <br />
+                                    <br />
+
+                                    @if (@currentPaymentRequest.DateDue is not null)
+                                    {
+                                        <b>Report due: <span>@currentPaymentRequest.DateDue.Value.ToString("dd MMM yyyy")</span></b>
+                                    }
+                                </p>
+                                <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                            </div>
+                        }
+                    }
+
+                    @if ((!Model.HasInProgressVariationRequest) &&
+                        (Model.ShowClosingReport) &&
+                    (Model.Stage == EApplicationStage.WorksDelivery || Model.Stage == EApplicationStage.WorksCompleted))
+                    {      
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <govuk-warning-text icon-fallback-text="Warning">
+                                Please note that once you initiate the final report you will not be able to submit any further variations for your project to request additional funds.
+                            </govuk-warning-text>
+                        </div>
+                        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-three-quarters">
+                                    <a href="@Url.Action("Start", "ClosingReport", new {Area = "ClosingReport"})" class="govuk-link">
+                                        Final payment request
+                                    </a>
+                                </div>
+                                <div class="govuk-flex-row">
+                                    <payment-request-task-status-badge status="@(Model.ClosingReportStatus.HasValue ? @Model.ClosingReportStatus.Value : EPaymentRequestTaskStatus.NotStarted)"></payment-request-task-status-badge>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-three-quarters govuk-body no-margin">
+                                    Provide required information to support the completion of your project and to receive your final payment.
+                                </div>
+                            </div>
+                            
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>                        
+                        
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            @if (!Model.IsPracticalCompletionSubmitted)
+                            {
+                                <a href="@Url.Action("Start", "PracticalCompletionMilestone", new { Area = "PracticalCompletionMilestone" })" class="govuk-link">Practical completion confirmation</a>
+                            }
+                            else
+                            {
+                                <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Practical completion confirmation</span>
+                            }
+                            <milestone-date-status-badge milestone-date="Model.PracticalCompletionMilestoneDate" is-submitted="Model.IsPracticalCompletionSubmitted"></milestone-date-status-badge>
+                        </div>
+                        <div class="govuk-!-adding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                @if (Model.PracticalCompletionMilestoneDate.HasValue)
+                                {
+                                    <text>Practical completion: </text> @Model.PracticalCompletionMilestoneDate.Value.ToString("dd MMM yyyy")
+                                }
+                                else
+                                {
+                                    <text>Tell us your actual practical completion date</text>
+                                }
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    @if (Model.Stage == EApplicationStage.WorksDelivery &&
+                        Model.HasScheduleOfWorks &&
+                        !Model.IsScheduleOfWorksSubmitted)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-three-quarters">
+                                    <a href="@Url.Action("Start", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" } )" class="govuk-link">Create schedule of works</a>
+                                </div>
+                                <div class="govuk-grid-column-one-quarter">
+                                    <div class="govuk-flex-row">
+                                        <schedule-of-works-status-badge application-status="@Model.Status" is-submitted="@Model.IsScheduleOfWorksSubmitted" is-approved="@Model.IsScheduleOfWorksApproved" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                In this section you are able to create your schedule of works.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    @if (Model.Stage == EApplicationStage.WorksDelivery &&
+                    Model.HasSubmittedPaymentRequests && !Model.ClosingReportStarted)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            @if (Model.HasInProgressVariationRequest)
+                            {
+                                <a href="@Url.Action("Start", "VariationRequest", new { Area = "VariationRequest"} )" class="govuk-link">
+                                    Edit variation
+                                </a>
+                            }
+                            else if (Model.IsVariationRequestSubmitted &&
+                                     Model.VariationRequestApprovalStatus != EVariationRequestApprovalStatus.Approved &&
+                                     Model.VariationRequestApprovalStatus != EVariationRequestApprovalStatus.Rejected)
+                            {
+                                <a href="@Url.Action("CheckYourAnswers", "VariationRequest", new { Area = "VariationRequest"} )" class="govuk-link">
+                                    View variation
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("StartInformation", "VariationRequest", new { Area = "VariationRequest"} )" class="govuk-link">
+                                    Create variation
+                                </a>
+                            }
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                Request changes to your timelines, costs, scope and third party contributions.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+                
+                    @if (Model.Stage == EApplicationStage.WorksDelivery && Model.PaymentRequests.Any())
+                    {
+                        <h2 class="govuk-heading-m govuk-!-margin-top-5">Application Details</h2>
+                    }
+
+                    @if (Model.Stage >= EApplicationStage.WorksDelivery &&
+                    Model.HasScheduleOfWorks &&
+                    Model.IsScheduleOfWorksSubmitted &&
+                    !Model.IsScheduleOfWorksApproved)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <a href="@Url.Action("PaymentsSummary", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" } )" class="govuk-link">View schedule of works</a>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                View your schedule of works.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+                    else if (Model.Stage >= EApplicationStage.WorksDelivery &&
+                    Model.HasScheduleOfWorks &&
+                    Model.IsScheduleOfWorksApproved)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <a href="@Url.Action("Start", "ApprovedScheduleOfWorks", new { Area = "ApprovedScheduleOfWorks" } )" class="govuk-link">View schedule of works</a>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                View your schedule of works.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            @if (!Model.IsStartedOnSiteSubmitted)
+                            {
+                                <a href="@Url.Action("Start", "StartedOnSiteMilestone", new { Area = "StartedOnSiteMilestone" })" class="govuk-link">Start on site confirmation</a>
+                            }
+                            else
+                            {
+                                <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Start on site confirmation</span>
+                            }
+                            <milestone-date-status-badge milestone-date="Model.StartedOnSiteMilestoneDate" is-submitted="Model.IsStartedOnSiteSubmitted"></milestone-date-status-badge>
+                        </div>
+                        <div class="govuk-!-adding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                @if (Model.StartedOnSiteMilestoneDate.HasValue)
+                                {
+                                    <text>Start on site: </text> @Model.StartedOnSiteMilestoneDate.Value.ToString("dd MMM yyyy")
+                                }
+                                else
+                                {
+                                    <text>Tell us your actual start on site date</text>
+                                }
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    @if (Model.Stage >= EApplicationStage.WorksPackage && Model.IsWorkPackageSubmitted)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <a href="@Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" } )" class="govuk-link">View works package</a>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                View your works package.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    @if (Model.HasSubmittedProgressReports)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <a href="@Url.Action("ProgressReports", "ProgressReportingDetails", new { Area = "ProgressReportingDetails" } )" class="govuk-link">View progress reports</a>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                View progress reports from previous months.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    @if (Model.Stage == EApplicationStage.WorksPackage && Model.HasWorkPackage && !Model.IsWorkPackageSubmitted && Model.HasThePrimaryReportBeenSubmitted)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <a href="@Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" } )" class="govuk-link">Compile works package</a>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                Detail the full scheduling and costs of works plan.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                        <a href="@Url.Action("Index", "TaskList", new { Area = "Application" })" class="govuk-link">View application details</a>
+                    </div>
+                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                        <p class="govuk-body">
+                            View all previously submitted information related to this application.
+                        </p>
+                        @if (Model is not { Stage: EApplicationStage.ApplyForGrant, Status: EApplicationStatus.ApplicationInProgress })
+                        {
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        }
                     </div>
 
-                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-1">
-                        <ul class="govuk-list govuk-list--bullet">
-                            <li>Sign the grant fund agreement for pre-tender funding support</li>
-                            <li>Fill in a monthly report to track your progress</li>
-                            <li>Begin to compile a work package detailing the full scheduling and costs of works plan</li>
-                        </ul>
-                        <p class="govuk-body">
-                            Your application may require some more information in order for an eligibility decision to be made, in which case, you will be directly contacted via email or telephone.
-                        </p>
-                    </div>
+                    @if (Model is { Stage: EApplicationStage.ApplyForGrant, Status: EApplicationStatus.ApplicationInProgress })
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            <a href="@Url.Action("FireRiskAssessorListPdf", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })" class="govuk-link">Download fire risk assessors panel</a>
+                        </div>
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
+                            <p class="govuk-body">
+                                Download the list of fire risk assessors on the Homes England panel. All Fire Risk Appraisal of External Walls (FRAEW) must be carried out by a fire risk assessor from the panel.
+                            </p>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
+                    @if (Model.Stage == EApplicationStage.ApplyForGrant)
+                    {
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
+                            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">What happens next</h2>
+                            <p class="govuk-body">
+                                An eligibility decision will be made on your application.
+                            </p>
+                            <p class="govuk-body">
+                                For Cladding Safety Scheme applicants, provided your application has been approved, you will be required to carry out the following actions:
+                            </p>
+                        </div>
+
+                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-1">
+                            <ul class="govuk-list govuk-list--bullet">
+                                <li>Sign the grant fund agreement for pre-tender funding support</li>
+                                <li>Fill in a monthly report to track your progress</li>
+                                <li>Begin to compile a works package detailing the full scheduling and costs of works plan</li>
+                            </ul>
+                            <p class="govuk-body">
+                                Your application may require some more information in order for an eligibility decision to be made, in which case, you will be directly contacted via email or telephone.
+                            </p>
+                        </div>
+                    }
                 </div>
             </div>
         </main>

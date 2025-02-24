@@ -1,0 +1,37 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+
+@{
+    ViewData["Title"] = "Grant funding agreement";
+    ViewData["Backlink"] = Url.Action("SupportRequired", "PreTenderSupport", new { Area = "PreTenderSupport" });
+    ViewData["FullWidth"] = true;    
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">                
+        <h1 class="govuk-heading-xl">
+            @ViewData["Title"]
+        </h1>
+        <p class="govuk-body">
+            The Grant Funding Agreement is the contract for the provision of funds from the Cladding Safety Scheme to the 
+            applicant for completion of the remediation works specified in the eligibility letter.
+        </p>
+        <p class="govuk-body">
+            The Grant Funding Agreement contains the terms and conditions for the provision of these funds, including 
+            requirements on the applicant relating to designing, undertaking and reporting on the remediation works.
+        </p>
+        <p class="govuk-body">
+            The Pre-Tender Support amount is available only to design and cost your remediation works and compile 
+            the works package. Once your works package has been submitted, we will notify you of the remaining grant 
+            funding amount approved to deliver your works and include this in the second section of 
+            the Grant Funding Agreement.
+        </p>
+        <p class="govuk-body">
+            More information on the Grant Funding Agreement is available in the guidance.
+        </p>
+
+        <govuk-button href="@Url.Action("ConfirmContactDetails", "PreTenderSupport", new {Area = "PreTenderSupport"})">Continue</govuk-button>
+    </div>
+    
+</div>
+    

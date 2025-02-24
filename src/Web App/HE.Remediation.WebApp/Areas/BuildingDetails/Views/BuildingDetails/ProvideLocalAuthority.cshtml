@@ -1,0 +1,47 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.LocalAuthorityCostCentreViewModel
+
+@{
+    ViewData["Title"] = "Provide building address";
+    ViewData["Backlink"] = Url.Action("ProvideBuildingAddress", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="LocalAuthorityCostCentreId" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">
+    Provide local authority</h1>
+
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ProvideLocalAuthority">
+    <govuk-fieldset>
+                
+        <govuk-select asp-for="LocalAuthorityCostCentreId" name="LocalAuthorityCostCentreId" class="govuk-!-width-full" aria-label="Select local authority">
+
+            <govuk-select-label><b>Local Authority</b></govuk-select-label>
+            <govuk-select-item value="0">&nbsp;</govuk-select-item>
+            @foreach (var localAuthorityCostCentre in Model.LocalAuthorityCostCentres)
+            {
+                <govuk-select-item selected="Model.LocalAuthorityCostCentreId == localAuthorityCostCentre.Id" value="@localAuthorityCostCentre.Id">@localAuthorityCostCentre.Name</govuk-select-item>
+            }
+        </govuk-select>
+        
+    </govuk-fieldset>
+
+    @for (var currentLocalAuthority = 0; currentLocalAuthority < Model.LocalAuthorityCostCentres.Count; currentLocalAuthority++)
+    {
+        var localAuthority = Model.LocalAuthorityCostCentres[currentLocalAuthority];
+        <input type="hidden" name="LocalAuthorityCostCentres[@currentLocalAuthority].Id" value="@localAuthority.Id.ToString()" />
+        <input type="hidden" name="LocalAuthorityCostCentres[@currentLocalAuthority].Name" value="@localAuthority.Name" />
+    }
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

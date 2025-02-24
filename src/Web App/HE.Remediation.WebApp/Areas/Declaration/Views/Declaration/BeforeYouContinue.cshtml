@@ -1,6 +1,7 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
 
 @{
+    ViewData["Title"] = "Before you continue";
     ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
 }
 
@@ -14,7 +15,7 @@
 
 <ul class="govuk-list govuk-list--bullet">
     <li>Building details</li>
-    <li>Responsible entity details</li>
+    <li>Responsible Entity details</li>
     <li>Alternative routes of funding</li>
     <li>Bank account details</li>
 </ul>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Text;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Extensions;
 
@@ -13,27 +12,23 @@ namespace HE.Remediation.WebApp.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "TaskListStatusBadgeTagHelper";
+            output.TagName = "strong";
             output.TagMode = TagMode.StartTagAndEndTag;
 
-            var sb = new StringBuilder();
-            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", Enum.GetName(typeof(ETaskStatus), TaskStatus)!.SplitCamelCase(), GetCssClass(TaskStatus));
-
-            output.PreContent.SetHtmlContent(sb.ToString());
+            output.Attributes.SetAttribute("class", $"govuk-tag app-task-list__tag {GetCssClass(TaskStatus)}");
+            
+            output.Content.SetHtmlContent(Enum.GetName(typeof(ETaskStatus), TaskStatus)!.SplitCamelCase());
         }
 
         public string GetCssClass(ETaskStatus status)
         {
-            switch (status)
+            return status switch
             {
-                case ETaskStatus.NotStarted:
-                    return "govuk-tag--grey";
-                case ETaskStatus.InProgress:
-                    return "govuk-tag--blue";
-                case ETaskStatus.Completed:
-                    return ""; //Blank return the correct darker blue colour status per the GDS documentation
-            }
-            return "";
+                ETaskStatus.NotStarted => "govuk-tag--grey",
+                ETaskStatus.InProgress => "govuk-tag--blue",
+                ETaskStatus.Completed => string.Empty, //Blank return the correct darker blue colour status per the GDS documentation
+                _ => string.Empty
+            };
         }
     }
 }

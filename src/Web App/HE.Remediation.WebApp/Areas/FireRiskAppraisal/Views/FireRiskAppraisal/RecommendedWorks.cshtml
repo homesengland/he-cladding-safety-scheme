@@ -1,0 +1,248 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.GetRecommendedWorksViewModel
+
+@{
+    ViewData["Title"] = "Recommended works";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLink"] = Url.Action("RecommendedWorksStart", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="LifeSafetyRiskAssessment" />
+        <govuk-error-summary-item asp-for="RecommendCladding" />
+        <govuk-error-summary-item asp-for="RecommendBuildingIntetim" />
+        <govuk-error-summary-item asp-for="CaveatsLimitations" />
+        <govuk-error-summary-item asp-for="RemediationSummary" />
+        <govuk-error-summary-item asp-for="OtherRiskMitigationOptionsConsidered" />
+        <govuk-error-summary-item asp-for="RecommendedInterimMeasuresTypes" />
+        <govuk-error-summary-item asp-for="OtherInterimMeasuresText" />
+        <govuk-error-summary-item asp-for="RiskSafetyMitigationTypes" />
+        <govuk-error-summary-item asp-for="SafetyRiskOtherText" />
+
+    </govuk-error-summary>
+}
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+                    <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="RecommendedWorks" method="post">
+
+                        <govuk-radios asp-for="LifeSafetyRiskAssessment">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    What is your assessment of the life safety risk of the building associated with the external wall systems, in accordance with PAS-9980?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+
+                            <govuk-radios-item value="@(ERiskType.Low)">Low</govuk-radios-item>
+                            <govuk-radios-item value="@(ERiskType.MediumTolerable)">Medium - tolerable</govuk-radios-item>
+                            <govuk-radios-item value="@(ERiskType.MediumActionRequired)">Medium - action required</govuk-radios-item>
+                            <govuk-radios-item value="@(ERiskType.High)">High</govuk-radios-item>
+                        </govuk-radios>
+
+
+                        <govuk-radios asp-for="RecommendCladding">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Do you recommend full replacement of cladding, partial replacement of cladding or no replacement of cladding (alternative mitigation works only)?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+
+                            <govuk-radios-item value="@(EReplacementCladding.Full)">Full replacement of cladding</govuk-radios-item>
+                            <govuk-radios-item value="@(EReplacementCladding.Partial)">Partial replacement of cladding</govuk-radios-item>
+                            <govuk-radios-item value="@(EReplacementCladding.None)">No replacement of cladding (alternative mitigation works only)</govuk-radios-item>
+                        </govuk-radios>
+
+                        <br />
+
+                        <label class="govuk-label--s">
+                            What are the potential courses of action for remediation/mitigation to address the life safety risk of the building?
+
+                        </label>
+                        <br />
+                        <br />
+                        <govuk-checkboxes asp-for="RiskSafetyMitigationTypes">
+                            <govuk-checkboxes-fieldset>
+                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Please note that any works that are not the removal of unsafe cladding will only be funded if they are proportional mitigation works to allow unsafe cladding to remain in place.
+                                </govuk-checkboxes-fieldset-legend>
+                            </govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-hint>
+                                You can select more than one if applicable
+                            </govuk-checkboxes-hint>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.CompleteCladdingReplacement)" value="@ERiskSafetyMitigationType.CompleteCladdingReplacement">Complete removal and replacement of the unique cladding system or systems</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.PartialCladdingReplacement)" value="@ERiskSafetyMitigationType.PartialCladdingReplacement">Partial removal and replacement of the unique cladding system or systems</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.EncapsulationOfCombustibles)" value="@ERiskSafetyMitigationType.EncapsulationOfCombustibles">Encapsulation of the combustible materials present in the cladding system</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.FillingCavaties)" value="@ERiskSafetyMitigationType.FillingCavaties">Filling cavities with non-combustible insulation</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.WorksToFireBarriers)" value="@ERiskSafetyMitigationType.WorksToFireBarriers">Works to Fire Barriers</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.InstallationOfFireAndSmokeAlarms)" value="@ERiskSafetyMitigationType.InstallationOfFireAndSmokeAlarms">Installation or upgrades to fire alarms and or smoke detection</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.WorksToImproveAccess)" value="@ERiskSafetyMitigationType.WorksToImproveAccess">Works to improve access and facilities for the fire service</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.WorksToMeansOfEscape)" value="@ERiskSafetyMitigationType.WorksToMeansOfEscape">Works to means of escape</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.WorksToSmokeExtraction)" value="@ERiskSafetyMitigationType.WorksToSmokeExtraction">Works to smoke extraction</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.WorksToInternalCompartmentation)" value="@ERiskSafetyMitigationType.WorksToInternalCompartmentation">Works to internal compartmentation</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.DontKnow)" value="@ERiskSafetyMitigationType.DontKnow">Don't know</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RiskSafetyMitigationTypes.Any(x => x == ERiskSafetyMitigationType.Other)" value="@ERiskSafetyMitigationType.Other">
+                                Other (Please specify)
+                                <govuk-checkboxes-item-conditional>
+                                    <govuk-input asp-for="SafetyRiskOtherText" input-class="govuk-!-width-full">
+                                        <govuk-input-label>Please enter the other potential course of action</govuk-input-label>
+                                    </govuk-input>
+                                </govuk-checkboxes-item-conditional>
+                            </govuk-checkboxes-item>
+                        </govuk-checkboxes>
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="2000">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="RemediationSummary" max-length="2000" asp-for="RemediationSummary">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        Please summarise the most cost effective course of action from the options listed above that will remediate the life safety risk. This is the option that will be funded.
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+                        </div>
+
+                        <br/>
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="2000">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="OtherRiskMitigationOptionsConsidered" max-length="2000" asp-for="OtherRiskMitigationOptionsConsidered">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        What other options did you consider instead of the preferred choice you identified above?
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+                        </div>
+
+
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="2000">
+                            <div class="govuk-form-group">
+                                <govuk-character-count name="CaveatsLimitations" max-length="2000" asp-for="CaveatsLimitations">
+                                    <govuk-character-count-label class="govuk-label--s">
+                                        Please state any caveats or limitations on the conclusions in your FRAEW.
+                                    </govuk-character-count-label>
+                                </govuk-character-count>
+                            </div>
+                        </div>
+
+                        <govuk-radios asp-for="RecommendBuildingIntetim">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                                    Do you recommend the building be put into interim measures?
+                                </govuk-radios-fieldset-legend>
+                            </govuk-radios-fieldset>
+
+                            <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+                            <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+                        </govuk-radios>
+
+
+                        <govuk-checkboxes asp-for="RecommendedInterimMeasuresTypes">
+                            <govuk-checkboxes-fieldset>
+                                <govuk-checkboxes-fieldset-legend class="govuk-fieldset__legend--s">
+                                    If yes, what type of interim measures do you recommend?
+                                </govuk-checkboxes-fieldset-legend>
+                            </govuk-checkboxes-fieldset>
+                            <govuk-checkboxes-hint>
+                                You can select more than one if applicable
+                            </govuk-checkboxes-hint>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.CommonFireAlarm)" value="@EInterimMeasuresType.CommonFireAlarm">Common fire alarm</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.WakingWatch)" value="@EInterimMeasuresType.WakingWatch">Waking watch</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.EvacuationManagement)" value="@EInterimMeasuresType.EvacuationManagement">Evacuation management</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.SimultaneousEvacuationStrategy)" value="@EInterimMeasuresType.SimultaneousEvacuationStrategy">Simultaneous evacuation strategy</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.FireHeatSmokeDetection)" value="@EInterimMeasuresType.FireHeatSmokeDetection">Fire, heat, smoke detection</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.FireSupressionSystem)" value="@EInterimMeasuresType.FireSupressionSystem">Fire suppression system</govuk-checkboxes-item>
+                            <govuk-checkboxes-item checked="@Model.RecommendedInterimMeasuresTypes.Any(x => x == EInterimMeasuresType.Other)" value="@EInterimMeasuresType.Other">
+                                Other (Please specify)
+                                <govuk-checkboxes-item-conditional>
+                                    <govuk-input asp-for="OtherInterimMeasuresText" input-class="govuk-!-width-full">
+                                        <govuk-input-label>Please enter the other interim measure</govuk-input-label>
+                                    </govuk-input>
+                                </govuk-checkboxes-item-conditional>
+                            </govuk-checkboxes-item>
+                        </govuk-checkboxes>
+
+                        <div class="comp-btn-group">
+                            <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+                            <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+                        </div>
+
+                        @Html.HiddenFor(x=> x.ReturnUrl)
+                        @Html.HiddenFor(x=> x.BuildingAddress)
+                        @Html.HiddenFor(x=> x.CompanyUndertakingReport)
+                        @Html.HiddenFor(x=> x.BuildingName)
+                        <input name="@($"{nameof(Model.FRAEWCompletedDate)}.{nameof(Model.FRAEWCompletedDate.Value.Day)}")" value="@Model.FRAEWCompletedDate?.Day" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWCompletedDate)}.{nameof(Model.FRAEWCompletedDate.Value.Month)}")" value="@Model.FRAEWCompletedDate?.Month" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWCompletedDate)}.{nameof(Model.FRAEWCompletedDate.Value.Year)}")" value="@Model.FRAEWCompletedDate?.Year" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWInstructedDate)}.{nameof(Model.FRAEWInstructedDate.Value.Day)}")" value="@Model.FRAEWInstructedDate?.Day" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWInstructedDate)}.{nameof(Model.FRAEWInstructedDate.Value.Month)}")" value="@Model.FRAEWInstructedDate?.Month" type="hidden" />
+                        <input name="@($"{nameof(Model.FRAEWInstructedDate)}.{nameof(Model.FRAEWInstructedDate.Value.Year)}")" value="@Model.FRAEWInstructedDate?.Year" type="hidden" />
+
+                    </form>
+                </div>
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">Building Details</h2>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Application Reference Number</div>
+                        <div class="govuk-body no-margin">@Model.ApplicationReferenceNumber</div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>                   
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Building name</div>
+                        <div class="govuk-body no-margin">@Model.BuildingName</div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Building Address Line 1</div>
+                        <div class="govuk-body no-margin">@Model.BuildingAddress</div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                    @if (Model.PartOfDevelopment.HasValue && Model.PartOfDevelopment.Value)
+                    {
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Block within wider development</div>
+                            <div class="govuk-body no-margin">@Model.Development</div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                    }
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">FRAEW instructed date</div>
+                        <div class="govuk-body no-margin">
+                            @if (Model.FRAEWInstructedDate is not null)
+                                {
+                                    var instructedDate = Model.FRAEWInstructedDate;
+                                    <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
+                                }
+                        </div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">FRAEW report completion date</div>
+                        <div class="govuk-body no-margin">
+                            @if (Model.FRAEWCompletedDate is not null)
+                                {
+                                    var completedDate = Model.FRAEWCompletedDate;
+                                    <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
+                                }
+                        </div>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-heading-s no-margin">Firm undertaking report</div>
+                        <div class="govuk-body no-margin">
+                             @Model.CompanyUndertakingReport
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </div>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+</div>

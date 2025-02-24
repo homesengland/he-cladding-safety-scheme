@@ -11,7 +11,7 @@ namespace HE.Remediation.Core.Providers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDataProtector _protector;
-        private const string CookieName = "AppData";
+        private const string CookieName = "AppData";        
         
         private enum CookieValueTypes : int
         {
@@ -21,7 +21,10 @@ namespace HE.Remediation.Core.Providers
             EntityTypeCookieIndex = 3,
             ProfileCompletenessCookieIndex = 4,
             SessionTimeCookieIndex = 5,      
-            DeclarationComplete = 6
+            DeclarationComplete = 6,
+            ProgressReportIdCookieIndex = 7,
+            PaymentRequestIdCookieIndex = 8,
+            AppIdEmailAddressCookieIndex = 9
         }
 
         public ApplicationDataProvider(IHttpContextAccessor httpContextAccessor, IDataProtectionProvider dataProtectionProvider)
@@ -32,6 +35,11 @@ namespace HE.Remediation.Core.Providers
 
         public string GetCookieName => CookieName;
 
+        /// <summary>
+        /// Checks if we are on the enforced path - hence where the system controls our flow from start to
+        /// finish. 
+        /// </summary>
+        /// <returns></returns>
         public bool IsEnforcedFlow()
         {
             UserProfileCompletionModel profileCompletion = GetProfileCompletion();
@@ -50,9 +58,46 @@ namespace HE.Remediation.Core.Providers
                 return true;
             }
 
-            // A profile has been chosen so just simply see if we have completed our profile by 
-            // seeing if the last sequence event has been completed
-            return (!profileCompletion.IsSecondaryContactInformationComplete);            
+            if (profileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company)
+            {
+                return (profileCompletion.IsSecondaryContactInformationComplete == false);            
+            }
+
+            return (profileCompletion.IsWantSecondaryContactComplete == false);
+        }
+
+        public Guid GetPaymentRequestId()
+        {            
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var cookieArray = decryptedCookie.Split("_");
+            if ((int)(CookieValueTypes.PaymentRequestIdCookieIndex) >= cookieArray.Length)
+            {
+                return default;
+            }
+
+            var paymentRequestId = cookieArray[(int)(CookieValueTypes.PaymentRequestIdCookieIndex)];
+            return Guid.TryParse(paymentRequestId, out var id)
+                ? id
+                : default;
+        }
+
+        public Guid GetProgressReportId()
+        {            
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var cookieArray = decryptedCookie.Split("_");
+            if ((int)(CookieValueTypes.ProgressReportIdCookieIndex) >= cookieArray.Length)
+            {
+                return default;
+            }
+
+            var progressReportId = cookieArray[(int)(CookieValueTypes.ProgressReportIdCookieIndex)];
+            return Guid.TryParse(progressReportId, out var id)
+                ? id
+                : default;
         }
 
         public Guid GetApplicationId()
@@ -167,6 +212,23 @@ namespace HE.Remediation.Core.Providers
 
                     profileCompletion.IsSecondaryContactInformationComplete = true;
                     break;
+                case EUserProfileStage.SecondaryContactSelection:
+
+                    profileCompletion.IsSecondaryContactSelectionComplete = true;
+                    break;
+                case EUserProfileStage.ContactInfoConsent:
+
+                    profileCompletion.IsContactConsentComplete = true;
+                    break;
+                case EUserProfileStage.WantSecondaryContact:
+
+                    profileCompletion.IsWantSecondaryContactComplete = true;
+                    break;
+                case EUserProfileStage.UserAddedSecondaryContact:
+
+                    profileCompletion.WantedToAddSecondaryContact = true;
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(profileStage));
             }
@@ -204,6 +266,22 @@ namespace HE.Remediation.Core.Providers
                 case EUserProfileStage.SecondaryContactInformation:
 
                     profileCompletion.IsSecondaryContactInformationComplete = true;
+                    break;
+                case EUserProfileStage.SecondaryContactSelection:
+
+                    profileCompletion.IsSecondaryContactSelectionComplete = true;
+                    break;
+                case EUserProfileStage.ContactInfoConsent:
+
+                    profileCompletion.IsContactConsentComplete = true;
+                    break;
+                case EUserProfileStage.WantSecondaryContact:
+
+                    profileCompletion.IsWantSecondaryContactComplete = true;
+                    break;
+                case EUserProfileStage.UserAddedSecondaryContact:
+
+                    profileCompletion.WantedToAddSecondaryContact = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(profileStage));
@@ -258,9 +336,44 @@ namespace HE.Remediation.Core.Providers
             SetCookieValue(string.Join("_", currentParts));
         }
 
+        public void SetPaymentRequestId(Guid paymentRequestId)
+        {
+            var currentParts = GetCookieParts();
+            currentParts[(int)(CookieValueTypes.PaymentRequestIdCookieIndex)] = paymentRequestId.ToString();
+            SetCookieValue(string.Join("_", currentParts));
+        }
+
+        public void SetProgressReportId(Guid progressReportId)
+        {
+            var currentParts = GetCookieParts();
+            currentParts[(int)(CookieValueTypes.ProgressReportIdCookieIndex)] = progressReportId.ToString();
+            SetCookieValue(string.Join("_", currentParts));
+        }
+
         public void SetApplicationId(Guid applicationId)
         {
             SetCookiePart((int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString());
+        }
+
+        public void SetApplicationIdAndEmailAddress(Guid applicationId, string emailAddress)
+        {
+            Dictionary<int, string> indexesAndValues = new Dictionary<int, string>()
+            {
+                {(int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString()},
+                {(int)(CookieValueTypes.AppIdEmailAddressCookieIndex), emailAddress}
+            };
+
+            SetCookieParts(indexesAndValues);
+        }
+
+        public string GetApplicationEmailAddress()
+        {
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var emailAddress = decryptedCookie.Split("_")[(int)(CookieValueTypes.AppIdEmailAddressCookieIndex)];
+
+            return emailAddress;
         }
 
         public void SetSessionTimeout()
@@ -292,7 +405,15 @@ namespace HE.Remediation.Core.Providers
         private string[] GetCookieParts()
         {
             var noOfCookieIndexes = Enum.GetValues(typeof(CookieValueTypes)).Length;
-            return GetDecryptedCookie()?.Split("_") ?? new string[ noOfCookieIndexes ];
+            var decryptedCookie = GetDecryptedCookie()?.Split("_");
+            if (decryptedCookie == null) return new string[ noOfCookieIndexes ];
+
+            if (decryptedCookie.Length < noOfCookieIndexes) 
+            { 
+                Array.Resize<string> (ref decryptedCookie, 
+                                      noOfCookieIndexes);
+            }
+            return decryptedCookie;
         }
 
         private void SetCookieValue(string value)
@@ -308,7 +429,7 @@ namespace HE.Remediation.Core.Providers
             };
 
             var encryptedAppId = _protector.Protect(value);
-            _httpContextAccessor.HttpContext?.Response.Cookies.Append(CookieName, encryptedAppId, cookieOptions);            
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append(CookieName, encryptedAppId, cookieOptions);                        
         }
 
         private void SetCookiePart(int index, string value)
@@ -320,6 +441,19 @@ namespace HE.Remediation.Core.Providers
                 SetCookieValue(string.Join("_", parts));
             }            
         }
+
+        private void SetCookieParts(IDictionary<int, string> indexAndValues)
+        {            
+            var parts = GetCookieParts();
+            foreach (var indexAndValue in indexAndValues)
+            {
+                if (indexAndValue.Key < parts.Length)
+                {
+                    parts[indexAndValue.Key] = indexAndValue.Value;
+                    SetCookieValue(string.Join("_", parts));
+                }
+            }
+        }
         
         private UserProfileCompletionModel ObtainProfileCompletionValue(int profileCompletionValue)
         {
@@ -330,6 +464,10 @@ namespace HE.Remediation.Core.Providers
             profileCompletion.IsCompanyDetailsComplete = (profileCompletionValue & 8) == 8;
             profileCompletion.IsCompanyAddressComplete = (profileCompletionValue & 16) == 16;
             profileCompletion.IsSecondaryContactInformationComplete = (profileCompletionValue & 32) == 32;
+            profileCompletion.IsSecondaryContactSelectionComplete = (profileCompletionValue & 64) == 64;
+            profileCompletion.IsContactConsentComplete = (profileCompletionValue & 128) == 128;
+            profileCompletion.IsWantSecondaryContactComplete = (profileCompletionValue & 256) == 256;
+            profileCompletion.WantedToAddSecondaryContact = (profileCompletionValue & 512) == 512;
             return profileCompletion;
         }
 
@@ -337,11 +475,15 @@ namespace HE.Remediation.Core.Providers
         {
             int profileCompletionValue = 0;            
             profileCompletionValue |= (profileCompletion.IsContactInformationComplete ? 1 : 0);
-            profileCompletionValue |= (profileCompletion.IsCorrespondenceAddressComplete ? 2 : 0);
+            profileCompletionValue |= (profileCompletion.IsCorrespondenceAddressComplete == true ? 2 : 0);
             profileCompletionValue |= (profileCompletion.IsResponsibleEntityTypeSelectionComplete ? 4 : 0);            
             profileCompletionValue |= (profileCompletion.IsCompanyDetailsComplete == true) ? 8 : 0;
             profileCompletionValue |= (profileCompletion.IsCompanyAddressComplete == true) ? 16 : 0;
-            profileCompletionValue |= (profileCompletion.IsSecondaryContactInformationComplete ? 32 : 0);            
+            profileCompletionValue |= (profileCompletion.IsSecondaryContactInformationComplete == true ? 32 : 0);            
+            profileCompletionValue |= (profileCompletion.IsSecondaryContactSelectionComplete == true ? 64 : 0);     
+            profileCompletionValue |= (profileCompletion.IsContactConsentComplete == true ? 128 : 0);            
+            profileCompletionValue |= (profileCompletion.IsWantSecondaryContactComplete == true ? 256 : 0);            
+            profileCompletionValue |= (profileCompletion.WantedToAddSecondaryContact == true ? 512 : 0);            
             return profileCompletionValue;
         }
 

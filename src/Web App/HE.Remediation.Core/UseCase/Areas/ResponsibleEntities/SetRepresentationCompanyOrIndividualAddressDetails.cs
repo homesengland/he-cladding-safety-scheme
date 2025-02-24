@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
@@ -17,21 +18,40 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 
         public async Task<Unit> Handle(SetRepresentationCompanyOrIndividualAddressDetailsRequest request, CancellationToken cancellationToken)
         {
-            var parameters = new DynamicParameters(request);
-            parameters.Add("@ApplicationId", _applicationDataProvider.GetApplicationId());
-
-            await _connection.ExecuteAsync("SetRepresentationCompanyOrIndividualAddress", parameters);
+            ParsedAddress parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
+            if (parsedAddress != null)
+            {
+                var applicationId = _applicationDataProvider.GetApplicationId();
+                await _connection.ExecuteAsync("SetRepresentationCompanyOrIndividualAddress",  new
+                {
+                    ApplicationId = applicationId,
+                    parsedAddress.NameNumber,
+                    parsedAddress.AddressLine1,
+                    parsedAddress.AddressLine2,
+                    parsedAddress.City,
+                    parsedAddress.LocalAuthority,
+                    parsedAddress.County,
+                    parsedAddress.Postcode,
+                    parsedAddress.SubBuildingName,
+                    parsedAddress.BuildingName,
+                    parsedAddress.BuildingNumber,
+                    parsedAddress.Street,
+                    parsedAddress.Town,
+                    parsedAddress.AdminArea,
+                    parsedAddress.UPRN,
+                    parsedAddress.AddressLines,
+                    parsedAddress.XCoordinate,
+                    parsedAddress.YCoordinate,
+                    parsedAddress.Toid,
+                    parsedAddress.BuildingType
+                });
+            }
             return Unit.Value;
         }
     }
 
     public class SetRepresentationCompanyOrIndividualAddressDetailsRequest : IRequest
     {
-        public string NameNumber { get; set; }
-        public string AddressLine1 { get; set; }
-        public string AddressLine2 { get; set; }
-        public string City { get; set; }
-        public string County { get; set; }
-        public string Postcode { get; set; }
+        public string SelectedAddressId { get; set; }
     }
 }

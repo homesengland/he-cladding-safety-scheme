@@ -2,53 +2,31 @@
 @model HE.Remediation.WebApp.ViewModels.BuildingDetails.BuildingDeveloperInformationViewModel
 @{
     ViewData["Title"] = "Building developer information";
-    ViewData["BackLink"] = Url.Action("ConfirmBuildingHeight", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["BackLink"] = Model.BuildingHasSafetyRegulatorRegistrationCode.HasValue && Model.BuildingHasSafetyRegulatorRegistrationCode.Value
+        ? Url.Action("BuildingSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" })
+        : Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
 {
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="DoYouKnowOriginalDeveloper"/>
-        <govuk-error-summary-item asp-for="OrganisationName"/>
-        <govuk-error-summary-item asp-for="NameNumber"/>
-        <govuk-error-summary-item asp-for="AddressLine1"/>
-        <govuk-error-summary-item asp-for="AddressLine2"/>
-        <govuk-error-summary-item asp-for="City"/>
-        <govuk-error-summary-item asp-for="County"/>
-        <govuk-error-summary-item asp-for="Postcode"/>
     </govuk-error-summary>
 }
-<h1 class="govuk-heading-xl">Building developer information</h1>
-
-<p class="govuk-body">If known, enter the building developer’s details on this page.</p>
-
-<p class="govuk-body">The details must be for the original developer of the building. The developer is classed as the original owner of the building who was responsible for the building programme and design of the building.</p>
+<h1 class="govuk-heading-xl">Do you know who the original developer for this building was?</h1>
 
 <form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="BuildingDeveloperInformation" method="post">
     <govuk-radios asp-for="DoYouKnowOriginalDeveloper">
-        <govuk-radios-fieldset>
-            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">Do you know who  the original developer for this building was?</govuk-radios-fieldset-legend>
-        </govuk-radios-fieldset>
-        <govuk-radios-item value="@(true)">
-            Yes
-            <govuk-radios-item-conditional>
-                <govuk-input asp-for="OrganisationName" input-class="govuk-input--width-20">
-                    <govuk-input-label class="govuk-label--m">Organisation name</govuk-input-label>
-                </govuk-input>
 
-                <h2 class="govuk-heading-m">Organisation address</h2>
-                <partial name="_AddressPartial" view-data="ViewData" />
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>        
 
-            </govuk-radios-item-conditional>
-        </govuk-radios-item>
-
-        <govuk-radios-item value="@(false)">No</govuk-radios-item>
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <div class="comp-btn-group">
-    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
-    <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
     </div>
 </form>

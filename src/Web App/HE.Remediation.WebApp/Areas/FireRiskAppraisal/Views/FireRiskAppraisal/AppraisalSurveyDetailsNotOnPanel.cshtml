@@ -41,6 +41,13 @@
             For example, 27 8 2022
         </govuk-date-input-hint>
     </govuk-date-input>
+    
+    @for (var i = 0; i < Model.FireRiskAssessorCompanies.Count; i++)
+    {
+        var company = Model.FireRiskAssessorCompanies[i];
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.CompanyName))" value="@company.CompanyName" />
+        <input type="hidden" name="@(nameof(Model.FireRiskAssessorCompanies))[@i].@(nameof(company.Id))" value="@company.Id" />
+    }
 
     <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
     <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary govuk-!-margin-left-4">Save and return later</govuk-button>
