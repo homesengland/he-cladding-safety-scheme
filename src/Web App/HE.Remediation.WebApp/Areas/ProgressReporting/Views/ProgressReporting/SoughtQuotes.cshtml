@@ -6,7 +6,7 @@
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
         ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
-        : Url.Action("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
+        : Url.Action("HasProjectPlanMilestones", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary

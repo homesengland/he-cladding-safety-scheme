@@ -85,21 +85,21 @@
 
     @if (Model.MissingRoles != null)
     {
-        @foreach (var role in Model.MissingRoles)
+        @foreach (var x in Model.MissingRoles.Select((value, index) => new { value, index }))
         {
-            <input asp-for="MissingRoles" type="hidden" value="@role" />
+            <input asp-for="@Model.MissingRoles[x.index]" type="hidden" />
         }
     }    
     @if (Model.TeamMembers != null && Model.TeamMembers.Any())
     {
         @foreach (var x in Model.TeamMembers.Select((value, index) => new { value, index }))
         {
-            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" value="@Model.TeamMembers[x.index].Id" />
-            <input asp-for="@Model.TeamMembers[x.index].RoleName" type="hidden" value="@Model.TeamMembers[x.index].RoleName" />            
-            <input asp-for="@Model.TeamMembers[x.index].RoleId" type="hidden" value="@Model.TeamMembers[x.index].RoleId" />
-            <input asp-for="@Model.TeamMembers[x.index].Name" type="hidden" value="@Model.TeamMembers[x.index].Name" />
-            <input asp-for="@Model.TeamMembers[x.index].CompanyName" type="hidden" value="@Model.TeamMembers[x.index].CompanyName" />
-            <input asp-for="@Model.TeamMembers[x.index].OtherRole" type="hidden" value="@Model.TeamMembers[x.index].OtherRole" />            
+            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" />
+            <input asp-for="@Model.TeamMembers[x.index].RoleName" type="hidden" />            
+            <input asp-for="@Model.TeamMembers[x.index].RoleId" type="hidden" />
+            <input asp-for="@Model.TeamMembers[x.index].Name" type="hidden" />
+            <input asp-for="@Model.TeamMembers[x.index].CompanyName" type="hidden" />
+            <input asp-for="@Model.TeamMembers[x.index].OtherRole" type="hidden" />            
         }
     }
 

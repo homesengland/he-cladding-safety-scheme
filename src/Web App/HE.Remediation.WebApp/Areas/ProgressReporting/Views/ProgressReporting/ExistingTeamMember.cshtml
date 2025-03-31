@@ -39,15 +39,15 @@
         <govuk-radios-item value="@(false)">No</govuk-radios-item>
     </govuk-radios>
 
-    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
-    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
-    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="ReturnUrl" type="hidden"/>
+    <input asp-for="BuildingName" type="hidden"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden"/>
     @if (Model.TeamMembers != null && Model.TeamMembers.Any())
     {
         foreach (var x in Model.TeamMembers.Select((value, index) => new { value, index }))
         {
-            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" value="@Model.TeamMembers[x.index].Id" />
-            <input asp-for="@Model.TeamMembers[x.index].Name" type="hidden" value="@Model.TeamMembers[x.index].Name" />
+            <input asp-for="@Model.TeamMembers[x.index].Id" type="hidden" />
+            <input asp-for="@Model.TeamMembers[x.index].Name" type="hidden" />
         }
     }
     <div class="comp-btn-group">

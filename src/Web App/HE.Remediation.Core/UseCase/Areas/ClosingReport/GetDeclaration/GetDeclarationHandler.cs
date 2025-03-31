@@ -39,7 +39,7 @@ public class GetDeclarationHandler : IRequestHandler<GetDeclarationRequest, GetD
         {
             ApplicationCreationDate = applicationCreationDate,
             DateOfCompletion = closingReportDetails?.ProjectCompletionDate,
-            LifeSafetyRiskAssessment = closingReportDetails?.LifeSafetyRiskAssessment,
+            FraewRiskToLifeReduced = closingReportDetails?.FraewRiskToLifeReduced,
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             IsSubmitted = isSubmitted

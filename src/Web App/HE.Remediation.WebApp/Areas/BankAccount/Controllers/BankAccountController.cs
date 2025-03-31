@@ -154,7 +154,7 @@ namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers
                         ? nameof(BankAccountDetailsRepresentative)
                         : nameof(BankAccountDetailsResponsibleEntity);
 
-                    return RedirectToAction(action, "BankAccount", new { Area = "BankAccount" });
+                    return SafeRedirectToAction(action, "BankAccount", new { Area = "BankAccount" });
                 }
 
                 return RedirectToAction("Index", "TaskList", new { area = "Application" });

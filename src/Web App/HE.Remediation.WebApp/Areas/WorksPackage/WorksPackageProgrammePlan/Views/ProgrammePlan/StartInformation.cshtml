@@ -1,0 +1,22 @@
+﻿@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProgrammePlan.StartInformationViewModel
+
+@{
+    ViewData["Title"] = "Project plan - About this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">In the following section we will ask you to upload the project plan for your remediation project.</p>
+<form asp-area="WorksPackageProgrammePlan" asp-controller="ProgrammePlan" asp-action="StartInformation" method="post">
+    
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button type="submit" disabled="@Model.IsSubmitted">Continue</govuk-button>
+    </div>
+</form>

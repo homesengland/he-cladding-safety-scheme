@@ -1434,6 +1434,35 @@ public class ProgressReportingRepository : IProgressReportingRepository
         await _connection.ExecuteAsync(nameof(UpdateIntentToProceedType), parameters);
     }
 
+    public async Task<bool?> GetProgressReportHasProjectPlanMilestones()
+    {
+        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<bool?>("GetProgressReportHasProjectPlanMilestones", new
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId
+        });
+    }
+
+    public async Task UpdateProgressReportHasProjectPlanMilestones(bool? hasProjectPlanMilestones)
+    {
+        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("UpdateProgressReportHasProjectPlanMilestones", new
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId,
+            HasProjectPlanMilestones = hasProjectPlanMilestones
+        });
+    }
+
     public async Task RemoveProgressReportLeaseholderInformationDocument(RemoveProgressReportLeaseholderInformationDocumentParameters parameters)
     {
         await _connection.ExecuteAsync(nameof(RemoveProgressReportLeaseholderInformationDocument), parameters);

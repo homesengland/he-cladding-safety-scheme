@@ -135,7 +135,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(RepresentationCompanyOrIndividual)
                 : model.ReturnUrl;
 
-                return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             TempData["BackLink"] = Url.Action("BasedInUk", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
@@ -202,7 +202,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(RepresentationCompanyOrIndividualDetails)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         #endregion
@@ -244,7 +244,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(RepresentationCompanyOrIndividualAddressDetails)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -297,7 +297,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityRelation)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityRelation)
                 : returnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         /// <summary>
@@ -430,7 +430,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (model.ReturnUrl is not null)
             {
-                return RedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return SafeRedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             switch (model.OrganisationType!.Value)
@@ -485,7 +485,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (model.ReturnUrl is not null)
             {
-                return RedirectToAction(model.ReturnUrl);
+                return SafeRedirectToAction(model.ReturnUrl, null, null);
             }
 
             return RedirectToAction("ResponsibleEntityUkRegistered");
@@ -535,7 +535,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? action
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -576,7 +576,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (model.ReturnUrl is not null)
             {
-                return RedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return SafeRedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             if
@@ -657,7 +657,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? addressAction
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities", returnUrl = nameof(ResponsibleEntityCompanyDetails) });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities", returnUrl = nameof(ResponsibleEntityCompanyDetails) });
         }
         #endregion
 
@@ -699,7 +699,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityCompanyAddress)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities", returnUrl = nameof(ResponsibleEntityOrganisationDetails) });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities", returnUrl = nameof(ResponsibleEntityOrganisationDetails) });
         }
         #endregion
 
@@ -742,7 +742,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityPrimaryContactDetails)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" }); //Should redirect to story 48098 when implemented
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" }); //Should redirect to story 48098 when implemented
         }
 
         [HttpPost(nameof(RespEntityCompAddrPostCodeItemSelected))]
@@ -770,7 +770,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityPrimaryContactDetails)
                 : returnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         [HttpGet(nameof(RespEntityCompAddrPostCodeItemEntered))]
@@ -862,7 +862,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 action = nameof(ResponsibleEntityResponsibleForGrantFunding);
             }
             
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" }); //Should navigate to story 48101 - UploadEvidenceOfAuthorisation
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" }); //Should navigate to story 48101 - UploadEvidenceOfAuthorisation
         }
         #endregion
 
@@ -907,7 +907,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? action
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -948,7 +948,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(FreeholderCompanyAddress)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -989,7 +989,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(FreeholderIndividualAddress)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -1032,7 +1032,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityCompanyType)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         [HttpPost(nameof(FreeholdCompAddrPostCodeItemSelected))]
@@ -1062,7 +1062,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityCompanyType)
                 : returnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         [HttpGet(nameof(FreeholdCompAddrPostCodeItemEntered))]
@@ -1142,7 +1142,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityCompanyType)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         [HttpPost(nameof(FreeholdIndAddrPostCodeItemSelected))]
@@ -1172,7 +1172,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityCompanyType)
                 : returnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         [HttpGet(nameof(FreeholdIndAddrPostCodeItemEntered))]
@@ -1239,7 +1239,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(ResponsibleEntityCompanyType)
                 : viewModel.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
       
         #endregion
@@ -1280,7 +1280,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             return model.SubmitAction == ESubmitAction.Exit
                 ? RedirectToAction("Index", "TaskList", new { Area = "Application" })
-                : RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                : SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 
@@ -1324,7 +1324,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             if (model.IsClaimingGrant == true &&
                 response.CompanyType is EApplicationResponsibleEntityOrganisationType.RegisteredProvider or EApplicationResponsibleEntityOrganisationType.LocalAuthority)
             {
-                return RedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             if (model is { IsClaimingGrant: false, HasOwners: true })
@@ -1549,7 +1549,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 ? nameof(UploadEvidence)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "ResponsibleEntities",
+            return SafeRedirectToAction(action, "ResponsibleEntities",
                 new { Area = "ResponsibleEntities", UploadType = model.OrganisationType == EApplicationResponsibleEntityOrganisationType.LocalAuthority ? EResponsibleEntityUploadType.S151 : EResponsibleEntityUploadType.ChiefExec });
         }
         #endregion
@@ -1610,7 +1610,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return SafeRedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
 
         #region UploadEvidence
@@ -1678,7 +1678,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         public async Task<IActionResult> UploadEvidenceDelete([FromQuery] DeleteResponsibleEntitiesEvidenceRequest request)
         {
             await _sender.Send(request);
-            return RedirectToAction(request.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities", uploadType = request.UploadType });
+            return SafeRedirectToAction(request.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities", uploadType = request.UploadType });
         }
         #endregion
 

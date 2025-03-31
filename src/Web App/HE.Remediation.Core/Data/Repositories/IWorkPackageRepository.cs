@@ -1,8 +1,8 @@
-﻿using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
+﻿using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.Declaration;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.GrantCertifyingOfficer;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.KeyDates;
-using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ThirdPartyContributions;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage;
@@ -16,6 +16,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ThirdPartyCont
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.WorkPackageDutyOfCareDeedResult;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.WorkPackageSignatories;
 using HE.Remediation.Core.Enums;
+using UpsertTeamMemberParameters = HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam.UpsertTeamMemberParameters;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -279,6 +280,19 @@ public interface IWorkPackageRepository
     Task<GrantCertifyingOfficerAuthorisedSignatoriesResult> GetGrantCertifyingOfficerAuthorisedSignatories();
 
     Task UpdateGrantCertifyingOfficerAuthorisedSignatories(UpdateGrantCertifyingOfficerAuthorisedSignatoriesParameters parameters);
+
+    #endregion
+
+    #region Programme Plan
+
+    Task CreateWorkPackageProgrammePlan(Guid applicationId);
+    Task SetWorkPackageProgrammePlanTaskStatus(SetWorkPackageProgrammePlanTaskStatusParameters parameters);
+    Task<bool?> GetHasProgrammePlan(Guid applicationId);
+    Task SetHasProgrammePlan(SetHasProgrammePlanParameters parameters);
+    Task<IReadOnlyCollection<FileResult>> GetProgrammePlanDocuments(Guid applicationId);
+    Task InsertProgrammePlanDocument(InsertProgrammePlanDocumentParameters parameters);
+    Task DeleteProgrammePlanDocument(DeleteProgrammePlanDocumentParameters parameters);
+    Task<GetProgrammePlanCheckYourAnswersResult> GetProgrammePlanCheckYourAnswers(Guid applicationId);
 
     #endregion
 }

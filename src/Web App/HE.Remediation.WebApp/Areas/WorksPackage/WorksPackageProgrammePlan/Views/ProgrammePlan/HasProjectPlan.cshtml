@@ -1,0 +1,34 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProgrammePlan.HasProjectPlanViewModel
+
+@{
+    ViewData["Title"] = "Project plan";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("StartInformation", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" });
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="HasProjectPlan" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Do you have an agreed Project Plan setting out the delivery milestones and underlying activities/timescales?</h1>
+
+<form asp-area="WorksPackageProgrammePlan" asp-controller="ProgrammePlan" asp-action="HasProjectPlan" method="post">
+    <govuk-radios asp-for="HasProjectPlan">
+        <govuk-radios-item value="@true" disabled="@Model.IsSubmitted">Yes</govuk-radios-item>
+        <govuk-radios-item value="@false" disabled="@Model.IsSubmitted">No</govuk-radios-item>
+    </govuk-radios>
+    
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

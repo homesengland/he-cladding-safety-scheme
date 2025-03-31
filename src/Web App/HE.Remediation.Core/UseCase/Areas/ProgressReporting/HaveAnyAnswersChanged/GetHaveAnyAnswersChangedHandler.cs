@@ -80,7 +80,8 @@ public class GetHaveAnyAnswersChangedHandler : IRequestHandler<GetHaveAnyAnswers
                 Signatory = gcoAnswers?.Signatory,
                 SignatoryEmailAddress = gcoAnswers?.SignatoryEmailAddress,
                 DateAppointed = gcoAnswers?.DateAppointed,
-                IntentToProceed = answers.IntentToProceedType
+                IntentToProceed = answers.IntentToProceedType,
+                HasProjectPlanMilestones = answers.HasProjectPlanMilestones
             } :
             throw new EntityNotFoundException("Answers not found");
     }

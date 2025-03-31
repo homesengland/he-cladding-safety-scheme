@@ -16,21 +16,13 @@
 {
     <govuk-error-summary>    
         <govuk-error-summary-item asp-for="DateOfCompletion" />
-        <govuk-error-summary-item asp-for="LifeSafetyRiskAssessment" />
+        <govuk-error-summary-item asp-for="FraewRiskToLifeReduced" />
         <govuk-error-summary-item asp-for="DischargedObligations" />
     </govuk-error-summary>
 }
 
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Final payment declaration and submission</h1>
-<p class="govuk-body">
-    Before completing the final payment declaration and submission, please be aware that our expectation
-    is having undertaken remediation in line with PAS9980:2022, that responses will be either low or medium tolerable.    
-</p>
-
-<p class="govuk-body">
-    Please be aware that if you tick any of the other options, we will be in touch to clarify your reply.
-</p>
 
 @using (Html.BeginForm())
 {
@@ -47,23 +39,17 @@
         </govuk-date-input-hint>
     </govuk-date-input>
 
-    <govuk-radios asp-for="LifeSafetyRiskAssessment">
-        <govuk-radios-fieldset>
-            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
-                Please provide the current risk assessment from the Fire Risk Appraisal of
-                External Walls (FRAEW) carried out following completion of the works
-            </govuk-radios-fieldset-legend>
-        </govuk-radios-fieldset>
-
-        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.Low)">Low</govuk-radios-item>
-        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.MediumTolerable)">Medium - tolerable</govuk-radios-item>
-        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.MediumActionRequired)">Medium - action required</govuk-radios-item>
-        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ERiskType.High)">High</govuk-radios-item>
-    </govuk-radios>
+    <govuk-checkboxes asp-for="FraewRiskToLifeReduced">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.DischargedObligations">
+            Please confirm that your Fire Risk Assessment shows that the risk to life has been reduced.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
 
     <govuk-checkboxes asp-for="DischargedObligations">
         <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.DischargedObligations">
-            I understand that the Cladding Safety System has discharged its obligations and that there is no further opportunity to claim funding.
+            I understand that once the review of the final payment request and supporting evidence has been undertaken and a decision 
+            communicated, that the Cladding Safety Scheme has discharged its obligations and that there is no further opportunity 
+            to claim funding.
         </govuk-checkboxes-item>
     </govuk-checkboxes>
 

@@ -25,6 +25,8 @@ public class TaskListViewModel : WorkPackageBaseViewModel
 
     public ETaskStatus SignatoriesStatusId { get; set; }
 
+    public ETaskStatus ProgrammePlanStatusId { get; set; }
+
     public bool CannotSubmit =>
         !IsSubmitted &&
             (GrantCertifyingOfficerStatusId != ETaskStatus.Completed ||
@@ -35,5 +37,6 @@ public class TaskListViewModel : WorkPackageBaseViewModel
              PlanningPermissionStatusId != ETaskStatus.Completed ||
              KeyDatesStatusId != ETaskStatus.Completed ||
              SignatoriesStatusId != ETaskStatus.Completed || 
+             ProgrammePlanStatusId != ETaskStatus.Completed ||
              !DutyOfCareDeedSent);
 }

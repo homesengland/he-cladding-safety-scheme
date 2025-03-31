@@ -1,10 +1,9 @@
-﻿using HE.Remediation.Core.Enums;
-
-namespace HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport;
+﻿namespace HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport;
 
 public class GetClosingReportDetailsResult
 {
 	public Guid? PaymentRequestId { get; set; }
+
 	public Guid? SubcontractorSurveyId { get; set; }
 
 	public bool? FinalCostReport { get; set; }
@@ -17,7 +16,7 @@ public class GetClosingReportDetailsResult
 
 	public DateTime? ProjectCompletionDate { get; set; }
 
-	public ERiskType? LifeSafetyRiskAssessment { get; set; }
+    public bool? FraewRiskToLifeReduced { get; set; }
 
-	public bool IsSubmitted { get; set; }
+    public bool IsSubmitted { get; set; }
 }

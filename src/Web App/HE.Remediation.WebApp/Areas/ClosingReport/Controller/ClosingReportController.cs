@@ -280,7 +280,7 @@ public class ClosingReportController : StartController
         return model.SubmitAction == ESubmitAction.Continue
             ? string.IsNullOrEmpty(model.ReturnUrl)
                 ? RedirectToAction("SubContractors")
-                : RedirectToAction(model.ReturnUrl)
+                : SafeRedirectToAction(model.ReturnUrl, null, null)
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 

@@ -503,7 +503,7 @@ public class CostsSchedulingController : StartController
         await _sender.Send(request);
 
         return viewModel.SubmitAction == ESubmitAction.Continue
-            ? RedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+            ? SafeRedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { Area = "WorksPackage" });
     }
 
@@ -532,7 +532,7 @@ public class CostsSchedulingController : StartController
         await _sender.Send(request);
 
         return viewModel.SubmitAction == ESubmitAction.Continue
-            ? RedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+            ? SafeRedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { Area = "WorksPackage" });
     }
 
@@ -560,7 +560,7 @@ public class CostsSchedulingController : StartController
         await _sender.Send(request);
 
         return viewModel.SubmitAction == ESubmitAction.Continue
-            ? RedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+            ? SafeRedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { Area = "WorksPackage" });
     }
 
@@ -589,7 +589,7 @@ public class CostsSchedulingController : StartController
         await _sender.Send(request);
 
         return viewModel.SubmitAction == ESubmitAction.Continue
-            ? RedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+            ? SafeRedirectToAction(viewModel.ReturnUrl, "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { Area = "WorksPackage" });
     }
 

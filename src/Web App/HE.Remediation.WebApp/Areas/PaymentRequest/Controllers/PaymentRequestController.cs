@@ -266,7 +266,7 @@ public class PaymentRequestController : StartController
         action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
+            ? SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 
@@ -311,7 +311,7 @@ public class PaymentRequestController : StartController
             var action = nameof(Invoices);
             action = model.ReturnUrl is null ? action : model.ReturnUrl;
 
-            return RedirectToAction(action, "PaymentRequest", new {area = "PaymentRequest"});
+            return SafeRedirectToAction(action, "PaymentRequest", new {area = "PaymentRequest"});
         }
 
         try
@@ -396,7 +396,7 @@ public class PaymentRequestController : StartController
         if (model.SubmitAction == ESubmitAction.Continue)
         {
             var action = !string.IsNullOrWhiteSpace(model.ReturnUrl) ? model.ReturnUrl : nameof(ProjectDates);
-            return RedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
+            return SafeRedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
         }
 
         return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
@@ -453,7 +453,7 @@ public class PaymentRequestController : StartController
         action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
+            ? SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 
@@ -494,7 +494,7 @@ public class PaymentRequestController : StartController
         action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
+            ? SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 
@@ -539,7 +539,7 @@ public class PaymentRequestController : StartController
             : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
+            ? SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 
@@ -577,7 +577,7 @@ public class PaymentRequestController : StartController
             : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
+            ? SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 
@@ -622,7 +622,7 @@ public class PaymentRequestController : StartController
             : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
+            ? SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"})
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 
@@ -668,7 +668,7 @@ public class PaymentRequestController : StartController
             : viewModel.ReturnUrl;
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" })
+            ? SafeRedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" })
             : RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
     }
 
@@ -727,7 +727,7 @@ public class PaymentRequestController : StartController
 
             action = viewModel.ReturnUrl ?? action;
 
-            return RedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"});
+            return SafeRedirectToAction(action, "PaymentRequest", new {Area = "PaymentRequest"});
         }
 
         return View(viewModel);
@@ -900,7 +900,7 @@ public class PaymentRequestController : StartController
         return model.SubmitAction == ESubmitAction.Continue
             ? string.IsNullOrEmpty(model.ReturnUrl)
                 ? RedirectToAction("SubContractors")
-                : RedirectToAction(model.ReturnUrl)
+                : SafeRedirectToAction(model.ReturnUrl, null, null)
             : RedirectToAction("Index", "StageDiagram", new {Area = "Application"});
     }
 

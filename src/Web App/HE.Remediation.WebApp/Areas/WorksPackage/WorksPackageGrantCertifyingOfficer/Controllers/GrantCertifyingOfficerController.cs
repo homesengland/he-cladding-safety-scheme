@@ -89,7 +89,7 @@ public class GrantCertifyingOfficerController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -133,7 +133,7 @@ public class GrantCertifyingOfficerController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -181,7 +181,7 @@ public class GrantCertifyingOfficerController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -360,7 +360,7 @@ public class GrantCertifyingOfficerController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)

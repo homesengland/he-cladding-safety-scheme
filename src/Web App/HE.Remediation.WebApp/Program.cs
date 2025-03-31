@@ -131,7 +131,8 @@ namespace HE.Remediation.WebApp
                 "WorksPackageKeyDates",
                 "WorksPackageSignatories", 
                 "WorksPackageDeclaration",
-                "WorksPackageSubmit"
+                "WorksPackageSubmit",
+                "WorksPackageProgrammePlan"
             };
             foreach (var areaName in applicationAreas.Union(workPackageAreas))
             {

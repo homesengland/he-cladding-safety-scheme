@@ -126,7 +126,7 @@ public class VariationRequestController : StartController
         {
             if (viewModel.ReturnUrl is not null && !adding)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.IsTimescaleVariation == true)
@@ -262,7 +262,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -322,7 +322,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -403,7 +403,7 @@ public class VariationRequestController : StartController
         if (viewModel.SubmitAction == ESubmitAction.Continue)
         {
             return viewModel.ReturnUrl is not null
-                ? RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+                ? SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
                 : RedirectToAction("Confirmation", "VariationRequest", new { Area = "VariationRequest" });
         }
 
@@ -523,7 +523,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -577,7 +577,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -631,7 +631,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -685,7 +685,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -759,7 +759,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -818,7 +818,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
@@ -875,7 +875,7 @@ public class VariationRequestController : StartController
             }
 
             return viewModel.ReturnUrl is not null
-                ? RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
+                ? SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" })
                 : RedirectToAction("Confirmation", "VariationRequest", new { Area = "VariationRequest" });
         }
         else if (viewModel.SubmitAction == ESubmitAction.Exit)
@@ -936,7 +936,7 @@ public class VariationRequestController : StartController
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
             }
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)

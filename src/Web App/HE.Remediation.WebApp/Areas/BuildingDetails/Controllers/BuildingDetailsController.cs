@@ -139,7 +139,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? action
                 : viewModel.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -182,7 +182,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? nameof(ProvideBuildingAddress)
                 : viewModel.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -225,7 +225,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? nameof(BuildingHasSafetyRegulatorRegistrationCode)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -262,7 +262,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? (model.BuildingHasSafetyRegulatorRegistrationCode.HasValue && model.BuildingHasSafetyRegulatorRegistrationCode.Value ? nameof(BuildingSafetyRegulatorRegistrationCode) : nameof(BuildingDeveloperInformation))
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -298,7 +298,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? nameof(BuildingDeveloperInformation)
                 : model.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -344,7 +344,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? action
                 : viewModel.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -371,7 +371,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                              ? nameof(ProvideLocalAuthority)
                              : viewModel.ReturnUrl;
 
-                return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+                return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
             }
             else if (submitAction == ESubmitAction.Exit)
             {
@@ -456,7 +456,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? nameof(ProvideLocalAuthority)
                 : viewModel.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -497,7 +497,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? nameof(BuildingPartOfDevelopment)
                 : viewModel.ReturnUrl;
 
-            return RedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
 
         #endregion
@@ -537,7 +537,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 
             if (!string.IsNullOrEmpty(model.ReturnUrl))
             {
-                return RedirectToAction(model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" });
+                return SafeRedirectToAction(model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" });
             }
             if (model.DoYouKnowOriginalDeveloper!.Value)
             {
@@ -577,7 +577,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? model.ReturnUrl
                 : nameof(DeveloperInBusiness);
 
-            return RedirectToAction(action);
+            return SafeRedirectToAction(action, null, null);
         }
 
 

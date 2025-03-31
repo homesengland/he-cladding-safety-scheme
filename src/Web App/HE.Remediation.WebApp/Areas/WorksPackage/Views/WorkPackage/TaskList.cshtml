@@ -124,6 +124,14 @@
                                 </li>
                                 <li class="app-task-list__item">
                                     <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.ProgrammePlanStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" }) : Url.Action("Start", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" }))">
+                                            Project Plan
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.ProgrammePlanStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
                                         <a class="govuk-link" href="@Url.Action("Start", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })" aria-describedby="list-convictions-status">
                                             Costs scheduling
                                         </a>

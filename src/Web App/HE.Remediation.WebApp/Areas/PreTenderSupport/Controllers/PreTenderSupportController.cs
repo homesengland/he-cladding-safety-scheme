@@ -97,7 +97,7 @@ namespace HE.Remediation.WebApp.Areas.PreTenderSupport.Controllers
 
                 if (viewModel.ReturnUrl is not null)
                 {
-                    return RedirectToAction(viewModel.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" });
+                    return SafeRedirectToAction(viewModel.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" });
                 }
 
                 if (submitAction == ESubmitAction.Continue)
@@ -163,7 +163,7 @@ namespace HE.Remediation.WebApp.Areas.PreTenderSupport.Controllers
 
                 if (viewModel.ReturnUrl is not null)
                 {
-                    return RedirectToAction(viewModel.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" });
+                    return SafeRedirectToAction(viewModel.ReturnUrl, "PreTenderSupport", new { Area = "PreTenderSupport" });
                 }
                                            
                 if (viewModel.SubmitAction == ESubmitAction.Continue)

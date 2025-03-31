@@ -35,7 +35,10 @@ public class GetFinalCheckYourAnswersResponse
 
     public string ReasonPlanningPermissionNotApplied { get; set; }
     public EIntentToProceedType? IntentToProceedType { get; set; }
-    
+
+    public bool? HasProjectPlanMilestones { get; set; }
+
+
     public EWhyYouHaveNotSoughtQuotes? WhyYouHaveNotSoughtQuotes { get; set; }
 
     public string QuotesNotSoughtReason { get; set; }
