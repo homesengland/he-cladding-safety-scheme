@@ -1,0 +1,55 @@
+﻿@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProgrammePlan.CheckYourAnswersViewModel
+
+@{
+    ViewData["Title"] = "Project plan";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Model.HasProjectPlan == true 
+        ? Url.Action("UploadProjectPlan", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" })
+        : Url.Action("HasProjectPlan", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Do you have an agreed Project Plan setting out the delivery milestones and underlying activities/timescales?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(!Model.HasProjectPlan.HasValue ? "-" : Model.HasProjectPlan.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("HasProjectPlan", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+    @if (Model.FileNames.Count > 0)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Project plan documentation</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @foreach (var fileName in Model.FileNames)
+                {
+                    @fileName<br/>
+                }
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("UploadProjectPlan", "ProgrammePlan", new { Area = "WorksPackageProgrammePlan" })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+<form asp-area="WorksPackageProgrammePlan" asp-controller="ProgrammePlan" asp-action="CheckYourAnswers" method="post">
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button type="submit" disabled="@Model.IsSubmitted">Continue</govuk-button>
+    </div>
+</form>

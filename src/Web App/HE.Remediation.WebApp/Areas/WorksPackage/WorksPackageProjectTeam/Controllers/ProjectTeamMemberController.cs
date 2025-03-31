@@ -151,7 +151,7 @@ public class ProjectTeamMemberController : StartController
         }
 
         return !string.IsNullOrEmpty(model.ReturnUrl)
-            ? RedirectToAction(model.ReturnUrl)
+            ? SafeRedirectToAction(model.ReturnUrl, null, null)
             : RedirectToAction("CheckYourAnswers", new { TeamMemberId = teamMemberId });
     }
 
@@ -209,7 +209,7 @@ public class ProjectTeamMemberController : StartController
 
         if (viewModel.ReturnUrl is not null)
         {
-            return RedirectToAction(viewModel.ReturnUrl);
+            return SafeRedirectToAction(viewModel.ReturnUrl, null, null);
         }
 
         return viewModel.SubmitAction == ESubmitAction.Continue

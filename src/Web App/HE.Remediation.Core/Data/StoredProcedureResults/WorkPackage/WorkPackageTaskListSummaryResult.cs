@@ -24,6 +24,8 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage
         
         public ETaskStatus WorkPackageSignatoriesStatusId { get; set; }
 
+        public ETaskStatus WorkPackageProgrammePlanStatusId { get; set; }
+
         public bool IsSubmitted { get; set; }
     }
 }

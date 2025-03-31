@@ -52,6 +52,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
             PlanningPermissionStatusId = planningPermissionStatus,
             KeyDatesStatusId = workPackageTaskListSummary.WorkPackageKeyDatesStatusId,
             SignatoriesStatusId = workPackageTaskListSummary.WorkPackageSignatoriesStatusId,
+            ProgrammePlanStatusId = workPackageTaskListSummary.WorkPackageProgrammePlanStatusId,
             IsSubmitted = workPackageTaskListSummary.IsSubmitted
         };
     }

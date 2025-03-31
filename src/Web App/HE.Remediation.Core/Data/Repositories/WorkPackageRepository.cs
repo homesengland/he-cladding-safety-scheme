@@ -3,7 +3,6 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsSchedu
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.Declaration;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.GrantCertifyingOfficer;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.KeyDates;
-using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.Declaration;
@@ -20,8 +19,10 @@ using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ThirdPartyContributions;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ThirdPartyContributions;
 using System.Data;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Services.StatusTransition;
+using UpsertTeamMemberParameters = HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam.UpsertTeamMemberParameters;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -1962,4 +1963,80 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         scope.Complete();
     }
+
+    #region Programme Plan
+    public async Task CreateWorkPackageProgrammePlan(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        await _connection.ExecuteAsync(nameof(CreateWorkPackageProgrammePlan), parameters);
+    }
+
+    public async Task SetWorkPackageProgrammePlanTaskStatus(SetWorkPackageProgrammePlanTaskStatusParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(SetWorkPackageProgrammePlanTaskStatus), parameters);
+    }
+
+    public async Task<bool?> GetHasProgrammePlan(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<bool?>(nameof(GetHasProgrammePlan), parameters);
+
+        return result;
+    }
+
+    public async Task SetHasProgrammePlan(SetHasProgrammePlanParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(SetHasProgrammePlan), parameters);
+    }
+
+    public async Task<IReadOnlyCollection<FileResult>> GetProgrammePlanDocuments(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var results = await _connection.QueryAsync<FileResult>(nameof(GetProgrammePlanDocuments), parameters);
+        return results;
+    }
+
+    public async Task InsertProgrammePlanDocument(InsertProgrammePlanDocumentParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(InsertProgrammePlanDocument), parameters);
+    }
+
+    public async Task DeleteProgrammePlanDocument(DeleteProgrammePlanDocumentParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(DeleteProgrammePlanDocument), parameters);
+    }
+
+    public async Task<GetProgrammePlanCheckYourAnswersResult> GetProgrammePlanCheckYourAnswers(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        GetProgrammePlanCheckYourAnswersResult result = null;
+
+        await _connection
+            .QueryAsync<GetProgrammePlanCheckYourAnswersResult, FileResult, GetProgrammePlanCheckYourAnswersResult>(
+                nameof(GetProgrammePlanCheckYourAnswers),
+                (answers, file) =>
+                {
+                    result ??= answers;
+
+                    if (file is not null)
+                    {
+                        result.FileNames.Add(file.Name);
+                    }
+
+                    return result;
+                },
+                parameters);
+
+        return result;
+    }
+
+    #endregion
 }

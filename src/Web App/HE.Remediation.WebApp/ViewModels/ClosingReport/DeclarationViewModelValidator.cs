@@ -15,10 +15,10 @@ public class DeclarationViewModelValidator : AbstractValidator<DeclarationViewMo
                 .WithMessage("The date of practical completion must be after the application creation date")
                 .Must(NotInTheFuture)
                 .WithMessage("The date of practical completion must not be in the future");
-                        
-        RuleFor(x => x.LifeSafetyRiskAssessment)
-            .NotNull()
-            .WithMessage("Current risk assessment required");
+
+        RuleFor(x => x.FraewRiskToLifeReduced)
+            .Must(x => x == true)
+            .WithMessage("You must confirm that your Fire Risk Assessment shows that the risk to life has been reduced");
 
         RuleFor(x => x.DischargedObligations)
             .Must(x => x == true)

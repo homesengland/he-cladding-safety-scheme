@@ -50,11 +50,5 @@ public class GetStageDiagramResponse
     public bool ShowClosingReport { get; set; }
     public EPaymentRequestTaskStatus? ClosingReportStatus { get; set; }
     public bool ClosingReportStarted { get; set; }
-    public bool HasThePrimaryReportBeenSubmitted
-    {
-        get
-        {
-            return HasSubmittedProgressReports && ProgressReports.Any(x => x.Version == 1 && x.DateSubmitted.HasValue);
-        }
-    }
+    public bool HasThePrimaryReportBeenSubmitted { get; set; }
 }

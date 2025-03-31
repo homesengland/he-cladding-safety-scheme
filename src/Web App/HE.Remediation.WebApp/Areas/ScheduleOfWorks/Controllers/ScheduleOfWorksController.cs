@@ -101,7 +101,7 @@ public class ScheduleOfWorksController : StartController
         if (viewModel.SubmitAction == ESubmitAction.Continue)
         {
             return viewModel.ReturnUrl is not null
-                ? RedirectToAction(viewModel.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
+                ? SafeRedirectToAction(viewModel.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
                 : RedirectToAction("UploadBuildingControl", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
         }
 
@@ -180,7 +180,7 @@ public class ScheduleOfWorksController : StartController
         if (model.SubmitAction == ESubmitAction.Continue)
         {
             return !string.IsNullOrWhiteSpace(model.ReturnUrl)
-                ? RedirectToAction(model.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
+                ? SafeRedirectToAction(model.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
                 : RedirectToAction("UploadLeaseholderEngagement", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
         }
 
@@ -244,7 +244,7 @@ public class ScheduleOfWorksController : StartController
         if (model.SubmitAction == ESubmitAction.Continue)
         {
             return !string.IsNullOrWhiteSpace(model.ReturnUrl)
-                ? RedirectToAction(model.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
+                ? SafeRedirectToAction(model.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
                 : RedirectToAction("ProjectDates", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
         }
 
@@ -315,7 +315,7 @@ public class ScheduleOfWorksController : StartController
 
         if (viewModel.ReturnUrl is not null)
         {
-            return RedirectToAction(viewModel.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+            return SafeRedirectToAction(viewModel.ReturnUrl, "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
         }
 
         return viewModel.SubmitAction == ESubmitAction.Continue

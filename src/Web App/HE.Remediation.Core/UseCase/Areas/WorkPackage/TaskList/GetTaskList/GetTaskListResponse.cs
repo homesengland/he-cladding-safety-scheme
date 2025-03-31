@@ -28,5 +28,7 @@ public class GetTaskListResponse
     
     public ETaskStatus SignatoriesStatusId { get; set; }
 
+    public ETaskStatus ProgrammePlanStatusId { get; set; }
+
     public bool IsSubmitted { get; set; }
 }

@@ -165,6 +165,8 @@ public interface IProgressReportingRepository
     Task<bool> GetDutyOfCareDeedTaskRaised();
     Task<EIntentToProceedType?> GetIntentToProceedType(GetIntentToProceedTypeParameters parameters);
     Task UpdateIntentToProceedType(UpdateIntentToProceedTypeParameters parameters);
+    Task<bool?> GetProgressReportHasProjectPlanMilestones();
+    Task UpdateProgressReportHasProjectPlanMilestones(bool? hasProjectPlanMilestones);
     Task RemoveProgressReportLeaseholderInformationDocument(RemoveProgressReportLeaseholderInformationDocumentParameters parameters);
 
     Task<GetBuildingControlDecisionResult> GetBuildingControlDecision(GetBuildingControlDecisionParameters parameters);

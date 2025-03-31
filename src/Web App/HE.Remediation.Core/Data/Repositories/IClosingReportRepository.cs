@@ -13,6 +13,7 @@ public interface IClosingReportRepository
     Task UpdateClosingReportToSubmitted(Guid applicationId);
     Task UpdateClosingReportProjectDate(Guid applicationId, DateTime? projectCompletionDate);
     Task UpdateClosingReportLifeSafetyRiskAssessment(Guid applicationId, ERiskType? lifeSafetyRiskAssessment);
+    Task UpdateClosingReportFraewRiskToLifeReduced(Guid applicationId, bool? fraewRiskToLifeReduced);
     Task UpdateClosingReportConfirmation(Guid applicationId, ConfirmationParameters parameters);
     Task InsertFile(Guid applicationId, Guid fileId, EClosingReportFileType uploadType);
     Task DeleteFile(Guid fileId);

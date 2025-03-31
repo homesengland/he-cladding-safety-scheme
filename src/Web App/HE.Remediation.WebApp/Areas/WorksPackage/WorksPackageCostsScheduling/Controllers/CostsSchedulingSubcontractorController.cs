@@ -73,7 +73,7 @@ public class CostsSchedulingSubcontractorController : StartController
         }
 
         return !string.IsNullOrEmpty(model.ReturnUrl)
-            ? RedirectToAction(model.ReturnUrl)
+            ? SafeRedirectToAction(model.ReturnUrl, null, null)
             : RedirectToAction("SubcontractorTeam", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
     }
 
@@ -115,7 +115,7 @@ public class CostsSchedulingSubcontractorController : StartController
 
         if (viewModel.ReturnUrl is not null)
         {
-            return RedirectToAction(viewModel.ReturnUrl);
+            return SafeRedirectToAction(viewModel.ReturnUrl, null, null);
         }
 
         return viewModel.SubmitAction == ESubmitAction.Continue

@@ -215,7 +215,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
                 return viewModel.SubmitAction == ESubmitAction.Continue 
-                                    ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                                    ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                                     : RedirectToAction("Index", "TaskList", new { Area = "Application" });                
             }
 
@@ -348,7 +348,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
             return submitAction == ESubmitAction.Continue 
-                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
@@ -416,13 +416,13 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 {
                     if (viewModel.WorksRequired!.Value == ENoYes.Yes)
                     {
-                        return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
+                        return SafeRedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
                     }
 
-                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+                    return SafeRedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
                 }
                 
-                return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+                return SafeRedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
             }
 
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
@@ -453,7 +453,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             {
                 if (viewModel.ReturnUrl is not null)
                 {
-                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });    
+                    return SafeRedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });    
                 }
 
                 return RedirectToAction(nameof(InternalWorksRequired), "FireRiskAppraisal", new { area = "FireRiskAppraisal" });    
@@ -574,13 +574,13 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 {
                     if (viewModel.WorksRequired!.Value == ENoYes.Yes)
                     {
-                        return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
+                        return SafeRedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });
                     }
 
-                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+                    return SafeRedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
                 }
 
-                return RedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+                return SafeRedirectToAction(action, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
             }
 
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
@@ -661,7 +661,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             {
                 if (viewModel.ReturnUrl is not null)
                 {
-                    return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });    
+                    return SafeRedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal", returnUrl = viewModel.ReturnUrl });    
                 }
 
                 return RedirectToAction(nameof(RecommendedWorksStart), "FireRiskAppraisal", new { area = "FireRiskAppraisal" });   
@@ -742,7 +742,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
             return submitAction == ESubmitAction.Continue 
-                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });            
         }
 
@@ -779,7 +779,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
             return submitAction == ESubmitAction.Continue 
-                                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                                ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
@@ -826,12 +826,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 var action = nameof(WorksToCladdingCladdingArea);
                 action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
              
-                return RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+                return SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
             }
 
             if (viewModel.ReturnUrl is not null)
             {
-                return RedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+                return SafeRedirectToAction(viewModel.ReturnUrl, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
             }
 
             ModelState.AddModelError("SelectedWorksToCladdingSystem", "Enter at least one cladding systems element");
@@ -932,7 +932,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             var action = nameof(ExternalWorksRequired);
             action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
             
-            return RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
+            return SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" });
         }
         #endregion
 
@@ -989,7 +989,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
 
             return submitAction == ESubmitAction.Continue 
-                ? RedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });            
         }
 

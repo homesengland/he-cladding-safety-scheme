@@ -3,7 +3,7 @@
 
 @{
     Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
-    ViewData["Title"] = "Upload monthly invoices";
+    ViewData["Title"] = "Monthly Payment Request";
     ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["BackLink"] = Url.Action("UploadCostReport", "PaymentRequest", new { Area = "PaymentRequest" });
 
@@ -28,7 +28,7 @@
     </govuk-error-summary>
 }
 
-<h1 class="govuk-heading-xl">Upload invoices</h1>
+<h1 class="govuk-heading-xl">Upload monthly invoices</h1>
 
 <p class="govuk-body">Please upload your monthly invoices. Please look to submit all invoices as 1 pdf with all invoices as a bundle.</p>
 

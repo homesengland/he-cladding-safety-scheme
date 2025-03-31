@@ -24,9 +24,6 @@
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Confirmation of required information</h1>
 <p class="govuk-body">
-    In order to submit your final payment request you must confirm that you have the required information to complete this section.
-    <br/>
-    <br/>
     By selecting to confirm and submit below you will initiate the final payment process and will not 
     be able to create any further variations to your project.
     <br/>
@@ -44,13 +41,15 @@
 
     <govuk-checkboxes asp-for="ExitFraew">
         <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ExitFraew">
-            An exit FRAEW report and letter from a qualified fire risk assessor confirming that the recommended works in the FRAEW submitted with the application have been done and the risk has been reduced to a tolerable level in line with PAS9980:2022
+            A current Fire Risk Assessment for this building, which reflects that remediation works to address the unsafe cladding have been completed and the risk to life is now at a 
+            tolerable level in line with PAS9980:2022.
         </govuk-checkboxes-item>
     </govuk-checkboxes>
 
     <govuk-checkboxes asp-for="CompletionCertificate">
         <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.CompletionCertificate">
-            A Completion Certificate from a Building Control Body in respect of Building Regulations. For buildings over 18m this is the Gateway 3 certificate from the Building Safety Regulator
+            A completion certificate from the appropriate Building Control body in respect of Building Regulations. For buildings over 18m, or 7 storeys or more, this is likely to be the 
+            Gateway 3 certificate from the Building Safety Regulator.
         </govuk-checkboxes-item>
     </govuk-checkboxes>
 

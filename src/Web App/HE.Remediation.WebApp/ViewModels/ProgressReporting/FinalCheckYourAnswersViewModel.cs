@@ -21,6 +21,7 @@ public class FinalCheckYourAnswersViewModel
     public string OtherMembersNotAppointedReason { get; set; }
     public string ReasonPlanningPermissionNotApplied { get; set; }
     public EIntentToProceedType? IntentToProceedType { get; set; }
+    public bool? HasProjectPlanMilestones { get; set; }
     public EWhyYouHaveNotSoughtQuotes? WhyYouHaveNotSoughtQuotes { get; set; }
     public string QuotesNotSoughtReason { get; set; }
     public DateTime? ExpectedWorksPackageSubmissionDate { get; set; }

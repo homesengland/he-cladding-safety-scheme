@@ -53,4 +53,17 @@ public abstract class StartController : Controller
 
         return RedirectToAction(area.Action, area.Controller, routeDictionary);
     }
+
+    /// <summary>
+    /// Use when action can be set by user input (to prevent malicious behaviour)
+    /// </summary>
+    protected IActionResult SafeRedirectToAction(string actionName, string controllerName, object routeValues)
+    {       
+        var url = Url.Action(actionName, controllerName, routeValues);
+        if (Url.IsLocalUrl(url))
+        {
+            return Redirect(url);
+        }
+        throw new ApplicationException("Invalid redirect request");
+    }
 }

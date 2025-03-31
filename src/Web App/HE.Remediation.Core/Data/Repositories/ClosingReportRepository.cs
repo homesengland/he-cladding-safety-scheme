@@ -59,6 +59,15 @@ public class ClosingReportRepository : IClosingReportRepository
         });
     }
 
+    public async Task UpdateClosingReportFraewRiskToLifeReduced(Guid applicationId, bool? fraewRiskToLifeReduced)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateClosingReportFraewRiskToLifeReduced), new
+        {
+            ApplicationId = applicationId,
+            FraewRiskToLifeReduced = fraewRiskToLifeReduced
+        });
+    }
+
     public async Task UpdateClosingReportToSubmitted(Guid applicationId)
     {
         await _connection.ExecuteAsync(nameof(UpdateClosingReportToSubmitted), new

@@ -33,4 +33,5 @@ public class GetProgressReportAnswersResult
     public DateTime ExpectedWorksPackageSubmissionDate { get; set; }
     public DateTime? ExpectedStartDateOnSite { get; set; }
     public EIntentToProceedType? IntentToProceedType { get; set; }
+    public bool? HasProjectPlanMilestones { get; set; }
 }

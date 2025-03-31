@@ -12,6 +12,7 @@ public class ProgressReportCheckMyAnswersResult
 
     public bool? QuotesSought { get; set; }
     public EIntentToProceedType? IntentToProceedTypeId { get; set; }
+    public bool? HasProjectPlanMilestones { get; set; }
     public EYesNoNonBoolean? RequirePlanningPermission { get; set; }
 
     public bool? AppliedForPlanningPermission { get; set; }

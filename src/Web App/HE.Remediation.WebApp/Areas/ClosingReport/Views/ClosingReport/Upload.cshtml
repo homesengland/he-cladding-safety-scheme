@@ -1,4 +1,5 @@
 ﻿@using HE.Remediation.Core.Enums;
+@using System.Net
 @model HE.Remediation.WebApp.ViewModels.ClosingReport.UploadViewModel
 @{
     if (Model.UploadType != EClosingReportFileType.ExitFraew)
@@ -36,7 +37,7 @@
 }
 <div class="govuk-body">
 
-<partial name="@($"_{Model.UploadType}")" view-data="ViewData"/>
+    <partial name="@(WebUtility.HtmlEncode($"_{Model.UploadType}"))" view-data="ViewData"/>
 
 <div class="govuk-hint">
     You can upload up to 5 files.
@@ -50,9 +51,9 @@
 
 @using (Html.BeginForm(FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
-    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
-    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
-    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" />
+    <input asp-for="BuildingName" type="hidden" />
+    <input asp-for="ReturnUrl" type="hidden" />
 
     @if ((Model.AddedFiles is null || Model.AddedFiles.Count < Model.NumberOfFilesAllowed) && !Model.IsSubmitted)
     {
@@ -88,12 +89,12 @@
                 </govuk-summary-list-row>
             }
         </govuk-summary-list>
-        @for (var i = 0; i < Model.AddedFiles.Count; i++)
+
+        @foreach (var x in Model.AddedFiles.Select((value, index) => new { value, index }))
         {
-            var file = Model.AddedFiles[i];
-            <input type="hidden" name="AddedFiles[@i].Id" value="@file.Id"/>
-            <input type="hidden" name="AddedFiles[@i].Name" value="@file.Name"/>
-            <input type="hidden" name="AddedFiles[@i].FileSize" value="@file.FileSize"/>
+            <input asp-for="@Model.AddedFiles[x.index].Id" type="hidden" />
+            <input asp-for="@Model.AddedFiles[x.index].Name" type="hidden" />
+            <input asp-for="@Model.AddedFiles[x.index].FileSize" type="hidden" />
         }
     }
     <br/>

@@ -58,6 +58,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
 
             if (progressReports.Any())
             {
+                stageDiagramResponse.HasThePrimaryReportBeenSubmitted = progressReports.Any(x => x.Version == 1 && x.DateSubmitted.HasValue);
                 stageDiagramResponse.ProgressReports = progressReports.OrderByDescending(x => x.DateCreated).Take(2).ToList();
             }
 

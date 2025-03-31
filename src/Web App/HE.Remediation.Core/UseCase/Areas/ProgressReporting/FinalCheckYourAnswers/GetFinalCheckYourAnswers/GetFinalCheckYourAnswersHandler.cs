@@ -56,6 +56,7 @@ public class GetFinalCheckYourAnswersHandler : IRequestHandler<GetFinalCheckYour
             OtherMembersNotAppointedReason = checkMyAnswersResult?.OtherMembersNotAppointedReason,
             ReasonPlanningPermissionNotApplied = checkMyAnswersResult?.ReasonPlanningPermissionNotApplied,
             IntentToProceedType = checkMyAnswersResult?.IntentToProceedTypeId,
+            HasProjectPlanMilestones = checkMyAnswersResult?.HasProjectPlanMilestones,
             WhyYouHaveNotSoughtQuotes = checkMyAnswersResult?.WhyYouHaveNotSoughtQuotes,
             QuotesNotSoughtReason = checkMyAnswersResult?.QuotesNotSoughtReason,
             ExpectedWorksPackageSubmissionDate = checkMyAnswersResult?.ExpectedWorksPackageSubmissionDate,
