@@ -86,23 +86,7 @@ public interface IWorkPackageRepository
 
     #endregion
 
-    #region Signatories
 
-    Task<SignatoriesResult> GetSignatories();
-
-    Task<ETaskStatus?> GetSignatoriesStatus();
-
-    Task InsertSignatories(bool? areSignatoriesCorrect);
-
-    Task UpdateSignatories(bool? areSignatoriesCorrect);
-
-    Task UpdateSignatoriesStatus(ETaskStatus taskStatus);
-
-    Task UpdateSignatoriesContactTask(bool contactTaskRaised);
-
-    Task ResetSignatories();
-
-    #endregion
 
     #region Key Dates
 

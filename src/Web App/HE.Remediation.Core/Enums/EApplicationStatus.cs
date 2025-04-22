@@ -51,6 +51,8 @@ namespace HE.Remediation.Core.Enums
         WorksComplete = 40,
         WorksPackageDeedComplete = 41,
         ApplicationClosed = 42,
-        ApplicationClosedReferToGla = 43
+        ApplicationClosedReferToGla = 43,
+        WorksPackageLetterIssued = 44,
+        WorksPackageMemorandumIssued = 45
     }
 }

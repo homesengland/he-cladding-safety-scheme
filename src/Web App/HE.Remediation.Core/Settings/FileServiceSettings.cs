@@ -6,6 +6,7 @@
         public UploadSectionSettings FireRiskAppraisal { get; set; }
         public UploadSectionSettings ResponsibleEntitiesEvidence { get; set; }
         public UploadSectionSettings FireRiskAppraisalSummary { get; set; }
+        public UploadSectionSettings FireRiskAppraisalReport { get; set; }
         public UploadSectionSettings ProgressReportEvidence { get; set; }
         public UploadSectionSettings ScheduleOfWorksContract { get; set; }
         public UploadSectionSettings ScheduleOfWorksBuildingControl { get; set; }

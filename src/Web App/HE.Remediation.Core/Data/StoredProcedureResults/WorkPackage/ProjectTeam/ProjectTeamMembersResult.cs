@@ -16,4 +16,5 @@ public class ProjectTeamMembersResult
     
     public ETeamRole Role { get; set; }
     public bool? HasChasCertification { get; set; }
+    public bool? InvolvedInOriginalInstallation { get; set; }
 }

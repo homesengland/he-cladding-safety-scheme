@@ -32,5 +32,6 @@ public class SetRepresentationCompanyOrIndividualAddressManualDetails : IRequest
         public string AddressLine2 { get; set; }
         public string City { get; set; }
         public string County { get; set; }
+        public int? CountryId { get; set; }
         public string Postcode { get; set; }
     }

@@ -23,11 +23,11 @@
 
                     <div class="govuk-flex-row">
                         <h2 class="govuk-heading-m">Application stage:</h2>
-                        <application-stage-text class="govuk-!-margin-left-2" stage="@Model.Stage"></application-stage-text>
+                        <application-stage-text class="govuk-!-margin-left-2" stage="@Model.Stage" scheme="@Model.ApplicationScheme"></application-stage-text>
                     </div>
 
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Stages:</h2>
-                    <application-stages-list stage="@Model.Stage"></application-stages-list>
+                    <application-stages-list stage="@Model.Stage" scheme="@Model.ApplicationScheme"></application-stages-list>
                     
                     <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                         <a href="@Url.Action("Index", "Document", new { Area = "Document" })" class="govuk-link">View uploaded documents</a>
@@ -39,7 +39,7 @@
                         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
                     </div>
 
-                    @if (Model.Stage == EApplicationStage.ApplyForGrant)
+                    @if (Model.Stage == EApplicationStage.ApplyForGrant && Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
                             <p class="govuk-body">
@@ -323,9 +323,9 @@
                         </div>
                     }
 
-                    @if (Model.Stage == EApplicationStage.WorksDelivery &&
-                        Model.HasScheduleOfWorks &&
-                        !Model.IsScheduleOfWorksSubmitted)
+                    @if (Model.Stage == EApplicationStage.WorksDelivery && 
+                         Model.HasScheduleOfWorks && 
+                         !Model.IsScheduleOfWorksSubmitted)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <div class="govuk-grid-row">
@@ -505,7 +505,7 @@
                         </div>
                     }
 
-                    @if (Model.Stage == EApplicationStage.ApplyForGrant)
+                    @if (Model.Stage == EApplicationStage.ApplyForGrant && Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5">
                             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">What happens next</h2>

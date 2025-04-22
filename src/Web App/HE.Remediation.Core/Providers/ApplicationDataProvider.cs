@@ -24,7 +24,8 @@ namespace HE.Remediation.Core.Providers
             DeclarationComplete = 6,
             ProgressReportIdCookieIndex = 7,
             PaymentRequestIdCookieIndex = 8,
-            AppIdEmailAddressCookieIndex = 9
+            AppIdEmailAddressCookieIndex = 9,
+            ApplicationSchemeCookieIndex = 10
         }
 
         public ApplicationDataProvider(IHttpContextAccessor httpContextAccessor, IDataProtectionProvider dataProtectionProvider)
@@ -350,20 +351,31 @@ namespace HE.Remediation.Core.Providers
             SetCookieValue(string.Join("_", currentParts));
         }
 
-        public void SetApplicationId(Guid applicationId)
-        {
-            SetCookiePart((int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString());
-        }
-
-        public void SetApplicationIdAndEmailAddress(Guid applicationId, string emailAddress)
+        public void SetApplicationDetails(Guid applicationId, EApplicationScheme applicationScheme, string emailAddress)
         {
             Dictionary<int, string> indexesAndValues = new Dictionary<int, string>()
             {
                 {(int)(CookieValueTypes.AppIdCookieIndex), applicationId.ToString()},
-                {(int)(CookieValueTypes.AppIdEmailAddressCookieIndex), emailAddress}
+                {(int)(CookieValueTypes.AppIdEmailAddressCookieIndex), emailAddress},
+                {(int)(CookieValueTypes.ApplicationSchemeCookieIndex), applicationScheme.ToString()}
             };
 
             SetCookieParts(indexesAndValues);
+        }
+
+        public EApplicationScheme GetApplicationScheme()
+        {
+            var decryptedCookie = GetDecryptedCookie();
+            if (decryptedCookie is null) return default;
+
+            var applicationScheme = decryptedCookie.Split("_")[(int)(CookieValueTypes.ApplicationSchemeCookieIndex)];
+
+            if (Enum.TryParse(applicationScheme, out EApplicationScheme scheme))
+            {
+                return scheme;
+            }
+
+            return default;
         }
 
         public string GetApplicationEmailAddress()

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HE.Remediation.Core.Interface;
+using Microsoft.AspNetCore.Http;
 using Serilog;
+using Serilog.Context;
 
 namespace HE.Remediation.Core.Middleware
 {
@@ -12,7 +14,7 @@ namespace HE.Remediation.Core.Middleware
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, IApplicationDataProvider applicationDataProvider)
         {
             try
             {
@@ -20,7 +22,11 @@ namespace HE.Remediation.Core.Middleware
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message, ex);
+                var userId = applicationDataProvider.GetUserId();
+                using (LogContext.PushProperty("UserId", userId))
+                {
+                    Log.Error(ex.Message, ex);
+                }
                 throw;
             }
         }

@@ -44,14 +44,12 @@ public class PostCodeManualViewModelValidator: AbstractValidator<PostCodeManualV
                             .Must(BeValidCountryDropDownSelection)                
                             .WithMessage("Please select a country");
 
-            RuleFor(x => x.Postcode)
-                    .NotEmpty()
-                    .WithMessage("Please enter a postcode");                    
-
             // When Uk is selected, then also check the post code
             When(x => x.CountryId == UKDropDownCountryValue,   () =>
             {
                 RuleFor(x => x.Postcode)
+                    .NotEmpty()
+                    .WithMessage("Please enter a postcode")                    
                     .ValidGovPostcode();                                       
             });            
         }

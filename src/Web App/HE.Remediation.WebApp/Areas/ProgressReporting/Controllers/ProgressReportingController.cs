@@ -69,10 +69,8 @@ using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingSafetyRegulato
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ExistingTeamMember;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.GetWhenStartOnSite;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.SetWhenStartOnSite;
-using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilestones.GetHasProjectPlanMilestones;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilestones.SetProjectPlanMilestones;
-using FluentValidation;
 
 namespace HE.Remediation.WebApp.Areas.ProgressReporting.Controllers;
 

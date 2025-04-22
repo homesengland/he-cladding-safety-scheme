@@ -11,7 +11,7 @@ public class SetReportDetailsRequest: IRequest<Unit>
     public string CompanyUndertakingReport { get; set; }
     public int? NumberOfStoreys { get; set; }    
 
-    public int? BuildingHeight { get; set; }
+    public decimal? BuildingHeight { get; set; }
 
     public EBasicComplexType BasicComplexId { get; set; }
 }

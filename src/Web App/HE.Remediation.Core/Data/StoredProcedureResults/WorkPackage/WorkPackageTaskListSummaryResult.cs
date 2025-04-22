@@ -22,7 +22,6 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage
 
         public ETaskStatus WorkPackageKeyDatesStatusId { get; set; }
         
-        public ETaskStatus WorkPackageSignatoriesStatusId { get; set; }
 
         public ETaskStatus WorkPackageProgrammePlanStatusId { get; set; }
 

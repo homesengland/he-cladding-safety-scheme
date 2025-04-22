@@ -11,6 +11,7 @@ using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesF
 using HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using HE.Remediation.Core.Interface;
 
 namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 {
@@ -20,12 +21,14 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
+        private readonly IApplicationDataProvider _applicationDataProvider;
 
-        public AlternativeFundingRoutesController(ISender sender, IMapper mapper)
+        public AlternativeFundingRoutesController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider)
             : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
+            _applicationDataProvider = applicationDataProvider;
         }
 
         protected override IActionResult DefaultStart => RedirectToAction("Information", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
@@ -108,9 +111,13 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
             var hasDeveloperPledgeAnswer =
                 viewModel.FundingStillPursuing != null && viewModel.FundingStillPursuing.Any(x => x == EFundingStillPursuing.SignedUpDevelopersPledge);
 
+            var isCladdingSafetyScheme = _applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
+
+            var isStop = hasDeveloperPledgeAnswer && isCladdingSafetyScheme;
+
             return button switch
             {
-                ESubmitAction.Continue => hasDeveloperPledgeAnswer ? RedirectToAction("DeveloperPledgeStop", "AlternativeFundingRoutes",
+                ESubmitAction.Continue => isStop ? RedirectToAction("DeveloperPledgeStop", "AlternativeFundingRoutes",
                     new { Area = "AlternativeFundingRoutes" }) : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes",
                     new { Area = "AlternativeFundingRoutes" }),
                 ESubmitAction.Exit => RedirectToAction("Index", "TaskList", new { Area = "Application" }),

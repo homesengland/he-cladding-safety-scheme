@@ -25,12 +25,13 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNew
             {
                 UserId = userId,
                 StatusId = EApplicationStatus.ApplicationInProgress,
-                StageId = EApplicationStage.ApplyForGrant
+                StageId = EApplicationStage.ApplyForGrant,
+                SchemeId = (int)request.ApplicationScheme
             });
 
-            var userIdAndEmailAddress = await _db.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", new { applicationId });
+            var userIdAndEmailAddress = await _db.QuerySingleOrDefaultAsync<UserIdEmailAddressAndSchemeId>("GetUserIdEmailAddressAndSchemeIdByApplicationId", new { applicationId });
 
-            _applicationDataProvider.SetApplicationIdAndEmailAddress(applicationId, userIdAndEmailAddress.EmailAddress);
+            _applicationDataProvider.SetApplicationDetails(applicationId, request.ApplicationScheme, userIdAndEmailAddress.EmailAddress);
 
             return Unit.Value;
         }

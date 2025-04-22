@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.Application.NewApplication;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Dashboard.AcknowledgeNotification;
@@ -22,12 +24,11 @@ public class GetAcknowledgeNotificationHandler : IRequestHandler<GetAcknowledgeN
             Acknowledged = true
         });
 
-        var applicationId = await _db.QuerySingleOrDefaultAsync<Guid>("GetApplicationIdForAlert", new
-        {
-            AlertId = request.Id
-        });
-
-        _applicationDataProvider.SetApplicationId(applicationId);
+        var applicationId = await _db.QuerySingleOrDefaultAsync<Guid>("GetApplicationIdForAlert", new { AlertId = request.Id });
+        var applicationDetails = await _db.QuerySingleOrDefaultAsync<UserIdEmailAddressAndSchemeId>("GetUserIdEmailAddressAndSchemeIdByApplicationId", new { applicationId });
+        var applicationScheme = (EApplicationScheme)(applicationDetails.ApplicationSchemeId ?? (int)EApplicationScheme.CladdingSafetyScheme);
+        
+        _applicationDataProvider.SetApplicationDetails(applicationId, applicationScheme, applicationDetails.EmailAddress);
 
         return Unit.Value;
     }

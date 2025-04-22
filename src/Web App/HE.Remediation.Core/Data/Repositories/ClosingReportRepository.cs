@@ -23,7 +23,14 @@ public class ClosingReportRepository : IClosingReportRepository
                 ApplicationId = applicationId
             });
     }
-
+    public async Task<bool?> GetClosingReportNeedVariations(Guid applicationId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<bool?>(
+            nameof(GetClosingReportNeedVariations), new
+            {
+                ApplicationId = applicationId
+            });
+    }
     public async Task<bool> IsClosingReportSubmitted(Guid applicationId)
     {
         return await _connection.QuerySingleOrDefaultAsync<bool>(nameof(IsClosingReportSubmitted), new
@@ -86,6 +93,15 @@ public class ClosingReportRepository : IClosingReportRepository
             parameters?.ExitFraew,
             parameters?.CompletionCertificate,
             parameters?.InformedPracticalCompletion
+        });
+    }
+
+    public async Task UpdateClosingReportNeedVariations(Guid applicationId, bool? needVariations)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateClosingReportNeedVariations), new
+        {
+            ApplicationId = applicationId,
+            NeedVariations = needVariations
         });
     }
 

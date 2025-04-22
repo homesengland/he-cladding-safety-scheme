@@ -1,0 +1,67 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.Application
+@model SchemeSelectionViewModel
+@{
+    Layout = "~/Areas/Application/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["ShowTitle"] = false;
+    ViewData["ShowSubtitle"] = false;
+    ViewData["Title"] = "Route to Remediation";
+    ViewData["SubTitle"] = "Select the route you are taking to remediate the building";
+    ViewData["BackLink"] = Url.Action("Index", "Dashboard", new { Area = "Application" });
+    ViewData["ShowBackButton"] = true;
+    ViewData["ShowExitLink"] = false;
+    ViewData["ReadOnly"] = false;
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme" class="govuk-link govuk-!-margin-bottom-2">
+            Cladding Safety Scheme
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/responsible-actors-scheme" class="govuk-link govuk-!-margin-bottom-2">
+            Responsible Actors Scheme
+        </a>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/social-sector-acm-cladding-remediation-fund-application-guidance" class="govuk-link govuk-!-margin-bottom-2">
+            Social Sector self-funded
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">Route to Remediation</h1>
+<h2 class="govuk-heading-m">Select the route you are taking to remediate the building</h2>
+
+<p class="govuk-body govuk-!-margin-bottom-9">
+    Please select the building remediation scheme that is right for your building. 
+    Note that only one selection per application can be made, so it's important to get this right from the outset.
+    Please see links in the top right if you are unsure on how to proceed, where published guidance should help you to decide the right scheme for your building's application.
+</p>
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SelectedSchemeId"/>
+    </govuk-error-summary>
+}
+<form asp-area="Application" asp-controller="Dashboard" asp-action="SchemeSelection" method="post">
+
+    <govuk-radios asp-for="SelectedSchemeId">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                @ViewData["Title"]
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        @foreach (var scheme in Model.Schemes)
+        {
+            <govuk-radios-item value="@scheme.Id">@scheme.SchemeName</govuk-radios-item>
+        }
+    </govuk-radios>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

@@ -10,4 +10,5 @@ public class ResponsibleEntityCompanyTypeViewModel
 
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
+    public EApplicationScheme ApplicationScheme { get; set; }
 }

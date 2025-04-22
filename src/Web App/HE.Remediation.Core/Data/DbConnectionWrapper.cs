@@ -34,5 +34,11 @@ namespace HE.Remediation.Core.Data
             var results = await _dbConnection.QueryAsync(sprocName, map, parameters, commandType: CommandType.StoredProcedure, splitOn: splitOn );
             return results.ToArray();
         }
+
+        public async Task<IReadOnlyCollection<T>> QueryAsync<T1, T2, T3, T>(string sprocName, Func<T1, T2, T3, T> map, object parameters = null, string splitOn = "Id")
+        {
+            var results = await _dbConnection.QueryAsync(sprocName, map, parameters, commandType: CommandType.StoredProcedure, splitOn: splitOn);
+            return results.ToArray();
+        }
     }
 }

@@ -4,6 +4,7 @@
     {
         public FileResult FraewFile { get; set; }
         public FileResult SummaryFile { get; set; }
+        public FileResult FraReportFile { get; set; }
     }
 
     public class FileResult

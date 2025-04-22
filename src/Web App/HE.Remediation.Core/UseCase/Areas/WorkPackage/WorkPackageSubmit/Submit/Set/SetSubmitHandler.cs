@@ -67,6 +67,10 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
 
         await TryCreateConsiderateConstructorsSchemeTask(applicationId);
 
+        await TryCreateProjectPlanTask(applicationId);
+
+        await TryCreateTeamMemberCladdingSystemInstallationTask(applicationId);
+
         await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest
         (
             applicationId,
@@ -96,6 +100,69 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
         await _taskRepository.InsertTask(new InsertTaskParameters
         {
             Description = "Please contact the applicant to discuss the lead contractor not being signed up to the considerate constructors scheme",
+            TaskTypeId = taskType.Id,
+            AssignedToTeamId = (int)ETeam.DaviesOps,
+            AssignedToUserId = null,
+            RequiredByDate = DateOnly.FromDateTime(dueDate),
+            CreatedByUserId = null,
+            Notes = null,
+            ReferenceId = applicationId,
+            TaskStatus = ETaskStatus.NotStarted.ToString(),
+            TopicId = null
+        });
+    }
+    private async Task TryCreateProjectPlanTask(Guid applicationId)
+    {
+        var hasAgreedProjectPlan = await _workPackageRepository.GetHasProgrammePlan(applicationId);
+
+        if (hasAgreedProjectPlan != null && hasAgreedProjectPlan.Value)
+        {
+            return;
+        }
+
+        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Works Package submission", "Additional information required"));
+
+        var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
+        {
+            Date = _dateTimeProvider.UtcNow,
+            WorkingDays = 1
+        });
+
+        await _taskRepository.InsertTask(new InsertTaskParameters
+        {
+            Description = "Contact the applicant to request further information about Project plan",
+            TaskTypeId = taskType.Id,
+            AssignedToTeamId = (int)ETeam.DaviesOps,
+            AssignedToUserId = null,
+            RequiredByDate = DateOnly.FromDateTime(dueDate),
+            CreatedByUserId = null,
+            Notes = null,
+            ReferenceId = applicationId,
+            TaskStatus = ETaskStatus.NotStarted.ToString(),
+            TopicId = null
+        });
+    }
+
+    private async Task TryCreateTeamMemberCladdingSystemInstallationTask(Guid applicationId)
+    {
+        var teamMembers = await _workPackageRepository.GetTeamMembers();
+
+        if (!teamMembers.Any(t => t.InvolvedInOriginalInstallation == true))
+        {
+            return;
+        }
+
+        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Works Package submission", "Additional information required"));
+
+        var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
+        {
+            Date = _dateTimeProvider.UtcNow,
+            WorkingDays = 1
+        });
+
+        await _taskRepository.InsertTask(new InsertTaskParameters
+        {
+            Description = "Please Contact the applicant to request further information about the project team member's involvement in the original cladding installation.",
             TaskTypeId = taskType.Id,
             AssignedToTeamId = (int)ETeam.DaviesOps,
             AssignedToUserId = null,

@@ -1,0 +1,39 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.NeedVariationsViewModel
+@{
+	Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+	ViewData["Title"] = "Final payment request";
+	ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+	ViewData["BackLink"] = Url.Action("Information", "ClosingReport", new { Area = "ClosingReport" });
+	ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+}
+
+@section ErrorSummary
+{
+	<govuk-error-summary>
+		<govuk-error-summary-item asp-for="NeedVariations" />
+	</govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Are you sure you do not need any variations and are ready to continue?</h1>
+
+@using (Html.BeginForm())
+{
+	<govuk-radios asp-for="NeedVariations">
+		<govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+		<govuk-radios-item value="@(false)">No</govuk-radios-item>
+	</govuk-radios>
+
+	@Html.HiddenFor(x => x.ApplicationReferenceNumber)
+	@Html.HiddenFor(x => x.BuildingName)
+
+	<div class="comp-btn-group">
+		<govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+		<govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+	</div>
+}

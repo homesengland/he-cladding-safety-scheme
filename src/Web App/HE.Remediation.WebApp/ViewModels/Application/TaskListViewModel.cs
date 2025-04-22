@@ -5,6 +5,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
     public class TaskListViewModel
     {
         public Guid ApplicationId { get; set; }
+        public EApplicationScheme ApplicationScheme { get; set; }
         public string ApplicationReferenceNumber { get; set; }
         public EApplicationStatus ApplicationStatusId { get; set; }
         public ETaskStatus ApplicationLeaseHolderEngagementStatusId { get; set; }
@@ -21,7 +22,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
                    && ApplicationBuildingDetailsStatusId == ETaskStatus.Completed
                    && ApplicationResponsibleEntityStatusId == ETaskStatus.Completed
                    && ApplicationFundingRoutesStatusId == ETaskStatus.Completed
-                   && ApplicationBankDetailsStatusId == ETaskStatus.Completed;
+                   && ((IsCladdingSafetyScheme() && ApplicationBankDetailsStatusId == ETaskStatus.Completed) || (!IsCladdingSafetyScheme()));
         }
 
         public bool Phase2Completed()
@@ -29,7 +30,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
             return ApplicationBuildingDetailsStatusId == ETaskStatus.Completed
                    && ApplicationResponsibleEntityStatusId == ETaskStatus.Completed
                    && ApplicationFundingRoutesStatusId == ETaskStatus.Completed
-                   && ApplicationBankDetailsStatusId == ETaskStatus.Completed
+                   && ((IsCladdingSafetyScheme() && ApplicationBankDetailsStatusId == ETaskStatus.Completed) || (!IsCladdingSafetyScheme()))
                    && ConfirmDeclarationStatusId == ETaskStatus.Completed;
         }
         public bool Phase3Completed()
@@ -40,6 +41,18 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public bool Phase4Completed()
         {
             return ApplicationStatusId != EApplicationStatus.ApplicationNotStarted && ApplicationStatusId != EApplicationStatus.ApplicationInProgress;
+        }
+
+        public bool IsBankAccountInformationRequired()
+        {
+            return ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme
+                && ApplicationScheme != EApplicationScheme.SocialSector
+                && ApplicationScheme != EApplicationScheme.SelfRemediating;
+        }
+
+        public bool IsCladdingSafetyScheme()
+        {
+            return ApplicationScheme == EApplicationScheme.CladdingSafetyScheme;
         }
     }
 } 

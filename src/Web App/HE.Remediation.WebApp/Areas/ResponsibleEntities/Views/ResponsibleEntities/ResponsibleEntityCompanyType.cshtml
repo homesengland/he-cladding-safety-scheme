@@ -1,4 +1,6 @@
-﻿@using HE.Remediation.Core.Enums
+﻿@using HE.Remediation.Core.Interface
+@using HE.Remediation.Core.Enums
+@inject IApplicationDataProvider applicationDataProvider;
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityCompanyTypeViewModel
 @{
     ViewData["Title"] = "What type of company is the Responsible Entity?";
@@ -7,6 +9,18 @@
         : ViewData["BackLink"] = (string)ViewData["CompanyOrIndividual"] == "Individual"
             ? Url.Action("FreeholderIndividualAddress", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
             : Url.Action("FreeholderCompanyAddress", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+
+    var isRasScheme = Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme;
+    var isSocialSectorScheme = Model.ApplicationScheme == EApplicationScheme.SocialSector;
+
+    if (isRasScheme)
+    {
+        ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    }
+    else if (isSocialSectorScheme)
+    {
+        ViewData["BackLink"] = Url.Action("Information", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    }
 }
 @section ErrorSummary
 {
@@ -21,13 +35,26 @@
                 @ViewData["Title"]
             </govuk-radios-fieldset-legend>
         </govuk-radios-fieldset>
-        
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.PrivateCompany)">Private company</govuk-radios-item>
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RightToManageCompany)">Right-to-Manage company</govuk-radios-item>
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation)">Resident-led organisation</govuk-radios-item>
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RegisteredProvider)">Registered Provider</govuk-radios-item>
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.LocalAuthority)">Local Authority</govuk-radios-item>
-        <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.Other)">Other</govuk-radios-item>
+
+        @if(Model.ApplicationScheme == EApplicationScheme.SocialSector) {
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RegisteredProvider)">Registered Provider</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.LocalAuthority)">Local Authority</govuk-radios-item>
+        }
+        else if (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+        {
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.PrivateCompany)">Private company</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.Other)">Other</govuk-radios-item>
+        } 
+        else
+        {
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.PrivateCompany)">Private company</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RightToManageCompany)">Right-to-Manage company</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation)">Resident-led organisation</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RegisteredProvider)">Registered Provider</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.LocalAuthority)">Local Authority</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.Other)">Other</govuk-radios-item>
+        }
+
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />

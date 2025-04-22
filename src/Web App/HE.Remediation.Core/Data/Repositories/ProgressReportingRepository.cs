@@ -1104,6 +1104,19 @@ public class ProgressReportingRepository : IProgressReportingRepository
             ProgressReportId = progressReportId
         });
     }
+    public async Task<GetProgressReportProgressSummaryResult> GetProgressReportProgressSummary(Guid progressReportId)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<GetProgressReportProgressSummaryResult>("GetProgressReportSummariseProgress", new
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId
+        });
+    }
 
     public async Task UpdateSummariseProgress(SetSummariseProgressRequest request)
     {

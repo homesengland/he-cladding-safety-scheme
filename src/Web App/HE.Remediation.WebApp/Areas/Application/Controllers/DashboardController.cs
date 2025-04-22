@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using FluentValidation.AspNetCore;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.AcknowledgeNotification;
 using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.GetPretender;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection;
 using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.Tasks;
 using HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication;
@@ -18,6 +21,7 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
     [CookieAuthorise]
     public class DashboardController : Controller
     {
+        private const string TempDataKey_SelectedScheme = "SelectedScheme";
         private readonly ISender _sender;
         private readonly IMapper _mapper;
 
@@ -53,21 +57,86 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
 
         #endregion
 
+        #region "Scheme Selection"
+
+        [HttpGet("SchemeSelection")]
+        public async Task<IActionResult> SchemeSelection()
+        {
+            var response = await _sender.Send(SchemeSelectionRequest.Request);
+
+            var viewModel = new SchemeSelectionViewModel
+            {
+                Schemes = response.Schemes.ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost("SchemeSelection")]
+        public async Task<IActionResult> SchemeSelection(SchemeSelectionViewModel viewModel)
+        {
+            var response = await _sender.Send(SchemeSelectionRequest.Request);
+
+            viewModel.Schemes = response.Schemes.ToList();
+
+            var validator = new SchemeSelectionViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, String.Empty);
+                return View(viewModel);
+            }
+
+            TempData[TempDataKey_SelectedScheme] = (EApplicationScheme)viewModel.SelectedSchemeId;
+
+            if (viewModel.SelectedSchemeId.Equals((int)EApplicationScheme.CladdingSafetyScheme))
+            {
+                return RedirectToAction(nameof(NewApplication));
+            }
+            else
+            {
+                return RedirectToAction(nameof(NewBuilding));
+            }
+        }
+
+        #endregion
+
         #region "New Application"
 
         [HttpGet]
         public IActionResult NewApplication()
         {
+            IfNoSchemeRedirectToSchemeSelection();
+            TempData[TempDataKey_SelectedScheme] = TempData[TempDataKey_SelectedScheme];
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Start()
+        public async Task<IActionResult> Start(NewApplicationOrBuildingViewModel viewModel)
         {
-            await _sender.Send(CreateNewApplicationRequest.Request);
+            IfNoSchemeRedirectToSchemeSelection();
+
+            TempData.TryGetValue(TempDataKey_SelectedScheme, out var scheme);
+
+            var request = CreateNewApplicationRequest.Request;
+            request.ApplicationScheme = (EApplicationScheme)scheme;
+            await _sender.Send(request);
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
+        #endregion
+
+        #region "New Building"
+
+        [HttpGet]
+        public IActionResult NewBuilding()
+        {
+            IfNoSchemeRedirectToSchemeSelection();
+            TempData[TempDataKey_SelectedScheme] = TempData[TempDataKey_SelectedScheme];
+            return View();
+        }
         #endregion
 
         #region "Existing Application"
@@ -136,6 +205,16 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
         public IActionResult Appeals()
         {
             return View();
+        }
+
+        private void IfNoSchemeRedirectToSchemeSelection()
+        {
+            TempData.TryGetValue(TempDataKey_SelectedScheme, out var scheme);
+
+            if (scheme == null)
+            {
+                RedirectToAction(nameof(SchemeSelection));
+            }
         }
 
     }

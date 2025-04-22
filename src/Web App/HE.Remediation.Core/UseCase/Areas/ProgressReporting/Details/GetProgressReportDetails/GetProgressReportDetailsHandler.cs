@@ -34,7 +34,7 @@ public class GetProgressReportDetailsHandler : IRequestHandler<GetProgressReport
 
         var details = await _progressReportingRepository.GetProgressReportDetails(applicationId, request.ProgressReportId);
 
-        var summariseProgress = await _progressReportingRepository.GetProgressReportProgressSummary();
+        var summariseProgress = await _progressReportingRepository.GetProgressReportProgressSummary(request.ProgressReportId);
 
         return new GetProgressReportDetailsResponse
         {

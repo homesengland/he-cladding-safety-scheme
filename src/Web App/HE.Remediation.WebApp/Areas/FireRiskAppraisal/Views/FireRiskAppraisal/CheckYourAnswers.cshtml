@@ -136,7 +136,7 @@
         <govuk-summary-list-row-value>
             @if (Model.BuildingHeight != null)
             {
-                <span>@Model.BuildingHeight.ToString()</span>
+                <span>@Model.BuildingHeight.Value.ToString("N2")</span>
             }
         </govuk-summary-list-row-value>
         @if (!Model.ReadOnly)

@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Data.Repositories;
+﻿using System.Text.RegularExpressions;
+using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -10,6 +11,8 @@ public class GetPreTenderHandler : IRequestHandler<GetPreTenderRequest, GetPreTe
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IAlertRepository _alertRepository;
     private readonly ISystemNotificationRepository _systemNotificationRepository;
+    
+    private static readonly Regex MarkdownHyperlinkRegex = new(@"\[(.+?)\]\((.+?)\)", RegexOptions.Compiled);
 
     public GetPreTenderHandler(
         IApplicationDataProvider applicationDataProvider, 
@@ -31,10 +34,26 @@ public class GetPreTenderHandler : IRequestHandler<GetPreTenderRequest, GetPreTe
 
         var notification = await _systemNotificationRepository.GetActiveSystemNotification();
 
+        var message = SantiseSystemNotification(notification?.Message);
+
         return new GetPreTenderResponse
         {
             AlertCount = alerts.Count,
-            NotificationMessage = notification?.Message
+            NotificationMessage = message
         };
+    }
+
+    private string SantiseSystemNotification(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            return null;
+        }
+
+        // replace angle brackets with HTML encoding to prevent HTML injection and cross site scripting
+        message = message.Replace("<", "&lt;").Replace(">", "&gt;");
+        // replace markdown hyperlinks with HTML anchor tags
+        message = MarkdownHyperlinkRegex.Replace(message, "<a href=\"$2\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">$1</a>");
+        return message;
     }
 }

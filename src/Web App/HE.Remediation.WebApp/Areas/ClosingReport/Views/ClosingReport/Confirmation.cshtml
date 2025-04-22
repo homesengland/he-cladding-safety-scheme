@@ -3,7 +3,7 @@
     Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
     ViewData["Title"] = "Final payment request";
     ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
-    ViewData["BackLink"] = Url.Action("Information", "ClosingReport", new {Area = "ClosingReport"});
+    ViewData["BackLink"] = Url.Action("NeedVariations", "ClosingReport", new {Area = "ClosingReport"});
     ViewData["FullWidth"] = true;
 }
 

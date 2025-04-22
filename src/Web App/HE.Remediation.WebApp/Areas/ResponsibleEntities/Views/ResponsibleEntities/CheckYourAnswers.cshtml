@@ -1,6 +1,11 @@
 ﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.CheckYourAnswersViewModel
+@inject IApplicationDataProvider applicationDataProvider;
 @{
+    var isRas = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
+    var isSocialSector = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
+
     ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
     ViewData["FullWidth"] = true;
     ViewData["ReturnUrl"] = "CheckYourAnswers";
@@ -16,7 +21,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <p class="govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold">
-                Representative
+                @(isRas ? "Developer" : "Representative")
             </p>
         </div>
         @if (!Model.ReadOnly)
@@ -35,7 +40,7 @@
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            As the Representative, are you based in the UK?
+                            As the @(isRas ? "Developer" : "Representative"), are you based in the UK?
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @(Model.RepresentativeUKBased!.Value ? "Yes" : "No")
@@ -63,11 +68,11 @@
 
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
-                                As the Representative, what are your company details?
+                                As the @(isRas ? "Developer" : "Representative"), what are your company details?
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
                                 @foreach (var item in details)
-                                {
+                                { 
                                     <span>
                                         @item<br>
                                     </span>
@@ -83,7 +88,7 @@
 
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            As the Representative, what are your company details?
+                            As the @(isRas ? "Developer" : "Representative"), what are your contact details?
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @foreach (var item in details)
@@ -102,7 +107,7 @@
 
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            As the Representative, what is your company address?
+                            As the @(isRas ? "Developer" : "Representative"), what is your company address?
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @foreach (var item in details.Where(item => !string.IsNullOrWhiteSpace(item)))
@@ -450,7 +455,7 @@
 </div>
 </div>
 
-@if (Model.BuildingRelationshipId != (int)EResponsibleEntityRelation.Freeholder && Model.FreeholderId != Guid.Empty)
+@if (Model.HasFreeholder() && !(isRas || isSocialSector))
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

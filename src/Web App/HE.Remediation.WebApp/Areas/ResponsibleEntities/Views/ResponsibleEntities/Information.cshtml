@@ -1,6 +1,22 @@
-﻿@{
+﻿@using HE.Remediation.Core.Interface
+@using HE.Remediation.Core.Enums
+@inject IApplicationDataProvider applicationDataProvider;
+@{
     ViewData["Title"] = "Information about this section";
     ViewData["BackLink"] = Url.Action("Index", "TaskList", new {Area = "Application"});
+
+    var applicationScheme = applicationDataProvider.GetApplicationScheme();
+    var continueDestination = Url.Action("Representative", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+
+    switch (applicationScheme)
+    {
+        case EApplicationScheme.ResponsibleActorsScheme:
+            continueDestination = Url.Action("RepresentationCompanyOrIndividualDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+        case EApplicationScheme.SocialSector:
+            continueDestination = Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            break;
+    }
 }
 
 <h1 class="govuk-heading-xl">Information about this section</h1>
@@ -20,4 +36,4 @@
     There is no requirement to have a Representative.
 </p>
 
-<govuk-button href="@Url.Action("Representative", "ResponsibleEntities", new {Area = "ResponsibleEntities"})">Continue</govuk-button>
+<govuk-button href="@continueDestination">Continue</govuk-button>

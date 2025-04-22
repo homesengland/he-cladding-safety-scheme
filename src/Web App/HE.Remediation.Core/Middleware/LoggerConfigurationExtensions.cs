@@ -13,7 +13,7 @@ public static class LoggerConfigurationExtensions
             connectionString: connectionString,
             sinkOptions: new MSSqlServerSinkOptions
             {
-                AutoCreateSqlTable = true,
+                AutoCreateSqlTable = false, // created by Database solution
                 TableName = "SystemLog"
             },
             columnOptions: ConfigureSerilogColumnOptions(),
@@ -43,11 +43,13 @@ public static class LoggerConfigurationExtensions
 
         properties.AdditionalColumns = new List<SqlColumn>
         {
-            new SqlColumn { ColumnName = "Elapsed", DataType = SqlDbType.Decimal, AllowNull = true },
-            new SqlColumn { ColumnName = "RequestMethod", DataType = SqlDbType.NVarChar, AllowNull = true },
-            new SqlColumn { ColumnName = "RequestPath", DataType = SqlDbType.NVarChar, AllowNull = true },
-            new SqlColumn { ColumnName = "RequestId", DataType = SqlDbType.NVarChar, AllowNull = true },
-            new SqlColumn { ColumnName = "StatusCode", DataType = SqlDbType.Int, AllowNull = true },
+            new() { ColumnName = "Elapsed", DataType = SqlDbType.Decimal, AllowNull = true },
+            new() { ColumnName = "RequestMethod", DataType = SqlDbType.NVarChar, AllowNull = true },
+            new() { ColumnName = "RequestPath", DataType = SqlDbType.NVarChar, AllowNull = true },
+            new() { ColumnName = "RequestId", DataType = SqlDbType.NVarChar, AllowNull = true },
+            new() { ColumnName = "StatusCode", DataType = SqlDbType.Int, AllowNull = true },
+            new() { ColumnName = "Source", DataType = SqlDbType.NVarChar, DataLength = 25, AllowNull = true },
+            new() { ColumnName = "UserId", DataType = SqlDbType.NVarChar, DataLength = 50, AllowNull = true }
         };
 
         return properties;

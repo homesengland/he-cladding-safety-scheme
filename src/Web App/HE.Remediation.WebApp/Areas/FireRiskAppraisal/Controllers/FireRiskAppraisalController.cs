@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
-using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddExternalWallWorks;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddInternalWallWorks;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.GetAppraisalSurveyDetails;
@@ -52,12 +52,14 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
+        private readonly IApplicationDataProvider _applicationDataProvider;
 
-        public FireRiskAppraisalController(ISender sender, IMapper mapper)
+        public FireRiskAppraisalController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider)
             : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
+            _applicationDataProvider = applicationDataProvider;
         }
 
         protected override IActionResult DefaultStart => RedirectToAction("WhatYouWillNeed", "FireRiskAppraisal",
@@ -282,11 +284,13 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
             var fraewFile = _mapper.Map<ViewModels.Shared.File>(file.FraewFile);
             var summaryFile = _mapper.Map<ViewModels.Shared.File>(file.SummaryFile);
+            var fraReportFile = _mapper.Map<ViewModels.Shared.File>(file.FraReportFile);
 
             var model = new UploadFireRiskAppraisalReportViewModel
             {
                 AddedFraew = fraewFile,
                 AddedSummary = summaryFile,
+                AddedFra = fraReportFile,
                 ReturnUrl = returnUrl
             };
 
@@ -304,15 +308,18 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
                 var fraewFile = _mapper.Map<ViewModels.Shared.File>(file.FraewFile);
                 var summaryFile = _mapper.Map<ViewModels.Shared.File>(file.SummaryFile);
+                var fraReport = _mapper.Map<ViewModels.Shared.File>(file.FraReportFile);
 
                 viewModel = new UploadFireRiskAppraisalReportViewModel
                 {
                     AddedFraew = fraewFile,
-                    AddedSummary = summaryFile
+                    AddedSummary = summaryFile,
+                    AddedFra = fraReport
                 };
 
                 ModelState.AddModelError(nameof(viewModel.Fraew), "Your files collectively are greater than 100mb");
                 ModelState.AddModelError(nameof(viewModel.FraewSummary), "Your files collectively are greater than 100mb");
+                ModelState.AddModelError(nameof(viewModel.FraReport), "Your files collectively are greater than 100mb");
 
                 return View(viewModel);
             }
@@ -331,7 +338,12 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 await _sender.Send(new UploadFireRiskAppraisalReportRequest
                 {
                     FraewFile = viewModel.Fraew,
-                    SummaryFile = viewModel.FraewSummary
+                    SummaryFile = viewModel.FraewSummary,
+                    FraReportFile = viewModel.FraReport,
+                    FraewAlreadyUploaded = viewModel.AddedFraew != null,
+                    SummaryAlreadyUploaded = viewModel.AddedSummary != null,
+                    FraAlreadyUploaded = viewModel.AddedFra != null,
+                    ApplicationScheme = _applicationDataProvider.GetApplicationScheme()
                 });
             }
             catch (InvalidFileException ex)

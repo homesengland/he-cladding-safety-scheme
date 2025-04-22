@@ -29,6 +29,8 @@ using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetSubmitPayment;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetDeclaration;
 using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.CheckStatusRequest;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetNeedVariations;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetNeedVariations;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.Controller;
 
@@ -81,6 +83,47 @@ public class ClosingReportController : StartController
             BuildingName = response.BuildingName
         };
         return View(model);
+    }
+
+
+    #endregion
+
+    #region Need Variations
+
+    [HttpGet(nameof(NeedVariations))]
+    public async Task<IActionResult> NeedVariations()
+    {
+        var response = await _sender.Send(GetNeedVariationsRequest.Request);
+        var viewModel = _mapper.Map<NeedVariationsViewModel>(response);
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(NeedVariations))]
+    public async Task<IActionResult> NeedVariations(NeedVariationsViewModel viewModel, ESubmitAction submitAction)
+    {
+        var validator = new NeedVariationsViewModelValidator();
+        var validationResult = await validator.ValidateAsync(viewModel);
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+        }
+
+        if (viewModel?.NeedVariations == false)
+        {
+            return RedirectToAction("Information", "ClosingReport");
+        }
+
+        var request = _mapper.Map<SetNeedVariationsRequest>(viewModel);
+        await _sender.Send(request);
+
+        return submitAction == ESubmitAction.Continue
+            ? RedirectToAction("Confirmation", "ClosingReport",
+                new
+                {
+                    Area = "ClosingReport",
+                })
+            : RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
     }
 
 

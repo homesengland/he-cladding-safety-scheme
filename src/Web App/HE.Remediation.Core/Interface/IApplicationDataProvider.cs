@@ -6,7 +6,6 @@ namespace HE.Remediation.Core.Interface
 {
     public interface IApplicationDataProvider
     {
-        void SetApplicationId(Guid applicationId);
         Guid GetApplicationId();
         void SetUserId(Guid userId);
         Guid? GetUserId();
@@ -45,6 +44,8 @@ namespace HE.Remediation.Core.Interface
 
         string GetApplicationEmailAddress();
 
-        void SetApplicationIdAndEmailAddress(Guid applicationId, string emailAddress);
+        void SetApplicationDetails(Guid applicationId, EApplicationScheme applicationScheme, string emailAddress);
+
+        EApplicationScheme GetApplicationScheme();
     }
 }

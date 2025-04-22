@@ -1,8 +1,11 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
-
+@using HE.Remediation.Core.Interface
+@using HE.Remediation.Core.Enums
+@inject IApplicationDataProvider applicationDataProvider;
 @{
     ViewData["Title"] = "Before you continue";
     ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
+    var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
 }
 
 <h1 class="govuk-heading-xl">
@@ -17,7 +20,10 @@
     <li>Building details</li>
     <li>Responsible Entity details</li>
     <li>Alternative routes of funding</li>
-    <li>Bank account details</li>
+    @if (isCladdingScheme)
+    {
+        <li>Bank account details</li>
+    }
 </ul>
 
 <p class="govuk-body">You can still view the details you've entered after you continue, but you will not be able to change them.</p>
