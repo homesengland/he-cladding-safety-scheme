@@ -20,10 +20,10 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
 
             var result =  new GetFireRiskAppraisalReportResponse();
 
-            var file = await _dbConnection.QueryAsync<FileResult, FileResult, GetFireRiskAppraisalReportResponse>("GetFireRiskAppraisalForApplication", 
-            (fraewFile, fraewSummary) =>
+            var file = await _dbConnection.QueryAsync<FileResult, FileResult, FileResult, GetFireRiskAppraisalReportResponse>("GetFireRiskAppraisalForApplication", 
+            (fraewFile, fraewSummary, fraReport) =>
             {
-               if(fraewFile is not null && fraewFile.Id != Guid.Empty)
+                if(fraewFile is not null && fraewFile.Id != Guid.Empty)
                 {
                     result.FraewFile = fraewFile;
                 }
@@ -31,6 +31,11 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
                 if (fraewSummary is not null && fraewSummary.Id != Guid.Empty)
                 {
                     result.SummaryFile = fraewSummary;
+                }
+
+                if (fraReport is not null && fraReport.Id != Guid.Empty)
+                {
+                    result.FraReportFile = fraReport;
                 }
 
                 return result;

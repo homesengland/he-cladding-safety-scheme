@@ -4,5 +4,6 @@
     {
         public Guid? FraewFileId { get; set; }
         public Guid? FraewSummaryFileId { get; set; }
+        public Guid? FraReportFileId { get; set; }
     }
 }

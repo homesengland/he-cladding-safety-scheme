@@ -24,4 +24,5 @@ public class PostCodeManualViewModel : AddressViewModel
     public bool? UkRegistered { get; set; }
     public int ProgressReportVersion { get; set; }
     public bool IsProgressReportGcoComplete { get; set; }
+    public bool? IsRepresentativeUkBased { get; set; }
 }

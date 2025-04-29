@@ -10,6 +10,9 @@ namespace HE.Remediation.WebApp.TagHelpers
         [HtmlAttributeName("stage")]
         public EApplicationStage ApplicationStage { get; set; }
 
+        [HtmlAttributeName("scheme")]
+        public EApplicationScheme ApplicationScheme { get; set; } = EApplicationScheme.CladdingSafetyScheme;
+
         [HtmlAttributeName("text-only")]
         public bool? TextOnly { get; set; }
 
@@ -36,7 +39,7 @@ namespace HE.Remediation.WebApp.TagHelpers
             switch (stage)
             {
                 case EApplicationStage.ApplyForGrant:
-                    return "Apply for grant";
+                    return ApplicationScheme == EApplicationScheme.CladdingSafetyScheme ? "Apply for grant" : "Create building record";
                 case EApplicationStage.GrantFundingAgreement:
                     return "Grant funding agreement";
                 case EApplicationStage.WorksPackage:

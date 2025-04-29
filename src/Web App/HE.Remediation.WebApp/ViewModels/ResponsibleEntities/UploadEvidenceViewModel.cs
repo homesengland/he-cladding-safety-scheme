@@ -10,5 +10,6 @@ public class UploadEvidenceViewModel : FileUploadViewModel
     public override string[] AcceptedFileTypes => new[] { ".pdf" };
     public override int NumberOfFilesAllowed => 5;
     public EResponsibleEntityUploadType UploadType { get; set; }
+    public bool IsRepresentative { get; set; }
     public string ReturnUrl { get; set; }
 }

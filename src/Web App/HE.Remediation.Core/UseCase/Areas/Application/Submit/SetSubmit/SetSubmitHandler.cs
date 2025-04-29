@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
@@ -55,27 +54,30 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.SetSubmit
 
             await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FinalApplicationSubmitted, applicationIds: applicationId);
 
-            var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Eligibility", "Start eligibility checks"));
-
-            var referenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
-
-            await _taskRepository.InsertTask(new InsertTaskParameters
+            if (_applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme)
             {
-                ReferenceId = applicationId,
-                AssignedToTeamId = (int)ETeam.DaviesOps,
-                AssignedToUserId = null,
-                CreatedByUserId = null,
-                Description = $"Application {referenceNumber} is ready for eligibility checks",
-                RequiredByDate = DateOnly.FromDateTime(DateTime.UtcNow),
-                TaskStatus = ETaskStatus.NotStarted.ToString(),
-                TaskTypeId = taskType.Id
-            });
+                var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Eligibility", "Start eligibility checks"));
 
-            await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest
-            (
-                applicationId,
-                EEmailType.ApplicationSubmitted
-            ));
+                var referenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
+
+                await _taskRepository.InsertTask(new InsertTaskParameters
+                {
+                    ReferenceId = applicationId,
+                    AssignedToTeamId = (int)ETeam.DaviesOps,
+                    AssignedToUserId = null,
+                    CreatedByUserId = null,
+                    Description = $"Application {referenceNumber} is ready for eligibility checks",
+                    RequiredByDate = DateOnly.FromDateTime(DateTime.UtcNow),
+                    TaskStatus = ETaskStatus.NotStarted.ToString(),
+                    TaskTypeId = taskType.Id
+                });
+
+                await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest
+                (
+                    applicationId,
+                    EEmailType.ApplicationSubmitted
+                ));
+            }
 
             scope.Complete();
         }

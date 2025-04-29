@@ -55,7 +55,6 @@ using ProjectDatesViewModelValidator = HE.Remediation.WebApp.ViewModels.PaymentR
 using SubmittedViewModel = HE.Remediation.WebApp.ViewModels.PaymentRequest.SubmittedViewModel;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetThirdPartyContributionsChanged;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetThirdPartyContributionsChanged;
-using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest;
 
 namespace HE.Remediation.WebApp.Areas.PaymentRequest.Controllers;
@@ -341,7 +340,6 @@ public class PaymentRequestController : StartController
     }
 
     [HttpGet(nameof(UploadCostReport) + "/Delete")]
-    [UserIdentityMustBeTheApplicationUser]
     public async Task<IActionResult> UploadCostReportDelete([FromQuery] Guid fileId, [FromQuery] string returnUrl)
     {
         await _sender.Send(new DeleteCostRequest

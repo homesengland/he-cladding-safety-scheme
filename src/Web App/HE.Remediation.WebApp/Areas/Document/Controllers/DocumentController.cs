@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.Document;
+using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Document;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace HE.Remediation.WebApp.Areas.Document.Controllers;
 
 [Area("Document")]
 [Route("Document")]
-[UserIdentityMustBeTheApplicationUser]
+[CookieApplicationAuthorise]
 public class DocumentController : Controller
 {
     private readonly ISender _sender;

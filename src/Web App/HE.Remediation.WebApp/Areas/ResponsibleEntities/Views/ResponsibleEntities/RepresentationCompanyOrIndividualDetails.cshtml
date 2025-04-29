@@ -1,8 +1,17 @@
 ﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RepresentationCompanyOrIndividualDetailsViewModel
+@inject IApplicationDataProvider applicationDataProvider;
 @{
-    ViewData["Title"] = "As the Representative, what are your company details?";
+    var isRasScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
+    var titlePrefix = isRasScheme ? "As a Developer" : "As the Representative";
+    ViewData["Title"] = $"{titlePrefix}, what are your company details?";
     ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividual", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+
+    if (isRasScheme)
+    {
+		ViewData["BackLink"] = Url.Action("Information", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    }
 }
 @section ErrorSummary
 {

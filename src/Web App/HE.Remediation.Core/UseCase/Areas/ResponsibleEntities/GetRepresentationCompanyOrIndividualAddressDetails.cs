@@ -23,6 +23,9 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                     ApplicationId = _applicationDataProvider.GetApplicationId()
                 });
 
+            var countries = await _connection.QueryAsync<Country>("GetCountries");
+            result.Countries = countries?.ToList();
+
             return result ?? new GetRepresentationCompanyOrIndividualAddressDetailsResponse();
         }
     }
@@ -45,5 +48,9 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         public string City { get; set; }
         public string County { get; set; }
         public string Postcode { get; set; }
+        public bool? IsRepresentativeUkBased { get; set; }
+        public int? CountryId { get; set; }
+        public List<Country> Countries { get; set; }
+
     }
 }

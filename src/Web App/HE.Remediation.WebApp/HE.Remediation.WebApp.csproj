@@ -49,6 +49,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\ClosingReport\Views\ClosingReport\NeedVariations.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Areas\FireRiskAppraisal\Views\FireRiskAppraisal\WhatYouWillNeed.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

@@ -26,7 +26,6 @@ public class GetTaskListResponse
 
     public ETaskStatus KeyDatesStatusId { get; set; }
     
-    public ETaskStatus SignatoriesStatusId { get; set; }
 
     public ETaskStatus ProgrammePlanStatusId { get; set; }
 

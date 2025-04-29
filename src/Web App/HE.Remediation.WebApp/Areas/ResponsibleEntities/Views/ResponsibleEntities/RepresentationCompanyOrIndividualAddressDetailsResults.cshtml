@@ -1,9 +1,13 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
 @using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
 @model HE.Remediation.WebApp.ViewModels.Location.PostCodeSelectionViewModel
 
+@inject IApplicationDataProvider applicationDataProvider;
 @{
-    ViewData["Title"] = "As the Representative, what is your company address?";
+    var titlePrefix = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme
+                            ? "As a Developer" : "As the Representative";
+    ViewData["Title"] = $"{titlePrefix}, what is your company address?";
     ViewData["BackLink"] = Url.Action("RepresentationCompanyOrIndividualAddressDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
     ViewData["FullWidth"] = false;
 

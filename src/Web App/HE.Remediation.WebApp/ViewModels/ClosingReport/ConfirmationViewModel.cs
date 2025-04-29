@@ -7,5 +7,5 @@ public class ConfirmationViewModel : ClosingReportBaseViewModel
     public bool? FinalCostReport { get; set; }
     public bool? ExitFraew { get; set; }
     public bool? CompletionCertificate { get; set; }
-    public bool? InformedPracticalCompletion { get; set; } 
+    public bool? InformedPracticalCompletion { get; set; }
 }

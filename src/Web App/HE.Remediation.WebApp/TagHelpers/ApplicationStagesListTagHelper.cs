@@ -7,14 +7,43 @@ namespace HE.Remediation.WebApp.TagHelpers
     [HtmlTargetElement("application-stages-list")]
     public class ApplicationStagesListTagHelper : TagHelper
     {
-        private static EApplicationStage[] ExcludedStates =
-        {
-            EApplicationStage.BuildingComplete, 
-            EApplicationStage.CounterSignInProgress
-        };
+        private static Dictionary<EApplicationScheme, EApplicationStage[]> SchemeSpecificExcludeStates =
+            new()
+            {
+                { 
+                    EApplicationScheme.CladdingSafetyScheme, new EApplicationStage[] {
+                                                                 EApplicationStage.BuildingComplete, 
+                                                                 EApplicationStage.CounterSignInProgress
+                    }
+                },
+                { 
+                    EApplicationScheme.ResponsibleActorsScheme, new EApplicationStage[] {
+                                                                 EApplicationStage.BuildingComplete, 
+                                                                 EApplicationStage.CounterSignInProgress,
+                                                                 EApplicationStage.GrantFundingAgreement
+                    }
+                },
+                { 
+                    EApplicationScheme.SocialSector, new EApplicationStage[] {
+                                                                 EApplicationStage.BuildingComplete, 
+                                                                 EApplicationStage.CounterSignInProgress,
+                                                                 EApplicationStage.GrantFundingAgreement
+                    }
+                },
+                { 
+                    EApplicationScheme.SelfRemediating, new EApplicationStage[] {
+                                                                 EApplicationStage.BuildingComplete, 
+                                                                 EApplicationStage.CounterSignInProgress,
+                                                                 EApplicationStage.GrantFundingAgreement
+                    }
+                },
+            };
 
         [HtmlAttributeName("stage")]
         public EApplicationStage ApplicationStage { get; set; }
+
+        [HtmlAttributeName("scheme")]
+        public EApplicationScheme ApplicationScheme { get; set; } = EApplicationScheme.CladdingSafetyScheme;
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -42,7 +71,7 @@ namespace HE.Remediation.WebApp.TagHelpers
                     setStageSelected = "govuk-stage-list-item-current";
                 }
 
-                if (ExcludedStates.All(x => x != stage))
+                if (SchemeSpecificExcludeStates[ApplicationScheme].All(x => x != stage))
                 {
                     if (currentStage == EApplicationStage.BuildingComplete)
                     {
@@ -64,7 +93,7 @@ namespace HE.Remediation.WebApp.TagHelpers
         {
             return stage switch
             {
-                EApplicationStage.ApplyForGrant => "Apply for grant",
+                EApplicationStage.ApplyForGrant => ApplicationScheme == EApplicationScheme.CladdingSafetyScheme ? "Apply for grant" : "Create building record",
                 EApplicationStage.GrantFundingAgreement => "Grant funding agreement",
                 EApplicationStage.WorksPackage => "Works package",
                 EApplicationStage.WorksDelivery => "Works delivery",

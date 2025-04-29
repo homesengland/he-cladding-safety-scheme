@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Exceptions;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -18,13 +19,14 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExisti
         public async Task<Unit> Handle(SetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
             var cookieUserId = _applicationDataProvider.GetUserId();
-            var userIdAndEmailAddress = await _db.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", new { request.ApplicationId });
-            if ((cookieUserId.HasValue || userIdAndEmailAddress.UserId.HasValue) && cookieUserId != userIdAndEmailAddress.UserId.Value)
+            var userIdEmailAddressAndSchemeId = await _db.QuerySingleOrDefaultAsync<UserIdEmailAddressAndSchemeId>("GetUserIdEmailAddressAndSchemeIdByApplicationId", new { request.ApplicationId });
+            if ((cookieUserId.HasValue || userIdEmailAddressAndSchemeId.UserId.HasValue) && cookieUserId != userIdEmailAddressAndSchemeId.UserId.Value)
             {
                 throw new EntityNotFoundException("Application not found.");
             }
 
-            _applicationDataProvider.SetApplicationIdAndEmailAddress(request.ApplicationId, userIdAndEmailAddress.EmailAddress);
+            var applicationScheme = (EApplicationScheme)userIdEmailAddressAndSchemeId.ApplicationSchemeId;
+            _applicationDataProvider.SetApplicationDetails(request.ApplicationId, applicationScheme, userIdEmailAddressAndSchemeId.EmailAddress);
             
             return Unit.Value;
         }

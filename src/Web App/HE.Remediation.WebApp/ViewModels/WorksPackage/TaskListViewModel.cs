@@ -23,7 +23,6 @@ public class TaskListViewModel : WorkPackageBaseViewModel
 
     public ETaskStatus KeyDatesStatusId { get; set; }
 
-    public ETaskStatus SignatoriesStatusId { get; set; }
 
     public ETaskStatus ProgrammePlanStatusId { get; set; }
 
@@ -36,7 +35,6 @@ public class TaskListViewModel : WorkPackageBaseViewModel
              ProjectTeamStatusId != ETaskStatus.Completed ||
              PlanningPermissionStatusId != ETaskStatus.Completed ||
              KeyDatesStatusId != ETaskStatus.Completed ||
-             SignatoriesStatusId != ETaskStatus.Completed || 
              ProgrammePlanStatusId != ETaskStatus.Completed ||
              !DutyOfCareDeedSent);
 }

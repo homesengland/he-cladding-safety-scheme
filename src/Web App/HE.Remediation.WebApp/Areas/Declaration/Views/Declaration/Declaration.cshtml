@@ -1,8 +1,12 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
+@inject IApplicationDataProvider applicationDataProvider;
 
 @{
     ViewData["Title"] = "Declaration";
     ViewData["Backlink"] = Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
+    var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
 }
 
 @if (ViewData.ModelState.ContainsKey(string.Empty))
@@ -31,14 +35,24 @@
 <ul class="govuk-list govuk-list--bullet">
     <li>I will tell Homes England if the application details change</li>
     <li>The information I have provided is true and correct</li>
-    <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information'</li>
-    <li>I can apply for grant funding for the building in this application as a Responsible Entity or an authorised Representative</li>
-    <li>I agree any grant funding received will be treated as state subsidy. More information about state subsidy can found in the guidance you have received.</li>
+    <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information</li>
+    @if (isCladdingScheme)
+    {
+        <li>I can apply for grant funding for the building in this application as a Responsible Entity or an authorised Representative</li>
+        <li>I agree any grant funding received will be treated as state subsidy. More information about state subsidy can found in the guidance you have received.</li>
+    }
+    else
+    {
+        <li>I can create a building record for this building on behalf of the responsible entity</li>
+    }
 </ul>
 
-<govuk-warning-text icon-fallback-text="Warning">
-    You may have to pay back any grant funding you receive if you submit untrue or incorrect information.
-</govuk-warning-text>
+    @if (isCladdingScheme)
+    {
+		<govuk-warning-text icon-fallback-text="Warning">
+			You may have to pay back any grant funding you receive if you submit untrue or incorrect information.
+		</govuk-warning-text>
+    }
 
 <form asp-area="Declaration" asp-controller="Declaration" asp-action="ConfirmDeclaration" method="post">
     <govuk-button type="submit">Confirm and continue</govuk-button>

@@ -130,6 +130,7 @@ public interface IProgressReportingRepository
     Task UpdateLeaseholdersInformedLastDate(DateTime? leaseholderInformedLastDate);
 
     Task<GetProgressReportProgressSummaryResult> GetProgressReportProgressSummary();
+    Task<GetProgressReportProgressSummaryResult> GetProgressReportProgressSummary(Guid progressReportId);
 
     Task UpdateSummariseProgress(SetSummariseProgressRequest request);
     Task<GetProgressReportSupportResult> GetProgressReportSupport();

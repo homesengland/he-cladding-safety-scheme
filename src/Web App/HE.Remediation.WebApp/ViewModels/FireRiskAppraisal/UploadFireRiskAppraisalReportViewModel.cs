@@ -1,4 +1,5 @@
-﻿using HE.Remediation.WebApp.ViewModels.Shared;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.WebApp.ViewModels.Shared;
 
 namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 {
@@ -7,6 +8,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public string DeleteEndpoint => "/FireRiskAppraisal/DeleteReport";
         public string[] FraewAcceptedFileTypes => new[] { ".pdf" };
         public string[] FraewSummaryAcceptedFileTypes => new[] { ".xlsx" };
+        public string[] FraReportAcceptedFileTypes => new[] { ".pdf", ".docx",".xlsx" };
 
         public Shared.File AddedFraew { get; set; }
 
@@ -15,6 +17,10 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public Shared.File AddedSummary { get; set; }
 
         public IFormFile FraewSummary { get; set; }
+
+        public Shared.File AddedFra { get; set; }
+
+        public IFormFile FraReport { get; set; }
 
         public string ReturnUrl { get; set; }
     }

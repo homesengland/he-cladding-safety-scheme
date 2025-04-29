@@ -62,20 +62,23 @@
                                     </span>
                                     <task-list-status-badge status="@Model.ApplicationFundingRoutesStatusId"></task-list-status-badge>
                                 </li>
-                                <li class="app-task-list__item">
-                                    @if (Model.ApplicationResponsibleEntityStatusId == ETaskStatus.NotStarted)
-                                    {
-                                        <span class="govuk-body">Bank account information</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="bank-account-eligibility-status">Cannot Start Yet</strong>
-                                    }
-                                    else
-                                    {
-                                        <a class="govuk-link" href="@(Model.ApplicationBankDetailsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "BankAccount" , new { Area="BankAccount" }) : Url.Action("Start", "BankAccount" , new { Area="BankAccount" }))" aria-describedby="list-convictions-status">
-                                            Bank account information
-                                        </a>
-                                        <task-list-status-badge status="@Model.ApplicationBankDetailsStatusId"></task-list-status-badge>
-                                    }
-                                </li>
+                                @if (Model.IsBankAccountInformationRequired())
+                                {
+                                    <li class="app-task-list__item">
+                                        @if (Model.ApplicationResponsibleEntityStatusId == ETaskStatus.NotStarted)
+                                        {
+                                            <span class="govuk-body">Bank account information</span>
+                                            <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="bank-account-eligibility-status">Cannot Start Yet</strong>
+                                        }
+                                        else
+                                        {
+                                            <a class="govuk-link" href="@(Model.ApplicationBankDetailsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "BankAccount" , new { Area="BankAccount" }) : Url.Action("Start", "BankAccount" , new { Area="BankAccount" }))" aria-describedby="list-convictions-status">
+                                                Bank account information
+                                            </a>
+                                            <task-list-status-badge status="@Model.ApplicationBankDetailsStatusId"></task-list-status-badge>
+                                        }
+                                    </li>
+                                }
                                 <li class="app-task-list__item">
                                     @if (Model.Phase2ReadyForDeclaration())
                                     {

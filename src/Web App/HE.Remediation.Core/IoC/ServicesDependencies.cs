@@ -76,6 +76,7 @@ public static class ServicesDependencies
         services.AddScoped<IFireRiskWorksRepository, FireRiskWorksRepository>();
         services.AddScoped<IBuildingDetailsRepository, BuildingDetailsRepository>();
         services.AddScoped<IAlertRepository, AlertRepository>();
+        services.AddScoped<IApplicationSchemeRepository, ApplicationSchemeRepository>();
         services.AddScoped<IPreTenderRepository, PreTenderRepository>();
         services.AddScoped<IProgressReportingRepository, ProgressReportingRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();

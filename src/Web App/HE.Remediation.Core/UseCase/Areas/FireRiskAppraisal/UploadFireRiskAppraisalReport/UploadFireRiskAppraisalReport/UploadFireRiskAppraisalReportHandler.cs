@@ -24,6 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
 
         private const string FraewFilePropertyName = "Fraew";
         private const string FraewSummaryFilePropertyName = "FraewSummary";
+        private const string FraReportFilePropertyName = "FraReport";
 
         public UploadFireRiskAppraisalReportHandler(
             IFileService fileService, 
@@ -51,8 +52,9 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
             {
                 ProcessFileResult fraewResult = default;
                 ProcessFileResult fraewSummaryResult = default;
+                ProcessFileResult fraReportResult = default;
 
-                if(request.FraewFile is not null)
+                if (request.FraewFile is not null)
                 {
                     fraewResult = await ProcessFile(request.FraewFile, FraewFilePropertyName, _fileServiceSettings.FireRiskAppraisal);
                 }
@@ -60,6 +62,11 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
                 if (request.SummaryFile is not null)
                 {
                     fraewSummaryResult = await ProcessFile(request.SummaryFile, FraewSummaryFilePropertyName, _fileServiceSettings.FireRiskAppraisalSummary);
+                }
+
+                if (request.FraReportFile is not null)
+                {
+                    fraReportResult = await ProcessFile(request.FraReportFile, FraReportFilePropertyName, _fileServiceSettings.FireRiskAppraisalReport);
                 }
 
                 if (request.FraewFile is not null)
@@ -71,6 +78,11 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
                 {
                     await _fileRepository.InsertFile(new InsertFileParameters { Extension = Path.GetExtension(request.SummaryFile.FileName), Id = fraewSummaryResult.FileId, MimeType = fraewSummaryResult.MimeType, Name = request.SummaryFile.FileName, Size = request.SummaryFile.Length });
                     await _dbConnection.ExecuteAsync("InsertFraewSummaryForApplication", new { fraewSummaryResult.FileId, applicationId });
+                }
+                if (request.FraReportFile is not null)
+                {
+                    await _fileRepository.InsertFile(new InsertFileParameters { Extension = Path.GetExtension(request.FraReportFile.FileName), Id = fraReportResult.FileId, MimeType = fraReportResult.MimeType, Name = request.FraReportFile.FileName, Size = request.FraReportFile.Length });
+                    await _dbConnection.ExecuteAsync("InsertFraReportForApplication", new { fraReportResult.FileId, applicationId });
                 }
 
                 await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewUploaded, applicationIds: applicationId);
@@ -99,14 +111,20 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
 
             var errors = new List<KeyValuePair<string, string>>();
 
-            if(existingFraew.FraewFileId == null && request.FraewFile == null)
+            if(existingFraew.FraewFileId == null && request.FraewFile == null && !request.FraewAlreadyUploaded)
             {
                 errors.Add(new KeyValuePair<string, string>(FraewFilePropertyName, "FRAEW File Required"));
             }
 
-            if (existingFraew.FraewSummaryFileId == null && request.SummaryFile == null)
+            if (existingFraew.FraewSummaryFileId == null && request.SummaryFile == null && !request.SummaryAlreadyUploaded)
             {
                 errors.Add(new KeyValuePair<string, string>(FraewSummaryFilePropertyName, "FRAEW Summary File Required"));
+            }
+
+            if (existingFraew.FraReportFileId == null && request.FraReportFile == null && !request.FraAlreadyUploaded 
+                    && request.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+            {
+                errors.Add(new KeyValuePair<string, string>(FraReportFilePropertyName, "FRA Report File Required"));
             }
 
             if (errors.Any())

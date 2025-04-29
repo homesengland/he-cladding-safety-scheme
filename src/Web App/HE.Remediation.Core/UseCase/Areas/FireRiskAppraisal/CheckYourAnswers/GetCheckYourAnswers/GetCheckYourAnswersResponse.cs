@@ -23,7 +23,7 @@ public class GetCheckYourAnswersResponse
 
     public int? NumberOfStoreys { get; set; }
 
-    public int? BuildingHeight { get; set; }
+    public decimal? BuildingHeight { get; set; }
 
     public EBasicComplexType? BasicComplexType { get; set; }
 

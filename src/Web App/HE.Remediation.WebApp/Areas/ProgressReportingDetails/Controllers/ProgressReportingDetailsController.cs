@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HE.Remediation.Core.Attributes;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.Details.GetProgressReportCompanyDetails;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.Details.GetProgressReportDetails;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProgressReports.GetProgressReports;
@@ -13,7 +12,6 @@ namespace HE.Remediation.WebApp.Areas.ProgressReportingDetails.Controllers;
 [Area("ProgressReportingDetails")]
 [Route("ProgressReporting")]
 [CookieApplicationAuthorise]
-[UserIdentityMustBeTheApplicationUser]
 public class ProgressReportingDetailsController : Controller
 {
     private readonly ISender _sender;

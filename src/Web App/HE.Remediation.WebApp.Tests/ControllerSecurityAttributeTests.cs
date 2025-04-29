@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using HE.Remediation.Core.Attributes;
 using HE.Remediation.WebApp.Areas;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +20,6 @@ namespace HE.Remediation.WebApp.Tests
             var controllersWithoutAnySecurityAttributes = assembly.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(baseType) && !t.IsSubclassOf(typeof(StartController))
                 && (!t.GetCustomAttributes(typeof(CookieAuthoriseAttribute), true).Any() &&
-                    !t.GetCustomAttributes(typeof(UserIdentityMustBeTheApplicationUserAttribute), true).Any() && 
                     !t.GetCustomAttributes(typeof(CookieApplicationAuthoriseAttribute), true).Any() &&
                     !t.GetCustomAttributes(typeof(AuthorizeAttribute), true).Any())
                 );

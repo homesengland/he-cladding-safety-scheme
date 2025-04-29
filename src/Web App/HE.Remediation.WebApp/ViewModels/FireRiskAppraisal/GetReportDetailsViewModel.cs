@@ -9,7 +9,7 @@ public class GetReportDetailsViewModel
     public string PeerReviewPerson { get; set; }
     public decimal? FraewCost { get; set; }
     public int? NumberOfStoreys { get; set; }    
-    public int? BuildingHeight { get; set; }
+    public decimal? BuildingHeight { get; set; }
     public EBasicComplexType BasicComplexId { get; set; }
     public string BuildingAddress { get; set; }
     public DateTime? FRAEWInstructedDate { get; set; }

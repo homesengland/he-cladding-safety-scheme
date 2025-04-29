@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.TaskList.GetTaskList;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Application;
@@ -14,11 +15,13 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
 
         private readonly ISender _sender;
         private readonly IMapper _mapper;
+        private readonly IApplicationDataProvider _applicationDataProvider;
 
-        public TaskListController(ISender sender, IMapper mapper)
+        public TaskListController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider)
         {
             _sender = sender;
             _mapper = mapper;
+            _applicationDataProvider = applicationDataProvider;
         }
 
         public async Task<IActionResult> Index()
@@ -26,6 +29,7 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             var taskListResponse = await _sender.Send(GetTaskListRequest.Request);
 
             var viewModel = _mapper.Map<TaskListViewModel>(taskListResponse);
+            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
             
             return View(viewModel);
         }

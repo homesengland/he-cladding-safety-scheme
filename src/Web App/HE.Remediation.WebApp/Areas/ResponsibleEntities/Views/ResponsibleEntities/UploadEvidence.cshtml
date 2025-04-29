@@ -1,10 +1,15 @@
 ﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.UploadEvidenceViewModel
+@inject IApplicationDataProvider applicationDataProvider;
 @{
+    var scheme = applicationDataProvider.GetApplicationScheme();
+    var displayAsRepresentative = (Model.IsRepresentative && scheme == EApplicationScheme.SelfRemediating);
+
     switch (Model.UploadType)
     {
         case EResponsibleEntityUploadType.Represent: 
-            ViewData["Title"] = "Upload evidence that you can represent the Responsible Entity";
+            ViewData["Title"] = displayAsRepresentative ? "Upload evidence that you can represent the Responsible Entity" : "Upload evidence that you have engaged with the Responsible Entity";
             ViewData["BackLink"] = Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             break;
         case EResponsibleEntityUploadType.S151:

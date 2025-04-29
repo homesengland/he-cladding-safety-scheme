@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
+using System.Reflection;
 
 namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
 {
@@ -48,5 +50,10 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
 
         public string ReturnUrl { get; set; }
         public bool ReadOnly { get; set; }
+
+        public bool HasFreeholder()
+        {
+            return BuildingRelationshipId != (int)EResponsibleEntityRelation.Freeholder && FreeholderId != null && FreeholderId != Guid.Empty;
+        }
     }
 }

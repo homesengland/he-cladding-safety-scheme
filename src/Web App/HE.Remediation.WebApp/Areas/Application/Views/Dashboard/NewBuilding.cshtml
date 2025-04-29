@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "New building record";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">New building record</h1>
+
+                    <p class="govuk-body">Register a new building that is eligible for remediation works.</p>
+                    <p class="govuk-body">You'll need to complete and submit each building before you can add the next one.</p>
+                    <p class="govuk-body">You can save each building record as a draft at any stage.</p>
+                    <h2 class="govuk-heading-m">Use this service to:</h2>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>supply building details for one of the bogernment's building remidiation schemes (Responsible Actors Scheme, Social Sector Schemes etc)'</li>
+                        <li>provide information on the Responsible Entity</li>
+                    </ul>
+
+                    <p class="govuk-body">The building record can be submitted once all details have been added.</p>
+
+                    <p class="govuk-body">In order to finalise and submit your building record, you will need to submit outputs from a 
+                        <a class="govuk-link" href="https://www.bsigroup.com/en-GB/standards/pas-9980/" rel="noreferrer noopener" target="_blank">Fire Risk Assessment of External Walls (FRAEW)</a>. These will be provided by an accredited panel member.
+                    </p>
+                    
+                    <h2 class="govuk-heading-m">For Cladding Safety Scheme Applications only</h2>
+
+                    <p class="govuk-body">At the end of this stage, for eligible applications, an agreed pre-tender funding amount 
+                        will be approved.</p>
+
+                    <p class="govuk-body">This financial support is provided to assist applicants in completing the design phase 
+                        of their remediation works, which will be required to proceed with the grant agreement.</p>
+
+                    <p class="govuk-body">Once the grant funding agreement is signed and the start on site criteria are met, 
+                        you will be able to claim monthly in arrears for works completed.</p>                   
+                    
+                    <form asp-area="Application" asp-controller="Dashboard" asp-action="start" method="post">
+                        <govuk-button is-start-button="true" type="submit">Start Now</govuk-button>
+                    </form>
+                </div>
+                <div class="govuk-grid-column-one-third">                    
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

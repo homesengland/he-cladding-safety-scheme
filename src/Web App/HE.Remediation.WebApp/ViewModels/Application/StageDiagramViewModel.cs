@@ -13,6 +13,7 @@ public class StageDiagramViewModel
     public EApplicationStage Stage { get; set; }
 
     public EApplicationStatus Status { get; set; }
+    public EApplicationScheme ApplicationScheme { get; set; }
 
     public DateTime DateCreated { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication;
 using Moq;
@@ -26,8 +27,8 @@ public class CreateNewApplicationTests
             .ReturnsAsync(Guid.NewGuid())
             .Verifiable();
 
-        _connection.Setup(x => x.QuerySingleOrDefaultAsync<UserIdAndEmailAddress>("GetUserIdAndEmailAddressByApplicationId", It.IsAny<object>()))
-            .ReturnsAsync(new UserIdAndEmailAddress { EmailAddress = "example@example.com", UserId = Guid.NewGuid()
+        _connection.Setup(x => x.QuerySingleOrDefaultAsync<UserIdEmailAddressAndSchemeId>("GetUserIdEmailAddressAndSchemeIdByApplicationId", It.IsAny<object>()))
+            .ReturnsAsync(new UserIdEmailAddressAndSchemeId { EmailAddress = "example@example.com", UserId = Guid.NewGuid(), ApplicationSchemeId = 1
             })
             .Verifiable();
             
@@ -35,7 +36,7 @@ public class CreateNewApplicationTests
                                 .Returns(Guid.NewGuid())
                                 .Verifiable(); 
 
-        _applicationDataProvider.Setup(x => x.SetApplicationIdAndEmailAddress(It.IsAny<Guid>(), It.IsAny<string>()))
+        _applicationDataProvider.Setup(x => x.SetApplicationDetails(It.IsAny<Guid>(), It.IsAny<EApplicationScheme>(), It.IsAny<string>()))
         .Verifiable();
 
 

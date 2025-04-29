@@ -71,6 +71,8 @@
         OnHoldGfa = 67,
         WorksPackageDeedComplete = 68,
         ApplicationClosed = 69,
-        ApplicationClosedReferToGla = 70
+        ApplicationClosedReferToGla = 70,
+        WorksPackageLetterIssued = 71,
+        WorksPackageMemorandumIssued = 72
     }
 }

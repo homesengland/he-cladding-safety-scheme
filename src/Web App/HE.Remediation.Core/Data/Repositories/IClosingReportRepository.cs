@@ -8,6 +8,7 @@ namespace HE.Remediation.Core.Data.Repositories;
 public interface IClosingReportRepository
 {
     Task<GetClosingReportConfirmationDetailsResult> GetClosingReportConfirmationDetails(Guid applicationId);
+    Task<bool?> GetClosingReportNeedVariations(Guid applicationId);
     Task<GetClosingReportDetailsResult> GetClosingReportDetails(Guid applicationId);
     Task<bool> IsClosingReportSubmitted(Guid applicationId);
     Task UpdateClosingReportToSubmitted(Guid applicationId);
@@ -15,6 +16,7 @@ public interface IClosingReportRepository
     Task UpdateClosingReportLifeSafetyRiskAssessment(Guid applicationId, ERiskType? lifeSafetyRiskAssessment);
     Task UpdateClosingReportFraewRiskToLifeReduced(Guid applicationId, bool? fraewRiskToLifeReduced);
     Task UpdateClosingReportConfirmation(Guid applicationId, ConfirmationParameters parameters);
+    Task UpdateClosingReportNeedVariations(Guid applicationId, bool? needVariations);
     Task InsertFile(Guid applicationId, Guid fileId, EClosingReportFileType uploadType);
     Task DeleteFile(Guid fileId);
     Task<IReadOnlyCollection<FileResult>> GetFiles(Guid applicationId, EClosingReportFileType uploadType);
