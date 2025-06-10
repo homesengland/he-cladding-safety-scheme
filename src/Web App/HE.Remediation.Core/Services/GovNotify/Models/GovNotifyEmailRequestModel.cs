@@ -29,21 +29,6 @@
         public string AdminUserEmailAddress { get; set; }
     }
 
-    public class ThirdPartyInviteParameters : GlobalPersonalisationParameters
-    {
-        public string FirstName { get; set; }
-        public string RequestorFullName { get; set; }
-        public string BuildingName { get; set; }
-        public string BuildingAddress { get; set; }
-    }
-
-    public class ThirdPartyRemoveAccessParameters : GlobalPersonalisationParameters
-    {
-        public string FirstName { get; set; }
-        public string AdminUserEmailAddress { get; set; }
-        public string BuildingName { get; set; }
-    }
-
     /// <summary>
     /// These are required fields for all templates
     /// </summary>

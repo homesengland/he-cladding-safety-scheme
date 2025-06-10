@@ -53,7 +53,7 @@ public interface IPaymentRequestRepository
 
     Task<bool> HasSubmittedPaymentRequests();
 
-    Task SubmitPaymentRequest(Guid paymentRequestId, Guid? userId);
+    Task SubmitPaymentRequest(Guid paymentRequestId);
 
     Task UpdatePaymentRequestTaskStatus(Guid paymentRequestId, EPaymentRequestTaskStatus taskStatusId);
 

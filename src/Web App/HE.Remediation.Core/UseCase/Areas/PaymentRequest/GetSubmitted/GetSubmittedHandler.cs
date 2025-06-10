@@ -40,9 +40,8 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
-        var userId = _applicationDataProvider.GetUserId();
 
-        await _paymentRequestRepository.SubmitPaymentRequest(paymentRequestId, userId);
+        await _paymentRequestRepository.SubmitPaymentRequest(paymentRequestId);
 
         await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PaymentRequestSubmitted, applicationIds: applicationId);
 

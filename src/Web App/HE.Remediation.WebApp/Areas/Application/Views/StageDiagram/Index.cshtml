@@ -3,26 +3,7 @@
 @model HE.Remediation.WebApp.ViewModels.Application.StageDiagramViewModel
 
 @{
-    Layout = "~/Areas/Application/Views/Shared/_SideCardLayout.cshtml";
     ViewData["Title"] = Model.UniqueBuildingName;
-    ViewData["ShowBackButton"] = false;
-}
-
-@section InfoCardSection
-{
-    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
-        <h2 class="govuk-heading-m">Third party contributors</h2>
-        <p class="govuk-body govuk-!-margin-top-0">Others can be invited to assist with specific sections of an application.</p>
-
-        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme" class="govuk-link govuk-!-margin-bottom-2">
-            Cladding Safety Scheme
-        </a>
-
-        <a href="@Url.Action("Index", "ThirdParty")" class="govuk-link govuk-!-margin-bottom-2">
-            View third party contributors
-        </a>
-        
-    </div>
 }
 
 <div class="text-center">
@@ -36,12 +17,12 @@
                     <h1 class="govuk-heading-xl">@Model.UniqueBuildingName</h1>
 
                     <div class="govuk-flex-row">
-                        <h2 class="govuk-heading-m">Application&nbsp;status:</h2>
+                        <h2 class="govuk-heading-m">Application status:</h2>
                         <application-status-badge class="govuk-!-margin-left-2" status="@Model.Status"></application-status-badge>
                     </div>
 
                     <div class="govuk-flex-row">
-                        <h2 class="govuk-heading-m">Application&nbsp;stage:</h2>
+                        <h2 class="govuk-heading-m">Application stage:</h2>
                         <application-stage-text class="govuk-!-margin-left-2" stage="@Model.Stage" scheme="@Model.ApplicationScheme"></application-stage-text>
                     </div>
 
@@ -459,19 +440,6 @@
                         </div>
                     }
 
-                    @if (Model.IsWorkPackageSubmitted)
-                    {
-                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-                            <a href="@Url.Action("Start", "CostSchedule", new { Area = "CostSchedule" } )" class="govuk-link">View cost schedule</a>
-                        </div>
-                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
-                            <p class="govuk-body">
-                                View your cost schedule.
-                            </p>
-                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-                        </div>
-                    }
-
                     @if (Model.Stage >= EApplicationStage.WorksPackage && Model.IsWorkPackageSubmitted)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
@@ -484,8 +452,6 @@
                             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
                         </div>
                     }
-                    
-
 
                     @if (Model.HasSubmittedProgressReports)
                     {
@@ -538,11 +504,6 @@
                             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
                         </div>
                     }
-
-                    <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-                        <a href="@Url.Action("Start", "RequestToWithdrawApplication", new { Area = "WithdrawalRequest" })" class="govuk-link">Request to withdraw application</a>
-                    </div>
-                    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
                     @if (Model.Stage == EApplicationStage.ApplyForGrant && Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
                     {

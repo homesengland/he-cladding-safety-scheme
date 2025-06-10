@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿
+using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.ProjectTeam.Get;
 

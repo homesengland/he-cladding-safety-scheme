@@ -280,12 +280,11 @@ public class PaymentRequestRepository : IPaymentRequestRepository
         });
     }
 
-    public async Task SubmitPaymentRequest(Guid paymentRequestId, Guid? userId)
+    public async Task SubmitPaymentRequest(Guid paymentRequestId)
     {
         await _connection.ExecuteAsync("SubmitPaymentRequest", new
         {            
-            PaymentRequestId = paymentRequestId,
-            UserId = userId
+            PaymentRequestId = paymentRequestId
         });
     }
 

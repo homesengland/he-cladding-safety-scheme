@@ -6,6 +6,6 @@ namespace HE.Remediation.Core.Data.StoredProcedureParameters
     {
         public Guid LeaseHolderEngagementId { get; set; }
         public EResponsibleForCommunicationType ResponsibleForCommunicationTypeId { get; set; }
-        public string RepresentationOtherText { get; set; }
+        public string? RepresentationOtherText { get; set; }
     }
 }

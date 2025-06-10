@@ -88,13 +88,9 @@ namespace HE.Remediation.WebApp.Controllers
             // Collaboration:
             //  Existing users hit this when logging in after being invited
             //  For new users - see logic in AccountController.RedirectToAccountHome
-            if (postLoginResponse.UserInvitesPending.IsOrganisationInvitePending)
+            if (postLoginResponse.UserInvitesPending.Any())
             {
                 return RedirectToAction("Join", "UserOnboarding", new { Area = "OrganisationManagement" });
-            }
-            if (postLoginResponse.UserInvitesPending.IsApplicationInvitePending)
-            {
-                return RedirectToAction("Join", "UserOnboarding", new { Area = "Application" });
             }
 
             if (postLoginResponse.UserProfileCompletion.IsContactInformationComplete == false)

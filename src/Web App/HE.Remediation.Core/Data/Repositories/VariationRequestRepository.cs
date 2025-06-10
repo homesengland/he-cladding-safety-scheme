@@ -311,7 +311,7 @@ public class VariationRequestRepository : IVariationRequestRepository
         scope.Complete();
     }
 
-    public async Task SubmitVariationRequest(Guid? userId)
+    public async Task SubmitVariationRequest()
     {
         if (!TryGetApplicationId(out var applicationId))
         {
@@ -322,8 +322,7 @@ public class VariationRequestRepository : IVariationRequestRepository
 
         await _connection.ExecuteAsync("SubmitVariationRequest", new
         {
-            ApplicationId = applicationId,
-            UserId = userId
+            ApplicationId = applicationId
         });
 
         scope.Complete();
@@ -612,14 +611,14 @@ public class VariationRequestRepository : IVariationRequestRepository
             });
     }
 
-    public async Task<VariationRequestThirdPartyContributionResult> GetThirdPartyContributionsThirdPartyContribution(Guid? variationRequestId)
+    public async Task<VariationRequestThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution(Guid? variationRequestId)
     {
         if (!TryGetApplicationId(out var applicationId))
         {
             return null;
         }
         
-        return await _connection.QuerySingleOrDefaultAsync<VariationRequestThirdPartyContributionResult>("GetVariationRequestThirdPartyContribution", new
+        return await _connection.QuerySingleOrDefaultAsync<VariationRequestThirdPartyContributionResult?>("GetVariationRequestThirdPartyContribution", new
         {
             ApplicationId = applicationId,
             VariationRequestId = variationRequestId

@@ -43,13 +43,12 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
     public async Task<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
-        var userId = _applicationDataProvider.GetUserId();
-
+        
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Works Package Checks", "Review works package for recommendation"));
         
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await _workPackageRepository.SubmitWorkPackage(userId);
+        await _workPackageRepository.SubmitWorkPackage();
         
         await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageSubmitted, applicationIds: applicationId);
 

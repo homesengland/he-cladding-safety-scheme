@@ -878,7 +878,7 @@ public class ProgressReportingRepository : IProgressReportingRepository
         return submittedDate;
     }
 
-    public async Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted, Guid? userId)
+    public async Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted)
     {
         if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
         {
@@ -889,8 +889,7 @@ public class ProgressReportingRepository : IProgressReportingRepository
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
-            DateSubmitted = dateSubmitted,
-            UserId = userId
+            DateSubmitted = dateSubmitted
         });
     }
 

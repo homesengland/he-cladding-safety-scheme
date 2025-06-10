@@ -26,9 +26,5 @@ namespace HE.Remediation.Core.Data.Repositories
         Task<string> GetApplicationReferenceNumber(Guid applicationId);
 
         Task<DateTime?> GetApplicationCreationDate(Guid applicationId);
-
-        Task<string> GetApplicationReasonForWithdrawalRequest(Guid applicationId);
-
-        Task UpdateApplicationReasonForWithdrawalRequest(Guid applicationId, string reasonForWithdrawalRequest);
     }
 }

@@ -692,13 +692,10 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         private async Task<RedirectToActionResult> RedirectToAccountHome()
         {
             var userProfile = await _sender.Send(GetPostLoginRequest());
-            if(userProfile.UserInvitesPending.IsOrganisationInvitePending)
+            if(userProfile.UserInvitesPending.Any())
             {
                 return RedirectToAction("Join", "UserOnboarding", new { Area = "OrganisationManagement", newSignUp = true });
-            }
-            if (userProfile.UserInvitesPending.IsApplicationInvitePending)
-            {
-                return RedirectToAction("Join", "UserOnboarding", new { Area = "Application" });
+
             }
 
             return RedirectToAction("Index", "Account", new { Area = "Administration" });

@@ -33,10 +33,6 @@ namespace HE.Remediation.Core.Services.Communication
                     return _govNotifySettings.CollaborationOrganisationInviteEmailTemplateId;
                 case EEmailType.CollaborationOrganisationUserRemoval:
                     return _govNotifySettings.CollaborationOrganisationInviteRemovalEmailTemplateId;
-                case EEmailType.CollaborationThirdPartyInvite:
-                    return _govNotifySettings.CollaborationThirdPartyInviteTemplateId;
-                case EEmailType.CollaborationThirdPartyRemoveAccess:
-                    return _govNotifySettings.CollaborationThirdPartyInviteRemovalEmailTemplateId;
                 default:
                     throw new Exception("Email type not supported");
             }

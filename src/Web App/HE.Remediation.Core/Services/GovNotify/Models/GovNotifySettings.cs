@@ -17,7 +17,5 @@
         public Guid CollaborationOrganisationInviteEmailTemplateId { get; set; }
 
         public Guid CollaborationOrganisationInviteRemovalEmailTemplateId { get; set; }
-        public Guid CollaborationThirdPartyInviteTemplateId { get; set; }
-        public Guid CollaborationThirdPartyInviteRemovalEmailTemplateId { get; set; }
     }
 }

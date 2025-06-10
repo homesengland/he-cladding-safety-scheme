@@ -101,7 +101,7 @@ public interface IProgressReportingRepository
 
     Task<DateTime?> GetProgressReportDateSubmitted();
 
-    Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted, Guid? userId);
+    Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted);
 
     Task<GetProgressReportResult> GetProgressReportDetails(Guid applicationId, Guid progressReportId);
 
