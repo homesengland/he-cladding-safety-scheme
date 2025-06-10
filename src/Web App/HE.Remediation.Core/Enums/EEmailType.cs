@@ -7,5 +7,10 @@ public enum EEmailType
     VariationSubmitted = 3,
     ScheduleOfWorksSubmitted = 4,
     WorksPackageSubmitted = 5,
-    ClosingReportSubmitted = 6
+    ClosingReportSubmitted = 6,
+    CollaborationOrganisationInvite = 7,
+    CollaborationOrganisationUserRemoval = 8,
+    CollaborationThirdPartyInvite = 9,
+    CollaborationThirdPartyRemoveAccess = 10
+
 }

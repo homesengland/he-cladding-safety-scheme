@@ -1,0 +1,78 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
+@model HE.Remediation.WebApp.ViewModels.OrganisationManagement.UsersViewModel
+@inject IApplicationDataProvider applicationDataProvider;
+@{
+    var userId = applicationDataProvider.GetAuth0UserId();
+    ViewData["Title"] = "Creating an organisation";
+}
+
+<govuk-back-link href="/Application/Dashboard">Back</govuk-back-link>
+
+<h1 class="govuk-heading-xl">Organisation management</h1>
+
+<h2 class="govuk-heading-m">@Model.OrganisationName</h2>
+
+<div class="govuk-body">
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header">Email address</th>
+                <th scope="col" class="govuk-table__header">Role</th>
+                @if (Model.ApplicationRoleId == EApplicationRole.OrganisationAdmin)
+                {
+                    <th scope="col" class="govuk-table__header">Manage</th>
+                }
+                <th scope="col" class="govuk-table__header">Access</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var user in Model.Users)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@user.Name</td>
+                    <td class="govuk-table__cell">@user.Email</td>
+                    <td class="govuk-table__cell">@user.Role</td>
+                    @if(Model.ApplicationRoleId == EApplicationRole.OrganisationAdmin)
+                    {
+                        <td class="govuk-table__cell">
+                            <a href="@Url.Action("EditMember", "OrganisationManagement", new { id = user.Id })" class="govuk-link">Edit</a>
+                        </td>
+                    }
+                    <td class="govuk-table__cell">
+                        @if (userId != user.Auth0UserId)
+                        {
+                            @if (user.UserStatus == "Accepted")
+                            {
+                                @if (Model.ApplicationRoleId == EApplicationRole.OrganisationAdmin)
+                                {
+                                    <a href="@Url.Action("RemoveMember", "OrganisationManagement", new { id = user.Id })" class="govuk-link">Remove</a>
+                                } else
+                                {
+                                    @user.UserStatus
+                                }
+
+                            }
+                            else
+                            {
+                                @user.UserStatus
+                            }
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.ApplicationRoleId == EApplicationRole.OrganisationAdmin)
+{
+    <div>
+        <a class="govuk-button" href="@Url.Action("InviteMember", "OrganisationManagement", new { organisationId = Model.OrganisationId })">Invite member</a>
+    </div>
+}
+
+
+

@@ -36,14 +36,19 @@ public class PostLoginHandler : IRequestHandler<PostLoginRequest, PostLoginRespo
             request.IpAddress,
             request.UserAgent);
 
+        await _userService.RecordSignIn(userModel);
+
         var userProfileCompletion = await _userService.GetUserProfileCompletionData(userId);
         _applicationDataProvider.SetUserDetails(userId, request.Auth0UserId, userProfileCompletion);
+
+        var userInvitesPending = await _userService.IsUserInvitePending(request.Auth0UserId);
 
         scope.Complete();
 
         return new PostLoginResponse
         {
-            UserProfileCompletion = userProfileCompletion
+            UserProfileCompletion = userProfileCompletion,
+            UserInvitesPending = userInvitesPending
         };
     }
 

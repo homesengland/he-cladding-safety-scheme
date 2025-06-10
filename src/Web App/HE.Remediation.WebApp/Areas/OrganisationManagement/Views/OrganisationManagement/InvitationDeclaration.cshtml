@@ -1,0 +1,45 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.OrganisationManagement.InvitationDeclarationViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Invitation declaration";
+}
+
+@section InfoCardSection
+{
+    @await Html.PartialAsync("_Guidance")
+}
+
+@section BackButton
+{
+    <govuk-back-link href="/OrganisationManagement/EditMember/@Model.CollaborationUserId">Back</govuk-back-link>
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IsAdminResponsibilityConfirmed" />
+    </govuk-error-summary>
+}
+
+<span class="govuk-caption-xl">Organisation management</span>
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form method="post" asp-area="OrganisationManagement" asp-controller="OrganisationManagement" asp-action="InvitationDeclaration">
+
+    <p class="govuk-body">Before completing the Invitation declaration, please check the information you've given us.</p>
+
+    <govuk-checkboxes name="IsAdminResponsibilityConfirmed" asp-for="IsAdminResponsibilityConfirmed">
+        <govuk-checkboxes-item value="true">Confirm that in completing this invitation to collaborate you are doing so on the basis that responsibility for the content / accuracy of the data remains with you the applicant.</govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    <div>
+        <a class="govuk-link" href="@Url.Action("Users", "OrganisationManagement")">Cancel and exit</a>
+    </div>
+</form>
+
+
+

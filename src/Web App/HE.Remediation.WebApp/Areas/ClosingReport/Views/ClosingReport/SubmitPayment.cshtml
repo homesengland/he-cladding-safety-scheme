@@ -5,8 +5,7 @@
     Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
     ViewData["Title"] = "Final payment request";
     ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
-    ViewData["BackLink"] = Model.SubcontractorsRequired ? Url.Action("SubContractorsCheckYourAnswers", "ClosingReport", new { Area = "ClosingReport" }) :
-      Url.Action("Upload", "ClosingReport", new { Area = "ClosingReport", UploadType = EClosingReportFileType.LeaseholderResidentCommunication });
+    ViewData["BackLink"] = Url.Action("BuildingsInsurance", "ClosingReport", new { Area = "ClosingReport" });
     ViewData["FullWidth"] = true;
     ViewData["UseStickyInfoPanel"] = true;
 }
@@ -224,7 +223,6 @@
     <input asp-for="IsExpired" type="hidden" value="@Model.IsExpired" />
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     <input asp-for="UnprofiledGrantFunding" type="hidden" value="@Model.UnprofiledGrantFunding" class="unprofiled-funding-amount" />
-    <input asp-for="SubcontractorsRequired" type="hidden" value="@Model.SubcontractorsRequired"/>
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>

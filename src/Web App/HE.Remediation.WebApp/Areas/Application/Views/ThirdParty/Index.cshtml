@@ -1,0 +1,55 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Application.ThirdPartyViewModel
+@{
+    ViewData["Title"] = Model.BuildingName;
+}
+<a href="@Url.Action("Index", "StageDiagram")" class="govuk-back-link">Back</a>
+<span class="govuk-caption-xl">@Model.ApplicationReferenceNumber</span>
+<h1 class="govuk-heading-xl">@Model.BuildingName</h1>
+
+<p class="govuk-body">
+	Your project team is listed below, and whether they have access to view and assist with this application.
+</p>
+
+@if (Model.TeamMembers != null && Model.TeamMembers.Any())
+{
+	<table class="govuk-table">
+		<thead class="govuk-table__head">
+			<tr class="govuk-table__row">
+				<th scope="col" class="govuk-table__header">Name</th>
+				<th scope="col" class="govuk-table__header">Email</th>
+				<th scope="col" class="govuk-table__header">Role</th>
+				<th scope="col" colspan="2" class="govuk-table__header">Manage</th>
+			</tr>
+		</thead>
+		<tbody class="govuk-table__body">
+			@foreach (var teamMember in Model.TeamMembers)
+			{
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell no-line-wrap">
+							@teamMember.Name
+					</td>
+					<td class="govuk-table__cell no-line-wrap">
+							@teamMember.EmailAddress
+					</td>
+					<td class="govuk-table__cell">
+						@teamMember.RoleName
+					</td>
+					<td class="govuk-table__cell" colspan="2">
+						<a class="govuk-link" href="@Url.Action((teamMember.InviteStatus == -1 ? "InviteContributor" : "RemoveAccess"), "ThirdParty", new { Area = "Application", teamMemberId = teamMember.Id })">@(teamMember.InviteStatus == -1 ? "Invite to contribute" : "Remove access")</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<div class="no-results bottom-highlight govuk-body">
+		There are no team members to show
+	</div>
+}
+
+<govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>

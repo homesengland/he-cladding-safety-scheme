@@ -4,7 +4,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageThirdPartyCon
 
 public class GetPursuingThirdPartyContributionResponse
 {
-    public bool? PursuingThirdPartyContribution { get; set; }
+    public EThirdPartyContributionPursuitStatus? ThirdPartyContributionPursuitStatusTypeId { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }
     public bool IsSubmitted { get; set; }

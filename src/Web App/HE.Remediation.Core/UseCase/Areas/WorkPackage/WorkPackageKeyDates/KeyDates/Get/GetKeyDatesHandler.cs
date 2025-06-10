@@ -30,7 +30,9 @@ public class GetKeyDatesHandler : IRequestHandler<GetKeyDatesRequest, GetKeyDate
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
         var requiredResult = await _workPackageRepository.GetKeyDates();
-        
+
+        var isCladdingBeingRemoved = await _workPackageRepository.IsCladdingBeingRemoved();
+
         var isSubmitted = await _workPackageRepository.IsWorkPackageSubmitted();
 
         return new GetKeyDatesResponse
@@ -43,6 +45,7 @@ public class GetKeyDatesHandler : IRequestHandler<GetKeyDatesRequest, GetKeyDate
             UnsafeCladdingRemovalDateYear = requiredResult?.UnsafeCladdingRemovalDate?.Year,
             ExpectedDateForCompletionMonth = requiredResult?.ExpectedDateForCompletion?.Month,
             ExpectedDateForCompletionYear = requiredResult?.ExpectedDateForCompletion?.Year,
+            IsCladdingBeingRemoved = isCladdingBeingRemoved,
             IsSubmitted = isSubmitted
         };
     }

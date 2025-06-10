@@ -3,7 +3,7 @@
     public enum EPursuedSourcesFundingType
     {
         ExhaustedAllRoutes = 1,
-        PursuingOtherRoutes,
-        NotExhaustedAllRoutes
+        PursuingOtherRoutes = 2,
+        NotExhaustedAllRoutes = 3
     }
 }

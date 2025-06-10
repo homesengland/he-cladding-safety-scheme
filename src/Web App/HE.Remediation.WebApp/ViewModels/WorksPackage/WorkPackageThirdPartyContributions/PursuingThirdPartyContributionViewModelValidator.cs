@@ -6,8 +6,8 @@ public class PursuingThirdPartyContributionViewModelValidator : AbstractValidato
 {
     public PursuingThirdPartyContributionViewModelValidator()
     {
-        RuleFor(x => x.PursuingThirdPartyContribution)
+        RuleFor(x => x.ThirdPartyContributionPursuitStatusTypeId)
             .NotNull()
-            .WithMessage("Select yes if you are pursuing any third party contributions");
+            .WithMessage("Please select an option to indicate whether you are pursuing any third party contributions.");
     }
 }

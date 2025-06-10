@@ -25,9 +25,11 @@ public class SetPursuingThirdPartyContributionHandler : IRequestHandler<SetPursu
             await _workPackageRepository.InsertThirdPartyContributions();
         }
 
-        await _workPackageRepository.UpdateThirdPartyContributionsPursuingThirdPartyContribution(request.PursuingThirdPartyContribution);
+        await _workPackageRepository.UpdateThirdPartyContributionsPursuingThirdPartyContribution(request.ThirdPartyContributionPursuitStatusTypeId);
 
-        if (request.PursuingThirdPartyContribution.HasValue && request.PursuingThirdPartyContribution.Value)
+        if (request.ThirdPartyContributionPursuitStatusTypeId.HasValue 
+            && (request.ThirdPartyContributionPursuitStatusTypeId == EThirdPartyContributionPursuitStatus.YesSecuredContribution
+                || request.ThirdPartyContributionPursuitStatusTypeId == EThirdPartyContributionPursuitStatus.YesClaimInProgress))
         {
             await _workPackageRepository.UpdateThirdPartyContributionsThirdPartyContribution(new ThirdPartyContributionParameters());
         }

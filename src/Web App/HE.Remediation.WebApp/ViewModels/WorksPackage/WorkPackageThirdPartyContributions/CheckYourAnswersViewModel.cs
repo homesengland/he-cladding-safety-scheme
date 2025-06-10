@@ -5,7 +5,7 @@ namespace HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageThirdPartyCon
 {
     public class CheckYourAnswersViewModel : WorkPackageBaseViewModel
     {
-        public bool PursuingThirdPartyContribution { get; set; }
+        public EThirdPartyContributionPursuitStatus PursuingThirdPartyContribution { get; set; }
         public List<string> ContributionTypes { get; set; }
         public decimal ContributionAmount { get; set; }
         public string ContributionNotes { get; set; }

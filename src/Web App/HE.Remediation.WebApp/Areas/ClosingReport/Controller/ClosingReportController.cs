@@ -27,10 +27,12 @@ using ReviewPaymentRequestViewModel = HE.Remediation.WebApp.ViewModels.ClosingRe
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetFinalCheckYourAnswers;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetSubmitPayment;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetDeclaration;
-using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.CheckStatusRequest;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetNeedVariations;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetNeedVariations;
+using HE.Remediation.WebApp.ViewModels.BuildingsInsurance;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.BuildingsInsurance.GetBuildingsInsurance;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.BuildingsInsurance.SetBuildingsInsurance;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.Controller;
 
@@ -287,7 +289,7 @@ public class ClosingReportController : StartController
 
         if (!response.SubContractors.Any())
         {
-            return RedirectToAction("SubmitPayment");
+            return RedirectToAction("BuildingsInsurance");
         }
 
         return View(model);
@@ -337,6 +339,51 @@ public class ClosingReportController : StartController
 
     #endregion
 
+    #region Building Insurance
+    [HttpGet(nameof(BuildingsInsurance))]
+    public async Task<IActionResult> BuildingsInsurance(string returnUrl)
+    {
+        var response = await _sender.Send(GetBuildingsInsuranceRequest.Request);
+
+        var viewModel = _mapper.Map<BuildingsInsuranceViewModel>(response);
+
+        var subContractorResponse = await _sender.Send(GetSubContractorsRequest.Request);
+        var model = _mapper.Map<SubContractorsViewModel>(subContractorResponse);
+        viewModel.SubcontractorsRequired = model.SubContractors.Any();
+
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(BuildingsInsurance))]
+    public async Task<IActionResult> BuildingsInsurance(BuildingsInsuranceViewModel model)
+    {
+        var validator = new BuildingsInsuranceViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetBuildingsInsuranceRequest>(model);
+        await _sender.Send(request);
+
+        if (model.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+        }
+
+        if (!string.IsNullOrEmpty(model.ReturnUrl))
+        {
+            return SafeRedirectToAction(model.ReturnUrl, "ClosingReport", new { Area = "ClosingReport" });
+        }
+
+        return RedirectToAction("SubmitPayment");
+    }
+
+    #endregion
+
     #region Submit Payment
 
     [HttpGet(nameof(SubmitPayment))]
@@ -376,6 +423,10 @@ public class ClosingReportController : StartController
     {
         var response = await _sender.Send(GetReviewPaymentRequest.Request);
         var viewModel = _mapper.Map<ReviewPaymentRequestViewModel>(response);
+
+        var insuranceResponse = await _sender.Send(GetBuildingsInsuranceRequest.Request);
+        _mapper.Map(insuranceResponse, viewModel);
+
         viewModel.ReturnUrl = returnUrl;
         return View(viewModel);
     }

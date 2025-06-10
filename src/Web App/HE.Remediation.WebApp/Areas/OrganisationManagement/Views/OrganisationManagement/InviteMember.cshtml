@@ -1,0 +1,71 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.OrganisationManagement.InviteMemberViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Invite new member";
+}
+
+@section InfoCardSection
+{
+    @await Html.PartialAsync("_Guidance")
+}
+
+@section BackButton
+{
+    <govuk-back-link href="/OrganisationManagement/Users">Back</govuk-back-link>
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FirstName" />
+        <govuk-error-summary-item asp-for="LastName" />
+        <govuk-error-summary-item asp-for="Email" />
+        <govuk-error-summary-item asp-for="ApplicationRole" />
+    </govuk-error-summary>
+}
+
+<span class="govuk-caption-xl">Organisation management</span>
+<h1 class="govuk-heading-xl">Invite new member</h1>
+
+
+@if (@Model.UserStatus.HasValue)
+{
+    <h2 class="govuk-heading-m">Status: <user-status-badge class="govuk-!-margin-left-2" status="@Model.UserStatus.Value"></user-status-badge></h2>
+
+}
+
+<form method="post" action="/OrganisationManagement/InviteMember">
+
+    <govuk-input asp-for="FirstName" input-class="govuk-input--width-20">
+        <govuk-input-label is-page-heading="true" class="govuk-label--s">First name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="LastName" input-class="govuk-input--width-20">
+        <govuk-input-label is-page-heading="true" class="govuk-label--s">Last name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="Email" name="Email" input-class="govuk-input--width-10" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Email address</govuk-input-label>
+    </govuk-input>
+
+    <govuk-radios asp-for="ApplicationRole">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--s">
+                Organisation role
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(EApplicationRole.OrganisationAdmin)">Admin</govuk-radios-item>
+        <govuk-radios-item value="@(EApplicationRole.OrganisationUser)">Team member</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="OrganisationId" type="hidden" value="@Model.OrganisationId" />
+    <input asp-for="CollaborationUserId" type="hidden" value="@Model.CollaborationUserId" />
+    <input asp-for="UserStatus" type="hidden" value="@Model.UserStatus" />
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    <div>
+        <a class="govuk-link" href="@Url.Action("Users", "OrganisationManagement")">Cancel and exit</a>
+    </div>
+</form>
+

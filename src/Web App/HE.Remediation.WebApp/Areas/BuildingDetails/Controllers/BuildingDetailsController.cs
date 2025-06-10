@@ -11,6 +11,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopmen
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.SetBuildingPartOfDevelopment;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.GetBuildingSafetyRegulatorRegistrationCode;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.SetBuildingSafetyRegulatorRegistrationCode;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.GetBuildingsInsurance;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.SetBuildingsInsurance;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.GetBuildingUniqueName;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.SetBuildingUniqueName;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.GetBuildingDetailsAnswers;
@@ -35,6 +37,7 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.GetResi
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.SetResidentialUnits;
 using HE.Remediation.Core.UseCase.Areas.Location.BuildingLookup;
 using HE.Remediation.WebApp.ViewModels.BuildingDetails;
+using HE.Remediation.WebApp.ViewModels.BuildingsInsurance;
 using HE.Remediation.WebApp.ViewModels.Location;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -544,7 +547,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 return RedirectToAction(nameof(BuildingDeveloperInformationAddress), "BuildingDetails", new { Area = "BuildingDetails" });
             }
 
-            return RedirectToAction("CheckYourAnswers", new { returnUrl = "BuildingDeveloperInformation" });
+            return RedirectToAction("BuildingsInsurance", new { returnUrl = "BuildingDeveloperInformation" });
         }
 
         [HttpGet(nameof(BuildingDeveloperInformationAddress))]
@@ -580,6 +583,46 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             return SafeRedirectToAction(action, null, null);
         }
 
+        #endregion
+
+        #region Building Insurance
+        [HttpGet(nameof(BuildingsInsurance))]
+        public async Task<IActionResult> BuildingsInsurance(string returnUrl)
+        {
+            var response = await _sender.Send(GetBuildingsInsuranceRequest.Request);
+
+            var viewModel = _mapper.Map<BuildingsInsuranceViewModel>(response);
+
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(BuildingsInsurance))]
+        public async Task<IActionResult> BuildingsInsurance(BuildingsInsuranceViewModel model)
+        {
+            var validator = new BuildingsInsuranceViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetBuildingsInsuranceRequest>(model);
+            await _sender.Send(request);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return SafeRedirectToAction(model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" });
+            }
+
+            return RedirectToAction("CheckYourAnswers", new { returnUrl = "BuildingDeveloperInformation" });
+        }
 
         #endregion
 

@@ -8,11 +8,9 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
     {
         public IFormFile FraewFile { get; set; }
         public IFormFile SummaryFile { get; set; }
-        public IFormFile FraReportFile { get; set; }
 
         public bool FraewAlreadyUploaded { get; set; }
         public bool SummaryAlreadyUploaded { get; set; }
-        public bool FraAlreadyUploaded { get; set; }
 
         public EApplicationScheme ApplicationScheme { get; set; }
     }

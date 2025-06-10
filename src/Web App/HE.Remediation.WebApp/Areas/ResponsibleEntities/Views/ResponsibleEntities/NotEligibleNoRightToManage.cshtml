@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "You are not eligible to carry out this application";
+    ViewData["ShowCancelAndExit"] = false;
+}
+
+<h1 class="govuk-heading-xl">You are not eligible to carry out this application</h1>
+
+<p class="govuk-body">
+    To apply to the Cladding Safety Scheme, the applicant must be the Responsible Entity - 
+    the person or organisation legally responsible for the external repair of the building, or their representative.
+</p>
+
+<p class="govuk-body">
+    To become the Responsible Entity, the RTM company must have acquired the Right to Manage by issuing the building 
+    owner/landlord with a Claim Notice served under section 79 of the CLRA 2002, 
+    and for the building owner/landlord to have accepted the claim, or for the Leasehold Valuation Tribunal 
+    to have decided in favour of the RTM company if the notice was disputed.
+</p>
+
+<h2 class="govuk-heading-m">What happens next</h2>
+<p class="govuk-body">
+    If the RTM company does not have an accepted Claim Notice and confirmed date of acquisition of the Right to Manage, 
+    the existing Responsible Entity must start a new application, 
+    or the RTM company can start a new application once the Right to Manage has been acquired.
+</p>
+
+<p class="govuk-body">
+    If the leaseholders and residents of the building have been informed of the current status of this application already, 
+    they should be notified of the potential delay.
+</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="NotEligibleReturnHome" method="post">
+    <govuk-button type="submit">Return to home</govuk-button>
+</form>

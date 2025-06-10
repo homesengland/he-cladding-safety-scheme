@@ -11,6 +11,14 @@ using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCheckYourAnswers;
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetLeaseholderEvidence;
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetCheckYourAnswers;
 using HE.Remediation.WebApp.ViewModels.Leaseholder;
+using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommunication;
+using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetResponsibleForCommunication;
+using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommunicationType;
+using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetResponsibleForCommunicationType;
+using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCommunicationPartyDetails;
+using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetCommunicationPartyDetails;
+using FluentValidation;
 
 namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
 {
@@ -35,6 +43,126 @@ namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
         {
             return View();
         }
+
+        #region ResponsibleForCommunication
+
+        [HttpGet(nameof(ResponsibleForCommunication))]
+        public async Task<IActionResult> ResponsibleForCommunication()
+        {
+            var response = await _sender.Send(GetResponsibleForCommunicationRequest.Request);
+
+            var model = _mapper.Map<LeaseHolderResponsibleForCommunicationViewModel>(response);
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(ResponsibleForCommunication))]
+        public async Task<IActionResult> ResponsibleForCommunication(LeaseHolderResponsibleForCommunicationViewModel viewModel, ESubmitAction submitAction)
+        {
+            var validator = new LeaseHolderResponsibleForCommunicationViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, String.Empty);
+                return View(viewModel);
+            }
+
+            var request = _mapper.Map<SetResponsibleForCommunicationRequest>(viewModel);
+            await _sender.Send(request);
+
+            if (submitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            return viewModel.ResponsibleForCommunication == ENoYes.No 
+                ? RedirectToAction("ResponsibleForCommunicationType", "LeaseHolder", new { Area = "Leaseholder" }) 
+                : RedirectToAction("CheckYourAnswers", "Leaseholder", new { Area = "Leaseholder" });
+        }
+
+        #endregion
+
+
+        #region ResponsibleForCommunicationType
+
+        [HttpGet(nameof(ResponsibleForCommunicationType))]
+        public async Task<IActionResult> ResponsibleForCommunicationType()
+        {
+            var response = await _sender.Send(GetResponsibleForCommunicationTypeRequest.Request);
+            var model = _mapper.Map<LeaseHolderResponsibleForCommunicationTypeViewModel>(response);
+           
+            return View(model);
+        }
+
+        [HttpPost(nameof(ResponsibleForCommunicationType))]
+        public async Task<IActionResult> ResponsibleForCommunicationType(LeaseHolderResponsibleForCommunicationTypeViewModel viewModel, ESubmitAction submitAction)
+        {
+            var validator = new LeaseHolderResponsibleForCommunicationTypeViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, String.Empty);
+                return View(viewModel);
+            }
+
+            var request = _mapper.Map<SetResponsibleForCommunicationTypeRequest>(viewModel);
+            await _sender.Send(request);
+
+
+            if (submitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            return viewModel.ResponsibleForCommunicationTypeId is EResponsibleForCommunicationType.ManagingAgent or EResponsibleForCommunicationType.Other 
+                ? RedirectToAction("CommunicationPartyDetails", "LeaseHolder", new { Area = "Leaseholder" }) 
+                : RedirectToAction("CheckYourAnswers", "Leaseholder", new { Area = "Leaseholder" });
+        }
+
+        #endregion
+
+
+        #region CommunicationPartyDetails
+
+        [HttpGet(nameof(CommunicationPartyDetails))]
+        public async Task<IActionResult> CommunicationPartyDetails()
+        {
+            var response = await _sender.Send(GetCommunicationPartyDetailsRequest.Request);
+            var model = _mapper.Map<LeaseHolderCommunicationPartyDetailsViewModel>(response);
+
+            return View(model);
+        }
+
+        [HttpPost(nameof(CommunicationPartyDetails))]
+        public async Task<IActionResult> CommunicationPartyDetails(LeaseHolderCommunicationPartyDetailsViewModel viewModel, ESubmitAction submitAction)
+        {
+
+            var validator = new LeaseHolderCommunicationPartyDetailsViewModelValidator();
+            var validationResult = await validator.ValidateAsync(viewModel);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(viewModel);
+            }
+
+            var request = _mapper.Map<SetCommunicationPartyDetailsRequest>(viewModel);
+            await _sender.Send(request);
+
+            if (submitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            return SafeRedirectToAction("CheckYourAnswers", "LeaseHolder", new { Area = "Leaseholder" });
+        }
+
+
+        #endregion
 
         [HttpGet(nameof(Evidence))]
         public async Task<IActionResult> Evidence()
@@ -77,8 +205,9 @@ namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
                 return View(request);
             }
 
-            return useCaseRequest.Completed ? RedirectToAction("CheckYourAnswers", "Leaseholder", new { Area = "Leaseholder" }) :
-                RedirectToAction("Evidence", "LeaseHolder", new { Area = "Leaseholder" });
+            return useCaseRequest.Completed 
+                ? RedirectToAction("ResponsibleForCommunication", "Leaseholder", new { Area = "Leaseholder" }) 
+                : RedirectToAction("Evidence", "LeaseHolder", new { Area = "Leaseholder" });
         }
 
         [HttpGet(nameof(Evidence) + "/Delete")]

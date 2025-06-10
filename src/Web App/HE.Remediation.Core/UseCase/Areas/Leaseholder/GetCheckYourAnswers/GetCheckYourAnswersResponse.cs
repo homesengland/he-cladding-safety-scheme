@@ -1,8 +1,22 @@
-﻿namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCheckYourAnswers;
+﻿using HE.Remediation.Core.Enums;
+
+namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCheckYourAnswers;
 
 public class GetCheckYourAnswersResponse
 {
     public List<LeaseHolderEvidenceFile> LeaseHolderEvidenceFiles { get; set; }
+
+    public ENoYes? ResponsibleForCommunication { get; set; }
+
+    public EApplicationRepresentationType? ApplicationRepresentationType { get; set; }
+    public EResponsibleForCommunicationType? ResponsibleForCommunicationTypeId { get; set; }
+    public string RepresentationOtherText { get; set; }
+
+
+    public string ContactName { get; set; }
+    public string CompanyName { get; set; }
+    public string EmailAddress { get; set; }
+    public string ContactNumber { get; set; }
 
     public bool ReadOnly { get; set; }
 }

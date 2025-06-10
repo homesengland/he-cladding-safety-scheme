@@ -1,5 +1,4 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 

@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -7,14 +8,17 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCheckYourAnswers
     public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersRequest, GetCheckYourAnswersResponse>
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
-        private readonly IDbConnectionWrapper _db;
         private readonly IApplicationRepository _applicationRepository;
+        private readonly ILeaseHolderRepository _leaseHolderRepository;
 
-        public GetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db, IApplicationRepository applicationRepository)
+
+        public GetCheckYourAnswersHandler(IApplicationDataProvider applicationDataProvider, 
+            IApplicationRepository applicationRepository,
+            ILeaseHolderRepository leaseHolderRepository)
         {
             _applicationDataProvider = applicationDataProvider;
-            _db = db;
             _applicationRepository = applicationRepository;
+            _leaseHolderRepository = leaseHolderRepository;
         }
 
         public async Task<GetCheckYourAnswersResponse> Handle(GetCheckYourAnswersRequest request, CancellationToken cancellationToken)
@@ -28,17 +32,21 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCheckYourAnswers
 
             var applicationStatus = await _applicationRepository.GetApplicationStatus(applicationId);
 
-            var leaseHolderEvidenceFiles = await _db.QueryAsync<LeaseHolderEvidenceFile>("GetLeaseHolderEngagementFilesForApplication", new
-            {
-                ApplicationId = applicationId
-            });
+            var leaseHolderEngagementId = await _leaseHolderRepository.GetLeaseHolderEngagementIdForApplication(applicationId);
 
-            var answers = new GetCheckYourAnswersResponse
-            {
-                LeaseHolderEvidenceFiles = leaseHolderEvidenceFiles.ToList(),
-                ReadOnly = applicationStatus.DeclarationConfirmed
-            };
+            var responseCommunication = await _leaseHolderRepository.GetLeaseHolderResponsibleForCommunication(leaseHolderEngagementId);
 
+            var answers = new GetCheckYourAnswersResponse();
+
+            var leaseHolderEvidenceFiles = await _leaseHolderRepository.GetLeaseHolderEngagementFilesForApplication(applicationId);
+
+            if (responseCommunication.ResponsibleForCommunication == ENoYes.No)
+            {
+                answers = await _leaseHolderRepository.GetLeaseHolderEngagementCheckYourAnswers(applicationId); 
+            }
+            answers.ResponsibleForCommunication = responseCommunication.ResponsibleForCommunication;
+            answers.LeaseHolderEvidenceFiles = leaseHolderEvidenceFiles.ToList();
+            answers.ReadOnly = applicationStatus.DeclarationConfirmed;
             return answers;
         }
     }

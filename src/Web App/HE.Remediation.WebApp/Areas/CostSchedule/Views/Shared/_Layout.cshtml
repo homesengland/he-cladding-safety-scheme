@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <main class="govuk-main-wrapper">
+                    <span class="govuk-caption-xl">@ViewData["Title"]</span>
+                    <span class="govuk-caption-m">@ViewData["SubTitle"]</span> <br />
+
+                    @RenderBody()
+
+                    <div>
+                        <a class="govuk-link" href="@Url.Action("Index", "StageDiagram", new { Area = "Application" })">Exit</a>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</div>

@@ -38,7 +38,8 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await _variationRequestRepository.SubmitVariationRequest();
+        var userId = _applicationDataProvider.GetUserId();
+        await _variationRequestRepository.SubmitVariationRequest(userId);
 
         var applicationId = _applicationDataProvider.GetApplicationId();
 

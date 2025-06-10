@@ -1,0 +1,37 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Application.InviteViewModel
+@{
+	var title = "You're inviting a contributor";
+	ViewData["Title"] = title;
+}
+<a href="@Url.Action("Index")" class="govuk-back-link">Back</a>
+<span class="govuk-caption-xl">Third party contributors</span>
+<h1 class="govuk-heading-xl">@(title)</h1>
+
+@if (Model.TeamMemberId.HasValue)
+{
+	<p class="govuk-body">
+		You're inviting @(Model.InvitedName) from your Project Team to be a contributor to this application.
+	</p>
+
+	<p class="govuk-body">
+		If they accept they will be able to add, edit and view information for the application.
+	</p>
+
+	<form method="post" action="/InviteContributor">
+		<input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+		<govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+		<div>
+			<a class="govuk-link" href="@Url.Action("Index", "StageDiagram")">Cancel and exit</a>
+		</div>
+	</form>
+}
+else
+{
+	<div class="no-results bottom-highlight govuk-body">
+		Team Member not found
+	</div>
+}
+

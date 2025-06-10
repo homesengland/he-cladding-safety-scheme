@@ -18,7 +18,6 @@ using HE.Remediation.Core.Services.PdfRendererService;
 using HE.Remediation.Core.Services.RazorRenderer;
 using VirusScanner.Client.Interfaces;
 using VirusScanner.Client.Services;
-using HE.Remediation.Core.Services.Communication;
 using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.IoC;
@@ -38,7 +37,8 @@ public static class ServicesDependencies
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICustomFileFormatInspector, CustomFileFormatInspector>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ICommunicationService, CommunicationService>();
+        services.AddScoped<Services.Communication.ICommunicationService, Services.Communication.CommunicationService>();
+        services.AddScoped<Services.Communication.Collaboration.ICommunicationService, Services.Communication.Collaboration.CommunicationService>();
         services.AddScoped<IPostCodeLookup, PostCodeLookup>();
         services.AddScoped<IRazorRenderer, RazorRenderer>();
         services.AddScoped<IPdfRenderer, PdfRenderer>();
@@ -75,6 +75,7 @@ public static class ServicesDependencies
         services.AddScoped<IFileRepository, FileRepository>();
         services.AddScoped<IFireRiskWorksRepository, FireRiskWorksRepository>();
         services.AddScoped<IBuildingDetailsRepository, BuildingDetailsRepository>();
+        services.AddScoped<IBuildingsInsuranceRepository, BuildingsInsuranceRepository>();
         services.AddScoped<IAlertRepository, AlertRepository>();
         services.AddScoped<IApplicationSchemeRepository, ApplicationSchemeRepository>();
         services.AddScoped<IPreTenderRepository, PreTenderRepository>();
@@ -95,5 +96,7 @@ public static class ServicesDependencies
         services.AddScoped<IDocumentRepository, DocumentRepository>();
         services.AddScoped<ILocalAuthorityCostCentreRepository, LocalAuthorityCostCentreRepository>();
         services.AddScoped<IGrantFundingRepository, GrantFundingRepository>();
+        services.AddScoped<ILeaseHolderRepository, LeaseHolderRepository>();
+        services.AddScoped<IRightToManageRepository, RightToManageRepository>();
     }
 }

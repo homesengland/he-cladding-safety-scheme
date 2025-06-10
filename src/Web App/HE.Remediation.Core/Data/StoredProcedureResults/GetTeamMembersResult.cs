@@ -1,6 +1,4 @@
-﻿using HE.Remediation.Core.Enums;
-
-namespace HE.Remediation.Core.Data.StoredProcedureResults;
+﻿namespace HE.Remediation.Core.Data.StoredProcedureResults;
 
 public class GetTeamMembersResult
 {
@@ -16,4 +14,7 @@ public class GetTeamMembersResult
     public string OtherRole { get; set; }
 
     public bool? HasChasCertification { get; set; }
+    public string EmailAddress { get; set; }
+    public int InviteStatus { get; set; }
+    public bool? IsRevoked { get; set; }
 }

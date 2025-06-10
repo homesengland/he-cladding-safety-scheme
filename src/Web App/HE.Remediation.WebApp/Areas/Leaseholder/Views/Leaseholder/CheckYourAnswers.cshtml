@@ -1,8 +1,11 @@
-﻿@model HE.Remediation.WebApp.ViewModels.Leaseholder.CheckYourAnswersViewModel
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.Leaseholder.CheckYourAnswersViewModel
 
 @{
     ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
-    ViewData["BackLink"] = Url.Action("Evidence", "Leaseholder", new { Area = "Leaseholder" });
+    var backLinkAction = Model.ResponsibleForCommunication == ENoYes.Yes? "ResponsibleForCommunication": "CommunicationPartyDetails";
+    ViewData["BackLink"] = Url.Action(backLinkAction, "Leaseholder", new { Area = "Leaseholder" });
     ViewData["ReadOnly"] = Model.ReadOnly;
     ViewData["ReturnUrl"] = "CheckYourAnswers";
     ViewData["FullWidth"] = true;
@@ -15,7 +18,7 @@
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
-                Upload evidence of lease holders
+                Upload evidence of communication to leaseholders and residents
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
                 @foreach (var item in Model.LeaseHolderEvidenceFiles)
@@ -25,13 +28,133 @@
             </govuk-summary-list-row-value>
             @if (!Model.ReadOnly)
             {
-                <govuk-summary-list-row-action href="@Url.Action("Evidence", "Leaseholder", new { returnUrl = ViewData["ReturnUrl"] })">
+                <govuk-summary-list-row-action href="@Url.Action("Evidence", "Leaseholder", new { Area = "Leaseholder" })">
                     Change
                 </govuk-summary-list-row-action>
             }
         </govuk-summary-list-row>
     }
 </govuk-summary-list>
+
+@if (Model.ResponsibleForCommunication != null)
+{
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Are you responsible for communication to leaseholders and residents?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.ResponsibleForCommunication
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleForCommunication", "Leaseholder", new { Area = "Leaseholder" })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+}
+
+<govuk-summary-list>
+    @if (Model.ResponsibleForCommunicationTypeId != null)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Who is responsible for communications to leaseholders and residents?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @{
+                    var responsibleForCommunication = Model.ResponsibleForCommunicationTypeId switch
+                    {
+                        EResponsibleForCommunicationType.ResponsibleEntity =>"Responsible Entity",
+                        EResponsibleForCommunicationType.ManagingAgent =>"Managing Agent",
+                        EResponsibleForCommunicationType.Other =>"Other",
+                        _ => Model.ResponsibleForCommunicationTypeId.ToString().SplitCamelCase()
+                    };
+                }
+                @responsibleForCommunication
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ResponsibleForCommunicationType", "Leaseholder", new { Area = "Leaseholder" })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+        @if (!string.IsNullOrWhiteSpace(Model.RepresentationOtherText))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>If 'Other' please provide more details</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.RepresentationOtherText
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    }
+</govuk-summary-list>
+
+<govuk-summary-list>
+    @if (Model.ResponsibleForCommunicationTypeId is EResponsibleForCommunicationType.ManagingAgent or EResponsibleForCommunicationType.Other)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Responsible party details
+            </govuk-summary-list-row-key>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("CommunicationPartyDetails", "Leaseholder", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+        @if (!string.IsNullOrWhiteSpace(Model.ContactName))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Contact name
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ContactName
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.CompanyName))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Company name
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.CompanyName
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.EmailAddress))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Email address
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.EmailAddress
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ContactNumber))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Contact number
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.ContactNumber
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    }
+</govuk-summary-list>
+
 
 @if (!Model.ReadOnly)
 {

@@ -5,5 +5,5 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageThirdPartyCon
 
 public class SetPursuingThirdPartyContributionRequest : IRequest
 {
-    public bool? PursuingThirdPartyContribution { get; set; }
+    public EThirdPartyContributionPursuitStatus? ThirdPartyContributionPursuitStatusTypeId { get; set; }
 }

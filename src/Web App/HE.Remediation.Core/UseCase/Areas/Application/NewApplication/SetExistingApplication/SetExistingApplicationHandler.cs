@@ -19,12 +19,21 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExisti
         public async Task<Unit> Handle(SetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
             var cookieUserId = _applicationDataProvider.GetUserId();
-            var userIdEmailAddressAndSchemeId = await _db.QuerySingleOrDefaultAsync<UserIdEmailAddressAndSchemeId>("GetUserIdEmailAddressAndSchemeIdByApplicationId", new { request.ApplicationId });
-            if ((cookieUserId.HasValue || userIdEmailAddressAndSchemeId.UserId.HasValue) && cookieUserId != userIdEmailAddressAndSchemeId.UserId.Value)
+
+            if(!cookieUserId.HasValue)
+            {
+                throw new EntityNotFoundException("User identity cannot be established.");
+            }
+
+            // check that the user either created the application, is a member of an associated organisation, or 3rd party
+            var isPermitted = await _db.QuerySingleOrDefaultAsync<bool>("CheckApplicationPermission", new { request.ApplicationId, UserId = cookieUserId });
+
+            if (!isPermitted)
             {
                 throw new EntityNotFoundException("Application not found.");
             }
 
+            var userIdEmailAddressAndSchemeId = await _db.QuerySingleOrDefaultAsync<UserIdEmailAddressAndSchemeId>("GetUserIdEmailAddressAndSchemeIdByApplicationId", new { request.ApplicationId });
             var applicationScheme = (EApplicationScheme)userIdEmailAddressAndSchemeId.ApplicationSchemeId;
             _applicationDataProvider.SetApplicationDetails(request.ApplicationId, applicationScheme, userIdEmailAddressAndSchemeId.EmailAddress);
             

@@ -229,6 +229,65 @@
             }
     }    
 }
+    @if (Model.SumInsuredAmount.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What is the total sum insured of the building?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                &pound;@Model.SumInsuredAmount?.ToString("N0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (Model.CurrentBuildingInsurancePremiumAmount.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                What is the current buildings insurance premium for the whole building?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                &pound;@Model.CurrentBuildingInsurancePremiumAmount?.ToString("N0")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (!String.IsNullOrEmpty(Model.InsuranceProviders))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Who is/are your current building insurance provider/s?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.InsuranceProviders
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (!String.IsNullOrEmpty(Model.IfOtherInsuranceProviderName))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                If Other, please tell us who is/are your current building insurance provider/s?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.IfOtherInsuranceProviderName
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    @if (!String.IsNullOrEmpty(Model.AdditionalInfo))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Additional information
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.AdditionalInfo
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
 </govuk-summary-list>
 
 @if (!Model.ReadOnly)

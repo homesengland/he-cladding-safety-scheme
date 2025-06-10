@@ -1,0 +1,41 @@
+﻿@using HE.Remediation.Core.Enums
+
+@model HE.Remediation.WebApp.ViewModels.WithdrawalRequest.FinalCheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Request to withdraw application";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = !Model.IsSubmitted
+        ? Url.Action("ReasonForClosing", "RequestToWithdrawApplication", new { Area = "WithdrawalRequest" })
+        : Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Check your answers</h1>
+
+<govuk-summary-list>    
+
+    <govuk-summary-list-row>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ReasonForClosing", "RequestToWithdrawApplication", new {Area = "WithdrawalRequest"})">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Explain the reason for requesting to close this application
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.ReasonForClosing
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+ 
+@if (!Model.IsSubmitted)
+{
+    <form method="post" asp-action="FinalCheckYourAnswersSubmit">
+        <govuk-button type="submit">Submit</govuk-button>
+    </form>
+}

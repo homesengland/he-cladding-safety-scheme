@@ -1,6 +1,5 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
-using System.Reflection;
 
 namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
 {
@@ -31,6 +30,10 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public string ResponsibleEntityCompanyAddress { get; set; }
         public string ResponsibleEntityPrimaryContact { get; set; }
 
+        public bool? HasAcquiredRightToManage { get; set; }
+        public DateTime? RightToManageAcquisitionDate { get; set; }
+        public List<string> RightToManageEvidenceFiles { get; set; }
+
         public string ResponsibleEntityAuthorisationEvidence { get; set; }
         public int? ResponsibleEntitySharedOwners { get; set; }
         public bool? ResponsibleEntityClaimingGrant { get; set; }
@@ -47,6 +50,7 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public string FreeholderCompanyDetails { get; set; }
         public string FreeholderDetails { get; set; }
         public string FreeholderAddress { get; set; }
+        public bool IsSocialSector { get; set; }
 
         public string ReturnUrl { get; set; }
         public bool ReadOnly { get; set; }

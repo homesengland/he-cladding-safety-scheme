@@ -48,27 +48,161 @@
             </govuk-summary-list-row-action>
         }
     </govuk-summary-list-row>
+    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Fire risk assessment
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            <span>@(!string.IsNullOrEmpty(Model.AssessmentFilename) ? Model.AssessmentFilename : "-")</span>
+        </govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+    
+    @if (Model.FireRiskAssessmentType.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Please confirm type of FRA
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @{
+                    var fireRiskAssessmentType = Model.FireRiskAssessmentType switch 
+                    {
+                        EFireRiskAssessmentType.Type1FireRiskAssessment => "Type 1 fire risk assessment (common parts &ndash; non-destructive)",
+                        EFireRiskAssessmentType.Type2FireRiskAssessment => "Type 2 fire risk assessment (common parts &ndash; destructive)",
+                        EFireRiskAssessmentType.Type3FireRiskAssessment => "Type 3 fire risk assessment (common parts and flats &ndash; non-destructive",
+                        EFireRiskAssessmentType.Type4FireRiskAssessment => "Type 4 fire risk assessment (common parts and flats &ndash; destructive)",
+                        EFireRiskAssessmentType.DontKnow => "Don't know",
+                        _ => "-"
+                    };
+                }
+                @Html.Raw(fireRiskAssessmentType)
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
 </govuk-summary-list>
 
 <h2 class="govuk-heading-m">Appraisal survey details</h2>
 <govuk-summary-list>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Company who did the survey
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @if (!String.IsNullOrEmpty(Model.FireRiskAssessorCompany))
-            {
+    @if (!string.IsNullOrEmpty(Model.FireRiskAssessorCompany))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Company who did the survey
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
                 <span>@Model.FireRiskAssessorCompany</span>
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
             }
-        </govuk-summary-list-row-value>
-        @if (!Model.ReadOnly)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
-                Change
-            </govuk-summary-list-row-action>            
-        }
-    </govuk-summary-list-row>
+        </govuk-summary-list-row>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.AssessorDetailsCompanyName))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Company who did the survey
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                <span>@Model.AssessorDetailsCompanyName</span>
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.AssessorDetailsCompanyNumber))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Company number
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                <span>@Model.AssessorDetailsCompanyNumber</span>
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.AssessorDetailsFirstName) && !string.IsNullOrEmpty(Model.AssessorDetailsLastName))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Assessor name
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                <span>@Model.AssessorDetailsFirstName @Model.AssessorDetailsLastName</span>
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.AssessorDetailsEmailAddress))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Assessor email address
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                <span>@Model.AssessorDetailsEmailAddress</span>
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.AssessorDetailsTelephone))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Assessor telephone number
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                <span>@Model.AssessorDetailsTelephone</span>
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AssessorDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
 
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
@@ -78,7 +212,7 @@
             @if (Model.DateOfInstruction != null)
             {
                 <span>@Model.DateOfInstruction.Value.ToString("dd/MM/yyyy")</span>
-            }            
+            }
         </govuk-summary-list-row-value>
 
         @if (!Model.ReadOnly)
@@ -86,7 +220,7 @@
             <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
                 Change
             </govuk-summary-list-row-action>
-        }        
+        }
     </govuk-summary-list-row>
 
     <govuk-summary-list-row>
@@ -102,7 +236,7 @@
         @if (!Model.ReadOnly)
         {
             <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
-                    Change
+                Change
             </govuk-summary-list-row-action>
         }
     </govuk-summary-list-row>

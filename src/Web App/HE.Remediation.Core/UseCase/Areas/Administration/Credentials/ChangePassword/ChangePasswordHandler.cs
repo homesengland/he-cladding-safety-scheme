@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Administration.Credentials.ChangePas
             _db = db;
         }
 
-        public async Task<Unit> Handle(ChangePasswordRequest request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(ChangePasswordRequest request, CancellationToken cancellationToken)
         {
             var auth0UserId = _applicationDataProvider.GetAuth0UserId();
 
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Administration.Credentials.ChangePas
             //    return new List<ChangePasswordResponse>();
             //}
 
-            return Unit.Value;
+            return Task.FromResult(Unit.Value);
         }
     }
 }

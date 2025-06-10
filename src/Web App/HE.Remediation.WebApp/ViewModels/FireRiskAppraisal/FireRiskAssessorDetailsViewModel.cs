@@ -10,7 +10,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public string CompanyNumber { get; set; }
         public string EmailAddress { get; set; }
         public string Telephone { get; set; }
-
+        public string ReturnUrl { get; set; }
         public ESubmitAction SubmitAction { get; set; }
     }
 }

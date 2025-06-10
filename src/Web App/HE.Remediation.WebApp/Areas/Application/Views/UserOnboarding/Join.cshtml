@@ -1,0 +1,31 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.JoinViewModel
+@{
+    ViewData["Title"] = "You've been invited";
+}
+
+<span class="govuk-heading-xl govuk-!-margin-top-9">You've been invited to be a contributor</span>
+
+<div class="govuk-body">
+    <p>
+        You've been added as a third party contributor on a Cladding Safety Scheme application.
+    </p>
+
+    <p>
+        This will allow you to add, edit and view information for the application.
+    </p>
+
+    <p class="govuk-!-margin-bottom-9">
+        By accepting this invitation, you are confirming that you accept the terms and conditions for use 
+        and Homes England's Privacy Notice which can be viewed here <a href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice">Homes England: privacy notice - GOV.UK</a>.
+    </p>
+</div>
+
+<form method="post" asp-area="Application" asp-controller="UserOnboarding" asp-action="Join">
+    <input asp-for="CollaborationUserId" type="hidden" value="@Model.CollaborationUserId" />
+    <input asp-for="ApplicationDetailsId" type="hidden" value="@Model.ApplicationDetailsId" />
+    <input asp-for="NewSignUp" type="hidden" value="@Model.NewSignUp" />
+    <button type="submit" name="action" value="true" class="govuk-button">Accept invite</button>
+    <button type="submit" name="action" value="false" class="govuk-button govuk-button--secondary govuk-!-margin-left-2">Decline</button>
+</form>
+

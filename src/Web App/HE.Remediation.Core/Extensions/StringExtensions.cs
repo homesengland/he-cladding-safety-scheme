@@ -16,5 +16,9 @@ namespace HE.Remediation.Core.Extensions
                 ? string.Concat(input[0].ToString().ToUpper(), input[1..].ToLower())
                 : null;
         }
+        public static string SplitCamelCaseAllButFirstWordLowercase(this string input)
+        {
+            return input.SplitCamelCase().ToSentenceCase();
+        }
     }
 }

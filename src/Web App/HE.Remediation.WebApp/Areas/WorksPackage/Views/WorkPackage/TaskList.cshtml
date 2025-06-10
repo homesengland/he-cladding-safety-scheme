@@ -91,20 +91,12 @@
                                     }
                                 </li>
                                 <li class="app-task-list__item">
-                                    @if (Model.ProjectTeamStatusId != ETaskStatus.Completed)
-                                    {
-                                        <span class="govuk-body">Duty of care deed</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
-                                    }
-                                    else
-                                    {
-                                        <span class="app-task-list__task-name">
-                                            <a class="govuk-link" href="@Url.Action("Start", "DutyOfCareDeed", new { Area = "WorksPackageDutyOfCareDeed" })" aria-describedby="list-convictions-status">
-                                                Duty of care deed
-                                            </a>
-                                        </span>
-                                        <task-list-status-badge status="@Model.DutyOfCareDeedStatusId"></task-list-status-badge>
-                                    }
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "DutyOfCareDeed", new { Area = "WorksPackageDutyOfCareDeed" })" aria-describedby="list-convictions-status">
+                                            Duty of care deed
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.DutyOfCareDeedStatusId"></task-list-status-badge>
                                 </li>
                             </ul>
                         </li>
@@ -147,12 +139,22 @@
                                     <task-list-status-badge status="@Model.ThirdPartyContributionsStatusId"></task-list-status-badge>
                                 </li>
                                 <li class="app-task-list__item">
+                                @if (Model.CostsScheduleStatusId == ETaskStatus.Completed)
+                                {
                                     <span class="app-task-list__task-name">
+
                                         <a class="govuk-link" href="@(Model.KeyDatesStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "KeyDates", new { Area = "WorksPackageKeyDates" }) : Url.Action("Start", "KeyDates", new { Area = "WorksPackageKeyDates" }))" aria-describedby="list-convictions-status">
                                             Key dates
                                         </a>
+
                                     </span>
                                     <task-list-status-badge status="@Model.KeyDatesStatusId"></task-list-status-badge>
+                                }
+                                else
+                                {
+                                    <span class="govuk-body">Key dates</span>
+                                    <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+                                }
                                 </li>
 
                             </ul>

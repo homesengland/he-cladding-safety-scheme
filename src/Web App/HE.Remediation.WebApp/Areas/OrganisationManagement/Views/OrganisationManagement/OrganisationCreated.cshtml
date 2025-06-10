@@ -1,0 +1,31 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
+@{
+    ViewData["Title"] = "Organisation created";
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <govuk-panel heading-level="1">
+                        <govuk-panel-title>
+                            Organisation created
+                        </govuk-panel-title>
+                        <govuk-panel-body>
+                            Name <br /><strong>@TempData["OrganisationName"]</strong>
+                        </govuk-panel-body>
+                    </govuk-panel>
+
+                    <h2 class="govuk-heading-m">What happens next</h2>
+
+                    <p class="govuk-body">You can now invite Administrators and Team members to help process and manage your organisation's applications.</p>
+
+                    <govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to dashboard</govuk-button>
+                    <govuk-button href=@Url.Action("Users", "OrganisationManagement") class="govuk-button--secondary govuk-!-margin-left-2">Invite members</govuk-button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

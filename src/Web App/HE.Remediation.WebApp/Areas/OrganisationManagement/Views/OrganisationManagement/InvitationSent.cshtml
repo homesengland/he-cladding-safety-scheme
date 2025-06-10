@@ -1,0 +1,39 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.OrganisationManagement.InviteMemberViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Invitation sent";
+}
+
+@section InfoCardSection
+{
+    
+}
+
+@section BackButton
+{
+    <govuk-back-link href="/Application/Dashboard">Back</govuk-back-link>
+}
+
+<span class="govuk-caption-xl">Organisation management</span>
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<govuk-panel heading-level="1">
+    <govuk-panel-title>
+        Invitation sent
+    </govuk-panel-title>
+    <govuk-panel-body>
+        Sent to<br /><strong>@TempData["Email"]</strong>
+    </govuk-panel-body>
+</govuk-panel>
+
+<h2 class="govuk-heading-m">What happens next</h2>
+
+<p class="govuk-body">An email will be sent to the invitee.</p>
+
+<p class="govuk-body">Once they log into an account sharing the email address provided they'll be asked if they wish to join the organisation.</p>
+
+<p class="govuk-body">Once they've joined you'll be able to view the applications started by them. They'll be able to view the applications in the organisation.</p>
+
+<govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to dashboard</govuk-button>
+<govuk-button href=@Url.Action("Users", "OrganisationManagement", new { Area = "OrganisationManagement" }) class="govuk-button--secondary">Return to organisation</govuk-button>

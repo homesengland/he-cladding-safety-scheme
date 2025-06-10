@@ -5,7 +5,7 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ThirdParty
 public class CheckYourAnswersResult
 {
     public IEnumerable<string> ContributionTypes { get; set; }
-    public bool PursuingThirdPartyContribution { get; set; }
+    public EThirdPartyContributionPursuitStatus PursuingThirdPartyContribution { get; set; }
     public decimal ContributionAmount { get; set; }
     public string ContributionNotes { get; set; }
 }

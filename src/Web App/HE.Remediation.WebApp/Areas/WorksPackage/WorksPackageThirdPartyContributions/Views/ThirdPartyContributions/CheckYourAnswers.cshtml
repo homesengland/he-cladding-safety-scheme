@@ -7,7 +7,9 @@
     ViewData["FullWidth"] = true;
     ViewData["BackLink"] = Model.IsSubmitted
         ? Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" })
-        : (Model.PursuingThirdPartyContribution ? Url.Action("ThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackage" }) : Url.Action("PursuingThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackage" }));
+        : (Model.PursuingThirdPartyContribution == EThirdPartyContributionPursuitStatus.YesSecuredContribution 
+            ? Url.Action("ThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackage" }) 
+            : Url.Action("PursuingThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackage" }));
 }
 
 <h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
@@ -35,11 +37,20 @@
                 Are you pursuing any third party contributions?
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
-                @(Model.PursuingThirdPartyContribution ? "Yes" : "No")
+                @{
+                    var pursuingType = Model.PursuingThirdPartyContribution switch
+                    {
+                        EThirdPartyContributionPursuitStatus.YesClaimInProgress => "Yes, a claim is in progress",
+                        EThirdPartyContributionPursuitStatus.YesSecuredContribution => "Yes, we have secured a contribution",
+                        EThirdPartyContributionPursuitStatus.No => "No",
+                        _ => "-"
+                    };
+                }
+                @pursuingType
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
 
-        @if (Model.PursuingThirdPartyContribution)
+        @if (Model.PursuingThirdPartyContribution == EThirdPartyContributionPursuitStatus.YesSecuredContribution)
         {
             <govuk-summary-list-row>
                 <govuk-summary-list-row-key>

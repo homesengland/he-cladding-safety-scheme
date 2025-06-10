@@ -5,7 +5,6 @@ using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Middleware;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Polly;
 
 namespace HE.Remediation.WebApp
 {
@@ -54,9 +53,6 @@ namespace HE.Remediation.WebApp
 
             builder.Services.AddHttpContextAccessor();
 
-            int retryCount = Int32.Parse(Environment.GetEnvironmentVariable("APIM_RETRY_COUNT") ?? "5");
-            int delayBetweenRetries = Int32.Parse(Environment.GetEnvironmentVariable("APIM_DELAY_BETWEEN_RETRY_MS") ?? "500");
-
             builder.Services.AddHttpClient("ApimClient", apimClient =>
             {
                 apimClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("BASE_APIM_ENDPOINT"));
@@ -65,8 +61,7 @@ namespace HE.Remediation.WebApp
                     Environment.GetEnvironmentVariable("APIM_PROXY_API_KEY"));
             })
             .SetHandlerLifetime(TimeSpan.FromMinutes(2))
-            .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(retryCount,
-                                                                              retryNumber => TimeSpan.FromMilliseconds(delayBetweenRetries)));
+            .AddStandardResilienceHandler();
             
             var mvcBuilder = builder.Services.AddMvc();
             builder.Services.Configure<ForwardedHeadersOptions>(options =>

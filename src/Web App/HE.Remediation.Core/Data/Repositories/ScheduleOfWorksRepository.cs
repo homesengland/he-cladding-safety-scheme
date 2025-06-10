@@ -85,7 +85,7 @@ public class ScheduleOfWorksRepository : IScheduleOfWorksRepository
         });
     }
 
-    public async Task SubmitScheduleOfWorks()
+    public async Task SubmitScheduleOfWorks(Guid? userId)
     {
         if (!TryGetApplicationId(out var applicationId))
         {
@@ -94,7 +94,8 @@ public class ScheduleOfWorksRepository : IScheduleOfWorksRepository
 
         await _connection.ExecuteAsync("SubmitScheduleOfWorks", new
         {
-            ApplicationId = applicationId
+            ApplicationId = applicationId,
+            UserId = userId
         });
     }
 

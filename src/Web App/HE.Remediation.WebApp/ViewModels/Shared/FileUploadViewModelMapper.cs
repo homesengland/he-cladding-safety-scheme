@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ByteSizeLib;
 using HE.Remediation.Core.Data.StoredProcedureResults;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport;
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetLeaseHolderEvidence;
 
 namespace HE.Remediation.WebApp.ViewModels.Shared
@@ -17,6 +16,9 @@ namespace HE.Remediation.WebApp.ViewModels.Shared
                 .ForMember(x => x.FileSize, o => o.MapFrom(s => ByteSize.FromBytes(s.Size).ToString()));
 
             CreateMap<Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport.FileResult, File>()
+                .ForMember(x => x.FileSize, o => o.MapFrom(s => ByteSize.FromBytes(s.Size).ToString()));
+
+            CreateMap<Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAssessmentReport.GetFireRiskAssessmentReport.FileResult, File>()
                 .ForMember(x => x.FileSize, o => o.MapFrom(s => ByteSize.FromBytes(s.Size).ToString()));
         }
     }

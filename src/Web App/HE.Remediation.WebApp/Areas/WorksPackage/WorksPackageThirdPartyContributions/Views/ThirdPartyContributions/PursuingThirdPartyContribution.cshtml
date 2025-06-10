@@ -11,17 +11,23 @@
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="PursuingThirdPartyContribution" />
+        <govuk-error-summary-item asp-for="ThirdPartyContributionPursuitStatusTypeId" />
     </govuk-error-summary>
 }
 
 <h1 class="govuk-heading-xl">Are you pursuing any third party contributions?</h1>
 
+<p class="govuk-hint">
+    Any contributions which have been confirmed can be recorded on the next page.
+    Third party contributions which are in progress, but not yet agreed can be recorded at a later date. 
+</p>
+
 <form asp-area="WorksPackageThirdPartyContributions" asp-controller="ThirdPartyContributions" asp-action="PursuingThirdPartyContribution" method="post">
 
-    <govuk-radios asp-for="PursuingThirdPartyContribution">
-        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(true)">Yes</govuk-radios-item>
-        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(false)">No</govuk-radios-item>
+    <govuk-radios asp-for="ThirdPartyContributionPursuitStatusTypeId">
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(EThirdPartyContributionPursuitStatus.YesSecuredContribution)">Yes, we have secured a contribution</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(EThirdPartyContributionPursuitStatus.YesClaimInProgress)">Yes, a claim is in progress</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(EThirdPartyContributionPursuitStatus.No)">No</govuk-radios-item>
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>

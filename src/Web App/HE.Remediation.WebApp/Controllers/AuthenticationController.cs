@@ -85,6 +85,18 @@ namespace HE.Remediation.WebApp.Controllers
 
         private IActionResult GetPostLoginActionResult(PostLoginResponse postLoginResponse)
         {
+            // Collaboration:
+            //  Existing users hit this when logging in after being invited
+            //  For new users - see logic in AccountController.RedirectToAccountHome
+            if (postLoginResponse.UserInvitesPending.IsOrganisationInvitePending)
+            {
+                return RedirectToAction("Join", "UserOnboarding", new { Area = "OrganisationManagement" });
+            }
+            if (postLoginResponse.UserInvitesPending.IsApplicationInvitePending)
+            {
+                return RedirectToAction("Join", "UserOnboarding", new { Area = "Application" });
+            }
+
             if (postLoginResponse.UserProfileCompletion.IsContactInformationComplete == false)
             {
                 // Go to the Contact information (profile information) page

@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        @await RenderSectionAsync("BackButton", false)
+
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    @await RenderSectionAsync("ErrorSummary", false)
+                    @RenderBody()
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    @await RenderSectionAsync("InfoCardSection", false)
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section BodyEnd {
+    @RenderSection("BodyEnd", false)
+}

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.Core.Extensions;
 
@@ -22,5 +23,27 @@ public static class EnumExtensions
         return displayAttribute != null && !string.IsNullOrWhiteSpace(displayAttribute.Name)
             ? displayAttribute.Name
             : null;
+    }
+
+    public static string GetFilterName(this EApplicationStage applicationStage)
+    {
+        switch (applicationStage)
+        {
+            case EApplicationStage.ApplyForGrant:
+                return "Apply for grant/Create building record";
+            case EApplicationStage.GrantFundingAgreement:
+                return "Grant Funding Agreement";
+            case EApplicationStage.WorksPackage:
+                return "Works Package";
+            case EApplicationStage.WorksDelivery:
+                return "Works Delivery";
+            case EApplicationStage.WorksCompleted:
+                return "Works Completed";
+            case EApplicationStage.BuildingComplete:
+                return "Building Complete";
+            case EApplicationStage.Closed:
+                return "Closed";
+            default: return string.Empty;
+        }
     }
 }

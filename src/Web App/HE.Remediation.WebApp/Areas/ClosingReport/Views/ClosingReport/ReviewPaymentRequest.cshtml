@@ -123,6 +123,68 @@
     @Html.HiddenFor(x => x.BuildingName)
     @Html.HiddenFor(x => x.ReturnUrl)
     @Html.HiddenFor(x=> x.ChangeToMonthlyCost)
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Buildings Insurance</h2>
+      <govuk-summary-list>
+		@if (Model.SumInsuredAmount.HasValue)
+		{
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					What is the total sum insured of the building?
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+					&pound;@Model.SumInsuredAmount?.ToString("N0")
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+		}
+
+		@if (Model.CurrentBuildingInsurancePremiumAmount.HasValue)
+		{
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					What is the current buildings insurance premium for the whole building?
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+					&pound;@Model.CurrentBuildingInsurancePremiumAmount?.ToString("N0")
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+		}
+
+        @if (!String.IsNullOrEmpty(Model.SelectedInsuranceProviderCommaSeparatedList))
+		{
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					Who is/are your current building insurance provider/s?
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+                    @Model.SelectedInsuranceProviderCommaSeparatedList
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+		}
+
+		@if (!String.IsNullOrEmpty(Model.IfOtherInsuranceProviderName))
+		{
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					If Other, please tell us who is/are your current building insurance provider/s?
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+					@Model.IfOtherInsuranceProviderName
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+		}
+
+		@if (!String.IsNullOrEmpty(Model.AdditionalInfo))
+		{
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					Additional information
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+					@Model.AdditionalInfo
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+		}
+	</govuk-summary-list>
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue" disabled="@Model.IsSubmitted">Save and continue</govuk-button>

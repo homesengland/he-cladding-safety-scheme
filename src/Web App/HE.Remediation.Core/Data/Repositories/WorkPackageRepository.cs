@@ -68,7 +68,7 @@ public class WorkPackageRepository : IWorkPackageRepository
         });
     }
 
-    public async Task SubmitWorkPackage()
+    public async Task SubmitWorkPackage(Guid? userId)
     {
         if (!TryGetApplicationId(out var applicationId))
         {
@@ -79,7 +79,8 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         await _connection.ExecuteAsync("SubmitWorkPackage", new
         {
-            ApplicationId = applicationId
+            ApplicationId = applicationId,
+            UserId = userId
         });
 
         scope.Complete();
@@ -1554,6 +1555,15 @@ public class WorkPackageRepository : IWorkPackageRepository
 
     #region Third Party Contribution
 
+    public async Task<GetLatestCostScheduleResult> GetLatestCostSchedule(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<GetLatestCostScheduleResult>(nameof(GetLatestCostSchedule), parameters);
+        return result;
+    }
+
     public async Task InsertThirdPartyContributions()
     {
         if (!TryGetApplicationId(out var applicationId))
@@ -1571,20 +1581,20 @@ public class WorkPackageRepository : IWorkPackageRepository
         scope.Complete();
     }
 
-    public async Task<bool?> GetThirdPartyContributionsPursuingThirdPartyContribution()
+    public async Task<EThirdPartyContributionPursuitStatus?> GetThirdPartyContributionsPursuingThirdPartyContribution()
     {
         if (!TryGetApplicationId(out var applicationId))
         {
             return null;
         }
 
-        return await _connection.QuerySingleOrDefaultAsync<bool?>("GetWorkPackageThirdPartyContributionsPursuingThirdPartyContribution", new
+        return await _connection.QuerySingleOrDefaultAsync<EThirdPartyContributionPursuitStatus?>("GetWorkPackageThirdPartyContributionsPursuingThirdPartyContribution", new
         {
             ApplicationId = applicationId
         });
     }
 
-    public async Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(bool? pursuingThirdPartyContribution)
+    public async Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(EThirdPartyContributionPursuitStatus? thirdPartyContributionPursuitStatusTypeId)
     {
         if (!TryGetApplicationId(out var applicationId))
         {
@@ -1596,20 +1606,20 @@ public class WorkPackageRepository : IWorkPackageRepository
         await _connection.ExecuteAsync("UpdateWorkPackageThirdPartyContributionsPursuingThirdPartyContribution", new
         {
             ApplicationId = applicationId,
-            PursuingThirdPartyContribution = pursuingThirdPartyContribution
+            ThirdPartyContributionPursuitStatusTypeId = (int)thirdPartyContributionPursuitStatusTypeId
         });
 
         scope.Complete();
     }
 
-    public async Task<ThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution()
+    public async Task<ThirdPartyContributionResult> GetThirdPartyContributionsThirdPartyContribution()
     {
         if (!TryGetApplicationId(out var applicationId))
         {
             return null;
         }
 
-        return await _connection.QuerySingleOrDefaultAsync<ThirdPartyContributionResult?>("GetWorkPackageThirdPartyContributionsThirdPartyContribution", new
+        return await _connection.QuerySingleOrDefaultAsync<ThirdPartyContributionResult>("GetWorkPackageThirdPartyContributionsThirdPartyContribution", new
         {
             ApplicationId = applicationId
         });

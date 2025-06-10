@@ -34,6 +34,8 @@ using HE.Remediation.WebApp.ViewModels.ResponsibleEntities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RightToManage;
+using HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RightToManage;
 
 namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 {
@@ -143,7 +145,6 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
-            TempData["BackLink"] = Url.Action("BasedInUk", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             return RedirectToAction("NotEligible", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
@@ -154,11 +155,46 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         {
             var response = await _sender.Send(GetNotEligibleRequest.Request);
 
-            ViewData["BackLink"] = !TempData.ContainsKey("BackLink")
-                ? Url.Action("Index", "TaskList", new { Area = "Application" })
-                : TempData["BackLink"];
+            if (response.StatusId == EApplicationStatus.ApplicationNotEligible)
+            {
+                ViewData["BackLinkHidden"] = true;
+            }
 
-            return View("NotEligibleNotInUk");
+            if (response is { RepresentationType: EApplicationRepresentationType.Representative, IsUkBased: false })
+            {
+                ViewData["BackLink"] = Url.Action("BasedInUk", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return View("NotEligibleNotInUk");
+            }
+
+            if (response is { IsUkRegistered: false, ApplicationScheme: EApplicationScheme.CladdingSafetyScheme })
+            {
+                ViewData["BackLink"] = Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return View("NotEligibleNotInUk");
+            }
+
+            if (response is { HasAcquiredRightToManage: false })
+            {
+                ViewData["BackLink"] = Url.Action("AcquiredRightToManage", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return View("NotEligibleNoRightToManage");
+            }
+
+            if (response is not
+                {
+                    CompanyType: EApplicationResponsibleEntityOrganisationType.RegisteredProvider
+                    or EApplicationResponsibleEntityOrganisationType.LocalAuthority,
+                    IsClaimingGrant: true
+                } &&
+                response is not
+                {
+                    IsClaimingGrant: false,
+                    HasOwners: true
+                })
+            {
+                ViewData["BackLink"] = Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return View("NotEligiblePrivateTenantOrUnaffordable");
+            }
+
+            return NotFound();
         }
 
         [HttpPost(nameof(NotEligible))]
@@ -472,9 +508,10 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             switch (model.OrganisationType!.Value)
             {
+                case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:
+                    return RedirectToAction("AcquiredRightToManage", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
                 case EApplicationResponsibleEntityOrganisationType.PrivateCompany:
                 case EApplicationResponsibleEntityOrganisationType.ResidentLedOrganisation:
-                case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:
                 case EApplicationResponsibleEntityOrganisationType.RegisteredProvider:
                 case EApplicationResponsibleEntityOrganisationType.LocalAuthority:
                     return RedirectToAction("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
@@ -529,7 +566,6 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         }
 
         #endregion
-
 
         #region ResponsibleEntityRelation
         [HttpGet(nameof(ResponsibleEntityRelation))]
@@ -621,7 +657,6 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if(!isUkBased && isCladdingSafetyScheme)
             {
-                TempData["BackLink"] = Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
                 return RedirectToAction("NotEligible", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
@@ -876,6 +911,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             var applicationScheme = _applicationDataProvider.GetApplicationScheme();
             var isSelfFunded = applicationScheme != EApplicationScheme.CladdingSafetyScheme;
+            var isSocialSector = applicationScheme == EApplicationScheme.SocialSector;
 
             var isRepresentative = response.RepresentationType == EApplicationRepresentationType.Representative;
 
@@ -884,7 +920,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             {
                 action = model.ReturnUrl;
             }
-            else if (isSelfFunded)
+            else if (isSelfFunded && !isSocialSector)
             {
                 return SafeRedirectToAction(nameof(UploadEvidence), "ResponsibleEntities", new { Area = "ResponsibleEntities", uploadType = EResponsibleEntityUploadType.Represent, isRepresentative });
             }
@@ -892,7 +928,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             {
                 action = nameof(UploadRepresentEvidence);
             }
-            else if (response.OrganisationType is EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+            else if (isSocialSector || response.OrganisationType is EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
             {
                 action = nameof(LeaseholderOrPrivateOwner);
             }
@@ -1313,8 +1349,11 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             var request = _mapper.Map<SetLeaseholderOrPrivateOwnerRequest>(model);
             await _sender.Send(request);
 
+            var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+            var isSocialSector = applicationScheme == EApplicationScheme.SocialSector;
+
             var action = model.ReturnUrl is null
-                ? nameof(ClaimingGrant)
+                ? isSocialSector ? nameof(CheckYourAnswers) : nameof(ClaimingGrant)
                 : model.ReturnUrl;
 
             return model.SubmitAction == ESubmitAction.Exit
@@ -1371,7 +1410,6 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return RedirectToAction("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
-            TempData["BackLink"] = Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             return RedirectToAction("NotEligible", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
@@ -1593,6 +1631,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         }
         #endregion
 
+        #region Upload Represent Evidence
         [HttpGet(nameof(UploadRepresentEvidence))]
         public async Task<IActionResult> UploadRepresentEvidence(string returnUrl)
         {
@@ -1658,6 +1697,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             return SafeRedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
+        #endregion
 
         #region UploadEvidence
         [HttpGet(nameof(UploadEvidence))]
@@ -1778,6 +1818,116 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             return RedirectToAction("Information");
         }
+        #endregion
+
+        #region Right to Manage
+        [HttpGet(nameof(AcquiredRightToManage))]
+        public async Task<IActionResult> AcquiredRightToManage(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetAcquiredRightToManageRequest.Request, cancellationToken);
+            var model = _mapper.Map<AcquiredRightToManageViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(AcquiredRightToManage))]
+        public async Task<IActionResult> AcquiredRightToManage(AcquiredRightToManageViewModel model, CancellationToken cancellationToken)
+        {
+            var validator = new AcquiredRightToManageViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetAcquiredRightToManageRequest>(model);
+            await _sender.Send(request, cancellationToken);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            if (model.HasAcquiredRightToManage == true)
+            {
+                return RedirectToAction("WhenRightToManageAcquired", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
+            return RedirectToAction("NotEligible", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+
+        [HttpGet(nameof(WhenRightToManageAcquired))]
+        public async Task<IActionResult> WhenRightToManageAcquired(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetWhenRightToManageAcquiredRequest.Request, cancellationToken);
+            var model = _mapper.Map<WhenRightToManageAcquiredViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(WhenRightToManageAcquired))]
+        public async Task<IActionResult> WhenRightToManageAcquired(WhenRightToManageAcquiredViewModel model, CancellationToken cancellationToken)
+        {
+            var validator = new WhenRightToManageAcquiredViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetWhenRightToManageAcquiredRequest>(model);
+            await _sender.Send(request, cancellationToken);
+
+
+            return model.SubmitAction == ESubmitAction.Continue
+                ? RedirectToAction("RightToManageEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
+                : RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+
+        [HttpGet(nameof(RightToManageEvidence))]
+        public async Task<IActionResult> RightToManageEvidence(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetRightToManageEvidenceRequest.Request, cancellationToken);
+            var model = _mapper.Map<RightToManageEvidenceViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(RightToManageEvidence))]
+        [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
+        public async Task<IActionResult> RightToManageEvidence(RightToManageEvidenceViewModel model, CancellationToken cancellationToken)
+        {
+            var validator = new RightToManageEvidenceViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            if (model.SubmitAction == ESubmitAction.Upload)
+            {
+                var request = _mapper.Map<AddRightToManageEvidenceRequest>(model);
+                await _sender.Send(request, cancellationToken);
+                return RedirectToAction("RightToManageEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
+            return model.SubmitAction == ESubmitAction.Continue
+                ? RedirectToAction("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
+                : RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+
+        [HttpGet(nameof(RightToManageEvidence) + "/Delete")]
+        public async Task<IActionResult> DeleteRightToManageEvidence(
+            [FromQuery] DeleteRightToManageEvidenceRequest request, 
+            CancellationToken cancellationToken)
+        {
+            await _sender.Send(request, cancellationToken);
+            return RedirectToAction("RightToManageEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+        }
+
         #endregion
     }
 }

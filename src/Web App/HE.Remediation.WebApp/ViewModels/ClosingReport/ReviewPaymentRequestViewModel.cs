@@ -24,4 +24,10 @@ public class ReviewPaymentRequestViewModel : ClosingReportBaseViewModel
     public decimal? AdditionalCost { get; set; }
 
     public string ReasonForChange { get; set; }    
+    public decimal? SumInsuredAmount { get; set; }
+    public decimal? CurrentBuildingInsurancePremiumAmount { get; set; }
+    public string IfOtherInsuranceProviderName { get; set; }
+    public string AdditionalInfo { get; set; }
+    public string InsuranceProviders { get; set; }
+    public string SelectedInsuranceProviderCommaSeparatedList { get; set; }
 }

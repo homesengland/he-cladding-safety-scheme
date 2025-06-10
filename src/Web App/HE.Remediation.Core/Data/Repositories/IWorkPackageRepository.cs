@@ -26,7 +26,7 @@ public interface IWorkPackageRepository
 
     Task<bool> HasWorkPackage();
 
-    Task SubmitWorkPackage();
+    Task SubmitWorkPackage(Guid? userId);
 
     Task<bool> IsWorkPackageSubmitted();
 
@@ -233,17 +233,18 @@ public interface IWorkPackageRepository
     Task<GetWorkPackageCostsResult> GetWorkPackageCostsByVariationRequestId(Guid variationRequestId);
 
     Task<Guid?> GetLatestWorkPackageCostsId();
+    Task<GetLatestCostScheduleResult> GetLatestCostSchedule(Guid applicationId);
 
     #endregion
 
     #region Third Party Contributions
     Task InsertThirdPartyContributions();
 
-    Task<bool?> GetThirdPartyContributionsPursuingThirdPartyContribution();
+    Task<EThirdPartyContributionPursuitStatus?> GetThirdPartyContributionsPursuingThirdPartyContribution();
 
-    Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(bool? pursuingThirdPartyContribution);
+    Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(EThirdPartyContributionPursuitStatus? thirdPartyContributionPursuitStatusTypeId);
 
-    Task<ThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution();
+    Task<ThirdPartyContributionResult> GetThirdPartyContributionsThirdPartyContribution();
 
     Task<List<EFundingStillPursuing>> GetThirdPartyContributionsThirdPartyContributionPursuingTypes();
 

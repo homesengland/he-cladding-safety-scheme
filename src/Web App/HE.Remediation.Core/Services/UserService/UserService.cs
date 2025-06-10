@@ -121,4 +121,7 @@ public class UserService : IUserService
 
     public Task ScaffoldUserProfileCompletionData(Guid userId)
         => _db.ExecuteAsync("ScaffoldUserProfileCompletionData", new { userId });
+
+    public async Task<UserInvitesPendingModel> IsUserInvitePending(string auth0UserId) 
+        => await _db.QuerySingleOrDefaultAsync<UserInvitesPendingModel>("IsUserInvitePending", new { auth0UserId });
 }

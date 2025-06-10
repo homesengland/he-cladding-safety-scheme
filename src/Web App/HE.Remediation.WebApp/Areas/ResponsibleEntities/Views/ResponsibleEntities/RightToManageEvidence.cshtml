@@ -1,0 +1,32 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RightToManage.RightToManageEvidenceViewModel
+
+@{
+    ViewData["BackLink"] = Url.Action("WhenRightToManageAcquired", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["Title"] = "Upload evidence that the Right to Manage has been acquired";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-hint">
+    Please upload a copy of the Claim Notice served under section 79 of the CLRA 2002. 
+    If the claim was disputed, but upheld by the Leasehold Valuation Tribunal, 
+    also upload evidence of the tribunal's decision in favour of the RTM company.
+</p>
+
+<p class="govuk-body">You can upload up to @Model.NumberOfFilesAllowed files.</p>
+<p class="govuk-body">Each file must be smaller than 100MB. and a .pdf file</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="RightToManageEvidence" method="post" enctype="multipart/form-data">
+    @await Html.PartialAsync("FileUpload", Model)
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

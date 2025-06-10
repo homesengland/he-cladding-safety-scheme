@@ -1,0 +1,31 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.OrganisationManagement.JoinViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "You've been invited";
+}
+
+<span class="govuk-heading-xl">You've been invited to an organisation</span>
+
+<div class="govuk-body">
+    <p>
+        @Model.RequestorFullName has invited you to join their organisation: @Model.OrganisationName.
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>All Team Members of the organisation will be able to start new applications and progress all applications for the organisation.</li>
+        <li>All Administrators of the organisation will be able to invite other users to join the organisation, and manage current organisation members.</li>
+    </ul>
+
+    <p class="govuk-!-margin-bottom-9">
+        The organisation will be responsible for all applications currently owned by you and the users you are inviting.
+    </p>
+</div>
+
+<form method="post" asp-area="OrganisationManagement" asp-controller="UserOnboarding" asp-action="Join">
+    <input asp-for="CollaborationUserId" type="hidden" value="@Model.CollaborationUserId" />
+    <input asp-for="NewSignUp" type="hidden" value="@Model.NewSignUp" />
+    <button type="submit" name="action" value="true" class="govuk-button">Join organisation</button>
+    <button type="submit" name="action" value="false" class="govuk-button govuk-button--secondary govuk-!-margin-left-2">Decline</button>
+</form>
+

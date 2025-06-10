@@ -10,12 +10,18 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         private readonly IDbConnectionWrapper _connection;
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IRightToManageRepository _rightToManageRepository;
 
-        public GetResponsibleEntityAnswersHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IApplicationRepository applicationRepository)
+        public GetResponsibleEntityAnswersHandler(
+            IDbConnectionWrapper connection, 
+            IApplicationDataProvider applicationDataProvider, 
+            IApplicationRepository applicationRepository, 
+            IRightToManageRepository rightToManageRepository)
         {
             _connection = connection;
             _applicationDataProvider = applicationDataProvider;
             _applicationRepository = applicationRepository;
+            _rightToManageRepository = rightToManageRepository;
         }
 
         public async Task<GetResponsibleEntityAnswersResponse> Handle(GetResponsibleEntityAnswersRequest request, CancellationToken cancellationToken)
@@ -35,6 +41,8 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                 ApplicationId = applicationId
             });
 
+            var rightToManageFiles = await _rightToManageRepository.GetRightToManageEvidence(applicationId);
+
             if (answers is not null)
             {
                 answers.RepresentEvidenceFiles = evidenceFiles.Where(x=> x.UploadType == EResponsibleEntityUploadType.Represent).ToList();
@@ -45,6 +53,13 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                 {
                     ApplicationId = applicationId
                 })).ToList();
+                answers.RightToManageEvidenceFiles = rightToManageFiles.Select(x => x.Name).ToList();
+
+                var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+                var isSelfFunded = applicationScheme != EApplicationScheme.CladdingSafetyScheme;
+                var isSocialSector = applicationScheme == EApplicationScheme.SocialSector;
+
+                answers.IsSocialSector = isSocialSector;
             }
 
             return answers ?? new GetResponsibleEntityAnswersResponse();
@@ -95,6 +110,10 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         public List<EvidenceFile> CheifExecEvidenceFiles { get; set; }
         public List<GrantFundingSignatory> GrantFundingSignatories { get; set; }
 
+        public bool? HasAcquiredRightToManage { get; set; }
+        public DateTime? RightToManageAcquisitionDate { get; set; }
+        public List<string> RightToManageEvidenceFiles { get; set; }
+
         public Guid? FreeholderId { get; set; }
         public int? FreeholderResponsibleEntityTypeId { get; set; }
         public string FreeholderIndividualOrCompany { get; set; }
@@ -102,6 +121,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         public string FreeholderDetails { get; set; }
         public string FreeholderAddress { get; set; }
         public bool ReadOnly { get; set; }
+        public bool IsSocialSector { get; set; }
     }
 
     public class EvidenceFile
