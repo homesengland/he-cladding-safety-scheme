@@ -5,11 +5,12 @@
 @{
     var isRas = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
     var isSocialSector = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
+    var backLinkAction = isSocialSector ? "LeaseholderOrPrivateOwner" : "UploadEvidence";
 
     ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
     ViewData["FullWidth"] = true;
     ViewData["ReturnUrl"] = "CheckYourAnswers";
-    ViewData["BackLink"] = Url.Action("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["BackLink"] = Url.Action(backLinkAction, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
     ViewData["ReadOnly"] = Model.ReadOnly;
     ViewData["BackLinkHidden"] = true;
 }
@@ -167,6 +168,40 @@
     </govuk-summary-list-row>
 }
 
+@if (Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.RightToManageCompany)
+{
+    @if (Model.HasAcquiredRightToManage.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Has the RTM company acquired the right to manage?</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(Model.HasAcquiredRightToManage!.Value ? "Yes" : "No")</govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    @if (Model.RightToManageAcquisitionDate.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>When was the Right to Manage acquired?</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(Model.RightToManageAcquisitionDate!.Value.ToString("dd/MM/yyyy"))</govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+    @if (Model.RightToManageEvidenceFiles.Count > 0)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Upload evidence that the Right to Manage has been acquired
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @foreach (var fileName in Model.RightToManageEvidenceFiles)
+                {
+                    <text>
+                        @fileName<br />
+                    </text>
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+}
+
 @if (
     Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.PrivateCompany ||
     Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.RightToManageCompany ||
@@ -267,7 +302,7 @@
         </govuk-summary-list-row>
     }
 
-    @if (Model.RepresentEvidenceFiles.Any())
+    @if (Model.RepresentEvidenceFiles.Any() && !isSocialSector)
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
@@ -343,9 +378,20 @@
 {
     @if (Model.ResponsibleEntitySharedOwners is not null)
     {
+        @if (Model.IsSocialSector)
+        {
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					Do you have any homes owned by long-term leaseholders or shared owners within the building?
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+					@(Model.ResponsibleEntitySharedOwners.GetValueOrDefault() > 0 ? "Yes" : "No")
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+        }
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
-                How many shared owners
+					@(Model.IsSocialSector ? "How many leaseholders and/or shared owners?" : "How many shared owners")
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
                 @Model.ResponsibleEntitySharedOwners
@@ -399,9 +445,20 @@
 {
     @if (Model.ResponsibleEntitySharedOwners is not null)
     {
+        @if (Model.IsSocialSector)
+        {
+			<govuk-summary-list-row>
+				<govuk-summary-list-row-key>
+					Do you have any homes owned by long-term leaseholders or shared owners within the building?
+				</govuk-summary-list-row-key>
+				<govuk-summary-list-row-value>
+					@(Model.ResponsibleEntitySharedOwners.GetValueOrDefault() > 0 ? "Yes" : "No")
+				</govuk-summary-list-row-value>
+			</govuk-summary-list-row>
+        }
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
-                How many shared owners
+					@(Model.IsSocialSector ? "How many leaseholders and/or shared owners?" : "How many shared owners")
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
                 @Model.ResponsibleEntitySharedOwners

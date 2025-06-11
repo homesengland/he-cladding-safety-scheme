@@ -16,6 +16,8 @@ public class ResetResponsibleEntitiesSectionHandlerTests : TestBase
     private readonly Mock<IFileService> _mockFileService;
     private readonly Mock<IResponsibleEntityRepository> _mockResponsibleEntityRepository;
     private readonly Mock<IBankDetailsRepository> _mockBankDetailsRepository;
+    private readonly Mock<IRightToManageRepository> _mockRightToManageRepository;
+    private readonly Mock<IFileRepository> _mockFileRepository;
 
     private readonly ResetResponsibleEntitiesSectionHandler _sut;
 
@@ -26,13 +28,17 @@ public class ResetResponsibleEntitiesSectionHandlerTests : TestBase
         _mockFileService = new Mock<IFileService>(MockBehavior.Strict);
         _mockResponsibleEntityRepository = new Mock<IResponsibleEntityRepository>(MockBehavior.Strict);
         _mockBankDetailsRepository = new Mock<IBankDetailsRepository>(MockBehavior.Strict);
+        _mockRightToManageRepository = new Mock<IRightToManageRepository>();
+        _mockFileRepository = new Mock<IFileRepository>();
 
         _sut = new ResetResponsibleEntitiesSectionHandler(
             _mockApplicationDataProvider.Object,
             _mockApplicationRepository.Object,
             _mockFileService.Object,
             _mockResponsibleEntityRepository.Object,
-            _mockBankDetailsRepository.Object);
+            _mockBankDetailsRepository.Object,
+            _mockRightToManageRepository.Object,
+            _mockFileRepository.Object);
     }
 
     [Fact]
@@ -46,6 +52,14 @@ public class ResetResponsibleEntitiesSectionHandlerTests : TestBase
         _mockApplicationRepository
             .Setup(x => x.GetResponsibleEntityEvidenceFiles(applicationId))
             .ReturnsAsync(files)
+            .Verifiable();
+
+        _mockRightToManageRepository.Setup(x => x.GetRightToManageEvidence(It.IsAny<Guid>()))
+            .ReturnsAsync(Array.Empty<FileResult>())
+            .Verifiable();
+
+        _mockFileRepository.Setup(x => x.DeleteFile(It.IsAny<Guid>()))
+            .ReturnsAsync(new DeleteFileResult())
             .Verifiable();
 
         foreach (var file in files)
@@ -85,6 +99,14 @@ public class ResetResponsibleEntitiesSectionHandlerTests : TestBase
             .Setup(x => x.GetResponsibleEntityEvidenceFiles(It.IsAny<Guid>()))
             .ReturnsAsync(Array.Empty<FileResult>());
 
+        _mockRightToManageRepository.Setup(x => x.GetRightToManageEvidence(It.IsAny<Guid>()))
+            .ReturnsAsync(Array.Empty<FileResult>())
+            .Verifiable();
+
+        _mockFileRepository.Setup(x => x.DeleteFile(It.IsAny<Guid>()))
+            .ReturnsAsync(new DeleteFileResult())
+            .Verifiable();
+
         _mockResponsibleEntityRepository
             .Setup(x => x.ResetResponsibleEntitiesSection(applicationId))
             .Returns(Task.CompletedTask)
@@ -111,6 +133,14 @@ public class ResetResponsibleEntitiesSectionHandlerTests : TestBase
         // Arrange
         var request = Fixture.Create<ResetResponsibleEntitiesSectionRequest>();
         var applicationId = ConfigureGetApplicationId();
+
+        _mockRightToManageRepository.Setup(x => x.GetRightToManageEvidence(It.IsAny<Guid>()))
+            .ReturnsAsync(Array.Empty<FileResult>())
+            .Verifiable();
+
+        _mockFileRepository.Setup(x => x.DeleteFile(It.IsAny<Guid>()))
+            .ReturnsAsync(new DeleteFileResult())
+            .Verifiable();
 
         _mockApplicationRepository
             .Setup(x => x.GetResponsibleEntityEvidenceFiles(It.IsAny<Guid>()))

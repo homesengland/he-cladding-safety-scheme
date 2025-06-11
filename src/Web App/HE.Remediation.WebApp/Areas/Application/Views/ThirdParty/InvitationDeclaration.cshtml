@@ -1,0 +1,29 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Application.InvitationDeclarationViewModel
+@{
+	var title = "Invitation declaration";
+	ViewData["Title"] = title;
+}
+
+<a href="@Url.Action("InviteContributor", new { teamMemberId = Model.TeamMemberId })" class="govuk-back-link">Back</a>
+<span class="govuk-caption-xl">Third party contribution</span>
+<h1 class="govuk-heading-xl">@(title)</h1>
+
+<govuk-error-summary>
+	<govuk-error-summary-item asp-for="IsDeclarationConfimed" />
+</govuk-error-summary>
+
+<form method="post" action="/InvitationDeclaration">
+	<p class="govuk-body">Before completing the Invitation declaration, please check the information you've given us.</p>
+	<input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+    <govuk-checkboxes name="IsDeclarationConfimed" asp-for="IsDeclarationConfimed">
+		<govuk-checkboxes-item value="true">Confirm that in completing this invitation to collaborate you are doing so on the basis that responsibility for the content / accuracy of the data remains with you the applicant.</govuk-checkboxes-item>
+    </govuk-checkboxes>
+	<govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+	<div>
+		<a class="govuk-link" href="@Url.Action("Index", "StageDiagram")">Cancel and exit</a>
+	</div>
+</form>
+

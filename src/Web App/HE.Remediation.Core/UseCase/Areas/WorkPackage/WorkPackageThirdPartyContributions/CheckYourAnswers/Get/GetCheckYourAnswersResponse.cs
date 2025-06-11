@@ -7,7 +7,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageThirdPartyCon
         public string ApplicationReferenceNumber { get; set; }
         public string BuildingName { get; set; }
         public bool IsSubmitted { get; set; }
-        public bool PursuingThirdPartyContribution { get; set; }
+        public EThirdPartyContributionPursuitStatus PursuingThirdPartyContribution { get; set; }
         public IEnumerable<string> ContributionTypes { get; set; }
         public decimal ContributionAmount { get; set; }
         public string ContributionNotes { get; set; }

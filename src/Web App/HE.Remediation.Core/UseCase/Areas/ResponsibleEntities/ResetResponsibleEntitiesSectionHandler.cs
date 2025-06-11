@@ -3,6 +3,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using MediatR;
 using System.Transactions;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -13,13 +14,17 @@ internal class ResetResponsibleEntitiesSectionHandler : IRequestHandler<ResetRes
     private readonly IFileService _fileService;
     private readonly IResponsibleEntityRepository _responsibleEntityRepository;
     private readonly IBankDetailsRepository _bankDetailsRepository;
+    private readonly IRightToManageRepository _rightToManageRepository;
+    private readonly IFileRepository _fileRepository;
 
     public ResetResponsibleEntitiesSectionHandler(
         IApplicationDataProvider applicationDataProvider,
         IApplicationRepository applicationRepository,
         IFileService fileService,
         IResponsibleEntityRepository responsibleEntityRepository,
-        IBankDetailsRepository bankDetailsRepository)
+        IBankDetailsRepository bankDetailsRepository, 
+        IRightToManageRepository rightToManageRepository, 
+        IFileRepository fileRepository)
     {
         _applicationDataProvider =
             applicationDataProvider ?? throw new ArgumentNullException(nameof(applicationDataProvider));
@@ -29,6 +34,8 @@ internal class ResetResponsibleEntitiesSectionHandler : IRequestHandler<ResetRes
         _responsibleEntityRepository = responsibleEntityRepository ??
                                        throw new ArgumentNullException(nameof(responsibleEntityRepository));
         _bankDetailsRepository = bankDetailsRepository;
+        _rightToManageRepository = rightToManageRepository;
+        _fileRepository = fileRepository;
     }
 
     public async Task<Unit> Handle(ResetResponsibleEntitiesSectionRequest request, CancellationToken cancellationToken)
@@ -39,10 +46,12 @@ internal class ResetResponsibleEntitiesSectionHandler : IRequestHandler<ResetRes
 
         await DeleteEvidenceFiles(applicationId);
 
+        await DeleteRightToManageEvidenceFiles(applicationId);
+
         await ResetResponsibleEntitiesSection(applicationId);
 
         await ResetBankDetailsSection(applicationId);
-
+        
         scope.Complete();
 
         return Unit.Value;
@@ -62,6 +71,24 @@ internal class ResetResponsibleEntitiesSectionHandler : IRequestHandler<ResetRes
             .Select(_fileService.DeleteFile);
 
         await Task.WhenAll(deleteFileTasks);
+    }
+
+    private async Task DeleteRightToManageEvidenceFiles(Guid applicationId)
+    {
+        var files = await _rightToManageRepository.GetRightToManageEvidence(applicationId);
+
+        foreach (var file in files)
+        {
+            await _rightToManageRepository.DeleteRightToManageEvidence(new DeleteRightToManageEvidenceParameters
+            {
+                ApplicationId = applicationId,
+                FileId = file.Id
+            });
+
+            await _fileRepository.DeleteFile(file.Id);
+            await _fileService.DeleteFile(file.Id + file.Extension);
+
+        }
     }
 
     private async Task ResetResponsibleEntitiesSection(Guid applicationId)

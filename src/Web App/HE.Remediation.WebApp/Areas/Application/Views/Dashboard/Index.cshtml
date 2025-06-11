@@ -29,7 +29,7 @@
                 }
 
                 <div class="govuk-grid-row app-cards">
-                    <div class="govuk-grid-column-one-third">
+                    <div class="govuk-grid-column-one-quarter">
                            <a href="@Url.Action("SchemeSelection", "Dashboard", new { area = "Application"})">
                             <div class="app-card">
                                 <p class="govuk-link govuk-heading-m">Start new application</p>
@@ -37,7 +37,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="govuk-grid-column-one-third">
+                    <div class="govuk-grid-column-one-quarter">
                         <a href="@Url.Action("ExistingApplications", "Dashboard", new { area = "Application"})">
                             <div class="app-card">
                                 <p class="govuk-link govuk-heading-m">View existing applications</p>
@@ -45,7 +45,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="govuk-grid-column-one-third">
+                    <div class="govuk-grid-column-one-quarter">
                         <a href="@Url.Action("Tasks", "Dashboard", new { area = "Application"})">
                             <div class="app-card task-count">
                                 <div class="govuk-grid-row">
@@ -63,7 +63,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="govuk-grid-column-one-third">
+                    <div class="govuk-grid-column-one-quarter">
                         <a href="@Url.Action("GetHelp", "Dashboard", new { area = "Application"})">
                             <div class="app-card">
                                 <p class="govuk-link govuk-heading-m">Get help</p>
@@ -71,7 +71,15 @@
                             </div>
                         </a>
                     </div>
-                    <div class="govuk-grid-column-one-third">
+@*                     <div class="govuk-grid-column-one-quarter">
+                        <a href="@Url.Action("Users", "OrganisationManagement", new { area = "OrganisationManagement"})">
+                            <div class="app-card">
+                                <p class="govuk-link govuk-heading-m">Organisation management</p>
+                                <p class="govuk-body">View and manage your organisation</p>
+                            </div>
+                        </a>
+                    </div> *@
+                    <div class="govuk-grid-column-one-quarter">
                         <a href="@Url.Action("index", "Account", new { area = "Administration"})">
                             <div class="app-card">
                                 <p class="govuk-link govuk-heading-m">Your settings<p>
@@ -79,7 +87,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="govuk-grid-column-one-third">
+                    <div class="govuk-grid-column-one-quarter">
                         <a href="@Url.Action("Complaints", "Dashboard", new { area = "Application"})">
                             <div class="app-card app-card-full-width">
                                 <p class="govuk-link govuk-heading-m">Complaints<p>

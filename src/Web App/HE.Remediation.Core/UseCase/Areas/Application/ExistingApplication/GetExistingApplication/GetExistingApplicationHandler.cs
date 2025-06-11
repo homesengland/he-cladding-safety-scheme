@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using Dapper;
+using HE.Remediation.Core.Extensions;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication
@@ -16,11 +18,15 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetE
 
         public async Task<IReadOnlyCollection<GetExistingApplicationResponse>> Handle(GetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
-            var existingApplications = await _db.QueryAsync<GetExistingApplicationResponse>("GetExistingApplications", new
-            {
-                UserId = _applicationDataProvider.GetUserId(),
-                Search = string.IsNullOrWhiteSpace(request.Search) ? null : request.Search
-            });
+            var stages = request.SelectedFilterStageOptions.Select(x => (int)x).ToArray();
+            var dynamicParams = new DynamicParameters();
+            dynamicParams.Add("UserId", _applicationDataProvider.GetUserId());
+            dynamicParams.Add("Search", string.IsNullOrWhiteSpace(request.Search) ? null : request.Search);
+            dynamicParams.Add("Stage", stages
+            .ToDataTable()
+            .AsTableValuedParameter("[dbo].[IntListType]"));
+
+            var existingApplications = await _db.QueryAsync<GetExistingApplicationResponse>("GetExistingApplications", dynamicParams);
             
             return existingApplications;
         }

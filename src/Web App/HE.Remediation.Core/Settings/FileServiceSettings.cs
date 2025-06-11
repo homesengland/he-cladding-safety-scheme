@@ -16,6 +16,7 @@
         public UploadSectionSettings ClosingReport { get; set; }
         public UploadSectionSettings PaymentRequestInvoice { get; set; }
         public UploadSectionSettings ProjectPlan { get; set; }
+        public UploadSectionSettings RtmEvidence { get; set; }
     }
 
     public class UploadSectionSettings

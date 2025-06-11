@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Fire risk assessor details";
     @*Removing file upload until this can be plumbed in properly*@
-    ViewData["BackLink"] = Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })
+        : Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
@@ -43,9 +45,11 @@
     <govuk-input asp-for="Telephone" name="Telephone" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false" input-maxlength="20">
         <govuk-input-label is-page-heading="false" class="govuk-label--s">Telephone number</govuk-input-label>
     </govuk-input>
+    
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <div class="comp-btn-group">
-    <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
-    <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
     </div>
 </form>

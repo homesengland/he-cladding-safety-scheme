@@ -10,6 +10,7 @@ using HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExist
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExistingApplication;
 using HE.Remediation.WebApp.Attributes.Authorisation;
+using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Helpers;
 using HE.Remediation.WebApp.ViewModels.Application;
 using MediatR;
@@ -141,16 +142,13 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
 
         #region "Existing Application"
 
-        public async Task<IActionResult> ExistingApplications(int? pageNo, string search)
+        public async Task<IActionResult> ExistingApplications(int? pageNo, string search, EApplicationStage[] selectedFilterStages, EApplicationStage[] unselectedFilterStages, string[] source, bool ShowFiltersValue)
         {
             const int pageSize = 10;
             pageNo ??= 1;
 
-            var existingApplicationsResponse = await _sender.Send(new GetExistingApplicationRequest
-            {
-                Search = search
-            });
             var viewModel = new ExistingApplicationViewModel();
+            IReadOnlyCollection<GetExistingApplicationResponse> existingApplicationsResponse = await FilterStages(search, selectedFilterStages, unselectedFilterStages, source, ShowFiltersValue, viewModel);
 
             var applications = _mapper.Map<IReadOnlyCollection<ExistingApplicationViewModel.ApplicationViewModel>>(existingApplicationsResponse);
 
@@ -160,6 +158,37 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             viewModel.PageCount = pagingRangeValuesViewModel.NoOfPages;
             viewModel.UseEllipses = pagingRangeValuesViewModel.UseEllipses;
             return View(viewModel);
+        }
+
+        private async Task<IReadOnlyCollection<GetExistingApplicationResponse>> FilterStages(string search, EApplicationStage[] selectedFilterStages, EApplicationStage[] unselectedFilterStages, string[] source, bool ShowFiltersValue, ExistingApplicationViewModel viewModel)
+        {
+            viewModel.SelectedFilterStageOptions = selectedFilterStages;
+
+            if (source.Contains("showFilters"))
+            {
+                viewModel.ShowFiltersValue = !ShowFiltersValue;
+            }
+
+            if (source.Contains("clear"))
+            {
+                viewModel.SelectedFilterStageOptions = [];
+            }
+            else if (source.Contains("unselect"))
+            {
+                viewModel.SelectedFilterStageOptions = selectedFilterStages.Except(unselectedFilterStages);
+            }
+
+            if (source.Contains("applyFilters"))
+            {
+                viewModel.ShowFiltersValue = false;
+            }
+
+            var existingApplicationsResponse = await _sender.Send(new GetExistingApplicationRequest
+            {
+                Search = search,
+                SelectedFilterStageOptions = viewModel.SelectedFilterStageOptions
+            });
+            return existingApplicationsResponse;
         }
 
         [HttpGet(nameof(ExistingApplication))]

@@ -82,11 +82,14 @@ public class ThirdPartyContributionsController : StartController
         var request = _mapper.Map<SetPursuingThirdPartyContributionRequest>(viewModel);
         await _sender.Send(request);
 
-        return submitAction == ESubmitAction.Continue
-            ? viewModel?.PursuingThirdPartyContribution == true
-                ? RedirectToAction("ThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions" })
-                : RedirectToAction("CheckYourAnswers", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions" })
-            : RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" });
+        if (submitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" });
+        }
+
+        return viewModel.ThirdPartyContributionPursuitStatusTypeId == EThirdPartyContributionPursuitStatus.YesSecuredContribution
+            ? RedirectToAction("ThirdPartyContribution", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions" })
+            : RedirectToAction("CheckYourAnswers", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions" });
     }
 
     #endregion

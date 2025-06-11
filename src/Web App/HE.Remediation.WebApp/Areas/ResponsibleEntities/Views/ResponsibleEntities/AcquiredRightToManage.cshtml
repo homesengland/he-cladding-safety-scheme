@@ -1,0 +1,33 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RightToManage.AcquiredRightToManageViewModel
+
+@{
+    ViewData["BackLink"] = Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    ViewData["Title"] = "Has the RTM company acquired the right to manage?";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="HasAcquiredRightToManage" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-body">
+    Please confirm that your Right to Manage Company has acquired the legal Right to Manage 
+    and has a copy of the Claim Notice served under section 79 of the CLRA 2002.
+</p>
+
+<form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="AcquiredRightToManage" method="post">
+    
+    <govuk-radios asp-for="HasAcquiredRightToManage">
+        <govuk-radios-item value="@true">Yes</govuk-radios-item>
+        <govuk-radios-item value="@false">No</govuk-radios-item>
+    </govuk-radios>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

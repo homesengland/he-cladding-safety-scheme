@@ -14,12 +14,21 @@ namespace HE.Remediation.Core.Services.GovNotify
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<GovNotifyEmailResponseModel> SendEmailAsync(GovNotifyEmailRequestModel model)
+        public async Task<GovNotifyEmailResponseModel> SendEmailAsync<TPersonalisationParameters>(GovNotifyEmailRequestModel<TPersonalisationParameters> model)
+            where TPersonalisationParameters : GlobalPersonalisationParameters
         {
             var requestPath = Environment.GetEnvironmentVariable("APIM_NOTIFY_SENDEMAIL_URI");
             using var response = await GetClient().PostAsJsonAsync(requestPath, model, _serializerOptions);
 
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                var errors = await response.Content.ReadAsStringAsync();
+                throw new Exception($"GovNotify API call failed. Status code: {response.StatusCode}, Errors: {errors}");
+            }
 
             return await response.Content.ReadFromJsonAsync<GovNotifyEmailResponseModel>();
         }
@@ -29,7 +38,15 @@ namespace HE.Remediation.Core.Services.GovNotify
             var requestPath = Environment.GetEnvironmentVariable("APIM_NOTIFY_GETSTATUS_URI");
             using var response = await GetClient().GetAsync($"{requestPath}/{notificationId}");
 
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                var errors = await response.Content.ReadAsStringAsync();
+                throw new Exception($"GovNotify API call failed. Status code: {response.StatusCode}, Errors: {errors}");
+            }
 
             return await response.Content.ReadFromJsonAsync<GovNotifyNotificationStatusResponseModel>(_serializerOptions);
         }

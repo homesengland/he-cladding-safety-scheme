@@ -35,7 +35,7 @@ public class GetPursuingThirdPartyContributionHandler : IRequestHandler<GetPursu
 
         return new GetPursuingThirdPartyContributionResponse
         {
-            PursuingThirdPartyContribution = response,
+            ThirdPartyContributionPursuitStatusTypeId = response,
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             IsSubmitted = isSubmitted

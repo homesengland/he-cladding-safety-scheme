@@ -17,6 +17,7 @@
         <main class="govuk-main-wrapper">
             @await RenderSectionAsync("ErrorSummary", false)
             <span class="govuk-caption-xl">Building details</span>
+            <span class="govuk-caption-m">@ViewData["SubTitle"]</span> <br />
             @RenderBody()
             <div>
                 <a class="govuk-link" href="@Url.Action("Index", "TaskList", new { Area = "Application" })">@((bool)ViewData["ReadOnly"] ? "Exit" : "Cancel and exit") </a>

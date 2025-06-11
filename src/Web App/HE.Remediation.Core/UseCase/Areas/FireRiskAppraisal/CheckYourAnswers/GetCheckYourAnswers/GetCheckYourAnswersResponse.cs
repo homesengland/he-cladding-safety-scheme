@@ -9,7 +9,17 @@ public class GetCheckYourAnswersResponse
 
     public string AppraisalSummaryFilename { get; set; }
 
+    public string AssessmentFilename { get; set; }
+    public EFireRiskAssessmentType? FireRiskAssessmentType { get; set; }
+
     public string FireRiskAssessorCompany { get; set; }
+
+    public string AssessorDetailsFirstName { get; set; }
+    public string AssessorDetailsLastName { get; set; }
+    public string AssessorDetailsCompanyName { get; set; }
+    public string AssessorDetailsCompanyNumber { get; set; }
+    public string AssessorDetailsEmailAddress { get; set; }
+    public string AssessorDetailsTelephone { get; set; }
 
     public DateTime? DateOfInstruction { get; set; }
 

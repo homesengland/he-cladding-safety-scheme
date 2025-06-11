@@ -13,4 +13,6 @@ public class KeyDatesViewModel : WorkPackageBaseViewModel
     
     public int? ExpectedDateForCompletionMonth { get; set; }
     public int? ExpectedDateForCompletionYear { get; set; }
+
+    public bool IsCladdingBeingRemoved { get; set; }
 }

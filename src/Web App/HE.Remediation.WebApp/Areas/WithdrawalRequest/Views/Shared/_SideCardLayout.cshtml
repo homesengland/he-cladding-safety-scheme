@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["ShowBackButton"] = ((bool)ViewData["ReadOnly"] == false);
+    if (ViewData.ContainsKey("BackLinkHidden"))
+    {
+        ViewData["ShowBackButton"] = (bool)ViewData["BackLinkHidden"] == false;
+    }
+
+    ViewData["ShowExitLink"] = true;
+    if (ViewData.ContainsKey("ExitLinkHidden"))
+    {
+        ViewData["ShowExitLink"] = (bool)ViewData["ExitLinkHidden"] == false;
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="@((bool?)ViewData["FullWidth"] == false ? "govuk-grid-column-two-thirds" : "govuk-grid-column-full")">
+        @if ((bool)ViewData["ShowBackButton"])
+        {
+            <govuk-back-link href="@ViewData["BackLink"]">Back</govuk-back-link>
+        }
+
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    @await RenderSectionAsync("ErrorSummary", false)
+                    <span class="govuk-caption-xl">@ViewData["Title"]</span>
+                    <span class="govuk-caption-m">@ViewData["SubTitle"]</span> <br />
+
+                    @RenderBody()
+                    <div>
+                        @if ((bool)ViewData["ShowExitLink"])
+                        {
+                            <a class="govuk-link" href="@Url.Action("Index", "StageDiagram", new { Area = "Application" })">@((bool)ViewData["ReadOnly"] ? "Exit" : "Cancel and exit") </a>
+                        }
+                    </div>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    @await RenderSectionAsync("InfoCardSection", false)
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section BodyEnd {
+    @RenderSection("BodyEnd", false)
+}

@@ -1,0 +1,42 @@
+﻿@using HE.Remediation.Core.Enums
+
+@model HE.Remediation.WebApp.ViewModels.Leaseholder.LeaseHolderResponsibleForCommunicationTypeViewModel
+@{
+    ViewData["Title"] = "Who is responsible for communications to leaseholders and residents?";
+    ViewData["BackLink"] = Url.Action("ResponsibleForCommunication", "Leaseholder", new { Area = "Leaseholder" });
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ResponsibleForCommunicationTypeId" />
+    </govuk-error-summary>
+}
+<form method="post" asp-area="Leaseholder" asp-controller="Leaseholder" asp-action="ResponsibleForCommunicationType">
+    <govuk-radios asp-for="ResponsibleForCommunicationTypeId">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">@ViewData["Title"]</govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        @if (Model.ApplicationRepresentationType == EApplicationRepresentationType.Representative)
+        {
+            <govuk-radios-item value="@(EResponsibleForCommunicationType.ResponsibleEntity)">Responsible Entity</govuk-radios-item>
+        }
+        <govuk-radios-item value="@(EResponsibleForCommunicationType.ManagingAgent)">Managing Agent</govuk-radios-item>
+        <govuk-radios-item value="@(EResponsibleForCommunicationType.Other)">
+            Other
+            <govuk-radios-item-conditional>
+                <govuk-input  asp-for="RepresentationOtherText" input-class="govuk-!-width-full">
+                    <govuk-input-label>If "Other" please provide more details</govuk-input-label>
+                </govuk-input>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+    </govuk-radios>
+    
+    <input type="hidden" asp-for="ApplicationRepresentationType" value="@Model.ApplicationRepresentationType" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

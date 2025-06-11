@@ -4,7 +4,6 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.BaseInformation.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.CheckYourAnswers.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.CheckYourAnswers.Set;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.IsCladdingBeingRemoved.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.KeyDates.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.KeyDates.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.Reset;
@@ -46,9 +45,7 @@ public class KeyDatesController : StartController
     public async Task<IActionResult> KeyDates(KeyDatesViewModel viewModel,
         ESubmitAction submitAction)
     {
-        var isCladdingBeingRemoved = await _sender.Send(GetIsCladdingBeingRemovedRequest.Request);
-
-        var validator = new KeyDatesViewModelValidator(isCladdingBeingRemoved);
+        var validator = new KeyDatesViewModelValidator();
         var validationResult = await validator.ValidateAsync(viewModel);
 
         if (!validationResult.IsValid)

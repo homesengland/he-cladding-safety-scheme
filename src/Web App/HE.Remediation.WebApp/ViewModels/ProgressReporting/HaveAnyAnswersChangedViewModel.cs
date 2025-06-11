@@ -59,4 +59,5 @@ public class HaveAnyAnswersChangedViewModel
     public string SignatoryEmailAddress { get; set; }
     public DateTime? DateAppointed { get; set; }
     public EIntentToProceedType? IntentToProceed { get; set; }
+    public bool? HasProjectPlanMilestones { get; set; }
 }

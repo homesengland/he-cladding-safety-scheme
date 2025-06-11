@@ -1,4 +1,4 @@
-#main-content {
+﻿#main-content {
     padding-top: 0;
 }
 
@@ -51,6 +51,11 @@ header.govuk-header .govuk-header__service-name .logout {
 }
 
 .app-cards .govuk-grid-column-one-third {
+    float: none;
+    margin-bottom: 30px;
+}
+
+.app-cards .govuk-grid-column-one-quarter {
     float: none;
     margin-bottom: 30px;
 }
@@ -1093,3 +1098,42 @@ input.right-aligned {
 .text-override-colour-default {
     color: #0b0c0c !important;
 }
+
+/* Begin application filtering */
+.application-filter-bg {
+    background: #f3f2f1;
+    margin-left: 0 !important;
+}
+
+.application-filter-border {
+    border:1px solid #b1b4b6;
+}
+
+.padding-left-30 {
+    padding-left: 30px !important;
+}
+
+.padding-19-5 {
+    padding: 19.5px;
+}
+
+.remove-buttons {
+    background-color: white !important;
+    border: 1px black solid !important;
+}
+
+a.clear-filters {
+    margin-top: 20px;
+    margin-bottom: 29px;
+    margin-left: 110px;
+    display: inline-block;
+}
+
+.margin-top-bottom-5 {
+    margin: 5px 0;
+}
+
+.margin-left-30 {
+    margin-left: 30px; 
+}
+/* End of application filtering */

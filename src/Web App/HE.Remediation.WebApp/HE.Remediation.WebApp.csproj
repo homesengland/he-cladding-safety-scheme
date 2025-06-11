@@ -32,9 +32,8 @@
     <PackageReference Include="GovUk.Frontend.AspNetCore" Version="0.5.1" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
@@ -44,11 +43,14 @@
 
   <ItemGroup>
     <Folder Include="Areas\AlternativeFundingRoutes\Controllers\" />
-    <Folder Include="Attributes\Routing\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\BuildingDetails\Views\BuildingDetails\BuildingsInsurance.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Areas\ClosingReport\Views\ClosingReport\NeedVariations.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -98,6 +100,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="wwwroot\js\existingApplications.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -109,6 +115,8 @@
     <_ContentIncludedByDefault Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\PracticalCompletion.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddress.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddressResults.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\AcquiredRightToManage.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\RightToManageEvidence.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\StartedOnSiteMilestone\Views\StartedOnSiteMilestone\StartedOnSite.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageProgrammePlan\Views\ProgrammePlan\StartInformation.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageProjectTeam\Views\ProjectTeam\CheckYourAnswers.cshtml" />
@@ -136,5 +144,13 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageProgrammePlan\Views\ProgrammePlan\StartInformation.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\AcquiredRightToManage.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\RightToManageEvidence.cshtml" />
   </ItemGroup>
 </Project>

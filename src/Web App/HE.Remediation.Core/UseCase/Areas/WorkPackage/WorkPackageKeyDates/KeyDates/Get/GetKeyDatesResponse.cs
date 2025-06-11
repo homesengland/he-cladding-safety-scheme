@@ -15,6 +15,8 @@ public class GetKeyDatesResponse
     
     public int? ExpectedDateForCompletionMonth { get; set; }
     public int? ExpectedDateForCompletionYear { get; set; }
+
+    public bool IsCladdingBeingRemoved { get; set; }
     
     public bool IsSubmitted { get; set; }
 }

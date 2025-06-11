@@ -5,5 +5,5 @@ namespace HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageThirdPartyCon
 
 public class PursuingThirdPartyContributionViewModel : WorkPackageBaseViewModel
 {
-    public bool? PursuingThirdPartyContribution { get; set; }
+    public EThirdPartyContributionPursuitStatus? ThirdPartyContributionPursuitStatusTypeId { get; set; }
 }

@@ -18,6 +18,7 @@ using System.Reflection;
 using HE.Remediation.Core.Services.GovNotify;
 using HE.Remediation.Core.Services.GovNotify.Models;
 using HE.Remediation.Core.Services.Communication;
+using HE.Remediation.Core.Services.Communication.Collaboration;
 
 namespace HE.Remediation.Core.Extensions
 {
@@ -52,6 +53,11 @@ namespace HE.Remediation.Core.Extensions
             builder.Services.AddSingleton<IBackgroundEmailCommunicationQueue, BackgroundEmailCommunicationQueue>();
             builder.Services.AddHostedService<EmailCommunicationHostedService>();
 
+            builder.Services.AddSingleton<IBackgroundCollaborationCommunicationQueue, BackgroundCollaborationCommunicationQueue>();
+            builder.Services.AddHostedService<CollaborationCommunicationHostedService>();
+
+            builder.Services.AddSingleton<CommunicationConstants>();
+
             services.AddGovNotifyService(builder.Configuration);
 
             services.AddAuth0WebAppAuthentication(options =>
@@ -83,16 +89,17 @@ namespace HE.Remediation.Core.Extensions
             services.AddScoped<IGovNotifyService, GovNotifyService>();
 
             services.AddHttpClient(GovNotifyServiceConstants.GovNotifyHttpClientName, client =>
-            {
-                client.BaseAddress = new Uri(configuration["BASE_APIM_ENDPOINT"]
-                                             ?? throw new InvalidOperationException(
-                                                 "The BASE_APIM_ENDPOINT configuration value has not been specified"));
+                {
+                    client.BaseAddress = new Uri(configuration["BASE_APIM_ENDPOINT"]
+                                                 ?? throw new InvalidOperationException(
+                                                     "The BASE_APIM_ENDPOINT configuration value has not been specified"));
 
-                client.DefaultRequestHeaders.Add("X-APIM-PROXY-KEY",
-                    Environment.GetEnvironmentVariable("APIM_PROXY_API_KEY")
-                    ?? throw new InvalidOperationException(
-                        "The APIM_PROXY_API_KEY configuration value has not been specified"));
-            });
+                    client.DefaultRequestHeaders.Add("X-APIM-PROXY-KEY",
+                        Environment.GetEnvironmentVariable("APIM_PROXY_API_KEY")
+                        ?? throw new InvalidOperationException(
+                            "The APIM_PROXY_API_KEY configuration value has not been specified"));
+                }
+            ).AddStandardResilienceHandler();
 
             return services;
         }

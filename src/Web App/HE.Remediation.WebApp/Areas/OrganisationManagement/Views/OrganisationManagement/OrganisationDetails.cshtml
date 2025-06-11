@@ -1,0 +1,45 @@
+﻿@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.OrganisationManagement.OrganisationDetailsViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Organisation Details";
+}
+
+@section InfoCardSection
+{
+    @await Html.PartialAsync("_Guidance")
+}
+
+@section BackButton
+{
+    <govuk-back-link href="/OrganisationManagement/Introduction">Back</govuk-back-link>
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Name" />
+        <govuk-error-summary-item asp-for="RegistrationNumber" />
+    </govuk-error-summary>
+}
+
+<span class="govuk-caption-xl">Organisation management</span>
+<h1 class="govuk-heading-xl">Organisation details</h1>
+
+<form method="post" asp-area="OrganisationManagement" asp-controller="OrganisationManagement" asp-action="OrganisationDetails">
+
+    <govuk-input asp-for="Name" input-class="govuk-input--width-20">
+        <govuk-input-label is-page-heading="true" class="govuk-label--s">Name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="RegistrationNumber" input-class="govuk-input--width-20">
+        <govuk-input-label is-page-heading="true" class="govuk-label--s">Registration number</govuk-input-label>
+    </govuk-input>
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    <div>
+        <a class="govuk-link" href="@Url.Action("Dashboard", "Application")">Cancel and exit</a>
+    </div>
+</form>

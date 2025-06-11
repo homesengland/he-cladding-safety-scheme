@@ -1,0 +1,41 @@
+﻿@using HE.Remediation.Core.Enums
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Creating an organisation";
+}
+
+@section InfoCardSection
+{
+    @await Html.PartialAsync("_Guidance")
+}
+
+@section BackButton
+{
+    <govuk-back-link href="/Application/Dashboard">Back</govuk-back-link>
+}
+
+<span class="govuk-caption-xl">Organisation management</span>
+<h1 class="govuk-heading-xl">Creating an organisation</h1>
+
+<div class="govuk-body">
+    <p>
+        Creating an organisation allows you to invite other users to assist, manage and progress your applications.
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>All Team Members of the organisation will be able to start new applications and progress all applications for the organisation.</li>
+        <li>All Administrators of the organisation will be able to invite other users to join the organisation, and manage current organisation members.</li>
+    </ul>
+
+    <p class="govuk-!-margin-bottom-9">
+        The organisation will be responsible for all applications currently owned by you and the users you are inviting.
+    </p>
+</div>
+
+<div>
+    <a class="govuk-button" href="@Url.Action("OrganisationDetails", "OrganisationManagement")">Continue</a>
+</div>
+<div>
+    <a class="govuk-link" href="@Url.Action("Dashboard", "Application")">Cancel and exit</a>
+</div>
+

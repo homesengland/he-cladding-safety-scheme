@@ -1571,20 +1571,20 @@ public class WorkPackageRepository : IWorkPackageRepository
         scope.Complete();
     }
 
-    public async Task<bool?> GetThirdPartyContributionsPursuingThirdPartyContribution()
+    public async Task<EThirdPartyContributionPursuitStatus?> GetThirdPartyContributionsPursuingThirdPartyContribution()
     {
         if (!TryGetApplicationId(out var applicationId))
         {
             return null;
         }
 
-        return await _connection.QuerySingleOrDefaultAsync<bool?>("GetWorkPackageThirdPartyContributionsPursuingThirdPartyContribution", new
+        return await _connection.QuerySingleOrDefaultAsync<EThirdPartyContributionPursuitStatus?>("GetWorkPackageThirdPartyContributionsPursuingThirdPartyContribution", new
         {
             ApplicationId = applicationId
         });
     }
 
-    public async Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(bool? pursuingThirdPartyContribution)
+    public async Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(EThirdPartyContributionPursuitStatus? thirdPartyContributionPursuitStatusTypeId)
     {
         if (!TryGetApplicationId(out var applicationId))
         {
@@ -1596,7 +1596,7 @@ public class WorkPackageRepository : IWorkPackageRepository
         await _connection.ExecuteAsync("UpdateWorkPackageThirdPartyContributionsPursuingThirdPartyContribution", new
         {
             ApplicationId = applicationId,
-            PursuingThirdPartyContribution = pursuingThirdPartyContribution
+            ThirdPartyContributionPursuitStatusTypeId = (int)thirdPartyContributionPursuitStatusTypeId
         });
 
         scope.Complete();

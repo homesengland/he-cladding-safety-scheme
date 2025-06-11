@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
+﻿using HE.Remediation.Core.Enums;
+using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -20,6 +21,12 @@ namespace HE.Remediation.WebApp.TagHelpers
 
         [HtmlAttributeName("search-parameter")]
         public string SearchParameter { get; set; }
+
+        [HtmlAttributeName("show-filters")]
+        public bool ShowFilters { get; set; }
+
+        [HtmlAttributeName("selected-filter-stages")]
+        public IEnumerable<EApplicationStage> SelectedFilterStageOptions { get; set; } = [];
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -133,7 +140,13 @@ namespace HE.Remediation.WebApp.TagHelpers
                 sb.Append("    <li class=\"govuk-pagination__item\">" + Environment.NewLine);
             }
             sb.Append("      <a class=\"govuk-link govuk-pagination__link\" href=\"");
-            sb.Append(new UriBuilder(URIPrefix).AddParameter("pageNo", PageNo).AddParameter("search", SearchParameter).Build());                    
+            var url = new UriBuilder(URIPrefix).AddParameter("pageNo", PageNo).AddParameter("search", SearchParameter);
+            sb.Append(url.Build());
+            sb.Append($"&=ShowFilters={ShowFilters}");
+            foreach (var stageOption in SelectedFilterStageOptions)
+            {
+                sb.Append($"&selectedFilterStages={stageOption}");
+            }
             sb.Append("\" aria-label=\"Page ");
             sb.Append(PageNo.ToString());
             sb.Append("\"");
@@ -157,7 +170,13 @@ namespace HE.Remediation.WebApp.TagHelpers
 
             sb.Append("  <div class=\"govuk-pagination__prev\">" + Environment.NewLine);
             sb.Append("    <a class=\"govuk-link govuk-pagination__link\" href=\"");
-            sb.Append(new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage - 1).AddParameter("search", SearchParameter).Build());
+            var url = new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage - 1).AddParameter("search", SearchParameter);
+            sb.Append(url.Build());
+            sb.Append($"&=ShowFilters={ShowFilters}");
+            foreach (var stageOption in SelectedFilterStageOptions)
+            {
+                sb.Append($"&selectedFilterStages={stageOption}");
+            }
             sb.Append("\" rel=\"prev\">" + Environment.NewLine);            
             sb.Append("      <svg class=\"govuk-pagination__icon govuk-pagination__icon--prev\" ");
             sb.Append("xmlns=\"http://www.w3.org/2000/svg\" height=\"13\" width=\"15\" aria-hidden=\"true\" focusable=\"false\" viewBox=\"0 0 15 13\">" + Environment.NewLine);
@@ -175,7 +194,13 @@ namespace HE.Remediation.WebApp.TagHelpers
             var sb = new StringBuilder();
             sb.Append("  <div class=\"govuk-pagination__next\">" + Environment.NewLine);
             sb.Append("    <a class=\"govuk-link govuk-pagination__link\" href=\"");
-            sb.Append(new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage + 1).AddParameter("search", SearchParameter).Build());
+            var url = new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage + 1).AddParameter("search", SearchParameter);
+            sb.Append(url.Build());
+            sb.Append($"&=ShowFilters={ShowFilters}");
+            foreach (var stageOption in SelectedFilterStageOptions)
+            {
+                sb.Append($"&selectedFilterStages={stageOption}");
+            }
             sb.Append("\" rel=\"next\">"  + Environment.NewLine);
             sb.Append("      <span class=\"govuk-pagination__link-title\">Next</span>"  + Environment.NewLine);
             sb.Append("      <svg class=\"govuk-pagination__icon govuk-pagination__icon--next\" ");

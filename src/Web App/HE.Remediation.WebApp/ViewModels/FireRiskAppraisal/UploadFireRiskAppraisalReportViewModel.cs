@@ -8,7 +8,6 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public string DeleteEndpoint => "/FireRiskAppraisal/DeleteReport";
         public string[] FraewAcceptedFileTypes => new[] { ".pdf" };
         public string[] FraewSummaryAcceptedFileTypes => new[] { ".xlsx" };
-        public string[] FraReportAcceptedFileTypes => new[] { ".pdf", ".docx",".xlsx" };
 
         public Shared.File AddedFraew { get; set; }
 
@@ -18,9 +17,6 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 
         public IFormFile FraewSummary { get; set; }
 
-        public Shared.File AddedFra { get; set; }
-
-        public IFormFile FraReport { get; set; }
 
         public string ReturnUrl { get; set; }
     }

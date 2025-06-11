@@ -30,6 +30,8 @@ using HE.Remediation.Core.UseCase.Areas.Administration.AddExtraContact.GetExtraC
 using HE.Remediation.Core.UseCase.Areas.Administration.AddExtraContact.SetExtraContact;
 using HE.Remediation.Core.UseCase.Areas.Administration.AdditionalContacts.GetAdditionalContact;
 using HE.Remediation.Core.UseCase.Areas.Administration.DeleteExtraContact.SetDeleteExtraContact;
+using HE.Remediation.Core.UseCase.Areas.Authentication.Login.PostLogin;
+using System.Security.Claims;
 
 namespace HE.Remediation.WebApp.Areas.Administration.Controllers
 {
@@ -108,7 +110,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                 if ((profileCompletion.ResponsibleEntityType == EResponsibleEntityType.Company) ||
                     (profileCompletion.ResponsibleEntityType == EResponsibleEntityType.Individual))
                 {
-                    return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                    return await RedirectToAccountHome();
                 }
             }
 
@@ -153,7 +155,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
 
         #endregion
@@ -197,7 +199,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                         return RedirectToAction("CompanyDetails", "Account", new { Area = "Administration" });
                     }
 
-                    return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                    return await RedirectToAccountHome();
                 }
                 else
                 {
@@ -207,11 +209,11 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                        return await RedirectToAccountHome();
                     }
                 }
             }
-            return RedirectToAction("index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
 
         #endregion
@@ -318,9 +320,9 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                     return RedirectToAction("CompanyAddress", "Account", new { Area = "Administration" });
                 }
 
-                return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                return await RedirectToAccountHome();
             }
-            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
 
         #endregion
@@ -367,9 +369,9 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                 {
                     return RedirectToAction("SecondaryContactDetails", "Account", new { Area = "Administration" });
                 }
-                return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                return await RedirectToAccountHome();
             }
-            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
 
         /// <summary>
@@ -402,9 +404,9 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                 {
                     return RedirectToAction("SecondaryContactDetails", "Account", new { Area = "Administration" });
                 }
-                return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                return await RedirectToAccountHome();
             }
-            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
 
         /// <summary>
@@ -511,7 +513,7 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                         return RedirectToAction("CompanyDetails", "Account", new { Area = "Administration" });
                     }
                     
-                    return RedirectToAction("Index", "Account", new { Area = "Administration" });                                            
+                    return await RedirectToAccountHome();                                            
                 }
                 else
                 {
@@ -521,12 +523,12 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                        return await RedirectToAccountHome();
                     }
                 }                
             }
 
-            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
         
         /// <summary>
@@ -561,10 +563,10 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Account", new { Area = "Administration" });
+                    return await RedirectToAccountHome();
                 }
             }
-            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+            return await RedirectToAccountHome();
         }
 
         /// <summary>
@@ -686,5 +688,30 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         }
 
         #endregion
+    
+        private async Task<RedirectToActionResult> RedirectToAccountHome()
+        {
+            var userProfile = await _sender.Send(GetPostLoginRequest());
+            if(userProfile.UserInvitesPending.Any())
+            {
+                return RedirectToAction("Join", "UserOnboarding", new { Area = "OrganisationManagement", newSignUp = true });
+
+            }
+
+            return RedirectToAction("Index", "Account", new { Area = "Administration" });
+        }
+
+        private PostLoginRequest GetPostLoginRequest()
+        {
+            return new PostLoginRequest
+            {
+                Auth0UserId = User.Claims.Single(e => e.Type == ClaimTypes.NameIdentifier).Value,
+                EmailAddress = User.Claims.Single(e => e.Type == ClaimTypes.Email).Value,
+                UserAgent = HttpContext.Request.Headers["User-Agent"],
+                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
+                LoginDateTime = DateTime.UtcNow
+            };
+        }
+
     }
 }

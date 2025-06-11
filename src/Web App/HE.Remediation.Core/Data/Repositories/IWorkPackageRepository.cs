@@ -239,9 +239,9 @@ public interface IWorkPackageRepository
     #region Third Party Contributions
     Task InsertThirdPartyContributions();
 
-    Task<bool?> GetThirdPartyContributionsPursuingThirdPartyContribution();
+    Task<EThirdPartyContributionPursuitStatus?> GetThirdPartyContributionsPursuingThirdPartyContribution();
 
-    Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(bool? pursuingThirdPartyContribution);
+    Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(EThirdPartyContributionPursuitStatus? thirdPartyContributionPursuitStatusTypeId);
 
     Task<ThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution();
 

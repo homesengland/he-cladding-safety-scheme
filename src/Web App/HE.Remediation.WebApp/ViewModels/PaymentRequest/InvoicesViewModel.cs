@@ -5,7 +5,7 @@ namespace HE.Remediation.WebApp.ViewModels.PaymentRequest;
 public class InvoicesViewModel : FileUploadViewModel
 {
     public override string DeleteEndpoint => "/PaymentRequest/Invoices/Delete";
-    public override string[] AcceptedFileTypes => new[] { ".pdf", ".doc", ".docx", ".xls", ".xlxs", ".csv" };
+    public override string[] AcceptedFileTypes => new[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
     public override int NumberOfFilesAllowed => 20;
 
     public string ApplicationReferenceNumber { get; set; }

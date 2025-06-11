@@ -1,0 +1,24 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.InvitationSentViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Invitation sent";
+}
+
+<govuk-panel heading-level="1">
+    <govuk-panel-title>
+        Invitation sent
+    </govuk-panel-title>
+    <govuk-panel-body>
+        Sent to<br /><strong>@Model.InvitedEmailAddress</strong>
+    </govuk-panel-body>
+</govuk-panel>
+
+<h2 class="govuk-heading-m">What happens next</h2>
+
+<p class="govuk-body">An email will be sent to the invitee.<br/>
+Once they log into an account sharing the email address provided they'll be asked to accept or refuse the invite.</p>
+
+<p class="govuk-body">Should they accept, they'll be able to add, edit and view this application.</p>
+
+<govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" })>Return to home</govuk-button>

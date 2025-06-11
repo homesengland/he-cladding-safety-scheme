@@ -1,0 +1,43 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WithdrawalRequest.ReasonForClosingViewModel
+@{
+	Layout = "~/Areas/WithdrawalRequest/Views/Shared/_SideCardLayout.cshtml";
+	ViewData["Title"] = "Request to withdraw application";
+	ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+	ViewData["BackLink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+	ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+}
+
+@section ErrorSummary
+{
+	<govuk-error-summary>
+		<govuk-error-summary-item asp-for="ReasonForClosing" />
+	</govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Explain the reason for requesting to close this application</h1>
+
+@using (Html.BeginForm())
+{
+	<div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="1000">
+		<div class="govuk-form-group">
+			<govuk-character-count name="ReasonForClosing" max-length="1000" asp-for="ReasonForClosing" disabled="@Model.IsSubmitted">
+				<govuk-character-count-label class="govuk-label--s">
+					Please provide as much detail as possible.
+				</govuk-character-count-label>
+			</govuk-character-count>
+		</div>
+	</div>
+
+	@Html.HiddenFor(x => x.ApplicationReferenceNumber)
+	@Html.HiddenFor(x => x.BuildingName)
+
+	<div class="comp-btn-group">
+		<govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+	</div>
+}

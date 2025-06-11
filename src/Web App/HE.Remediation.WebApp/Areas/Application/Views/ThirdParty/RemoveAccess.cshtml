@@ -1,0 +1,33 @@
+﻿@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.RemoveAccessViewModel
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = $"Remove access for {Model.InvitedName}";
+}
+
+@section BackButton
+{
+    <govuk-back-link href="/Application/ThirdParty/Index">Back</govuk-back-link>
+}
+
+<span class="govuk-caption-xl">Third party collaboration</span>
+<h1 class="govuk-heading-xl">Revoke access for @Model.InvitedName</h1>
+
+<form method="post" asp-controller="ThirdParty" asp-action="RemoveAccess">
+    
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            Once access has been removed this application will no longer be visible to this account.
+        </strong>
+    </div>
+	<input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+	<input asp-for="InvitedName" type="hidden" value="@Model.InvitedName" />
+    <govuk-button class="govuk-button govuk-button--warning" name="SubmitAction" value="@ESubmitAction.Continue">Remove access</govuk-button>
+    <div>
+        <a class="govuk-link" href="@Url.Action("Index", "ThirdParty")">Cancel and exit</a>
+    </div>
+</form>

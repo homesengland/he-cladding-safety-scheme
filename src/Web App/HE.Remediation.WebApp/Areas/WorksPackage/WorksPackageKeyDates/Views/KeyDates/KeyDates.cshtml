@@ -58,34 +58,34 @@
         </fieldset>
     </div>
 
-    <div class="govuk-form-group @(isCladdingRemovalError ? "govuk-form-group--error" : string.Empty)">
-    <govuk-input-label is-page-heading="false" class="govuk-label--s">When do you expect to remove cladding? (Optional)</govuk-input-label>
-        <fieldset class="govuk-fieldset" role="group" aria-describedby="unsafe-removal-date-hint">
-            <div id="unsafe-removal-date-hint" class="govuk-hint">
-                Only answer this question if it is relevant to your works
-            </div>
-            <govuk-error-message asp-for="UnsafeCladdingRemovalDateMonth"/>
-            <govuk-error-message asp-for="UnsafeCladdingRemovalDateYear"/>
-            <div class="govuk-date-input" id="unsafe-removal-date">
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateMonth">
-                            Month
-                        </label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateMonth" type="number" inputmode="numeric">
+    @if (Model.IsCladdingBeingRemoved)
+    {
+        <div class="govuk-form-group @(isCladdingRemovalError ? "govuk-form-group--error" : string.Empty)">
+            <govuk-input-label is-page-heading="false" class="govuk-label--s">When do you expect to remove cladding?</govuk-input-label>
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="unsafe-removal-date-hint">
+                <govuk-error-message asp-for="UnsafeCladdingRemovalDateMonth"/>
+                <govuk-error-message asp-for="UnsafeCladdingRemovalDateYear"/>
+                <div class="govuk-date-input" id="unsafe-removal-date">
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateMonth">
+                                Month
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateMonth" type="number" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateYear">
+                                Year
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateYear" type="number" inputmode="numeric">
+                        </div>
                     </div>
                 </div>
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateYear">
-                            Year
-                        </label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled="@Model.IsSubmitted" asp-for="UnsafeCladdingRemovalDateYear" type="number" inputmode="numeric">
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-    </div>
+            </fieldset>
+        </div>
+    }
 
     <div class="govuk-form-group @(isEndDateError ? "govuk-form-group--error" : string.Empty)">
     <govuk-input-label is-page-heading="false" class="govuk-label--s">When do you expect to complete your works?</govuk-input-label>
@@ -120,6 +120,7 @@
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="IsCladdingBeingRemoved" type="hidden" value="@Model.IsCladdingBeingRemoved"/>
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>

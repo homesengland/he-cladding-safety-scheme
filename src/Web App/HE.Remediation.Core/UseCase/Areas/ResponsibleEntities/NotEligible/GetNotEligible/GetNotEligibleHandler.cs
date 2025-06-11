@@ -22,6 +22,9 @@ public class GetNotEligibleHandler : IRequestHandler<GetNotEligibleRequest, GetN
             ApplicationId = _applicationDataProvider.GetApplicationId()
         });
 
-        return response ?? new GetNotEligibleResponse();
+        response ??= new GetNotEligibleResponse();
+        response.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
+
+        return response;
     }
 }

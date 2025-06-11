@@ -6,7 +6,7 @@ public class KeyDatesViewModelValidator : AbstractValidator<KeyDatesViewModel>
 {
     private const int MaxYear = 2040;
 
-    public KeyDatesViewModelValidator(bool isCladdingBeingRemoved)
+    public KeyDatesViewModelValidator()
     {
         #region StartDate
 
@@ -45,7 +45,7 @@ public class KeyDatesViewModelValidator : AbstractValidator<KeyDatesViewModel>
             .WithMessage("Please provide a removal month")
             .InclusiveBetween(1, 12)
             .WithMessage("Please provide a removal month")
-            .When(x => x.UnsafeCladdingRemovalDateYear.HasValue || isCladdingBeingRemoved);
+            .When(x => x.UnsafeCladdingRemovalDateYear.HasValue || x.IsCladdingBeingRemoved);
 
         RuleFor(x => x.UnsafeCladdingRemovalDateYear)
             .NotNull()
@@ -54,7 +54,7 @@ public class KeyDatesViewModelValidator : AbstractValidator<KeyDatesViewModel>
             .WithMessage("Please provide a removal year")
             .LessThanOrEqualTo(MaxYear)
             .WithMessage($"Please provide a removal year no later than {MaxYear}")
-            .When(x => x.UnsafeCladdingRemovalDateMonth.HasValue || isCladdingBeingRemoved)
+            .When(x => x.UnsafeCladdingRemovalDateMonth.HasValue || x.IsCladdingBeingRemoved)
             .DependentRules(() =>
             {
                 RuleFor(x => x)
