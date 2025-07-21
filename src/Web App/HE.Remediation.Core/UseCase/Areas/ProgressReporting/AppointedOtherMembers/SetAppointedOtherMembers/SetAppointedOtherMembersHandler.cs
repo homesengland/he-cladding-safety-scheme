@@ -1,5 +1,4 @@
-﻿
-using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedOtherMembers.SetAppointedOtherMembers;
@@ -15,12 +14,7 @@ public class SetAppointedOtherMembersHandler : IRequestHandler<SetAppointedOther
 
     public async Task<Unit> Handle(SetAppointedOtherMembersRequest request, CancellationToken cancellationToken)
     {
-        await UpdateOtherMembersAppointed(request);
-        return Unit.Value;
-    }
-
-    private async Task UpdateOtherMembersAppointed(SetAppointedOtherMembersRequest request)
-    {
         await _progressReportingRepository.UpdateOtherMembersAppointed(request.OtherMembersAppointed);
+        return Unit.Value;
     }
 }

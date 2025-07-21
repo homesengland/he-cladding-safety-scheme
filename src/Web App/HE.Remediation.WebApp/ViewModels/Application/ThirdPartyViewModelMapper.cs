@@ -8,6 +8,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public ThirdPartyViewModelMapper()
         {
             CreateMap<GetThirdPartyResponse, ThirdPartyViewModel>();
+            CreateMap<GetThirdPartyResponse.TeamMember, ThirdPartyViewModel.TeamMember>();
         }
     }
 }

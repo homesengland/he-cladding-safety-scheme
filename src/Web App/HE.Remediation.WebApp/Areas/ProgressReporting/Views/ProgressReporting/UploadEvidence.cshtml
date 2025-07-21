@@ -3,11 +3,13 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["Backlink"] = !Model.HasVisitedCheckYourAnswers
+        ? Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = true;
 }
 @section ErrorSummary
-    {
+{
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="File" />
     </govuk-error-summary>
@@ -31,10 +33,10 @@
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
         <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
     </div>
 </form>
-

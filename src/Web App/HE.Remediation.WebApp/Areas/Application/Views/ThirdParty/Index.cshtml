@@ -38,7 +38,7 @@
 						@teamMember.RoleName
 					</td>
 					<td class="govuk-table__cell" colspan="2">
-						<a class="govuk-link" href="@Url.Action((teamMember.InviteStatus == -1 ? "InviteContributor" : "RemoveAccess"), "ThirdParty", new { Area = "Application", teamMemberId = teamMember.Id })">@(teamMember.InviteStatus == -1 ? "Invite to contribute" : "Remove access")</a>
+						@await Html.PartialAsync("_TeamMemberActionLink", teamMember)
 					</td>
 				</tr>
 			}

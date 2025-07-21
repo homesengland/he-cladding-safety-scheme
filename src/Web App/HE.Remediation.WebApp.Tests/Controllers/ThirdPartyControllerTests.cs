@@ -62,7 +62,7 @@ namespace HE.Remediation.WebApp.Tests.Controllers
                 .Returns(viewModel);
 
             // Act
-            var result = await _controller.InviteContributor(teamMemberId) as ViewResult;
+            var result = await _controller.InviteContributor(teamMemberId, Core.Enums.ETeamMemberSource.WorkPackage) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
@@ -92,7 +92,7 @@ namespace HE.Remediation.WebApp.Tests.Controllers
             var validator = new InvitationDeclarationViewModelValidator();
             var validationResult = await validator.ValidateAsync(viewModel);
 
-            var request = new SetInviteMemberRequest(Guid.NewGuid(), string.Empty);
+            var request = new SetInviteMemberRequest(Guid.NewGuid(), string.Empty, Core.Enums.ETeamMemberSource.WorkPackage);
             _senderMock.Setup(s => s.Send(request, default))
                 .ReturnsAsync(new SetInviteMemberResponse());
 

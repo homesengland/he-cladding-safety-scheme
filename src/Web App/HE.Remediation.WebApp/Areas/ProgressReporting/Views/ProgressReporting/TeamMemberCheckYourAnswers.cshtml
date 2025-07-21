@@ -10,8 +10,9 @@
     var role = Model.Role != ETeamRole.Other ? Model.Role.ToString().SplitCamelCase() : Model.OtherRole;
 
     var continueAction = Model.Version == 1
-        ? @Url.Action("ProjectTeam", "ProgressReporting", new { Area = "ProgressReporting" })
-        : @Url.Action("ProjectTeamOverview", "ProgressReporting", new { Area = "ProgressReporting" });
+        ? Url.Action("ProjectTeam", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("ProjectTeamOverview", "ProgressReporting", new { Area = "ProgressReporting" });
+    
 }
 
 <h1 class="govuk-heading-xl">Check your answers</h1>

@@ -3,7 +3,7 @@ using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenSubmit.SetWhenSubm
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.SetWhenStartOnSite;
-    public class SetWhenStartOnSiteHandler : IRequestHandler<SetWhenStartOnSiteRequest>
+    public class SetWhenStartOnSiteHandler : IRequestHandler<SetWhenStartOnSiteRequest, SetWhenStartOnSiteResponse>
     {
     private readonly IProgressReportingRepository _progressReportingRepository;
 
@@ -12,19 +12,23 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.Se
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetWhenStartOnSiteRequest request, CancellationToken cancellationToken)
+    public async Task<SetWhenStartOnSiteResponse> Handle(SetWhenStartOnSiteRequest request, CancellationToken cancellationToken)
     {
-        await UpdateProgressReportExpectedStartDateOnSite(request);
-        return Unit.Value;
-    }
-
-    private async Task UpdateProgressReportExpectedStartDateOnSite(SetWhenStartOnSiteRequest request)
-    {
-        var expectedStartDateOnSite = request.StartMonth is not null && request.StartYear is not null
-            ? new DateTime(request.StartYear.Value, request.StartMonth.Value, 1).AddMonths(1).AddDays(-1)
-            : (DateTime?)null;
+        var expectedStartDateOnSite = new DateTime(request.StartYear!.Value, request.StartMonth!.Value, 1);
 
         await _progressReportingRepository.UpdateProgressReportExpectedStartDateOnSite(expectedStartDateOnSite);
+        var leadDesignerNeedsSupport = await _progressReportingRepository.GetProgressReportLeadDesignerNeedsSupport();
+        var otherMembersNeedsSupport = await _progressReportingRepository.GetProgressReportOtherMembersNeedsSupport();
+        var quotesNeedsSupport = await _progressReportingRepository.GetProgressReportQuotesNeedsSupport();
+        var planningPermissionNeedsSupport = await _progressReportingRepository.GetProgressReportPlanningPermissionNeedsSupport();
+
+        return new SetWhenStartOnSiteResponse
+        {
+            NeedsSupport = leadDesignerNeedsSupport == true
+                           || otherMembersNeedsSupport == true
+                           || quotesNeedsSupport == true
+                           || planningPermissionNeedsSupport == true
+        };
     }
 }
 

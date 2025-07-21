@@ -8,6 +8,6 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommuni
 
         public EResponsibleForCommunicationType? ResponsibleForCommunicationTypeId { get; set; }
 
-        public string? RepresentationOtherText { get; set; }
+        public string RepresentationOtherText { get; set; }
     }
 }

@@ -6,6 +6,8 @@ public class GetDeclarationResponse
 
     public bool? FraewRiskToLifeReduced { get; set; }
 
+    public bool? GrantFundingObligations { get; set; }
+
     public DateTime? ApplicationCreationDate { get; set; }
 
     public string ApplicationReferenceNumber { get; set; }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
 {
@@ -39,13 +40,20 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
 
             var progressSummary = await _progressReportingRepository.GetProgressReportProgressSummary();
 
+            var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+            
             return new GetSummariseProgressResponse
             {
                 BuildingName = buildingName,
                 ApplicationReferenceNumber = applicationReferenceNumber,
                 ProgressSummary = progressSummary.ProgressSummary,
                 GoalSummary = progressSummary.GoalSummary,
-                IsSupportNeeded = progressSummary.RequiresSupport
+                IsSupportNeeded = progressSummary.RequiresSupport,
+                HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
             };
         }
     }
@@ -64,6 +72,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
         public string ProgressSummary { get; set; }
         public string GoalSummary { get; set; }
         public bool? IsSupportNeeded { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 
 }

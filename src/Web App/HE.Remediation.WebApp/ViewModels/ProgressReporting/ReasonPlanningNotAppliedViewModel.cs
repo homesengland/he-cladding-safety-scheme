@@ -11,6 +11,7 @@ public class ReasonPlanningNotAppliedViewModel
     public string ReasonPlanningPermissionNotApplied { get; set; }
 
     public bool? PlanningPermissionNeedsSupport { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }

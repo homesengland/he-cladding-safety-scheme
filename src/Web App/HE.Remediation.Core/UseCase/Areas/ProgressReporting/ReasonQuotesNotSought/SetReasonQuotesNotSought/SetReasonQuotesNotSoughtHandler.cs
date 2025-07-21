@@ -29,10 +29,9 @@ public class SetReasonQuotesNotSoughtHandler : IRequestHandler<SetReasonQuotesNo
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
-        await UpdateQuotesNotSoughtReason(request);
+        await _progressReportingRepository.UpdateQuotesNotSoughtReason(request.WhyYouHaveNotSoughtQuotes, request.QuotesNotSoughtReason, request.QuotesNeedsSupport);
 
-        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Progress Report",
-            "Review"));
+        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Progress Report", "Review"));
 
         // next working day - weekends and holidays are in DateReference table
         var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
@@ -57,10 +56,5 @@ public class SetReasonQuotesNotSoughtHandler : IRequestHandler<SetReasonQuotesNo
         }
 
         return Unit.Value;
-    }
-
-    private async Task UpdateQuotesNotSoughtReason(SetReasonQuotesNotSoughtRequest request)
-    {
-        await _progressReportingRepository.UpdateQuotesNotSoughtReason(request.WhyYouHaveNotSoughtQuotes, request.QuotesNotSoughtReason, request.QuotesNeedsSupport);
     }
 }

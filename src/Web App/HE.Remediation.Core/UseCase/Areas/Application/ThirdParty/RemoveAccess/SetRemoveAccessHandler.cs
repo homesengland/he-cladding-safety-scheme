@@ -1,25 +1,25 @@
 ﻿using System.Data;
 using Dapper;
 using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication.Collaboration;
+using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;
 using MediatR;
 using static HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember.SetInviteMemberHandler;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.RemoveAccess;
 
-public class SetRemoveAccessHandler(IProgressReportingRepository progressReportingRepository, IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IBackgroundCollaborationCommunicationQueue emailInviteSendQueue) : IRequestHandler<SetRemoveAccessRequest, SetRemoveAccessResponse>
+public class SetRemoveAccessHandler(IThirdPartyCollaboratorRepository thirdPartyCollaboratorRepository, IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IBackgroundCollaborationCommunicationQueue emailInviteSendQueue) : IRequestHandler<SetRemoveAccessRequest, SetRemoveAccessResponse>
 {
-    private readonly IProgressReportingRepository _progressReportingRepository = progressReportingRepository;
+    private readonly IThirdPartyCollaboratorRepository _thirdPartyCollaboratorRepository = thirdPartyCollaboratorRepository;
     private readonly IDbConnectionWrapper _connection = connection;
     private readonly IApplicationDataProvider _applicationDataProvider = applicationDataProvider;
     private readonly IBackgroundCollaborationCommunicationQueue _emailInviteSendQueue = emailInviteSendQueue;
 
     public async Task<SetRemoveAccessResponse> Handle(SetRemoveAccessRequest request, CancellationToken cancellationToken)
     {
-        var teamMember = await _progressReportingRepository.GetTeamMember(request.TeamMemberId);
+        var teamMember = await _thirdPartyCollaboratorRepository.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source);
         var applicationId = _applicationDataProvider.GetApplicationId();
 
         var collaborationUserId = await GetCollaborationUserId(teamMember, applicationId);
@@ -52,7 +52,7 @@ public class SetRemoveAccessHandler(IProgressReportingRepository progressReporti
         };
     }
 
-    private async Task RemoveThirdPartyCollaborator(GetTeamMemberResult teamMember, Guid applicationId)
+    private async Task RemoveThirdPartyCollaborator(GetInviteResponse teamMember, Guid applicationId)
     {
         await _connection.ExecuteAsync("RemoveThirdPartyCollaborator", new
         {
@@ -62,7 +62,7 @@ public class SetRemoveAccessHandler(IProgressReportingRepository progressReporti
         });
     }
 
-    private async Task<Guid?> GetCollaborationUserId(GetTeamMemberResult teamMember, Guid applicationId)
+    private async Task<Guid?> GetCollaborationUserId(GetInviteResponse teamMember, Guid applicationId)
     {
         var @params = new DynamicParameters();
         @params.Add("@ApplicationId", value: applicationId, dbType: DbType.Guid, direction: ParameterDirection.Input);

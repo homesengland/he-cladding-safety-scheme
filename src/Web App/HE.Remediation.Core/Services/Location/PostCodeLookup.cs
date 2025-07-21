@@ -6,6 +6,11 @@ namespace HE.Remediation.Core.Services.Location;
 
 public class PostCodeLookup : IPostCodeLookup
 {
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     private readonly IHttpClientFactory _httpClientFactory;
 
     public PostCodeLookup(IHttpClientFactory httpClientFactory)
@@ -26,7 +31,7 @@ public class PostCodeLookup : IPostCodeLookup
             var httpResponse = await httpClient.GetAsync($"{Environment.GetEnvironmentVariable("APIM_BUILDING_LOOKUP_URI")}?postcode={postcode}");
 
             await using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, _jsonSerializerOptions);
         }
         catch (Exception ex)
         {
@@ -70,7 +75,7 @@ public class PostCodeLookup : IPostCodeLookup
                                                           requestTxt);
 
             await using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });            
+            return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, _jsonSerializerOptions);            
         }
         catch (Exception ex)
         {

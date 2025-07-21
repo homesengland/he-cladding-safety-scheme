@@ -16,6 +16,7 @@ public class GrantCertifyingOfficerSignatoriesViewModel
 
     public int Version { get; set; }
     public bool IsGcoComplete { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
 }

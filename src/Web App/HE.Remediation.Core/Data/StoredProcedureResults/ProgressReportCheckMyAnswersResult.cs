@@ -5,6 +5,7 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults;
 public class ProgressReportCheckMyAnswersResult
 {
     public bool? LeaseholdersInformed { get; set; } 
+    public string LeaseholdersInformedEvidenceFiles { get; set; }
 
     public bool? LeadDesignerAppointed { get; set; }
 

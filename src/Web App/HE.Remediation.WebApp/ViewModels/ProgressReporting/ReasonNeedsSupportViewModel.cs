@@ -16,6 +16,7 @@ public class ReasonNeedsSupportViewModel
     public bool? QuotesNeedsSupport { get; set; }
 
     public string SupportNeededReason { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }

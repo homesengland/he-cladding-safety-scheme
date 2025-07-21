@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
@@ -39,6 +40,13 @@ public class GetTeamMemberHandler : IRequestHandler<GetTeamMemberRequest, GetTea
             throw new EntityNotFoundException("Team Member not found");
         }
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetTeamMemberResponse
         {
             Role = request.TeamMemberId.HasValue ? (teamMember?.Role ?? request.TeamRole) : request.TeamRole,
@@ -60,7 +68,8 @@ public class GetTeamMemberHandler : IRequestHandler<GetTeamMemberRequest, GetTea
             Version = version,
             HasChasCertification = teamMember?.HasChasCertification,
             ConsiderateConstructorSchemeReasonNo = teamMember?.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.No ? teamMember.ConsiderateConstructorSchemeReason : null,
-            ConsiderateConstructorSchemeReasonDontKnow = teamMember?.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.DontKnow ? teamMember.ConsiderateConstructorSchemeReason : null
+            ConsiderateConstructorSchemeReasonDontKnow = teamMember?.ConsiderateConstructorSchemeType == EConsiderateConstructorSchemeType.DontKnow ? teamMember.ConsiderateConstructorSchemeReason : null,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

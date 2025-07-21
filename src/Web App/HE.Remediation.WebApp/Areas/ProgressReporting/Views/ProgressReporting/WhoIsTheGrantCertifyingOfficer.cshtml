@@ -3,9 +3,23 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Model.Version == 1 || !Model.IsGcoComplete
-        ? Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })
-        : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+
+    string backLink;
+
+    if (Model.Version == 1)
+    {
+        backLink = Model.HasVisitedCheckYourAnswers
+            ? Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else
+    {
+        backLink = !Model.IsGcoComplete
+            ? Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    ViewData["Backlink"] = backLink;
     ViewData["FullWidth"] = true;
 }
 

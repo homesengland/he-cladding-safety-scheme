@@ -1,16 +1,15 @@
 ﻿@using HE.Remediation.Core.Enums;
 @using HE.Remediation.Core.Extensions
 @using GovUk.Frontend.AspNetCore.TagHelpers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 @model HE.Remediation.WebApp.ViewModels.ProgressReporting.FinalCheckYourAnswersViewModel
 @{
-	var @needsSupport = (Model.LeadDesignerNeedsSupport == true ||
-							Model.OtherMembersNeedsSupport == true ||
+	var @needsSupport = (Model.OtherMembersNeedsSupport == true ||
 							Model.QuotesNeedsSupport == true ||
 							Model.PlanningPermissionNeedsSupport == true);
 
 	var @showSupportSection = (needsSupport ||
 										Model.OtherMembersAppointed == false ||
-										Model.LeadDesignerAppointed == false ||
 										Model.QuotesSought == false ||
 										Model.AppliedForPlanningPermission == false);
 
@@ -24,15 +23,42 @@
 
 	var buildingControlPrefix = Model.BuildingControlDetailsRequired == true
 		? "Building control approval for higher-risk buildings (Gateway 2)"
-		: "Building control approval for buildings under 7 storyes and under 18m in height";
+		: "Building control approval for buildings under 7 storeys and under 18m in height";
+
+    const string ErrorClasses = "govuk-form-group--error govuk-error-message govuk-!-margin-bottom-0";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="OtherMembersNeedsSupport" />
+        <govuk-error-summary-item asp-for="OtherMembersNotAppointedReason" />
+        <govuk-error-summary-item asp-for="HasGco" />
+        <govuk-error-summary-item asp-for="TeamMember" />
+        <govuk-error-summary-item asp-for="HasGcoAddress" />
+        <govuk-error-summary-item asp-for="Signatory" />
+        <govuk-error-summary-item asp-for="SignatoryEmailAddress" />
+        <govuk-error-summary-item asp-for="DateAppointed" />
+        <govuk-error-summary-item asp-for="WhyYouHaveNotSoughtQuotes" />
+        <govuk-error-summary-item asp-for="QuotesNotSoughtReason" />
+        <govuk-error-summary-item asp-for="QuotesNeedsSupport" />
+        <govuk-error-summary-item asp-for="AppliedForPlanningPermission" />
+        <govuk-error-summary-item asp-for="PlanningPermissionSubmittedDate" />
+        <govuk-error-summary-item asp-for="PlanningPermissionPlannedSubmitDate" />
+        <govuk-error-summary-item asp-for="ReasonPlanningPermissionNotApplied" />
+        <govuk-error-summary-item asp-for="PlanningPermissionNeedsSupport" />
+        <govuk-error-summary-item asp-for="BuildingHasSafetyRegulatorRegistrationCode" />
+        <govuk-error-summary-item asp-for="BuildingSafetyRegulatorRegistrationCode" />
+        <govuk-error-summary-item asp-for="HasAppliedForBuildingControl" />
+        <govuk-error-summary-item asp-for="SupportNeededReason" />
+    </govuk-error-summary>
 }
 
 <h1 class="govuk-heading-xl">Check your answers</h1>
 
-
 <div class="govuk-grid-row">
 	<div class="govuk-grid-column-full govuk-text-align-right">
-		<a href=@Url.Action("ChangeAnswers", "ProgressReporting") class="govuk-link">Change your answers</a>
+		<a href=@Url.Action("ChangeAnswers", "ProgressReporting") class="govuk-link">Clear all answers</a>
 	</div>
 </div>
 
@@ -43,46 +69,87 @@
 		<govuk-summary-list-row-key>
 			Have you informed the leaseholders/residents about the progress of the application?
 		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.LeaseholdersInformed!.Value ? "Yes" : "No")
-		</govuk-summary-list-row-value>
+        <govuk-summary-list-row-value>
+            @(Model.LeaseholdersInformed!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" })">
+            Change
+        </govuk-summary-list-row-action>
 	</govuk-summary-list-row>
-
-	@if (Model.LeadDesignerAppointed.HasValue)
+	
+	@if (!string.IsNullOrWhiteSpace(Model.LeaseholdersInformedEvidenceFiles))
 	{
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				Have you appointed a lead designer?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.LeadDesignerAppointed!.Value ? "Yes" : "No")
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Upload communication evidence
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.LeaseholdersInformedEvidenceFiles)
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("UploadEvidence", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 	}
 </govuk-summary-list>
 
 <h2 class="govuk-heading-m">Project Team</h2>
 
 <govuk-summary-list>
-	<govuk-summary-list-row>
-		<govuk-summary-list-row-key>
-			Have you appointed other members of your project team?
-		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.OtherMembersAppointed!.Value ? "Yes" : "No")
-		</govuk-summary-list-row-value>
-	</govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you appointed other members of your project team?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.OtherMembersAppointed!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
 	@if (Model.OtherMembersAppointed == false)
 	{
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				Why have you not appointed other team members?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@Model.OtherMembersNotAppointedReason
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            @{
+                var otherMembersNotAppointedReasonClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.OtherMembersNotAppointedReason), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        otherMembersNotAppointedReasonClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@otherMembersNotAppointedReasonClass" id="@nameof(Model.OtherMembersNotAppointedReason)">
+                    Why have you not appointed other team members?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.OtherMembersNotAppointedReason) ? Model.OtherMembersNotAppointedReason : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ReasonNoOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 	}
+	
+	@if (Model.TeamMembers?.Any() == true)
+	{
+	    <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+				Tell us about your project team
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                &nbsp;
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ProjectTeam", "ProgressReporting", new { Area = "ProgressReporting" })">
+				View
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+	}
+
 </govuk-summary-list>
 
 @if (Model.TeamMembers != null && Model.TeamMembers.Any())
@@ -93,7 +160,7 @@
 				<th scope="col" class="govuk-table__header">Role</th>
 				<th scope="col" class="govuk-table__header">Name</th>
 				<th scope="col" class="govuk-table__header">Company name</th>
-				<th scope="col" class="govuk-table__header">Change</th>
+				<th scope="col" class="govuk-table__header govuk-!-font-weight-bold govuk-table__cell--numeric">Change</th>
 			</tr>
 		</thead>
 		<tbody class="govuk-table__body">
@@ -110,89 +177,195 @@
 					}
 					<td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
 					<td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
-					<td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("TeamMember", "ProgressReporting", new { Area = "ProgressReporting", TeamRole = teamMember.RoleId, TeamMemberId = teamMember.Id, ReturnUrl = ViewData["ReturnUrl"] })">Change</a></td>
+					<td class="govuk-table__cell govuk-table__cell--numeric"><a class="govuk-link" href="@Url.Action("TeamMember", "ProgressReporting", new { Area = "ProgressReporting", TeamRole = teamMember.RoleId, TeamMemberId = teamMember.Id })">Change</a></td>
 				</tr>
 			}
 		</tbody>
 	</table>
 }
 
-@if (Model.HasGco.HasValue)
+@if (Model.TeamMembers?.Any(m => m.RoleId == (int)ETeamRole.ProjectManager) == true &&
+     Model.TeamMembers?.Any(m => m.RoleId == (int)ETeamRole.QuantitySurveyor) == true)
 {
 	<h2 class="govuk-heading-m">Grant Certifying Officer</h2>
 
 	<govuk-summary-list>
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>Have you appointed your grant certifying officer?</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>@(Model.HasGco.Value ? "Yes" : "No")</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
-
-		@if (!string.IsNullOrEmpty(Model.TeamMember))
+        <govuk-summary-list-row>
+            @{
+                var hasGcoClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.HasGco), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        hasGcoClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@hasGcoClass" id="@nameof(Model.HasGco)">
+                    Have you appointed your grant certifying officer?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(Model.HasGco == true ? "Yes" : Model.HasGco == false ? "No" : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+		
+		@if (Model.HasGco == true)
 		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>Who is your grant certifying officer?</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					<div>@Model.TeamMember</div>
-					<div class="govuk-!-font-size-16 govuk-hint">@Model.Role</div>
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-		}
+            <govuk-summary-list-row>
+                @{
+                    var teamMemberClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.TeamMember), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            teamMemberClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@teamMemberClass" id="@nameof(Model.TeamMember)">
+                        Who is your grant certifying officer?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (!string.IsNullOrEmpty(Model.TeamMember))
+                    {
+                        <div>@Model.TeamMember</div>
+                        <div class="govuk-!-font-size-16 govuk-hint">@Model.Role</div>
+                    }
+                    else
+                    {
+                        <div>-</div>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("WhoIsTheGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 
-		@if (Model.HasGcoAddress)
-		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>Provide grant certifying officer's company address</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@if (!string.IsNullOrEmpty(Model.NameNumber))
-					{
-						<div>@Model.NameNumber</div>
-					}
-					@if (!string.IsNullOrEmpty(Model.AddressLine1))
-					{
-						<div>@Model.AddressLine1</div>
-					}
-					@if (!string.IsNullOrEmpty(Model.AddressLine2))
-					{
-						<div>@Model.AddressLine2</div>
-					}
-					@if (!string.IsNullOrEmpty(Model.City))
-					{
-						<div>@Model.City</div>
-					}
-					@if (!string.IsNullOrEmpty(Model.County))
-					{
-						<div>@Model.County</div>
-					}
-					@if (!string.IsNullOrEmpty(Model.Postcode))
-					{
-						<div>@Model.Postcode</div>
-					}
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-		}
+		    <govuk-summary-list-row>
+                @{
+                    var hasGcoAddressClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.HasGcoAddress), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            hasGcoAddressClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@hasGcoAddressClass" id="@nameof(Model.HasGcoAddress)">
+                        Provide grant certifying officer's company address
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (Model.HasGcoAddress)
+                    {
+                        @if (!string.IsNullOrEmpty(Model.NameNumber))
+                        {
+                            <div>@Model.NameNumber</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.AddressLine1))
+                        {
+                            <div>@Model.AddressLine1</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.AddressLine2))
+                        {
+                            <div>@Model.AddressLine2</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.City))
+                        {
+                            <div>@Model.City</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.County))
+                        {
+                            <div>@Model.County</div>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Postcode))
+                        {
+                            <div>@Model.Postcode</div>
+                        }
+                    }
+                    else
+                    {
+                        <div>-</div>
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAddress", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 
-		@if (!string.IsNullOrEmpty(Model.Signatory))
-		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>Authorised signatory</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>@Model.Signatory</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-		}
+		    <govuk-summary-list-row>
+                @{
+                    var signatoryClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.Signatory), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            signatoryClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@signatoryClass" id="@nameof(Model.Signatory)">
+                        Authorised signatory
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.Signatory) ? Model.Signatory : "-")</govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 
-		@if (!string.IsNullOrEmpty(Model.SignatoryEmailAddress))
-		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>Authorised signatory email address</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>@Model.SignatoryEmailAddress</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-		}
+		    <govuk-summary-list-row>
+                @{
+                    var signatoryEmailAddressClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.SignatoryEmailAddress), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            signatoryEmailAddressClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@signatoryEmailAddressClass" id="@nameof(Model.SignatoryEmailAddress)">
+                        Authorised signatory email address
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.SignatoryEmailAddress) ? Model.SignatoryEmailAddress : "-")</govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 
-		@if (Model.DateAppointed.HasValue)
-		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>Company’s Date of Appointment to the project</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>@Model.DateAppointed.Value.ToString("dd MMMM yyyy")</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
+
+		    <govuk-summary-list-row>
+                @{
+                    var dateAppointedClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.DateAppointed), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            dateAppointedClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@dateAppointedClass" id="@nameof(Model.DateAppointed)">
+                        Company’s Date of Appointment to the project
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@(Model.DateAppointed.HasValue ? Model.DateAppointed.Value.ToString("dd MMMM yyyy") : "-")</govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 		}
 	</govuk-summary-list>
 }
@@ -206,16 +379,19 @@
 			<govuk-summary-list-row-key>
 				How are you intending to proceed?
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@if (Model.IntentToProceedType == EIntentToProceedType.DesignAndBuild)
-				{
-					<text>Design &amp; Build</text>
-				}
-				else if (Model.IntentToProceedType == EIntentToProceedType.Traditional)
-				{
-					<text>Traditional</text>
-				}
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @if (Model.IntentToProceedType == EIntentToProceedType.DesignAndBuild)
+                {
+                    <text>Design &amp; Build</text>
+                }
+                else if (Model.IntentToProceedType == EIntentToProceedType.Traditional)
+                {
+                    <text>Traditional</text>
+                }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 	}
 	@if (Model.HasProjectPlanMilestones.HasValue)
@@ -224,48 +400,83 @@
 			<govuk-summary-list-row-key>
 				Do you have an agreed Project Plan setting out the delivery milestones and underlying activities/timescales?
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.HasProjectPlanMilestones!.Value ? "Yes" : "No")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.HasProjectPlanMilestones!.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("HasProjectPlanMilestones", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 	}
 	<govuk-summary-list-row>
 		<govuk-summary-list-row-key>
 			Have you sought quotes or issued a tender?
 		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.QuotesSought!.Value ? "Yes" : "No")
-		</govuk-summary-list-row-value>
+        <govuk-summary-list-row-value>
+            @(Model.QuotesSought!.Value ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" })">
+            Change
+        </govuk-summary-list-row-action>
 	</govuk-summary-list-row>
 
 	@if (Model.QuotesSought == false)
 	{
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				Tell us why have you not sought quotes or issued a tender?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.NotReadyForTender ? "Not ready for tender" : "I don't plan on running an open tender")
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            @{
+                var whyYouhaveNotSoughtQuotesClass = string.Empty;
+			    if (ViewData.ModelState.TryGetValue(nameof(Model.WhyYouHaveNotSoughtQuotes), out var validationResult))
+			    {
+			        if (validationResult.ValidationState == ModelValidationState.Invalid)
+			        {
+			            whyYouhaveNotSoughtQuotesClass = ErrorClasses;
+			        }
+			    }
+			}
+            <govuk-summary-list-row-key>
+                <div class="@whyYouhaveNotSoughtQuotesClass" id="@nameof(Model.WhyYouHaveNotSoughtQuotes)">
+                    Tell us why have you not sought quotes or issued a tender?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @{
+                    var whyYouHaveNotSoughtQuotes = Model.WhyYouHaveNotSoughtQuotes switch
+                    {
+                        EWhyYouHaveNotSoughtQuotes.NotReadyForTender => "Not ready for tender",
+                        EWhyYouHaveNotSoughtQuotes.IDontPlanTo => "I don't plan on running an open tender",
+                        _ => "-"
+                        };
+                }
+                @whyYouHaveNotSoughtQuotes
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				Tell us why
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@Model.QuotesNotSoughtReason
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
-
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				Do you need support to seek quotes or issue a tender?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.QuotesNeedsSupport == true ? "Yes" : "No")
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            @{
+                var reasonQuotesNotSoughtClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.QuotesNotSoughtReason), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+						reasonQuotesNotSoughtClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@reasonQuotesNotSoughtClass" id="@nameof(Model.QuotesNotSoughtReason)">
+                    Additional information
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.QuotesNotSoughtReason) ? Model.QuotesNotSoughtReason : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 	}
 </govuk-summary-list>
 
@@ -277,85 +488,181 @@
 		<govuk-summary-list-row-key>
 			Do your works need planning permission?
 		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.RequirePlanningPermission.HasValue ? HE.Remediation.Core.Helpers.EnumHelpers.GetText((EYesNoNonBoolean)Model.RequirePlanningPermission.Value) : "-")
-		</govuk-summary-list-row-value>
+        <govuk-summary-list-row-value>
+            @(Model.RequirePlanningPermission.HasValue ? HE.Remediation.Core.Helpers.EnumHelpers.GetText((EYesNoNonBoolean)Model.RequirePlanningPermission.Value) : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" })">
+			Change
+        </govuk-summary-list-row-action>
 	</govuk-summary-list-row>
+	
+    @if (Model.RequirePlanningPermission == EYesNoNonBoolean.Yes)
+    {
+        <govuk-summary-list-row>
+            @{
+                var appliedForPlanningPermissionClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.AppliedForPlanningPermission), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        appliedForPlanningPermissionClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@appliedForPlanningPermissionClass" id="@nameof(Model.AppliedForPlanningPermission)">
+                    Have you applied for planning permission?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.AppliedForPlanningPermission == true ? "Yes" : Model.AppliedForPlanningPermission == false ? "No" : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("AppliedPlanning", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
 
-	<govuk-summary-list-row>
-		<govuk-summary-list-row-key>
-			Have you applied for planning permission?
-		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.AppliedForPlanningPermission == true ? "Yes" : "No")
-		</govuk-summary-list-row-value>
-	</govuk-summary-list-row>
-
-	@if (Model.AppliedForPlanningPermission == true)
+    @if (Model.AppliedForPlanningPermission == true)
 	{
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				What date was the application submitted?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.PlanningPermissionSubmittedDate.HasValue ? Model.PlanningPermissionSubmittedDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            @{
+                var planningPermissionSubmittedDateClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionSubmittedDate), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        planningPermissionSubmittedDateClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@planningPermissionSubmittedDateClass" id="@nameof(Model.PlanningPermissionSubmittedDate)">
+                    What date was the application submitted?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PlanningPermissionSubmittedDate.HasValue ? Model.PlanningPermissionSubmittedDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("PlanningPermissionDetails", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				What date was the application approved?
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.PlanningPermissionApprovedDate.HasValue ? Model.PlanningPermissionApprovedDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.PlanningPermissionApprovedDate.HasValue ? Model.PlanningPermissionApprovedDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("PlanningPermissionDetails", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 	}
-	else
+    @if (Model.AppliedForPlanningPermission == false)
 	{
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				When do you plan to submit your planning application?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.PlanningPermissionPlannedSubmitDate.HasValue ? Model.PlanningPermissionPlannedSubmitDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            @{
+                var planningPermissionPlannedSubmitDateClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionPlannedSubmitDate), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        planningPermissionPlannedSubmitDateClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@planningPermissionPlannedSubmitDateClass" id="@nameof(Model.PlanningPermissionPlannedSubmitDate)">
+                    When do you plan to submit your planning application?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PlanningPermissionPlannedSubmitDate.HasValue ? Model.PlanningPermissionPlannedSubmitDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("PlanningPermissionPlannedSubmitDate", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 
-		@if (!string.IsNullOrWhiteSpace(Model.ReasonPlanningPermissionNotApplied))
-		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Why are you not applying for planning permission?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@Model.ReasonPlanningPermissionNotApplied
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-		}
+	    <govuk-summary-list-row>
+            @{
+                var reasonPlanningPermissionNotAppliedeClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.ReasonPlanningPermissionNotApplied), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        reasonPlanningPermissionNotAppliedeClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@reasonPlanningPermissionNotAppliedeClass" id="@nameof(Model.ReasonPlanningPermissionNotApplied)">
+                    Why are you not applying for planning permission?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.ReasonPlanningPermissionNotApplied) ? Model.ReasonPlanningPermissionNotApplied : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ReasonPlanningNotApplied", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 	}
 
 	@if (Model.ShowBuildingSafetyRegulatorRegistration)
 	{
-		<govuk-summary-list-row>
-			<govuk-summary-list-row-key>
-				Do you have a Building Safety Regulator registration code?
-			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.BuildingHasSafetyRegulatorRegistrationCode!.Value ? "Yes" : "No")
-			</govuk-summary-list-row-value>
-		</govuk-summary-list-row>
+	    <govuk-summary-list-row>
+            @{
+                var buildingHasSafetyRegulatorRegistrationCodeClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.BuildingHasSafetyRegulatorRegistrationCode), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        buildingHasSafetyRegulatorRegistrationCodeClass = ErrorClasses;
+                    }
+                }
+            }
+            <govuk-summary-list-row-key>
+                <div class="@buildingHasSafetyRegulatorRegistrationCodeClass" id="@nameof(Model.BuildingHasSafetyRegulatorRegistrationCode)">
+                    Do you have a Building Safety Regulator registration code?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingHasSafetyRegulatorRegistrationCode == true ? "Yes" : Model.BuildingHasSafetyRegulatorRegistrationCode == false ? "No" : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 
 		@if (Model.BuildingHasSafetyRegulatorRegistrationCode == true)
 		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					What is your Building Safety Regulator registration code?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(!String.IsNullOrEmpty(Model.BuildingSafetyRegulatorRegistrationCode) ? Model.BuildingSafetyRegulatorRegistrationCode : "-")
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
+		    <govuk-summary-list-row>
+                @{
+                    var buildingSafetyRegulatorRegistrationCodeClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.BuildingSafetyRegulatorRegistrationCode), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            buildingSafetyRegulatorRegistrationCodeClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@buildingSafetyRegulatorRegistrationCodeClass" id="@nameof(Model.BuildingSafetyRegulatorRegistrationCode)">
+                        What is your Building Safety Regulator registration code?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(!String.IsNullOrEmpty(Model.BuildingSafetyRegulatorRegistrationCode) ? Model.BuildingSafetyRegulatorRegistrationCode : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("BuildingSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 		}
 	}
 
@@ -363,21 +670,39 @@
 		<govuk-summary-list-row-key>
 			Is your building at least 7 storeys or 18m in height?
 		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.BuildingControlDetailsRequired == true ? "Yes" : "No")
-		</govuk-summary-list-row-value>
+        <govuk-summary-list-row-value>
+            @(Model.BuildingControlDetailsRequired == true ? "Yes" : Model.BuildingControlDetailsRequired == false ? "No" : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" })">
+            Change
+        </govuk-summary-list-row-action>
 	</govuk-summary-list-row>
 
-	<govuk-summary-list-row>
-		<govuk-summary-list-row-key>
-			@(Model.BuildingControlDetailsRequired == true
-						? "Have you applied for building control approval for higher-risk buildings (Gateway 2)?"
-						: "Have you applied for building control approval through the full plans approval process?")
-		</govuk-summary-list-row-key>
-		<govuk-summary-list-row-value>
-			@(Model.HasAppliedForBuildingControl == true ? "Yes " : "No")
-		</govuk-summary-list-row-value>
-	</govuk-summary-list-row>
+<govuk-summary-list-row>
+        @{
+            var hasAppliedForBuildingControlClass = string.Empty;
+            if (ViewData.ModelState.TryGetValue(nameof(Model.HasAppliedForBuildingControl), out var validationResult))
+            {
+                if (validationResult.ValidationState == ModelValidationState.Invalid)
+                {
+                    hasAppliedForBuildingControlClass = ErrorClasses;
+                }
+            }
+        }
+        <govuk-summary-list-row-key>
+            <div class="@hasAppliedForBuildingControlClass" id="@nameof(Model.HasAppliedForBuildingControl)">
+                @(Model.BuildingControlDetailsRequired == true
+                    ? "Have you applied for building control approval for higher-risk buildings (Gateway 2)?"
+                    : "Have you applied for building control approval through the full plans approval process?")
+            </div>
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.HasAppliedForBuildingControl == true ? "Yes " : Model.HasAppliedForBuildingControl == false ? "No" : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("HaveYouAppliedForBuildingControl", "ProgressReporting", new { Area = "ProgressReporting" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
 
 	@if (Model.HasAppliedForBuildingControl == true)
 	{
@@ -385,9 +710,12 @@
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Actual submission date
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.BuildingControlActualDate.HasValue ? Model.BuildingControlActualDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlActualDate.HasValue ? Model.BuildingControlActualDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlSubmission", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		@if (Model.BuildingControlDetailsRequired == true)
@@ -396,9 +724,12 @@
 				<govuk-summary-list-row-key>
 					@buildingControlPrefix - Gateway 2 application reference
 				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(!string.IsNullOrWhiteSpace(Model.BuildingControlApplicationReference) ? Model.BuildingControlApplicationReference : "-")
-				</govuk-summary-list-row-value>
+                <govuk-summary-list-row-value>
+                    @(!string.IsNullOrWhiteSpace(Model.BuildingControlApplicationReference) ? Model.BuildingControlApplicationReference : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("BuildingControlSubmission", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
 			</govuk-summary-list-row>
 		}
 
@@ -406,54 +737,72 @@
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Actual submission additional information and supporting details
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(!string.IsNullOrWhiteSpace(Model.BuildingControlActualInformation) ? Model.BuildingControlActualInformation : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.BuildingControlActualInformation) ? Model.BuildingControlActualInformation : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlSubmission", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Validation date
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.BuildingControlValidationDate.HasValue ? Model.BuildingControlValidationDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlValidationDate.HasValue ? Model.BuildingControlValidationDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlValidation", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Validation additional information and supporting details
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(!string.IsNullOrWhiteSpace(Model.BuildingControlValidationInformation) ? Model.BuildingControlValidationInformation : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.BuildingControlValidationInformation) ? Model.BuildingControlValidationInformation : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlValidation", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Decision date
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.BuildingControlDecisionDate.HasValue ? Model.BuildingControlDecisionDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlDecisionDate.HasValue ? Model.BuildingControlDecisionDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlDecision", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Decision
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.BuildingControlDecision.HasValue ? (Model.BuildingControlDecision.Value ? "Approved" : "Rejected") : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlDecision.HasValue ? (Model.BuildingControlDecision.Value ? "Approved" : "Rejected") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlDecision", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Decision additional information and supporting details
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(!string.IsNullOrWhiteSpace(Model.BuildingControlDecisionInformation) ? Model.BuildingControlDecisionInformation : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.BuildingControlDecisionInformation) ? Model.BuildingControlDecisionInformation : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlDecision", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 	}
 	else if (Model.HasAppliedForBuildingControl == false)
@@ -462,18 +811,24 @@
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Forecast submission date
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(Model.BuildingControlForecastDate.HasValue ? Model.BuildingControlForecastDate.Value.ToString("MM/yy") : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingControlForecastDate.HasValue ? Model.BuildingControlForecastDate.Value.ToString("MM/yy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlForecast", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 
 		<govuk-summary-list-row>
 			<govuk-summary-list-row-key>
 				@buildingControlPrefix - Forecast submission additional information and supporting details
 			</govuk-summary-list-row-key>
-			<govuk-summary-list-row-value>
-				@(!string.IsNullOrWhiteSpace(Model.BuildingControlForecastInformation) ? Model.BuildingControlForecastInformation : "-")
-			</govuk-summary-list-row-value>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.BuildingControlForecastInformation) ? Model.BuildingControlForecastInformation : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlForecast", "ProgressReporting", new { Area = "ProgressReporting" })">
+                Change
+            </govuk-summary-list-row-action>
 		</govuk-summary-list-row>
 	}
 
@@ -490,9 +845,12 @@
 				<govuk-summary-list-row-key>
 					When do you think you'll submit your works package?
 				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@Model.ExpectedWorksPackageSubmissionDate.Value.ToString("MM/yy")
-				</govuk-summary-list-row-value>
+                <govuk-summary-list-row-value>
+                    @Model.ExpectedWorksPackageSubmissionDate.Value.ToString("MM/yy")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" })">
+					Change
+                </govuk-summary-list-row-action>
 			</govuk-summary-list-row>
 		}
 
@@ -502,9 +860,12 @@
 				<govuk-summary-list-row-key>
 					When do you think you'll start on site?
 				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@Model.ExpectedStartDateOnSite.Value.ToString("MM/yy")
-				</govuk-summary-list-row-value>
+                <govuk-summary-list-row-value>
+                    @Model.ExpectedStartDateOnSite.Value.ToString("MM/yy")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("WhenStartOnSite", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
 			</govuk-summary-list-row>
 		}
 	</govuk-summary-list>
@@ -516,61 +877,112 @@
 
 	<govuk-summary-list>
 
-		@if (Model.LeadDesignerAppointed == false)
-		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Why have you not appointed a lead designer?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@Model.LeadDesignerNotAppointedReason
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Do you need support appointing a lead designer?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(Model.LeadDesignerNeedsSupport == true ? "Yes" : "No")
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-		}
-
 		@if (Model.OtherMembersAppointed == false)
 		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Do you need support appointing a team?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(Model.OtherMembersNeedsSupport == true ? "Yes" : "No")
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
+		    <govuk-summary-list-row>
+                @{
+                    var otherMembersNeedsSupportClass = string.Empty;
+					if (ViewData.ModelState.TryGetValue(nameof(Model.OtherMembersNeedsSupport), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+							otherMembersNeedsSupportClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@otherMembersNeedsSupportClass" id="@nameof(Model.OtherMembersNeedsSupport)">
+                        Do you need support appointing a team?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.OtherMembersNeedsSupport == true ? "Yes" : Model.OtherMembersNeedsSupport == false ? "No" : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ReasonNoOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+		}
+		
+		@if (Model.QuotesSought == false)
+		{
+		    <govuk-summary-list-row>
+				@{
+				    var quotesNeedSupportClass = string.Empty;
+					if (ViewData.ModelState.TryGetValue(nameof(Model.QuotesNeedsSupport), out var validationResult))
+				    {
+				        if (validationResult.ValidationState == ModelValidationState.Invalid)
+				        {
+							quotesNeedSupportClass = ErrorClasses;
+				        }
+				    }
+				}
+                <govuk-summary-list-row-key>
+                    <div class="@quotesNeedSupportClass" id="@nameof(Model.QuotesNeedsSupport)">
+                        Do you need support to seek quotes or issue a tender?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.QuotesNeedsSupport == true ? "Yes" : Model.QuotesNeedsSupport == false ? "No" : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 		}
 
-		@if (Model.AppliedForPlanningPermission == false)
+        @if (Model.AppliedForPlanningPermission == false)
 		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Do you need support applying for planning permission?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(Model.PlanningPermissionNeedsSupport == true ? "Yes" : "No")
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
+		    <govuk-summary-list-row>
+                @{
+                    var planningPermissionNeedsSupportClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionNeedsSupport), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            planningPermissionNeedsSupportClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@planningPermissionNeedsSupportClass" id="@nameof(Model.PlanningPermissionNeedsSupport)">
+                        Do you need support applying for planning permission?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.PlanningPermissionNeedsSupport == true ? "Yes" : Model.PlanningPermissionNeedsSupport == false ? "No" : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ReasonPlanningNotApplied", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 		}
 
 		@if (needsSupport)
 		{
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					What kind of support do you need?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@Model.SupportNeededReason
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
+		    <govuk-summary-list-row>
+                @{
+                    var supportNeededReasonClass = string.Empty;
+                    if (ViewData.ModelState.TryGetValue(nameof(Model.SupportNeededReason), out var validationResult))
+                    {
+                        if (validationResult.ValidationState == ModelValidationState.Invalid)
+                        {
+                            supportNeededReasonClass = ErrorClasses;
+                        }
+                    }
+                }
+                <govuk-summary-list-row-key>
+                    <div class="@supportNeededReasonClass" id="@nameof(Model.SupportNeededReason)">
+                        What kind of support do you need?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(!string.IsNullOrWhiteSpace(Model.SupportNeededReason) ? Model.SupportNeededReason : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("ReasonNeedsSupport", "ProgressReporting", new { Area = "ProgressReporting" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
 		}
 	</govuk-summary-list>
 }
@@ -587,9 +999,108 @@
 
 <form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="FinalCheckYourAnswers" method="post">
 
-	<input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+	<input asp-for="LeaseholdersInformed" type="hidden" value="@Model.LeaseholdersInformed" />
+	<input asp-for="LeaseholdersInformedEvidenceFiles" type="hidden" value="@Model.LeaseholdersInformedEvidenceFiles" />
+	<input asp-for="LeadDesignerAppointed" type="hidden" value="@Model.LeadDesignerAppointed" />
+	<input asp-for="OtherMembersAppointed" type="hidden" value="@Model.OtherMembersAppointed" />
+	<input asp-for="QuotesSought" type="hidden" value="@Model.QuotesSought" />
+	<input asp-for="RequirePlanningPermission" type="hidden" value="@Model.RequirePlanningPermission" />
+    <input asp-for="AppliedForPlanningPermission" type="hidden" value="@Model.AppliedForPlanningPermission" />
+    @if (Model.PlanningPermissionPlannedSubmitDate.HasValue)
+    {
+        <govuk-date-input asp-for="PlanningPermissionPlannedSubmitDate" class="hidden" value="@Model.PlanningPermissionPlannedSubmitDate"></govuk-date-input>
+    }
+    @if (Model.PlanningPermissionSubmittedDate.HasValue)
+    {
+        <govuk-date-input asp-for="PlanningPermissionSubmittedDate" class="hidden" value="@Model.PlanningPermissionSubmittedDate"></govuk-date-input>
+    }
+    @if (Model.PlanningPermissionApprovedDate.HasValue)
+    {
+        <govuk-date-input asp-for="PlanningPermissionApprovedDate" class="hidden" value="@Model.PlanningPermissionApprovedDate"></govuk-date-input>
+    }
+    <input asp-for="ShowBuildingSafetyRegulatorRegistration" type="hidden" value="@Model.ShowBuildingSafetyRegulatorRegistration" />
+	<input asp-for="BuildingHasSafetyRegulatorRegistrationCode" type="hidden" value="@Model.BuildingHasSafetyRegulatorRegistrationCode" />
+	<input asp-for="BuildingSafetyRegulatorRegistrationCode" type="hidden" value="@Model.BuildingSafetyRegulatorRegistrationCode" />
+	<input asp-for="LeadDesignerNotAppointedReason" type="hidden" value="@Model.LeadDesignerNotAppointedReason" />
+	<input asp-for="OtherMembersNotAppointedReason" type="hidden" value="@Model.OtherMembersNotAppointedReason" />
+	<input asp-for="ReasonPlanningPermissionNotApplied" type="hidden" value="@Model.ReasonPlanningPermissionNotApplied" />
+	<input asp-for="IntentToProceedType" type="hidden" value="@Model.IntentToProceedType" />
+	<input asp-for="HasProjectPlanMilestones" type="hidden" value="@Model.HasProjectPlanMilestones" />
+	<input asp-for="WhyYouHaveNotSoughtQuotes" type="hidden" value="@Model.WhyYouHaveNotSoughtQuotes" />
+    <input asp-for="QuotesNotSoughtReason" type="hidden" value="@Model.QuotesNotSoughtReason" />
+    @if (Model.ExpectedWorksPackageSubmissionDate.HasValue)
+    {
+        <govuk-date-input asp-for="ExpectedWorksPackageSubmissionDate" class="hidden" value="@Model.ExpectedWorksPackageSubmissionDate"></govuk-date-input>
+    }
+    @if (Model.ExpectedStartDateOnSite.HasValue)
+    {
+        <govuk-date-input asp-for="ExpectedStartDateOnSite" class="hidden" value="@Model.ExpectedStartDateOnSite"></govuk-date-input>
+    }
+    <input asp-for="BuildingControlDetailsRequired" type="hidden" value="@Model.BuildingControlDetailsRequired" />
+	<input asp-for="HasAppliedForBuildingControl" type="hidden" value="@Model.HasAppliedForBuildingControl" />
+    @if (Model.BuildingControlForecastDate.HasValue)
+    {
+        <govuk-date-input asp-for="BuildingControlForecastDate" class="hidden" value="@Model.BuildingControlForecastDate"></govuk-date-input>
+    }
+    <input asp-for="BuildingControlForecastInformation" type="hidden" value="@Model.BuildingControlForecastInformation" />
+    @if (Model.BuildingControlActualDate.HasValue)
+    {
+        <govuk-date-input asp-for="BuildingControlActualDate" class="hidden" value="@Model.BuildingControlActualDate"></govuk-date-input>
+    }
+    <input asp-for="BuildingControlActualInformation" type="hidden" value="@Model.BuildingControlActualInformation" />
+    <input asp-for="BuildingControlApplicationReference" type="hidden" value="@Model.BuildingControlApplicationReference" />
+    @if (Model.BuildingControlValidationDate.HasValue)
+    {
+        <govuk-date-input asp-for="BuildingControlValidationDate" class="hidden" value="@Model.BuildingControlValidationDate"></govuk-date-input>
+    }
+    <input asp-for="BuildingControlValidationInformation" type="hidden" value="@Model.BuildingControlValidationInformation" />
+    @if (Model.BuildingControlDecisionDate.HasValue)
+    {
+        <govuk-date-input asp-for="BuildingControlDecisionDate" class="hidden" value="@Model.BuildingControlDecisionDate"></govuk-date-input>
+    }
+    <input asp-for="BuildingControlDecisionInformation" type="hidden" value="@Model.BuildingControlDecisionInformation" />
+	<input asp-for="BuildingControlDecision" type="hidden" value="@Model.BuildingControlDecision" />
+	<input asp-for="LeadDesignerNeedsSupport" type="hidden" value="@Model.LeadDesignerNeedsSupport" />
+	<input asp-for="OtherMembersNeedsSupport" type="hidden" value="@Model.OtherMembersNeedsSupport" />
+	<input asp-for="PlanningPermissionNeedsSupport" type="hidden" value="@Model.PlanningPermissionNeedsSupport" />
+	<input asp-for="QuotesNeedsSupport" type="hidden" value="@Model.QuotesNeedsSupport" />
+	<input asp-for="SupportNeededReason" type="hidden" value="@Model.SupportNeededReason" />
+	<input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+	<input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+	<input asp-for="HasGco" type="hidden" value="@Model.HasGco" />
+	<input asp-for="TeamMember" type="hidden" value="@Model.TeamMember" />
+	<input asp-for="Role" type="hidden" value="@Model.Role" />
+	<input asp-for="NameNumber" type="hidden" value="@Model.NameNumber" />
+	<input asp-for="AddressLine1" type="hidden" value="@Model.AddressLine1" />
+	<input asp-for="AddressLine2" type="hidden" value="@Model.AddressLine2" />
+	<input asp-for="City" type="hidden" value="@Model.City" />
+	<input asp-for="County" type="hidden" value="@Model.County" />
+	<input asp-for="Postcode" type="hidden" value="@Model.Postcode" />
+	<input asp-for="HasGcoAddress" type="hidden" value="@Model.HasGcoAddress" />
+	<input asp-for="Signatory" type="hidden" value="@Model.Signatory" />
+    <input asp-for="SignatoryEmailAddress" type="hidden" value="@Model.SignatoryEmailAddress" />
+    @if (Model.DateAppointed.HasValue)
+    {
+        <govuk-date-input asp-for="DateAppointed" class="hidden" value="@Model.DateAppointed"></govuk-date-input>
+    }
+    
+    @if (Model.TeamMembers?.Any() == true)
+    {
+        for (var i = 0; i < Model.TeamMembers.Count; i++)
+        {
+            var member = Model.TeamMembers[i];
+            <input type="hidden" name="TeamMembers[@i].Id" value="@member.Id"/>
+            <input type="hidden" name="TeamMembers[@i].RoleId" value="@member.RoleId"/>
+            <input type="hidden" name="TeamMembers[@i].RoleName" value="@member.RoleName"/>
+            <input type="hidden" name="TeamMembers[@i].Name" value="@member.Name"/>
+            <input type="hidden" name="TeamMembers[@i].CompanyName" value="@member.CompanyName"/>
+            <input type="hidden" name="TeamMembers[@i].OtherRole" value="@member.OtherRole"/>
+            <input type="hidden" name="TeamMembers[@i].HasChasCertification" value="@member.HasChasCertification"/>
+            <input type="hidden" name="TeamMembers[@i].EmailAddress" value="@member.EmailAddress"/>
+        }
+    }
 
-	<div class="comp-btn-group">
+    <div class="comp-btn-group">
 		<govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Submit</govuk-button>
 	</div>
 </form>

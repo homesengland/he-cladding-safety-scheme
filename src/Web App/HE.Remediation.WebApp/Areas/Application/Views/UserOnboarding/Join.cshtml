@@ -15,10 +15,14 @@
         This will allow you to add, edit and view information for the application.
     </p>
 
-    <p class="govuk-!-margin-bottom-9">
-        By accepting this invitation, you are confirming that you accept the terms and conditions for use 
-        and Homes England's Privacy Notice which can be viewed here <a href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice">Homes England: privacy notice - GOV.UK</a>.
-    </p>
+    <div class="govuk-warning-text govuk-!-margin-bottom-9">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            By accepting this invitation, you are confirming that you accept the terms and conditions for use
+            and Homes England's Privacy Notice which can be viewed here <a href="https://www.gov.uk/government/publications/homes-england-privacy-notice/homes-england-privacy-notice">Homes England: privacy notice - GOV.UK</a>.
+        </strong>
+    </div>
 </div>
 
 <form method="post" asp-area="Application" asp-controller="UserOnboarding" asp-action="Join">

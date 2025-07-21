@@ -6,7 +6,7 @@ using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenSubmit.SetWhenSubmit;
 
-public class SetWhenSubmitHandler : IRequestHandler<SetWhenSubmitRequest, SetWhenSubmitResponse>
+public class SetWhenSubmitHandler : IRequestHandler<SetWhenSubmitRequest>
 {
     private readonly IProgressReportingRepository _progressReportingRepository;
     private readonly ITaskRepository _taskRepository;
@@ -28,24 +28,13 @@ public class SetWhenSubmitHandler : IRequestHandler<SetWhenSubmitRequest, SetWhe
         _grantFundingRepository = grantFundingRepository;
     }
 
-    public async Task<SetWhenSubmitResponse> Handle(SetWhenSubmitRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(SetWhenSubmitRequest request, CancellationToken cancellationToken)
     {
         var forecastRoundedDate = ToMonthEnd(request.SubmissionMonth, request.SubmissionYear);
         await CreateTaskIfNineMonthGap(forecastRoundedDate);
         await _progressReportingRepository.UpdateProgressReportExpectedWorksPackageSubmissionDate(forecastRoundedDate);
 
-        var leadDesignerNeedsSupport = await _progressReportingRepository.GetProgressReportLeadDesignerNeedsSupport();
-        var otherMembersNeedsSupport = await _progressReportingRepository.GetProgressReportOtherMembersNeedsSupport();
-        var quotesNeedsSupport = await _progressReportingRepository.GetProgressReportQuotesNeedsSupport();
-        var planningPermissionNeedsSupport = await _progressReportingRepository.GetProgressReportPlanningPermissionNeedsSupport();
-
-        return new SetWhenSubmitResponse
-        {
-            NeedsSupport = (leadDesignerNeedsSupport != null && leadDesignerNeedsSupport.Value) 
-                        || (otherMembersNeedsSupport != null && otherMembersNeedsSupport.Value)
-                        || (quotesNeedsSupport != null && quotesNeedsSupport.Value)
-                        || (planningPermissionNeedsSupport != null && planningPermissionNeedsSupport.Value)
-        };
+        return Unit.Value;
     }
 
     private async Task CreateTaskIfNineMonthGap(DateTime? forecastRoundedDate)

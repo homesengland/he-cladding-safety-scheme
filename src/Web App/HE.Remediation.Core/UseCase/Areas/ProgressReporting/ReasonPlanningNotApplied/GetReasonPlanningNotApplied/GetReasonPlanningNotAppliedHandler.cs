@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -30,12 +31,21 @@ public class GetReasonPlanningNotAppliedHandler : IRequestHandler<GetReasonPlann
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
         var planningPermissionNotAppliedReason = await _progressReportingRepository.GetProgressReportPlanningPermissionNotAppliedReason();
+
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetReasonPlanningNotAppliedResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             ReasonPlanningPermissionNotApplied = planningPermissionNotAppliedReason?.ReasonPlanningPermissionNotApplied,
-            PlanningPermissionNeedsSupport = planningPermissionNotAppliedReason?.PlanningPermissionNeedsSupport
+            PlanningPermissionNeedsSupport = planningPermissionNotAppliedReason?.PlanningPermissionNeedsSupport,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

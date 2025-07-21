@@ -9,8 +9,8 @@ public class ProjectTeamViewModel
 
     public string ApplicationReferenceNumber { get; set; }
 
-    public string BuildingName { get; set; }    
-
+    public string BuildingName { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
 }

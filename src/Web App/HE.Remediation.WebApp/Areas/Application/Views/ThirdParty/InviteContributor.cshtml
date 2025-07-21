@@ -22,6 +22,7 @@
 
 	<form method="post" action="/InviteContributor">
 		<input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+		<input asp-for="Source" type="hidden" value="@Model.Source" />
 		<govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
 		<div>
 			<a class="govuk-link" href="@Url.Action("Index", "StageDiagram")">Cancel and exit</a>

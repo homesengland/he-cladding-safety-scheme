@@ -38,6 +38,7 @@ public class CostScheduleViewModel
     public string PropertyManagerDescription { get; set; }
     public decimal? IrrecoverableVatAmount { get; set; }
     public string IrrecoverableVatDescription { get; set; }
+    public decimal? IneligibleAmount { get; set; }
 
     public decimal OtherCostsTotal => (FraewSurveyAmount ?? 0) + (FeasibilityStageAmount ?? 0) + (PostTenderStageAmount ?? 0) +
                                       (PropertyManagerAmount ?? 0) + (IrrecoverableVatAmount ?? 0);

@@ -29,7 +29,7 @@ public class GetHasAppliedForBuildingControlHandler : IRequestHandler<GetHasAppl
         cancellationToken.ThrowIfCancellationRequested();
 
         var applicationId = _applicationDataProvider.GetApplicationId();
-        var progressReport = _applicationDataProvider.GetProgressReportId();
+        var progressReportId = _applicationDataProvider.GetProgressReportId();
         var referenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
         var version = await _progressReportingRepository.GetProgressReportVersion();
@@ -38,7 +38,14 @@ public class GetHasAppliedForBuildingControlHandler : IRequestHandler<GetHasAppl
             new GetHasAppliedForBuildingControlParameters
             {
                 ApplicationId = applicationId,
-                ProgressReportId = progressReport
+                ProgressReportId = progressReportId
+            });
+
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
             });
 
         return new GetHasAppliedForBuildingControlResponse
@@ -47,7 +54,8 @@ public class GetHasAppliedForBuildingControlHandler : IRequestHandler<GetHasAppl
             HasAppliedForBuildingControl = hasAppliedForBuildingControl.HasAppliedForBuildingControl,
             BuildingName = buildingName,
             ApplicationReferenceNumber = referenceNumber,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }
@@ -69,4 +77,5 @@ public class GetHasAppliedForBuildingControlResponse
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

@@ -16,4 +16,5 @@ public class GetReasonNeedsSupportResponse
     public bool? QuotesNeedsSupport { get; set; }
 
     public string SupportNeededReason { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

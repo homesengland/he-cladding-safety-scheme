@@ -39,12 +39,23 @@ public class GetIntentToProceedHandler : IRequestHandler<GetIntentToProceedReque
         var hasGco = await _progressReportingRepository.GetHasGrantCertifyingOfficer();
         var appointedMembers = await _progressReportingRepository.GetProgressReportOtherMembersAppointed();
 
+        var teamMembers = await _progressReportingRepository.GetTeamMembers();
 
         var intent = await _progressReportingRepository.GetIntentToProceedType(new GetIntentToProceedTypeParameters
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId
         });
+
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
+            });
+
+        var hasGcoRoles = teamMembers.Any(x => x.RoleId == (int)ETeamRole.ProjectManager)
+                       && teamMembers.Any(x => x.RoleId == (int)ETeamRole.QuantitySurveyor);
 
         return new GetIntentToProceedResponse
         {
@@ -53,7 +64,9 @@ public class GetIntentToProceedHandler : IRequestHandler<GetIntentToProceedReque
             BuildingName = buildingName,
             Version = version,
             HasGco = hasGco ?? false,
-            OtherMembersAppointed = appointedMembers
+            OtherMembersAppointed = appointedMembers,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers,
+            HasGcoRoles = hasGcoRoles
         };
     }
 }
@@ -73,8 +86,9 @@ public class GetIntentToProceedResponse
     public int Version { get; set; }
     public bool? OtherMembersAppointed { get; set; }
     public bool HasGco { get; set; }
-
+    public bool HasGcoRoles { get; set; }
 
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

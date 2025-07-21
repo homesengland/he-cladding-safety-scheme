@@ -10,4 +10,5 @@ public class GetBuildingHasSafetyRegulatorRegistrationCodeResponse
     public EYesNoNonBoolean? WorksPermissionRequired { get; set; }
     public bool? BuildingHasSafetyRegulatorRegistrationCode { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

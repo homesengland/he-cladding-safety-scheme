@@ -9,6 +9,7 @@ public class GetProgressSupportResponse
 
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public GetProgressSupportResponse()
     {

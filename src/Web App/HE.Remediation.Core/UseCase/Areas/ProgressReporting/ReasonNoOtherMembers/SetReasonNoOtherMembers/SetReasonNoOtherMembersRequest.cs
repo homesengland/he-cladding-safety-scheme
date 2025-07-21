@@ -1,5 +1,4 @@
-﻿
-using MediatR;
+﻿using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoOtherMembers.SetReasonNoOtherMembers;
 
@@ -9,4 +8,3 @@ public class SetReasonNoOtherMembersRequest : IRequest
 
     public bool? OtherMembersNeedsSupport { get; set; }
 }
-

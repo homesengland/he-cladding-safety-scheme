@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -29,12 +30,20 @@ public class GetProjectTeamHandler : IRequestHandler<GetProjectTeamRequest, GetP
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-        var teamMembers = await _progressReportingRepository.GetTeamMembers();                
+        var teamMembers = await _progressReportingRepository.GetTeamMembers();
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetProjectTeamResponse
         {
             TeamMembers = teamMembers,
             BuildingName = buildingName,
-            ApplicationReferenceNumber = applicationReferenceNumber            
+            ApplicationReferenceNumber = applicationReferenceNumber,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 

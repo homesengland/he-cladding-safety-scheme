@@ -8,4 +8,5 @@ public class GetInformedLeaseholderResponse
     public string BuildingName { get; set; }
 
     public bool? LeaseholdersInformed { get; set; } 
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

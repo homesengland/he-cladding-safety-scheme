@@ -3,9 +3,23 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Model.ProgressReportVersion == 1 || !Model.IsProgressReportGcoComplete
-        ? Url.Action("ConfirmGcoDetails", "ProgressReporting", new { Area = "ProgressReporting" })
-        : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+
+    string backLink;
+
+    if (Model.ProgressReportVersion == 1)
+    {
+        backLink = Model.ProgressReportHasVisitedCheckYourAnswers
+            ? Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("ConfirmGcoDetails", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else
+    {
+        backLink = !Model.IsProgressReportGcoComplete
+            ? Url.Action("ConfirmGcoDetails", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    ViewData["Backlink"] = backLink;
     ViewData["FullWidth"] = true;
 }
 
@@ -30,6 +44,7 @@
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
     <input asp-for="ProgressReportVersion" type="hidden" value="@Model.ProgressReportVersion" />
     <input asp-for="IsProgressReportGcoComplete" type="hidden" value="@Model.IsProgressReportGcoComplete" />
+    <input asp-for="ProgressReportHasVisitedCheckYourAnswers" type="hidden" value="@Model.ProgressReportHasVisitedCheckYourAnswers" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@(ESubmitAction.FindAddress)">Find Address</govuk-button>

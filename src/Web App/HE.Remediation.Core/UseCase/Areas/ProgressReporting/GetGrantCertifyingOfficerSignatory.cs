@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -31,6 +32,12 @@ public class GetGrantCertifyingOfficerSignatoryHandler : IRequestHandler<GetGran
         var result = await _progressReportingRepository.GetGrantCertifyingOfficerSignatory();
         var version = await _progressReportingRepository.GetProgressReportVersion();
         var isGcoComplete = await _progressReportingRepository.IsGrantCertifyingOfficerComplete();
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
 
         return new GetGrantCertifyingOfficerSignatoryResponse
         {
@@ -42,7 +49,8 @@ public class GetGrantCertifyingOfficerSignatoryHandler : IRequestHandler<GetGran
             DateAppointedMonth = result.DateAppointed?.Month,
             DateAppointedYear = result.DateAppointed?.Year,
             Version = version,
-            IsGcoComplete = isGcoComplete
+            IsGcoComplete = isGcoComplete,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }
@@ -69,4 +77,5 @@ public class GetGrantCertifyingOfficerSignatoryResponse
 
     public int Version { get; set; }
     public bool IsGcoComplete { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

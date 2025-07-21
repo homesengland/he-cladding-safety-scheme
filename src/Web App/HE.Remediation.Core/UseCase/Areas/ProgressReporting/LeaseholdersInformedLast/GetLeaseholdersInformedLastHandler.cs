@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -32,11 +33,19 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeaseholderInforme
 
             var informedLastDate = await _progressReportingRepository.GetProgressReportLeaseholdersInformedLastDate();
 
+            var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+                new GetHasVisitedCheckYourAnswersParameters
+                {
+                    ApplicationId = applicationId,
+                    ProgressReportId = _applicationDataProvider.GetProgressReportId()
+                });
+
             return new GetLeaseholdersInformedLastResponse
             {
                 BuildingName = buildingName,
                 ApplicationReferenceNumber = applicationReferenceNumber,
-                LeaseholdersInformedLastDate = informedLastDate
+                LeaseholdersInformedLastDate = informedLastDate,
+                HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
             };
         }
     }
@@ -53,5 +62,6 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeaseholderInforme
         public string ApplicationReferenceNumber { get; set; }
         public string BuildingName { get; set; }
         public DateTime? LeaseholdersInformedLastDate { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 }

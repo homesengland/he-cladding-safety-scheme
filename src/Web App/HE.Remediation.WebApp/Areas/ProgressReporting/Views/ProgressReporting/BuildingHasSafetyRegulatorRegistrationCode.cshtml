@@ -4,25 +4,28 @@
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
 
-    if (!string.IsNullOrEmpty(Model.ReturnUrl))
+    string backLink;
+
+    if (Model.Version > 1)
     {
-        ViewData["BackLink"] = Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+        backLink = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
     }
-    else if (Model.Version > 1)
+    else if (Model.HasVisitedCheckYourAnswers)
     {
-        ViewData["BackLink"] = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        backLink = Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     else if (Model.WorksPermissionRequired == EYesNoNonBoolean.Yes)
     {
-        ViewData["BackLink"] = Model.WorksPermissionApplied == true
+        backLink = Model.WorksPermissionApplied == true
             ? Url.Action("PlanningPermissionDetails", "ProgressReporting", new { Area = "ProgressReporting" })
             : Url.Action("ReasonPlanningNotApplied", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     else
     {
-        ViewData["BackLink"] = Url.Action("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" });
+        backLink = Url.Action("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
+    ViewData["BackLink"] = backLink;
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
@@ -54,6 +57,7 @@
     <input asp-for="WorksPermissionRequired" type="hidden" />
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
     <input asp-for="Version" type="hidden" value="@Model.Version" />
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>

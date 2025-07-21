@@ -6,5 +6,6 @@
         public string BuildingName { get; set; }
         public string BuildingSafetyRegulatorRegistrationCode { get; set; }
         public int Version { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 }

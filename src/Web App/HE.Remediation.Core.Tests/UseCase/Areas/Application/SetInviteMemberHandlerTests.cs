@@ -4,14 +4,14 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using static HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember.SetInviteMemberHandler;
-using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;
 
 namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
 {
 
     public class SetInviteMemberHandlerTests
     {
-        private readonly Mock<IProgressReportingRepository> _workPackageRepositoryMock = new();
+        private readonly Mock<IThirdPartyCollaboratorRepository> _thirdPartyCollaboratorRepository = new();
         private readonly Mock<IDbConnectionWrapper> _connectionMock = new();
         private readonly Mock<IApplicationDataProvider> _applicationDataProviderMock = new();
         private readonly Mock<IBackgroundCollaborationCommunicationQueue> _backgroundCollaborationCommunicationQueueMock = new();
@@ -22,10 +22,10 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
         public SetInviteMemberHandlerTests()
         {
             _handler = new SetInviteMemberHandler(
-                _workPackageRepositoryMock.Object,
                 _connectionMock.Object,
                 _applicationDataProviderMock.Object,
-                _backgroundCollaborationCommunicationQueueMock.Object
+                _backgroundCollaborationCommunicationQueueMock.Object,
+                _thirdPartyCollaboratorRepository.Object
             );
 
             _mockResponse = new ThirdPartyInviteResponse
@@ -42,16 +42,16 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
         public async Task Handle_ShouldInsertThirdPartyCollaborator_AndReturnResponse()
         {
             // Arrange
-            var request = new SetInviteMemberRequest(Guid.NewGuid(), string.Empty);
-            var teamMemberResult = new GetTeamMemberResult
+            var request = new SetInviteMemberRequest(Guid.NewGuid(), string.Empty, Enums.ETeamMemberSource.ProgressReport);
+            var teamMemberResult = new GetInviteResponse
             {
                 TeamMemberId = request.TeamMemberId,
                 Name = "John Doe",
                 EmailAddress = "john.doe@example.com",
             };
 
-            _workPackageRepositoryMock
-                .Setup(repo => repo.GetTeamMember(request.TeamMemberId))
+            _thirdPartyCollaboratorRepository
+                .Setup(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source))
                 .ReturnsAsync(teamMemberResult);
 
             _applicationDataProviderMock
@@ -65,7 +65,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
                 .ReturnsAsync(_mockResponse);
 
             _connectionMock
-                .Setup(conn => conn.ExecuteAsync("InsertThirdPartyCollaborator", It.IsAny<object>()))
+                .Setup(conn => conn.ExecuteAsync("UpsertThirdPartyCollaborator", It.IsAny<object>()))
                 .Returns(Task.CompletedTask);
 
             // Act
@@ -76,19 +76,19 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
             Assert.Equal(request.TeamMemberId, response.TeamMemberId);
             Assert.Equal("John Doe", response.InvitedName);
 
-            _workPackageRepositoryMock.Verify(repo => repo.GetTeamMember(request.TeamMemberId), Times.Once);
-            _connectionMock.Verify(conn => conn.ExecuteAsync("InsertThirdPartyCollaborator", It.IsAny<object>()), Times.Once);
+            _thirdPartyCollaboratorRepository.Verify(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, Enums.ETeamMemberSource.ProgressReport), Times.Once);
+            _connectionMock.Verify(conn => conn.ExecuteAsync("UpsertThirdPartyCollaborator", It.IsAny<object>()), Times.Once);
         }
 
         [Fact]
         public async Task Handle_ShouldThrowException_IfTeamMemberNotFound()
         {
             // Arrange
-            var request = new SetInviteMemberRequest(Guid.NewGuid(), string.Empty);
+            var request = new SetInviteMemberRequest(Guid.NewGuid(), string.Empty, Enums.ETeamMemberSource.ProgressReport);
 
-            _workPackageRepositoryMock
-                .Setup(repo => repo.GetTeamMember(request.TeamMemberId))
-                .ReturnsAsync((GetTeamMemberResult)null); // Simulate not found
+            _thirdPartyCollaboratorRepository
+                .Setup(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source))
+                .ReturnsAsync((GetInviteResponse)null); // Simulate not found
 
             // Act & Assert
             await Assert.ThrowsAsync<NullReferenceException>(() => _handler.Handle(request, CancellationToken.None));

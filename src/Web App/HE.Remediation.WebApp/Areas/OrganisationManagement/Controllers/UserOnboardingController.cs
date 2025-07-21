@@ -5,6 +5,7 @@ using HE.Remediation.Core.UseCase.Areas.OrganisationManagement.UserOnboarding;
 using MediatR;
 using HE.Remediation.WebApp.ViewModels.OrganisationManagement;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 
 namespace HE.Remediation.WebApp.Areas.OrganisationManagement.Controllers
 {
@@ -48,6 +49,13 @@ namespace HE.Remediation.WebApp.Areas.OrganisationManagement.Controllers
             return newSignup ?
                 RedirectToAction("Index", "Account", new { Area = "Administration" }) :
                 RedirectToAction("Callback", "Authentication");
+        }
+
+        [HttpGet(nameof(Blocked))]
+        public async Task<IActionResult> Blocked()
+        {
+            await HttpContext.SignOutAsync();
+            return View();
         }
     }
 }

@@ -30,7 +30,6 @@ public class SetReasonQuotesNotSoughtTests : TestBase
     }
 
     [Fact]
-    [AutoData]
     public async Task Handler_Sets_QuotesNotSoughtReason()
     {
         //Arrange

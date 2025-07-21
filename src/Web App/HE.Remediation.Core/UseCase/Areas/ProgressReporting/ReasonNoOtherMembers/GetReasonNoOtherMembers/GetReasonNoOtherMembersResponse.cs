@@ -10,4 +10,5 @@ public class GetReasonNoOtherMembersResponse
     public string OtherMembersNotAppointedReason { get; set; }
 
     public bool? OtherMembersNeedsSupport { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

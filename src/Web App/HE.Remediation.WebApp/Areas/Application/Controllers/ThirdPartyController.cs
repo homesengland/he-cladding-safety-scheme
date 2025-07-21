@@ -9,6 +9,7 @@ using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Application;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.WebApp.Areas.Application.Controllers
 {
@@ -29,26 +30,26 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
         }
 
         [HttpGet(nameof(InviteContributor))]
-        public async Task<IActionResult> InviteContributor(Guid teamMemberId)
+        public async Task<IActionResult> InviteContributor(Guid teamMemberId, ETeamMemberSource source)
         {
-            var response = await _sender.Send(new GetInviteRequest(teamMemberId));
+            var response = await _sender.Send(new GetInviteRequest(teamMemberId, source));
             var viewModel = _mapper.Map<InviteViewModel>(response);
-
             return View(viewModel);
         }
 
         [HttpPost(nameof(InviteContributor))]
         public IActionResult InviteContributor(InviteViewModel viewModel)
         {
-            return RedirectToAction("InvitationDeclaration", new { teamMemberId = viewModel.TeamMemberId });
+            return RedirectToAction("InvitationDeclaration", new { teamMemberId = viewModel.TeamMemberId, source = (int)viewModel.Source });
         }
 
         [HttpGet(nameof(InvitationDeclaration))]
-        public IActionResult InvitationDeclaration(Guid teamMemberId)
+        public IActionResult InvitationDeclaration(Guid teamMemberId, ETeamMemberSource source)
         {
             var viewModel = new InvitationDeclarationViewModel
             {
-                TeamMemberId = teamMemberId
+                TeamMemberId = teamMemberId,
+                Source = source
             };
 
             return View(viewModel);
@@ -67,34 +68,35 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             }
 
             var auth0UserId = _applicationDataProvider.GetAuth0UserId();
-            var request = new SetInviteMemberRequest(viewModel.TeamMemberId.Value, auth0UserId);
+            var request = new SetInviteMemberRequest(viewModel.TeamMemberId.Value, auth0UserId, viewModel.Source);
 
             await _sender.Send(request);
 
-            return RedirectToAction("InvitationSent", new { teamMemberId = viewModel.TeamMemberId });
+            return RedirectToAction("InvitationSent", new { teamMemberId = viewModel.TeamMemberId, source = (int)viewModel.Source });
         }
 
         [HttpGet(nameof(InvitationSent))]
-        public async Task<IActionResult> InvitationSent(Guid teamMemberId)
+        public async Task<IActionResult> InvitationSent(Guid teamMemberId, ETeamMemberSource source)
         {
-            var response = await _sender.Send(new GetInviteRequest(teamMemberId));
+            var response = await _sender.Send(new GetInviteRequest(teamMemberId, source));
             var viewModel = new InvitationSentViewModel
             {
                 TeamMemberId = teamMemberId,
-                InvitedEmailAddress = response.InvitedEmailAddress
+                InvitedEmailAddress = response.EmailAddress
             };
 
             return View(viewModel);
         }
 
         [HttpGet(nameof(RemoveAccess))]
-        public async Task<IActionResult> RemoveAccess(Guid teamMemberId)
+        public async Task<IActionResult> RemoveAccess(Guid teamMemberId, ETeamMemberSource source)
         {
-            var response = await _sender.Send(new GetInviteRequest(teamMemberId));
+            var response = await _sender.Send(new GetInviteRequest(teamMemberId, source));
             var viewModel = new RemoveAccessViewModel
             {
                 TeamMemberId = teamMemberId,
-                InvitedName = response.InvitedName
+                InvitedName = response.Name,
+                Source = source
             };
 
             return View(viewModel);
@@ -113,7 +115,7 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             }
 
             var auth0UserId = _applicationDataProvider.GetAuth0UserId();
-            await _sender.Send(new SetRemoveAccessRequest(viewModel.TeamMemberId.Value, auth0UserId));
+            await _sender.Send(new SetRemoveAccessRequest(viewModel.TeamMemberId.Value, auth0UserId, viewModel.Source));
 
             return RedirectToAction("Index");
         }

@@ -9,6 +9,7 @@ namespace HE.Remediation.WebApp.ViewModels.ProgressReporting
         public string ApplicationReferenceNumber { get; set; }
         public string BuildingName { get; set; }
         public DateTime? LeaseholdersInformedLastDate { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
         public ESubmitAction SubmitAction { get; set; }
         public string ReturnUrl { get; set; }
     }

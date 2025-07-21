@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -30,12 +31,20 @@ public class GetReasonNoOtherMembersHandler : IRequestHandler<GetReasonNoOtherMe
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
         var otherMembersNotAppointed = await _progressReportingRepository.GetProgressReportOtherMembersNotAppointedReason();
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetReasonNoOtherMembersResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             OtherMembersNotAppointedReason = otherMembersNotAppointed?.OtherMembersNotAppointedReason,
-            OtherMembersNeedsSupport = otherMembersNotAppointed?.OtherMembersNeedsSupport
+            OtherMembersNeedsSupport = otherMembersNotAppointed?.OtherMembersNeedsSupport,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

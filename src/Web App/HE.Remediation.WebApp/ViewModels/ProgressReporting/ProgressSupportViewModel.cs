@@ -10,6 +10,7 @@ public class ProgressSupportViewModel
 
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
 

@@ -18,4 +18,5 @@ public class PostCodeEntryViewModel
 
     public int ProgressReportVersion { get; set; }
     public bool IsProgressReportGcoComplete { get; set; }
+    public bool ProgressReportHasVisitedCheckYourAnswers { get; set; }
 }

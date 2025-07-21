@@ -692,10 +692,21 @@ namespace HE.Remediation.WebApp.Areas.Administration.Controllers
         private async Task<RedirectToActionResult> RedirectToAccountHome()
         {
             var userProfile = await _sender.Send(GetPostLoginRequest());
-            if(userProfile.UserInvitesPending.Any())
+
+            // Check user is not a revoked organisation user
+            if (userProfile.UserInviteStatus.IsOrganisationInviteRevoked)
+            {
+                return RedirectToAction("Blocked", "UserOnboarding", new { Area = "OrganisationManagement" });
+            }
+
+            if (userProfile.UserInviteStatus.IsOrganisationInvitePending)
             {
                 return RedirectToAction("Join", "UserOnboarding", new { Area = "OrganisationManagement", newSignUp = true });
+            }
 
+            if (userProfile.UserInviteStatus.IsApplicationInvitePending)
+            {
+                return RedirectToAction("Join", "UserOnboarding", new { Area = "Application" });
             }
 
             return RedirectToAction("Index", "Account", new { Area = "Administration" });

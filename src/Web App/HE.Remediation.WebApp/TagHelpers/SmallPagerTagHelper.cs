@@ -1,5 +1,4 @@
 ﻿using HE.Remediation.Core.Enums;
-using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -28,11 +27,13 @@ namespace HE.Remediation.WebApp.TagHelpers
         [HtmlAttributeName("selected-filter-stages")]
         public IEnumerable<EApplicationStage> SelectedFilterStageOptions { get; set; } = [];
 
+        private const int PagesBeforeEllipsis = 2;
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-             
+
             if ((CurrentPage == 1) && (PageCount == 1))
             {
                 output.PreContent.SetHtmlContent(string.Empty);
@@ -46,48 +47,36 @@ namespace HE.Remediation.WebApp.TagHelpers
                 sb.Append(ObtainPreviousLinkMarkup());
             }
 
-            sb.Append(OutputPageEntriesStart());            
+            sb.Append(OutputPageEntriesStart());
 
-            if (PageCount < 10)
+            if (PageCount > 10)
             {
-                for (int PageCounter = 1; PageCounter < PageCount + 1; PageCounter++)
+                for (var PageCounter = 1; PageCounter < PageCount + 1; PageCounter++)
                 {
-                    sb.Append(ObtainPageMarkup((PageCounter == CurrentPage), PageCounter));                    
-                }                
+                    if (PageCounter == 1
+                        || (PageCounter >= (CurrentPage - PagesBeforeEllipsis) &&
+                            (PageCounter <= (CurrentPage + PagesBeforeEllipsis)))
+                        || PageCounter == PageCount)
+                    {
+                        sb.Append(ObtainPageMarkup((PageCounter == CurrentPage), PageCounter));
+                    }
+                    else if ((PageCounter == (CurrentPage - PagesBeforeEllipsis - 1) &&
+                              (CurrentPage - PagesBeforeEllipsis - 1 != 1))
+                             || (PageCounter == (CurrentPage + PagesBeforeEllipsis + 1) &&
+                                 (CurrentPage + PagesBeforeEllipsis + 1 != PageCount)))
+                    {
+                        sb.Append(ObtainEllipsesMarkup());
+                    }
+                }
             }
             else
-            {                
-                //sb.Append(ObtainPageMarkup(1));
-
-                //if (CurrentPage >= 5)
-                //{
-                //    sb.Append(ObtainEllipsesMarkup());
-                //    //sb.Append(ObtainPageMarkup(2));
-                //}
-                //else
-                //{
-                //}
-
-                //if (CurrentPage > 2)
-                //{
-                //    sb.Append(ObtainPageMarkup(CurrentPage-1));        
-                //}
-                //if (CurrentPage > 1)
-                //{
-                //    sb.Append(ObtainPageMarkup(CurrentPage));
-                //}
-                //if (CurrentPage < PageCount)
-                //{
-                //    sb.Append(ObtainPageMarkup(CurrentPage+1));        
-                //}
-
-                //if (PageCount >= 4)
-                //{
-                //    sb.Append(ObtainEllipsesMarkup());
-                //}
-                //sb.Append(ObtainPageMarkup(PageCount));
+            {
+                for (var PageCounter = 1; PageCounter < PageCount + 1; PageCounter++)
+                {
+                    sb.Append(ObtainPageMarkup((PageCounter == CurrentPage), PageCounter));
+                }
             }
-            
+
             sb.Append(OutputPageEntriesEnd());
 
             if (CurrentPage < PageCount)
@@ -112,7 +101,7 @@ namespace HE.Remediation.WebApp.TagHelpers
         {
             return "  <ul class=\"govuk-pagination__list\">" + Environment.NewLine;
         }
-        
+
         private string OutputPagerFooter()
         {
             return "</nav>" + Environment.NewLine;
@@ -123,14 +112,9 @@ namespace HE.Remediation.WebApp.TagHelpers
             return "<nav class=\"govuk-pagination\" role=\"navigation\" aria-label=\"results\">" + Environment.NewLine;
         }
 
-        private string ObtainPageMarkup(int PageNo)
-        {
-            return ObtainPageMarkup((PageNo == CurrentPage), PageNo);
-        }
-
         private string ObtainPageMarkup(bool ItemSelected, int PageNo)
         {
-            var sb = new StringBuilder();            
+            var sb = new StringBuilder();
             if (ItemSelected)
             {
                 sb.Append("    <li class=\"govuk-pagination__item govuk-pagination__item--current\">" + Environment.NewLine);
@@ -152,15 +136,15 @@ namespace HE.Remediation.WebApp.TagHelpers
             sb.Append("\"");
             if (ItemSelected)
             {
-                sb.Append(" aria-current=\"page\">");                
+                sb.Append(" aria-current=\"page\">");
             }
             else
             {
-                sb.Append(">"); 
+                sb.Append(">");
             }
             sb.Append(PageNo.ToString());
             sb.Append("</a>" + Environment.NewLine);
-            sb.Append("    </li>" + Environment.NewLine);                                        
+            sb.Append("    </li>" + Environment.NewLine);
             return sb.ToString();
         }
 
@@ -177,7 +161,7 @@ namespace HE.Remediation.WebApp.TagHelpers
             {
                 sb.Append($"&selectedFilterStages={stageOption}");
             }
-            sb.Append("\" rel=\"prev\">" + Environment.NewLine);            
+            sb.Append("\" rel=\"prev\">" + Environment.NewLine);
             sb.Append("      <svg class=\"govuk-pagination__icon govuk-pagination__icon--prev\" ");
             sb.Append("xmlns=\"http://www.w3.org/2000/svg\" height=\"13\" width=\"15\" aria-hidden=\"true\" focusable=\"false\" viewBox=\"0 0 15 13\">" + Environment.NewLine);
             sb.Append("        <path d=\"m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z\">");
@@ -212,7 +196,7 @@ namespace HE.Remediation.WebApp.TagHelpers
             sb.Append("    </a>" + Environment.NewLine);
             sb.Append("  </div>" + Environment.NewLine);
             return sb.ToString();
-        }        
+        }
 
         private class UriBuilder
         {

@@ -43,6 +43,8 @@ public class GetSubmitPaymentResponse
     public bool IsSubmitted { get; set; }
 
     public bool IsExpired { get; set; }
+
+    public bool IsItALastSchedulePayment { get; set; }
 }
 
 public class MonthlyCost

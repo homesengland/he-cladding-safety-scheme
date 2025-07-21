@@ -43,6 +43,13 @@ public class GetBuildingControlValidationHandler : IRequestHandler<GetBuildingCo
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
+            });
+
         return new GetBuildingControlValidationResponse
         {
             ApplicationReferenceNumber = reference,
@@ -51,7 +58,8 @@ public class GetBuildingControlValidationHandler : IRequestHandler<GetBuildingCo
             ValidationDateMonth = validation.BuildingControlValidationDate?.Month,
             ValidationDateYear = validation.BuildingControlValidationDate?.Year,
             ValidationInformation = validation.BuildingControlValidationInformation,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }
@@ -75,4 +83,5 @@ public class GetBuildingControlValidationResponse
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

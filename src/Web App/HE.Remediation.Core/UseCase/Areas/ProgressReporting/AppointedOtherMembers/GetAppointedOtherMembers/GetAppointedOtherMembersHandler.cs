@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -32,12 +33,20 @@ public class GetAppointedOtherMembersHandler : IRequestHandler<GetAppointedOther
         var otherMembersAppointed = await _progressReportingRepository.GetProgressReportOtherMembersAppointed();
         var leaseholdersInformed = await _progressReportingRepository.GetProgressReportLeaseholdersInformed();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ProgressReportId = _applicationDataProvider.GetProgressReportId(),
+                ApplicationId = applicationId
+            });
+
         return new GetAppointedOtherMembersResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             LeaseholdersInformed = leaseholdersInformed,
-            OtherMembersAppointed = otherMembersAppointed
+            OtherMembersAppointed = otherMembersAppointed,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

@@ -6,7 +6,9 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Url.Action("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["Backlink"] = Model.HasVisitedCheckYourAnswers
+        ? Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = false;
 }
 

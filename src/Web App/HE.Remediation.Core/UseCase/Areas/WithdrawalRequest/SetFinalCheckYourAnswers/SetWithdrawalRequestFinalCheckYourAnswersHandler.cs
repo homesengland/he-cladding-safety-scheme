@@ -31,7 +31,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WithdrawalRequest.SetFinalCheckYourA
 
             var reasonForClosing = await _applicationRepository.GetApplicationReasonForWithdrawalRequest(applicationId);
 
-            var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Application", "Review to withdraw application"));
+            var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Application", "Review request to withdraw application"));
             var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
             {
                 Date = DateTime.UtcNow.Date,

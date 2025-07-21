@@ -9,6 +9,7 @@ public class WorksRequirePermissionViewModel
     public EYesNoNonBoolean? PermissionRequired { get; set; }
     public bool? QuotesSought { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }

@@ -1,0 +1,24 @@
+﻿@using HE.Remediation.Core.Enums
+@{
+    Layout = "~/Areas/OrganisationManagement/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Account not active";
+}
+
+<h1 class="govuk-heading-xl">Sorry, your account is no longer active</h1>
+
+<div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+        Access to your previous organisation has been removed and your account has been disabled.
+    </strong>
+</div>
+
+<div class="govuk-body">
+    <p>If this appears to be a mistake please contact an organisation admin.</p>
+</div>
+
+<div>
+    <a class="govuk-button" href="@Url.Action("Logout", "Authentication")">Sign out</a>
+</div>
+

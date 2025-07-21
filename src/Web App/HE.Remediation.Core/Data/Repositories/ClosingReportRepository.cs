@@ -66,12 +66,14 @@ public class ClosingReportRepository : IClosingReportRepository
         });
     }
 
-    public async Task UpdateClosingReportFraewRiskToLifeReduced(Guid applicationId, bool? fraewRiskToLifeReduced)
+    public async Task UpdateClosingReportDeclarations(Guid applicationId, bool? fraewRiskToLifeReduced,
+                                                       bool? grantFundingObligations)
     {
-        await _connection.ExecuteAsync(nameof(UpdateClosingReportFraewRiskToLifeReduced), new
+        await _connection.ExecuteAsync(nameof(UpdateClosingReportDeclarations), new
         {
             ApplicationId = applicationId,
-            FraewRiskToLifeReduced = fraewRiskToLifeReduced
+            FraewRiskToLifeReduced = fraewRiskToLifeReduced,
+            GrantFundingObligations = grantFundingObligations
         });
     }
 

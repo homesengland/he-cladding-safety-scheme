@@ -49,11 +49,13 @@ public interface IPaymentRequestRepository
 
     Task<bool> IsPaymentRequestExpired(Guid paymentRequestId);
 
+    Task<bool> IsItALastScheduledPayment(Guid applicationId, Guid paymentRequestId);
+
     Task<bool> IsPaymentRequestSubmitted(Guid paymentRequestId);
 
     Task<bool> HasSubmittedPaymentRequests();
 
-    Task SubmitPaymentRequest(Guid paymentRequestId);
+    Task SubmitPaymentRequest(Guid paymentRequestId, Guid? userId);
 
     Task UpdatePaymentRequestTaskStatus(Guid paymentRequestId, EPaymentRequestTaskStatus taskStatusId);
 

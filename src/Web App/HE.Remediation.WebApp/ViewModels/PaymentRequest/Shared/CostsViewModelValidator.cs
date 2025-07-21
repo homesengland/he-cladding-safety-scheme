@@ -12,7 +12,8 @@ namespace HE.Remediation.WebApp.ViewModels.PaymentRequest.Shared
             .Must(UnprofiledGrantFundingGreaterThanZeroRounded)
             .WithMessage("You have over-allocated your funding. Please update your monthly cost profile to match your approved grant funding.")
             .Must(UnprofiledGrantFundingEqualToZeroRounded)
-            .WithMessage("You have under-allocated your funding. Please update your monthly cost profile to match your approved grant funding.");
+            .WithMessage("You have under-allocated your funding. Please update your monthly cost profile to match your approved grant funding.")
+            .When(x => !x.IsItALastSchedulePayment, ApplyConditionTo.CurrentValidator);
         }
 
         private bool UnprofiledGrantFundingGreaterThanZeroRounded(CostsViewModel costs, decimal? _)

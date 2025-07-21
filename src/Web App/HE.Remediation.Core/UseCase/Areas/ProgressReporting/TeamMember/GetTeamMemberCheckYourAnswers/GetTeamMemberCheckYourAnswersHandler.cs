@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -32,6 +33,13 @@ public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMembe
 
         var teamMember = await _progressReportingRepository.GetTeamMember(request.TeamMemberId);
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetTeamMemberCheckYourAnswersResponse
         {
             ApplicationReferenceNumber = reference,
@@ -52,7 +60,8 @@ public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMembe
             ConsiderateConstructorSchemeReason = teamMember.ConsiderateConstructorSchemeReason,
             Name = teamMember.Name,
             TeamMemberId = teamMember.TeamMemberId,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

@@ -51,6 +51,8 @@ namespace HE.Remediation.WebApp.ViewModels.PaymentRequest
         public decimal? CurrentMonthTotal { get; set; }
 
         public MonthlyCostViewModel FinalMonthCost { get; set; }
+
+        public bool IsItALastSchedulePayment { get; set; }
     }
 
     public class MonthlyCostViewModel

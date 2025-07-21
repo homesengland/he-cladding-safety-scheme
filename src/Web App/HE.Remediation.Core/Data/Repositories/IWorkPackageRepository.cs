@@ -6,6 +6,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ThirdPartyContributions;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage;
+using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ConfirmToProceed;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.Declaration;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.GrantCertifyingOfficer;
@@ -22,11 +23,17 @@ namespace HE.Remediation.Core.Data.Repositories;
 
 public interface IWorkPackageRepository
 {
+    #region Confirm To Proceed
+    Task<bool?> GetWorkPackageConfirmToProceed();
+
+    Task UpdateWorkPackageConfirmToProceed(bool? isConfirmedToProceed);
+    #endregion
+
     Task<WorkPackageTaskListSummaryResult> GetWorkPackageTaskListSummary();
 
     Task<bool> HasWorkPackage();
 
-    Task SubmitWorkPackage();
+    Task SubmitWorkPackage(Guid? userId);
 
     Task<bool> IsWorkPackageSubmitted();
 
@@ -91,6 +98,8 @@ public interface IWorkPackageRepository
     #region Key Dates
 
     Task<KeyDatesResult> GetKeyDates();
+
+    Task<KeyDatesResult> GetLatestWorkPackageKeyDatesByApplication();
 
     Task<ETaskStatus?> GetKeyDatesStatus();
 
@@ -233,6 +242,7 @@ public interface IWorkPackageRepository
     Task<GetWorkPackageCostsResult> GetWorkPackageCostsByVariationRequestId(Guid variationRequestId);
 
     Task<Guid?> GetLatestWorkPackageCostsId();
+    Task<GetLatestCostScheduleResult> GetLatestCostSchedule(Guid applicationId);
 
     #endregion
 
@@ -243,7 +253,7 @@ public interface IWorkPackageRepository
 
     Task UpdateThirdPartyContributionsPursuingThirdPartyContribution(EThirdPartyContributionPursuitStatus? thirdPartyContributionPursuitStatusTypeId);
 
-    Task<ThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution();
+    Task<ThirdPartyContributionResult> GetThirdPartyContributionsThirdPartyContribution();
 
     Task<List<EFundingStillPursuing>> GetThirdPartyContributionsThirdPartyContributionPursuingTypes();
 

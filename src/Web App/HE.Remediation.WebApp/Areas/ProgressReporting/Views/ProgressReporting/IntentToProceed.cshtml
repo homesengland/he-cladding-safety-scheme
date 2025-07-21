@@ -3,13 +3,13 @@
 @{
     string backLink;
 
-    if (!string.IsNullOrEmpty(Model.ReturnUrl))
-    {
-        backLink = Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-    }
-    else if (Model.Version > 1)
+    if (Model.Version > 1)
     {
         backLink = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else if (Model.HasVisitedCheckYourAnswers)
+    {
+        backLink = Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     else if (Model.HasGco)
     {
@@ -18,6 +18,10 @@
     else if (Model.OtherMembersAppointed == false)
     {
         backLink = Url.Action("ReasonNoOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else if (Model.HasGco == false && Model.HasGcoRoles)
+    {
+        backLink = Url.Action("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     else
     {
@@ -52,6 +56,7 @@
     <input asp-for="Version" type="hidden" value="@Model.Version"/>
     <input asp-for="OtherMembersAppointed" type="hidden" value="@Model.OtherMembersAppointed" />
     <input asp-for="HasGco" type="hidden" value="@Model.HasGco" />
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers"/>
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>

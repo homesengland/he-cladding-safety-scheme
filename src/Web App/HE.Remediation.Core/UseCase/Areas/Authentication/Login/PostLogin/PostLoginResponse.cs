@@ -5,5 +5,5 @@ namespace HE.Remediation.Core.UseCase.Areas.Authentication.Login.PostLogin;
 public class PostLoginResponse
 {
     public UserProfileCompletionModel UserProfileCompletion { get; set; }
-    public UserInvitesPendingModel UserInvitesPending { get; internal set; }
+    public UserInvitesPendingModel UserInviteStatus { get; internal set; }
 }

@@ -18,4 +18,5 @@ public interface IUserService
     Task<Guid> ScaffoldFirstTimeUserData(string auth0UserId, string emailAddress);
     Task ScaffoldUserProfileCompletionData(Guid userId);
     Task<UserInvitesPendingModel> IsUserInvitePending(string auth0UserId);
+    Task<UserDetailsModel> GetUserDetailsByCompanyRegistrationNumber(string companyRegistrationNumber);
 }

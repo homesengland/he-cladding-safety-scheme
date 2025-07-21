@@ -30,7 +30,7 @@ public class SetInformedLeaseholderHandler : IRequestHandler<SetInformedLeasehol
 
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await UpdateLeaseholdersInformed(request);
+        await _progressReportingRepository.UpdateLeaseholdersInformed(request.LeaseholdersInformed);
 
         if (progressReportVersion == 1)
         {
@@ -40,10 +40,5 @@ public class SetInformedLeaseholderHandler : IRequestHandler<SetInformedLeasehol
         scope.Complete();
 
         return Unit.Value;
-    }
-
-    private async Task UpdateLeaseholdersInformed(SetInformedLeaseholderRequest request)
-    {
-        await _progressReportingRepository.UpdateLeaseholdersInformed(request.LeaseholdersInformed);        
     }
 }

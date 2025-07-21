@@ -41,6 +41,13 @@ public class GetWhenSubmitHandler : IRequestHandler<GetWhenSubmitRequest, GetWhe
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
+            });
+
         return new GetWhenSubmitResponse
         {
             BuildingName = buildingName,
@@ -48,7 +55,8 @@ public class GetWhenSubmitHandler : IRequestHandler<GetWhenSubmitRequest, GetWhe
             HasAppliedForBuildingControl = hasAppliedForBuildingControl.HasAppliedForBuildingControl,
             SubmissionMonth = submissionDate?.Month,
             SubmissionYear = submissionDate?.Year,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -32,12 +33,20 @@ public class GetAppliedForPlanningPermissionHandler : IRequestHandler<GetApplied
         var appliedForPlanningPermission = await _progressReportingRepository.GetProgressReportAppliedForPlanningPermission();
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetAppliedForPlanningPermissionResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             AppliedForPlanningPermission = appliedForPlanningPermission,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

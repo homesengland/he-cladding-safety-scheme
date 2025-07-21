@@ -51,4 +51,5 @@ public class GetHaveAnyAnswersChangedResponse
     public DateTime? DateAppointed { get; set; }
     public EIntentToProceedType? IntentToProceed { get; set; }
     public bool? HasProjectPlanMilestones { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

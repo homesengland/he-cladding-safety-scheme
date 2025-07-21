@@ -101,7 +101,7 @@ public interface IProgressReportingRepository
 
     Task<DateTime?> GetProgressReportDateSubmitted();
 
-    Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted);
+    Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted, Guid? userId);
 
     Task<GetProgressReportResult> GetProgressReportDetails(Guid applicationId, Guid progressReportId);
 
@@ -180,4 +180,6 @@ public interface IProgressReportingRepository
     Task UpdateBuildingControlValidation(UpdateBuildingControlValidationParameters parameters);
     Task<GetHasAppliedForBuildingControlResult> GetHasAppliedForBuildingControl(GetHasAppliedForBuildingControlParameters parameters);
     Task UpdateHasAppliedForBuildingControl(UpdateHasAppliedForBuildingControlParameters parameters);
+    Task<bool> GetHasVisitedCheckYourAnswers(GetHasVisitedCheckYourAnswersParameters parameters);
+    Task SetHasVisitedCheckYourAnswers(SetHasVisitedCheckYourAnswersParameters parameters);
 }

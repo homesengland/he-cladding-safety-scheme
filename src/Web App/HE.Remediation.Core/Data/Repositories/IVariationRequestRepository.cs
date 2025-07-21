@@ -43,7 +43,7 @@ public interface IVariationRequestRepository
 
     Task<IReadOnlyCollection<FileResult>> GetEvidence();
 
-    Task SubmitVariationRequest();
+    Task SubmitVariationRequest(Guid? userId);
 
     Task<GetVariationCostsResult> GetVariationCosts(Guid variationRequestId);
 
@@ -84,7 +84,7 @@ public interface IVariationRequestRepository
     Task<Guid?> GetLatestVariationRequestId();
 
     #region Third Party Contributions
-    Task<VariationRequestThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution(Guid? variationRequestId);
+    Task<VariationRequestThirdPartyContributionResult> GetThirdPartyContributionsThirdPartyContribution(Guid? variationRequestId);
 
     Task<List<EFundingStillPursuing>> GetThirdPartyContributionsThirdPartyContributionPursuingTypes(Guid? variationRequestId);
 

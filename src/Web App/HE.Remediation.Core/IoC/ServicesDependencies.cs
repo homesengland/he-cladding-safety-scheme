@@ -98,5 +98,7 @@ public static class ServicesDependencies
         services.AddScoped<IGrantFundingRepository, GrantFundingRepository>();
         services.AddScoped<ILeaseHolderRepository, LeaseHolderRepository>();
         services.AddScoped<IRightToManageRepository, RightToManageRepository>();
+        services.AddScoped<IThirdPartyCollaboratorRepository, ThirdPartyCollaboratorRepository>();
+        services.AddScoped<IDataIngestionRepository, DataIngestionRepository>();
     }
 }

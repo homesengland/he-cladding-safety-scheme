@@ -8,6 +8,8 @@ public class UploadEvidenceViewModel : FileUploadViewModel
 
     public string BuildingName { get; set; }
 
+    public bool HasVisitedCheckYourAnswers { get; set; }
+
     public override string DeleteEndpoint => "/ProgressReporting/UploadEvidence/Delete";
 
     public override string[] AcceptedFileTypes => new[] { ".pdf" };

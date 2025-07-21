@@ -2,7 +2,7 @@
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.SetWhenStartOnSite;
 
-public class SetWhenStartOnSiteRequest : IRequest
+public class SetWhenStartOnSiteRequest : IRequest<SetWhenStartOnSiteResponse>
 {
     public int? StartMonth { get; set; }
 

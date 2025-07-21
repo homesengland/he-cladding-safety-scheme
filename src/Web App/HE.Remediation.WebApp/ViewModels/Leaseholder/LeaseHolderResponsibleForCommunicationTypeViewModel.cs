@@ -7,6 +7,6 @@ namespace HE.Remediation.WebApp.ViewModels.Leaseholder
     {
         public EResponsibleForCommunicationType? ResponsibleForCommunicationTypeId { get; set; }
         public EApplicationRepresentationType? ApplicationRepresentationType { get; set; }
-        public string? RepresentationOtherText { get; set; }
+        public string RepresentationOtherText { get; set; }
     }
 }

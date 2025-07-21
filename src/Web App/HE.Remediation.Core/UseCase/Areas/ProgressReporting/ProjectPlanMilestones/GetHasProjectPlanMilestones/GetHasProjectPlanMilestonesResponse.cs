@@ -7,5 +7,6 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilesto
         public string BuildingName { get; set; }
         public bool? HasProjectPlanMilestones { get; set; }
         public int Version { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 }

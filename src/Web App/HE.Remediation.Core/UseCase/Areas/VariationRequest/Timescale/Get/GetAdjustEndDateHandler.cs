@@ -10,16 +10,19 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
         private readonly IApplicationRepository _applicationRepository;
         private readonly IBuildingDetailsRepository _buildingDetailsRepository;
         private readonly IVariationRequestRepository _variationRequestRepository;
+        private readonly IWorkPackageRepository _workPackageRepository;
 
         public GetAdjustEndDateHandler(IApplicationDataProvider applicationDataProvider,
                                        IBuildingDetailsRepository buildingDetailsRepository,
                                        IApplicationRepository applicationRepository,
-                                       IVariationRequestRepository variationRequestRepository)
+                                       IVariationRequestRepository variationRequestRepository,
+                                       IWorkPackageRepository workPackageRepository)
         {
             _applicationDataProvider = applicationDataProvider;
             _buildingDetailsRepository = buildingDetailsRepository;
             _applicationRepository = applicationRepository;
             _variationRequestRepository = variationRequestRepository;
+            _workPackageRepository = workPackageRepository;
         }
 
         public async Task<GetAdjustEndDateResponse> Handle(GetAdjustEndDateRequest request, CancellationToken cancellationToken)
@@ -30,6 +33,7 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
             var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
             var adjustEndDateResult = await _variationRequestRepository.GetVariationAdjustEndDate();
+            var previousEndDate = await _workPackageRepository.GetLatestWorkPackageKeyDatesByApplication();
 
             var isSubmitted = await _variationRequestRepository.IsVariationRequestSubmitted();
 
@@ -39,6 +43,8 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
                 ApplicationReferenceNumber = applicationReferenceNumber,
                 NewEndMonth = adjustEndDateResult?.NewEndMonth,
                 NewEndYear = adjustEndDateResult?.NewEndYear,
+                PreviousEndMonth = previousEndDate?.ExpectedDateForCompletion?.Month,
+                PreviousEndYear = previousEndDate?.ExpectedDateForCompletion?.Year,
                 IsSubmitted = isSubmitted
             };
         }

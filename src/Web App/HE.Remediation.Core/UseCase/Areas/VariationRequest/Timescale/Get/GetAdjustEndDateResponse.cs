@@ -7,4 +7,7 @@ public class GetAdjustEndDateResponse
         public bool IsSubmitted { get; set; }
     public int? NewEndMonth { get; set; }
     public int? NewEndYear { get; set; }
+
+    public int? PreviousEndMonth { get; set; }
+    public int? PreviousEndYear { get; set; }
 }

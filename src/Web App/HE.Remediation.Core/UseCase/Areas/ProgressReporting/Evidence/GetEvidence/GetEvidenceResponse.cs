@@ -10,4 +10,5 @@ public class GetEvidenceResponse
     public string BuildingName { get; set; }
 
     public IReadOnlyCollection<FileResult> AddedFiles { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

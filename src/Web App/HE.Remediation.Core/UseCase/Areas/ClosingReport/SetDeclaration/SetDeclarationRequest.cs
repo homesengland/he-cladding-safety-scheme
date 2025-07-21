@@ -7,4 +7,7 @@ public class SetDeclarationRequest : IRequest
     public DateTime? DateOfCompletion { get; set; }
 
     public bool? FraewRiskToLifeReduced { get; set; }
+
+    public bool? GrantFundingObligations { get; set; }
+
 }

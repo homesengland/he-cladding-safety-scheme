@@ -15,12 +15,7 @@ public class SetSoughtQuotesHandler : IRequestHandler<SetSoughtQuotesRequest>
 
     public async Task<Unit> Handle(SetSoughtQuotesRequest request, CancellationToken cancellationToken)
     {
-        await UpdateQuotesSought(request);
-        return Unit.Value;
-    }
-
-    private async Task UpdateQuotesSought(SetSoughtQuotesRequest request)
-    {
         await _progressReportingRepository.UpdateQuotesSought(request.QuotesSought);
+        return Unit.Value;
     }
 }

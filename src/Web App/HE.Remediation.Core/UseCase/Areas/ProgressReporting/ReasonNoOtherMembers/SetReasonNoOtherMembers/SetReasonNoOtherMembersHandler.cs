@@ -1,5 +1,4 @@
-﻿
-using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNoOtherMembers.SetReasonNoOtherMembers;
@@ -15,12 +14,7 @@ public class SetReasonNoOtherMembersHandler : IRequestHandler<SetReasonNoOtherMe
 
     public async Task<Unit> Handle(SetReasonNoOtherMembersRequest request, CancellationToken cancellationToken)
     {
-        await UpdateOtherMembersNotAppointedReason(request);
-        return Unit.Value;
-    }
-
-    private async Task UpdateOtherMembersNotAppointedReason(SetReasonNoOtherMembersRequest request)
-    {
         await _progressReportingRepository.UpdateOtherMembersNotAppointedReason(request.OtherMembersNotAppointedReason, request.OtherMembersNeedsSupport);
+        return Unit.Value;
     }
 }

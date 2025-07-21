@@ -25,6 +25,12 @@ namespace HE.Remediation.Core.Services.Communication.Collaboration
                 case EEmailType.CollaborationOrganisationUserRemoval:
                     await SendRemovalEmail(emailRequest);
                     break;
+                case EEmailType.CollaborationThirdPartyInvite:
+                    await SendThirdPartyInviteEmail(emailRequest);
+                    break;
+                case EEmailType.CollaborationThirdPartyRemoveAccess:
+                    await SendThirdPartyRemoveAccessEmail(emailRequest);
+                    break;
             }
         }
 
@@ -53,6 +59,39 @@ namespace HE.Remediation.Core.Services.Communication.Collaboration
                 {
                     FirstName = emailRequest.Parameters["FirstName"],
                     OrganisationName = emailRequest.Parameters["OrganisationName"],
+                    AdminUserEmailAddress = emailRequest.Parameters["AdminUserEmailAddress"],
+                    RecipientEmail = emailRequest.EmailTo
+                }
+            });
+        }
+
+        private async Task SendThirdPartyInviteEmail(CollaborationEmailRequest emailRequest)
+        {
+            await _govNotifyService.SendEmailAsync(new GovNotifyEmailRequestModel<ThirdPartyInviteParameters>
+            {
+                TemplateId = _communicationConstants.GetEmailTypeTemplateId(emailRequest.EmailType),
+                EmailAddress = emailRequest.EmailTo,
+                Personalisation = new ThirdPartyInviteParameters()
+                {
+                    FirstName = emailRequest.Parameters["FirstName"],
+                    RequestorFullName = emailRequest.Parameters["RequestorFullName"],
+                    BuildingName = emailRequest.Parameters["BuildingName"],
+                    BuildingAddress = emailRequest.Parameters["BuildingAddress"],
+                    RecipientEmail = emailRequest.EmailTo
+                }
+            });
+        }
+
+        private async Task SendThirdPartyRemoveAccessEmail(CollaborationEmailRequest emailRequest)
+        {
+            await _govNotifyService.SendEmailAsync(new GovNotifyEmailRequestModel<ThirdPartyRemoveAccessParameters>
+            {
+                TemplateId = _communicationConstants.GetEmailTypeTemplateId(emailRequest.EmailType),
+                EmailAddress = emailRequest.EmailTo,
+                Personalisation = new ThirdPartyRemoveAccessParameters()
+                {
+                    FirstName = emailRequest.Parameters["FirstName"],
+                    BuildingName = emailRequest.Parameters["BuildingName"],
                     AdminUserEmailAddress = emailRequest.Parameters["AdminUserEmailAddress"],
                     RecipientEmail = emailRequest.EmailTo
                 }

@@ -38,7 +38,8 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await _scheduleOfWorksRepository.SubmitScheduleOfWorks();
+        var userId = _applicationDataProvider.GetUserId();
+        await _scheduleOfWorksRepository.SubmitScheduleOfWorks(userId);
 
         var applicationId = _applicationDataProvider.GetApplicationId();
         await _statusTransitionService.TransitionToStatus(EApplicationStatus.ScheduleOfWorksSubmitted, applicationIds: applicationId);

@@ -10,6 +10,7 @@ public class HasProjectPlanMilestonesViewModel
 
     public bool? HasProjectPlanMilestones { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
 }
