@@ -1,0 +1,173 @@
+﻿@model HE.Remediation.Core.Services.RazorRenderer.Models.CostScheduleViewModel
+
+@{
+    var domain = $"{Context.Request.Scheme}://{Context.Request.Host}";
+}
+<html>
+<head>
+    <link rel="stylesheet" href="@(domain)/govuk-frontend-3.9.1.min.css">
+</head>
+<body>
+    <h1 class="govuk-heading-xl">Your Current Cost Schedule</h1>
+
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" colspan="3"><h2>Total costs</h2></th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold govuk-!-padding-bottom-6">Eligible costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter  govuk-!-font-weight-bold govuk-!-padding-bottom-6">@Html.Raw(Model.OverallTotal > 0 ? $"&pound;{Model.OverallTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-padding-bottom-6">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold govuk-!-padding-bottom-6">Ineligible costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter  govuk-!-font-weight-bold govuk-!-padding-bottom-6">@Html.Raw(Model.IneligibleAmount > 0 ? $"&pound;{Model.IneligibleAmount:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-padding-bottom-6">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold govuk-!-padding-bottom-6">Total</td>
+                @{
+                    var totalAmount = (Model.OverallTotal) + (Model.IneligibleAmount ?? 0);
+                }
+                <td class="govuk-table__cell govuk-!-width-one-quarter  govuk-!-font-weight-bold govuk-!-padding-bottom-6"> @Html.Raw(totalAmount > 0 ? $"&pound;{totalAmount:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric govuk-!-padding-bottom-6">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <th class="govuk-table__header govuk-!-width-one-half">Works type</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter">Total Eligible Costs</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter">Description of Works</th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Removal of unsafe cladding</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-half">Removal of unsafe cladding system</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.UnsafeCladdingRemovalAmount > 0 ? $"&pound;{Model.UnsafeCladdingRemovalAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.UnsafeCladdingRemovalDescription</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter  govuk-!-font-weight-bold">@Html.Raw(Model.UnsafeCladdingTotal > 0 ? $"&pound;{Model.UnsafeCladdingTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Installation of new cladding to replace unsafe cladding</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">New cladding – including specification, insulation and other associated components to be installed</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.NewCladdingAmount > 0 ? $"&pound;{Model.NewCladdingAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.NewCladdingDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Any other eligible works to the external wall system recommended in the FRAEW/PAS9980 assessment</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.ExternalWorksAmount > 0 ? $"&pound;{Model.ExternalWorksAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.ExternalWorksDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Any internal mitigation works recommended in the FRAEW /PAS9980 assessment in lieu of cladding removal</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Html.Raw(Model.InternalWorksAmount > 0 ? $"&pound;{Model.InternalWorksAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.InternalWorksDescription</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter  govuk-!-font-weight-bold">@Html.Raw(Model.InstallationTotal > 0 ? $"&pound;{Model.InstallationTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Preliminaries, access costs, main contractor's overheads and profit </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Main contractor's preliminaries </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.MainContractorPreliminariesAmount > 0 ? $"&pound;{Model.MainContractorPreliminariesAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.MainContractorPreliminariesDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Access (e.g. scaffolding or mast climber) </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.AccessAmount > 0 ? $"&pound;{Model.AccessAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.AccessDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Main contractor's overheads and profit </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.MainContractorOverheadAmount > 0 ? $"&pound;{Model.MainContractorOverheadAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.MainContractorOverheadDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Contractor's contingencies </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.ContractorContingenciesAmount > 0 ? $"&pound;{Model.ContractorContingenciesAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.ContractorContingenciesDescription</td>
+            </tr>
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-weight-bold">Total</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter  govuk-!-font-weight-bold">@Html.Raw(Model.PreliminariesTotal > 0 ? $"&pound;{Model.PreliminariesTotal:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="govuk-table">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-font-size-24 govuk-!-font-weight-bold">Other costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric"></td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">FRAEW survey costs</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.FraewSurveyAmount > 0 ? $"&pound;{Model.FraewSurveyAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-table__cell--numeric">&nbsp;</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Professional fees - feasibility stage - e.g. statutory, planning, legal, building consent and other fees</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.FeasibilityStageAmount > 0 ? $"&pound;{Model.FeasibilityStageAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.FeasibilityStageDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Professional fees - post tender stage </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.PostTenderStageAmount > 0 ? $"&pound;{Model.PostTenderStageAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.PostTenderStageDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Property manager/leaseholder liaison costs </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.PropertyManagerAmount > 0 ? $"&pound;{Model.PropertyManagerAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.PropertyManagerDescription</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half">Irrecoverable VAT on works and associated fees</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter ">@Html.Raw(Model.IrrecoverableVatAmount > 0 ? $"&pound;{Model.IrrecoverableVatAmount.Value:N0}" : "-")</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter">@Model.IrrecoverableVatDescription</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</body>
+</html>

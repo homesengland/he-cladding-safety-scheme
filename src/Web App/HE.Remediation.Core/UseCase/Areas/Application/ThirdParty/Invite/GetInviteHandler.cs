@@ -3,19 +3,13 @@ using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;
 
-public class GetInviteHandler(IProgressReportingRepository progressReportingRepository) : IRequestHandler<GetInviteRequest, GetInviteResponse>
+public class GetInviteHandler(IThirdPartyCollaboratorRepository thirdPartyCollaboratorRepository) : IRequestHandler<GetInviteRequest, GetInviteResponse>
 {
-    private readonly IProgressReportingRepository _progressReportingRepository = progressReportingRepository;
+    private readonly IThirdPartyCollaboratorRepository _thirdPartyCollaboratorRepository = thirdPartyCollaboratorRepository;
 
     public async Task<GetInviteResponse> Handle(GetInviteRequest request, CancellationToken cancellationToken)
     {
-        var teamMember = await _progressReportingRepository.GetTeamMember(request.TeamMemberId);
-
-        return new GetInviteResponse
-        {
-            TeamMemberId = teamMember.TeamMemberId,
-            InvitedName = teamMember.Name,
-            InvitedEmailAddress = teamMember.EmailAddress
-        };
+        var result = await _thirdPartyCollaboratorRepository.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source);
+        return result;
     }
 }

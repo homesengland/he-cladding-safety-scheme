@@ -18,7 +18,7 @@ namespace HE.Remediation.WebApp.TagHelpers
 
             var sb = new StringBuilder();
             var description = ApplicationStatus.GetEnumDisplayName() ?? Enum.GetName(typeof(EApplicationStatus), ApplicationStatus)!.SplitCamelCase();
-            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", description, GetCssClass(ApplicationStatus));
+            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", description.Replace(" ", "&nbsp;"), GetCssClass(ApplicationStatus));
 
             output.PreContent.SetHtmlContent(sb.ToString());
         }

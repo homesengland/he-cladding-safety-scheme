@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -29,12 +30,20 @@ public class GetInformedLeaseholderHandler : IRequestHandler<GetInformedLeasehol
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
-        var leaseholdersInformed = await _progressReportingRepository.GetProgressReportLeaseholdersInformed();        
+        var leaseholdersInformed = await _progressReportingRepository.GetProgressReportLeaseholdersInformed();
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetInformedLeaseholderResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            LeaseholdersInformed = leaseholdersInformed
+            LeaseholdersInformed = leaseholdersInformed,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

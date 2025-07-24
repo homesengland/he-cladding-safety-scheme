@@ -10,4 +10,7 @@ public enum EEmailType
     ClosingReportSubmitted = 6,
     CollaborationOrganisationInvite = 7,
     CollaborationOrganisationUserRemoval = 8,
+    CollaborationThirdPartyInvite = 9,
+    CollaborationThirdPartyRemoveAccess = 10
+
 }

@@ -43,6 +43,13 @@ public class GetBuildingControlSubmissionHandler : IRequestHandler<GetBuildingCo
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
+            });
+
         return new GetBuildingControlSubmissionResponse
         {
             ApplicationReferenceNumber = reference,
@@ -52,7 +59,8 @@ public class GetBuildingControlSubmissionHandler : IRequestHandler<GetBuildingCo
             SubmissionDateMonth = submission.BuildingControlActualSubmissionDate?.Month,
             SubmissionDateYear = submission.BuildingControlActualSubmissionDate?.Year,
             SubmissionInformation = submission.BuildingControlActualSubmissionInformation,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }
@@ -78,4 +86,5 @@ public class GetBuildingControlSubmissionResponse
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

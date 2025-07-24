@@ -37,7 +37,7 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
         await _closingRequestRepository.UpdateClosingReportProjectDate(applicationId, request.DateOfCompletion);
-        await _closingRequestRepository.UpdateClosingReportFraewRiskToLifeReduced(applicationId, request.FraewRiskToLifeReduced);
+        await _closingRequestRepository.UpdateClosingReportDeclarations(applicationId, request.FraewRiskToLifeReduced, request.GrantFundingObligations);
         await _closingRequestRepository.UpdateClosingReportToSubmitted(applicationId);
 
         await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.ClosingReportSubmitted, applicationIds: applicationId);

@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -35,6 +36,13 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.Ge
 
             var result = await _progressReportingRepository.GetBuildingControlRequired();
 
+            var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+                new GetHasVisitedCheckYourAnswersParameters
+                {
+                    ApplicationId = applicationId,
+                    ProgressReportId = _applicationDataProvider.GetProgressReportId()
+                });
+
             return new GetBuildingControlRequiredResponse
             {
                 BuildingHasSafetyRegulatorRegistrationCode = buildingHasSafetyRegulatorRegistrationCode,
@@ -45,7 +53,8 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.Ge
                 ShowBuildingSafetyRegulatorRegistrationCode = showBuildingSafetyRegulatorRegistrationCode,
                 ApplicationReferenceNumber = applicationReferenceNumber,
                 Version = version,
-        };
+                HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
+            };
         }
     }
 
@@ -68,5 +77,6 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.Ge
         public bool ShowBuildingSafetyRegulatorRegistrationCode { get; set; }
         public string ApplicationReferenceNumber { get; set; }
         public int Version { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 }

@@ -10,6 +10,7 @@ public class WhenStartOnSiteViewModel
     public int? StartYear { get; set; }
     public bool? BuildingControlRequired { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }

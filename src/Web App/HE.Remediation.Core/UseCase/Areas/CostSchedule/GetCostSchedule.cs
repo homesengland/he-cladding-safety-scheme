@@ -67,7 +67,8 @@ public class GetCostScheduleHandler : IRequestHandler<GetCostScheduleRequest, Ge
             PropertyManagerAmount = costs.PropertyManagerAmount,
             PropertyManagerDescription = costs.PropertyManagerDescription,
             IrrecoverableVatAmount = costs.IrrecoverableVatAmount,
-            IrrecoverableVatDescription = costs.IrrecoverableVatDescription
+            IrrecoverableVatDescription = costs.IrrecoverableVatDescription,
+            IneligibleAmount = costs.IneligibleAmount
         };
     }
 }
@@ -115,5 +116,6 @@ public class GetCostScheduleResponse
     public string PropertyManagerDescription { get; set; }
     public decimal? IrrecoverableVatAmount { get; set; }
     public string IrrecoverableVatDescription { get; set; }
+    public decimal? IneligibleAmount { get; set; }
 
 }

@@ -15,12 +15,7 @@ public class DeleteTeamMemberHandler : IRequestHandler<DeleteTeamMemberRequest>
 
     public async Task<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
     {
-        await DeleteTeamMember(request);
-        return Unit.Value;
-    }
-
-    private async Task DeleteTeamMember(DeleteTeamMemberRequest request)
-    {
         await _progressReportingRepository.DeleteProgressReportTeamMember(request.TeamMemberId);
+        return Unit.Value;
     }
 }

@@ -18,7 +18,7 @@ public interface IScheduleOfWorksRepository
 
     Task ResetScheduleOfWorks();
 
-    Task SubmitScheduleOfWorks();
+    Task SubmitScheduleOfWorks(Guid? userId);
 
     Task<IReadOnlyCollection<FileResult>> GetContracts();
     Task<IReadOnlyCollection<FileResult>> GetScheduleOfWorksBuildingControlFiles(Guid applicationId);

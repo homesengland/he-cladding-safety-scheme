@@ -12,6 +12,7 @@ namespace HE.Remediation.WebApp.ViewModels.ProgressReporting
         public bool? WorksPermissionApplied { get; set; }
         public EYesNoNonBoolean? WorksPermissionRequired { get; set; }
         public string ApplicationReferenceNumber { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
         public int Version { get; set; }
         public ESubmitAction SubmitAction { get; set; }
     }

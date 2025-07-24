@@ -6,6 +6,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.FinalCheckYourAnsw
 public class GetFinalCheckYourAnswersResponse
 {
     public bool? LeaseholdersInformed { get; set; } 
+    public string LeaseholdersInformedEvidenceFiles { get; set; }
 
     public bool? LeadDesignerAppointed { get; set; }
 

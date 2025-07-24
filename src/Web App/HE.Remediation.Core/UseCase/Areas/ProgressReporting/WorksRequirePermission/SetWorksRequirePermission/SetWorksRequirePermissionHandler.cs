@@ -15,12 +15,7 @@ public class SetWorksRequirePermissionHandler : IRequestHandler<SetWorksRequireP
 
     public async Task<Unit> Handle(SetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
     {
-        await UpdateRequirePlanningPermission(request);
-        return Unit.Value;
-    }
-
-    private async Task UpdateRequirePlanningPermission(SetWorksRequirePermissionRequest request)
-    {
         await _progressReportingRepository.UpdateRequirePlanningPermission(request.PermissionRequired);
+        return Unit.Value;
     }
 }

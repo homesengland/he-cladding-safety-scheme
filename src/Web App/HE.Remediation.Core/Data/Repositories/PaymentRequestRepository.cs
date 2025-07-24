@@ -267,6 +267,15 @@ public class PaymentRequestRepository : IPaymentRequestRepository
         });
     }
 
+    public async Task<bool> IsItALastScheduledPayment(Guid applicationId, Guid paymentRequestId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<bool>(nameof(IsItALastScheduledPayment), new
+        {
+            ApplicationId = applicationId,
+            PaymentRequestId = paymentRequestId
+        });
+    }
+
     public async Task<bool> HasSubmittedPaymentRequests()
     {
         if (!TryGetApplicationId(out var applicationId))
@@ -280,11 +289,12 @@ public class PaymentRequestRepository : IPaymentRequestRepository
         });
     }
 
-    public async Task SubmitPaymentRequest(Guid paymentRequestId)
+    public async Task SubmitPaymentRequest(Guid paymentRequestId, Guid? userId)
     {
         await _connection.ExecuteAsync("SubmitPaymentRequest", new
         {            
-            PaymentRequestId = paymentRequestId
+            PaymentRequestId = paymentRequestId,
+            UserId = userId
         });
     }
 

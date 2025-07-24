@@ -3,7 +3,6 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress;
-using System.Transactions;
 using HE.Remediation.Core.Enums;
 using static HE.Remediation.Core.Data.StoredProcedureResults.GetProgressReportResult;
 
@@ -14,8 +13,9 @@ public class ProgressReportingRepository : IProgressReportingRepository
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
 
-    public ProgressReportingRepository(IDbConnectionWrapper connection,
-                                       IApplicationDataProvider applicationDataProvider)
+    public ProgressReportingRepository(
+        IDbConnectionWrapper connection,
+        IApplicationDataProvider applicationDataProvider)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
@@ -72,7 +72,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
         });
     }
 
-
     public async Task<LatestProgressReportResult> GetLatestProgressReport(Guid? applicationId = null)
     {
         if (!TryGetApplicationId(out var appId) && !applicationId.HasValue)
@@ -113,7 +112,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             ProgressReportId = progressReportId
         });
     }
-
 
     public async Task UpdateTeamMember(TeamMemberDetails teamMemberDetails)
     {
@@ -170,16 +168,12 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportLeaseholdersInformed", new
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
             LeaseholdersInformed = leaseholdersInformed
         });
-
-        scope.Complete();
     }
 
     public async Task<bool?> GetProgressReportOtherMembersAppointed()
@@ -203,15 +197,11 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("ResetProgressReport", new
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId
         });
-
-        scope.Complete();
     }
 
     public async Task<int> GetProgressReportVersion()
@@ -272,16 +262,12 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportOtherMembersAppointed", new
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
             OtherMembersAppointed = otherMembersAppointed
         });
-
-        scope.Complete();
     }
 
     public async Task<ProgressReportOtherMembersNotAppointedReasonResult> GetProgressReportOtherMembersNotAppointedReason()
@@ -305,8 +291,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportOtherMembersNotAppointedReason", new
         {
             ApplicationId = applicationId,
@@ -314,8 +298,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             OtherMembersNotAppointedReason = otherMembersNotAppointedReason,
             OtherMembersNeedsSupport = otherMembersNeedsSupport
         });
-
-        scope.Complete();
     }
 
     public async Task<string> GetProgressReportTeamMemberName(Guid teamMemberId)
@@ -338,14 +320,12 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("DeleteTeamMember", new
         {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId,
             TeamMemberId = teamMemberId
         });
-
-        scope.Complete();
     }
 
     public async Task<bool?> GetProgressReportQuotesSought()
@@ -369,16 +349,12 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportQuotesSought", new
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
             QuotesSought = quotesSought
         });
-
-        scope.Complete();
     }
 
     public async Task<ProgressReportQuotesNotSoughtReasonResult> GetProgressReportQuotesNotSoughtReason()
@@ -402,8 +378,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportUpdateQuotesNotSoughtReason", new
         {
             ApplicationId = applicationId,
@@ -412,8 +386,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             QuotesNotSoughtReason = quotesNotSoughtReason,
             QuotesNeedsSupport = quotesNeedsSupport
         });
-
-        scope.Complete();
     }
 
     public async Task<GetTeamMemberResult> GetTeamMember(Guid? teamMemberId)
@@ -465,8 +437,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportRequirePlanningPermission", new
         {
             ApplicationId = applicationId,
@@ -474,7 +444,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             RequirePlanningPermission = planningPermissionRequired
         });
 
-        scope.Complete();
     }
 
     public async Task<bool?> GetProgressReportAppliedForPlanningPermission()
@@ -498,8 +467,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportAppliedForPlanningPermission", new
         {
             ApplicationId = applicationId,
@@ -507,7 +474,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             AppliedForPlanningPermission = appliedForPlanningPermission
         });
 
-        scope.Complete();
     }
 
     public async Task<ProgressReportPlanningPermissionNotAppliedReasonResult> GetProgressReportPlanningPermissionNotAppliedReason()
@@ -531,8 +497,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportPlanningPermissionNotAppliedReason", new
         {
             ApplicationId = applicationId,
@@ -541,7 +505,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             PlanningPermissionNeedsSupport = planningPermissionNeedsSupport
         });
 
-        scope.Complete();
     }
 
     public async Task<List<GetTeamMembersResult>> GetTeamMembers()
@@ -595,8 +558,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportExpectedWorksPackageSubmissionDate", new
         {
             ApplicationId = applicationId,
@@ -604,7 +565,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             ExpectedWorksPackageSubmissionDate = submissionDate
         });
 
-        scope.Complete();
     }
 
     public async Task UpdateProgressReportExpectedStartDateOnSite(DateTime? expectedStartDateOnSite)
@@ -614,8 +574,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportExpectedStartDateOnSite", new
         {
             ApplicationId = applicationId,
@@ -623,7 +581,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             ExpectedStartDateOnSite = expectedStartDateOnSite
         });
 
-        scope.Complete();
     }
 
     public async Task<DateTime?> GetProgressReportPlanningPermissionPlannedSubmitDate()
@@ -647,8 +604,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportPlanningPermissionPlannedSubmitDate", new
         {
             ApplicationId = applicationId,
@@ -656,7 +611,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             PlanningPermissionPlannedSubmitDate = planningPermissionPlannedSubmitDate
         });
 
-        scope.Complete();
     }
 
     public async Task<ProgressReportPlanningPermissionDetailsResult> GetProgressReportPlanningPermissionDetails()
@@ -680,8 +634,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportPlanningPermissionDetails", new
         {
             ApplicationId = applicationId,
@@ -690,7 +642,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             PlanningPermissionApprovedDate = planningPermissionApprovedDate
         });
 
-        scope.Complete();
     }
 
     public async Task<bool> GetProgressReportShowBuildingSafetyRegulatorRegistrationCode()
@@ -728,8 +679,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportingBuildingHasSafetyRegulatorRegistrationCode", new
         {
             ApplicationId = applicationId,
@@ -737,7 +686,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             BuildingHasSafetyRegulatorRegistrationCode = buildingHasSafetyRegulatorRegistrationCode
         });
 
-        scope.Complete();
     }
 
     public async Task<string> GetProgressReportBuildingSafetyRegulatorRegistrationCode()
@@ -761,8 +709,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportingBuildingSafetyRegulatorRegistrationCode", new
         {
             ApplicationId = applicationId,
@@ -770,7 +716,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             BuildingSafetyRegulatorRegistrationCode = buildingSafetyRegulatorRegistrationCode
         });
 
-        scope.Complete();
     }
 
     public async Task<string> GetProgressReportSupportNeededReason()
@@ -850,8 +795,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportSupportNeededReason", new
         {
             ApplicationId = applicationId,
@@ -859,7 +802,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             SupportNeededReason = supportNeededReason
         });
 
-        scope.Complete();
     }
 
     public async Task<DateTime?> GetProgressReportDateSubmitted()
@@ -878,7 +820,7 @@ public class ProgressReportingRepository : IProgressReportingRepository
         return submittedDate;
     }
 
-    public async Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted)
+    public async Task UpdateProgressReportDateSubmitted(DateTime? dateSubmitted, Guid? userId)
     {
         if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
         {
@@ -889,7 +831,8 @@ public class ProgressReportingRepository : IProgressReportingRepository
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
-            DateSubmitted = dateSubmitted
+            DateSubmitted = dateSubmitted,
+            UserId = userId
         });
     }
 
@@ -940,8 +883,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportLeaseholdersInformedFile", new
         {
             ApplicationId = applicationId,
@@ -949,7 +890,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             LeaseholdersInformedFileId = fileId
         });
 
-        scope.Complete();
     }
 
     public async Task<IReadOnlyCollection<ProgressReportResult>> GetProgressReports()
@@ -1079,8 +1019,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportLeaseholdersInformedLastDate", new
         {
             ApplicationId = applicationId,
@@ -1088,7 +1026,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             LeaseholdersInformedLastDate = leaseholdersInformedLastDate
         });
 
-        scope.Complete();
     }
 
     public async Task<GetProgressReportProgressSummaryResult> GetProgressReportProgressSummary()
@@ -1125,8 +1062,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             return;
         }
 
-        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
         await _connection.ExecuteAsync("UpdateProgressReportSummariseProgress", new
         {
             ApplicationId = applicationId,
@@ -1135,7 +1070,6 @@ public class ProgressReportingRepository : IProgressReportingRepository
             RequiresSupport = request.IsSupportNeeded
         });
 
-        scope.Complete();
     }
 
     public async Task<GetProgressReportSupportResult> GetProgressReportSupport()
@@ -1534,5 +1468,16 @@ public class ProgressReportingRepository : IProgressReportingRepository
     public async Task UpdateHasAppliedForBuildingControl(UpdateHasAppliedForBuildingControlParameters parameters)
     {
         await _connection.ExecuteAsync(nameof(UpdateHasAppliedForBuildingControl), parameters);
+    }
+
+    public async Task<bool> GetHasVisitedCheckYourAnswers(GetHasVisitedCheckYourAnswersParameters parameters)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<bool>(nameof(GetHasVisitedCheckYourAnswers), parameters);
+        return result;
+    }
+
+    public async Task SetHasVisitedCheckYourAnswers(SetHasVisitedCheckYourAnswersParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(SetHasVisitedCheckYourAnswers), parameters);
     }
 }

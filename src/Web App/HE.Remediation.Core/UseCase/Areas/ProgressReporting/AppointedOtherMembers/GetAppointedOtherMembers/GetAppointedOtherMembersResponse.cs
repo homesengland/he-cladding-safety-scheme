@@ -10,4 +10,5 @@ public class GetAppointedOtherMembersResponse
     public bool? LeaseholdersInformed { get; set; }
 
     public bool? OtherMembersAppointed { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

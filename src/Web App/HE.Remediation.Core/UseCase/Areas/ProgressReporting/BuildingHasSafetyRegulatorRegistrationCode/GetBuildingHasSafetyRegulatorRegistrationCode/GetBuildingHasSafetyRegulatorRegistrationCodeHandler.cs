@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -39,6 +40,13 @@ public class GetBuildingHasSafetyRegulatorRegistrationCodeHandler : IRequestHand
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetBuildingHasSafetyRegulatorRegistrationCodeResponse
         {
             BuildingName = buildingName,
@@ -46,7 +54,8 @@ public class GetBuildingHasSafetyRegulatorRegistrationCodeHandler : IRequestHand
             WorksPermissionApplied = worksPermissionApplied,
             WorksPermissionRequired = worksPermissionRequired,
             BuildingHasSafetyRegulatorRegistrationCode = progressReportBuildingHasSafetyRegulatorRegistrationCode,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

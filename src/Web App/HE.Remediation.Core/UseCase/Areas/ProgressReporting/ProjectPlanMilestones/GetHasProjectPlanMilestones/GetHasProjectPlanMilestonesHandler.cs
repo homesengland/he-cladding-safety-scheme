@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilestones;
 using MediatR;
@@ -39,12 +40,20 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilesto
 
             var version = await _progressReportingRepository.GetProgressReportVersion();
 
+            var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+                new GetHasVisitedCheckYourAnswersParameters
+                {
+                    ApplicationId = applicationId,
+                    ProgressReportId = _applicationDataProvider.GetProgressReportId()
+                });
+
             return new GetHasProjectPlanMilestonesResponse
             {
                 BuildingName = buildingName,
                 ApplicationReferenceNumber = applicationReferenceNumber,
                 HasProjectPlanMilestones = hasProjectPlanMilestones,
-                Version = version
+                Version = version,
+                HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
             };
         }
     }

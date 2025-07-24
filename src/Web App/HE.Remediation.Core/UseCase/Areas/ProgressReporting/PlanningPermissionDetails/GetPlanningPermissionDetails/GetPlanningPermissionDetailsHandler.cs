@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -34,6 +35,13 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermission
 
             var version = await _progressReportingRepository.GetProgressReportVersion();
 
+            var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+                new GetHasVisitedCheckYourAnswersParameters
+                {
+                    ApplicationId = applicationId,
+                    ProgressReportId = _applicationDataProvider.GetProgressReportId()
+                });
+
             return new GetPlanningPermissionDetailsResponse
             {
                 BuildingName = buildingName,
@@ -43,7 +51,8 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermission
                 PlanningPermissionSubmittedYear = progressReportPlanningPermissionDetails.PlanningPermissionSubmittedDate?.Year,
                 PlanningPermissionApprovedMonth = progressReportPlanningPermissionDetails.PlanningPermissionApprovedDate?.Month,
                 PlanningPermissionApprovedYear = progressReportPlanningPermissionDetails.PlanningPermissionApprovedDate?.Year,
-                Version = version
+                Version = version,
+                HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
             };
         }
     }

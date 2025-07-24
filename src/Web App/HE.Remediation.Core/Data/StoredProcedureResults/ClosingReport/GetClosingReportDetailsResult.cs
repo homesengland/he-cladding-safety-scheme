@@ -18,5 +18,7 @@ public class GetClosingReportDetailsResult
 
     public bool? FraewRiskToLifeReduced { get; set; }
 
+    public bool? GrantFundingObligations { get; set; }
+
     public bool IsSubmitted { get; set; }
 }

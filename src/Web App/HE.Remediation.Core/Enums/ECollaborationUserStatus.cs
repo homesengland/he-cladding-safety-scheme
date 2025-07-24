@@ -13,6 +13,7 @@ namespace HE.Remediation.Core.Enums
         [Display(Name = "Rejected")]
         Rejected = 3,
         [Display(Name = "Removed")]
-        Removed = 4
+        Removed = 4,
+        ThirdPartyUser = 5
     }
 }

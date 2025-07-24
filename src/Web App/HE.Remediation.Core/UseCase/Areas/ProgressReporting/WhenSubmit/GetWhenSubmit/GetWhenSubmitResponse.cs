@@ -9,4 +9,5 @@ public class GetWhenSubmitResponse
 	public int? SubmissionMonth { get; set; }
     public int? SubmissionYear { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

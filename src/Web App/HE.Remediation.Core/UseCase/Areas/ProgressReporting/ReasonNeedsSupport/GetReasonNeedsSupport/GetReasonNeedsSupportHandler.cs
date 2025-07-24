@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -35,6 +36,14 @@ public class GetReasonNeedsSupportHandler : IRequestHandler<GetReasonNeedsSuppor
         var quotesNeedsSupport = await _progressReportingRepository.GetProgressReportQuotesNeedsSupport();
 
         var supportNeededReason = await _progressReportingRepository.GetProgressReportSupportNeededReason();
+
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetReasonNeedsSupportResponse
         {
             BuildingName = buildingName,
@@ -43,7 +52,8 @@ public class GetReasonNeedsSupportHandler : IRequestHandler<GetReasonNeedsSuppor
             OtherMembersNeedsSupport = otherMembersNeedsSupport,
             PlanningPermissionNeedsSupport = planningPermissionNeedsSupport,
             QuotesNeedsSupport = quotesNeedsSupport,
-            SupportNeededReason = supportNeededReason
+            SupportNeededReason = supportNeededReason,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -32,11 +33,18 @@ public class GetEvidenceHandler : IRequestHandler<GetEvidenceRequest, GetEvidenc
 
         var files = await _progressReportingRepository.GetProgressReportLeaseholdersInformedFiles();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(new GetHasVisitedCheckYourAnswersParameters
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = _applicationDataProvider.GetProgressReportId()
+        });
+
         var response = new GetEvidenceResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            AddedFiles = files
+            AddedFiles = files,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
 
         return response;

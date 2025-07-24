@@ -11,7 +11,7 @@ public class ReasonNoOtherMembersViewModel
     public string OtherMembersNotAppointedReason { get; set; }
 
     public bool? OtherMembersNeedsSupport { get; set; }
-
+    public bool HasVisitedCheckYourAnswers { get; set; }
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
 }

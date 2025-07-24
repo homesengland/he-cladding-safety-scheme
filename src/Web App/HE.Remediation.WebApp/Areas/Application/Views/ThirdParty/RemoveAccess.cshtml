@@ -26,6 +26,7 @@
     </div>
 	<input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
 	<input asp-for="InvitedName" type="hidden" value="@Model.InvitedName" />
+    <input asp-for="Source" type="hidden" value="@Model.Source" />
     <govuk-button class="govuk-button govuk-button--warning" name="SubmitAction" value="@ESubmitAction.Continue">Remove access</govuk-button>
     <div>
         <a class="govuk-link" href="@Url.Action("Index", "ThirdParty")">Cancel and exit</a>

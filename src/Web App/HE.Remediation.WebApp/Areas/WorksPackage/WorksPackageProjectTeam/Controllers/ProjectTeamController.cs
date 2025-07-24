@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.CheckYourAnswers;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.ProjectTeam.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.RegulatoryCompliance;

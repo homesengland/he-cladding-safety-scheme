@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -32,6 +33,12 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SecondaryCheckYour
             var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
             var checkMyAnswersResult = await _progressReportingRepository.GetProgressReportSecondaryCheckMyAnswers();
+
+            await _progressReportingRepository.SetHasVisitedCheckYourAnswers(new SetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
 
             var response = new GetCheckYourAnswersResponse
             {

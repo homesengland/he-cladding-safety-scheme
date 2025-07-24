@@ -6,4 +6,6 @@ public class AdjustEndDateViewModel : VariationRequestBaseViewModel
 {
     public int? NewEndMonth { get; set; }
     public int? NewEndYear { get; set; }
+    public int? PreviousEndMonth { get; set; }
+    public int? PreviousEndYear { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -36,6 +37,12 @@ public class GetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<GetWhoIs
         var teamMembers = await _progressReportingRepository.GetProjectManagersAndQuantitySurveyors();
         var version = await _progressReportingRepository.GetProgressReportVersion();
         var isGcoComplete = await _progressReportingRepository.IsGrantCertifyingOfficerComplete();
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
 
         return new GetWhoIsTheGrantCertifyingOfficerResponse
         {
@@ -44,6 +51,7 @@ public class GetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<GetWhoIs
             ProjectTeamMemberId = teamMemberId,
             Version = version,
             IsGcoComplete = isGcoComplete,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers,
             TeamMembers = teamMembers.Select(x => new GetWhoIsTheGrantCertifyingOfficerResponse.TeamMemberResponse
             {
                 Id = x.Id,
@@ -71,6 +79,7 @@ public class GetWhoIsTheGrantCertifyingOfficerResponse
     public IList<TeamMemberResponse> TeamMembers { get; set; }
     public int Version { get; set; }
     public bool IsGcoComplete { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public class TeamMemberResponse
     {

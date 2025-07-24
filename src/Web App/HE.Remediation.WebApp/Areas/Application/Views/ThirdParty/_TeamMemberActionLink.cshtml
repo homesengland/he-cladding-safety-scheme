@@ -1,0 +1,37 @@
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.ThirdPartyViewModel.TeamMember
+
+@functions {
+
+	private string GetActionName()
+	{
+		return Model.InviteStatus switch
+		{
+			ECollaborationUserStatus.Accepted => "RemoveAccess",
+			_ => "InviteContributor"
+		};
+	}
+
+	private string GetLinkText()
+	{
+		return Model.InviteStatus switch
+		{
+			ECollaborationUserStatus.Invited => "Invited",
+			ECollaborationUserStatus.Accepted => "Remove access",
+			ECollaborationUserStatus.Rejected => "Re-Invite",
+			ECollaborationUserStatus.Removed => "Re-Invite",
+			_ => "Invite"
+		};
+	}
+}
+
+@if (Model.InviteStatus != ECollaborationUserStatus.Invited)
+{
+	<a class="govuk-link" href="@Url.Action(GetActionName(), "ThirdParty", new { Area = "Application", teamMemberId = Model.Id, source = (int)Model.Source })">
+		@GetLinkText()
+	</a>
+}
+else
+{
+	@GetLinkText()
+}

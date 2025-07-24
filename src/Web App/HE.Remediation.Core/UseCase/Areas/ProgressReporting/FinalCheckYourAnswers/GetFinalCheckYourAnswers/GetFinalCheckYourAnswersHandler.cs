@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -36,11 +37,18 @@ public class GetFinalCheckYourAnswersHandler : IRequestHandler<GetFinalCheckYour
 
         var gco = await _progressReportingRepository.GetGrantCerifyingOfficerAnswers();
 
+        await _progressReportingRepository.SetHasVisitedCheckYourAnswers(new SetHasVisitedCheckYourAnswersParameters
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = _applicationDataProvider.GetProgressReportId()
+        });
+
         return new GetFinalCheckYourAnswersResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             LeaseholdersInformed = checkMyAnswersResult?.LeaseholdersInformed,
+            LeaseholdersInformedEvidenceFiles = HtmlFormatLeaseholderInformedEvidenceFiles(checkMyAnswersResult?.LeaseholdersInformedEvidenceFiles),
             LeadDesignerAppointed = checkMyAnswersResult?.LeadDesignerAppointed,
             OtherMembersAppointed = checkMyAnswersResult?.OtherMembersAppointed,
             QuotesSought = checkMyAnswersResult?.QuotesSought,
@@ -92,5 +100,12 @@ public class GetFinalCheckYourAnswersHandler : IRequestHandler<GetFinalCheckYour
             SignatoryEmailAddress = gco?.SignatoryEmailAddress,
             DateAppointed = gco?.DateAppointed
         };
+    }
+
+    public string HtmlFormatLeaseholderInformedEvidenceFiles(string leaseholderEvidenceFiles)
+    {
+        return !string.IsNullOrWhiteSpace(leaseholderEvidenceFiles)
+            ? $"<ul>{string.Join("", leaseholderEvidenceFiles.Split("/").Select(x => $"<li>{x}</li>"))}</ul>"
+            : null;
     }
 }

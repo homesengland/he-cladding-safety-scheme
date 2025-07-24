@@ -20,10 +20,10 @@ public class GetAppliedForPlanningPermissionTests : TestBase
 
     public GetAppliedForPlanningPermissionTests()
     {
-        _applicationDataProvider = new Mock<IApplicationDataProvider>(MockBehavior.Strict);
-        _applicationRepository = new Mock<IApplicationRepository>(MockBehavior.Strict);
-        _buildingDetailsRepository = new Mock<IBuildingDetailsRepository>(MockBehavior.Strict);
-        _progressReportingRepository = new Mock<IProgressReportingRepository>(MockBehavior.Strict);
+        _applicationDataProvider = new Mock<IApplicationDataProvider>();
+        _applicationRepository = new Mock<IApplicationRepository>();
+        _buildingDetailsRepository = new Mock<IBuildingDetailsRepository>();
+        _progressReportingRepository = new Mock<IProgressReportingRepository>();
 
         _handler = new GetAppliedForPlanningPermissionHandler(
             _applicationDataProvider.Object,

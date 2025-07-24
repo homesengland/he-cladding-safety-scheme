@@ -1,20 +1,26 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
 public class ProjectTeamContinueHandler : IRequestHandler<ProjectTeamContinueRequest, ProjectTeamContinueResponse>
 {
+    private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IProgressReportingRepository _progressReportingRepository;
 
-    public ProjectTeamContinueHandler(IProgressReportingRepository progressReportingRepository)
+    public ProjectTeamContinueHandler(
+        IApplicationDataProvider applicationDataProvider, 
+        IProgressReportingRepository progressReportingRepository)
     {
+        _applicationDataProvider = applicationDataProvider;
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<ProjectTeamContinueResponse> Handle(ProjectTeamContinueRequest request, CancellationToken cancellationToken)
+    public async Task<ProjectTeamContinueResponse> Handle(ProjectTeamContinueRequest request,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -23,9 +29,23 @@ public class ProjectTeamContinueHandler : IRequestHandler<ProjectTeamContinueReq
         var hasCertifyingOfficerRoles = teamMembers.Any(x => x.RoleId == (int)ETeamRole.ProjectManager) &&
                                         teamMembers.Any(x => x.RoleId == (int)ETeamRole.QuantitySurveyor);
 
+        var isGcoComplete = await _progressReportingRepository.IsGrantCertifyingOfficerComplete();
+
+        var hasVisitedCheckYourAnswers =
+            await _progressReportingRepository.GetHasVisitedCheckYourAnswers(new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = _applicationDataProvider.GetApplicationId(),
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
+        var version = await _progressReportingRepository.GetProgressReportVersion();
+
         return new ProjectTeamContinueResponse
         {
-            HasCertifyingOfficerRoles = hasCertifyingOfficerRoles
+            HasCertifyingOfficerRoles = hasCertifyingOfficerRoles,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers,
+            IsGcoComplete = isGcoComplete,
+            Version = version
         };
     }
 }
@@ -42,4 +62,7 @@ public class ProjectTeamContinueRequest : IRequest<ProjectTeamContinueResponse>
 public class ProjectTeamContinueResponse
 {
     public bool HasCertifyingOfficerRoles { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
+    public bool IsGcoComplete { get; set; }
+    public int Version { get; set; }
 }

@@ -26,7 +26,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.OrganisationD
             }
             catch (SqlException ex) when (ex.Message.Contains("UK_CollaborationOrganisation_RegistrationNumber"))
             {
-                throw new DuplicateRegistrationNumberException("Registration Number already exists");
+                throw new DuplicateRegistrationNumberException("Registration number already exists");
             }
             
         }

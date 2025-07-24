@@ -144,10 +144,20 @@ namespace HE.Remediation.WebApp.Areas.OrganisationManagement.Controllers
                 ModelState.AddModelError(nameof(viewModel.Email), "User with given email already exists");
                 return View(viewModel);
             }
+            catch (OrganisationAssociationException)
+            {
+                ModelState.AddModelError(nameof(viewModel.Email), "This e-mail address is already associated with an organisation and cannot be invited");
+                return View(viewModel);
+            }
             catch (InvalidAdminOrganisationException)
             {
                 return RedirectToAction("Index", "Dashboard", new { Area = "Application" });
             } 
+            catch(MinimumAdminsException)
+            {
+                ModelState.AddModelError(nameof(viewModel.ApplicationRole), "You have reached the minimum number of administrators for the organisation");
+                return View(viewModel);
+            }
             catch(MaximumAdminsException)
             {
                 ModelState.AddModelError(nameof(viewModel.ApplicationRole), "You have reached the maximum number of administrators for the organisation");

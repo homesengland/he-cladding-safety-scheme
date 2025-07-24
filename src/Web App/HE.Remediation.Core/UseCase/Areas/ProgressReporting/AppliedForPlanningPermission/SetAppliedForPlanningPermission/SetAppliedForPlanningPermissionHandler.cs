@@ -15,12 +15,7 @@ public class SetAppliedForPlanningPermissionHandler : IRequestHandler<SetApplied
 
     public async Task<Unit> Handle(SetAppliedForPlanningPermissionRequest request, CancellationToken cancellationToken)
     {
-        await UpdateAppliedForPlanningPermission(request);
-        return Unit.Value;
-    }
-
-    private async Task UpdateAppliedForPlanningPermission(SetAppliedForPlanningPermissionRequest request)
-    {
         await _progressReportingRepository.UpdateAppliedForPlanningPermission(request.AppliedForPlanningPermission);
+        return Unit.Value;
     }
 }

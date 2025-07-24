@@ -16,27 +16,39 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
 
         public async Task<UpsertMemberResponse> Handle(UpsertMemberRequest request, CancellationToken cancellationToken)
         {
-            if(request.CollaborationUserId.HasValue)
+            if (request.CollaborationUserId.HasValue)
             {
                 return await UpdateCollaborationUser(request);
-            } 
+            }
             else
             {
                 return await InsertProvisionalCollaborationUser(request);
-            } 
+            }
         }
 
         private async Task<UpsertMemberResponse> UpdateCollaborationUser(UpsertMemberRequest request)
         {
-            await _connection.ExecuteAsync("UpdateCollaborationUser", new
+            try
             {
-                CollaborationUserId = request.CollaborationUserId!.Value,
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                ApplicationRoleId = (int)request.ApplicationRole,
-                UserStatusId = (int)request.UserStatus.GetValueOrDefault()
-            });
+                await _connection.ExecuteAsync("UpdateCollaborationUser", new
+                {
+                    CollaborationUserId = request.CollaborationUserId!.Value,
+                    request.FirstName,
+                    request.LastName,
+                    request.Email,
+                    ApplicationRoleId = (int)request.ApplicationRole,
+                    UserStatusId = (int)request.UserStatus.GetValueOrDefault(),
+                    request.OrganisationId
+                });
+            }
+            catch (SqlException ex) when (ex.Message.Contains("Min number of admins exceeded"))
+            {
+                throw new MinimumAdminsException();
+            }
+            catch (SqlException ex) when (ex.Message.Contains("Max number of admins exceeded"))
+            {
+                throw new MaximumAdminsException();
+            }
 
             return new UpsertMemberResponse() { CollaborationUserId = request.CollaborationUserId.Value };
         }
@@ -65,9 +77,17 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
             {
                 throw new UserEmailExistsException();
             }
+            catch (SqlException ex) when (ex.Message.Contains("Min number of admins exceeded"))
+            {
+                throw new MinimumAdminsException();
+            }
             catch (SqlException ex) when (ex.Message.Contains("Max number of admins exceeded"))
             {
                 throw new MaximumAdminsException();
+            }
+            catch (SqlException ex) when (ex.Message.Contains("Already associated with an organisation"))
+            {
+                throw new OrganisationAssociationException();
             }
         }
     }
@@ -93,4 +113,6 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
     public class InvalidAdminOrganisationException() : ApplicationException() { };
     public class UserEmailExistsException() : ApplicationException() { };
     public class MaximumAdminsException() : ApplicationException() { };
+    public class MinimumAdminsException() : ApplicationException() { };
+    public class OrganisationAssociationException() : ApplicationException() { };
 }

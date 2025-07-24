@@ -40,10 +40,11 @@ public class SetFinalCheckYourAnswersHandler : IRequestHandler<SetFinalCheckYour
     public async Task<Unit> Handle(SetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
-        
+        var userId = _applicationDataProvider.GetUserId();
+
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             
-        await _progressReportingRepository.UpdateProgressReportDateSubmitted(_dateTimeProvider.UtcNow);
+        await _progressReportingRepository.UpdateProgressReportDateSubmitted(_dateTimeProvider.UtcNow, userId);
 
         await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PrimaryReportSubmitted, applicationIds: applicationId);
 

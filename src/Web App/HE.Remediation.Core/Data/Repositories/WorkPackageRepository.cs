@@ -23,6 +23,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Services.StatusTransition;
 using UpsertTeamMemberParameters = HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam.UpsertTeamMemberParameters;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -39,6 +40,35 @@ public class WorkPackageRepository : IWorkPackageRepository
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
         _statusTransitionService = statusTransitionService;
+    }
+
+    public async Task<bool?> GetWorkPackageConfirmToProceed()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<bool?>(
+            "GetWorkPackageConfirmToProceed", new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task UpdateWorkPackageConfirmToProceed(bool? isConfirmedToProceed)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            throw new InvalidOperationException("Unable to retrieve ApplicationId.");
+        }
+
+        await _connection.ExecuteAsync(
+            "UpdateWorkPackageConfirmToProceed", new
+            {
+                ApplicationId = applicationId,
+                IsConfirmedToProceed = isConfirmedToProceed
+            });
     }
 
     public async Task<WorkPackageTaskListSummaryResult> GetWorkPackageTaskListSummary()
@@ -68,7 +98,7 @@ public class WorkPackageRepository : IWorkPackageRepository
         });
     }
 
-    public async Task SubmitWorkPackage()
+    public async Task SubmitWorkPackage(Guid? userId)
     {
         if (!TryGetApplicationId(out var applicationId))
         {
@@ -79,7 +109,8 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         await _connection.ExecuteAsync("SubmitWorkPackage", new
         {
-            ApplicationId = applicationId
+            ApplicationId = applicationId,
+            UserId = userId
         });
 
         scope.Complete();
@@ -609,6 +640,21 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         return await _connection.QuerySingleOrDefaultAsync<KeyDatesResult>(
             "GetWorkPackageKeyDates",
+            new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task<KeyDatesResult> GetLatestWorkPackageKeyDatesByApplication()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<KeyDatesResult>(
+            "GetLatestWorkPackageKeyDatesByApplication",
             new
             {
                 ApplicationId = applicationId
@@ -1554,6 +1600,15 @@ public class WorkPackageRepository : IWorkPackageRepository
 
     #region Third Party Contribution
 
+    public async Task<GetLatestCostScheduleResult> GetLatestCostSchedule(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<GetLatestCostScheduleResult>(nameof(GetLatestCostSchedule), parameters);
+        return result;
+    }
+
     public async Task InsertThirdPartyContributions()
     {
         if (!TryGetApplicationId(out var applicationId))
@@ -1602,14 +1657,14 @@ public class WorkPackageRepository : IWorkPackageRepository
         scope.Complete();
     }
 
-    public async Task<ThirdPartyContributionResult?> GetThirdPartyContributionsThirdPartyContribution()
+    public async Task<ThirdPartyContributionResult> GetThirdPartyContributionsThirdPartyContribution()
     {
         if (!TryGetApplicationId(out var applicationId))
         {
             return null;
         }
 
-        return await _connection.QuerySingleOrDefaultAsync<ThirdPartyContributionResult?>("GetWorkPackageThirdPartyContributionsThirdPartyContribution", new
+        return await _connection.QuerySingleOrDefaultAsync<ThirdPartyContributionResult>("GetWorkPackageThirdPartyContributionsThirdPartyContribution", new
         {
             ApplicationId = applicationId
         });

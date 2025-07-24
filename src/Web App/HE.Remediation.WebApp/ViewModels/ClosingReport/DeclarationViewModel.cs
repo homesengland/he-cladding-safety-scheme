@@ -8,7 +8,9 @@ public class DeclarationViewModel : ClosingReportBaseViewModel
 
     public bool? FraewRiskToLifeReduced { get; set; }
 
-    public bool? DischargedObligations { get; set; }    
+    public bool? DischargedObligations { get; set; }
+
+    public bool? GrantFundingObligations { get; set; }
 
     public DateTime? ApplicationCreationDate { get; set; }
 }

@@ -86,11 +86,22 @@ namespace HE.Remediation.WebApp.Controllers
         private IActionResult GetPostLoginActionResult(PostLoginResponse postLoginResponse)
         {
             // Collaboration:
+
+            // Check user is not a revoked organisation user
+            if (postLoginResponse.UserInviteStatus.IsOrganisationInviteRevoked)
+            {
+                return RedirectToAction("Blocked", "UserOnboarding", new { Area = "OrganisationManagement" });
+            }
+
             //  Existing users hit this when logging in after being invited
             //  For new users - see logic in AccountController.RedirectToAccountHome
-            if (postLoginResponse.UserInvitesPending.Any())
+            if (postLoginResponse.UserInviteStatus.IsOrganisationInvitePending)
             {
                 return RedirectToAction("Join", "UserOnboarding", new { Area = "OrganisationManagement" });
+            }
+            if (postLoginResponse.UserInviteStatus.IsApplicationInvitePending)
+            {
+                return RedirectToAction("Join", "UserOnboarding", new { Area = "Application" });
             }
 
             if (postLoginResponse.UserProfileCompletion.IsContactInformationComplete == false)

@@ -17,6 +17,7 @@
     <govuk-error-summary>    
         <govuk-error-summary-item asp-for="DateOfCompletion" />
         <govuk-error-summary-item asp-for="FraewRiskToLifeReduced" />
+        <govuk-error-summary-item asp-for="GrantFundingObligations" />
         <govuk-error-summary-item asp-for="DischargedObligations" />
     </govuk-error-summary>
 }
@@ -42,6 +43,13 @@
     <govuk-checkboxes asp-for="FraewRiskToLifeReduced">
         <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.DischargedObligations">
             Please confirm that your Fire Risk Assessment shows that the risk to life has been reduced.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+    <govuk-checkboxes asp-for="GrantFundingObligations">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.GrantFundingObligations">
+            I confirm that I have met the obligations of the grant funding agreement by taking reasonable endeavours 
+            to recover funding from all possible sources, and will continue to engage with Homes England 
+            on any recovery options that remain open.
         </govuk-checkboxes-item>
     </govuk-checkboxes>
 

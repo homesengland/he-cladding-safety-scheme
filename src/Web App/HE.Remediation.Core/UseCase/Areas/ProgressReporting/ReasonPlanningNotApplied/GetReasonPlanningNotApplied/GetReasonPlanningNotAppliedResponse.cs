@@ -10,4 +10,5 @@ public class GetReasonPlanningNotAppliedResponse
     public string ReasonPlanningPermissionNotApplied { get; set; }
 
     public bool? PlanningPermissionNeedsSupport { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

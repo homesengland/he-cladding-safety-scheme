@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
@@ -34,6 +35,13 @@ public class GetHaveAnyAnswersChangedHandler : IRequestHandler<GetHaveAnyAnswers
         var answers = await _progressReportingRepository.GetProgressReportAnswers();
 
         var gcoAnswers = await _progressReportingRepository.GetGrantCerifyingOfficerAnswers();
+
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters()
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
 
         return answers is not null ?
             new GetHaveAnyAnswersChangedResponse
@@ -81,7 +89,8 @@ public class GetHaveAnyAnswersChangedHandler : IRequestHandler<GetHaveAnyAnswers
                 SignatoryEmailAddress = gcoAnswers?.SignatoryEmailAddress,
                 DateAppointed = gcoAnswers?.DateAppointed,
                 IntentToProceed = answers.IntentToProceedType,
-                HasProjectPlanMilestones = answers.HasProjectPlanMilestones
+                HasProjectPlanMilestones = answers.HasProjectPlanMilestones,
+                HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
             } :
             throw new EntityNotFoundException("Answers not found");
     }

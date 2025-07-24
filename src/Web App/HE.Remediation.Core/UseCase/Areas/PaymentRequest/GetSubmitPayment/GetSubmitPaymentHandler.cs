@@ -34,6 +34,7 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
         var isSubmitted = await _paymentRequestRepository.IsPaymentRequestSubmitted(paymentRequestId);
         var isExpired = await _paymentRequestRepository.IsPaymentRequestExpired(paymentRequestId);
+        var isItALastSchedulePayment = await _paymentRequestRepository.IsItALastScheduledPayment(applicationId, paymentRequestId);
 
         var overview = await _paymentRequestRepository.GetOverview();
         var costsProfile = await _paymentRequestRepository.GetCostsProfile();
@@ -127,7 +128,8 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
             PaidCosts = paidCosts,
             MissedPayments = missedPayments,
             MissedPaymentTotal = missedPaymentTotal,
-            FinalMonthTotal = finalMonthTotal
+            FinalMonthTotal = finalMonthTotal,
+            IsItALastSchedulePayment = isItALastSchedulePayment
     };
     }
 }

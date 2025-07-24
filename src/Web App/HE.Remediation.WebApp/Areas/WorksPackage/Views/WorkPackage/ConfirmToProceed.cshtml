@@ -1,0 +1,38 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.ConfirmToProceed.ConfirmToProceedViewModel
+@{
+    ViewData["Title"] = "Compile a works package";
+    ViewData["HideTitle"] = true;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IsConfirmedToProceed" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Confirm you are ready to proceed</h1>
+
+<p class="govuk-body">
+    You should submit your works package at the same point you are submitting your full plans approval to Building Control (irrespective of the route, be it the Building Safety Regulator, approved inspector or local Authority).
+</p>
+<p class="govuk-body">
+    Please only proceed if you are at this point of the project or if the works do not require Building Control approval, which will be only in rare circumstances.
+</p>
+<h1 class="govuk-heading-l"> I have read the above and am ready to compile and submit my works package.</h1>
+
+<form  asp-action="ConfirmToProceed" method="post">
+    <govuk-radios asp-for="IsConfirmedToProceed">
+        <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Confirm and submit</govuk-button>
+    <div>
+        <a class="govuk-link" href="@Url.Action("Index", "StageDiagram", new { Area = "Application" })">Cancel and exit</a>
+    </div>
+</form>

@@ -20,6 +20,7 @@ public class GetTeamMemberCheckYourAnswersResponse
     public EConsiderateConstructorSchemeType? ConsiderateConstructorSchemeType { get; set; }
     public bool? HasChasCertification { get; set; }
     public string ConsiderateConstructorSchemeReason { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }

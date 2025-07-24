@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -33,11 +34,19 @@ public class GetProgressSupportHandler : IRequestHandler<GetProgressSupportReque
 
         var support = await _progressReportingRepository.GetProgressReportSupport();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+        
         var response = new GetProgressSupportResponse
         {
             ApplicationReferenceNumber = reference,
             BuildingName = buildingName,
-            SupportNeededReason = support?.SupportNeededReason
+            SupportNeededReason = support?.SupportNeededReason,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
 
         if (support?.LeadDesignerNeedsSupport == true)

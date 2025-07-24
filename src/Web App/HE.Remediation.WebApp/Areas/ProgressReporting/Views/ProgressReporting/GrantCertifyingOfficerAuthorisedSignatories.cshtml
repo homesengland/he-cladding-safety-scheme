@@ -4,9 +4,23 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Model.Version == 1 || !Model.IsGcoComplete
-        ? Url.Action("GrantCertifyingOfficerAddress", "ProgressReporting", new { Area = "ProgressReporting" })
-        : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+
+    string backLink;
+
+    if (Model.Version == 1)
+    {
+        backLink = Model.HasVisitedCheckYourAnswers
+            ? Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("GrantCertifyingOfficerAddress", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+    else
+    {
+        backLink = !Model.IsGcoComplete
+            ? Url.Action("GrantCertifyingOfficerAddress", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    }
+
+    ViewData["Backlink"] = backLink;
     ViewData["FullWidth"] = true;
 
     var companiesDateOfAppointmentInvalid = ViewData.ModelState.TryGetValue(nameof(Model.DateAppointedDay), out var dateCompaniesAppointmentDayState) && dateCompaniesAppointmentDayState.ValidationState == ModelValidationState.Invalid || 
@@ -36,6 +50,7 @@
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
     <input asp-for="Version" type="hidden" value="@Model.Version" />
     <input asp-for="IsGcoComplete" type="hidden" value="@Model.IsGcoComplete" />
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers" />
 
     <govuk-fieldset>
         <govuk-input asp-for="Signatory" input-class="govuk-input--width-20">

@@ -7,5 +7,6 @@
         public int? StartMonth { get; set; }
         public int? StartYear { get; set; }
         public int Version { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 }

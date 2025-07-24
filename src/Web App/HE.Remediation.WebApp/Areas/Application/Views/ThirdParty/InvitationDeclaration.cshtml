@@ -7,7 +7,7 @@
 	ViewData["Title"] = title;
 }
 
-<a href="@Url.Action("InviteContributor", new { teamMemberId = Model.TeamMemberId })" class="govuk-back-link">Back</a>
+<a href="@Url.Action("InviteContributor", new { teamMemberId = Model.TeamMemberId, source = (int)Model.Source })" class="govuk-back-link">Back</a>
 <span class="govuk-caption-xl">Third party contribution</span>
 <h1 class="govuk-heading-xl">@(title)</h1>
 
@@ -18,6 +18,7 @@
 <form method="post" action="/InvitationDeclaration">
 	<p class="govuk-body">Before completing the Invitation declaration, please check the information you've given us.</p>
 	<input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+	<input asp-for="Source" type="hidden" value="@Model.Source" />
     <govuk-checkboxes name="IsDeclarationConfimed" asp-for="IsDeclarationConfimed">
 		<govuk-checkboxes-item value="true">Confirm that in completing this invitation to collaborate you are doing so on the basis that responsibility for the content / accuracy of the data remains with you the applicant.</govuk-checkboxes-item>
     </govuk-checkboxes>

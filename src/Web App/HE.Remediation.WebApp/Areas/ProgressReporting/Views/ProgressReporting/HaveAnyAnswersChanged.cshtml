@@ -10,6 +10,10 @@
     var buildingControlPrefix = Model.BuildingControlRequired == true
         ? "Building control approval for higher-risk buildings (Gateway 2)"
         : "Building control approval for buildings under 7 storyes and under 18m in height";
+
+    var continueAction = !Model.HasVisitedCheckYourAnswers
+        ? Url.Action("LeaseholdersInformedLast", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("SecondaryCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
 }
 
 <h1 class="govuk-heading-xl">Have any of your answers changed since last month?</h1>
@@ -146,7 +150,7 @@
         </tr>
 
         <tr class="govuk-table__row">
-            <td class="govuk-table__cell govuk-!-font-weight-bold">Tell us why</td>
+            <td class="govuk-table__cell govuk-!-font-weight-bold">Additional information</td>
             <td class="govuk-table__cell govuk-!-width-one-half">@Model.QuotesNotSoughtReason</td>
             <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" })">Change</a></td>
         </tr>
@@ -337,5 +341,5 @@
     </tbody>
 </table>
 <div class="comp-btn-group">
-	<govuk-button href="@Url.Action("LeaseholdersInformedLast", "ProgressReporting", new {Area = "ProgressReporting"})">Continue</govuk-button>
+	<govuk-button href="@continueAction">Continue</govuk-button>
 </div>

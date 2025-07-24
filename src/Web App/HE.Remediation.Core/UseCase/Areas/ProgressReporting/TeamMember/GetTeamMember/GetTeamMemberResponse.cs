@@ -25,4 +25,5 @@ public class GetTeamMemberResponse
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

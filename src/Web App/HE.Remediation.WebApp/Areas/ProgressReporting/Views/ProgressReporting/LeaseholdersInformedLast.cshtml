@@ -4,7 +4,9 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["Backlink"] = !Model.HasVisitedCheckYourAnswers
+        ? Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("SecondaryCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = true;
 }
 
@@ -35,6 +37,7 @@
 
                 <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
                 <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+                <input type="hidden" asp-for="HasVisitedCheckYourAnswers" value="@Model.HasVisitedCheckYourAnswers"/>
 
                 <div class="comp-btn-group">
                     <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>

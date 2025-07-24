@@ -10,4 +10,5 @@ public class GetWorksRequirePermissionResponse
     public EYesNoNonBoolean? PermissionRequired { get; set; }
     public bool? QuotesSought { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

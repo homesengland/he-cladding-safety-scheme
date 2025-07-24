@@ -19,6 +19,10 @@ public class DeclarationViewModelValidator : AbstractValidator<DeclarationViewMo
         RuleFor(x => x.FraewRiskToLifeReduced)
             .Must(x => x == true)
             .WithMessage("You must confirm that your Fire Risk Assessment shows that the risk to life has been reduced");
+        
+        RuleFor(x => x.GrantFundingObligations)
+           .Must(x => x == true)
+           .WithMessage("You must confirm that you have met the obligations of the grant funding agreement");
 
         RuleFor(x => x.DischargedObligations)
             .Must(x => x == true)

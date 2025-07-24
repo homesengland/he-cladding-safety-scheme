@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -32,6 +33,14 @@ public class GetReasonQuotesNotSoughtHandler : IRequestHandler<GetReasonQuotesNo
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
         var quotesNotSoughtReason = await _progressReportingRepository.GetProgressReportQuotesNotSoughtReason();
+
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = _applicationDataProvider.GetProgressReportId()
+            });
+
         return new GetReasonQuotesNotSoughtResponse
         {
             BuildingName = buildingName,
@@ -39,7 +48,8 @@ public class GetReasonQuotesNotSoughtHandler : IRequestHandler<GetReasonQuotesNo
             WhyYouHaveNotSoughtQuotes = quotesNotSoughtReason?.WhyYouHaveNotSoughtQuotes,
             QuotesNotSoughtReason = quotesNotSoughtReason?.QuotesNotSoughtReason,
             QuotesNeedsSupport = quotesNotSoughtReason?.QuotesNeedsSupport,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }

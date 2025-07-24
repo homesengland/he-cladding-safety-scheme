@@ -10,5 +10,6 @@ namespace HE.Remediation.WebApp.ViewModels.ProgressReporting
         public string ReturnUrl { get; set; }
         public string ProgressSummary { get; set; }
         public bool? IsSupportNeeded { get; set; }
+        public bool HasVisitedCheckYourAnswers { get; set; }
     }
 }

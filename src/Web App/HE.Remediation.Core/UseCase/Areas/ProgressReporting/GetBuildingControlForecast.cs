@@ -43,6 +43,13 @@ public class GetBuildingControlForecastHandler : IRequestHandler<GetBuildingCont
 
         var version = await _progressReportingRepository.GetProgressReportVersion();
 
+        var hasVisitedCheckYourAnswers = await _progressReportingRepository.GetHasVisitedCheckYourAnswers(
+            new GetHasVisitedCheckYourAnswersParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
+            });
+
         return new GetBuildingControlForecastResponse
         {
             ApplicationReferenceNumber = reference,
@@ -51,7 +58,8 @@ public class GetBuildingControlForecastHandler : IRequestHandler<GetBuildingCont
             ForecastDateMonth = forecast.BuildingControlForecastSubmissionDate?.Month,
             ForecastDateYear = forecast.BuildingControlForecastSubmissionDate?.Year,
             ForecastInformation = forecast.BuildingControlForecastInformation,
-            Version = version
+            Version = version,
+            HasVisitedCheckYourAnswers = hasVisitedCheckYourAnswers
         };
     }
 }
@@ -75,4 +83,5 @@ public class GetBuildingControlForecastResponse
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

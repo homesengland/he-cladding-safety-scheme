@@ -4,9 +4,9 @@
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
-        ? Url.Action(Model.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" })
-        : Url.Action("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" });
+    ViewData["Backlink"] = Model.HasVisitedCheckYourAnswers
+        ? Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+        : Url.Action("WhenStartOnSite", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary
@@ -57,6 +57,7 @@
     <input asp-for="OtherMembersNeedsSupport" type="hidden" value="@Model.OtherMembersNeedsSupport" />
     <input asp-for="QuotesNeedsSupport" type="hidden" value="@Model.QuotesNeedsSupport" />
     <input asp-for="PlanningPermissionNeedsSupport" type="hidden" value="@Model.PlanningPermissionNeedsSupport" />
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers"/>
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>

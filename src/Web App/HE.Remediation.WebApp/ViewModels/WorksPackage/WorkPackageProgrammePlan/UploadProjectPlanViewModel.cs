@@ -13,6 +13,5 @@ public class UploadProjectPlanViewModel : FileUploadViewModel
     public string BuildingName { get; set; }
     public bool IsSubmitted { get; set; }
 
-    public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
 }

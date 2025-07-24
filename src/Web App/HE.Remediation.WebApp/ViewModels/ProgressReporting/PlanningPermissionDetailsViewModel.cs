@@ -12,6 +12,7 @@ public class PlanningPermissionDetailsViewModel
     public int? PlanningPermissionApprovedMonth { get; set; }
     public int? PlanningPermissionApprovedYear { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }
 }

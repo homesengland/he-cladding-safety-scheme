@@ -1,6 +1,8 @@
 ﻿@using HE.Remediation.Core.Enums;
 @using HE.Remediation.Core.Extensions
 @using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Helpers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 @model HE.Remediation.WebApp.ViewModels.ProgressReporting.SecondaryCheckYourAnswersViewModel
 @{
     ViewData["Title"] = "Progress Reporting";
@@ -16,13 +18,21 @@
 <govuk-summary-list>
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
+            Have any of your answers changed since last month?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            &nbsp;
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })">
+            View
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
             When did you last update your leaseholders/residents on progress?
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-            @if (Model.LastUpdate.HasValue)
-            {
-                <span>@Model.LastUpdate.Value.ToString("dd MMMM yyyy")<br></span>
-            }
+            @(Model.LastUpdate.HasValue ? Model.LastUpdate.Value.ToString("dd MMMM yyyy") : "-")
         </govuk-summary-list-row-value>
         <govuk-summary-list-row-action href="@Url.Action("LeaseholdersInformedLast", "ProgressReporting")" visually-hidden-text="name">
             Change
@@ -34,22 +44,30 @@
             Summarise your risks and blockers
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-            @if (!String.IsNullOrEmpty(Model.ThisMonthProgressSummary))
-            {
-                <span>@Model.ThisMonthProgressSummary<br></span>
-            }
+            @(!string.IsNullOrEmpty(Model.ThisMonthProgressSummary) ? Model.ThisMonthProgressSummary : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("SummariseProgress", "ProgressReporting")" visually-hidden-text="name">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+    
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Do you need support?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.HelpNeeded == true ? "Yes" : Model.HelpNeeded == false ? "No" : "-")
         </govuk-summary-list-row-value>
         <govuk-summary-list-row-action href="@Url.Action("SummariseProgress", "ProgressReporting")" visually-hidden-text="name">
             Change
         </govuk-summary-list-row-action>
     </govuk-summary-list-row>
 
-
 </govuk-summary-list>
 
 
 
-@if (Model.HelpNeeded.HasValue && Model.HelpNeeded.Value)
+@if (Model.HelpNeeded == true)
 {
     <h2 class="govuk-heading-m">What kind of support do you need?</h2>
 
@@ -59,21 +77,15 @@
                 Type of support
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
-                @{
-                    if (Model.SupportTypes.Any())
-                    {
-                        var supportTypes = new List<string>();
+                @if (Model.SupportTypes?.Any() == true)
+                {
+                    var supportTypes = Model.SupportTypes.Select(supportType => EnumHelpers.GetText(supportType)).ToList();
 
-                        foreach (var supportType in Model.SupportTypes)
-                        {
-                            supportTypes.Add(HE.Remediation.Core.Helpers.EnumHelpers.GetText(supportType));
-                        }
-                        <span>@string.Join(", ", supportTypes)</span>
-                    }
-                    else
-                    {
-                        <span>None</span>
-                    }
+                    <span>@string.Join(", ", supportTypes)</span>
+                }
+                else
+                {
+                    <span>None</span>
                 }
             </govuk-summary-list-row-value>
             <govuk-summary-list-row-action href="@Url.Action("ProgressSupport", "ProgressReporting")" visually-hidden-text="name">
@@ -82,14 +94,23 @@
         </govuk-summary-list-row>
 
         <govuk-summary-list-row>
+            @{
+                var supportNeededReasonClass = string.Empty;
+                if (ViewData.ModelState.TryGetValue(nameof(Model.SupportNeededReason), out var validationResult))
+                {
+                    if (validationResult.ValidationState == ModelValidationState.Invalid)
+                    {
+                        supportNeededReasonClass = "govuk-form-group--error govuk-error-message govuk-!-margin-bottom-0";
+                    }
+                }
+            }
             <govuk-summary-list-row-key>
-                Tell us about the support you need
+                <div class="@supportNeededReasonClass" id="@nameof(Model.SupportNeededReason)">
+                    Tell us about the support you need
+                </div>
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
-                @if (!String.IsNullOrEmpty(Model.SupportNeededReason))
-                {
-                    <span>@Model.SupportNeededReason<br></span>
-                }
+                @(!string.IsNullOrEmpty(Model.SupportNeededReason) ? Model.SupportNeededReason : "-")
             </govuk-summary-list-row-value>
             <govuk-summary-list-row-action href="@Url.Action("ProgressSupport", "ProgressReporting")" visually-hidden-text="name">
                 Change
@@ -110,7 +131,21 @@
 
 <form asp-area="ProgressReporting" asp-controller="ProgressReporting" asp-action="SecondaryCheckYourAnswers" method="post">
 
-    <input asp-for="SubmitAction" type="hidden" value="@Model.SubmitAction" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <govuk-date-input asp-for="LastUpdate" class="hidden" value="@Model.LastUpdate" />
+    <input asp-for="ThisMonthProgressSummary" type="hidden" value="@Model.ThisMonthProgressSummary" />
+    <input asp-for="NextMonthProgressSummary" type="hidden" value="@Model.NextMonthProgressSummary" />
+    <input asp-for="HelpNeeded" type="hidden" value="@Model.HelpNeeded" />
+    <input asp-for="SupportNeededReason" type="hidden" value="@Model.SupportNeededReason" />
+    
+    @if (Model.SupportTypes?.Any() == true)
+    {
+        for (var i = 0; i < Model.SupportTypes.Count; i++)
+        {
+            <input name="SupportTypes[@i]" type="hidden" value="@Model.SupportTypes[i]"/>
+        }
+    }
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Submit</govuk-button>

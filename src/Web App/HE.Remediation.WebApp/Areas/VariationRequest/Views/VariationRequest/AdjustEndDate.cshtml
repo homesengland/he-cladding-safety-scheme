@@ -17,10 +17,19 @@
     </govuk-error-summary>
 }
 
-<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">What is your new end date?</h1>
+<h1 class="govuk-heading-xl  govuk-!-margin-bottom-6">Your new expected end date</h1>
 
 <form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="AdjustEndDate" method="post">
 
+    <table class="govuk-table govuk-!-margin-top-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell" style="border-top:1px solid #b1b4b6;"><b>Previous expected end date</b></td>
+                <td class="govuk-table__cell" style="border-top:1px solid #b1b4b6;">@Model.PreviousEndMonth?.ToString("D2")/@Model.PreviousEndYear</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2 class="govuk-heading-m">What is your new end date?</h2>
     <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" role="group" aria-describedby="adjust-end-date-hint">
             <div id="adjust-end-date-hint" class="govuk-hint">

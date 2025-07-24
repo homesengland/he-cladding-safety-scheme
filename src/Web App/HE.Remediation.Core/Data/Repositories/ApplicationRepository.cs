@@ -108,6 +108,22 @@ public class ApplicationRepository : IApplicationRepository
         return referenceNumber;
     }
 
+    public async Task<string> GetApplicationReasonForWithdrawalRequest(Guid applicationId)
+    {
+        var reasonForClosing = await _dbConnection.QuerySingleOrDefaultAsync<string>(nameof(GetApplicationReasonForWithdrawalRequest), new { ApplicationId = applicationId });
+        return reasonForClosing;
+    }
+
+
+    public async Task UpdateApplicationReasonForWithdrawalRequest(Guid applicationId, string reasonForWithdrawalRequest)
+    {
+        await _dbConnection.ExecuteAsync(nameof(UpdateApplicationReasonForWithdrawalRequest), new
+        {
+            ApplicationId = applicationId,
+            ReasonForWithdrawalRequest = reasonForWithdrawalRequest
+        });
+    }
+
     public async Task<DateTime?> GetApplicationCreationDate(Guid applicationId)
     {
         var creationDate = await _dbConnection.QuerySingleOrDefaultAsync<DateTime?>(nameof(GetApplicationCreationDate), new
@@ -115,5 +131,17 @@ public class ApplicationRepository : IApplicationRepository
                                                                                         ApplicationId = applicationId
                                                                                     });
         return creationDate;
+    }
+
+    public async Task<bool> IsExistingApplication(string buildingName, string postcode)
+    {
+        var result = await _dbConnection.QuerySingleOrDefaultAsync<bool>(
+            "ApplicationExistsWithSameAddress", new
+            {
+                BuildingName = buildingName,
+                Postcode = postcode
+            });
+
+        return result;
     }
 }

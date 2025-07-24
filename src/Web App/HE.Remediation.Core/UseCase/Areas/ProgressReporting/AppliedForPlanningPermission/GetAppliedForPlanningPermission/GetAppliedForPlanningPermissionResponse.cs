@@ -6,4 +6,5 @@ public class GetAppliedForPlanningPermissionResponse
     public string BuildingName { get; set; }
     public bool? AppliedForPlanningPermission { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 }

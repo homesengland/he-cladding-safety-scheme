@@ -5,13 +5,15 @@ using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.RemoveAccess;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using static HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember.SetInviteMemberHandler;
 using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;
+using static HE.Remediation.Core.Data.StoredProcedureResults.GetProgressReportResult;
 
 namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
 {
 
     public class SetRemoveAccessHandlerTests
     {
-        private readonly Mock<IProgressReportingRepository> _workPackageRepositoryMock = new();
+        private readonly Mock<IThirdPartyCollaboratorRepository> _thirdPartyCollaboratorRepository = new();
         private readonly Mock<IDbConnectionWrapper> _connectionMock = new();
         private readonly Mock<IApplicationDataProvider> _applicationDataProviderMock = new();
         private readonly Mock<IBackgroundCollaborationCommunicationQueue> _backgroundCollaborationCommunicationQueueMock = new();
@@ -22,7 +24,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
         public SetRemoveAccessHandlerTests()
         {
             _handler = new SetRemoveAccessHandler(
-                _workPackageRepositoryMock.Object,
+                _thirdPartyCollaboratorRepository.Object,
                 _connectionMock.Object,
                 _applicationDataProviderMock.Object,
                 _backgroundCollaborationCommunicationQueueMock.Object
@@ -42,16 +44,16 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
         public async Task Handle_ShouldRemoveThirdPartyCollaborator_AndReturnResponse()
         {
             // Arrange
-            var request = new SetRemoveAccessRequest(Guid.NewGuid(), string.Empty);
-            var teamMemberResult = new GetTeamMemberResult
+            var request = new SetRemoveAccessRequest(Guid.NewGuid(), string.Empty, Enums.ETeamMemberSource.WorkPackage);
+            var teamMemberResult = new GetInviteResponse
             {
                 TeamMemberId = request.TeamMemberId,
                 Name = "John Doe",
-                EmailAddress = "john.doe@example.com"
+                EmailAddress = "john.doe@example.com",
             };
 
-            _workPackageRepositoryMock
-                .Setup(repo => repo.GetTeamMember(request.TeamMemberId))
+            _thirdPartyCollaboratorRepository
+                .Setup(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source))
                 .ReturnsAsync(teamMemberResult);
 
             _applicationDataProviderMock
@@ -75,7 +77,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
             Assert.Equal(request.TeamMemberId, response.TeamMemberId);
             Assert.Equal("John Doe", response.InvitedName);
 
-            _workPackageRepositoryMock.Verify(repo => repo.GetTeamMember(request.TeamMemberId), Times.Once);
+            _thirdPartyCollaboratorRepository.Verify(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source), Times.Once);
             _connectionMock.Verify(conn => conn.ExecuteAsync("RemoveThirdPartyCollaborator", It.IsAny<object>()), Times.Once);
         }
 
@@ -83,11 +85,11 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
         public async Task Handle_ShouldThrowException_IfTeamMemberNotFound()
         {
             // Arrange
-            var request = new SetRemoveAccessRequest(Guid.NewGuid(), string.Empty);
+            var request = new SetRemoveAccessRequest(Guid.NewGuid(), string.Empty, Enums.ETeamMemberSource.WorkPackage);
 
-            _workPackageRepositoryMock
-                .Setup(repo => repo.GetTeamMember(request.TeamMemberId))
-                .ReturnsAsync((GetTeamMemberResult)null); // Simulate not found
+            _thirdPartyCollaboratorRepository
+                .Setup(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source))
+                .ReturnsAsync((GetInviteResponse)null);
 
             // Act & Assert
             await Assert.ThrowsAsync<NullReferenceException>(() => _handler.Handle(request, CancellationToken.None));

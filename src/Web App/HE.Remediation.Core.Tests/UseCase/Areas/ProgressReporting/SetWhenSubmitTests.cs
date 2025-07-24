@@ -20,11 +20,11 @@ public class SetWhenSubmitTests
 
     public SetWhenSubmitTests()
     {
-        _progressReportingRepository = new Mock<IProgressReportingRepository>(MockBehavior.Strict);
-        _taskRepository = new Mock<ITaskRepository>(MockBehavior.Strict);
-        _dateRepository = new Mock<IDateRepository>(MockBehavior.Strict);
-        _grantFundingRepository = new Mock<IGrantFundingRepository>(MockBehavior.Strict);
-        _applicationDataProvider = new Mock<IApplicationDataProvider>(MockBehavior.Strict);
+        _progressReportingRepository = new Mock<IProgressReportingRepository>();
+        _taskRepository = new Mock<ITaskRepository>();
+        _dateRepository = new Mock<IDateRepository>();
+        _grantFundingRepository = new Mock<IGrantFundingRepository>();
+        _applicationDataProvider = new Mock<IApplicationDataProvider>();
 
         _handler = new SetWhenSubmitHandler(_progressReportingRepository.Object, 
             _taskRepository.Object, _dateRepository.Object, 
@@ -53,19 +53,6 @@ public class SetWhenSubmitTests
 
         _progressReportingRepository.Setup(x => x.UpdateProgressReportExpectedWorksPackageSubmissionDate(It.IsAny<DateTime?>()))
                                     .Returns(Task.CompletedTask)
-                                    .Verifiable();
-
-        _progressReportingRepository.Setup(x => x.GetProgressReportLeadDesignerNeedsSupport())
-                                    .ReturnsAsync(false)
-                                    .Verifiable();
-        _progressReportingRepository.Setup(x => x.GetProgressReportOtherMembersNeedsSupport())
-                                    .ReturnsAsync(false)
-                                    .Verifiable();
-        _progressReportingRepository.Setup(x => x.GetProgressReportQuotesNeedsSupport())
-                                    .ReturnsAsync(false)
-                                    .Verifiable();
-        _progressReportingRepository.Setup(x => x.GetProgressReportPlanningPermissionNeedsSupport())
-                                    .ReturnsAsync(false)
                                     .Verifiable();
 
         _grantFundingRepository.Setup(x => x.GetGrantFundingAgreementCompleteDate(It.IsAny<Guid>()))

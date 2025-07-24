@@ -7,7 +7,9 @@
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["BackLink"] = Model.Version > 1
         ? Url.Action("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" })
-        : Url.Action("HaveYouAppliedForBuildingControl", "ProgressReporting", new { Area = "ProgressReporting" });
+        : !Model.HasVisitedCheckYourAnswers
+            ? Url.Action("HaveYouAppliedForBuildingControl", "ProgressReporting", new { Area = "ProgressReporting" })
+            : Url.Action("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     ViewData["FullWidth"] = false;
 
     var title = Model.BuildingControlRequired == true
@@ -86,6 +88,7 @@
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
     <input asp-for="Version" type="hidden" value="@Model.Version"/>
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers"/>
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>

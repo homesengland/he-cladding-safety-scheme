@@ -19,6 +19,12 @@ using HE.Remediation.Core.Services.GovNotify;
 using HE.Remediation.Core.Services.GovNotify.Models;
 using HE.Remediation.Core.Services.Communication;
 using HE.Remediation.Core.Services.Communication.Collaboration;
+using HE.Remediation.Core.Services.DataIngestion;
+using HE.Remediation.Core.Settings;
+using System.Configuration;
+using HE.Remediation.Core.UseCase.DataIngest.Validation;
+using HE.Remediation.Core.UseCase.DataIngest.Lookups;
+using HE.Remediation.Core.UseCase.DataIngest.DataImporters;
 
 namespace HE.Remediation.Core.Extensions
 {
@@ -59,6 +65,18 @@ namespace HE.Remediation.Core.Extensions
             builder.Services.AddSingleton<CommunicationConstants>();
 
             services.AddGovNotifyService(builder.Configuration);
+
+            // Data Ingestion
+            services.Configure<DataIngestionOptions>(builder.Configuration.GetSection("DataIngestion"));
+            services.AddScoped<DataIngestionBatchChannel>();
+            services.AddScoped<DataIngestionProducer>();
+            services.AddScoped<DataIngestionConsumer>();
+            services.AddHostedService<DataIngestionBackgroundService>();
+            services.AddScoped<IAddressResolver, AddressResolver>();
+            services.AddTransient<JsonDataIngestMapperIValidator>();
+            services.AddScoped<IBuildingDetailsDataImporter, BuildingDetailsDataImporter>();
+            services.AddScoped<IResponsibleEntityDataImporter, ResponsibleEntityDataImporter>();
+            services.AddScoped<IDataIngestionLookupService, DataIngestionLookupService>();
 
             services.AddAuth0WebAppAuthentication(options =>
             {

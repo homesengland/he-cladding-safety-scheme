@@ -8,6 +8,7 @@ public class AppliedPlanningViewModel
     public string BuildingName { get; set; }
     public bool? AppliedForPlanningPermission { get; set; }
     public int Version { get; set; }
+    public bool HasVisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
     public string ReturnUrl { get; set; }

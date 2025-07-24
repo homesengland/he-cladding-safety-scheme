@@ -6,6 +6,7 @@ namespace HE.Remediation.WebApp.ViewModels.ProgressReporting;
 public class FinalCheckYourAnswersViewModel
 {
     public bool? LeaseholdersInformed { get; set; }
+    public string LeaseholdersInformedEvidenceFiles { get; set; }
     public bool? LeadDesignerAppointed { get; set; }
     public bool? OtherMembersAppointed { get; set; }
     public bool? QuotesSought { get; set; }

@@ -13,6 +13,7 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="FileSignatures" Version="4.4.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageReference Include="FuzzySharp" Version="2.0.2" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
@@ -28,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Services\OidcEventHandlerService\" />
-    <Folder Include="Services\RazorRenderer\Models\" />
     <Folder Include="Services\UserService\Enum\" />
     <Folder Include="UseCase\Areas\Administration\CompanyAddress\GetCompanyAddressForCurrentUser\" />
     <Folder Include="UseCase\Areas\Administration\CompanyAddress\SetCompanyAddressForCurrentUser\" />

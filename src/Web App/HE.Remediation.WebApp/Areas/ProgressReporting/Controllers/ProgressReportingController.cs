@@ -189,7 +189,9 @@ public class ProgressReportingController : StartController
                     return RedirectToAction("UploadEvidence", "ProgressReporting", new { Area = "ProgressReporting" });
                 }
 
-                return RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
+                return !viewModel.HasVisitedCheckYourAnswers
+                    ? RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" })
+                    : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
@@ -252,9 +254,14 @@ public class ProgressReportingController : StartController
 
         }
 
-        return viewModel.SubmitAction == ESubmitAction.Continue
+        if (viewModel.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+        }
+
+        return !viewModel.HasVisitedCheckYourAnswers
             ? RedirectToAction("AppointedOtherMembers", "ProgressReporting", new { area = "ProgressReporting" })
-            : RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+            : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     [HttpGet(nameof(UploadEvidence) + "/Delete")]
@@ -286,33 +293,29 @@ public class ProgressReportingController : StartController
         var validator = new AppointedOtherMembersViewModelValidator();
 
         var validationResult = await validator.ValidateAsync(viewModel);
-        if (validationResult.IsValid)
+        if (!validationResult.IsValid)
         {
-            var request = _mapper.Map<SetAppointedOtherMembersRequest>(viewModel);
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+        }
 
-            await _sender.Send(request);
+        var request = _mapper.Map<SetAppointedOtherMembersRequest>(viewModel);
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
+        await _sender.Send(request);
 
-            if (viewModel.SubmitAction == ESubmitAction.Continue)
-            {
-                if (request.OtherMembersAppointed == true)
-                {
-                    return RedirectToAction("ProjectTeam", "ProgressReporting", new { Area = "ProgressReporting" });
-                }
+        if (viewModel.ReturnUrl is not null)
+        {
+            return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
+        }
 
-                return RedirectToAction("ReasonNoOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
+        if (viewModel.SubmitAction == ESubmitAction.Exit)
+        {
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
         }
 
-        validationResult.AddToModelState(ModelState, String.Empty);
-
-        return View(viewModel);
+        return request.OtherMembersAppointed == true
+            ? RedirectToAction("ProjectTeam", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("ReasonNoOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     #endregion
@@ -348,7 +351,9 @@ public class ProgressReportingController : StartController
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
             {
-                return RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
+	            return !viewModel.HasVisitedCheckYourAnswers
+		            ? RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" })
+		            : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
@@ -377,8 +382,19 @@ public class ProgressReportingController : StartController
     public async Task<IActionResult> ProjectTeamContinue(CancellationToken cancellationToken)
     {
         var response = await _sender.Send(ProjectTeamContinueRequest.Request, cancellationToken);
-        return response.HasCertifyingOfficerRoles
-            ? RedirectToAction("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" })
+
+        if (response.HasCertifyingOfficerRoles && !response.IsGcoComplete)
+        {
+            return RedirectToAction("HasGrantCertifyingOfficer", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        if (response.Version > 1)
+        {
+            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return response.HasVisitedCheckYourAnswers
+            ? RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
             : RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
@@ -612,7 +628,9 @@ public class ProgressReportingController : StartController
 
                 if (request.QuotesSought == true)
                 {
-                    return RedirectToAction("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" });
+	                return !viewModel.HasVisitedCheckYourAnswers
+		                ? RedirectToAction("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" })
+		                : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
                 }
 
                 return RedirectToAction("ReasonQuotesNotSought", "ProgressReporting", new { Area = "ProgressReporting" });
@@ -669,7 +687,9 @@ public class ProgressReportingController : StartController
                     return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
                 }
 
-                return RedirectToAction("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" });
+                return !viewModel.HasVisitedCheckYourAnswers
+	                ? RedirectToAction("WorksRequirePermission", "ProgressReporting", new { Area = "ProgressReporting" })
+	                : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
             }
         }
 
@@ -709,11 +729,6 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
             }
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
             if (request.PermissionRequired == EYesNoNonBoolean.Yes)
             {
                 return RedirectToAction("AppliedPlanning", "ProgressReporting", new { Area = "ProgressReporting" });
@@ -724,7 +739,9 @@ public class ProgressReportingController : StartController
                 RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
-            return RedirectToAction("RequireBuildingSafetyRegulatoryRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" });
+            return !viewModel.HasVisitedCheckYourAnswers
+                ? RedirectToAction("RequireBuildingSafetyRegulatoryRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })
+                : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
         validationResult.AddToModelState(ModelState, String.Empty);
@@ -812,11 +829,6 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
             }
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
             return RedirectToAction("ReasonPlanningNotApplied", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
@@ -856,14 +868,14 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
             }
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
             if (viewModel.Version > 1)
             {
                 return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+            }
+
+            if (viewModel.HasVisitedCheckYourAnswers)
+            {
+                return RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             if (!viewModel.ShowBuildingSafetyRegulatorRegistrationCode)
@@ -927,12 +939,9 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
             }
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            return RedirectToAction("RequireBuildingSafetyRegulatoryRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" });
+            return !viewModel.HasVisitedCheckYourAnswers
+                ? RedirectToAction("RequireBuildingSafetyRegulatoryRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" })
+                : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
         validationResult.AddToModelState(ModelState, String.Empty);
@@ -971,15 +980,19 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        var action = !string.IsNullOrEmpty(model.ReturnUrl)
-            ? model.ReturnUrl
-            : model.BuildingHasSafetyRegulatorRegistrationCode == true
-                ? nameof(BuildingSafetyRegulatorRegistrationCode)
-                : model.Version > 1
-                    ? nameof(HaveAnyAnswersChanged)
-                    : nameof(BuildingControlRequired);
+        if (model.BuildingHasSafetyRegulatorRegistrationCode == true)
+        {
+            return RedirectToAction("BuildingSafetyRegulatorRegistrationCode", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
 
-        return SafeRedirectToAction(action, "ProgressReporting", new { Area = "ProgressReporting" });
+        if (model.Version > 1)
+        {
+            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return model.HasVisitedCheckYourAnswers
+            ? RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     #endregion
 
@@ -1011,13 +1024,14 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        var action = !string.IsNullOrWhiteSpace(model.ReturnUrl)
-            ? model.ReturnUrl
-            : model.Version > 1
-                ? nameof(HaveAnyAnswersChanged)
-                : nameof(BuildingControlRequired);
+        if (model.Version > 1)
+        {
+            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
 
-        return SafeRedirectToAction(action, "ProgressReporting", new { Area = "ProgressReporting" });
+        return !model.HasVisitedCheckYourAnswers
+            ? RedirectToAction("BuildingControlRequired", "ProgressReporting", new { Area = "ProgressReporting" })
+            : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     #endregion
 
@@ -1091,7 +1105,7 @@ public class ProgressReportingController : StartController
     }
     #endregion
 
-    #region Building control forecase submission date
+    #region Building control forecast submission date
     [HttpGet(nameof(BuildingControlForecast))]
     public async Task<IActionResult> BuildingControlForecast(CancellationToken cancellationToken)
     {
@@ -1120,9 +1134,14 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        return model.Version == 1
+        if (model.Version > 1)
+        {
+            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return !model.HasVisitedCheckYourAnswers
             ? RedirectToAction("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" })
-            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+            : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
     #endregion
 
@@ -1215,9 +1234,14 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        return model.Version == 1
+        if (model.Version > 1)
+        {
+            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return !model.HasVisitedCheckYourAnswers
             ? RedirectToAction("WhenSubmit", "ProgressReporting", new { Area = "ProgressReporting" })
-            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+            : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
 
     }
     #endregion
@@ -1244,7 +1268,7 @@ public class ProgressReportingController : StartController
         {
             var request = _mapper.Map<SetWhenSubmitRequest>(viewModel);
 
-            var response = await _sender.Send(request);
+            await _sender.Send(request);
 
             if (viewModel.SubmitAction == ESubmitAction.Exit)
             {
@@ -1258,16 +1282,14 @@ public class ProgressReportingController : StartController
 
             if (viewModel.Version > 1)
             {
-                return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+	            return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+
             }
 
-            if (response.NeedsSupport)
-            {
-                return RedirectToAction("ReasonNeedsSupport", "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
-            return RedirectToAction("WhenStartOnSite", "ProgressReporting", new { Area = "ProgressReporting" });
-        }
+            return !viewModel.HasVisitedCheckYourAnswers
+	            ? RedirectToAction("WhenStartOnSite", "ProgressReporting", new { Area = "ProgressReporting" })
+	            : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
+		}
 
         validationResult.AddToModelState(ModelState, String.Empty);
 
@@ -1305,14 +1327,14 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
             }
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(actionName: viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
             if (viewModel.Version > 1)
             {
                 return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+            }
+
+            if (response.NeedsSupport && !viewModel.HasVisitedCheckYourAnswers)
+            {
+                return RedirectToAction("ReasonNeedsSupport", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             return RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
@@ -1354,11 +1376,6 @@ public class ProgressReportingController : StartController
                 return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
             }
 
-            if (viewModel.ReturnUrl is not null)
-            {
-                return SafeRedirectToAction(viewModel.ReturnUrl, "ProgressReporting", new { Area = "ProgressReporting" });
-            }
-
             return RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
@@ -1377,14 +1394,22 @@ public class ProgressReportingController : StartController
         var response = await _sender.Send(GetFinalCheckYourAnswersRequest.Request);
         var viewModel = _mapper.Map<FinalCheckYourAnswersViewModel>(response);
 
-        viewModel.ReturnUrl = string.Empty;
         return View(viewModel);
     }
 
     [HttpPost(nameof(FinalCheckYourAnswers))]
-    public async Task<IActionResult> FinalCheckYourAnswers(FinalCheckYourAnswersViewModel viewModel, ESubmitAction submitAction)
+    public async Task<IActionResult> FinalCheckYourAnswers(FinalCheckYourAnswersViewModel viewModel, CancellationToken cancellationToken)
     {
-        await _sender.Send(SetFinalCheckYourAnswersRequest.Request);
+	    var validator = new FinalCheckYourAnswersViewModelValidator();
+	    var validationResult = await validator.ValidateAsync(viewModel, cancellationToken);
+
+	    if (!validationResult.IsValid)
+	    {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+	    }
+
+        await _sender.Send(SetFinalCheckYourAnswersRequest.Request, cancellationToken);
 
         return RedirectToAction("Submitted", "ProgressReporting", new { Area = "ProgressReporting" });
     }
@@ -1445,7 +1470,6 @@ public class ProgressReportingController : StartController
         var response = await _sender.Send(GetProjectTeamRequest.Request);
         var viewModel = _mapper.Map<ProjectTeamViewModel>(response);
 
-        viewModel.ReturnUrl = string.Empty;
         return View(viewModel);
     }
 
@@ -1470,12 +1494,11 @@ public class ProgressReportingController : StartController
         var response = await _sender.Send(GetLeaseholdersInformedLastRequest.Request);
         var viewModel = _mapper.Map<LeaseholdersInformedLastViewModel>(response);
 
-        viewModel.ReturnUrl = string.Empty;
         return View(viewModel);
     }
 
     [HttpPost(nameof(LeaseholdersInformedLast))]
-    public async Task<IActionResult> LeaseholdersInformedLast(LeaseholdersInformedLastViewModel viewModel, ESubmitAction submitAction)
+    public async Task<IActionResult> LeaseholdersInformedLast(LeaseholdersInformedLastViewModel viewModel)
     {
         var validator = new LeaseholdersInformedLastViewModelValidator();
 
@@ -1488,7 +1511,9 @@ public class ProgressReportingController : StartController
 
             if (viewModel.SubmitAction == ESubmitAction.Continue)
             {
-                return RedirectToAction("SummariseProgress", "ProgressReporting", new { Area = "ProgressReporting" });
+                return !viewModel.HasVisitedCheckYourAnswers
+                    ? RedirectToAction("SummariseProgress", "ProgressReporting", new { Area = "ProgressReporting" })
+                    : RedirectToAction("SecondaryCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
@@ -1528,41 +1553,32 @@ public class ProgressReportingController : StartController
     [HttpPost(nameof(SummariseProgress))]
     public async Task<IActionResult> SummariseProgress(SummariseProgressViewModel viewModel)
     {
-        if (viewModel.SubmitAction == ESubmitAction.Exit)
-        {
-            var request = _mapper.Map<SetSummariseProgressRequest>(viewModel);
-
-            await _sender.Send(request);
-
-            return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
-        }
-
         var validator = new SummariseProgressViewModelValidator();
 
         var validationResult = await validator.ValidateAsync(viewModel);
 
-        if (validationResult.IsValid)
+        if (!validationResult.IsValid)
         {
-            var request = _mapper.Map<SetSummariseProgressRequest>(viewModel);
+            validationResult.AddToModelState(ModelState, string.Empty);
 
-            await _sender.Send(request);
-
-            if (viewModel.SubmitAction == ESubmitAction.Continue)
-            {
-                if (viewModel.IsSupportNeeded.HasValue && viewModel.IsSupportNeeded.Value)
-                {
-                    return RedirectToAction("ProgressSupport", "ProgressReporting", new { Area = "ProgressReporting" }); //TODO - What kind of support do you need
-                }
-                else
-                {
-                    return RedirectToAction("SecondaryCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
-                }
-            }
+            return View("SummariseProgress", viewModel);
         }
 
-        validationResult.AddToModelState(ModelState, String.Empty);
+        var request = _mapper.Map<SetSummariseProgressRequest>(viewModel);
 
-        return View("SummariseProgress", viewModel);
+        await _sender.Send(request);
+
+        if (viewModel.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+        }
+            
+        if (viewModel.IsSupportNeeded.HasValue && viewModel.IsSupportNeeded.Value)
+        {
+            return RedirectToAction("ProgressSupport", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return RedirectToAction("SecondaryCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     #endregion
@@ -1611,8 +1627,17 @@ public class ProgressReportingController : StartController
     }
 
     [HttpPost(nameof(SecondaryCheckYourAnswers))]
-    public async Task<IActionResult> CheckYourAnswers(SecondaryCheckYourAnswersViewModel viewModel)
+    public async Task<IActionResult> SecondaryCheckYourAnswers(SecondaryCheckYourAnswersViewModel viewModel)
     {
+        var validator = new SecondaryCheckYourAnswersViewModelValidator();
+        var validationResult = await validator.ValidateAsync(viewModel);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+        }
+
         await _sender.Send(SetCheckYourAnswersRequest.Request);
         return RedirectToAction("Submitted", "ProgressReporting", new { Area = "ProgressReporting" });
     }
@@ -1657,8 +1682,14 @@ public class ProgressReportingController : StartController
                 : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
         }
 
-        var action = viewModel.Version == 1 ? nameof(SoughtQuotes) : nameof(HaveAnyAnswersChanged);
-        return SafeRedirectToAction(action, "ProgressReporting", new { Area = "ProgressReporting" });
+        if (viewModel.Version == 1)
+        {
+            return viewModel.HasVisitedCheckYourAnswers
+                ? RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" })
+                : RedirectToAction("IntentToProceed", "ProgressReporting", new { Aera = "ProgressReporting" });
+        }
+
+        return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     [HttpGet(nameof(WhoIsTheGrantCertifyingOfficer))]
@@ -1907,9 +1938,14 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        return viewModel.Version == 1
-            ? RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" })
-            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        if (viewModel.Version == 1)
+        {
+            return !viewModel.HasVisitedCheckYourAnswers
+                ? RedirectToAction("IntentToProceed", "ProgressReporting", new { Area = "ProgressReporting" })
+                : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
     }
 
     #endregion
@@ -1945,9 +1981,14 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        return model.Version == 1
-                ? RedirectToAction("HasProjectPlanMilestones", "ProgressReporting", new { Area = "ProgressReporting" })
-                : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+        if (model.Version == 1)
+        {
+	        return !model.HasVisitedCheckYourAnswers
+		        ? RedirectToAction("HasProjectPlanMilestones", "ProgressReporting", new { Area = "ProgressReporting" })
+		        : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
 
     }
 
@@ -1984,10 +2025,15 @@ public class ProgressReportingController : StartController
             return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
         }
 
-        return model.Version == 1
-            ? RedirectToAction("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" })
-            : RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
-    }
+        if (model.Version == 1)
+        {
+	        return !model.HasVisitedCheckYourAnswers
+		        ? RedirectToAction("SoughtQuotes", "ProgressReporting", new { Area = "ProgressReporting" })
+		        : RedirectToAction("FinalCheckYourAnswers", "ProgressReporting", new { Area = "ProgressReporting" });
+        }
+
+        return RedirectToAction("HaveAnyAnswersChanged", "ProgressReporting", new { Area = "ProgressReporting" });
+	}
 
     #endregion
 }

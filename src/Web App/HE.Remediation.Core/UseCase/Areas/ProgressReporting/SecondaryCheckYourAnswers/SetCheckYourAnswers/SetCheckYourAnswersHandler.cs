@@ -34,10 +34,11 @@ public class SetCheckYourAnswersHandler : IRequestHandler<SetCheckYourAnswersReq
     public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
+        var userId = _applicationDataProvider.GetUserId();
 
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await _progressReportingRepository.UpdateProgressReportDateSubmitted(_dateTimeProvider.UtcNow);
+        await _progressReportingRepository.UpdateProgressReportDateSubmitted(_dateTimeProvider.UtcNow, userId);
 
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Progress Report", "Support request"));
         var supportNeeds = await _progressReportingRepository.GetProgressReportSupportNeeds();
