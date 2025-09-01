@@ -52,9 +52,9 @@ public class FireRiskAppraisalRepository : IFireRiskAppraisalRepository
         return insulationTypes.ToList();
     }
 
-    public async Task<List<GetCladdingManufacturerResult>> GetActiveCladdingManufacturers()
+    public async Task<List<GetCladdingManufacturerResult>> GetCladdingManufacturers()
     {
-        var manufacturers = await _db.QueryAsync<GetCladdingManufacturerResult>("GetActiveCladdingManufacturers");
+        var manufacturers = await _db.QueryAsync<GetCladdingManufacturerResult>("GetCladdingManufacturers");
         return manufacturers.ToList();
     }
 

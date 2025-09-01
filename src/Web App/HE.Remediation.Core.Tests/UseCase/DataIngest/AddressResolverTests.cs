@@ -3,6 +3,7 @@ using Moq;
 using HE.Remediation.Core.UseCase.DataIngest;
 using HE.Remediation.Core.Services.Location;
 using HE.Remediation.Core.UseCase.DataIngest.Lookups;
+using static AddressResolverException;
 
 namespace HE.Remediation.Core.Tests.UseCase.DataIngest
 {
@@ -63,8 +64,9 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
                 .ReturnsAsync(new PostCodeResults { Locations = new List<PostCodeResult>() });
 
             // Act & Assert
-            var ex = await Assert.ThrowsAsync<AddressResolver.AddressResolverException>(() => _resolver.GetAddress(importedData));
-            Assert.Contains("No locations found", ex.Message);
+            var ex = await Assert.ThrowsAsync<AddressResolverException>(() => _resolver.GetAddress(importedData));
+            Assert.Contains("Postcode Lookup: No locations found for the provided postcode (AB12 3CD).", ex.Message);
+            Assert.Equal(ErrorType.Postcode, ex.LookupErrorType);
         }
 
         [Fact]
@@ -90,8 +92,9 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
                 .ReturnsAsync(new PostCodeResults { Locations = new List<PostCodeResult> { location } });
 
             // Act & Assert
-            var ex = await Assert.ThrowsAsync<AddressResolver.AddressResolverException>(() => _resolver.GetAddress(importedData));
-            Assert.Contains("No location matched", ex.Message);
+            var ex = await Assert.ThrowsAsync<AddressResolverException>(() => _resolver.GetAddress(importedData));
+            Assert.Contains("Postcode Lookup: No location matched the address (, 10 Main Street).", ex.Message);
+            Assert.Equal(ErrorType.BuildingName, ex.LookupErrorType);
         }
        
     }

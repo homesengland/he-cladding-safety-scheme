@@ -11,16 +11,19 @@ public class GetVariationReasonHandler : IRequestHandler<GetVariationReasonReque
     private readonly IApplicationRepository _applicationRepository;
     private readonly IBuildingDetailsRepository _buildingDetailsRepository;
     private readonly IVariationRequestRepository _variationRequestRepository;
+    private readonly IPaymentRequestRepository _paymentRequestRepository;
 
     public GetVariationReasonHandler(IApplicationDataProvider applicationDataProvider,
                                      IBuildingDetailsRepository buildingDetailsRepository,
                                      IApplicationRepository applicationRepository,
-                                     IVariationRequestRepository variationRequestRepository)
+                                     IVariationRequestRepository variationRequestRepository,
+                                     IPaymentRequestRepository paymentRequestRepository)
     {
         _applicationDataProvider = applicationDataProvider;
         _buildingDetailsRepository = buildingDetailsRepository;
         _applicationRepository = applicationRepository;
         _variationRequestRepository = variationRequestRepository;
+        _paymentRequestRepository = paymentRequestRepository;
     }
 
     public async Task<GetVariationReasonResponse> Handle(GetVariationReasonRequest request, CancellationToken cancellationToken)
@@ -33,6 +36,7 @@ public class GetVariationReasonHandler : IRequestHandler<GetVariationReasonReque
         var variationRequestId = await _variationRequestRepository.GetLatestVariationRequestId();
         var isSubmitted = await _variationRequestRepository.IsVariationRequestSubmitted();
         var approvalStatus = await _variationRequestRepository.GetApprovalStatus();
+        var monthlyPaymentsOutstanding = await _paymentRequestRepository.GetMonthlyPaymentsOutstanding(applicationId);
 
         OverviewResult overview;
         GetVariationReasonResult variationReason;
@@ -65,7 +69,9 @@ public class GetVariationReasonHandler : IRequestHandler<GetVariationReasonReque
             IsThirdPartyContributionVariation = variationReason?.IsThirdPartyContributionVariation,
             ApprovedGrantFunding = overview?.TotalGrantFunding ?? 0,
             GrantPaidToDate = overview?.TotalGrantPaidToDate ?? 0,
-            UnclaimedGrantFunding = overview?.TotalUnclaimedGrant ?? 0
+            UnclaimedGrantFunding = overview?.TotalUnclaimedGrant ?? 0,
+            ClosingReportStarted = overview?.ClosingReportStarted ?? false,
+            LastMonthlyPaymentCompleted = monthlyPaymentsOutstanding == 0
         };
     }
 }

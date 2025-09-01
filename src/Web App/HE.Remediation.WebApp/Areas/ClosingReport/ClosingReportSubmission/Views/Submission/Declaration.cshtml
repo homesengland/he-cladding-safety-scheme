@@ -1,0 +1,72 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.DeclarationViewModel
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Model.ReturnUrl;
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+    {
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>    
+        <govuk-error-summary-item asp-for="DateOfCompletion" />
+        <govuk-error-summary-item asp-for="FraewRiskToLifeReduced" />
+        <govuk-error-summary-item asp-for="GrantFundingObligations" />
+        <govuk-error-summary-item asp-for="DischargedObligations" />
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Final payment declaration and submission</h1>
+
+@using (Html.BeginForm())
+{
+
+    <govuk-date-input asp-for="DateOfCompletion" name="DateOfCompletion" disabled="@Model.IsSubmitted">
+        <govuk-date-input-fieldset class="govuk-!-margin-top-5">
+            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                Date of practical completion
+            </govuk-date-input-fieldset-legend>
+        </govuk-date-input-fieldset>
+        <govuk-date-input-label></govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+
+    <govuk-checkboxes asp-for="FraewRiskToLifeReduced">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.DischargedObligations">
+            Please confirm that your Fire Risk Assessment shows that the risk to life has been reduced.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+    <govuk-checkboxes asp-for="GrantFundingObligations">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.GrantFundingObligations">
+            I confirm that I have met the obligations of the grant funding agreement by taking reasonable endeavours 
+            to recover funding from all possible sources, and will continue to engage with Homes England 
+            on any recovery options that remain open.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes asp-for="DischargedObligations">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.DischargedObligations">
+            I understand that once the review of the final payment request and supporting evidence has been undertaken and a decision 
+            communicated, that the Cladding Safety Scheme has discharged its obligations and that there is no further opportunity 
+            to claim funding.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input name="@($"{nameof(Model.ApplicationCreationDate)}.{nameof(Model.ApplicationCreationDate.Value.Day)}")" value="@Model.ApplicationCreationDate?.Day" type="hidden" />
+    <input name="@($"{nameof(Model.ApplicationCreationDate)}.{nameof(Model.ApplicationCreationDate.Value.Month)}")" value="@Model.ApplicationCreationDate?.Month" type="hidden" />
+    <input name="@($"{nameof(Model.ApplicationCreationDate)}.{nameof(Model.ApplicationCreationDate.Value.Year)}")" value="@Model.ApplicationCreationDate?.Year" type="hidden" />
+
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+
+    <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="Continue">Confirm and submit</govuk-button>
+}

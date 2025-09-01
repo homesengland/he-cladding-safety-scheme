@@ -12,8 +12,9 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.TaskList.GetTaskList
         public ETaskStatus ApplicationResponsibleEntityStatusId { get; set; }
         public ETaskStatus ApplicationFundingRoutesStatusId { get; set; }
         public ETaskStatus ApplicationBankDetailsStatusId { get; set; }
-        public bool ConfirmDeclaration { get; set; }
         public ETaskStatus ConfirmDeclarationStatusId { get; set; }
+        public ETaskStatus ApplicationFraStatusId { get; set; }
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
+        public bool IsDataIngestion { get; set; }
     }
 }

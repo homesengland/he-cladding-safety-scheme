@@ -1,0 +1,32 @@
+﻿@using HE.Remediation.Core.Enums
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Practical Completion Certificate";
+    ViewData["BackLink"] = Url.Action("TaskList", "ClosingReport", new { Area = "ClosingReport" });
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">In this section</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#practical-completion--scheme-exit" class="govuk-link govuk-!-margin-bottom-2">
+            Guidance
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">About this section</h1>
+<p class="govuk-body">
+    In this section we will ask you to upload your practical completion certificate confirming that the works have been completed to the standard outlined in the fund requirements.
+</p>
+
+<p class="govuk-body">
+    For further information please refer to the guidance.
+</p>
+
+@using (Html.BeginForm())
+{
+    <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>
+}

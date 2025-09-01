@@ -1,6 +1,16 @@
 ﻿public class AddressResolverException : DataImportException
 {
-    public AddressResolverException(string message) : base(message)
+    public ErrorType LookupErrorType { get; }
+
+    public AddressResolverException(string message, ErrorType errorType) : base($"Postcode Lookup: {message}")
     {
+        LookupErrorType = errorType;
+    }
+
+    public enum ErrorType
+    {
+        Postcode,
+        BuildingName,
+        Other
     }
 }

@@ -40,6 +40,8 @@ namespace HE.Remediation.WebApp
             {
                 options.AreaViewLocationFormats.Insert(0,"/Areas/WorksPackage/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Insert(1,"/Areas/WorksPackage/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Insert(2, "/Areas/ClosingReport/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Insert(3, "/Areas/ClosingReport/Views/Shared/{0}.cshtml");
             });
 
             if (builder.Environment.IsDevelopment())
@@ -127,16 +129,32 @@ namespace HE.Remediation.WebApp
                 "WorksPackageSignatories", 
                 "WorksPackageDeclaration",
                 "WorksPackageSubmit",
-                "WorksPackageProgrammePlan"
+                "WorksPackageProgrammePlan",
+                "WorksPackageFireRiskAssessment"
             };
-            foreach (var areaName in applicationAreas.Union(workPackageAreas))
+
+            var closingReportAreas = new[]
+            {
+                "ClosingReport",
+                "ClosingReportBuildingControlEvidence",
+                "ClosingReportBuildingsInsurance",
+                "ClosingReportFinalCost",
+                "ClosingReportFinalPaymentRequest",
+                "ClosingReportFireRiskAssessment",
+                "ClosingReportLeaseholderCommunication",
+                "ClosingReportPracticalCompletionCertificate",
+                "ClosingReportSubmission",
+                "ClosingReportEvidenceOfThirdPartyContribution"
+            };
+
+            foreach (var areaName in applicationAreas.Union(workPackageAreas).Union(closingReportAreas))
             {
                 app.MapAreaControllerRoute(
                     name: areaName,
                     areaName: areaName,
                     pattern: areaName + "/{controller=Start}/{action=Index}/{id?}");
             }
-            
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Application}/{action=Index}/{id?}");

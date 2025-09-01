@@ -11,20 +11,20 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetDeclaration;
 public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
 {
     private readonly IApplicationDataProvider _adp;
-    private readonly IClosingReportRepository _closingRequestRepository;
+    private readonly IClosingReportRepository _closingReportRepository;
     private readonly IApplicationRepository _applicationRepository;
     private readonly ICommunicationService _communicationService;
     private readonly IStatusTransitionService _statusTransitionService;
 
     public SetDeclarationHandler(
         IApplicationDataProvider adp,
-        IClosingReportRepository closingRequestRepository,
+        IClosingReportRepository closingReportRepository,
         IApplicationRepository applicationRepository,
         ICommunicationService communicationService, 
         IStatusTransitionService statusTransitionService)
     {
         _adp = adp;
-        _closingRequestRepository = closingRequestRepository;
+        _closingReportRepository = closingReportRepository;
         _applicationRepository = applicationRepository;
         _communicationService = communicationService;
         _statusTransitionService = statusTransitionService;
@@ -36,9 +36,9 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
 
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        await _closingRequestRepository.UpdateClosingReportProjectDate(applicationId, request.DateOfCompletion);
-        await _closingRequestRepository.UpdateClosingReportDeclarations(applicationId, request.FraewRiskToLifeReduced, request.GrantFundingObligations);
-        await _closingRequestRepository.UpdateClosingReportToSubmitted(applicationId);
+        await _closingReportRepository.UpdateClosingReportProjectDate(applicationId, request.DateOfCompletion);
+        await _closingReportRepository.UpdateClosingReportDeclarations(applicationId, request.FraewRiskToLifeReduced, request.GrantFundingObligations);
+        await _closingReportRepository.UpdateClosingReportToSubmitted(applicationId);
 
         await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.ClosingReportSubmitted, applicationIds: applicationId);
         await _applicationRepository.UpdateApplicationStage(applicationId, EApplicationStage.WorksCompleted);
@@ -48,6 +48,8 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
             applicationId,
             EEmailType.ClosingReportSubmitted
         ));
+
+        await _closingReportRepository.UpsertClosingReportTaskStatus(applicationId, EClosingReportTask.FinalPaymentDeclaration, ETaskStatus.Completed);
 
         scope.Complete();
         

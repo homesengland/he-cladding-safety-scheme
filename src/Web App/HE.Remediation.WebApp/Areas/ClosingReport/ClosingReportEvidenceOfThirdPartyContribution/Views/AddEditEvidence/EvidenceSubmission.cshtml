@@ -1,0 +1,67 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.UploadEvidenceSubmissionUploadViewModel
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final Report";
+    ViewData["Backlink"] = ViewData["Backlink"] = Model.ViaCheckAnswer ? Url.Action("CheckYourAnswers", new { id = Model.Id }) : Url.Action("Details2", new { id = Model.Id });
+    ViewData["FullWidth"] = true;
+    ViewData["ExitLinkHidden"] = true;
+
+    var acceptedTypes = Model?.AcceptedFileTypes?.Any() == true ? string.Join(",", Model?.AcceptedFileTypes) : "*";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<form asp-action="EvidenceSubmission"
+asp-controller="AddEditEvidence"
+asp-area="ClosingReportEvidenceOfThirdPartyContribution"
+asp-route-id=""
+method="post"
+enctype="multipart/form-data">
+    <h1 class="govuk-heading-xl">Upload Third Party Contribution Evidence (optional)</h1>
+    <h2 class="govuk-heading-m">Please upload evidence of the outcome or current status of this claim</h2>
+    <p class="govuk-caption-m">File must be smaller than 50MB and .pdf format</p>
+
+    @if (Model.FileId == null)
+    {
+        <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Upload</govuk-button>
+    } 
+    else
+    {
+        <govuk-summary-list>
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    File added
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.Name
+                </govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("DeleteEvidenceSubmission", new { id= Model.Id, fileId = Model.FileId })">Delete</govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>
+        </govuk-summary-list>
+    }
+    <br />
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="ViaCheckAnswer" value="@Model.ViaCheckAnswer" />
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>
+
+<div>
+    <a class="govuk-link" href="@Url.Action( "CancelAndExit", new { id = Model.Id })">Cancel and exit</a>
+</div>

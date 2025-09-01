@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.CostsScheduling;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CheckYourAnswers
 {
@@ -25,6 +26,8 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
         public string PostTenderDescription { get; set; }
         public string PropertyManagerDescription { get; set; }
         public string VatDescription { get; set; }
+
+        public PreferredContractorLinksResult PreferredContractorLinksResult { get; set; }
 
         public class CladdingSystem
         {

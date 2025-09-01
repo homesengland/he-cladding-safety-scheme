@@ -8,6 +8,8 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage
 
         public ETaskStatus WorkPackageCostsScheduleStatusId { get; set; }
 
+        public ETaskStatus WorkPackageInternalDefectsStatusId { get; set; }
+
         public ETaskStatus WorkPackageThirdPartyContributionsStatusId { get; set; }
 
         public ETaskStatus WorkPackageDeclarationStatusId { get; set; }
@@ -22,8 +24,9 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage
 
         public ETaskStatus WorkPackageKeyDatesStatusId { get; set; }
         
-
         public ETaskStatus WorkPackageProgrammePlanStatusId { get; set; }
+
+        public ETaskStatus WorkPackageFireRiskAssessmentStatusId { get; set; }
 
         public bool IsSubmitted { get; set; }
     }

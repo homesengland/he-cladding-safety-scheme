@@ -6,4 +6,5 @@ namespace HE.Remediation.WebApp.ViewModels.ClosingReport;
 public class SubContractorRatingsViewModel : ClosingReportBaseViewModel
 {
     public GetSubContractorRatingResult Ratings { get; set; }
+    public string Name { get; set; }
 }

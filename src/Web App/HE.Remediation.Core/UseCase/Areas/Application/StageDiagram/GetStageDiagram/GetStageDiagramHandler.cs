@@ -52,6 +52,9 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             {
                 ApplicationId = applicationId
             });
+
+            var monthlyPaymentsOutstanding = await _paymentRequestRepository.GetMonthlyPaymentsOutstanding(applicationId);
+
             stageDiagramResponse.SubmittedDate = submittedDate;
 
             var progressReports = await _progressReportingRepository.GetProgressReports();
@@ -71,7 +74,8 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             var variationRequestApprovalStatus = await _variationRequestRepository.GetApprovalStatus();
 
             var closingReportAvailable = await _closingReportRepository.GetApplicationReadyForClosingReport(applicationId);
-            
+            var closingReportSubmitted = await _closingReportRepository.IsClosingReportSubmitted(applicationId);
+
             if (closingReportAvailable)
             {
                 if (variationRequestApprovalStatus is null)
@@ -104,6 +108,9 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             stageDiagramResponse.IsStartedOnSiteSubmitted = startedOnDate?.IsStartOnSiteSubmitted ?? false;
             stageDiagramResponse.PracticalCompletionMilestoneDate = practicalCompletion?.PracticalCompletionDate;
             stageDiagramResponse.IsPracticalCompletionSubmitted = practicalCompletion?.IsPracticalCompletionSubmitted ?? false;
+            stageDiagramResponse.IsClosingReportSubmitted = closingReportSubmitted;
+
+            stageDiagramResponse.ConsiderVariation = monthlyPaymentsOutstanding == 1;
 
             return stageDiagramResponse ?? new GetStageDiagramResponse();
         }

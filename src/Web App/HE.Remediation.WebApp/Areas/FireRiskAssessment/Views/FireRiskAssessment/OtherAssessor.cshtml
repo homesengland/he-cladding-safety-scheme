@@ -1,0 +1,56 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAssessment.OtherAssessorViewModel
+@{
+    ViewData["Title"] = "Fire risk assessor details";
+    ViewData["BackLink"] = Model.VisitedCheckYourAnswers
+        ? Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+        : Url.Action("Report", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FirstName" />
+        <govuk-error-summary-item asp-for="LastName" />
+        <govuk-error-summary-item asp-for="CompanyName" />
+        <govuk-error-summary-item asp-for="CompanyNumber" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="Telephone" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="FireRiskAssessment" asp-action="OtherAssessor" method="post">
+    <govuk-input asp-for="FirstName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">First name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="LastName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Last name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="CompanyName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Company name</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="CompanyNumber" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Company number</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Email address</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input asp-for="Telephone" input-class="govuk-input--width-20" inputmode="numeric" pattern="[0-9]*" spellcheck="false" input-maxlength="20">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Telephone number</govuk-input-label>
+    </govuk-input>
+    
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

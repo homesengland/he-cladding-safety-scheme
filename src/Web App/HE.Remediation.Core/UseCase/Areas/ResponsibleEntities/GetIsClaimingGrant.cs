@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
@@ -7,11 +9,13 @@ public class GetIsClaimingGrantHandler : IRequestHandler<GetIsClaimingGrantReque
 {
     private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IResponsibleEntityRepository _responsibleEntityRepository;
 
-    public GetIsClaimingGrantHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+    public GetIsClaimingGrantHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider, IResponsibleEntityRepository responsibleEntityRepository)
     {
         _connection = connection;
         _applicationDataProvider = applicationDataProvider;
+        _responsibleEntityRepository = responsibleEntityRepository;
     }
 
     public async Task<GetIsClaimingGrantResponse> Handle(GetIsClaimingGrantRequest request, CancellationToken cancellationToken)
@@ -21,6 +25,14 @@ public class GetIsClaimingGrantHandler : IRequestHandler<GetIsClaimingGrantReque
             ApplicationId = _applicationDataProvider.GetApplicationId()
         });
 
+        var organisationAndRepresentationType = await _responsibleEntityRepository.GetResponsibleEntityOrganisationAndRepresentationType(_applicationDataProvider.GetApplicationId());
+
+        if (result != null)
+        {
+            result.IsSocialSector = _applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
+            result.OrganisationType = organisationAndRepresentationType.OrganisationType;
+        }
+
         return result ?? new GetIsClaimingGrantResponse();
     }
 }
@@ -29,6 +41,8 @@ public class GetIsClaimingGrantResponse
 {
     public bool? IsClaimingGrant { get; set; }
     public bool? HasOwners { get; set; }
+    public bool IsSocialSector { get; set; }
+    public EApplicationResponsibleEntityOrganisationType OrganisationType { get; set; }
 }
 
 public class GetIsClaimingGrantRequest : IRequest<GetIsClaimingGrantResponse>

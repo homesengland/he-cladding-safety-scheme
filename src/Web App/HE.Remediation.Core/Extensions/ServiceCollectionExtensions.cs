@@ -76,6 +76,7 @@ namespace HE.Remediation.Core.Extensions
             services.AddTransient<JsonDataIngestMapperIValidator>();
             services.AddScoped<IBuildingDetailsDataImporter, BuildingDetailsDataImporter>();
             services.AddScoped<IResponsibleEntityDataImporter, ResponsibleEntityDataImporter>();
+            services.AddScoped<IFraDataImporter, FraDataImporter>();
             services.AddScoped<IDataIngestionLookupService, DataIngestionLookupService>();
 
             services.AddAuth0WebAppAuthentication(options =>

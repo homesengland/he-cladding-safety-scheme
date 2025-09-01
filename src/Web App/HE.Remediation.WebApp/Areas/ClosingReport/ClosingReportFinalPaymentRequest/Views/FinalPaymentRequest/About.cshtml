@@ -1,0 +1,41 @@
+﻿@using HE.Remediation.Core.Enums
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final Payment Request";
+    ViewData["BackLink"] = Url.Action("TaskList", "ClosingReport", new { Area = "ClosingReport" });
+    ViewData["FullWidth"] = true;
+}
+
+@section InfoCardSection
+{
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">In this section</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#practical-completion--scheme-exit" class="govuk-link govuk-!-margin-bottom-2">
+            Guidance
+        </a>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">About this section</h1>
+<p class="govuk-body">
+    In this section we will ask you to submit your final payment request.
+</p>
+
+<p class="govuk-body">
+    You can claim any amount up to 5% of the total grant awarded to you. Eligible costs for any amount claimed in this section must be included in the final cost report alongside all other spend for the project and evidenced as usual.
+</p>
+
+<p class="govuk-body">
+    Any amount left unclaimed following the submission of the closing report and final payment request will no longer be available.
+</p>
+
+<p class="govuk-body">
+        If you need to discuss the remaining grant available before submitting your payment request, please email
+        <a href="mailto:support@claddingsafetyscheme.co.uk" class="govuk-link">support@claddingsafetyscheme.co.uk</a>.
+</p>
+
+@using (Html.BeginForm())
+{
+   <govuk-button name="SubmitAction" value="Continue">Continue</govuk-button>
+}

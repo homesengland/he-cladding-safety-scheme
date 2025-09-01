@@ -1,0 +1,71 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment.IdentifiedDefectsViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Title"] = "Fire risk assessment";
+    ViewData["Backlink"] = Model.VisitedCheckYourAnswers
+        ? Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
+        : Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="InternalFireSafetyDefects" />
+        <govuk-error-summary-item asp-for="OtherInternalDefect" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">FRA Report</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="WorksPackageFireRiskAssessment" asp-action="IdentifiedDefects" method="post">
+
+    <govuk-checkboxes asp-for="InternalFireSafetyDefects">
+        <govuk-checkboxes-fieldset>
+            <govuk-checkboxes-fieldset-legend is-page-heading="false" class="govuk-label--s">
+                What are the identified internal fire safety defects
+            </govuk-checkboxes-fieldset-legend>
+        </govuk-checkboxes-fieldset>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.DefectiveWallsCeilingsFloors" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.DefectiveWallsCeilingsFloors))">
+            Defective walls, ceilings or floors that can cause a loss of compartmentalisation between dwellings or between dwellings and common parts
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.InadequateDefectiveFireDoors" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.InadequateDefectiveFireDoors))">
+            Inadequate or defective fire doors
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.InadequateStoppingAroundFireCablesAndPipes" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.InadequateStoppingAroundFireCablesAndPipes))">
+            Inadequate stopping around fire cables and pipes
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.InadequateOrMissingFireEscapeSignage" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.InadequateOrMissingFireEscapeSignage))">
+            Incorrect or missing fire escape signage
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.InadequateDefectiveFireDetectionAndAlarmSystems" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.InadequateDefectiveFireDetectionAndAlarmSystems))">
+            Inadequate/defective fire detection and alarm systems
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.UnprotectedMeansOfEscape" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.UnprotectedMeansOfEscape))">
+            Unprotected means of escape
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.InadequateDefectiveFireFightingEquipmentOrInstallation" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.InadequateDefectiveFireFightingEquipmentOrInstallation))">
+            Inadequate/defective firefighting equipment or installations
+        </govuk-checkboxes-item>
+        <govuk-checkboxes-item value="@EInternalFireSafetyDefect.Other" checked="@(Model.InternalFireSafetyDefects.Contains(EInternalFireSafetyDefect.Other))">
+            Other
+            <govuk-checkboxes-item-conditional>
+                <govuk-input asp-for="OtherInternalDefect">
+                    <govuk-input-label>Specify the defect</govuk-input-label>
+                </govuk-input>
+            </govuk-checkboxes-item-conditional>
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

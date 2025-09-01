@@ -1,14 +1,29 @@
-﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ClaimingGrantViewModel
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using InputTagHelper = GovUk.Frontend.AspNetCore.TagHelpers.InputTagHelper
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ClaimingGrantViewModel
+
 @{
     ViewData["Title"] = "Are you claiming funding on the grounds of the works not being viable to your organisation?";
-    ViewData["BackLink"] = Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+
+    @if (Model.IsSocialSector || Model.OrganisationType is EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
+    {
+        ViewData["BackLink"] = Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    }
+    else
+    {
+            ViewData["BackLink"] = Url.Action("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+    }
 }
+
 @section ErrorSummary
 {
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="IsClaimingGrant"/>
     </govuk-error-summary>
 }
+
 <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ClaimingGrant" method="post">
     <govuk-radios asp-for="IsClaimingGrant">
         <govuk-radios-fieldset>
@@ -20,8 +35,9 @@
         <govuk-radios-item value="@(false)">No</govuk-radios-item>
     </govuk-radios>
 
+    <input type="hidden" asp-for="IsSocialSector" value="@Model.IsSocialSector" />
+    <input type="hidden" asp-for="OrganisationType" value="@Model.OrganisationType" />
     <input type="hidden" asp-for="HasOwners" value="@Model.HasOwners" />
-
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>

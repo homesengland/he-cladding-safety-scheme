@@ -34,6 +34,8 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
 
             var claddingSystems = await _workPackageRepository.GetCladdingReplacementSystemsForApplication();
 
+            var preferredContractorLinks = await _workPackageRepository.GetCostsSchedulePreferredContractorLinks();
+
             return new GetCheckYourAnswersResponse
             {
                 CompetitiveBidsObtained = quotes,
@@ -56,7 +58,8 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
                 ApplicationReferenceNumber = referenceNumber,
                 BuildingName = buildingName,
                 IsSubmitted = isSubmitted,
-                CladdingSystems = claddingSystems.Select(x=> new GetCheckYourAnswersResponse.CladdingSystem { BeingRemoved = x.IsBeingRemoved, CladdingManufacturer = x.CladdingManufacturer, CladdingType = x.CladdingType, InsulationManufacturer = x.InsulationManufacturer, InsulationMaterial = x.InsulationMaterial}).ToList()
+                CladdingSystems = claddingSystems.Select(x=> new GetCheckYourAnswersResponse.CladdingSystem { BeingRemoved = x.IsBeingRemoved, CladdingManufacturer = x.CladdingManufacturer, CladdingType = x.CladdingType, InsulationManufacturer = x.InsulationManufacturer, InsulationMaterial = x.InsulationMaterial}).ToList(),
+                PreferredContractorLinksResult = preferredContractorLinks,
             };
         }
 

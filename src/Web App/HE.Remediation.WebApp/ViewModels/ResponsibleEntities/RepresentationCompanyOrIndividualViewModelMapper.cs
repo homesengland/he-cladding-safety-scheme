@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentationCompanyOrIndividual.GetRepresentationCompanyOrIndividual;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentationCompanyOrIndividual.SetRepresentationCompanyOrIndividual;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.GetRepCompanyOrIndividual;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.SetRepCompanyOrIndividual;
 
 namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities;
 
@@ -8,8 +8,8 @@ public class RepresentationCompanyOrIndividualViewModelMapper : Profile
 {
     public RepresentationCompanyOrIndividualViewModelMapper()
     {
-        CreateMap<RepresentationCompanyOrIndividualViewModel, SetRepresentationCompanyOrIndividualRequest>();
+        CreateMap<RepresentationCompanyOrIndividualViewModel, SetRepCompanyOrIndividualRequest>();
 
-        CreateMap<GetRepresentationCompanyOrIndividualResponse, RepresentationCompanyOrIndividualViewModel>();
+        CreateMap<GetRepCompanyOrIndividualResponse, RepresentationCompanyOrIndividualViewModel>();
     }
 }

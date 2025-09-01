@@ -1,0 +1,23 @@
+﻿@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageInternalDefects.StartInformationViewModel
+
+@{
+    ViewData["Title"] = "Internal Defects - About this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">In this section we will ask you to tell us about the cost of remediating any internal defects and how this work will be funded.</p>
+<p class="govuk-body">For details on what is funded by the Cladding Safety Scheme, please refer to the  <a href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" target="_blank">guidance</a></p>
+<form asp-area="WorksPackageInternalDefects" asp-controller="InternalDefects" asp-action="StartInformation" method="post">
+    
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button type="submit" disabled="@Model.IsSubmitted">Continue</govuk-button>
+    </div>
+</form>

@@ -21,4 +21,6 @@ public class UpdateCladdingSystemDetailsParameters
 	public string ReplacementOtherInsulationManufacturer { get; set; }
 
 	public string ReplacementOtherCladdingManufacturer { get; set; }
+
+    public int? CladdingSystemArea { get; set; }
 }

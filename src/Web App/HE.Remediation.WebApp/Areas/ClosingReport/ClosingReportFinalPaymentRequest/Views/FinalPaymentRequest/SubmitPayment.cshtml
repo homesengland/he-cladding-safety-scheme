@@ -1,0 +1,239 @@
+﻿@using HE.Remediation.Core.Enums;
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.CostsViewModel
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Model.ReturnUrl;
+    ViewData["FullWidth"] = true;
+    ViewData["UseStickyInfoPanel"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="@Model.UnprofiledGrantFunding" />
+    </govuk-error-summary>
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <div class="app-card no-bottom-border">
+
+            <h2 class="govuk-heading-m">Funding details</h2>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Total grant funding</h3>
+            <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw($"&pound;{(Model.ApprovedGrantFunding ?? 0):N0}")</p>
+
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Grant funding paid to date</h3>
+            <p class="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-2">@Html.Raw(Model.GrantPaidToDate is not null ? $"&pound;{Model.GrantPaidToDate.Value:N0}" : "-")</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unprofiled funding</h3>
+
+
+            <p class="unprofiled-funding @(Model is { UnprofiledGrantFunding: < 0 } ? "out-of-range-number-text" : "govuk-body") govuk-!-margin-top-0">
+                @if (Model is { UnprofiledGrantFunding: < 0 })
+                {
+                    @Html.Raw($"-&pound;{Math.Abs(Model.UnprofiledGrantFunding.Value).ToString("N0")}")
+                }
+                else
+                {
+                    @Html.Raw($"&pound;{(Model.UnprofiledGrantFunding ?? 0).ToString("N0")}")
+                }
+            </p>            
+        </div>
+    </div>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Submit payment request</h1>
+<p class="govuk-body">
+    Your final payment request should be up to a maximum of 5% of your grant award. If you need more grant funding, then you must contact 
+    us before completing and submitting this final payment request.
+</p>
+<p class="govuk-body">
+    You must provide evidence from your grant certifying officer of all costs for the works in your final cost report and supporting evidence.
+</p>
+
+<details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Show all paid months
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row bold-bottom-table-border">
+                    @if (@Model.ProjectDuration == 1)
+                    {
+                        <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Months (@Model.ProjectDuration month)</th>
+                    }
+                    else
+                    {
+                        <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Months (@Model.ProjectDuration months)</th>                        
+                    }
+                    
+                    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">Amount</th>
+                    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">Status</th>
+                </tr>
+                <tr class="govuk-table__row bold-bottom-table-border">
+                    <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Grant paid to date</th>
+                    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+                    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric"></th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                @if (Model.PaidCosts != null)
+                {
+                    @foreach (var x in Model.PaidCosts.Select((value, index) => new { value, index }))
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell govuk-!-padding-left-2">
+                                <label class="govuk-label" for="PaidCosts_@(x.index)__AmountText">
+                                    @(Model.PaidCosts[x.index].MonthName)
+                                </label>
+                            </td>
+                            <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
+                                &pound;<span>@Model.PaidCosts[x.index].AmountText</span>
+                                <input asp-for="@Model.PaidCosts[x.index].Id" id="PaidCosts_@(x.index)__Id" name="PaidCosts[@(x.index)].Id" type="hidden" value="@x.value.Id" />
+                                <input asp-for="@Model.PaidCosts[x.index].MonthName" id="PaidCosts_@(x.index)__MonthName" name="PaidCosts[@(x.index)].MonthName" type="hidden" value="@x.value.MonthName" />
+                                <input asp-for="@Model.PaidCosts[x.index].AmountText" id="PaidCosts_@(x.index)__AmountText" name="PaidCosts[@(x.index)].AmountText" type="hidden" value="@x.value.AmountText" />
+                                <input asp-for="@Model.PaidCosts[x.index].Paid" id="PaidCosts_@(x.index)__Paid" name="PaidCosts[@(x.index)].Paid" type="hidden" value="@x.value.Paid" />
+                            </td>
+                            <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
+                                <payment-request-status-badge status="@Model.PaidCosts[x.index].Paid ? EPaymentRequestStatus.Paid : EPaymentRequestStatus.Approved"></payment-request-status-badge>
+                            </td>
+                        </tr>
+                    }
+                } 
+            </tbody>
+        </table>
+    </div>
+</details>
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body" >            
+        <tr class="govuk-table__row govuk-!-font-weight-bold bold-bottom-table-border bold-top-table-border">
+            <td class="govuk-table__cell govuk-!-padding-left-2">Grant paid to date totals</td>
+            <td class="govuk-table__cell govuk-text-align-right">
+                &pound;<span class="monthly-costs-to-date">@Model.GrantPaidToDate?.ToString("N0")</span>
+            </td>
+        </tr>
+        </tbody>
+</table>
+
+
+<form id="costProfileForm" asp-area="ClosingReportFinalPaymentRequest" asp-controller="FinalPaymentRequest" asp-action="SubmitPayment" method="post">
+
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Final payment request</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">
+                    <label class="govuk-label" asp-for="@Model.FinalMonthCost.AmountText">
+                        5% of project costs
+                    </label>
+                </td>
+                <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-top-0 govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
+                    <govuk-input asp-for="@Model.FinalMonthCost.AmountText"
+                                 id="FinalMonthCost__AmountText"
+                                 name="FinalMonthCost.AmountText"
+                                 input-class="govuk-!-width-full govuk-!-margin-0 right-aligned final-cost-input govuk-input--width-10 final-cost-input"
+                                 input-inputmode="numeric"
+                                 input-maxlength="10"
+                                 disabled="@Model.IsSubmitted">
+
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+
+                    <input asp-for="@Model.FinalMonthCost.Id"
+                           id="FinalMonthCost__Id"
+                           name="FinalMonthCost.Id"
+                           type="hidden"
+                           value="@Model.FinalMonthCost.Id" />
+
+                    <input asp-for="@Model.FinalMonthCost.MonthName"
+                           id="FinalMonthCost__MonthDate"
+                           name="FinalMonthCost.MonthDate"
+                           type="hidden"
+                           value="@Model.FinalMonthCost.MonthName" />
+                </td>
+            </tr>
+
+            <tr class="govuk-table__row govuk-!-font-weight-bold">
+                <td class="govuk-table__cell govuk-!-padding-left-2">Total</td>
+                <td class="govuk-table__cell govuk-text-align-right">
+                    &pound;<span class="final-cost-total">@Model.FinalMonthTotal?.ToString("N0")</span>
+                    <input class="final-cost-total" asp-for="FinalMonthTotal" type="hidden" value="@Model.FinalMonthTotal" />
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <td colspan="2">
+                    <div id="UnprofiledGrantFunding" class="@(ViewData.ModelState.TryGetValue($"UnprofiledGrantFunding", out var unprofiledGrantFundingState) && unprofiledGrantFundingState.ValidationState == ModelValidationState.Invalid ? "govuk-form-group govuk-form-group--error" : string.Empty)">
+                        @if (unprofiledGrantFundingState?.ValidationState == ModelValidationState.Invalid)
+                        {
+                            foreach (var error in unprofiledGrantFundingState.Errors)
+                            {
+                                <govuk-error-message class="govuk-!-padding-top-3 govuk-!-padding-right-9">
+                                    <govuk-input-error-message>@error.ErrorMessage</govuk-input-error-message>
+                                </govuk-error-message>
+                            }
+                        }
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row bold-bottom-table-border">
+                <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Unprofiled funding</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
+                <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">
+                    <span class="unprofiled-funding">
+                        @if (Model is { UnprofiledGrantFunding: < 0 })
+                        {
+                            @Html.Raw($"-&pound;{Math.Abs(Model.UnprofiledGrantFunding.Value).ToString("N0")}")
+                        }
+                        else
+                        {
+                            @Html.Raw($"&pound;{(Model.UnprofiledGrantFunding ?? 0).ToString("N0")}")
+                        }
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body" />            
+    </table>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="IsExpired" type="hidden" value="@Model.IsExpired" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="UnprofiledGrantFunding" type="hidden" value="@Model.UnprofiledGrantFunding" class="unprofiled-funding-amount" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+
+    <input id="GrantPaidToDate" name="GrantPaidToDate" type="hidden" value="@Model.GrantPaidToDate" class="grant-paid-to-date" />
+    <input id="ApprovedGrantFunding" name="ApprovedGrantFunding" type="hidden" value="@Model.ApprovedGrantFunding" class="approved-grant-funding" />
+</form>
+
+@section BodyEnd
+{
+    *<script src="~/js/finalCosts.js"></script>
+}

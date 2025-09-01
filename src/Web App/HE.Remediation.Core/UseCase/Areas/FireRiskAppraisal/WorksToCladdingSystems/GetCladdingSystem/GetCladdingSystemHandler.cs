@@ -31,7 +31,7 @@ public class GetCladdingSystemHandler : IRequestHandler<GetCladdingSystemRequest
         response.CladdingTypes = await _fireRiskAppraisalRepository.GetCladdingSystemTypes();
         response.InsulationTypes = await _fireRiskAppraisalRepository.GetInsulationTypes();
 
-        var manufacturers = await _fireRiskAppraisalRepository.GetActiveCladdingManufacturers();
+        var manufacturers = await _fireRiskAppraisalRepository.GetCladdingManufacturers();
         response.CladdingManufacturers = manufacturers
             .OrderBy(x => x.IsEndOfList)
             .ThenBy(x => x.Name);

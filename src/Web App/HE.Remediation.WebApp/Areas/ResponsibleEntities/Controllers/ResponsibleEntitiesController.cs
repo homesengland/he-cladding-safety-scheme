@@ -10,8 +10,8 @@ using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrI
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrIndividual.SetFreeholderCompanyOrIndividual;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.GetNotEligible;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.SetNotEligible;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentationCompanyOrIndividual.GetRepresentationCompanyOrIndividual;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentationCompanyOrIndividual.SetRepresentationCompanyOrIndividual;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.GetRepCompanyOrIndividual;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.SetRepCompanyOrIndividual;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.GetRepresentativeType;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.SetRepresentativeType;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentativeBasedInUk.GetRepresentativeBasedInUk;
@@ -210,7 +210,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpGet(nameof(RepresentationCompanyOrIndividual))]
         public async Task<IActionResult> RepresentationCompanyOrIndividual(string returnUrl)
         {
-            var response = await _sender.Send(GetRepresentationCompanyOrIndividualRequest.Request);
+            var response = await _sender.Send(GetRepCompanyOrIndividualRequest.Request);
 
             var model = _mapper.Map<RepresentationCompanyOrIndividualViewModel>(response);
 
@@ -231,7 +231,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return View(model);
             }
 
-            var request = _mapper.Map<SetRepresentationCompanyOrIndividualRequest>(model);
+            var request = _mapper.Map<SetRepCompanyOrIndividualRequest>(model);
             await _sender.Send(request);
 
             if (model.SubmitAction == ESubmitAction.Exit)
@@ -257,7 +257,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             if (isRasScheme)
             {
                 _ = await _sender.Send(new SetRepresentativeTypeRequest { RepresentativeType = EApplicationRepresentationType.Representative });
-                _ = await _sender.Send(new SetRepresentationCompanyOrIndividualRequest { ReponsibleEntityType = EResponsibleEntityType.Company });
+                _ = await _sender.Send(new SetRepCompanyOrIndividualRequest { ReponsibleEntityType = EResponsibleEntityType.Company });
             }
 
             var response = await _sender.Send(GetRepresentationCompanyOrIndividualDetailsRequest.Request);
@@ -490,7 +490,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             if (isSocialSectorScheme)
             {
                 _ = await _sender.Send(new SetRepresentativeTypeRequest { RepresentativeType = EApplicationRepresentationType.ResponsibleEntity });
-                _ = await _sender.Send(new SetRepresentationCompanyOrIndividualRequest { ReponsibleEntityType = EResponsibleEntityType.Company });
+                _ = await _sender.Send(new SetRepCompanyOrIndividualRequest { ReponsibleEntityType = EResponsibleEntityType.Company });
             }
 
             var request = _mapper.Map<SetResponsibleEntityCompanyTypeRequest>(model);
@@ -1404,13 +1404,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             {
                 return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
-
-            if (model is { IsClaimingGrant: false, HasOwners: true })
-            {
-                return RedirectToAction("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
-            }
-
-            return RedirectToAction("NotEligible", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            return RedirectToAction("ResponsibleEntityResponsibleForGrantFunding", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
         }
         #endregion
 

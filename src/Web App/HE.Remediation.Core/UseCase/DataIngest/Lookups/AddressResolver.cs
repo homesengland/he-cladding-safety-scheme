@@ -4,6 +4,7 @@ using FuzzySharp;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Services.Location;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
+using static AddressResolverException;
 
 namespace HE.Remediation.Core.UseCase.DataIngest.Lookups
 {
@@ -27,21 +28,21 @@ namespace HE.Remediation.Core.UseCase.DataIngest.Lookups
 
             if (results == null || results.Locations.Count == 0)
             {
-                throw new AddressResolverException($"No locations found for the provided postcode ({importedDataRow.PostCode}).");
+                throw new AddressResolverException($"No locations found for the provided postcode ({importedDataRow.PostCode}).", ErrorType.Postcode);
             }
 
             var fuzzyMatchResult = FuzzyMatch(importedDataRow, results.Locations);
 
             if (!fuzzyMatchResult.Item1)
             {
-                throw new AddressResolverException($"No location matched the address ({importedDataRow.BuildingName}, {importedDataRow.AddressLine1}).");
+                throw new AddressResolverException($"No location matched the address ({importedDataRow.BuildingName}, {importedDataRow.AddressLine1}).", ErrorType.BuildingName);
             }
 
             var parsedAddress = PostCodeUtility.ParseBuildingLookupJson(JsonSerializer.Serialize(fuzzyMatchResult.Item2));
 
             if (parsedAddress == null)
             {
-                throw new AddressResolverException("Resolved address not in expected format. Check Postcode API response.");
+                throw new AddressResolverException("Resolved address not in expected format. Check Postcode API response.", ErrorType.BuildingName);
             }
 
             var details = new BuildingDetailsAddressDetails
@@ -134,13 +135,6 @@ namespace HE.Remediation.Core.UseCase.DataIngest.Lookups
             public string YCoordinate { get; set; }
             public string Toid { get; set; }
             public string BuildingType { get; set; }
-        }
-
-        public class AddressResolverException : DataImportException
-        {
-            public AddressResolverException(string message) : base($"Postcode Lookup: {message}")
-            {
-            }
         }
     }
 }

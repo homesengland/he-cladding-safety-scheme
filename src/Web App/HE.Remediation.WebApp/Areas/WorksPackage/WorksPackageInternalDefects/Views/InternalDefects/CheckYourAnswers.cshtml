@@ -1,0 +1,49 @@
+﻿@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageInternalDefects.CheckYourAnswersViewModel
+
+@{
+    ViewData["Title"] = "Internal Defects";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("InternalDefectsCost", "InternalDefects", new { Area = "WorksPackageInternalDefects" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Tell us about the cost of fixing any internal defects</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.InternalDefectsCost.HasValue ? Model.InternalDefectsCost.Value.ToString("N2") : "-")
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href='@Url.Action("InternalDefectsCost", "InternalDefects", new { Area = "WorksPackageInternalDefects" })'>
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Tell us how these costs are being funded</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(string.IsNullOrWhiteSpace(Model?.Description) ? "-" : Model.Description)
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href='@Url.Action("InternalDefectsCost", "InternalDefects", new { Area = "WorksPackageInternalDefects" })'>
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+
+<form asp-area="WorksPackageInternalDefects" asp-controller="InternalDefects" asp-action="CheckYourAnswers" method="post">
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button type="submit" disabled="@Model.IsSubmitted">Continue</govuk-button>
+    </div>
+</form>

@@ -27,5 +27,6 @@ namespace HE.Remediation.WebApp.ViewModels.BuildingsInsurance
         public string ReferenceNumber { get; set; }
         public string BuildingName { get; set; }
         public bool SubcontractorsRequired { get; set; }
+        public bool IsSubmitted { get; set; }
     }
 }

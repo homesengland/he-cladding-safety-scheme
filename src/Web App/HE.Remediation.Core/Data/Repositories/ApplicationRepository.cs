@@ -1,3 +1,4 @@
+using Dapper;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
@@ -142,6 +143,26 @@ public class ApplicationRepository : IApplicationRepository
                 Postcode = postcode
             });
 
+        return result;
+    }
+
+    public async Task<bool> IsClosingReportStarted(Guid applicationId)
+    {
+        var result = await _dbConnection.QuerySingleOrDefaultAsync<bool>(
+            "IsClosingReportStarted", new
+            {
+                ApplicationId = applicationId
+            });
+
+        return result;
+    }
+
+    public async Task<GetApplicationTaskListSummaryResult> GetApplicationTaskListSummary(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _dbConnection.QuerySingleOrDefaultAsync<GetApplicationTaskListSummaryResult>(nameof(GetApplicationTaskListSummary), parameters);
         return result;
     }
 }

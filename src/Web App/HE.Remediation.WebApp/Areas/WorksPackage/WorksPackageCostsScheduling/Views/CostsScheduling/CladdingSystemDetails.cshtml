@@ -17,6 +17,7 @@
         <govuk-error-summary-item asp-for="ReplacementOtherInsulationType" />
         <govuk-error-summary-item asp-for="ReplacementInsulationManufacturerId" />
         <govuk-error-summary-item asp-for="ReplacementOtherInsulationManufacturer" />
+        <govuk-error-summary-item asp-for="CladdingSystemArea" />
     </govuk-error-summary>
 }
 
@@ -164,6 +165,10 @@
         <govuk-input-label class="govuk-label--s">If 'Other', please specify insulation manufacturer</govuk-input-label>
     </govuk-input>
 
+    <govuk-input disabled="@Model.IsSubmitted" name="CladdingSystemArea" asp-for="CladdingSystemArea" input-pattern="[0-9]*">
+        <govuk-input-label class="govuk-label--s">Confirm the area of this cladding system in square metres</govuk-input-label>
+    </govuk-input>
+
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
@@ -173,6 +178,7 @@
     <input asp-for="CladdingManufacturerName" type="hidden" value="@Model.CladdingManufacturerName" />
     <input asp-for="InsulationTypeName" type="hidden" value="@Model.InsulationTypeName" />
     <input asp-for="InsulationManufacturerName" type="hidden" value="@Model.InsulationManufacturerName" />
+    <input asp-for="CladdingSystemArea" type="hidden" value="@Model.CladdingSystemArea" />
     <input asp-for="IsBeingRemoved" type="hidden" value="@Model.IsBeingRemoved" />
     <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
 

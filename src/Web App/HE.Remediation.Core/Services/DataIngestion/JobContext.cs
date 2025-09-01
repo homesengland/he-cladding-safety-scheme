@@ -1,9 +1,13 @@
+using HE.Remediation.Core.Enums;
+
 namespace HE.Remediation.Core.Services.DataIngestion
 {
     public class JobContext
     {
         public Guid JobId { get; }
         public int TotalRows { get; }
+        public EApplicationScheme TargetScheme { get; }
+
         public int SuccessCount => _successCount;
         public int FailCount => _failCount;
 
@@ -13,10 +17,16 @@ namespace HE.Remediation.Core.Services.DataIngestion
         public event Func<object, JobContextEventArgs, Task> StatusReportEventAsync;
         public event Func<object, JobContextEventArgs, Task> JobCompleteEventAsync;
 
-        public JobContext(Guid jobId, int totalRows)
+        public JobContext(Guid jobId, int totalRows, EDataIngestionImportType importType)
         {
             JobId = jobId;
             TotalRows = totalRows;
+            TargetScheme = importType switch
+            {
+                EDataIngestionImportType.SocialSectorSelfFunded => EApplicationScheme.SocialSector,
+                EDataIngestionImportType.SocialSectorCss => EApplicationScheme.CladdingSafetyScheme,
+                _ => EApplicationScheme.CladdingSafetyScheme
+            };
         }
 
         public async Task IncrementSuccess(int count = 1)

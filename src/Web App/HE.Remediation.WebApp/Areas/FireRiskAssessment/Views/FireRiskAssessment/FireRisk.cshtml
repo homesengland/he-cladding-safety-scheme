@@ -1,0 +1,60 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAssessment.FireRiskViewModel
+@{
+    ViewData["Title"] = "FRA report";
+
+    if (Model.VisitedCheckYourAnswers)
+    {
+        ViewData["BackLink"] = Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+    else
+    {
+        ViewData["BackLink"] = !Model.HasOffPanelAssessor
+            ? Url.Action("Report", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+            : Url.Action("FraDate", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FireRiskRating" />
+        <govuk-error-summary-item asp-for="HasInternalFireSafetyRisks" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="FireRiskAssessment" asp-action="FireRisk" method="post">
+    <govuk-radios asp-for="FireRiskRating">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-label--s">
+                What is the overall risk rating of the FRA?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@EFraRiskRating.Low" checked="@(Model.FireRiskRating == EFraRiskRating.Low)">Low</govuk-radios-item>
+        <govuk-radios-item value="@EFraRiskRating.MediumTolerable" checked="@(Model.FireRiskRating == EFraRiskRating.MediumTolerable)">Medium - Tolerable</govuk-radios-item>
+        <govuk-radios-item value="@EFraRiskRating.MediumActionRequired" checked="@(Model.FireRiskRating == EFraRiskRating.MediumActionRequired)">Medium - Action Required</govuk-radios-item>
+        <govuk-radios-item value="@EFraRiskRating.High" checked="@(Model.FireRiskRating == EFraRiskRating.High)">High</govuk-radios-item>
+    </govuk-radios>
+    
+    <govuk-radios asp-for="HasInternalFireSafetyRisks">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-label--s">
+                Does the FRA identify internal fire safety defects that contribute to the fire safety risks?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@true" checked="@Model.HasInternalFireSafetyRisks == true">Yes</govuk-radios-item>
+        <govuk-radios-item value="@false" checked="@Model.HasInternalFireSafetyRisks == false">No</govuk-radios-item>
+    </govuk-radios>
+    
+    <input asp-for="HasOffPanelAssessor" type="hidden" value="@Model.HasOffPanelAssessor" />
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

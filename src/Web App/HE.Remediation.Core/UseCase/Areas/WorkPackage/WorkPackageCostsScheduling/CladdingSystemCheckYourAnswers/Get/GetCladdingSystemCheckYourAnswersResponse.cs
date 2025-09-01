@@ -32,4 +32,6 @@ public class GetCladdingSystemCheckYourAnswersResponse
     public string ReplacementOtherInsulationManufacturer { get; set; }
 
     public bool IsSubmitted { get; set; }
+
+    public int? CladdingSystemArea { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperAddressInformation;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperInformation;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.SetBuildingDeveloperAddressInformation;
@@ -35,6 +36,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.S
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResetSection;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.GetResidentialUnits;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.SetResidentialUnits;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.WorksAlreadyCompleted.GetWorksAlreadyCompleted;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.WorksAlreadyCompleted.SetWorksAlreadyCompleted;
 using HE.Remediation.Core.UseCase.Areas.Location.BuildingLookup;
 using HE.Remediation.WebApp.ViewModels.BuildingDetails;
 using HE.Remediation.WebApp.ViewModels.BuildingsInsurance;
@@ -50,12 +53,14 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
+        private readonly IApplicationDataProvider _applicationDataProvider;
 
-        public BuildingDetailsController(ISender sender, IMapper mapper)
+        public BuildingDetailsController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider)
             : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
+            _applicationDataProvider = applicationDataProvider;
         }
 
         protected override IActionResult DefaultStart => RedirectToAction("WhatYoullNeed", "BuildingDetails", new { Area = "BuildingDetails" });
@@ -89,11 +94,53 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 validationResult.AddToModelState(ModelState, String.Empty);
                 return View(viewModel);
             }
+            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
 
             var request = _mapper.Map<SetBuildingUniqueNameRequest>(viewModel);
             await _sender.Send(request);
 
-            return submitAction == ESubmitAction.Continue ?
+            if (viewModel.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
+            {
+                return submitAction == ESubmitAction.Continue ?
+                    RedirectToAction("WorksAlreadyCompleted", "BuildingDetails", new { Area = "BuildingDetails" }) :
+                    RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+            else
+            {
+                return submitAction == ESubmitAction.Continue ?
+                    RedirectToAction("ResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" }) :
+                    RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+        }
+        #endregion
+
+        #region Works Already Completed
+        [HttpGet(nameof(WorksAlreadyCompleted))]
+        public async Task<IActionResult> WorksAlreadyCompleted(string returnUrl)
+        {
+            var response = await _sender.Send(GetWorksAlreadyCompletedRequest.Request);
+            var viewModel = _mapper.Map<WorksAlreadyCompletedViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(WorksAlreadyCompleted))]
+        public async Task<IActionResult> WorksAlreadyCompleted(WorksAlreadyCompletedViewModel model)
+        {
+            var validator = new WorksAlreadyCompletedViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetWorksAlreadyCompletedRequest>(model);
+            await _sender.Send(request);
+
+            return model.SubmitAction == ESubmitAction.Continue ?
                 RedirectToAction("ResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" }) :
                 RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
@@ -106,7 +153,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             var response = await _sender.Send(GetResidentialUnitsRequest.Request);
 
             var viewModel = _mapper.Map<ResidentialUnitsViewModel>(response);
-
+            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
             viewModel.ReturnUrl = returnUrl;
 
             return View(viewModel);
@@ -126,6 +173,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 return View(viewModel);
             }
 
+            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
             var request = _mapper.Map<SetResidentialUnitsRequest>(viewModel);
             await _sender.Send(request);
 

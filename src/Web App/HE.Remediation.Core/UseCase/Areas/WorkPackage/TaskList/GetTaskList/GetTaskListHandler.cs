@@ -12,18 +12,24 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
     private readonly IBuildingDetailsRepository _buildingDetailsRepository;
     private readonly IProgressReportingRepository _progressReportingRepository;
     private readonly IWorkPackageRepository _workPackageRepository;
+    private readonly IWorkPackageFireRiskAssessmentRepository _fireRiskAssessmentRepository;
+    private readonly IFireRiskAssessmentRepository _fraRepository;
 
     public GetTaskListHandler(IApplicationDataProvider applicationDataProvider,
                               IBuildingDetailsRepository buildingDetailsRepository,
                               IApplicationRepository applicationRepository,
                               IProgressReportingRepository progressReportingRepository,
-                              IWorkPackageRepository workPackageRepository)
+                              IWorkPackageRepository workPackageRepository, 
+                              IWorkPackageFireRiskAssessmentRepository fireRiskAssessmentRepository, 
+                              IFireRiskAssessmentRepository fraRepository)
     {
         _applicationDataProvider = applicationDataProvider;
         _buildingDetailsRepository = buildingDetailsRepository;
         _applicationRepository = applicationRepository;
         _progressReportingRepository = progressReportingRepository;
         _workPackageRepository = workPackageRepository;
+        _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
+        _fraRepository = fraRepository;
     }
 
     public async Task<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
@@ -32,6 +38,10 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
 
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
+
+        var hasFra = await _fraRepository.GetHasFra(applicationId);
+
+        await _fireRiskAssessmentRepository.InsertWorkPackageFra(applicationId);
 
         var workPackageTaskListSummary = await _workPackageRepository.GetWorkPackageTaskListSummary();
 
@@ -43,6 +53,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             GrantCertifyingOfficerStatusId = workPackageTaskListSummary.WorkPackageGrantCertifyingOfficerStatusId,
+            InternalDefectsStatusId = workPackageTaskListSummary.WorkPackageInternalDefectsStatusId,
             CostsScheduleStatusId = workPackageTaskListSummary.WorkPackageCostsScheduleStatusId,
             ThirdPartyContributionsStatusId = workPackageTaskListSummary.WorkPackageThirdPartyContributionsStatusId,
             DeclarationStatusId = workPackageTaskListSummary.WorkPackageDeclarationStatusId,
@@ -52,7 +63,9 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
             PlanningPermissionStatusId = planningPermissionStatus,
             KeyDatesStatusId = workPackageTaskListSummary.WorkPackageKeyDatesStatusId,
             ProgrammePlanStatusId = workPackageTaskListSummary.WorkPackageProgrammePlanStatusId,
-            IsSubmitted = workPackageTaskListSummary.IsSubmitted
+            WorkPackageFireRiskAssessmentStatusId = workPackageTaskListSummary.WorkPackageFireRiskAssessmentStatusId,
+            IsSubmitted = workPackageTaskListSummary.IsSubmitted,
+            HasFra = hasFra == true
         };
     }
 

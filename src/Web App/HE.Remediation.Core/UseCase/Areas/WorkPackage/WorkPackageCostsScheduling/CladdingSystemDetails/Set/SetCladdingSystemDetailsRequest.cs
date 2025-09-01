@@ -22,4 +22,6 @@ public class SetCladdingSystemDetailsRequest : IRequest<Unit>
     public string ReplacementOtherInsulationManufacturer { get; set; }
 
     public string ReplacementOtherCladdingManufacturer { get; set; }
+
+    public int? CladdingSystemArea { get; set; }
 }

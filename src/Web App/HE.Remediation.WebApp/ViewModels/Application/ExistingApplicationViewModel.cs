@@ -42,6 +42,8 @@ namespace HE.Remediation.WebApp.ViewModels.Application
             public EApplicationStatus Status { get; set; }
 
             public bool OpenTasks { get; set; }
+
+            public EApplicationScheme ApplicationScheme { get; set; }
         }
     }
 

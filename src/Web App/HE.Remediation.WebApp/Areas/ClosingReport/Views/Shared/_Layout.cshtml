@@ -24,7 +24,10 @@
 
                 <main class="govuk-main-wrapper">
                     @await RenderSectionAsync("ErrorSummary", false)
-                    <span class="govuk-caption-xl">@ViewData["Title"]</span>
+                    @if ((bool?)ViewData["HideTitle"] != true)
+                    {
+                        <span class="govuk-caption-xl">@ViewData["Title"]</span>
+                    }
                     <span class="govuk-caption-m">@ViewData["SubTitle"]</span> <br />
 
                     @RenderBody()
@@ -32,7 +35,7 @@
                     <div>
                         @if ((bool)ViewData["ShowExitLink"])
                         {
-                            <a class="govuk-link" href="@Url.Action("Index", "StageDiagram", new { Area = "Application" })">@((bool)ViewData["ReadOnly"] ? "Exit" : "Cancel and exit") </a>
+                            <a class="govuk-link" href="@Url.Action("TaskList", "ClosingReport", new { Area = "ClosingReport" })">@((bool)ViewData["ReadOnly"] ? "Exit" : "Cancel and exit") </a>
                         }
                     </div>
                 </main>

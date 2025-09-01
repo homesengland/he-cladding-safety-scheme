@@ -30,7 +30,7 @@ namespace HE.Remediation.Core.Services.DataIngestion
                     try
                     {
                         var data = JsonSerializer.Deserialize<Dictionary<string, string>>(row.RowJson);
-                        await _sender.Send(new CreateImportRequest { ImportData = data, UnProcessedRowId = row.Id, DataIngestionId = jobContext.JobId });
+                        await _sender.Send(new CreateImportRequest(data, row.Id, jobContext.JobId, jobContext.TargetScheme), cancellationToken);
                         await jobContext.IncrementSuccess();
                     }
                     catch (Exception ex)

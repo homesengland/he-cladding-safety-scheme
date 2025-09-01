@@ -485,4 +485,12 @@ public class PaymentRequestRepository : IPaymentRequestRepository
     {
         await _connection.ExecuteAsync(nameof(DeletePaymentRequestInvoiceFile), parameters);
     }
+
+    public async Task<int> GetMonthlyPaymentsOutstanding(Guid applicationId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<int>("GetMonthlyPaymentsOutstanding", new
+        {
+            ApplicationId = applicationId
+        });
+    }
 }

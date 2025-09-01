@@ -2,6 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.Declaration;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.GrantCertifyingOfficer;
+using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.InternalDefects;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ThirdPartyContributions;
 using HE.Remediation.Core.Data.StoredProcedureResults;
@@ -10,6 +11,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ConfirmToProce
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.Declaration;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.GrantCertifyingOfficer;
+using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.InternalDefects;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.PlanningPermission;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ProjectTeam;
@@ -181,6 +183,9 @@ public interface IWorkPackageRepository
 
     Task UpdateCostsScheduleSoughtQuotes(ENoYes? soughtQuotes);
 
+    Task<PreferredContractorLinksResult> GetCostsSchedulePreferredContractorLinks();
+    Task UpdateCostSchedulePReferredContractorLinks(EYesNoNonBoolean? preferredContractorLinks, string preferredContractorLinkAdditionalNotes);
+
     Task<string> GetCostsScheduleNoQuotesReason();
 
     Task UpdateCostsScheduleNoQuotesReason(string reason);
@@ -289,4 +294,15 @@ public interface IWorkPackageRepository
     Task<GetProgrammePlanCheckYourAnswersResult> GetProgrammePlanCheckYourAnswers(Guid applicationId);
 
     #endregion
+
+    #region Internal Defects
+
+    Task InsertInternalDefectsCost();
+    Task<GetInternalDefectsCostResult> GetInternalDefectsCost();
+    Task<ETaskStatus?> GetInternalDefectsStatus();
+    Task UpdateInternalDefectsStatus(ETaskStatus taskStatus);
+    Task SetInternalDefectsCost(SetInternalDefectsParameters parameters);
+
+    #endregion
+
 }

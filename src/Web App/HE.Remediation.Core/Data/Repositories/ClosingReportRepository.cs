@@ -1,8 +1,9 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.ClosingReport;
-using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails;
+using FileResult = HE.Remediation.Core.Data.StoredProcedureResults.FileResult;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -117,13 +118,16 @@ public class ClosingReportRepository : IClosingReportRepository
         });
     }
 
-    public async Task DeleteFile(Guid fileId)
+    public async Task<int> DeleteFile(Guid fileId)
     {
-        await _connection.ExecuteAsync("DeleteClosingReportFile", new
+        var remainingFileCount = await _connection.QuerySingleOrDefaultAsync<int>("DeleteClosingReportFile", new
         {
             FileId = fileId
         });
+        return remainingFileCount;
     }
+
+    
 
     public async Task<IReadOnlyCollection<FileResult>> GetFiles(Guid applicationId, EClosingReportFileType uploadType)
     {
@@ -220,5 +224,39 @@ public class ClosingReportRepository : IClosingReportRepository
         {
             ApplicationId = applicationId
         });
+    }
+
+    public async Task<IReadOnlyCollection<ClosingReportTaskStatusResultItem>> GetClosingReportTaskStatus(Guid applicationId)
+    {
+        return await _connection.QueryAsync<ClosingReportTaskStatusResultItem>(
+            nameof(GetClosingReportTaskStatus), new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task UpsertClosingReportTaskStatus(Guid applicationId, EClosingReportTask closingReportTask, ETaskStatus taskStatus, bool allowRevert = false)
+    {
+        await _connection.ExecuteAsync(nameof(UpsertClosingReportTaskStatus), 
+            new { ApplicationId = applicationId, ClosingReportTaskId = (int)closingReportTask, TaskStatusId = (int)taskStatus, AllowRevert = allowRevert });
+    }
+
+    public async Task<GetEvidenceSubmissionUploadResponse> GetApplicationEvidenceOfThirdPartyContributionFile(Guid applicationId, EClosingReportFileType uploadType)
+    {
+        var file = await _connection.QuerySingleOrDefaultAsync<FileResult>(
+            nameof(GetApplicationEvidenceOfThirdPartyContributionFile),
+            new
+            {
+                ApplicationId = applicationId,
+                UploadType = (int)uploadType
+            });
+
+        return file == null ? null : new GetEvidenceSubmissionUploadResponse { EvidenceSubmissionFile = file };
+    }
+
+    public async Task UpdateClosingReportHasThirdPartyContributions(Guid applicationId, bool hasThirdPartyContributions)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateClosingReportHasThirdPartyContributions),
+            new { ApplicationId = applicationId, HasThirdPartyContributions = hasThirdPartyContributions });
     }
 }

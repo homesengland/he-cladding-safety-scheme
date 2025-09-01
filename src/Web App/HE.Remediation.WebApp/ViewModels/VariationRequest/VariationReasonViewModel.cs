@@ -1,6 +1,4 @@
-﻿using Amazon.S3.Model;
-using HE.Remediation.WebApp.ViewModels.VariationRequest.Shared;
-using Humanizer;
+﻿using HE.Remediation.WebApp.ViewModels.VariationRequest.Shared;
 
 namespace HE.Remediation.WebApp.ViewModels.VariationRequest;
 
@@ -21,4 +19,8 @@ public class VariationReasonViewModel : VariationRequestBaseViewModel
     public decimal? GrantPaidToDate { get; set; }
 
     public decimal? UnclaimedGrantFunding { get; set; }
+
+    public bool LastMonthlyPaymentCompleted { get; set; }
+    
+    public bool ClosingReportStarted { get; set; }
 }

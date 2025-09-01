@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.CostsScheduling;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.Shared;
 
 namespace HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling
@@ -6,6 +7,7 @@ namespace HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduli
     public class CheckYourAnswersViewModel : WorkPackageBaseViewModel
     {
         public ENoYes CompetitiveBidsObtained { get; set; }
+        public PreferredContractorLinksResult PreferredContractorLinksResult { get; set; }
         public List<SubContractors> SubContractors { get; set; }
         public List<CladdingSystem> CladdingSystems { get; set; }
         public decimal EligibleCosts { get; set; }

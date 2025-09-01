@@ -1,0 +1,141 @@
+﻿@model HE.Remediation.WebApp.ViewModels.ClosingReport.AddEditEvidenceDetailsViewModel
+@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@{
+    ViewData["Title"] = "Final Report";
+    ViewData["BackLink"] = Url.Action("EvidenceSubmission", new { id = Model.Id });
+    ViewData["FullWidth"] = true;
+    ViewData["ExitLinkHidden"] = true;
+}
+
+<h1 class="govuk-heading-xl">Your Answers</h1>
+
+<dl class="govuk-summary-list">
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-heading-m">
+            Third Party Contribution Evidence
+        </dt>
+        <dd class="govuk-summary-list__value govuk-text-align-right">
+            &nbsp;
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            &nbsp;
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Date of attempt
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @Model.DateOfAttempt?.ToString("d MMM yyyy")
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a href=@Url.Action("Details" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Third party name
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @Model.ThirdPartyName
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a href=@Url.Action("Details" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+        </dd>
+    </div>
+
+    @if (Model.StatusOfAttempt != null)
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Status of attempt
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.StatusOfAttempt.Value.GetEnumDisplayName()
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a href=@Url.Action("Details" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+            </dd>
+        </div>
+    }
+
+    @if (Model.TypeOfContribution?.Count() > 0)
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                What type of contribution have you received?
+            </dt>
+            <dd class="govuk-summary-list__value">
+                <ul>
+                    @foreach (var item in Model.TypeOfContribution)
+                    {
+                        <li>@item.GetEnumDisplayName()</li>
+                    }
+                </ul>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a href=@Url.Action("Details2" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+            </dd>
+        </div>
+    }
+
+    @if (Model.Amount > 0)
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Amount
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.Amount
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a href=@Url.Action("Details2" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+            </dd>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.AttemptDetails))
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Attempt details
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.AttemptDetails
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a href=@Url.Action("Details2" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+            </dd>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Name))
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Third Party Contribution Evidence
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @($"{@Model.Name}")
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a href=@Url.Action("EvidenceSubmission" , new { id = Model.Id, viaCheckAnswer = true }) class="govuk-link">Change</a>
+            </dd>
+        </div>
+    }
+    
+</dl>
+
+@using (Html.BeginForm("CheckYourAnswers", "AddEditEvidence", new { Area = "ClosingReportEvidenceOfThirdPartyContribution", id = (Guid?)null }))
+{
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <govuk-button name="SubmitAction" value="Continue">Save and Continue</govuk-button>
+}
+
+<div>
+    <a class="govuk-link" href="@Url.Action( "CancelAndExit", new { id = Model.Id })">Cancel and exit</a>
+</div>

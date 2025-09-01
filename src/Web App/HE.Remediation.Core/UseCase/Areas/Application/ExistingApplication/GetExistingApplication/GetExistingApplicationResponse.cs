@@ -17,5 +17,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetE
         public EApplicationStatus Status { get; set; }
 
         public bool OpenTasks { get; set; }
+
+        public EApplicationScheme ApplicationScheme { get; set; }
     }
 }

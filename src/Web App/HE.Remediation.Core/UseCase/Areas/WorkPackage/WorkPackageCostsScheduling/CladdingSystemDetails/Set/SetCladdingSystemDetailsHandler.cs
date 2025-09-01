@@ -41,6 +41,7 @@ public class SetCladdingSystemDetailsHandler : IRequestHandler<SetCladdingSystem
             ReplacementOtherInsulationType = request.ReplacementOtherInsulationType,
             ReplacementOtherInsulationManufacturer = request.ReplacementOtherInsulationManufacturer,
             ReplacementOtherCladdingManufacturer = request.ReplacementOtherCladdingManufacturer,
+            CladdingSystemArea = request.CladdingSystemArea,
         });
     }
 

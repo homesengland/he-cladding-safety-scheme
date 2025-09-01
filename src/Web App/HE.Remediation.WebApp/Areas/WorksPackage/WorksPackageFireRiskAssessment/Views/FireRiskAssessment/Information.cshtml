@@ -1,0 +1,19 @@
+﻿@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment.InformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Title"] = "Fire risk assessment - About this section";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = false;
+}
+
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In this section you will be asked to upload your building's Fire Risk Assessment
+    and confirm the type of Fire Risk Assessment that has been undertaken.
+</p>
+
+<div class="comp-btn-group">
+    <govuk-button href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Continue</govuk-button>
+</div>

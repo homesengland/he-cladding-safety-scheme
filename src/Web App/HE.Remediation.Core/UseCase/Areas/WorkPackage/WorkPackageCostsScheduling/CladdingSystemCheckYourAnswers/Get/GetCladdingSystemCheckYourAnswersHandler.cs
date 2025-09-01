@@ -47,6 +47,7 @@ public class GetCladdingSystemCheckYourAnswersHandler : IRequestHandler<GetCladd
             ReplacementOtherInsulationType = checkMyAnswersResult?.ReplacementOtherInsulationType,
             ReplacementInsulationManufacturerName = checkMyAnswersResult?.ReplacementInsulationManufacturerName,
             ReplacementOtherInsulationManufacturer = checkMyAnswersResult?.ReplacementOtherInsulationManufacturer,
+            CladdingSystemArea= checkMyAnswersResult?.CladdingSystemArea,
             IsSubmitted = isSubmitted
         };
     }

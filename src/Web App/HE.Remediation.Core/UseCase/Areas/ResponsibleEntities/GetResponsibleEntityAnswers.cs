@@ -101,6 +101,8 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 
         public string ResponsibleEntityPrimaryContact { get; set; }
         public string ResponsibleEntityAuthorisationEvidence { get; set; }
+
+        public bool? ResponsibleEntityHasOwners { get; set; }
         public int? ResponsibleEntitySharedOwners { get; set; }
         public bool? ResponsibleEntityClaimingGrant { get; set; }
         public bool? ResponsibleEntityResponsibleForGrantFunding { get; set; }

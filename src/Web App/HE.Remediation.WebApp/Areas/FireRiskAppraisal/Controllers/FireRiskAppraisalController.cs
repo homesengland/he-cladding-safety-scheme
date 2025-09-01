@@ -31,26 +31,18 @@ using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetai
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.DeleteFireRiskAppraisalReport;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.UploadFireRiskAppraisalReport;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAssessmentReport.DeleteFireRiskAssessmentReport;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAssessmentReport.GetFireRiskAssessmentReport;
-using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAssessmentReport.UploadFireRiskAssessmentReport;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.CladdingArea;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.DeleteCladdingSystem;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.GetCladdingSystem;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.GetWorksToCladdingSystems;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.SetCladdingArea;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.SetCladdingSystem;
-using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.FireRiskAppraisal;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using System.Reflection;
-
-using System.Threading;
 
 namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 {
@@ -354,11 +346,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
                 return View(viewModel);
             }
 
-            var action = nameof(UploadFireRiskAssessmentReport);
-            action = viewModel.ReturnUrl is null ? action : viewModel.ReturnUrl;
-
             return submitAction == ESubmitAction.Continue 
-                ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
+                ? RedirectToAction("ReportDetails", "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 
@@ -373,93 +362,6 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
             await _sender.Send(request);
 
             return RedirectToAction("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
-        }
-
-        #endregion
-
-        #region Upload fire risk Assessment Report
-
-        [HttpGet(nameof(UploadFireRiskAssessmentReport))]
-        public async Task<IActionResult> UploadFireRiskAssessmentReport(string returnUrl)
-        {
-            var response = await _sender.Send(GetFireRiskReportAssessmentReportRequest.Request);
-
-            var model = _mapper.Map<UploadFireRiskAssessmentReportViewModel>(response);
-            model.ReturnUrl = returnUrl;
-
-            return View(model);
-        }
-
-
-        [HttpPost(nameof(UploadFireRiskAssessmentReport))]
-        [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
-        public async Task<IActionResult> UploadFireRiskAssessmentReport(UploadFireRiskAssessmentReportViewModel viewModel, ESubmitAction submitAction)
-        {
-            if (!ModelState.IsValid)
-            {
-                var response = await _sender.Send(GetFireRiskReportAssessmentReportRequest.Request);
-                viewModel = _mapper.Map<UploadFireRiskAssessmentReportViewModel>(response);
-
-                ModelState.AddModelError(nameof(viewModel.FraReport), "Your file is greater than 100mb");
-                return View(viewModel);
-            }
-
-            var validator = new UploadFireRiskAssessmentReportViewModelValidator();
-            var validationResult = await validator.ValidateAsync(viewModel);
-
-            if (!validationResult.IsValid)
-            {
-                validationResult.AddToModelState(ModelState, string.Empty);
-                return View(viewModel);
-            }
-
-            var request = new UploadFireRiskAssessmentReportRequest
-            {
-                FraReportFile = submitAction == ESubmitAction.Upload ? viewModel.FraReport : null,
-                FraAlreadyUploaded = viewModel.AddedFra is not null,
-                FireRiskAssessmentType = viewModel.FireRiskAssessmentType,
-                ApplicationScheme = _applicationDataProvider.GetApplicationScheme()
-            };
-
-            try
-            {
-                await _sender.Send(request);
-            }
-            catch (InvalidFileException ex)
-            {
-                if (submitAction == ESubmitAction.Upload)
-                {
-                    ModelState.AddModelError(nameof(viewModel.FraReport), ex.Message);
-                }
-                else
-                {
-                    foreach (var error in ex.Errors)
-                    {
-                        ModelState.AddModelError(error.Key, error.Value);
-                    }
-                }
-
-                return View(viewModel);
-            }
-
-            if (submitAction == ESubmitAction.Upload)
-            {
-                // Stay on the same screen with file now shown in summary list
-                return RedirectToAction("UploadFireRiskAssessmentReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
-            }
-
-            var action = viewModel.ReturnUrl ?? nameof(ReportDetails);
-
-            return submitAction == ESubmitAction.Continue
-                ? SafeRedirectToAction(action, "FireRiskAppraisal", new { area = "FireRiskAppraisal" })
-                : RedirectToAction("Index", "TaskList", new { Area = "Application" });
-        }
-
-        [HttpGet("DeleteAssessmentReport")]
-        public async Task<IActionResult> DeleteAssessmentReport([FromQuery] DeleteFireRiskAssessmentRequest request)
-        {
-            await _sender.Send(request);
-            return RedirectToAction("UploadFireRiskAssessmentReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
         }
 
         #endregion

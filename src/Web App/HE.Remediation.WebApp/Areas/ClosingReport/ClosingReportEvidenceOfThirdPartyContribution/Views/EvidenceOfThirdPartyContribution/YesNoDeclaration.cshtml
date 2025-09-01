@@ -1,0 +1,30 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.ClosingReport
+@model ThirdPartyYesNoDeclarationViewModel
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Final Report";
+    ViewData["BackLink"] = Url.Action("About");
+    ViewData["FullWidth"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="Declaration" />
+            </govuk-error-summary>
+
+            <h1 class="govuk-heading-xl">Have there been any Third Party Contributions to evidence?</h1>
+
+            <form asp-action="YesNoDeclaration" method="post">
+                <govuk-radios asp-for="Declaration">
+                    <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+                    <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+                </govuk-radios>
+
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue" disabled="@Model.IsSubmitted">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

@@ -301,6 +301,30 @@
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
     }
+    
+    @if (Model.ResponsibleEntityHasOwners.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Do you have any homes owned by long-term leaseholders or shared owners within the building?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ResponsibleEntityHasOwners.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        
+        @if (Model.ResponsibleEntityHasOwners.Value == true)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    How many leasehold and/or shared ownership homes?
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.ResponsibleEntitySharedOwners.HasValue? Model.ResponsibleEntitySharedOwners.Value : "-")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    }
 
     @if (Model.RepresentEvidenceFiles.Any() && !isSocialSector)
     {
@@ -640,7 +664,7 @@
         @if (!Model.ReadOnly)
         {
             <div class="govuk-grid-column-one-third govuk-text-align-right">
-                <a href=@Url.Action("ChangeAnswers", "ResponsibleEntities") class="govuk-link">Change your answers</a>
+                <a href=@Url.Action("GrantFundingSignatories", "ResponsibleEntities") class="govuk-link">Change your answers</a>
             </div>
         }
     </div>

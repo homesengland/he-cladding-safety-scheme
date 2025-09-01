@@ -2,6 +2,8 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.ClosingReport;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails;
+using FileResult = HE.Remediation.Core.Data.StoredProcedureResults.FileResult;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -18,7 +20,8 @@ public interface IClosingReportRepository
     Task UpdateClosingReportConfirmation(Guid applicationId, ConfirmationParameters parameters);
     Task UpdateClosingReportNeedVariations(Guid applicationId, bool? needVariations);
     Task InsertFile(Guid applicationId, Guid fileId, EClosingReportFileType uploadType);
-    Task DeleteFile(Guid fileId);
+    Task<GetEvidenceSubmissionUploadResponse> GetApplicationEvidenceOfThirdPartyContributionFile(Guid applicationId, EClosingReportFileType uploadType);
+    Task<int> DeleteFile(Guid fileId);
     Task<IReadOnlyCollection<FileResult>> GetFiles(Guid applicationId, EClosingReportFileType uploadType);
     Task<Guid?> GetSubcontractorSurveyId(Guid applicationId);
     Task UpdateSubcontractorSurveyId(Guid applicationId, Guid subContractorSurveyId);
@@ -35,5 +38,7 @@ public interface IClosingReportRepository
     Task<int> GetClosingReportProjectDuration(Guid applicationId);
     Task<Guid?> GetPaymentRequestIDForClosingReport(Guid applicationId);
     Task<decimal> GetClosingReportAllowedFinalPaymentAmount(Guid applicationId);
-
+    Task<IReadOnlyCollection<ClosingReportTaskStatusResultItem>> GetClosingReportTaskStatus(Guid applicationId);
+    Task UpsertClosingReportTaskStatus(Guid applicationId, EClosingReportTask closingReportTask, ETaskStatus taskStatus, bool allowRevert = false);
+    Task UpdateClosingReportHasThirdPartyContributions(Guid applicationId, bool hasThirdPartyContributions);
 }

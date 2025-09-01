@@ -36,15 +36,21 @@ namespace HE.Remediation.Core.Services.DataIngestion
 
                     try
                     {
-                        var jobs = (await db.QueryAsync<(Guid DataIngestionId, int TotalRows)>("DequeueDataIngestionJobs", commandType: CommandType.StoredProcedure)).ToList();
+                        var jobs = (await db.QueryAsync<(Guid DataIngestionId, int TotalRows, int ImportTypeId)>("DequeueDataIngestionJobs", commandType: CommandType.StoredProcedure)).ToList();
 
                         foreach (var job in jobs)
                         {
-                            _logger.LogInformation("Starting data ingestion job {DataIngestionId} with {TotalRows} rows", job.DataIngestionId, job.TotalRows);
+                            _logger.LogInformation("Starting data ingestion job {DataIngestionId} (Type: {ImportTypeId}) with {TotalRows} rows", job.DataIngestionId, job.ImportTypeId, job.TotalRows);
 
                             using (var jobScope = _serviceProvider.CreateScope())
                             {
-                                var jobContext = new JobContext(job.DataIngestionId, job.TotalRows);
+                                if (!Enum.IsDefined(typeof(EDataIngestionImportType), job.ImportTypeId))
+                                {
+                                    _logger.LogWarning("Invalid ImportTypeId {ImportTypeId} for data ingestion job {DataIngestionId}", job.ImportTypeId, job.DataIngestionId);
+                                    continue;
+                                }
+
+                                var jobContext = new JobContext(job.DataIngestionId, job.TotalRows, (EDataIngestionImportType)job.ImportTypeId);
                                 jobContext.StatusReportEventAsync += OnStatusReportAsync;
                                 jobContext.JobCompleteEventAsync += OnJobCompleteAsync;
 

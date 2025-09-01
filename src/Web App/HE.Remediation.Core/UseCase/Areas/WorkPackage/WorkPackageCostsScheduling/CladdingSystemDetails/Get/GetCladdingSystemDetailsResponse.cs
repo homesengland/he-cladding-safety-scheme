@@ -45,6 +45,8 @@ public class GetCladdingSystemDetailsResponse
 
     public string ReplacementOtherInsulationManufacturer { get; set; }
 
+    public int? CladdingSystemArea { get; set; }
+
     public IEnumerable<GetCladdingManufacturerResult> CladdingManufacturers { get; set; }
 
     public IEnumerable<GetCladdingManufacturerResult> InsulationManufacturers { get; set; }

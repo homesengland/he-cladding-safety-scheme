@@ -1,0 +1,30 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.Shared.SubContractorRatings
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.CheckYourAnswersViewModel
+@{
+    ViewData["Title"] = "Ratings For Contractors";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("SubContractors");
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Check your answers</h1>
+
+@await Html.PartialAsync("SubContractorSurvey/_CheckYourAnswers", new SubContractorCheckYourAnswersViewModel
+{
+    Action = "SubContractorRatings",
+    ReturnAction = "SubContractorsCheckYourAnswers",
+    IsSubmitted = Model.IsSubmitted,
+    SubContractorRatings = Model.SubContractorRatings
+})
+
+<form method="post" asp-action="SubContractorsCheckYourAnswers">
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+    @Html.HiddenFor(x => x.ReturnUrl)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue" disabled="@Model.IsSubmitted">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" disabled="@Model.IsSubmitted" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

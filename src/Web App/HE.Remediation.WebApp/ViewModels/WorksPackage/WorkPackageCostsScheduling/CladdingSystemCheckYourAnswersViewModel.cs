@@ -26,4 +26,6 @@ public class CladdingSystemCheckYourAnswersViewModel : WorkPackageBaseViewModel
     public string ReplacementInsulationTypeName { get; set; }
 
     public string ReplacementInsulationManufacturerName { get; set; }
+ 
+    public int? CladdingSystemArea { get; set; }
 }
