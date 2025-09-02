@@ -8,7 +8,7 @@ namespace HE.Remediation.Core.Data.Repositories.FireRiskAppraisal
         Task<List<GetFireRiskAssessorListResult>> GetFireAssessorList();
         Task<List<GetCladdingTypeResult>> GetCladdingSystemTypes();
         Task<List<GetInsulationTypeResult>> GetInsulationTypes();
-        Task<List<GetCladdingManufacturerResult>> GetActiveCladdingManufacturers();
+        Task<List<GetCladdingManufacturerResult>> GetCladdingManufacturers();
         Task UpdateStatusToInProgress();
 
         Task<IReadOnlyCollection<GetFireRiskAssessorPdfListResult>> GetFireRiskAssessorPdfList();

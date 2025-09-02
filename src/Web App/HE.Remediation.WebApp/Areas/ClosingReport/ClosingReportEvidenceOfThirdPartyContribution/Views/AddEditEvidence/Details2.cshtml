@@ -1,0 +1,61 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.AddEditEvidenceDetailsViewModel
+@{
+    ViewData["Title"] = "Final Report";
+    ViewData["Backlink"] = Model.ViaCheckAnswer ? Url.Action("CheckYourAnswers", new { id = Model.Id }) : Url.Action("Details", new { id = Model.Id });
+    ViewData["FullWidth"] = false;
+    ViewData["ExitLinkHidden"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="AttemptDetails" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Submit Third Party Contribution Evidence Details</h1>
+
+@using (Html.BeginForm("Details2", "AddEditEvidence", new { Area = "ClosingReportEvidenceOfThirdPartyContribution", id = (Guid?)null }))
+{
+    <govuk-checkboxes name="TypeOfContribution" asp-for="TypeOfContribution">
+        <govuk-checkboxes-fieldset>
+            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--s">
+                What type of contribution have you received?
+            </govuk-checkboxes-fieldset-legend>
+        </govuk-checkboxes-fieldset>
+        <govuk-checkboxes-hint>
+            Please select all that apply.
+        </govuk-checkboxes-hint>
+        @foreach (EFundingStillPursuing item in Enum.GetValues(typeof(EFundingStillPursuing)))
+        {
+            <govuk-checkboxes-item checked="@Model?.TypeOfContribution?.Any(x => x == item)" value="@item">@item.GetEnumDisplayName()</govuk-checkboxes-item>
+        }
+    </govuk-checkboxes>
+
+    <govuk-input asp-for="Amount" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label class="govuk-label--s">Amount (optional)</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-character-count asp-for="AttemptDetails" max-length="150">
+        <govuk-character-count-label class="govuk-label--s">Attempt details</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="ThirdPartyName" value="@Model.ThirdPartyName" />
+    <govuk-date-input asp-for="DateOfAttempt" class="hidden" value="@Model.DateOfAttempt" />
+    <input type="hidden" asp-for="StatusOfAttempt" value="@Model.StatusOfAttempt" />
+    <input type="hidden" asp-for="ViaCheckAnswer" value="@Model.ViaCheckAnswer" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="button" value="Continue">Continue</govuk-button>
+    </div>
+}
+<div>
+    <a class="govuk-link" href="@Url.Action( "CancelAndExit", new { id = Model.Id })">Cancel and exit</a>
+</div>
+
+

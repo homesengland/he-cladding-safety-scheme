@@ -8,4 +8,5 @@ public class AdjustEndDateViewModel : VariationRequestBaseViewModel
     public int? NewEndYear { get; set; }
     public int? PreviousEndMonth { get; set; }
     public int? PreviousEndYear { get; set; }
+    public bool LastMonthlyPaymentCompleted { get; set; }
 }

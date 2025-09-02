@@ -14,8 +14,10 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public ETaskStatus ApplicationFundingRoutesStatusId { get; set; }
         public ETaskStatus ApplicationBankDetailsStatusId { get; set; }
         public ETaskStatus ConfirmDeclarationStatusId { get; set; }
+        public ETaskStatus ApplicationFraStatusId { get; set; }
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
-        
+        public bool IsDataIngestion { get; set; }
+
         public bool Phase2ReadyForDeclaration()
         {
             return ApplicationLeaseHolderEngagementStatusId == ETaskStatus.Completed
@@ -35,7 +37,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         }
         public bool Phase3Completed()
         {
-            return ApplicationFireRiskAssessmentStatusId == ETaskStatus.Completed;
+            return ApplicationFireRiskAssessmentStatusId == ETaskStatus.Completed && ApplicationFraStatusId == ETaskStatus.Completed;
         }
 
         public bool Phase4Completed()

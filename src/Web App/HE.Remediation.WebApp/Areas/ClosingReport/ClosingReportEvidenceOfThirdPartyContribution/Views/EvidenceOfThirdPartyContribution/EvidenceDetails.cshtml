@@ -1,0 +1,142 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.EvidenceOfThirdPartyContributionViewModel
+@{
+    ViewData["Title"] = "Final Report";
+    ViewData["Backlink"] = Url.Action("YesNoDeclaration");
+    ViewData["FullWidth"] = true;
+    ViewData["Readonly"] = Model.IsSubmitted;
+
+    var isSubmitted = Model.IsSubmitted;
+    var deleteEndpoint = "";
+    var changeEndpoint = "";
+}
+
+<h1 class="govuk-heading-xl">Third Party Contribution Evidence Details</h1>
+
+<p class="govuk-heading-s">Please add the details of each attempt you have made to secure a contribution to the cost of remediating your building, in line with your responsibilities under clause 5.4 of the grant funding agreement.</p>
+
+<p class="govuk-heading-s">You should add all attempts, whether unsuccessful, in progress or yet to be started, and include supporting evidence of the outcome, or current position of any claims.</p>
+
+
+<h2 class="govuk-heading-m">Evidence</h2>
+
+@using (Html.BeginForm())
+{
+
+    @if (Model.GetEvidenceDetailsResponse == null || !Model.GetEvidenceDetailsResponse.EvidenceDetailsResults.Any())
+    {
+        <div class="no-results bottom-highlight govuk-body">
+            There are no third party contributions to show
+        </div>
+    }
+    else
+    {
+        <div class="no-results bottom-highlight govuk-body">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Third Party Name</th>
+                        <th scope="col" class="govuk-table__header">Attempt Details</th>
+                        <th scope="col" class="govuk-table__header">Date of attempt</th>
+                        <th scope="col" class="govuk-table__header">Status of attempt</th>
+                        @if (!Model.IsSubmitted)
+                        {
+                            <th scope="col" colspan="2" class="govuk-table__header">Update</th>
+                        }
+                        else
+                        {
+                            <th scope="col" colspan="2" class="govuk-table__header">&nbsp;</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+
+                    @foreach (var evidenceDetail in Model.GetEvidenceDetailsResponse.EvidenceDetailsResults)
+                    {
+                        var evidenceId = evidenceDetail.Id;
+                        var applicationId = Model.ApplicationId;
+                        deleteEndpoint = Url.Action(
+                            "RemoveEvidence",
+                            "AddEditEvidence",
+                            new
+                            {
+                                id = evidenceId,
+                                Area = "ClosingReportEvidenceOfThirdPartyContribution",
+                            }
+                        );
+                        changeEndpoint = Url.Action(
+                            "Details",
+                            "AddEditEvidence",
+                            new
+                            {
+                                id = evidenceId,
+                                Area = "ClosingReportEvidenceOfThirdPartyContribution",
+                            }
+                        );
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@(evidenceDetail.ThirdPartyName ?? "")</td>
+                            <td class="govuk-table__cell">@(evidenceDetail.AttemptDetails ?? "")</td>
+                            <td class="govuk-table__cell">
+                                @(evidenceDetail.DateOfAttempt.HasValue ? evidenceDetail.DateOfAttempt.Value.ToString("dd/MM/yyyy") : "")
+                            </td>
+                            <td class="govuk-table__cell">
+                                @{
+                                    var statusText = (int)evidenceDetail.StatusOfAttempt switch
+                                    {
+                                        1 => "In Progress",
+                                        2 => "Not yet started",
+                                        3 => "Success",
+                                        4 => "Fail",
+                                        _ => evidenceDetail.StatusOfAttempt?.ToString() ?? ""
+                                    };
+                                }
+                                @statusText
+                            </td>
+                            @if (!Model.IsSubmitted)
+                            {
+                                <td class="govuk-table__cell">
+                                    <a class="govuk-link" href="@changeEndpoint">Change</a>
+                                </td>
+                            }
+                            @if (!Model.IsSubmitted)
+                            {
+                                <td class="govuk-table__cell">
+                                    <a class="govuk-link" href="@deleteEndpoint">Remove</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="govuk-table__cell" colspan="2">
+                                    &nbsp;
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="govuk-button-group">
+        @if(!Model.IsSubmitted)
+        {
+            <govuk-button class="govuk-button--secondary"
+                          href="@Url.Action("Details", "AddEditEvidence", new { Area = "ClosingReportEvidenceOfThirdPartyContribution" })">
+                Add contribution
+            </govuk-button>
+            <br />
+        }
+
+        <govuk-button name="SubmitAction"
+                      value="Continue"
+                      class="@(Model.GetEvidenceDetailsResponse == null || !Model.GetEvidenceDetailsResponse.EvidenceDetailsResults.Any() ? "govuk-button--disabled" : "")"
+                      disabled="@(Model.GetEvidenceDetailsResponse == null || !Model.GetEvidenceDetailsResponse.EvidenceDetailsResults.Any())">
+            Continue
+        </govuk-button>
+
+    </div>
+
+
+}

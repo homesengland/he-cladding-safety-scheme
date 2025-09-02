@@ -39,7 +39,7 @@ public class GetCladdingSystemDetailsHandler : IRequestHandler<GetCladdingSystem
         var claddingTypes = await _fireRiskAppraisalRepository.GetCladdingSystemTypes();
         var insulationTypes = await _fireRiskAppraisalRepository.GetInsulationTypes();
 
-        var manufacturers = await _fireRiskAppraisalRepository.GetActiveCladdingManufacturers();
+        var manufacturers = await _fireRiskAppraisalRepository.GetCladdingManufacturers();
         var claddingManufacturers = manufacturers
             .OrderBy(x => x.IsEndOfList)
             .ThenBy(x => x.Name);
@@ -67,6 +67,7 @@ public class GetCladdingSystemDetailsHandler : IRequestHandler<GetCladdingSystem
             ReplacementOtherInsulationType = claddingSystemResult?.ReplacementOtherInsulationType,
             ReplacementOtherCladdingManufacturer = claddingSystemResult?.ReplacementOtherCladdingManufacturer,
             ReplacementOtherInsulationManufacturer = claddingSystemResult?.ReplacementOtherInsulationManufacturer,
+            CladdingSystemArea = claddingSystemResult?.CladdingSystemArea,
             IsSubmitted = isSubmitted,
             CladdingTypes = claddingTypes,
             InsulationTypes = insulationTypes,

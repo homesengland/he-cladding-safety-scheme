@@ -23,4 +23,6 @@ public class CostsScheduleCladdingSystemAnswersResult
     public string ReplacementInsulationManufacturerName { get; set; }
 
     public string ReplacementOtherCladdingManufacturer { get; set; }
+
+    public int? CladdingSystemArea { get; set; }
 }

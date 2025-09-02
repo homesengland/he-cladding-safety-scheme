@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "No current FRA";
+    ViewData["BackLink"] = Url.Action("HasFra", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<p class="govuk-body">
+    Under the Regulatory Reform (Fire Safety) Order 2005 it is a legal requirement in the United Kingdom for buildings with two
+    or more domestic premises to undertake and retain a written record of a Fire Risk Assessment.
+</p>
+
+<p class="govuk-body">
+    It is expected that at the Works Package stage, you will upload a Fire Risk Assessment,
+    including advising the Type of Assessment undertaken, in support of your application.
+</p>
+
+
+<div class="comp-btn-group">
+    <govuk-button href="@Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Continue</govuk-button>
+</div>

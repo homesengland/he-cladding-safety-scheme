@@ -48,6 +48,18 @@
                     <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Stages:</h2>
                     <application-stages-list stage="@Model.Stage" scheme="@Model.ApplicationScheme"></application-stages-list>
 
+                    @if (Model.ConsiderVariation)
+                    {
+                        <div class="govuk-warning-text govuk-!-padding-bottom-0">
+                            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                            <strong class="govuk-warning-text__text">
+                                <span class="govuk-visually-hidden">Warning</span>
+                                You are reaching the end of your declared remediation period. If an extension to time, or an update to cost is required, please consider submitting a variation as soon as possible.
+                            </strong>
+                            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                        </div>
+                    }
+
                     <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                         <a href="@Url.Action("Index", "Document", new { Area = "Document" })" class="govuk-link">View uploaded documents</a>
                     </div>
@@ -88,18 +100,18 @@
                             </p>
 
                             <p class="govuk-body">
-                                Please refer to your eligibility letter, which will give you further information, including whether you 
+                                Please refer to your eligibility letter, which will give you further information, including whether you
                                 are eligible for Pre-Tender Support Funding and if so, the amount you will be paid.
                             </p>
 
                             <p class="govuk-body">
                                 If you do not want to receive Pre-Tender Support Funding or if you need to change the signatories for the
-                                Grant Funding Agreement, please email <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a> 
+                                Grant Funding Agreement, please email <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>
                                 as soon as possible.
                             </p>
 
                             <p class="govuk-body">
-                                Once the Grant Funding Agreement has been completed, you will be able to begin monthly reporting and to 
+                                Once the Grant Funding Agreement has been completed, you will be able to begin monthly reporting and to
                                 compile your works package.
                             </p>
 
@@ -134,7 +146,7 @@
                                     </div>
                                     <div class="govuk-grid-column-one-quarter">
                                         @if ((@currentReport.DateDue is not null && @currentReport.DateDue.Value.Date < DateTime.Today) ||
-                                     @currentReport.DateSubmitted is not null)
+                                      @currentReport.DateSubmitted is not null)
                                         {
                                             <div class="govuk-flex-row">
                                                 <progress-report-status-badge due="@currentReport.DateDue" submitted="@currentReport.DateSubmitted"></progress-report-status-badge>
@@ -169,7 +181,7 @@
                                         </div>
                                         <div class="govuk-grid-column-one-quarter">
                                             @if ((@previousReport.DateDue is not null && @previousReport.DateDue.Value.Date < DateTime.Today) ||
-                                         @previousReport.DateSubmitted is not null)
+                                          @previousReport.DateSubmitted is not null)
                                             {
                                                 <div class="govuk-flex-row">
                                                     <progress-report-status-badge is-previous="@true" due="@previousReport.DateDue" submitted="@previousReport.DateSubmitted"></progress-report-status-badge>
@@ -201,11 +213,11 @@
                         if (Model.ShowClosingReport)
                         {
                             <p class="govuk-body">
-                                In this section you will be asked for a number of documents to support your final retained payment of up to 
+                                In this section you will be asked for a number of documents to support your final retained payment of up to
                                 a maximum of 5%. A full list of the documents required appears on the 'About this section' page to follow.
                             </p>
                             <p class="govuk-body">
-                                Before starting this final payment request, please contact us if you do require 
+                                Before starting this final payment request, please contact us if you do require
                                 funding greater than the retained 5%.
                             </p>
                         }
@@ -226,11 +238,11 @@
                     @if (Model.Stage == EApplicationStage.WorksCompleted)
                     {
                         <p class="govuk-body">
-                            In this section you will be asked for a number of documents to support your final retained payment of up to 
+                            In this section you will be asked for a number of documents to support your final retained payment of up to
                             a maximum of 5%. A full list of the documents required appears on the 'About this section' page to follow.
                         </p>
                         <p class="govuk-body">
-                            Before starting this final payment request, please contact us if you do require 
+                            Before starting this final payment request, please contact us if you do require
                             funding greater than the retained 5%.
                         </p>
                         <p class="govuk-body">
@@ -255,7 +267,7 @@
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-three-quarters">
                                         <div class="govuk-flex-row">
-                                            <a href="@Url.Action("Start", "PaymentRequest", new { Area = "PaymentRequest", Id = currentPaymentRequest.Id } )" class="govuk-link">@currentPaymentRequest.CreatedDate!.Value.ToString("MMMM") payment request</a>                                            
+                                            <a href="@Url.Action("Start", "PaymentRequest", new { Area = "PaymentRequest", Id = currentPaymentRequest.Id } )" class="govuk-link">@currentPaymentRequest.CreatedDate!.Value.ToString("MMMM") payment request</a>
                                             @if ((currentPaymentRequest.IsExpired) && (!currentPaymentRequest.IsSubmitted))
                                             {
                                                 <payment-request-task-status-badge expired="true" status="@currentPaymentRequest.TaskStatusId"></payment-request-task-status-badge>
@@ -263,7 +275,7 @@
                                             else
                                             {
                                                 <payment-request-task-status-badge status="@currentPaymentRequest.TaskStatusId"></payment-request-task-status-badge>
-                                            }                                                                                    
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -284,15 +296,20 @@
                         }
                     }
 
-                    @if ((!Model.HasInProgressVariationRequest) &&
-                      (Model.ShowClosingReport) &&
+                    @if (!Model.HasInProgressVariationRequest && (!Model.IsVariationRequestSubmitted) &&
+                    (Model.ShowClosingReport) &&
                     (Model.Stage == EApplicationStage.WorksDelivery || Model.Stage == EApplicationStage.WorksCompleted))
-                    {      
-                        <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-                            <govuk-warning-text icon-fallback-text="Warning">
-                                Please note that once you initiate the final report you will not be able to submit any further variations for your project to request additional funds.
-                            </govuk-warning-text>
-                        </div>
+                    {
+
+                        @if (!Model.IsClosingReportSubmitted)
+                        {
+                            <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
+                                <govuk-warning-text icon-fallback-text="Warning">
+                                    Please note that once you initiate the final report you will not be able to submit any further variations for your project to request additional funds.
+                                </govuk-warning-text>
+                            </div>
+                        }
+
                         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <div class="govuk-grid-row">
@@ -314,7 +331,7 @@
                             </div>
 
                             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-                        </div>                        
+                        </div>
 
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             @if (!Model.IsPracticalCompletionSubmitted)
@@ -342,9 +359,9 @@
                         </div>
                     }
 
-                    @if (Model.Stage == EApplicationStage.WorksDelivery && 
-                       Model.HasScheduleOfWorks && 
-                       !Model.IsScheduleOfWorksSubmitted)
+                    @if (Model.Stage == EApplicationStage.WorksDelivery &&
+                    Model.HasScheduleOfWorks &&
+                    !Model.IsScheduleOfWorksSubmitted)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <div class="govuk-grid-row">
@@ -377,8 +394,8 @@
                                 </a>
                             }
                             else if (Model.IsVariationRequestSubmitted &&
-                                     Model.VariationRequestApprovalStatus != EVariationRequestApprovalStatus.Approved &&
-                                     Model.VariationRequestApprovalStatus != EVariationRequestApprovalStatus.Rejected)
+                            Model.VariationRequestApprovalStatus != EVariationRequestApprovalStatus.Approved &&
+                            Model.VariationRequestApprovalStatus != EVariationRequestApprovalStatus.Rejected)
                             {
                                 <a href="@Url.Action("CheckYourAnswers", "VariationRequest", new { Area = "VariationRequest"} )" class="govuk-link">
                                     View variation

@@ -36,6 +36,8 @@ public class CladdingSystemDetailsViewModel : WorkPackageBaseViewModel
 
     public string ReplacementOtherInsulationManufacturer { get; set; }
 
+    public int? CladdingSystemArea { get; set; }
+
     public IEnumerable<CladdingTypeViewModel> CladdingTypes { get; set; }
 
     public IEnumerable<InsulationTypeViewModel> InsulationTypes { get; set; }

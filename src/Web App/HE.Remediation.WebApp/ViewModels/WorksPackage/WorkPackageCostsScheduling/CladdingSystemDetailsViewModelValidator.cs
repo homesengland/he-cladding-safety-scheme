@@ -54,5 +54,14 @@ public class CladdingSystemDetailsViewModelValidator : AbstractValidator<Claddin
             .WithMessage("Enter the insulation manufacturer")
             .MaximumLength(256)
             .WithMessage("The maximum number of characters allowed is 256");
+
+        RuleFor(x => x.CladdingSystemArea)
+            .NotEmpty()
+            .WithMessage("Enter the Cladding Area in square metres")
+            .GreaterThan(0)
+            .WithMessage("Enter a positive whole number for the Cladding Area");
+       
+
+
     }
 }

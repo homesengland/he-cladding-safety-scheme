@@ -1,0 +1,64 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment.ReportViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Title"] = "Fire risk assessment";
+    ViewData["Backlink"] = Model.VisitedCheckYourAnswers
+        ? Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
+        : Url.Action("UploadFireRiskAssessmentReport", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="AssessorId" />
+        <govuk-error-summary-item asp-for="FraDate" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">FRA report</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="WorksPackageFireRiskAssessment" asp-action="Report" method="post">
+    <govuk-select asp-for="AssessorId" class="govuk-!-width-full" aria-label="Select Fire Risk Assessor">
+        <govuk-select-label class="govuk-label--s">Name of the firm/organisation that carried out the FRA?</govuk-select-label>
+    
+        <govuk-select-item selected="@(!Model.AssessorId.HasValue)">&nbsp;</govuk-select-item>
+    
+        @foreach (var fireRiskAssessorCompany in Model.FireRiskAssessorCompanies)
+        {
+            <govuk-select-item value="@fireRiskAssessorCompany.Id" selected="@(fireRiskAssessorCompany.Id == Model.AssessorId.ToString())">
+                @fireRiskAssessorCompany.CompanyName
+            </govuk-select-item>
+        }
+    </govuk-select>
+
+    <div class="govuk-!-margin-bottom-6">
+        <a class="govuk-link" href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">
+            I cannot find the company on this list
+        </a>
+    </div>
+
+    @for (var i = 0; i < Model.FireRiskAssessorCompanies.Count; i++)
+    {
+        var company = Model.FireRiskAssessorCompanies[i];
+        <input name="@("FireRiskAssessorCompanies[" + i + "].Id")" type="hidden" value="@company.Id" />
+        <input name="@("FireRiskAssessorCompanies[" + i + "].CompanyName")" type="hidden" value="@company.CompanyName" />
+    }
+
+    <govuk-date-input asp-for="FraDate">
+        <govuk-date-input-label class="govuk-label--s">What date was the FRA conducted?</govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

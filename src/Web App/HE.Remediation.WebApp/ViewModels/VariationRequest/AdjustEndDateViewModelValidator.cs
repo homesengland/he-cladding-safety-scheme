@@ -27,7 +27,13 @@ public class AdjustEndDateViewModelValidator : AbstractValidator<AdjustEndDateVi
                         .Must(x => BeInTheFuture(x.NewEndMonth, x.NewEndYear))
                         .WithName("NewEndMonth")
                         .WithMessage(x => "The end date must be in the future")
-                        .When(x => x.NewEndMonth.HasValue && x.NewEndYear.HasValue);
+                        .When(x => x.LastMonthlyPaymentCompleted == false && x.NewEndMonth.HasValue && x.NewEndYear.HasValue);
+
+                    RuleFor(x => x)
+                        .Must(x => BeInTheFuture(x.NewEndMonth, x.NewEndYear, x.PreviousEndMonth, x.PreviousEndYear))
+                        .WithName("NewEndMonth")
+                        .WithMessage(x => "The end date must be later than the current end date")
+                        .When(x => x.LastMonthlyPaymentCompleted == true && x.NewEndMonth.HasValue && x.NewEndYear.HasValue);
                 });
     }
 
@@ -40,5 +46,16 @@ public class AdjustEndDateViewModelValidator : AbstractValidator<AdjustEndDateVi
         var validDate = (new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1)).AddMonths(-1);
 
         return date.Date > validDate;
+    }
+
+    private bool BeInTheFuture(int? newEndMonth, int? newEndYear, int? currentEndMonth, int? currentEndYear)
+    {
+        if (newEndMonth is null or < 1 or > 12) return false;
+        if (newEndYear is null or < 1 or > MaxYear) return false;
+
+        var newEndDate = new DateTime(newEndYear.Value, newEndMonth.Value, 1);
+        var currentEndDate = new DateTime(currentEndYear!.Value, currentEndMonth!.Value, 1);
+
+        return newEndDate.Date > currentEndDate.Date;
     }
 }

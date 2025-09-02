@@ -6,5 +6,6 @@ public enum EClosingReportFileType
     PracticalCompletionCertificate,
     BuildingRegulations,
     LeaseholderResidentCommunication,
-    FinalCost
+    FinalCost,
+    EvidenceOfThirdPartyContribution
 }

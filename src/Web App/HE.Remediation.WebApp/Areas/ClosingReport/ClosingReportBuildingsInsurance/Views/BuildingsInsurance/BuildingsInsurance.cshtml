@@ -1,0 +1,85 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingsInsurance.BuildingsInsuranceViewModel
+@{
+    ViewData["Title"] = "Buildings Insurance";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ReferenceNumber})";
+    ViewData["BackLink"] = Model.ReturnUrl;
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="SumInsuredAmountText"/>
+        <govuk-error-summary-item asp-for="CurrentBuildingInsurancePremiumAmountText"/>
+        <govuk-error-summary-item asp-for="SelectedInsuranceProviderIds"/>
+        <govuk-error-summary-item asp-for="IfOtherInsuranceProviderName"/>
+        <govuk-error-summary-item asp-for="AdditionalInfo"/>
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Buildings Insurance</h1>
+<p class="govuk-body">Tell us about the buildings insurance for this building.</p>
+
+<form asp-area="ClosingReportBuildingsInsurance" asp-controller="BuildingsInsurance" asp-action="BuildingsInsurance" method="post">
+
+	<input type="hidden" name="BuildingName" value="@Model.BuildingName" />
+	<input type="hidden" name="ReferenceNumber" value="@Model.ReferenceNumber" />
+    <input asp-for="SubcontractorsRequired" type="hidden" value="@Model.SubcontractorsRequired" />
+    
+
+	<h2 class="govuk-heading-m">What is the total sum insured of the building?</h2>
+    <govuk-input asp-for="SumInsuredAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Sum insured</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+	<h2 class="govuk-heading-m">What is the current buildings insurance premium for the whole building?</h2>
+    <p class="govuk-body">
+		This should be the total amount charged for insuring the building for a year, including any additional charges, such as commissions, insurance premium tax or terrorism cover.
+    </p>
+    <govuk-input asp-for="CurrentBuildingInsurancePremiumAmountText" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Amount</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-checkboxes name="SelectedInsuranceProviderIds" asp-for="SelectedInsuranceProviderIds">
+        <govuk-checkboxes-fieldset>
+            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="">
+				<h2 class="govuk-heading-m">Who is/are your current building insurance provider/s?</h2>
+            </govuk-checkboxes-fieldset-legend>
+        </govuk-checkboxes-fieldset>
+        <govuk-checkboxes-hint>
+            Please select from the list or select Other and add the name of your insurance provider/s.
+        </govuk-checkboxes-hint>
+        @foreach (var insuranceProvider in Model.InsuranceProviders)
+        {
+            <govuk-checkboxes-item checked="Model.SelectedInsuranceProviderIds.Contains(insuranceProvider.Id)" value="@insuranceProvider.Id.ToString()">@insuranceProvider.Name</govuk-checkboxes-item>
+        }
+    </govuk-checkboxes>
+
+    @for (var currentInsuranceProvider = 0; currentInsuranceProvider < Model.InsuranceProviders.Count; currentInsuranceProvider++)
+    {
+        var location = Model.InsuranceProviders[currentInsuranceProvider];
+        <input type="hidden" name="InsuranceProviders[@currentInsuranceProvider].Id" value="@location.Id.ToString()" />
+        <input type="hidden" name="InsuranceProviders[@currentInsuranceProvider].Name" value="@location.Name" />
+    }
+
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="150">
+        <div class="govuk-form-group">
+            <govuk-character-count name="IfOtherInsuranceProviderName" max-length="150" asp-for="IfOtherInsuranceProviderName">
+                <govuk-character-count-label class="govuk-hint">
+                    If Other, please tell us who is/are your current building insurance provider/s?
+                </govuk-character-count-label>
+            </govuk-character-count>
+        </div>
+    </div>
+
+    <govuk-character-count asp-for="AdditionalInfo" max-length="500">
+        <govuk-character-count-label>Additional information</govuk-character-count-label>
+    </govuk-character-count>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue" disabled="@Model.IsSubmitted">Save and continue</govuk-button>
+    </div>
+</form>

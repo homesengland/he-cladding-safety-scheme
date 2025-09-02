@@ -1,0 +1,29 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.WorksAlreadyCompletedViewModel
+@{
+    ViewData["Title"] = "Have works to this building already been completed?";
+    ViewData["BackLink"] = Url.Action("BuildingUniqueName", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="WorksAlreadyCompleted" />
+    </govuk-error-summary>
+}
+
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="WorksAlreadyCompleted">
+    <h1 class="govuk-heading-xl">Have works to this building already been completed?</h1>
+
+    <govuk-radios asp-for="WorksAlreadyCompleted">
+        <govuk-radios-item value="True">Yes, I am applying for funding for a building which has been remediated</govuk-radios-item>
+        <govuk-radios-item value="False">No, I am applying for funding for a new remediation project</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

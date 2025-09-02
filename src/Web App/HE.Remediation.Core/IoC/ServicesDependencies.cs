@@ -100,5 +100,8 @@ public static class ServicesDependencies
         services.AddScoped<IRightToManageRepository, RightToManageRepository>();
         services.AddScoped<IThirdPartyCollaboratorRepository, ThirdPartyCollaboratorRepository>();
         services.AddScoped<IDataIngestionRepository, DataIngestionRepository>();
+        services.AddScoped<IEvidenceOfThirdPartyContributionRepository, EvidenceOfThirdPartyContributionRepository>();
+        services.AddScoped<IFireRiskAssessmentRepository, FireRiskAssessmentRepository>();
+        services.AddScoped<IWorkPackageFireRiskAssessmentRepository, WorkPackageFireRiskAssessmentRepository>();
     }
 }

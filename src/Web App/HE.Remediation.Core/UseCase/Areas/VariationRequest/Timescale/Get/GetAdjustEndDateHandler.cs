@@ -11,18 +11,21 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
         private readonly IBuildingDetailsRepository _buildingDetailsRepository;
         private readonly IVariationRequestRepository _variationRequestRepository;
         private readonly IWorkPackageRepository _workPackageRepository;
+        private readonly IPaymentRequestRepository _paymentRequestRepository;
 
         public GetAdjustEndDateHandler(IApplicationDataProvider applicationDataProvider,
                                        IBuildingDetailsRepository buildingDetailsRepository,
                                        IApplicationRepository applicationRepository,
                                        IVariationRequestRepository variationRequestRepository,
-                                       IWorkPackageRepository workPackageRepository)
+                                       IWorkPackageRepository workPackageRepository,
+                                       IPaymentRequestRepository paymentRequestRepository)
         {
             _applicationDataProvider = applicationDataProvider;
             _buildingDetailsRepository = buildingDetailsRepository;
             _applicationRepository = applicationRepository;
             _variationRequestRepository = variationRequestRepository;
             _workPackageRepository = workPackageRepository;
+            _paymentRequestRepository = paymentRequestRepository;
         }
 
         public async Task<GetAdjustEndDateResponse> Handle(GetAdjustEndDateRequest request, CancellationToken cancellationToken)
@@ -35,6 +38,8 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
             var adjustEndDateResult = await _variationRequestRepository.GetVariationAdjustEndDate();
             var previousEndDate = await _workPackageRepository.GetLatestWorkPackageKeyDatesByApplication();
 
+            var monthlyPaymentsOutstanding = await _paymentRequestRepository.GetMonthlyPaymentsOutstanding(applicationId);
+
             var isSubmitted = await _variationRequestRepository.IsVariationRequestSubmitted();
 
             return new GetAdjustEndDateResponse
@@ -45,7 +50,8 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
                 NewEndYear = adjustEndDateResult?.NewEndYear,
                 PreviousEndMonth = previousEndDate?.ExpectedDateForCompletion?.Month,
                 PreviousEndYear = previousEndDate?.ExpectedDateForCompletion?.Year,
-                IsSubmitted = isSubmitted
+                IsSubmitted = isSubmitted,
+                LastMonthlyPaymentCompleted = monthlyPaymentsOutstanding == 0
             };
         }
     }

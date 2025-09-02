@@ -1,0 +1,34 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageInternalDefects.InternalDefectsCostViewModel
+
+@{
+    ViewData["Title"] = "Internal Defects - About this section";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("StartInformation", "InternalDefects", new { Area = "WorksPackageInternalDefects" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Tell us about the cost of fixing any internal defects</h1>
+
+<form asp-area="WorksPackageInternalDefects" asp-controller="InternalDefects" asp-action="InternalDefectsCost" method="post">
+    <!-- Numerical value input -->
+    <govuk-input disabled="@Model.IsSubmitted" asp-for="InternalDefectsCosts" input-class="govuk-!-width-one-third" input-inputmode="numeric">
+        <govuk-input-label>Tell us about the cost of fixing any internal defects</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <!-- Free text input -->
+    <govuk-character-count disabled="@Model.IsSubmitted" asp-for="Description" max-length="1000">
+        <govuk-character-count-label>Tell us how these costs are being funded</govuk-character-count-label>
+    </govuk-character-count>
+
+
+    <input type="hidden" asp-for="ApplicationReferenceNumber" value="@Model.ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="BuildingName" value="@Model.BuildingName" />
+    <input type="hidden" asp-for="IsSubmitted" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

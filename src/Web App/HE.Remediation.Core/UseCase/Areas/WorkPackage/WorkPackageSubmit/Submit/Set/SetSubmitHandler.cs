@@ -46,11 +46,11 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
         var userId = _applicationDataProvider.GetUserId();
 
         var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Works Package Checks", "Review works package for recommendation"));
-        
+
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
         await _workPackageRepository.SubmitWorkPackage(userId);
-        
+
         await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageSubmitted, applicationIds: applicationId);
 
         await _taskRepository.InsertTask(new InsertTaskParameters
@@ -65,6 +65,30 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
             TaskTypeId = taskType.Id,
             TopicId = taskType.TopicId
         });
+
+        var preferredContractorLinksResult = await _workPackageRepository.GetCostsSchedulePreferredContractorLinks();
+        if (preferredContractorLinksResult?.PreferredContractorLinks == EYesNoNonBoolean.Yes)
+        {
+            taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Works Package submission", "Additional information required"));
+            var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
+            {
+                Date = _dateTimeProvider.UtcNow,
+                WorkingDays = 1
+            });
+
+            await _taskRepository.InsertTask(new InsertTaskParameters
+            {
+                ReferenceId = applicationId,
+                AssignedToTeamId = (int)ETeam.DaviesOps,
+                AssignedToUserId = null,
+                CreatedByUserId = null,
+                Description = "Contact the applicant to request further information about the preferred contractor's involvement/relationship to other parties in the project.",
+                RequiredByDate = DateOnly.FromDateTime(dueDate),
+                TaskStatus = ETaskStatus.NotStarted.ToString(),
+                TaskTypeId = taskType.Id,
+                TopicId = taskType.TopicId
+            });
+        }
 
         await TryCreateConsiderateConstructorsSchemeTask(applicationId);
 

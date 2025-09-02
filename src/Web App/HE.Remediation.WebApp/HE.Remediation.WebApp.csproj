@@ -111,6 +111,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\FireRisk.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\FraDate.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\NoCurrentFra.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\OtherAssessor.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\CheckYourAnswers.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\PracticalCompletionMilestone\Views\PracticalCompletionMilestone\PracticalCompletion.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\ProgressReporting\Views\ProgressReporting\GrantCertifyingOfficerAddress.cshtml" />
@@ -118,6 +122,14 @@
     <_ContentIncludedByDefault Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\AcquiredRightToManage.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\RightToManageEvidence.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\StartedOnSiteMilestone\Views\StartedOnSiteMilestone\StartedOnSite.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\FireRisk.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\FraDate.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\Funding.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\IdentifiedDefects.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\Information.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\OtherAssessor.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\Report.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\UploadFireRiskAssessmentReport.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageProgrammePlan\Views\ProgrammePlan\StartInformation.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\WorksPackage\WorksPackageProjectTeam\Views\ProjectTeam\CheckYourAnswers.cshtml" />
   </ItemGroup>
@@ -152,5 +164,53 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Areas\ResponsibleEntities\Views\ResponsibleEntities\RightToManageEvidence.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\FireRisk.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\NoCurrentFra.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\OtherAssessor.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\FireRiskAssessment\Views\FireRiskAssessment\FraDate.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\Information.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\UploadFireRiskAssessmentReport.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\Report.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\OtherAssessor.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\FraDate.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\FireRisk.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\IdentifiedDefects.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\WorksPackage\WorksPackageFireRiskAssessment\Views\FireRiskAssessment\Funding.cshtml" />
   </ItemGroup>
 </Project>

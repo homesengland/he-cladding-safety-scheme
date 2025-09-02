@@ -1,11 +1,10 @@
-﻿using System;
-using System.Transactions;
+﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.DataIngest.DataImporters;
 using HE.Remediation.Core.UseCase.DataIngest.Lookups;
 using HE.Remediation.Core.UseCase.DataIngest.Validation;
 using MediatR;
+using static AddressResolverException;
 
 namespace HE.Remediation.Core.UseCase.DataIngest
 {
@@ -14,6 +13,7 @@ namespace HE.Remediation.Core.UseCase.DataIngest
         IDataIngestionLookupService dataIngestionLookupService,
         IBuildingDetailsDataImporter buildingDetailsDataImporter,
         IResponsibleEntityDataImporter responsibleEntityDataImporter,
+        IFraDataImporter fraDataImporter,
         IDataIngestionRepository dataIngestionRepository) : IRequestHandler<CreateImportRequest>
     {
         private readonly JsonDataIngestMapperIValidator _validator = validator;
@@ -21,6 +21,7 @@ namespace HE.Remediation.Core.UseCase.DataIngest
         private readonly IDataIngestionRepository _dataIngestionRepository = dataIngestionRepository;
         private readonly IBuildingDetailsDataImporter _buildingDetailsDataImporter = buildingDetailsDataImporter;
         private readonly IResponsibleEntityDataImporter _responsibleEntityDataImporter = responsibleEntityDataImporter;
+        private readonly IFraDataImporter _fraDataImporter = fraDataImporter;
 
         public async Task<Unit> Handle(CreateImportRequest request, CancellationToken cancellationToken)
         {
@@ -56,22 +57,28 @@ namespace HE.Remediation.Core.UseCase.DataIngest
             {
                 lookups = await _dataIngestionLookupService.GetLookups(importedDataRow);
             }
-            catch (Exception ex)
+            catch (AddressResolverException ex)
             {
-                string message = ex.Message.StartsWith("Postcode Lookup") ? "Building_Name/Postcode not found" : ex.Message;
+                string message = ex.LookupErrorType == ErrorType.BuildingName ? "Building_name not found" : "Postcode not found";
                 await SaveErrorToUnprocessedRow(request.UnProcessedRowId, "Lookups", message);
                 throw;
             }
-            
+            catch (Exception ex)
+            {
+                await SaveErrorToUnprocessedRow(request.UnProcessedRowId, "Lookups", ex.Message);
+                throw;
+            }
+
             // IMPORT
 
-            var applicationScheme = EApplicationScheme.SocialSector;
+            var applicationScheme = request.TargetScheme;
 
             try
             {
                 using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
                 var applicationId = await _buildingDetailsDataImporter.Process(importedDataRow, applicationScheme, lookups.ApplicantUserId, lookups);
-                await _responsibleEntityDataImporter.Process(importedDataRow, applicationScheme, applicationId, lookups);
+                await _responsibleEntityDataImporter.Process(importedDataRow, applicationScheme, applicationId);
+                await _fraDataImporter.Process(importedDataRow, applicationScheme, applicationId, lookups);
 
                 await CompleteSuccessfulImport(request.DataIngestionId, request.UnProcessedRowId, applicationId, importedDataRow.RegistrationNumber);
                 transaction.Complete();

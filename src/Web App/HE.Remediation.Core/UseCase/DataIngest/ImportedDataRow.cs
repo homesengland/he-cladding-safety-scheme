@@ -89,7 +89,7 @@ namespace HE.Remediation.Core.UseCase.DataIngest
         {
             get
             {
-                var answer = _importData.GetSanitizedValue("RE organisation type")?.ToLower();
+                var answer = _importData.GetSanitizedValue("RE_Organisation_Type")?.ToLower();
 
                 if (answer == null)
                 {
@@ -98,7 +98,7 @@ namespace HE.Remediation.Core.UseCase.DataIngest
 
                 if (answer.StartsWith("rp"))
                     return EApplicationResponsibleEntityOrganisationType.RegisteredProvider;
-                if (answer.StartsWith("la"))
+                if (answer.StartsWith("la") || answer.StartsWith("local authority"))
                     return EApplicationResponsibleEntityOrganisationType.LocalAuthority;
                 return null;
             }
@@ -177,7 +177,39 @@ namespace HE.Remediation.Core.UseCase.DataIngest
             }
         }
 
-        public string InternalElement { get { return _importData.GetSanitizedValue("Other_LCFS_Defect_Type"); } }
+        public EInternalFireSafetyDefect? InternalElement { 
+            get { 
+                var answer = _importData.GetSanitizedValue("Other_LCFS_Defect_Type")?.ToLower();
+                if (answer == null)
+                {
+                    return null;
+                }
+                if (answer.Contains("defective walls"))
+                    return EInternalFireSafetyDefect.DefectiveWallsCeilingsFloors;
+                if (answer.Contains("fire doors"))
+                    return EInternalFireSafetyDefect.InadequateDefectiveFireDoors;
+                if (answer.Contains("cables or pipes"))
+                    return EInternalFireSafetyDefect.InadequateStoppingAroundFireCablesAndPipes;
+                if (answer.Contains("signage"))
+                    return EInternalFireSafetyDefect.InadequateOrMissingFireEscapeSignage;
+                if (answer.Contains("alarm systems"))
+                    return EInternalFireSafetyDefect.InadequateDefectiveFireDetectionAndAlarmSystems;
+                if (answer.Contains("means of escape"))
+                    return EInternalFireSafetyDefect.UnprotectedMeansOfEscape;
+                if (answer.Contains("firefighting"))
+                    return EInternalFireSafetyDefect.InadequateDefectiveFireFightingEquipmentOrInstallation;
+
+                return EInternalFireSafetyDefect.Other;
+            } 
+        }
+
+        public string InternalElementDescription
+        {
+            get
+            {
+                return _importData.GetSanitizedValue("Other_LCFS_Defect_Type");
+            }
+        }
 
         public ERiskType? RiskLevel { 
             get {
@@ -215,6 +247,33 @@ namespace HE.Remediation.Core.UseCase.DataIngest
                     return EReplacementCladding.Full;
                 if (answer.StartsWith("partial"))
                     return EReplacementCladding.Partial;
+                if (answer.StartsWith("mitigation") || answer.StartsWith("none"))
+                    return EReplacementCladding.None;
+                return null;
+            }
+        }
+
+        public EFireRiskAssessmentType? LatestAssessmentLevel
+        {
+            get
+            {
+                var answer = _importData.GetSanitizedValue("Latest_Assessment_Level")?.ToLower();
+
+                if (answer == null)
+                {
+                    return null;
+                }
+
+                if (answer.StartsWith("type 1"))
+                    return EFireRiskAssessmentType.Type1FireRiskAssessment;
+                if (answer.StartsWith("type 2"))
+                    return EFireRiskAssessmentType.Type2FireRiskAssessment;
+                if (answer.StartsWith("type 3"))
+                    return EFireRiskAssessmentType.Type3FireRiskAssessment;
+                if (answer.StartsWith("type 4"))
+                    return EFireRiskAssessmentType.Type4FireRiskAssessment;
+                if (answer.StartsWith("don") && answer.EndsWith("know"))
+                    return EFireRiskAssessmentType.DontKnow;
                 return null;
             }
         }
@@ -224,15 +283,29 @@ namespace HE.Remediation.Core.UseCase.DataIngest
     {
         public static string GetSanitizedValue(this Dictionary<string, string> dictionary, string key)
         {
-            var result = dictionary.TryGetValue(key, out var value) ? value : string.Empty;
+            // Normalize the input key: remove underscores, spaces, and make lowercase
+            static string Normalize(string s) => new string([.. s.Where(c => !char.IsWhiteSpace(c) && c != '_')]).ToLowerInvariant();
 
-            if (result.StartsWith("null", StringComparison.CurrentCultureIgnoreCase) ||
-                result.Equals("0", StringComparison.CurrentCultureIgnoreCase))
+            var normalizedKey = Normalize(key);
+
+            foreach (var kvp in dictionary)
             {
-                return null;
+                if (Normalize(kvp.Key) == normalizedKey)
+                {
+                    if (kvp.Value == null)
+                    {
+                        return null;
+                    }
+                    if (kvp.Value.StartsWith("null", StringComparison.CurrentCultureIgnoreCase) ||
+                        kvp.Value.Equals("0", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return null;
+                    }
+                    return kvp.Value.Trim();
+                }
             }
 
-            return result.Trim();
+            return string.Empty;
         }
     }
 }

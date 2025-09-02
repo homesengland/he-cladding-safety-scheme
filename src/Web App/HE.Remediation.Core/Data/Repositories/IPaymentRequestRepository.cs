@@ -89,4 +89,5 @@ public interface IPaymentRequestRepository
     Task<IReadOnlyCollection<GetPaymentRequestInvoiceFilesResult>> GetPaymentRequestInvoiceFiles(GetPaymentRequestInvoiceFilesParameters parameters);
     Task InsertPaymentRequestInvoiceFile(InsertPaymentRequestInvoiceFileParameters parameters);
     Task DeletePaymentRequestInvoiceFile(DeletePaymentRequestInvoiceFileParameters parameters);
+    Task<int> GetMonthlyPaymentsOutstanding(Guid applicationId);
 }

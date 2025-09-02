@@ -33,6 +33,14 @@
 </govuk-summary-list-row>
 <govuk-summary-list-row>
     <govuk-summary-list-row-key>
+        Have works to this building already been completed?
+    </govuk-summary-list-row-key>
+    <govuk-summary-list-row-value>
+        @(Model.WorksAlreadyCompleted ? "Yes, I am applying for funding for a building which has been remediated" : "No, I am applying for funding for a new remediation project")
+    </govuk-summary-list-row-value>
+</govuk-summary-list-row>
+<govuk-summary-list-row>
+    <govuk-summary-list-row-key>
         Number of residential units?
     </govuk-summary-list-row-key>
     <govuk-summary-list-row-value>

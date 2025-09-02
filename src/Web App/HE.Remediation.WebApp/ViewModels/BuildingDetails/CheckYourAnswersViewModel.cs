@@ -5,6 +5,7 @@
         public string ReturnURL { get; set; }
 
         public string BuildingUniqueName { get; set; }
+        public bool WorksAlreadyCompleted { get; set; }
         public int ResidentialUnitsCount { get; set; }
         public bool NonResidentialUnits { get; set; }
         public int NonResidentialUnitsCount { get; set; }

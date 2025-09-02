@@ -122,6 +122,25 @@
                                     </span>
                                     <task-list-status-badge status="@Model.ProgrammePlanStatusId"></task-list-status-badge>
                                 </li>
+                                @if (!Model.HasFra)
+                                {
+                                    <li class="app-task-list__item">
+                                        <span class="app-task-list__task-name">
+                                            <a class="govuk-link" href="@Url.Action("Start", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })" aria-describedby="list-convictions-status">
+                                                Fire risk assessment
+                                            </a>
+                                        </span>
+                                        <task-list-status-badge status="@Model.WorkPackageFireRiskAssessmentStatusId"></task-list-status-badge>
+                                    </li>
+                                }
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.InternalDefectsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "InternalDefects", new { Area = "WorksPackageInternalDefects" }) : Url.Action("Start", "InternalDefects", new { Area = "WorksPackageInternalDefects" }))">
+                                            Internal Defects
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.InternalDefectsStatusId"></task-list-status-badge>
+                                </li>
                                 <li class="app-task-list__item">
                                     <span class="app-task-list__task-name">
                                         <a class="govuk-link" href="@Url.Action("Start", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })" aria-describedby="list-convictions-status">

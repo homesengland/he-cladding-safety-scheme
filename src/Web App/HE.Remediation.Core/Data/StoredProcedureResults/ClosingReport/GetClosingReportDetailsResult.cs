@@ -20,5 +20,7 @@ public class GetClosingReportDetailsResult
 
     public bool? GrantFundingObligations { get; set; }
 
+    public bool? HasThirdPartyContributions { get; set; }
+
     public bool IsSubmitted { get; set; }
 }

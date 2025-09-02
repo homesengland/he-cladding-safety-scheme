@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.DataIngest;
 using HE.Remediation.Core.UseCase.DataIngest.Validation;
 
@@ -7,10 +6,13 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
 {
     public class ImportedDataRowTests
     {
-        [Fact]
-        public void BuildingName_ReturnsExpectedValue()
+        [Theory]
+        [InlineData("Building_Name")]
+        [InlineData("Building Name")]
+        [InlineData("Building name")]
+        public void BuildingName_ReturnsExpectedValue(string columnName)
         {
-            var mapper = new ImportedDataRow(new Dictionary<string, string> { { "Building_Name", "Test Building" } });
+            var mapper = new ImportedDataRow(new Dictionary<string, string> { { columnName, "Test Building" } });
             Assert.Equal("Test Building", mapper.BuildingName);
 
             mapper = new ImportedDataRow(new Dictionary<string, string>());
@@ -218,14 +220,23 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
             Assert.Equal(expected, mapper.IsInternalMitigationWorks);
         }
 
-        [Fact]
-        public void InternalElement_ReturnsExpectedValue()
+        [Theory]
+        [InlineData("Inadequate/defective fire doors", EInternalFireSafetyDefect.InadequateDefectiveFireDoors)]
+        [InlineData("Inadequate fire stopping around cables or pipes", EInternalFireSafetyDefect.InadequateStoppingAroundFireCablesAndPipes)]
+        [InlineData("Inadequate/defective firefighting equipment or installations", EInternalFireSafetyDefect.InadequateDefectiveFireFightingEquipmentOrInstallation)]
+        [InlineData("Inadequate/defective fire detection and alarm systems", EInternalFireSafetyDefect.InadequateDefectiveFireDetectionAndAlarmSystems)]
+        [InlineData("Defective walls, ceilings or floors that can cause fire spread between dwellings or between dwellings and common parts", EInternalFireSafetyDefect.DefectiveWallsCeilingsFloors)]
+        [InlineData("Incorrect or missing fire escape signage", EInternalFireSafetyDefect.InadequateOrMissingFireEscapeSignage)]
+        [InlineData("Unprotected means of escape", EInternalFireSafetyDefect.UnprotectedMeansOfEscape)]
+        [InlineData("Other", EInternalFireSafetyDefect.Other)]
+        [InlineData("Don't Know", EInternalFireSafetyDefect.Other)]
+        [InlineData("Random text by accident", EInternalFireSafetyDefect.Other)]
+        [InlineData(null, null)]
+        public void InternalElement_ReturnsExpectedValue(string input, EInternalFireSafetyDefect? expected)
         {
-            var mapper = new ImportedDataRow(new Dictionary<string, string> { { "Other_LCFS_Defect_Type", "TypeA" } });
-            Assert.Equal("TypeA", mapper.InternalElement);
-
-            mapper = new ImportedDataRow(new Dictionary<string, string>());
-            Assert.Equal(string.Empty, mapper.InternalElement);
+            var mapper = new ImportedDataRow(new Dictionary<string, string> { { "Other_LCFS_Defect_Type", input } });
+            Assert.Equal(expected, mapper.InternalElement);
+            Assert.Equal(input, mapper.InternalElementDescription);
         }
 
         [Fact]
@@ -241,6 +252,8 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
         [Theory]
         [InlineData("full remediation", EReplacementCladding.Full)]
         [InlineData("partial remediation", EReplacementCladding.Partial)]
+        [InlineData("mitigation", EReplacementCladding.None)]
+        [InlineData("none", EReplacementCladding.None)]
         [InlineData("unknown", null)]
         [InlineData("", null)]
         [InlineData(null, null)]
@@ -250,6 +263,43 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
             if (input != null) dict["FRAEW_Recommendation"] = input;
             var mapper = new ImportedDataRow(dict);
             Assert.Equal(expected, mapper.CladdingReplacement);
+        }
+
+        [Theory]
+        [InlineData("RE Organisation Type")]
+        [InlineData("RE_Organisation_Type")]
+        [InlineData("RE organisation Type")]
+        public void REOrganisationType_ColumnNameDifference_ReturnsExpectedValue(string columnName)
+        {
+            var mapper = new ImportedDataRow(new Dictionary<string, string> { { columnName, "Local Authority" } });
+            Assert.Equal(EApplicationResponsibleEntityOrganisationType.LocalAuthority, mapper.OrganisationType);
+
+            mapper = new ImportedDataRow(new Dictionary<string, string>());
+            Assert.Null(mapper.OrganisationType);
+        }
+
+        [Theory]
+        [InlineData("Local Authority", EApplicationResponsibleEntityOrganisationType.LocalAuthority)]
+        [InlineData("LA", EApplicationResponsibleEntityOrganisationType.LocalAuthority)]
+        [InlineData("RP", EApplicationResponsibleEntityOrganisationType.RegisteredProvider)]
+        public void REOrganisationType_ReturnsExpectedValue(string input, EApplicationResponsibleEntityOrganisationType expected)
+        {
+            var mapper = new ImportedDataRow(new Dictionary<string, string> { { "RE_Organisation_Type", input } });
+            Assert.Equal(expected, mapper.OrganisationType);
+        }
+
+        [Theory]
+        [InlineData("Type 1", EFireRiskAssessmentType.Type1FireRiskAssessment)]
+        [InlineData("Type 2", EFireRiskAssessmentType.Type2FireRiskAssessment)]
+        [InlineData("Type 3", EFireRiskAssessmentType.Type3FireRiskAssessment)]
+        [InlineData("Type 4", EFireRiskAssessmentType.Type4FireRiskAssessment)]
+        [InlineData("Don't Know", EFireRiskAssessmentType.DontKnow)]
+        [InlineData("Don’t Know", EFireRiskAssessmentType.DontKnow)]
+        [InlineData("NULL", null)]
+        public void LatestAssessmentLevel_ReturnsExpectedValue(string input, EFireRiskAssessmentType? expected)
+        {
+            var mapper = new ImportedDataRow(new Dictionary<string, string> { { "Latest_Assessment_Level", input } });
+            Assert.Equal(expected, mapper.LatestAssessmentLevel);
         }
 
         [Fact]

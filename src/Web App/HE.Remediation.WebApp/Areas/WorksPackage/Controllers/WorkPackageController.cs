@@ -11,8 +11,6 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-using System.Reflection;
-
 namespace HE.Remediation.WebApp.Areas.WorksPackage.Controllers;
 
 [Area("WorksPackage")]

@@ -1,6 +1,7 @@
 ﻿@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityResponsibleForGrantFundingViewModel;
 @{
     ViewData["Title"] = "Are you responsible for signing the grant funding agreement?";
+    ViewData["BackLink"] = Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
 }
 @section ErrorSummary
     {

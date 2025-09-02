@@ -94,6 +94,7 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
 
             var buildingDetailsDataImporter = new Mock<IBuildingDetailsDataImporter>().Object;
             var responsibleEntityDataImporter = new Mock<IResponsibleEntityDataImporter>().Object;
+            var fraDataImporter = new Mock<IFraDataImporter>().Object;
             var repo = new Mock<IDataIngestionRepository>().Object;
             var lookupService = new Mock<IDataIngestionLookupService>();
 
@@ -116,13 +117,11 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest
                 lookupService.Object,
                 buildingDetailsDataImporter,
                 responsibleEntityDataImporter,
+                fraDataImporter,
                 repo
             );
 
-            var request = new CreateImportRequest
-            {
-                ImportData = xlsColumns
-            };
+            var request = new CreateImportRequest(xlsColumns, Guid.Empty, Guid.Empty, Enums.EApplicationScheme.SocialSector);
             var result = await handler.Handle(request, default);
 
             Assert.Equal(Unit.Value, result);

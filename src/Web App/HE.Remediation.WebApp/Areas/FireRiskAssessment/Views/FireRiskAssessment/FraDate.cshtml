@@ -1,0 +1,34 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAssessment.FraDateViewModel
+@{
+    ViewData["Title"] = "Assessment details";
+    ViewData["BackLink"] = Model.VisitedCheckYourAnswers
+        ? Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+        : Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FraDate" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="FireRiskAssessment" asp-action="FraDate" method="post">
+    <govuk-date-input asp-for="FraDate">
+        <govuk-date-input-label class="govuk-label--s">What date was the FRA conducted?</govuk-date-input-label>
+        <govuk-date-input-hint>
+            For example, 27 8 2022
+        </govuk-date-input-hint>
+    </govuk-date-input>
+    
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

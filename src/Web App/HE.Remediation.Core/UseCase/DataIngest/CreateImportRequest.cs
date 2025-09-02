@@ -1,11 +1,13 @@
-﻿using MediatR;
+﻿using HE.Remediation.Core.Enums;
+using MediatR;
 
 namespace HE.Remediation.Core.UseCase.DataIngest
 {
-    public class CreateImportRequest: IRequest<Unit>
+    public class CreateImportRequest(Dictionary<string, string> importData, Guid unProcessedRowId, Guid dataIngestionId, EApplicationScheme targetScheme) : IRequest<Unit>
     {
-        public Dictionary<string, string> ImportData { get; set; }
-        public Guid UnProcessedRowId { get; set; }
-        public Guid DataIngestionId { get; set; }
+        public Dictionary<string, string> ImportData { get; } = importData;
+        public Guid UnProcessedRowId { get; } = unProcessedRowId;
+        public Guid DataIngestionId { get; } = dataIngestionId;
+        public EApplicationScheme TargetScheme { get; } = targetScheme;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.GetResidentialUnits;
 using Moq;
 
@@ -24,7 +25,7 @@ public class GetResidentialUnitsTests
     [Fact]
     public async Task Handler_Returns_Data_From_DB()
     {
-        //Arrange        
+        //Arrange
         var unitsResponse = new GetResidentialUnitsResponse()
         {
             ResidentialUnitsCount = 2,
@@ -33,7 +34,11 @@ public class GetResidentialUnitsTests
         
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
-                                .Verifiable(); 
+                                .Verifiable();
+
+        _applicationDataProvider
+            .Setup(provider => provider.GetApplicationScheme())
+            .Returns(EApplicationScheme.CladdingSafetyScheme);
 
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetResidentialUnitsResponse>("GetResidentialUnits", It.IsAny<object>()))
                                 .ReturnsAsync(unitsResponse)

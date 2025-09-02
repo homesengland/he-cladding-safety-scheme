@@ -51,4 +51,7 @@ public class GetStageDiagramResponse
     public EPaymentRequestTaskStatus? ClosingReportStatus { get; set; }
     public bool ClosingReportStarted { get; set; }
     public bool HasThePrimaryReportBeenSubmitted { get; set; }
+
+    public bool ConsiderVariation { get; set; }
+    public bool IsClosingReportSubmitted { get; set; }
 }

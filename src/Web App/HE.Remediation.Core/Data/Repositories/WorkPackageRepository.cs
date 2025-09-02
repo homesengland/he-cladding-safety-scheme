@@ -11,7 +11,6 @@ using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.PlanningPermission;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ProjectTeam;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.WorkPackageDutyOfCareDeedResult;
-using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.WorkPackageSignatories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using System.Transactions;
@@ -23,7 +22,9 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Services.StatusTransition;
 using UpsertTeamMemberParameters = HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam.UpsertTeamMemberParameters;
-using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
+using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.InternalDefects;
+using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.InternalDefects;
+using System;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -1123,6 +1124,19 @@ public class WorkPackageRepository : IWorkPackageRepository
         scope.Complete();
     }
 
+    public async Task<PreferredContractorLinksResult> GetCostsSchedulePreferredContractorLinks()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+        return await _connection.QuerySingleOrDefaultAsync<PreferredContractorLinksResult>(
+            "GetWorkPackageCostsSchedulePreferredContractorLinks", new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
     public async Task<ENoYes?> GetCostsScheduleSoughtQuotes()
     {
         if (!TryGetApplicationId(out var applicationId))
@@ -1134,6 +1148,22 @@ public class WorkPackageRepository : IWorkPackageRepository
         {
             ApplicationId = applicationId
         });
+    }
+
+    public async Task UpdateCostSchedulePReferredContractorLinks(EYesNoNonBoolean? preferredContractorLinks, string preferredContractorLinkAdditionalNotes)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        await _connection.ExecuteAsync("UpdateWorkPackageCostsSchedulePreferredContractorLinks", new
+        {
+            ApplicationId = applicationId,
+            PreferredContractorLinks = preferredContractorLinks,
+            PreferredContractorLinkAdditionalNotes = preferredContractorLinkAdditionalNotes
+        });
+        scope.Complete();
     }
 
     public async Task UpdateCostsScheduleSoughtQuotes(ENoYes? soughtQuotes)
@@ -1947,6 +1977,88 @@ public class WorkPackageRepository : IWorkPackageRepository
                 parameters);
 
         return result;
+    }
+
+    #endregion
+
+    #region Internal Defects
+
+    public async Task InsertInternalDefectsCost()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("InsertWorkPackageInternalDefects", new
+        {
+            ApplicationId = applicationId
+        });
+    }
+
+    public async Task<GetInternalDefectsCostResult> GetInternalDefectsCost()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<GetInternalDefectsCostResult>(
+            "GetWorkPackageInternalDefectsCost", new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task SetInternalDefectsCost(SetInternalDefectsParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(SetInternalDefectsCost), new
+            {
+            ApplicationId = parameters.ApplicationId,
+            InternalDefectsCosts = parameters.InternalDefectsCosts,
+            Description = parameters.Description
+        });
+    }
+
+    public async Task UpdateInternalDefectsTaskStatus(SetInternalDefectsParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateInternalDefectsTaskStatus), parameters);
+    }
+
+    public async Task<ETaskStatus?> GetInternalDefectsStatus()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<ETaskStatus?>("GetWorkPackageInternalDefectsStatus", new
+        {
+            ApplicationId = applicationId
+        });
+    }
+
+    public async Task UpdateInternalDefectsStatus(ETaskStatus taskStatus)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        await _connection.ExecuteAsync("UpdateInternalDefectsTaskStatus", new
+        {
+            ApplicationId = applicationId,
+            TaskStatusId = taskStatus
+        });
+
+        if (taskStatus == ETaskStatus.InProgress)
+        {
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+        }
+
+        scope.Complete();
     }
 
     #endregion

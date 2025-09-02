@@ -1,0 +1,19 @@
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.TaskListItemViewModel
+
+<li class="app-task-list__item">
+    @if (Model.Status == null)
+    {
+        <span class="govuk-body">@Model.Task.GetEnumDisplayName()</span>
+        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+    }
+    else
+    {
+        <span class="app-task-list__task-name">
+            <a class="govuk-link" href="@Model.TaskUrl" aria-describedby="list-convictions-status">
+                @Model.Task.GetEnumDisplayName()
+            </a>
+        </span>
+        <task-list-status-badge status="@Model.Status.Value"></task-list-status-badge>
+    }
+</li>

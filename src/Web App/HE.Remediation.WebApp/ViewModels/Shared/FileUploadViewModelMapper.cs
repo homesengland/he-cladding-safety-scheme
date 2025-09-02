@@ -18,7 +18,7 @@ namespace HE.Remediation.WebApp.ViewModels.Shared
             CreateMap<Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport.FileResult, File>()
                 .ForMember(x => x.FileSize, o => o.MapFrom(s => ByteSize.FromBytes(s.Size).ToString()));
 
-            CreateMap<Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAssessmentReport.GetFireRiskAssessmentReport.FileResult, File>()
+            CreateMap<Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAssessmentReport.GetFireRiskAssessmentReport.FileResult, File>()
                 .ForMember(x => x.FileSize, o => o.MapFrom(s => ByteSize.FromBytes(s.Size).ToString()));
         }
     }

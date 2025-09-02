@@ -21,4 +21,9 @@ public class GetVariationReasonResponse
     public decimal? UnclaimedGrantFunding { get; set; }
 
     public bool IsSubmitted { get; set; }
+
+    public bool ClosingReportStarted { get; set; }
+
+    public bool LastMonthlyPaymentCompleted { get; set; }
+
 }

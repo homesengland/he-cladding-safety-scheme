@@ -1,0 +1,226 @@
+﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment.CheckYourAnswersViewModel
+
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Title"] = "Fire risk assessment";
+    ViewData["Backlink"] = Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+
+    const string ErrorClasses = "govuk-form-group--error govuk-error-message govuk-!-margin-bottom-0";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FraFile" />
+        <govuk-error-summary-item asp-for="Defects" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<govuk-summary-list>
+    @{
+        var fraFileClass = string.Empty;
+        if (ViewData.ModelState.TryGetValue(nameof(Model.FraFile), out var fraFileValidation))
+        {
+            if (fraFileValidation.ValidationState == ModelValidationState.Invalid)
+            {
+                fraFileClass = ErrorClasses;
+            }
+        }
+    }
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <div class="@fraFileClass" id="@(nameof(Model.FraFile))">
+                FRA file
+            </div>
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.FraFile) ? Model.FraFile : "-")</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Please confirm the type of FRA</govuk-summary-list-row-key>
+        @{
+            var type = Model.FireRiskAssessmentType switch
+            {
+                EFireRiskAssessmentType.Type1FireRiskAssessment => "Type 1 fire risk assessment (common parts &ndash; non-destructive)",
+                EFireRiskAssessmentType.Type2FireRiskAssessment => "Type 2 fire risk assessment (common parts &ndash; destructive)",
+                EFireRiskAssessmentType.Type3FireRiskAssessment => "Type 3 fire risk assessment (common parts and flats &ndash; non-destructive)",
+                EFireRiskAssessmentType.Type4FireRiskAssessment => "Type 4 fire risk assessment (common parts and flats &ndash; destructive)",
+                EFireRiskAssessmentType.DontKnow => "Don't know",
+                _ => "-"
+            };
+        }
+        <govuk-summary-list-row-value>@Html.Raw(type)</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Name of the firm/organisation that carried out the FRA?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.FireRiskAssessor) ? Model.FireRiskAssessor : "-")</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("Report", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    @if (string.IsNullOrEmpty(Model.FireRiskAssessor))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Fire risk assessor first name</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherAssessorFirstName) ? Model.OtherAssessorFirstName : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Fire risk assessor last name</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherAssessorLastName) ? Model.OtherAssessorLastName : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Fire risk assessor company name</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherAssessorCompanyName) ? Model.OtherAssessorCompanyName : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Fire risk assessor company number</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherAssessorCompanyNumber) ? Model.OtherAssessorCompanyNumber : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Fire risk assessor email address</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherAssessorEmailAddress) ? Model.OtherAssessorEmailAddress : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Fire risk assessor telephone number</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherAssessorTelephone) ? Model.OtherAssessorTelephone : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>What date was the FRA conducted?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@(Model.FireRiskAssessmentDate.HasValue ? Model.FireRiskAssessmentDate.Value.ToString("dd/MM/yyyy") : "-")</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action((!string.IsNullOrEmpty(Model.FireRiskAssessor) ? "Report" : "FraDate"), "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>What is the overall risk rating of the FRA?</govuk-summary-list-row-key>
+        @{
+            var riskRating = Model.FireRiskRating switch
+            {
+                EFraRiskRating.Low => "Low",
+                EFraRiskRating.MediumTolerable => "Medium - tolerable",
+                EFraRiskRating.MediumActionRequired => "Medium - action required",
+                EFraRiskRating.High => "High",
+                _ => "-"
+            };
+        }
+        <govuk-summary-list-row-value>@riskRating</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Does the FRA identify internal fire safety defects that contribute to the fire safety risks?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@(Model.HasInternalFireSafetyRisks == true ? "Yes" : Model.HasInternalFireSafetyRisks == false ? "No" : "-")</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    @if (Model.HasInternalFireSafetyRisks == true)
+    {
+        var defectsClass = string.Empty;
+        if (ViewData.ModelState.TryGetValue(nameof(Model.Defects), out var defectsValidation))
+        {
+            if (defectsValidation.ValidationState == ModelValidationState.Invalid)
+            {
+                defectsClass = ErrorClasses;
+            }
+        }
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <div class="@defectsClass" id="@(nameof(Model.Defects))">
+                    What are the identified internal fire safety defects
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.Defects.Count > 0)
+                {
+                    <ul>
+                        @foreach (var defect in Model.Defects)
+                        {
+                            <li>@(!defect.Equals("Other", StringComparison.InvariantCultureIgnoreCase) ? defect : $"{defect} - {Model.OtherInternalFireSafetyRisk}")</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <text>-</text>
+                }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("IdentifiedDefects", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Have you got any funding in place to cover these works?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@(Model.HasFunding == true ? "Yes" : Model.HasFunding == false ? "No" : "-")</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>@(Model.HasFunding == true ? "What type of funding?" : "What action are you looking to undertake?")</govuk-summary-list-row-key>
+        @{
+            var fundingType = Model.FraFundingType switch
+            {
+                EFraFundingType.PaidForByThirdParty => "These works are paid for by a third party",
+                EFraFundingType.PaidForFromExistingServiceChargeFunds => "These works are planned to be paid for from existing service charge funds",
+                EFraFundingType.RequestToBeMadeToThirdParty => "Request to be made to a third party",
+                EFraFundingType.ServiceChargesFollowingS20 => "Service charges following S20 consultation",
+                EFraFundingType.CostOfWorksYetToBeSecured => "The costs of these are works yet to be secured",
+                _ => "-"
+            };
+        }
+        <govuk-summary-list-row-value>@fundingType</govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+    
+</govuk-summary-list>
+
+<form asp-controller="FireRiskAssessment" asp-area="WorksPackageFireRiskAssessment" asp-action="CheckYourAnswers" method="post">
+    
+    <input asp-for="FraFile" type="hidden" value="@Model.FraFile" />
+    <input asp-for="FireRiskAssessmentType" type="hidden" value="@Model.FireRiskAssessmentType" />
+    <input asp-for="FireRiskAssessor" type="hidden" value="@Model.FireRiskAssessor" />
+    <input asp-for="OtherAssessorFirstName" type="hidden" value="@Model.OtherAssessorFirstName" />
+    <input asp-for="OtherAssessorLastName" type="hidden" value="@Model.OtherAssessorLastName" />
+    <input asp-for="OtherAssessorCompanyName" type="hidden" value="@Model.OtherAssessorCompanyName" />
+    <input asp-for="OtherAssessorCompanyNumber" type="hidden" value="@Model.OtherAssessorCompanyNumber" />
+    <input asp-for="OtherAssessorEmailAddress" type="hidden" value="@Model.OtherAssessorEmailAddress" />
+    <input asp-for="OtherAssessorTelephone" type="hidden" value="@Model.OtherAssessorTelephone" />
+    @if (Model.FireRiskAssessmentDate.HasValue)
+    {
+        <govuk-date-input asp-for="FireRiskAssessmentDate" class="hidden" value="@Model.FireRiskAssessmentDate"></govuk-date-input>
+    }
+    <input asp-for="FireRiskRating" type="hidden" value="@Model.FireRiskRating" />
+    <input asp-for="HasInternalFireSafetyRisks" type="hidden" value="@Model.HasInternalFireSafetyRisks" />
+    <input asp-for="HasFunding" type="hidden" value="@Model.HasFunding" />
+    <input asp-for="FraFundingType" type="hidden" value="@Model.FraFundingType" />
+    <input asp-for="OtherInternalFireSafetyRisk" type="hidden" value="@Model.OtherInternalFireSafetyRisk" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    @for (var i = 0; i < Model.Defects.Count; i++)
+    {
+        var @defect = Model.Defects[i];
+        <input name="@($"{nameof(Model.Defects)}[{i}]")" type="hidden" value="@defect" />
+    }
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted">Submit</govuk-button>
+    </div>
+</form>

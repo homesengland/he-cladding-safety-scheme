@@ -35,6 +35,7 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public List<string> RightToManageEvidenceFiles { get; set; }
 
         public string ResponsibleEntityAuthorisationEvidence { get; set; }
+        public bool? ResponsibleEntityHasOwners { get; set; }
         public int? ResponsibleEntitySharedOwners { get; set; }
         public bool? ResponsibleEntityClaimingGrant { get; set; }
         public bool? ResponsibleEntityResponsibleForGrantFunding { get; set; }
@@ -51,7 +52,6 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public string FreeholderDetails { get; set; }
         public string FreeholderAddress { get; set; }
         public bool IsSocialSector { get; set; }
-
         public string ReturnUrl { get; set; }
         public bool ReadOnly { get; set; }
 

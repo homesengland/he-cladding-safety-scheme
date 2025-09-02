@@ -22,6 +22,8 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.I
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.IneligibleCosts;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.NoQuotes.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.NoQuotes.Set;
+using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.PreferredContractorLinks.Get;
+using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.PreferredContractorLinks.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.RequiresSubcontractors.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.RequiresSubcontractors.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.ResetCladdingSystem;
@@ -73,6 +75,33 @@ public class CostsSchedulingController : StartController
 
     #endregion
 
+    #region Does the preferred contractor have any links to the Responsible Entity, original developer and/or project team firms?
+    [HttpGet(nameof(PreferredContractorLinks))]
+    public async Task<IActionResult> PreferredContractorLinks()
+    {
+        var response = await _sender.Send(GetPreferredContractorLinksRequest.Request);
+        var viewModel = _mapper.Map<PreferredContractorLinksViewModel>(response);
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(PreferredContractorLinks))]
+    public async Task<IActionResult> PreferredContractorLinks(PreferredContractorLinksViewModel viewModel, ESubmitAction submitAction)
+    {
+        var validator = new PreferredContractorLinksViewModelValidator();
+        var validationResult = await validator.ValidateAsync(viewModel);
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+        }
+        var request = _mapper.Map<SetPreferredContractorLinksRequest>(viewModel);
+        await _sender.Send(request);
+        return submitAction == ESubmitAction.Continue
+            ? RedirectToAction("RequiresSubcontractors", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+            : RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" });
+    }
+    #endregion
+
     #region Have you sought quotes?
 
     [HttpGet(nameof(SoughtQuotes))]
@@ -103,7 +132,7 @@ public class CostsSchedulingController : StartController
 
         return submitAction == ESubmitAction.Continue
             ? viewModel?.SoughtQuotes is ENoYes.Yes
-                ? RedirectToAction("RequiresSubcontractors", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+                ? RedirectToAction("PreferredContractorLinks", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
                 : RedirectToAction("NoQuotes", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" });
     }
@@ -137,7 +166,7 @@ public class CostsSchedulingController : StartController
         await _sender.Send(request);
 
         return submitAction == ESubmitAction.Continue
-            ? RedirectToAction("RequiresSubcontractors", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+            ? RedirectToAction("PreferredContractorLinks", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" });
     }
 

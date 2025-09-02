@@ -42,5 +42,6 @@ public class GetBuildingsInsuranceResponse
     public string InsuranceProvidersJson { get; set; }
     public string ReferenceNumber {  get; set; }
     public string BuildingName {  get; set; }
+    public bool IsSubmitted { get; set; }
 
 }

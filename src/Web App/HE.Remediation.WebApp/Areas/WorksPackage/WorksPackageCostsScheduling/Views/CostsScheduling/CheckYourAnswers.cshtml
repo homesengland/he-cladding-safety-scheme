@@ -38,6 +38,45 @@
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
     </govuk-summary-list>
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-label--m">Preferred Contractor links disclosure</span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full govuk-text-align-right">
+                            <a href=@Url.Action("PreferredContractorLinks", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", returnUrl = Url.Action("CheckYourAnswers", "CostsScheduling", new { Area = "WorksPackageCostsScheduling"})}) class="govuk-link">Change</a>
+                        </div>
+                    </div>
+                }
+
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Does the preferred contractor have any links to the Responsible Entity, original developer and/or project team firms?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreferredContractorLinksResult.PreferredContractorLinks == EYesNoNonBoolean.Yes ? "Yes" :
+                    Model.PreferredContractorLinksResult.PreferredContractorLinks == EYesNoNonBoolean.No ? "No" :
+                    "Don't know")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Reasoning explained
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreferredContractorLinksResult.PreferredContractorLinkAdditionalNotes)
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
     <div class="govuk-summary-list no-margin">
         <div class="govuk-summary-list__row">
             <div class="govuk-summary-list__key">

@@ -12,6 +12,8 @@ public class GetTaskListResponse
 
     public ETaskStatus CostsScheduleStatusId { get; set; }
 
+    public ETaskStatus InternalDefectsStatusId { get; set; }
+
     public ETaskStatus ThirdPartyContributionsStatusId { get; set; }
 
     public ETaskStatus DeclarationStatusId { get; set; }
@@ -26,8 +28,9 @@ public class GetTaskListResponse
 
     public ETaskStatus KeyDatesStatusId { get; set; }
     
-
     public ETaskStatus ProgrammePlanStatusId { get; set; }
 
+    public ETaskStatus WorkPackageFireRiskAssessmentStatusId { get; set; }
+    public bool HasFra { get; set; }
     public bool IsSubmitted { get; set; }
 }

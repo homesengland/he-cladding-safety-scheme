@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -24,7 +25,12 @@ public class SetReviewPaymentHandler : IRequestHandler<SetReviewPaymentRequest>
         {
             await _closingReportRequestRepository.UpdateClosingReportReasonForChange(applicationId, request.ReasonForChange);
         }
-                        
+
+        if(request.Confirm)
+        {
+            await _closingReportRequestRepository.UpsertClosingReportTaskStatus(applicationId, EClosingReportTask.SubmitPaymentRequest, ETaskStatus.Completed);
+        }
+        
         return Unit.Value;
     } 
 }

@@ -1,0 +1,82 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment.FundingViewModel
+
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Title"] = "Fire risk assessment";
+    ViewData["Backlink"] = Model.HasDefects
+        ? Url.Action("IdentifiedDefects", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
+        : Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="HasFunding" />
+        <govuk-error-summary-item asp-for="HasFundingType" />
+        <govuk-error-summary-item asp-for="HasNoFundingType" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">FRA Report</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="WorksPackageFireRiskAssessment" asp-action="Funding" method="post">
+
+    <govuk-radios asp-for="HasFunding">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-label--s">
+                Have you got any funding in place to cover these works?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@true">
+            Yes
+
+            <govuk-radios-item-conditional>
+
+                <govuk-select asp-for="HasFundingType">
+                    <govuk-select-label>What type of funding?</govuk-select-label>
+                    <govuk-select-item selected="@(!Model.HasFundingType.HasValue)">&nbsp;</govuk-select-item>
+                    <govuk-select-item value="@EFraFundingType.PaidForByThirdParty" selected="@Model.HasFundingType == EFraFundingType.PaidForByThirdParty">
+                        These works are paid for by a third party
+                    </govuk-select-item>
+                    <govuk-select-item value="@EFraFundingType.PaidForFromExistingServiceChargeFunds" selected="@Model.HasFundingType == EFraFundingType.PaidForFromExistingServiceChargeFunds">
+                        These works are planned to be paid for from existing service charge funds
+                    </govuk-select-item>
+                </govuk-select>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+
+        <govuk-radios-item value="@false">
+            No
+
+            <govuk-radios-item-conditional>
+                <govuk-select asp-for="HasNoFundingType">
+                    <govuk-select-label>What action are you looking to undertake?</govuk-select-label>
+                    <govuk-select-item selected="@(!Model.HasNoFundingType.HasValue)">&nbsp;</govuk-select-item>
+                    <govuk-select-item value="@EFraFundingType.RequestToBeMadeToThirdParty" selected="@Model.HasNoFundingType == EFraFundingType.RequestToBeMadeToThirdParty">
+                        Request to be made to a third party
+                    </govuk-select-item>
+                    <govuk-select-item value="@EFraFundingType.ServiceChargesFollowingS20" selected="@Model.HasNoFundingType == EFraFundingType.ServiceChargesFollowingS20">
+                        Service charges following S20 consultation
+                    </govuk-select-item>
+                    <govuk-select-item value="@EFraFundingType.CostOfWorksYetToBeSecured" selected="@Model.HasNoFundingType == EFraFundingType.CostOfWorksYetToBeSecured">
+                        The costs of these are works yet to be secured
+                    </govuk-select-item>
+                </govuk-select>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="HasDefects" type="hidden" value="@Model.HasDefects" />
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

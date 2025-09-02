@@ -2,9 +2,7 @@
 @model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling.RequiresSubcontractorsViewModel
 @{
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Model.SoughtQuotes == ENoYes.Yes
-        ? Url.Action("SoughtQuotes", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
-        : Url.Action("NoQuotes", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+    ViewData["Backlink"] = Url.Action("PreferredContractorLinks", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
     ViewData["ReadOnly"] = Model.IsSubmitted;
     ViewData["FullWidth"] = false;
 }

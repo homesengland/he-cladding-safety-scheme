@@ -1,0 +1,49 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment.UploadFireRiskAssessmentReportViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Title"] = "Fire risk assessment";
+    ViewData["Backlink"] = Model.VisitedCheckYourAnswers
+        ? Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
+        : Url.Action("Information", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    ViewData["FullWidth"] = false;
+}
+
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+        <govuk-error-summary-item asp-for="FireRiskAssessmentType" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Upload FRA report</h1>
+
+<form asp-area="WorksPackageFireRiskAssessment" asp-controller="FireRiskAssessment" asp-action="UploadFireRiskAssessmentReport" method="post" enctype="multipart/form-data">
+    <h3 class="govuk-heading-m">Upload FRA Report</h3>
+
+    <p class="govuk-body">Each file must be smaller than 100MB, and a .pdf, .docx or .xlsx file.</p>
+
+    @await Html.PartialAsync("~/Views/Shared/FileUpload.cshtml", Model) 
+
+    <govuk-radios asp-for="FireRiskAssessmentType">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">Please confirm the type of FRA</govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@EFireRiskAssessmentType.Type1FireRiskAssessment">Type 1 fire risk assessment (common parts &ndash; non-destructive)</govuk-radios-item>
+        <govuk-radios-item value="@EFireRiskAssessmentType.Type2FireRiskAssessment">Type 2 fire risk assessment (common parts &ndash; destructive)</govuk-radios-item>
+        <govuk-radios-item value="@EFireRiskAssessmentType.Type3FireRiskAssessment">Type 3 fire risk assessment (common parts and flats &ndash; non-destructive)</govuk-radios-item>
+        <govuk-radios-item value="@EFireRiskAssessmentType.Type4FireRiskAssessment">Type 4 fire risk assessment (common parts and flats &ndash; destructive)</govuk-radios-item>
+        <govuk-radios-item value="@EFireRiskAssessmentType.DontKnow">Don't know</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

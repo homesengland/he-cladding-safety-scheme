@@ -1,0 +1,155 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.ClosingReport
+@model TaskListViewModel
+@{
+    ViewData["Title"] = "Submit your closing report and final payment request";
+    ViewData["HideTitle"] = true;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper govuk-!-padding-top-0">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Submit your closing report and final payment request</h1>
+
+                    <p class="govuk-body">View the steps you'll need to complete to compile and submit your closing report and final payment request.</p>
+
+                    <h2 class="govuk-heading-m">IMPORTANT</h2>
+
+                    <p class="govuk-body">
+                        By entering this section, you have confirmed that you require no further variations to your project 
+                        and that you are ready to input and submit your closing report and request the final payment of up to 5% retained grant funding.
+                    </p>
+
+                    <p class="govuk-body">
+                        If you have not yet confirmed your practical completion date, please do so using the link on the application home screen.
+                    </p>
+
+                    <p class="govuk-body">
+                        If you have entered this section by mistake and you need to request additional funding and/or time to reach practical 
+                        completion of the project, do not enter any of the sections below, 
+                        and email us at <a href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a> to discuss a variation request.
+                    </p>
+
+                    <p class="govuk-body">
+                        For information about the closing report and exiting the Cladding Safety Scheme, please refer to the guidance links on this page.
+                    </p>
+
+
+                    <ol class="app-task-list">
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">1. </span> Supporting information
+                            </h3>
+
+                            <ul class="app-task-list__items">
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.FireRiskAssessment,
+                                    TaskUrl = Url.Action("Start", "FireRiskAssessment", new { Area = "ClosingReportFireRiskAssessment" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.FireRiskAssessment),
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.PracticalCompletionCertificate,
+                                    TaskUrl = Url.Action("Start", "PracticalCompletionCertificate", new { Area = "ClosingReportPracticalCompletionCertificate" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.PracticalCompletionCertificate)
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.BuildingControlEvidence,
+                                    TaskUrl = Url.Action("Start", "BuildingControlEvidence", new { Area = "ClosingReportBuildingControlEvidence" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.BuildingControlEvidence)
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.CommunicationWithLeaseholders,
+                                    TaskUrl = Url.Action("Start", "LeaseholderCommunication", new { Area = "ClosingReportLeaseholderCommunication" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.CommunicationWithLeaseholders)
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.BuildingInsuranceInformation,
+                                    TaskUrl = Url.Action("Start", "BuildingsInsurance", new { Area = "ClosingReportBuildingsInsurance" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.BuildingInsuranceInformation)
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.EvidenceOfThirdPartyContribution,
+                                    TaskUrl = Url.Action("Start", "EvidenceOfThirdPartyContribution", new { Area = "ClosingReportEvidenceOfThirdPartyContribution" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.EvidenceOfThirdPartyContribution)
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.RatingsForContractors,
+                                    TaskUrl = Url.Action("Start", "ContractorRatings", new { Area = "ClosingReportContractorRatings" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.RatingsForContractors)
+                                })
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">2. </span> Final Payment Request
+                            </h3>
+                            <ul class="app-task-list__items">
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.SubmitPaymentRequest,
+                                    TaskUrl = Url.Action("Start", "FinalPaymentRequest", new { Area = "ClosingReportFinalPaymentRequest" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.SubmitPaymentRequest)
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.UploadFinalCostReport,
+                                    TaskUrl = Url.Action("Start", "FinalCost", new { Area = "ClosingReportFinalCost" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.UploadFinalCostReport)
+                                })
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">3. </span> Declaration and Submission
+                            </h3>
+                            <ul class="app-task-list__items">
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = EClosingReportTask.FinalPaymentDeclaration,
+                                    TaskUrl = Url.Action("Start", "Submission", new { Area = "ClosingReportSubmission" }),
+                                    Status = Model.DisplayStatus(EClosingReportTask.FinalPaymentDeclaration)
+                                })
+
+                            </ul>
+                        </li>
+
+                        
+                    </ol>
+
+                    <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">In this section</h2>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="#">Scheme exit</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

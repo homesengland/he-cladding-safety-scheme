@@ -11,6 +11,9 @@ namespace HE.Remediation.WebApp.TagHelpers
         [HtmlAttributeName("status")]
         public EApplicationStatus ApplicationStatus { get; set; }
 
+        [HtmlAttributeName("wrap")]
+        public bool Wrap { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "span";
@@ -18,7 +21,8 @@ namespace HE.Remediation.WebApp.TagHelpers
 
             var sb = new StringBuilder();
             var description = ApplicationStatus.GetEnumDisplayName() ?? Enum.GetName(typeof(EApplicationStatus), ApplicationStatus)!.SplitCamelCase();
-            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", description.Replace(" ", "&nbsp;"), GetCssClass(ApplicationStatus));
+            var nonWrappableSpace = Wrap ? " " : "&nbsp;";
+            sb.AppendFormat("<strong class=\"govuk-tag app-task-list__tag {1}\">{0}</strong>", description.Replace(" ", nonWrappableSpace), GetCssClass(ApplicationStatus));
 
             output.PreContent.SetHtmlContent(sb.ToString());
         }
