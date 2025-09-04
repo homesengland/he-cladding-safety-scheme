@@ -32,7 +32,6 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
             var buildingName = await _buildDetailsRepository.GetBuildingUniqueName(applicationId);
             var isSubmitted = await _workPackageRepository.IsWorkPackageSubmitted();
 
-            var claddingSystems = await _workPackageRepository.GetCladdingReplacementSystemsForApplication();
 
             var preferredContractorLinks = await _workPackageRepository.GetCostsSchedulePreferredContractorLinks();
 
@@ -58,7 +57,6 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
                 ApplicationReferenceNumber = referenceNumber,
                 BuildingName = buildingName,
                 IsSubmitted = isSubmitted,
-                CladdingSystems = claddingSystems.Select(x=> new GetCheckYourAnswersResponse.CladdingSystem { BeingRemoved = x.IsBeingRemoved, CladdingManufacturer = x.CladdingManufacturer, CladdingType = x.CladdingType, InsulationManufacturer = x.InsulationManufacturer, InsulationMaterial = x.InsulationMaterial}).ToList(),
                 PreferredContractorLinksResult = preferredContractorLinks,
             };
         }

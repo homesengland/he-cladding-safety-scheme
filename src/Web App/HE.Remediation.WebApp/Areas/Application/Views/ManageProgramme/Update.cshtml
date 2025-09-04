@@ -1,0 +1,54 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.ManageProgrammeUpdateViewModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        <form asp-area="Application" asp-controller="ManageProgramme" asp-action="Update" method="post">
+
+            <govuk-back-link href="@Url.Action("Index")">Back</govuk-back-link>
+
+            <main class="govuk-main-wrapper">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <govuk-error-summary>
+                                <govuk-error-summary-item asp-for="EstimatedInvestigationCompletion" />
+                                <govuk-error-summary-item asp-for="EstimatedStartOnSite" />
+                                <govuk-error-summary-item asp-for="EstimatedPracticalCompletion" />
+                            </govuk-error-summary>
+                        }
+
+                        <span class="govuk-caption-xl">Manage programme</span> <br />
+
+                        <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Update works progression information</h1>
+
+                        <month-year-input asp-for="EstimatedInvestigationCompletion"
+                                            label="What is the estimated works investigation completion date? (Optional)"
+                                            model-state="@ViewData.ModelState" />
+
+                        <month-year-input asp-for="EstimatedStartOnSite"
+                                          label="What is the estimated start on site date? (Optional)" 
+                                          model-state="@ViewData.ModelState" />
+
+                        <month-year-input asp-for="EstimatedPracticalCompletion"
+                                          label="What is the estimated practical completion date? (Optional)" 
+                                          model-state="@ViewData.ModelState" />
+
+                        @foreach (var id in Model.AppId)
+                        {
+                            <input name="AppId" type="hidden" value="@id" />
+                        }
+                        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+                        <p><a class="govuk-link" href="@Url.Action("Index")">Cancel and exit</a></p>
+                    </div>
+                </div>
+            </main>
+
+        </form>
+
+    </div>
+</div>
+

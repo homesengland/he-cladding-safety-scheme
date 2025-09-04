@@ -56,6 +56,9 @@ using SubmittedViewModel = HE.Remediation.WebApp.ViewModels.PaymentRequest.Submi
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetThirdPartyContributionsChanged;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetThirdPartyContributionsChanged;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetLeaseholderResidentUploadEvidence;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetLeaseholderResidentUploadEvidence;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.DeleteLeaseholderResidentUploadEvidence;
 
 namespace HE.Remediation.WebApp.Areas.PaymentRequest.Controllers;
 
@@ -393,7 +396,7 @@ public class PaymentRequestController : StartController
 
         if (model.SubmitAction == ESubmitAction.Continue)
         {
-            var action = !string.IsNullOrWhiteSpace(model.ReturnUrl) ? model.ReturnUrl : nameof(ProjectDates);
+            var action = !string.IsNullOrWhiteSpace(model.ReturnUrl) ? model.ReturnUrl : nameof(LeaseholderResidentEvidence);
             return SafeRedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
         }
 
@@ -405,6 +408,68 @@ public class PaymentRequestController : StartController
     {
         await _sender.Send(request, cancellationToken);
         return RedirectToAction("Invoices", "PaymentRequest", new { Area = "PaymentRequest", ReturnUrl = request.ReturnUrl });
+    }
+
+    #endregion
+
+    #region Leaseholder Resident Upload Evidence
+
+    [HttpGet(nameof(LeaseholderResidentEvidence))]
+    public async Task<IActionResult> LeaseholderResidentEvidence(string returnUrl, CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetLeaseholderResidentUploadEvidenceRequest.Request, cancellationToken);
+        var viewModel = _mapper.Map<LeaseholderResidentEvidenceViewModel>(response);
+        viewModel.ReturnUrl = returnUrl;
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(LeaseholderResidentEvidence))]
+    [RequestSizeLimit(FileUploadConstants.MaxRequestSizeBytes)]
+    public async Task<IActionResult> LeaseholderResidentEvidence(LeaseholderResidentEvidenceViewModel model, CancellationToken cancellationToken)
+    {
+        if (!ModelState.IsValid)
+        {
+            // this will happen when the request size limit is exceeded, the model is null so manually add the error message
+            ModelState.AddModelError(nameof(model.File), "One more more files are larger than 50mb");
+            return View(model);
+        }
+
+        var validator = new LeaseholderResidentEvidenceViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        if (model.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+        }
+
+        var request = _mapper.Map<SetLeaseholderResidentUploadEvidenceRequest>(model);
+        await _sender.Send(request, cancellationToken);
+
+        if (model.SubmitAction == ESubmitAction.Upload)
+        {
+            return RedirectToAction("LeaseholderResidentEvidence", "PaymentRequest", new { Area = "PaymentRequest" });
+        }
+
+        if (model.SubmitAction == ESubmitAction.Continue)
+        {
+            var action = !string.IsNullOrWhiteSpace(model.ReturnUrl) ? model.ReturnUrl : nameof(ProjectDates);
+            return SafeRedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
+        }
+
+        return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+    }
+
+    [HttpGet(nameof(LeaseholderResidentEvidence) + "/Delete")]
+    public async Task<IActionResult> DeleteLeaseholderResidentEvidence([FromQuery] DeleteLeaseholderResidentUploadEvidenceRequest request, CancellationToken cancellationToken)
+    {
+        await _sender.Send(request, cancellationToken);
+        return RedirectToAction("LeaseholderResidentEvidence", "PaymentRequest", new { Area = "PaymentRequest", ReturnUrl = request.ReturnUrl });
     }
 
     #endregion

@@ -103,5 +103,7 @@ public static class ServicesDependencies
         services.AddScoped<IEvidenceOfThirdPartyContributionRepository, EvidenceOfThirdPartyContributionRepository>();
         services.AddScoped<IFireRiskAssessmentRepository, FireRiskAssessmentRepository>();
         services.AddScoped<IWorkPackageFireRiskAssessmentRepository, WorkPackageFireRiskAssessmentRepository>();
+        services.AddScoped<IAlternateFundingRepository, AlternateFundingRepository>();
+        services.AddScoped<IManageProgrammeRepository, ManageProgrammeRepository>();
     }
 }

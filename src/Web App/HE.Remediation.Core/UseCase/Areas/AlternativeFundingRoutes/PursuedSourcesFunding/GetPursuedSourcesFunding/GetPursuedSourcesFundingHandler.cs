@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.GetPursuedSourcesFunding
@@ -6,27 +7,29 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
     public class GetPursuedSourcesFundingHandler : IRequestHandler<GetPursuedSourcesFundingRequest, GetPursuedSourcesFundingResponse>
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
-        private readonly IDbConnectionWrapper _db;
+        private readonly IAlternateFundingRepository _alternateFundingRepository;
 
-        public GetPursuedSourcesFundingHandler(IApplicationDataProvider applicationDataProvider, IDbConnectionWrapper db)
+        public GetPursuedSourcesFundingHandler(
+            IApplicationDataProvider applicationDataProvider,
+            IAlternateFundingRepository alternateFundingRepository)
         {
             _applicationDataProvider = applicationDataProvider;
-            _db = db;
+            _alternateFundingRepository = alternateFundingRepository;
         }
 
         public async Task<GetPursuedSourcesFundingResponse> Handle(GetPursuedSourcesFundingRequest request, CancellationToken cancellationToken)
         {
-            return await GetPursuedSourcesFunding();
-        }
+            var applicationId = _applicationDataProvider.GetApplicationId();
 
-        private async Task<GetPursuedSourcesFundingResponse> GetPursuedSourcesFunding()
-        {
-            var response = await _db.QuerySingleOrDefaultAsync<GetPursuedSourcesFundingResponse>("GetPursuedSourcesFunding", new
+            var pursuedSourcesFunding = await _alternateFundingRepository.GetPursuedSourcesFunding(applicationId);
+
+            var visitedCheckYourAnswers = await _alternateFundingRepository.GetAlternateFundingVisitedCheckYourAnswers(applicationId);
+
+            return new GetPursuedSourcesFundingResponse
             {
-                ApplicationId = _applicationDataProvider.GetApplicationId()
-            });
-
-            return response ?? new GetPursuedSourcesFundingResponse();
+                PursuedSourcesFunding = pursuedSourcesFunding,
+                VisitedCheckYourAnswers = visitedCheckYourAnswers
+            };
         }
     }
 }

@@ -10,7 +10,6 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
         public bool IsSubmitted { get; set; }
         public ENoYes? CompetitiveBidsObtained { get; set; }
         public List<SubContractor> SubContractors { get; set; }
-        public List<CladdingSystem> CladdingSystems { get; set; }
         public decimal EligibleCosts { get; set; }
         public decimal IneligibleCosts { get; set; }
         public decimal TotalCosts { get; set; }
@@ -29,14 +28,14 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
 
         public PreferredContractorLinksResult PreferredContractorLinksResult { get; set; }
 
-        public class CladdingSystem
-        {
-            public bool BeingRemoved { get; set; }
-            public string CladdingType { get; set; }
-            public string CladdingManufacturer { get; set; }
-            public string InsulationMaterial { get; set; }
-            public string InsulationManufacturer { get; set; }
-        }
+        //public class CladdingSystem
+        //{
+        //    public bool BeingRemoved { get; set; }
+        //    public string CladdingType { get; set; }
+        //    public string CladdingManufacturer { get; set; }
+        //    public string InsulationMaterial { get; set; }
+        //    public string InsulationManufacturer { get; set; }
+        //}
 
         public class SubContractor
         {

@@ -39,5 +39,9 @@
         public string VariationSummary { get; set; }
 
         public bool IsSubmitted { get; set; }
+
+        public bool? UsedContractorContingency { get; set; }
+
+        public string UsedContractorContingencyAdditionalNotes { get; set; }
     }
 }

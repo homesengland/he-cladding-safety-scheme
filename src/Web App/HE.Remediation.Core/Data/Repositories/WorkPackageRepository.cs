@@ -1124,6 +1124,29 @@ public class WorkPackageRepository : IWorkPackageRepository
         scope.Complete();
     }
 
+    public async Task UpdateWorkPackageCladdingSystemStatus(ETaskStatus taskStatus)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        await _connection.ExecuteAsync("UpdateWorkPackageCladdingSystemStatus", new
+        {
+            ApplicationId = applicationId,
+            TaskStatusId = taskStatus
+        });
+
+        if (taskStatus == ETaskStatus.InProgress)
+        {
+            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+        }
+
+        scope.Complete();
+    }
+
     public async Task<PreferredContractorLinksResult> GetCostsSchedulePreferredContractorLinks()
     {
         if (!TryGetApplicationId(out var applicationId))

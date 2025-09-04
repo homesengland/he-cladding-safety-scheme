@@ -1,0 +1,160 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCladdingSystem.CladdingSystemCheckYourAnswersViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("CladdingSystemDetails", "CladdingSystem", new { Area = "WorksPackageCladdingSystem", FireRiskCladdingSystemsId = Model.FireRiskCladdingSystemsId, CladdingSystemIndex = Model.CladdingSystemIndex });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Cladding system @(Model.CladdingSystemIndex + 1)</h2>
+        </govuk-summary-list-row-key>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-value>
+                <div class="govuk-text-align-right">
+                    <a href=@Url.Action("CladdingSystemChangeAnswers", "CladdingSystem", new { Area = "WorksPackageCladdingSystem", FireRiskCladdingSystemsId = Model.FireRiskCladdingSystemsId, CladdingSystemIndex = Model.CladdingSystemIndex }) class="govuk-link">Change</a>
+                </div>
+            </govuk-summary-list-row-value>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Is this being removed?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @{
+                var removalType = Model.IsBeingRemoved switch
+                {
+                    EReplacementCladding.Full => "Yes, fully",
+                    EReplacementCladding.Partial => "Yes, partially",
+                    EReplacementCladding.None => "No",
+                    _ => ""
+                };
+            }
+            @removalType
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">What is replacing this cladding system?</h2>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding type
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.ReplacementCladdingSystemTypeName))
+            {
+                if (Model.ReplacementCladdingSystemTypeName == "Other")
+                {
+                    <span>@Model.ReplacementCladdingSystemTypeName</span>
+                    <span> - </span>
+                    <span>@Model.ReplacementOtherCladdingSystemType</span>
+                }
+                else
+                {
+                    <span>@Model.ReplacementCladdingSystemTypeName<br></span>
+                }
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding manufacturer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.ReplacementCladdingManufacturerName))
+            {
+                if (Model.ReplacementCladdingManufacturerName == "Other")
+                {
+                    <span>@Model.ReplacementCladdingManufacturerName</span>
+                    <span> - </span>
+                    <span>@Model.ReplacementOtherCladdingManufacturer</span>
+                }
+                else
+                {
+                    <span>@Model.ReplacementCladdingManufacturerName<br></span>
+                }
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Insulation material
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.ReplacementInsulationTypeName))
+            {
+                if (Model.ReplacementInsulationTypeName == "Other")
+                {
+                    <span>@Model.ReplacementInsulationTypeName</span>
+                    <span> - </span>
+                    <span>@Model.ReplacementOtherInsulationType</span>
+                }
+                else
+                {
+                    <span>@Model.ReplacementInsulationTypeName<br></span>
+                }
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Insulation manufacturer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (!String.IsNullOrEmpty(Model.ReplacementInsulationManufacturerName))
+            {
+                if (Model.ReplacementInsulationManufacturerName == "Other")
+                {
+                    <span>@Model.ReplacementInsulationManufacturerName</span>
+                    <span> - </span>
+                    <span>@Model.ReplacementOtherInsulationManufacturer</span>
+                }
+                else
+                {
+                    <span>@Model.ReplacementInsulationManufacturerName<br></span>
+                }
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding System Area
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            <span>@Model.CladdingSystemArea m<sup>2</sup></span>
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+@using (Html.BeginForm())
+{
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="FireRiskCladdingSystemsId" type="hidden" value="@Model.FireRiskCladdingSystemsId" />
+    <input asp-for="CladdingSystemIndex" type="hidden" value="@Model.CladdingSystemIndex" />
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+}

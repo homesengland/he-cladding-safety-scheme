@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetCheckYourAnswers;
 using HE.Remediation.WebApp.ViewModels.PaymentRequest.Shared;
 
 namespace HE.Remediation.WebApp.ViewModels.PaymentRequest;
@@ -19,6 +20,10 @@ public class CheckYourAnswersViewModel : PaymentRequestBaseViewModel
     public DateTime? ExpectedEndDate { get; set; }
 
     public decimal? ScheduledAmount { get; set; }
+
+    public DateTime? LastCommunicationDate { get; set; }
+    public List<PaymentRequestLastCommunicationFile> PaymentRequestLastCommunicationFiles { get; set; }
+    public IList<string> PaymentRequestLastCommunicationFileNames { get; set; }
 
     public bool? ProjectDatesChanged { get; set; }
 

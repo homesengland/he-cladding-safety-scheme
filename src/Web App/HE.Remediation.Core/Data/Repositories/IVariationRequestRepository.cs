@@ -75,6 +75,12 @@ public interface IVariationRequestRepository
 
     Task<ENoYes?> HasVariationIneligibleCosts(Guid variationRequestId);
 
+    Task<GetVariationContractorContingencyResult> GetVariationContractorContingency(Guid? variationRequestId);
+
+    Task<ENoYes?> UsedVariationContractorContingency(Guid? variationRequestId);
+
+    Task UpdateVariationContractorContingency(UpdateVariationContractorContingencyParameters parameters);
+
     Task<GetVariationIneligibleCostsChangesResult> GetVariationIneligibleCostsChanges(Guid variationRequestId);
 
     Task UpdateVariationIneligibleCosts(UpdateVariationIneligibleCostsParameters parameters);

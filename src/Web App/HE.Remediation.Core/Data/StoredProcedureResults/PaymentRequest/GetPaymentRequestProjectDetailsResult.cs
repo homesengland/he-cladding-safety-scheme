@@ -18,4 +18,6 @@ public class GetPaymentRequestProjectDetailsResult
     public bool? UserEnteredCostsChanged { get; set; }
 
     public bool? ThirdPartyContributionsChanged { get; set; }
+
+    public DateTime? LeaseholderResidentCommunicationDate { get; set; }
 }

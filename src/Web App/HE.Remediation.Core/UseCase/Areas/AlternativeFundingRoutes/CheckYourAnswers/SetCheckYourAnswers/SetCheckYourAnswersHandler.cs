@@ -16,15 +16,12 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.CheckYourAn
 
         public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
-            await SetCheckYourAnswers();
-            return Unit.Value;
-        }
+            cancellationToken.ThrowIfCancellationRequested();
 
-        private async Task SetCheckYourAnswers()
-        {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            await _db.ExecuteAsync("UpdateFundingRoutesCheckYourAnswers", new { applicationId});
+            await _db.ExecuteAsync("UpdateFundingRoutesCheckYourAnswers", new { applicationId });
+            return Unit.Value;
         }
     }
 }

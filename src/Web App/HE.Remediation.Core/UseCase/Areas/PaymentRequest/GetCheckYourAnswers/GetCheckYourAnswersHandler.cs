@@ -46,6 +46,8 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             PaymentRequestId = paymentRequestId
         });
 
+        var lastCommunicationEvidenceFiles = await _paymentRequestRepository.GetLeaseholderResidentUploadEvidenceForPaymentRequest(paymentRequestId);
+
         var teamMembers = await _paymentRequestRepository.GetPaymentRequestTeamMembers();
 
         var keyDates = await _paymentRequestRepository.GetLatestWorkPackageKeyDates(paymentRequestId, true);
@@ -80,6 +82,8 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             ExpectedStartDate = keyDates?.StartDate,
             ExpectedEndDate = keyDates?.ExpectedDateForCompletion,
             ScheduledAmount = requestDetails?.ScheduledAmountCost,
+            LastCommunicationDate = projectDetails?.LeaseholderResidentCommunicationDate,
+            PaymentRequestLastCommunicationFileNames = lastCommunicationEvidenceFiles?.Select(x => x.Name).ToList(),
             ProjectDatesChanged = projectDetails?.ProjectDatesChanged,
             CurrentMonthCost = (currentPayment?.Value ?? 0),
             AdditionalCostMonthTitle = additionalPayment?.ItemName,

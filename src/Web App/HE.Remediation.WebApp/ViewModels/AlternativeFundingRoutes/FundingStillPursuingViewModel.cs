@@ -6,5 +6,6 @@ namespace HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes
     {
         public IEnumerable<EFundingStillPursuing> FundingStillPursuing { get; set; } =
             new List<EFundingStillPursuing>();
+        public bool VisitedCheckYourAnswers { get; set; }
     }
 }

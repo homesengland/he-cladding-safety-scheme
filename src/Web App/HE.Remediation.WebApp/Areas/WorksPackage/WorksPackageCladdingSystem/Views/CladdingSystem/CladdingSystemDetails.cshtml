@@ -1,0 +1,188 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCladdingSystem.CladdingSystemDetailsViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("CladdingSystem", "CladdingSystem", new { Area = "WorksPackageCladdingSystem", FireRiskCladdingSystemsId = Model.FireRiskCladdingSystemsId, CladdingSystemIndex = Model.CladdingSystemIndex });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ReplacementCladdingSystemTypeId" />
+        <govuk-error-summary-item asp-for="ReplacementOtherCladdingSystemType" />
+        <govuk-error-summary-item asp-for="ReplacementCladdingManufacturerId" />
+        <govuk-error-summary-item asp-for="ReplacementOtherCladdingManufacturer" />
+        <govuk-error-summary-item asp-for="ReplacementInsulationTypeId" />
+        <govuk-error-summary-item asp-for="ReplacementOtherInsulationType" />
+        <govuk-error-summary-item asp-for="ReplacementInsulationManufacturerId" />
+        <govuk-error-summary-item asp-for="ReplacementOtherInsulationManufacturer" />
+        <govuk-error-summary-item asp-for="CladdingSystemArea" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What is replacing cladding system @(Model.CladdingSystemIndex + 1)?</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">FRAEW details</h2>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding type
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CladdingSystemTypeName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Cladding manufacturer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CladdingManufacturerName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Insulation type
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.InsulationTypeName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Insulation manufacturer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.InsulationManufacturerName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+@using (Html.BeginForm())
+{
+    <h2 class="govuk-heading-m">What is replacing this cladding system?</h2>
+
+    <h3 class="govuk-heading-m">Cladding type details</h3>
+
+    <govuk-select disabled="@Model.IsSubmitted" asp-for="ReplacementCladdingSystemTypeId" name="ReplacementCladdingSystemTypeId" class="govuk-!-width-full">
+        <govuk-select-label><strong>Cladding type</strong></govuk-select-label>
+        @if (!Model.ReplacementCladdingSystemTypeId.HasValue || Model.ReplacementCladdingSystemTypeId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+
+        @foreach (var claddingType in Model.CladdingTypes)
+        {
+            @if (Model.ReplacementCladdingSystemTypeId.HasValue && claddingType.Id == Model.ReplacementCladdingSystemTypeId.Value)
+            {
+                <govuk-select-item value="@claddingType.Id" selected="true">@claddingType.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@claddingType.Id">@claddingType.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
+
+    <govuk-input disabled="@Model.IsSubmitted" name="ReplacementOtherCladdingSystemType" asp-for="ReplacementOtherCladdingSystemType">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify cladding material</govuk-input-label>
+    </govuk-input>
+
+    <govuk-select disabled="@Model.IsSubmitted" asp-for="ReplacementCladdingManufacturerId" name="ReplacementCladdingManufacturerId" class="govuk-!-width-full">
+        <govuk-select-label><strong>Cladding Manufacturer</strong></govuk-select-label>
+        @if (!Model.ReplacementCladdingManufacturerId.HasValue || Model.ReplacementCladdingManufacturerId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var manufacturer in Model.CladdingManufacturers)
+        {
+            @if (Model.ReplacementCladdingManufacturerId.HasValue && manufacturer.Id == Model.ReplacementCladdingManufacturerId.Value)
+            {
+                <govuk-select-item value="@manufacturer.Id" selected="true">@manufacturer.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@manufacturer.Id">@manufacturer.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
+    <govuk-input disabled="@Model.IsSubmitted" name="ReplacementOtherCladdingManufacturer" asp-for="ReplacementOtherCladdingManufacturer ">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify cladding manufacturer</govuk-input-label>
+    </govuk-input>
+
+    <h3 class="govuk-heading-m">Insulation material details</h3>
+
+    <govuk-select disabled="@Model.IsSubmitted" asp-for="ReplacementInsulationTypeId" name="ReplacementInsulationTypeId" class="govuk-!-width-full">
+        <govuk-select-label><strong>Insulation material</strong></govuk-select-label>
+        @if (!Model.ReplacementInsulationTypeId.HasValue || Model.ReplacementInsulationTypeId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var insulationType in Model.InsulationTypes)
+        {
+            @if (Model.ReplacementInsulationTypeId.HasValue && insulationType.Id == Model.ReplacementInsulationTypeId.Value)
+            {
+                <govuk-select-item value="@insulationType.Id" selected="true">@insulationType.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@insulationType.Id">@insulationType.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
+    <govuk-input disabled="@Model.IsSubmitted" name="ReplacementOtherInsulationType" asp-for="ReplacementOtherInsulationType">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify insulation material</govuk-input-label>
+    </govuk-input>
+
+    <govuk-select disabled="@Model.IsSubmitted" asp-for="ReplacementInsulationManufacturerId" name="ReplacementInsulationManufacturerId" class="govuk-!-width-full">
+        <govuk-select-label><strong>Insulation Manufacturer</strong></govuk-select-label>
+        @if (!Model.ReplacementInsulationManufacturerId.HasValue || Model.ReplacementInsulationManufacturerId.Value == 0)
+        {
+            <govuk-select-item value="0" selected="true">&nbsp;</govuk-select-item>
+        }
+        @foreach (var manufacturer in Model.InsulationManufacturers)
+        {
+            @if (Model.ReplacementInsulationManufacturerId.HasValue && manufacturer.Id == Model.ReplacementInsulationManufacturerId.Value)
+            {
+                <govuk-select-item value="@manufacturer.Id" selected="true">@manufacturer.Name</govuk-select-item>
+            }
+            else
+            {
+                <govuk-select-item value="@manufacturer.Id">@manufacturer.Name</govuk-select-item>
+            }
+        }
+    </govuk-select>
+    <govuk-input disabled="@Model.IsSubmitted" name="ReplacementOtherInsulationManufacturer" asp-for="ReplacementOtherInsulationManufacturer">
+        <govuk-input-label class="govuk-label--s">If 'Other', please specify insulation manufacturer</govuk-input-label>
+    </govuk-input>
+
+    <govuk-input disabled="@Model.IsSubmitted" name="CladdingSystemArea" asp-for="CladdingSystemArea" input-pattern="[0-9]*">
+        <govuk-input-label class="govuk-label--s">Confirm the area of this cladding system in square metres</govuk-input-label>
+    </govuk-input>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="FireRiskCladdingSystemsId" type="hidden" value="@Model.FireRiskCladdingSystemsId" />
+    <input asp-for="CladdingSystemIndex" type="hidden" value="@Model.CladdingSystemIndex" />
+    <input asp-for="CladdingSystemTypeName" type="hidden" value="@Model.CladdingSystemTypeName" />
+    <input asp-for="CladdingManufacturerName" type="hidden" value="@Model.CladdingManufacturerName" />
+    <input asp-for="InsulationTypeName" type="hidden" value="@Model.InsulationTypeName" />
+    <input asp-for="InsulationManufacturerName" type="hidden" value="@Model.InsulationManufacturerName" />
+    <input asp-for="IsBeingRemoved" type="hidden" value="@Model.IsBeingRemoved" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+}

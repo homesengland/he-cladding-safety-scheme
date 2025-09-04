@@ -101,6 +101,36 @@
             </govuk-summary-list-row-action>
         }
     </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you used your contractor contingency?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.UsedContractorContingency.GetValueOrDefault(false) ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ContractorContingency", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Please explain your answer 
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.UsedContractorContingencyAdditionalnotes
+        </govuk-summary-list-row-value>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ContractorContingency", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
 </govuk-summary-list>
 
     @if (Model.IsCostVariation.GetValueOrDefault(false))

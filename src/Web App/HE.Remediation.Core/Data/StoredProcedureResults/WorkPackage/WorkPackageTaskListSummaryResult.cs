@@ -8,6 +8,8 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage
 
         public ETaskStatus WorkPackageCostsScheduleStatusId { get; set; }
 
+        public ETaskStatus WorkPackageCladdingSystemStatusId { get; set; }
+      
         public ETaskStatus WorkPackageInternalDefectsStatusId { get; set; }
 
         public ETaskStatus WorkPackageThirdPartyContributionsStatusId { get; set; }

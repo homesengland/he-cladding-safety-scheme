@@ -165,4 +165,13 @@ public class ApplicationRepository : IApplicationRepository
         var result = await _dbConnection.QuerySingleOrDefaultAsync<GetApplicationTaskListSummaryResult>(nameof(GetApplicationTaskListSummary), parameters);
         return result;
     }
+
+    public async Task<bool> IsSocialSector(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _dbConnection.QuerySingleOrDefaultAsync<bool>(nameof(IsSocialSector), parameters);
+        return result;
+    }
 }

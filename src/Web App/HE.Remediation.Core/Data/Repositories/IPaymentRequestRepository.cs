@@ -29,6 +29,14 @@ public interface IPaymentRequestRepository
 
     Task InsertPaymentRequestCostFile(Guid fileId, Guid paymentRequestId);
 
+    Task<List<PaymentLeaseholderResidentUploadEvidenceResult>> GetLeaseholderResidentUploadEvidenceForPaymentRequest(Guid paymentRequestId);
+
+    Task InsertLeaseholderResidentUploadEvidenceFile(Guid fileId, Guid paymentRequestId);
+
+    Task DeleteLeaseholderResidentUploadEvidenceFile(Guid fileId, Guid paymentRequestId);
+
+    Task UpdatePaymentRequestLeaseholderResidentLastCommunicationDate(Guid paymentRequestId, DateTime? lastCommunicationDate);
+
     Task UpdatePaymentRequestDeclaration(Guid paymentRequestId, PaymentRequestDeclarationParameters declarationParameters);
 
     Task<KeyDatesResult> GetLatestWorkPackageKeyDates(Guid paymentRequestId, bool includeLinked = false);

@@ -35,5 +35,6 @@ namespace HE.Remediation.Core.Data.Repositories
 
         Task<bool> IsClosingReportStarted(Guid applicationId);
         Task<GetApplicationTaskListSummaryResult> GetApplicationTaskListSummary(Guid applicationId);
+        Task<bool> IsSocialSector(Guid applicationId);
     }
 }

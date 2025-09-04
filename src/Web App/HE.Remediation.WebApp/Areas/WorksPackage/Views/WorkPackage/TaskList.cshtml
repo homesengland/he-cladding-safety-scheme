@@ -151,6 +151,14 @@
                                 </li>
                                 <li class="app-task-list__item">
                                     <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("Start", "CladdingSystem", new { Area = "WorksPackageCladdingSystem" })" aria-describedby="list-convictions-status">
+                                            Cladding Works
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.CladdingSystemStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
                                         <a class="govuk-link" href="@Url.Action("Start", "ThirdPartyContributions", new { Area = "WorksPackageThirdPartyContributions" })" aria-describedby="list-convictions-status">
                                             Third party contributions
                                         </a>

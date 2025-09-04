@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using HE.Remediation.Core.Enums;
@@ -22,6 +23,14 @@ public static class EnumExtensions
         var displayAttribute = value.GetCustomAttribute<DisplayAttribute>();
         return displayAttribute != null && !string.IsNullOrWhiteSpace(displayAttribute.Name)
             ? displayAttribute.Name
+            : null;
+    }
+
+    public static string GetEnumDescription<T>(this T value) where T : struct, Enum
+    {
+        var descriptionAttribute = value.GetCustomAttribute<DisplayAttribute>();
+        return descriptionAttribute != null && !string.IsNullOrWhiteSpace(descriptionAttribute.Description)
+            ? descriptionAttribute.Description
             : null;
     }
 

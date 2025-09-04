@@ -1,0 +1,70 @@
+﻿ @using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.VariationRequest.ContractorContingencyViewModel
+@{
+    Layout = "~/Areas/VariationRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["BackLink"] = Model.IneligibleCosts == ENoYes.Yes
+       ? Url.Action("IneligibleCostsChanges", "VariationRequest", new { Area = "VariationRequest" })
+       : Url.Action("IneligibleCosts", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+}
+
+@section InfoCardSection
+{
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will fund
+        </a>
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/cladding-safety-scheme-overview#what-we-will-not-fund" class="govuk-link govuk-!-margin-bottom-2">
+            What we will not fund
+        </a>
+    </div>
+}
+  
+
+<govuk-error-summary>
+    <govuk-error-summary-item asp-for="UsedVariationContractorContingency" />
+    <govuk-error-summary-item asp-for="ContractorContingencyAdditionalNotes" />
+</govuk-error-summary>
+
+<h1 class="govuk-heading-xl">Have you used your contractor contingency?</h1>
+
+<div class="govuk-hint">
+    Tell us whether you have used any/all of the contractor contingency awarded to you as part of the costs agreed in the Works Package.
+</div>
+
+<form asp-area="VariationRequest" asp-controller="VariationRequest" asp-action="ContractorContingency" method="post">
+
+    <govuk-radios asp-for="UsedVariationContractorContingency">
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item disabled="@Model.IsSubmitted" value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="2000">
+        <div class="govuk-form-group">
+            <govuk-character-count name="ContractorContingencyAdditionalNotes" max-length="2000" asp-for="ContractorContingencyAdditionalNotes" disabled="@Model.IsSubmitted">
+                <govuk-character-count-label class="govuk-label--s">
+                    Please explain your answer
+                </govuk-character-count-label>
+            </govuk-character-count>
+        </div>
+    </div>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="UsedVariationContractorContingency" type="hidden" value="@Model.UsedVariationContractorContingency" />
+    <input asp-for="ContractorContingencyAdditionalNotes" type="hidden" value="@Model.ContractorContingencyAdditionalNotes" />
+    <input asp-for="IneligibleCosts" type="hidden" value="@Model.IneligibleCosts" />
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+        }
+    </div>
+</form>

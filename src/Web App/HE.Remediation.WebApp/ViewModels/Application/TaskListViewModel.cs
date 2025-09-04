@@ -17,6 +17,7 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public ETaskStatus ApplicationFraStatusId { get; set; }
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
         public bool IsDataIngestion { get; set; }
+        public bool IsSocialSector { get; set; }
 
         public bool Phase2ReadyForDeclaration()
         {

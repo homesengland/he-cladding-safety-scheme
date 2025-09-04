@@ -10,8 +10,6 @@ namespace HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduli
             CreateMap<GetCheckYourAnswersResponse, CheckYourAnswersViewModel>();
 
             CreateMap<GetCheckYourAnswersResponse.SubContractor, SubContractors>();
-
-            CreateMap<GetCheckYourAnswersResponse.CladdingSystem, CladdingSystem>();
         }
     }
 }

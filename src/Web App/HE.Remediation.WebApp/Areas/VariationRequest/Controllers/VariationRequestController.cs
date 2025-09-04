@@ -47,6 +47,8 @@ using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.VariationRequest.ThirdPartyContribution.Get;
 using HE.Remediation.Core.UseCase.Areas.VariationRequest.ThirdPartyContribution.Set;
 using Azure;
+using HE.Remediation.Core.UseCase.Areas.VariationRequest.ContractorContingency.Get;
+using HE.Remediation.Core.UseCase.Areas.VariationRequest.ContractorContingency.Set;
 
 namespace HE.Remediation.WebApp.Areas.Variation.Controllers;
 
@@ -773,7 +775,7 @@ public class VariationRequestController : StartController
                     return RedirectToAction("IneligibleCostsChanges", "VariationRequest", new { Area = "VariationRequest" });
                 }
 
-                return RedirectToAction("Evidence", "VariationRequest", new { Area = "VariationRequest" });
+                return RedirectToAction("ContractorContingency", "VariationRequest", new { Area = "VariationRequest" });
             }
 
             return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
@@ -818,6 +820,49 @@ public class VariationRequestController : StartController
         if (validationResult.IsValid)
         {
             var request = _mapper.Map<SetIneligibleCostsChangesRequest>(viewModel);
+            await _sender.Send(request);
+
+            if (viewModel.ReturnUrl is not null)
+            {
+                return SafeRedirectToAction(viewModel.ReturnUrl, "VariationRequest", new { Area = "VariationRequest" });
+            }
+
+            if (viewModel.SubmitAction == ESubmitAction.Continue)
+            {
+                return RedirectToAction("ContractorContingency", "VariationRequest", new { Area = "VariationRequest" });
+            }
+
+            return RedirectToAction("Index", "StageDiagram", new { area = "Application" });
+        }
+
+        validationResult.AddToModelState(ModelState, String.Empty);
+
+        return View(viewModel);
+    }
+
+    #endregion
+
+    #region "ContractorContingency"
+
+    [HttpGet(nameof(ContractorContingency))]
+    public async Task<IActionResult> ContractorContingency()
+    {
+        var response = await _sender.Send(GetContractorContingencyRequest.Request);
+        var viewModel = _mapper.Map<ContractorContingencyViewModel>(response);
+
+        viewModel.ReturnUrl = string.Empty;
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(ContractorContingency))]
+    public async Task<IActionResult> ContractorContingency(ContractorContingencyViewModel viewModel)
+    {
+        var validator = new ContractorContingencyViewModelValidator();
+
+        var validationResult = await validator.ValidateAsync(viewModel);
+        if (validationResult.IsValid)
+        {
+            var request = _mapper.Map<SetContractorContingencyRequest>(viewModel);
             await _sender.Send(request);
 
             if (viewModel.ReturnUrl is not null)

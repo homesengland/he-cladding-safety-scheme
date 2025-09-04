@@ -1103,6 +1103,7 @@ input.right-aligned {
 .application-filter-bg {
     background: #f3f2f1;
     margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .application-filter-border {

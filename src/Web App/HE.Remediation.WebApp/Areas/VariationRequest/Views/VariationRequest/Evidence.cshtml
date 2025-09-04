@@ -2,9 +2,7 @@
 @model HE.Remediation.WebApp.ViewModels.VariationRequest.EvidenceViewModel
 @{
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["BackLink"] = Model.IneligibleCosts == ENoYes.Yes
-        ? Url.Action("IneligibleCostsChanges", "VariationRequest", new { Area = "VariationRequest" })
-        : Url.Action("IneligibleCosts", "VariationRequest", new { Area = "VariationRequest" });
+    ViewData["BackLink"] = Url.Action("ContractorContingency", "VariationRequest", new { Area = "VariationRequest" });
     ViewData["ReadOnly"] = Model.IsSubmitted;
     ViewData["FullWidth"] = false;
 

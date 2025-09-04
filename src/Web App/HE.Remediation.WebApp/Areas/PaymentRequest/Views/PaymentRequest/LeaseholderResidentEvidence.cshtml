@@ -1,0 +1,97 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.LeaseholderResidentEvidenceViewModel
+
+@{
+    Layout = "~/Areas/PaymentRequest/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Monthly Payment Request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("Invoices", "PaymentRequest", new { Area = "PaymentRequest" });
+
+    var readOnly = ((Model.IsSubmitted == true) || (Model.IsExpired));
+}
+
+@section InfoCardSection
+{
+    <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+        <h2 class="govuk-heading-m">Related guidance</h2>
+
+        <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#monthly-grant-claims-progress-monitoring-and-variations" class="govuk-link govuk-!-margin-bottom-2">
+            Monthly grant claims, progress monitoring and variations
+        </a>
+    </div>
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">When did you last update leaseholders and residents?</h1>
+<p class ="govuk-caption-m">
+    Please confirm the date of your last communication to leaseholders and residents and upload evidence of any new communications.</p>
+<form asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="LeaseholderResidentEvidence" method="post" enctype="multipart/form-data">
+    <div class="govuk-form-group">
+        <h2 class="govuk-heading-m">Date of last communication</h2>
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="start-date-hint">
+            <div id="start-date-hint" class="govuk-hint">
+                For example, 8 2025
+            </div>
+            <govuk-error-message asp-for="LastCommunicationDateMonth" />
+            <govuk-error-message asp-for="LastCommunicationDateYear" />
+            <div class="govuk-date-input" id="submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="LastCommunicationDateMonth">
+                            Month
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled asp-for="LastCommunicationDateMonth" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="LastCommunicationDateMonth" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="LastCommunicationDateYear">
+                            Year
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled asp-for="LastCommunicationDateYear" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="LastCommunicationDateYear" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <h2 class="govuk-heading-m">
+        Please upload evidence of new communications (optional)
+    </h2>
+
+    <p class="govuk-caption-m">You can upload up to @Model.NumberOfFilesAllowed files.</p>
+    <p class="govuk-caption-m">Each file must be smaller than 50mb.</p>
+    @await Html.PartialAsync("FileUpload", Model)
+    <br />
+
+    @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x=> x.BuildingName)
+    @Html.HiddenFor(x=> x.ReturnUrl)
+    @Html.HiddenFor(x => x.IsExpired)
+    @Html.HiddenFor(x => x.IsSubmitted)
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Continue)" type="submit">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
