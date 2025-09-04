@@ -12,6 +12,8 @@ public class GetTaskListResponse
 
     public ETaskStatus CostsScheduleStatusId { get; set; }
 
+    public ETaskStatus CladdingSystemStatusId { get; set; }
+
     public ETaskStatus InternalDefectsStatusId { get; set; }
 
     public ETaskStatus ThirdPartyContributionsStatusId { get; set; }

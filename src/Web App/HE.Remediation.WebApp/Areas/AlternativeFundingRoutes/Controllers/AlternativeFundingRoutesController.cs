@@ -12,6 +12,7 @@ using HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes;
 
 namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 {
@@ -33,11 +34,15 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 
         protected override IActionResult DefaultStart => RedirectToAction("Information", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
 
+        private IActionResult ExitAction => RedirectToAction("Index", "TaskList", new { Area = "Application" });
+
         #region Information
         [HttpGet(nameof(Information))]
-        public IActionResult Information()
+        public async Task<IActionResult> Information(CancellationToken cancellationToken)
         {
-            return View();
+            var response = await _sender.Send(GetAlternateFundingInformationRequest.Request, cancellationToken);
+            var model = _mapper.Map<InformationViewModel>(response);
+            return View(model);
         }
         #endregion
 
@@ -67,16 +72,29 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
             }
 
             var request = _mapper.Map<SetPursuedSourcesFundingRequest>(viewModel);
-            await _sender.Send(request);
+            var response = await _sender.Send(request);
 
-            if (viewModel.SubmitAction == ESubmitAction.Continue)
+            if (viewModel.SubmitAction == ESubmitAction.Exit)
             {
-                return request.PursuedSourcesFunding is EPursuedSourcesFundingType.PursuingOtherRoutes
-                    ? RedirectToAction("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
-                    : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+                return ExitAction;
             }
 
-            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            if (response.IsSocialSector)
+            {
+                if (response.VisitedCheckYourAnswers)
+                {
+                    return RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+                }
+
+                if (request.PursuedSourcesFunding != EPursuedSourcesFundingType.ExhaustedAllRoutes)
+                {
+                    return RedirectToAction("CostRecovery", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+                }
+            }
+
+            return request.PursuedSourcesFunding is EPursuedSourcesFundingType.PursuingOtherRoutes
+                ? RedirectToAction("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
         }
         #endregion
 
@@ -115,14 +133,15 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 
             var isStop = hasDeveloperPledgeAnswer && isCladdingSafetyScheme;
 
-            return button switch
+            if (button == ESubmitAction.Exit)
             {
-                ESubmitAction.Continue => isStop ? RedirectToAction("DeveloperPledgeStop", "AlternativeFundingRoutes",
-                    new { Area = "AlternativeFundingRoutes" }) : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes",
-                    new { Area = "AlternativeFundingRoutes" }),
-                ESubmitAction.Exit => RedirectToAction("Index", "TaskList", new { Area = "Application" }),
-                _ => throw new ArgumentOutOfRangeException(nameof(button), button, null)
-            };
+                return ExitAction;
+            }
+
+            return isStop
+                ? RedirectToAction("DeveloperPledgeStop", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+
         }
         #endregion
 
@@ -139,12 +158,21 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
 
         #region SetCheckYourAnswers
         [HttpPost(nameof(SetCheckYourAnswers))]
-        public async Task<IActionResult> SetCheckYourAnswers()
+        public async Task<IActionResult> SetCheckYourAnswers(CheckYourAnswersViewModel model, CancellationToken cancellationToken)
         {
-            var request = SetCheckYourAnswersRequest.Request;
-            await _sender.Send(request);
+            var validator = new CheckYourAnswersViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
 
-            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View("CheckYourAnswers", model);
+            }
+
+            var request = SetCheckYourAnswersRequest.Request;
+            await _sender.Send(request, cancellationToken);
+
+            return ExitAction;
         }
         #endregion
 
@@ -164,6 +192,111 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
             await _sender.Send(request);
 
             return RedirectToAction("Index", "Dashboard", new { Area = "Application" }); ;
+        }
+        #endregion
+
+        #region CostRecovery
+
+        [HttpGet(nameof(CostRecovery))]
+        public async Task<IActionResult> CostRecovery(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetCostRecoveryRequest.Request, cancellationToken);
+            var model = _mapper.Map<CostRecoveryViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(CostRecovery))]
+        public async Task<IActionResult> CostRecovery(CostRecoveryViewModel model, CancellationToken cancellationToken)
+        {
+            var validator = new CostRecoveryViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetCostRecoveryRequest>(model);
+            await _sender.Send(request, cancellationToken);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return ExitAction;
+            }
+
+            return model.VisitedCheckYourAnswers
+                ? RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                : RedirectToAction("RoleForRemediationContribution", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+        }
+
+        #endregion
+
+        #region RoleForRemediationContribution
+
+        [HttpGet(nameof(RoleForRemediationContribution))]
+        public async Task<IActionResult> RoleForRemediationContribution(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetRoleForRemediationContributionRequest.Request, cancellationToken);
+            var model = _mapper.Map<RoleForRemediationContributionViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(RoleForRemediationContribution))]
+        public async Task<IActionResult> RoleForRemediationContribution(RoleForRemediationContributionViewModel model, CancellationToken cancellationToken)
+        {
+            var validator = new RoleForRemediationContributionViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetRoleForRemediationContributionRequest>(model);
+            await _sender.Send(request, cancellationToken);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return ExitAction;
+            }
+
+            return model.Roles.Contains(EPartyPursuedRole.Other)
+                ? RedirectToAction("OtherParties", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                : RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+        }
+
+        #endregion
+
+        #region OtherParties
+
+        [HttpGet(nameof(OtherParties))]
+        public async Task<IActionResult> OtherParties(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(GetOtherPartiesRequest.Request, cancellationToken);
+            var model = _mapper.Map<OtherPartiesViewModel>(response);
+            return View(model);
+        }
+
+        [HttpPost(nameof(OtherParties))]
+        public async Task<IActionResult> OtherParties(OtherPartiesViewModel model, CancellationToken cancellationToken)
+        {
+            var validator = new OtherPartiesViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetOtherPartiesRequest>(model);
+            await _sender.Send(request, cancellationToken);
+
+            return model.SubmitAction == ESubmitAction.Continue
+                ? RedirectToAction("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                : ExitAction;
         }
         #endregion
     }

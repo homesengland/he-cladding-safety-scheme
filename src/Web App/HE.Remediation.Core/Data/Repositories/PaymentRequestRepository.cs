@@ -84,7 +84,33 @@ public class PaymentRequestRepository : IPaymentRequestRepository
 
         return results.ToList();
     }
-    
+
+    public async Task<List<PaymentLeaseholderResidentUploadEvidenceResult>> GetLeaseholderResidentUploadEvidenceForPaymentRequest(Guid paymentRequestId)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return new List<PaymentLeaseholderResidentUploadEvidenceResult>();
+        }
+
+        var results = await _connection.QueryAsync<PaymentLeaseholderResidentUploadEvidenceResult>("GetPaymentRequestLeaseholderResidentUploadEvidenceFilesForApplication", new
+        {
+            ApplicationId = applicationId,
+            PaymentRequestId = paymentRequestId
+        });
+
+        return results.ToList();
+    }
+
+    public async Task UpdatePaymentRequestLeaseholderResidentLastCommunicationDate(Guid paymentRequestId, DateTime? lastCommunicationDate)
+    {
+        await _connection.ExecuteAsync("UpdatePaymentRequestLeaseholderResidentCommunicationDate", new
+        {
+            PaymentRequestId = paymentRequestId,
+            LastCommunicationDate = lastCommunicationDate
+        });
+    }
+   
+
     public async Task<GetPaymentRequestEndVersionDatesResult> GetPaymentRequestEndVersionDates(Guid applicationId)
     {
         return await _connection.QuerySingleOrDefaultAsync<GetPaymentRequestEndVersionDatesResult>(nameof(GetPaymentRequestEndVersionDates), new
@@ -127,9 +153,27 @@ public class PaymentRequestRepository : IPaymentRequestRepository
         });
     }
 
+    public async Task DeleteLeaseholderResidentUploadEvidenceFile(Guid fileId, Guid paymentRequestId)
+    {
+        await _connection.ExecuteAsync(nameof(DeleteLeaseholderResidentUploadEvidenceFile), new
+        {
+            FileId = fileId,
+            PaymentRequestId = paymentRequestId
+        });
+    }
+
     public async Task InsertPaymentRequestCostFile(Guid fileId, Guid paymentRequestId)
     {
         await _connection.ExecuteAsync("InsertPaymentRequestCostFile", new
+        {
+            FileId = fileId,
+            PaymentRequestId = paymentRequestId
+        });
+    }
+
+    public async Task InsertLeaseholderResidentUploadEvidenceFile(Guid fileId, Guid paymentRequestId)
+    {
+        await _connection.ExecuteAsync("InsertPaymentRequestLeaseholderResidentUploadEvidence", new
         {
             FileId = fileId,
             PaymentRequestId = paymentRequestId

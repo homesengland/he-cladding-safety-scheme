@@ -4,13 +4,13 @@ namespace HE.Remediation.Core.Enums
 {
     public enum EApplicationScheme
     {
-        [Display(Name = "CSS")]
-        CladdingSafetyScheme = 1, // Cladding Safety Scheme
-        [Display(Name = "RAS")]
-        ResponsibleActorsScheme = 2, // Responsible Actors Scheme (RAS)
-        [Display(Name = "SSSF")]
-        SocialSector = 3, // Social Sector self-funded
-        [Display(Name = "PSSF")]
-        SelfRemediating = 4 // Private Sector self-funded (not RAS)
+        [Display(Name = "CSS", Description = "Cladding safety scheme")]
+        CladdingSafetyScheme = 1, 
+        [Display(Name = "RAS", Description = "Responsible actors scheme")]
+        ResponsibleActorsScheme = 2, 
+        [Display(Name = "SSSF", Description = "Social sector")]
+        SocialSector = 3, 
+        [Display(Name = "PSSF", Description = "Private sector")]
+        SelfRemediating = 4
     }
 }

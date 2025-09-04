@@ -20,6 +20,10 @@ public class GetCheckYourAnswersResponse
 
     public decimal? ScheduledAmount { get; set; }
 
+    public DateTime? LastCommunicationDate { get; set; }
+    public List<PaymentRequestLastCommunicationFile> PaymentRequestLastCommunicationFiles { get; set; }
+    public IList<string> PaymentRequestLastCommunicationFileNames { get; set; }
+
     public bool? ProjectDatesChanged { get; set; }
 
     public decimal? CurrentMonthCost { get; set; }
@@ -44,6 +48,11 @@ public class GetCheckYourAnswersResponse
 }
 
 public class PaymentRequestCostFile
+{
+    public string Name { get; set; }
+}
+
+public class PaymentRequestLastCommunicationFile
 {
     public string Name { get; set; }
 }

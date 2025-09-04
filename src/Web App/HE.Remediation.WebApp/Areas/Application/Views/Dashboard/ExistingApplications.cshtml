@@ -19,9 +19,20 @@
     <div class="govuk-width-container">
         <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
-            <h1 class="govuk-heading-xl">View existing applications</h1>
-            <p class="govuk-body">View all applications shared with you. Select the relevant building application number to view the building application page.</p>
-
+            <h1 class="govuk-heading-xl">Manage active applications</h1>
+            <p class="govuk-body">
+                View all applications shared with you.
+            </p>
+            <p class="govuk-body">
+                All applications are active unless you tell us your estimated works investigation completion date, estimated start on site date or estimated practical completion date are more than 12 months in the future. 
+                Once pre tender financial support has been paid the application will remain active.
+            </p>
+            <p class="govuk-body">
+                You can manage your programme via the Manage programme section.
+            </p>
+            <p class="govuk-body">
+                Select the relevant building application number to view the building application page.
+            </p>
             <form asp-area="Application" asp-controller="Dashboard" asp-action="ExistingApplications" method="get" class="govuk-grid-row">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-one-full govuk-body margin-left-30">
@@ -30,60 +41,60 @@
                         <govuk-button type="submit">Search</govuk-button>
                         @{
                             var showHideText = Model.ShowFiltersValue ? "Hide" : "Show";
-                         }
+                        }
                         <govuk-button class="govuk-button govuk-button--secondary" type="submit" name="source" value="showFilters">@($"{showHideText} filters")</govuk-button>
                         <input asp-for="ShowFiltersValue" type="hidden" value="@Model.ShowFiltersValue" />
                     </div>
                 </div>
                 @if (Model.SelectedFilterStageOptions.Any() || Model.ShowFiltersValue)
                 {
-                <div class="govuk-grid-row application-filter-border">
-                    <div class="govuk-grid-column-three-quarters application-filter-bg">
-                        <label class="govuk-label--s govuk-label padding-19-5" for="unselectedFilterStages">Filters:</label>
-                    </div>
-                    <div class="govuk-grid-column-one-quarter application-filter-bg clear-all-filters">
-                        <a href="javascript:void(0);" class="govuk-link clear-filters">Clear filters</a>
-                    </div>
-                    @if(Model.SelectedFilterStageOptions.Any())
-                    {
-                    <div class="govuk-grid-row govuk-grid-column-full application-filter-bg">
-                        @foreach (var selectedStageOption in Model.SelectedFilterStageOptions)
-                        {
-							<govuk-button name="unselectedFilterStages" class="govuk-button govuk-button--secondary remove-buttons" value="@selectedStageOption">✖ @selectedStageOption.GetFilterName()</govuk-button>
-                        }
-                        <input type="hidden" name="source" value="" />
-                    </div>
-                    }
-                    @if (Model.ShowFiltersValue)
-                    {
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half padding-left-30">
-                                <govuk-checkboxes name="selectedFilterStages" asp-for="SelectedFilterStageOptions">
-                                    <govuk-checkboxes-fieldset>
-                                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-label--s govuk-label margin-top-bottom-5">
-                                            Stage
-                                        </govuk-checkboxes-fieldset-legend>
-                                    </govuk-checkboxes-fieldset>
-                                    <govuk-checkboxes-hint>
-                                        Please select all that apply.
-                                    </govuk-checkboxes-hint>
-                                    @foreach (var stageOption in Model.FilterStageOptions)
-                                    {
-                                            <govuk-checkboxes-item class="filter-check-boxes" checked="@Model.SelectedFilterStageOptions.Any(x => x == stageOption)" value="@stageOption">@stageOption.GetFilterName()</govuk-checkboxes-item>
-                                    }
-                                </govuk-checkboxes>
-                                <govuk-button type="submit" name="source" value="applyFilters">Apply filters</govuk-button>
-                            </div>
+                    <div class="govuk-grid-row application-filter-border">
+                        <div class="govuk-grid-column-three-quarters application-filter-bg">
+                            <label class="govuk-label--s govuk-label padding-19-5" for="unselectedFilterStages">Filters:</label>
                         </div>
-                    }
-                    else
-                    {
-                        @foreach (var stageOption in Model.SelectedFilterStageOptions)
+                        <div class="govuk-grid-column-one-quarter application-filter-bg clear-all-filters">
+                            <a href="javascript:void(0);" class="govuk-link clear-filters">Clear filters</a>
+                        </div>
+                        @if(Model.SelectedFilterStageOptions.Any())
                         {
-							<input name="selectedFilterStages" type="hidden" value="@stageOption" />
+                            <div class="govuk-grid-row govuk-grid-column-full application-filter-bg">
+                                @foreach (var selectedStageOption in Model.SelectedFilterStageOptions)
+                                {
+                                    <govuk-button name="unselectedFilterStages" class="govuk-button govuk-button--secondary remove-buttons" value="@selectedStageOption">✖ @selectedStageOption.GetFilterName()</govuk-button>
+                                }
+                                <input type="hidden" name="source" value="" />
+                            </div>
                         }
-                    }
-                </div>
+                        @if (Model.ShowFiltersValue)
+                        {
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-one-half padding-left-30">
+                                    <govuk-checkboxes name="selectedFilterStages" asp-for="SelectedFilterStageOptions">
+                                        <govuk-checkboxes-fieldset>
+                                            <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-label--s govuk-label margin-top-bottom-5">
+                                                Stage
+                                            </govuk-checkboxes-fieldset-legend>
+                                        </govuk-checkboxes-fieldset>
+                                        <govuk-checkboxes-hint>
+                                            Please select all that apply.
+                                        </govuk-checkboxes-hint>
+                                        @foreach (var stageOption in Model.FilterStageOptions)
+                                        {
+                                            <govuk-checkboxes-item class="filter-check-boxes" checked="@Model.SelectedFilterStageOptions.Any(x => x == stageOption)" value="@stageOption">@stageOption.GetFilterName()</govuk-checkboxes-item>
+                                        }
+                                    </govuk-checkboxes>
+                                    <govuk-button type="submit" name="source" value="applyFilters">Apply filters</govuk-button>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var stageOption in Model.SelectedFilterStageOptions)
+                            {
+                                <input name="selectedFilterStages" type="hidden" value="@stageOption" />
+                            }
+                        }
+                    </div>
                 }
 
             </form>
@@ -114,7 +125,19 @@
                 </tbody>
             </table>
 
-            <results-small-pager current-page="@Model.CurrentPage" page-count="@Model.PageCount" search-parameter="@search" uri-prefix="ExistingApplications" show-filters="@Model.ShowFiltersValue" selected-filter-stages="@Model.SelectedFilterStageOptions" />
+            @{
+                var filters = new Dictionary<string, IEnumerable<string>>();
+                filters.Add("selectedFilterStages", Model.SelectedFilterStageOptions.Select(x => x.ToString()));
+            }
+
+            <results-small-pager
+                current-page="@Model.CurrentPage" 
+                page-count="@Model.PageCount" 
+                search-parameter="@search" 
+                uri-prefix="ExistingApplications" 
+                show-filters="@Model.ShowFiltersValue"
+                selected-filter-stages="filters" 
+            />
 
         </main>
     </div>
@@ -122,5 +145,5 @@
 
 @section BodyEnd
 {
-  <script src="~/js/existingApplications.js"></script>
+  <script src="~/js/gridFilters.js"></script>
 }

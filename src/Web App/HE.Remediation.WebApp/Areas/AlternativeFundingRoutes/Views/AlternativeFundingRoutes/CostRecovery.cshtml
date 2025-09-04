@@ -1,0 +1,45 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.CostRecoveryViewModel
+
+@{
+    ViewData["Title"] = "Have you secured, are you attempting to secure, or do you plan to pursue cost recovery towards remediation costs from third parties (not from Government) on this building?";
+    ViewData["BackLink"] = !Model.VisitedCheckYourAnswers
+        ? Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+        : Url.Action("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="CostRecoveryType" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="CostRecovery">
+    
+    <govuk-radios asp-for="CostRecoveryType">
+        <govuk-radios-item value="@ECostRecoveryType.YesReachedAnAgreementWithThirdParty">
+            Yes - reached an agreement with one or more third parties to fund or conduct remediation
+        </govuk-radios-item>
+        <govuk-radios-item value="@ECostRecoveryType.YesActivelyPursuing">
+            Yes - actively pursuing one or more third parties to fund or conduct remediation on this building
+        </govuk-radios-item>
+        <govuk-radios-item value="@ECostRecoveryType.YesPlanToPursue">
+            Yes - plan to pursue one or more third parties to fund or conduct remediation on this building in the future
+        </govuk-radios-item>
+        <govuk-radios-item value="@ECostRecoveryType.YesReachedAnAgreementOnBuliding">
+            Yes - reached an agreement on this building with one or more third parties but am still actively pursuing further contributions or plan to pursue further contributions in the future
+        </govuk-radios-item>
+        <govuk-radios-item value="@ECostRecoveryType.DontKnow">
+            Don't know
+        </govuk-radios-item>
+    </govuk-radios>
+    
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

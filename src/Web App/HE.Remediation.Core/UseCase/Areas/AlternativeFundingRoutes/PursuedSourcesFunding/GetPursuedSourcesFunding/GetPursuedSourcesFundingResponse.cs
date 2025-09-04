@@ -5,4 +5,5 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
 public class GetPursuedSourcesFundingResponse
 {
     public EPursuedSourcesFundingType? PursuedSourcesFunding { get; set; }
+    public bool VisitedCheckYourAnswers { get; set; }
 }

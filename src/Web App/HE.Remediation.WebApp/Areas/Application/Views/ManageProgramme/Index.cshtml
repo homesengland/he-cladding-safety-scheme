@@ -1,0 +1,105 @@
+﻿@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.Application.ManageProgrammeViewModel
+
+@{
+    ViewData["Title"] = "Manage programme";
+    string search = null;
+    if (Context.Request.Query.TryGetValue("search", out var results))
+    {
+        search = results.FirstOrDefault();
+    }
+    else if (Context.Request.Query.TryGetValue("Search", out results))
+    {
+        search = results.FirstOrDefault();
+    }
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <h1 class="govuk-heading-xl">Manage programme</h1>
+            <p class="govuk-body">View applications and update their building works progression information and estimated dates.</p>
+
+            <form asp-area="Application" asp-controller="ManageProgramme" asp-action="Index" method="get" class="govuk-grid-row">
+                
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-full govuk-body margin-left-30">
+                        <label for="search">Search by Application number or building name</label>
+                        <input class="govuk-input govuk-!-width-one-third govuk-!-margin-right-6" id="search" name="search" value="@search" type="search" placeholder="" />
+                        <govuk-button type="submit">Search</govuk-button>
+                        @{
+                            var showHideText = Model.ShowFilters ? "Hide" : "Show";
+                         }
+                        <govuk-button class="govuk-button govuk-button--secondary" type="submit" name="source" value="showFilters">@($"{showHideText} filters")</govuk-button>
+                        <input asp-for="ShowFilters" type="hidden" value="@Model.ShowFilters" />
+                    </div>
+                </div>
+
+                @if (Model.FiltersSelected || Model.ShowFilters)
+                {
+                    @await Html.PartialAsync("_Filter", Model)
+                }
+
+            </form>
+
+            <form id="MpGrid" asp-area="Application" asp-controller="ManageProgramme" asp-action="Index" method="post">
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header" style="width:5%">&nbsp;</th>
+                            <th scope="col" class="govuk-table__header" style="width:15%">Building application ID</th>
+                            <th scope="col" class="govuk-table__header" style="width:24%">Unique building name</th>
+                            <th scope="col" class="govuk-table__header" style="width:13%">Est. Works Investigation Completion Date</th>
+                            <th scope="col" class="govuk-table__header" style="width:16%">Est. Start on Site</th>
+                            <th scope="col" class="govuk-table__header" style="width:17%">Est. Practical Completion</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @foreach (var application in Model.ApplicationList)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">
+                                    <govuk-checkboxes name="AppId">
+                                        <govuk-checkboxes-item value="@application.ApplicationId" />
+                                    </govuk-checkboxes>
+                                </td>
+                                <td class="govuk-table__cell">@application.ApplicationNumber</td>
+                                <td class="govuk-table__cell">@application.UniqueBuildingName</td>
+                                <td class="govuk-table__cell">@(application.InvestigationCompletionDate?.ToString("MM/yy") ?? "No data")</td>
+                                <td class="govuk-table__cell">@(application.StartOnSiteDate?.ToString("MM/yy") ?? "No data")</td>
+                                <td class="govuk-table__cell">@(application.PracticalCompletionDate?.ToString("MM/yy") ?? "No data")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <govuk-button id="btnUpdate" type="submit" disabled="false">Update selected applications</govuk-button>
+            </form>
+
+            @{
+                var filters = new Dictionary<string, IEnumerable<string>>();
+                filters.Add("selectedWic", Model.SelectedInvestigationCompletionYearFilters.Select(x => x.ToString()));
+                filters.Add("selectedSos", Model.SelectedStartOnSiteYearFilters.Select(x => x.ToString()));
+                filters.Add("selectedPc", Model.SelectedPracticalCompletionYearFilters.Select(x => x.ToString()));
+                filters.Add("selectedScheme", Model.SelectedSchemeTypeFilters.Select(x => x.ToString()));
+            }
+
+            <results-small-pager current-page="@Model.CurrentPage"
+                                 page-count="@Model.PageCount"
+                                 search-parameter="@search"
+                                 uri-prefix="ManageProgramme"
+                                 show-filters="@Model.ShowFilters"
+                                 selected-filter-stages="filters" />
+
+
+        </main>
+    </div>
+</div>
+
+@section BodyEnd
+{
+    <script src="~/js/gridFilters.js"></script>
+    <script src="~/js/gridRowSelection.js"></script>
+}

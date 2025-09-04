@@ -1,0 +1,118 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using System.Globalization;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCladdingSystem.FireRiskAppraisalToExternalWallsViewModel
+@{
+    Layout = "~/Areas/WorksPackage/Views/Shared/_SideCardLayout.cshtml";
+
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrWhiteSpace(Model.ReturnUrl) ? Model.ReturnUrl : 
+        Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+    {
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <govuk-error-summary>
+            <govuk-error-summary-item asp-for="CladdingSystems" />
+        </govuk-error-summary>
+    }
+}
+
+@section IntroductionSection
+    {
+    <h1 class="govuk-heading-xl">Fire Risk Appraisal to External Walls (FRAEW) identified works</h1>
+
+    <p class="govuk-body">
+        Your FRAEW identified works to your building to address fire safety issues.
+    </p>
+    <p class="govuk-body">
+        Please let us know if you are removing, partially or in full, any cladding systems from your building and if you are, what you will be replacing them with.
+    </p>
+    <p class="govuk-body">
+        Please complete the following sections even if you are undertaking mitigation works.
+    </p>
+}
+
+@section InfoCardSection
+    {
+    <div class="info-card govuk-!-margin-bottom-4">
+        <h2 class="govuk-heading-m">FRAEW details</h2>
+
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Building name</h3>
+        <p class="govuk-body govuk-!-margin-top-0">@Model.BuildingName</p>
+
+        <h3 class="govuk-heading-s govuk-!-padding-top-0 govuk-!-margin-bottom-1">FRAEW cost</h3>
+        <p class="govuk-body govuk-!-margin-top-0">@(Model.FraewSurveyCost is not null ? Model.FraewSurveyCost.Value.ToString("\u00A3#,##0", CultureInfo.CreateSpecificCulture("en-GB")) : "-")</p>
+
+        @if (@Model.FraewSurveyDate != DateTime.MinValue)
+        {
+            <h3 class="govuk-heading-s govuk-!-padding-top-0 govuk-!-margin-bottom-1">FRAEW date</h3>
+            <p class="govuk-body govuk-!-margin-top-0">@Model.FraewSurveyDate.ToString("dd MMM yyyy")</p>
+        }
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    <div id="@nameof(Model.CladdingSystems)" class="@(ViewData.ModelState.TryGetValue(nameof(Model.CladdingSystems), out var claddingSystemsState) && claddingSystemsState.ValidationState == ModelValidationState.Invalid ? "govuk-form-group govuk-form-group--error" : string.Empty)">
+        <h2 class="govuk-heading-l">Cladding systems</h2>
+
+        @if (Model.CladdingSystems != null && Model.CladdingSystems.Any())
+        {
+            @if (claddingSystemsState?.ValidationState == ModelValidationState.Invalid)
+            {
+                <govuk-error-message class="govuk-!-padding-top-3" asp-for="CladdingSystems" />
+            }
+
+            <ol class="app-task-list">
+                <li>
+                    <ul class="app-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
+                        @foreach (var x in Model.CladdingSystems.Select((claddingSystem, index) => new { claddingSystem, index }))
+                        {
+                            <li class="app-task-list__item">
+                                @if (!Model.IsSubmitted)
+                                {
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@Url.Action("CladdingSystem", "CladdingSystem", new { Area = "WorksPackageCladdingSystem", FireRiskCladdingSystemsId = x.claddingSystem.FireRiskCladdingSystemsId, CladdingSystemIndex = x.index })" aria-describedby="list-convictions-status">
+                                            Cladding system @(x.index + 1)
+                                        </a>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="app-task-list__task-name">
+                                        Cladding system @(x.index + 1)
+                                    </span>
+                                }
+                                <task-list-status-badge status="@x.claddingSystem.CladdingSystemTaskStatusId"></task-list-status-badge>
+
+                                <input asp-for="@Model.CladdingSystems[x.index].FireRiskCladdingSystemsId" type="hidden" value="@Model.CladdingSystems[x.index].FireRiskCladdingSystemsId" />
+                                <input asp-for="@Model.CladdingSystems[x.index].CladdingSystemTypeName" type="hidden" value="@Model.CladdingSystems[x.index].CladdingSystemTypeName" />
+                                <input asp-for="@Model.CladdingSystems[x.index].CladdingSystemTaskStatusId" type="hidden" value="@Model.CladdingSystems[x.index].CladdingSystemTaskStatusId" />
+                            </li>
+                        }
+                    </ul>
+                </li>
+            </ol>
+        }
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="RequiresSubcontractors" type="hidden" value="@Model.RequiresSubcontractors" />
+    <input asp-for="FraewSurveyCost" type="hidden" value="@Model.FraewSurveyCost" />
+    <input asp-for="FraewSurveyDate" type="hidden" value="@Model.FraewSurveyDate" />
+    <input asp-for="FraewRemediationType" type="hidden" value="@Model.FraewRemediationType" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+
+    <div class="comp-btn-group">
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button disabled="@Model.IsSubmitted" name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+}

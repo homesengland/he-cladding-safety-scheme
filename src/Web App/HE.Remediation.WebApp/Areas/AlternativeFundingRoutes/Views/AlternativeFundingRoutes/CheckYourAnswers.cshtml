@@ -1,58 +1,159 @@
 ﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 @model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.CheckYourAnswersViewModel
 @{
     ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
-    ViewData["BackLink"] = Model.OtherSourcesPursuedType == EPursuedSourcesFundingType.PursuingOtherRoutes
-        ? Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
-        : Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+    if (!Model.IsSocialSector)
+    {
+        ViewData["BackLink"] = Model.OtherSourcesPursuedTypeId == EPursuedSourcesFundingType.PursuingOtherRoutes
+            ? Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+            : Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+    }
+    else
+    {
+        ViewData["BackLink"] = Model.OtherSourcesPursuedTypeId == EPursuedSourcesFundingType.ExhaustedAllRoutes
+            ? Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+            : !string.IsNullOrEmpty(Model.OtherPartyPursuedRole)
+                ? Url.Action("OtherParties", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+                : Url.Action("RoleForRemediationContribution", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+    }
+
     ViewData["ReadOnly"] = Model.ReadOnly;
     ViewData["FullWidth"] = true;
+
+    const string ErrorClasses = "govuk-form-group--error govuk-error-message govuk-!-margin-bottom-0";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FundingRouteTypes" />
+        <govuk-error-summary-item asp-for="OtherPartyPursuedRole"/>
+    </govuk-error-summary>
 }
 
 <h1 class="govuk-heading-xl">@(Model.ReadOnly ? "Your answers" : "Check your answers")</h1>
 
-<dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            Have you pursued other sources of funding?
-        </dt>
-        <dd class="govuk-summary-list__value">
-            @Model.PursuedSourcesFundingAnswer
-        </dd>
-        <dd class="govuk-summary-list__actions">
-            @if (!Model.ReadOnly)
-            {
-                <a class="govuk-link" href="@Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
-                    Change<span class="govuk-visually-hidden"> pursued sources funding answer</span>
-                </a>
-            }
-        </dd>
-    </div>
-    @if (Model.FundingStillPursuingAnswer.Any())
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Have you pursued other sources of funding?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>@Model.OtherSourcesPursuedType</govuk-summary-list-row-value>
+        @if (!Model.ReadOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+    @if (!Model.IsSocialSector)
     {
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                Which routes of funding are you still pursuing?
-            </dt>
-            <dd class="govuk-summary-list__value">
-                <ul class="govuk-list govuk-list--bullet">
-                    @foreach (var fundingStillPursuingAnswer in Model.FundingStillPursuingAnswer)
+        var fundingClasses = string.Empty;
+        if (ViewData.ModelState.TryGetValue(nameof(Model.FundingRouteTypes), out var fundingValidation))
+        {
+            if (fundingValidation.ValidationState == ModelValidationState.Invalid)
+            {
+                fundingClasses = ErrorClasses;
+            }
+        }
+
+        if (Model.OtherSourcesPursuedTypeId == EPursuedSourcesFundingType.PursuingOtherRoutes)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <div class="@fundingClasses" id="@(nameof(Model.FundingRouteTypes))">
+                        Which routes of funding are you still pursuing?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (Model.FundingRouteTypes.Count > 0)
                     {
-                        <li>@fundingStillPursuingAnswer</li>
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach (var fundingStillPursuingAnswer in Model.FundingRouteTypes)
+                            {
+                                <li>@fundingStillPursuingAnswer</li>
+                            }
+                        </ul>
                     }
-                </ul>
-            </dd>
-            <dd class="govuk-summary-list__actions">
+                    else
+                    {
+                        <text>-</text>
+                    }
+                </govuk-summary-list-row-value>
                 @if (!Model.ReadOnly)
                 {
-                    <a class="govuk-link" href="@Url.Action("FundingStillPursuing", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
-                        Change<span class="govuk-visually-hidden"> funding still pursuing answer</span>
-                    </a>
+                    <govuk-summary-list-row-action href="@Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                        Change
+                    </govuk-summary-list-row-action>
                 }
-            </dd>
-        </div>
+            </govuk-summary-list-row>
+        }
     }
-</dl>
+    @if (Model is { IsSocialSector: true, OtherSourcesPursuedTypeId: EPursuedSourcesFundingType.PursuingOtherRoutes or EPursuedSourcesFundingType.NotExhaustedAllRoutes })
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you secured, are you attempting to secure, or do you plan to pursue cost recovery towards remediation costs from third parties (not from Government) on this building?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.CostRecoveryType) ? Model.CostRecoveryType : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("CostRecovery", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                In relation to this building, what is the role of the party that you have pursued, are pursuing or plan to pursue for a remediation contribution?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.PartyPursuedRoles.Count > 0)
+                {
+                    <ul>
+                        @foreach (var role in Model.PartyPursuedRoles)
+                        {
+                            <li>@role.Name</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <text>-</text>
+                }
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("RoleForRemediationContribution", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+        @if (Model.PartyPursuedRoles.Any(x => x.Id == EPartyPursuedRole.Other))
+        {
+            var otherRoleClass = string.Empty;
+            if (ViewData.ModelState.TryGetValue(nameof(Model.OtherPartyPursuedRole), out var otherRoleValidation))
+            {
+                if (otherRoleValidation.ValidationState == ModelValidationState.Invalid)
+                {
+                    otherRoleClass = ErrorClasses;
+                }
+            }
+
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <div class="@otherRoleClass" id="@(nameof(Model.OtherPartyPursuedRole))">
+                        Name of the party or parties that you are pursuing, have pursued, or will pursue for a remediation contribution in relation to this building
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.OtherPartyPursuedRole) ? Model.OtherPartyPursuedRole : "-")</govuk-summary-list-row-value>
+
+                @if (!Model.ReadOnly)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("OtherParties", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                        Change
+                    </govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>
+        }
+    }
+</govuk-summary-list>
 
 @if (!Model.ReadOnly)
 {
@@ -61,6 +162,25 @@
         your knowledge, the details you are providing are correct.</p>
 
     <form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="SetCheckYourAnswers">
+        <input asp-for="OtherSourcesPursuedTypeId" type="hidden" value="@Model.OtherSourcesPursuedTypeId" />
+        <input asp-for="OtherSourcesPursuedType" type="hidden" value="@Model.OtherSourcesPursuedType" />
+        <input asp-for="CostRecoveryType" type="hidden" value="@Model.CostRecoveryType" />
+        <input asp-for="OtherPartyPursuedRole" type="hidden" value="@Model.OtherPartyPursuedRole" />
+        <input asp-for="IsSocialSector" type="hidden" value="@Model.IsSocialSector" />
+        <input asp-for="ReadOnly" type="hidden" value="@Model.ReadOnly" />
+        
+        @for (var i = 0; i < Model.PartyPursuedRoles.Count; i++)
+        {
+            var role = Model.PartyPursuedRoles[i];
+            <input type="hidden" name="@($"{nameof(Model.PartyPursuedRoles)}[{i}].Id")" value="@role.Id" />
+            <input type="hidden" name="@($"{nameof(Model.PartyPursuedRoles)}[{i}].Name")" value="@role.Name" />
+        }
+        
+        @for (var i = 0; i < Model.FundingRouteTypes.Count; i++)
+        {
+            <input type="hidden" name="@($"{nameof(Model.FundingRouteTypes)}[{i}]")" value="@Model.FundingRouteTypes[i]" />
+        }
+
         <govuk-button name="button" value="Continue">Accept and save application</govuk-button>
     </form>
 }

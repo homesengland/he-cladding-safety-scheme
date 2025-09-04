@@ -35,4 +35,8 @@ public class CheckYourAnswersViewModel : VariationRequestBaseViewModel
     public string ThirdPartyContributionNotes { get; set; }
 
     public string VariationSummary { get; set; }
+
+    public bool? UsedContractorContingency { get; set; } 
+
+    public string UsedContractorContingencyAdditionalnotes { get; set; }
 }

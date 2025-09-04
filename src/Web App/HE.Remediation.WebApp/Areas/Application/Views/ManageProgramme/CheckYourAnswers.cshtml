@@ -1,0 +1,94 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.ManageProgrammeUpdateViewModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        <form asp-area="Application" asp-controller="ManageProgramme" asp-action="SubmitCheckYourAnswers" method="post">
+
+            <a href="#" class="govuk-back-link" onclick="document.forms[0].submit(); return false;">Back</a>
+
+            <main class="govuk-main-wrapper">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+
+                        <span class="govuk-caption-xl">Manage programme</span> <br />
+
+                        <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Check your answers</h1>
+
+                        <p class="govuk-body">
+                            The following applications will be updated:
+                        </p>
+
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach(var application in Model.ApplicationHeadlines)
+                            {
+                                <li>@application</li>
+                            }
+                        </ul>
+
+                        <dl class="govuk-summary-list">
+
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    What is the estimated works investigation completion date?
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    @(Model.EstimatedInvestigationCompletionDate?.ToString("MM/yyyy") ?? "No data")
+                                </dd>
+                                <dd class="govuk-summary-list__actions">
+                                    <a href="#" class="govuk-link" onclick="document.forms[0].submit(); return false;">Change</a>
+                                </dd>
+                            </div>
+
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    What is the estimated start on site date?
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    @(Model.EstimatedStartOnSiteDate?.ToString("MM/yyyy") ?? "No data")
+                                </dd>
+                                <dd class="govuk-summary-list__actions">
+                                    <a href="#" class="govuk-link" onclick="document.forms[0].submit(); return false;">Change</a>
+                                </dd>
+                            </div>
+
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    What is the estimated practical completion date?
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    @(Model.EstimatedPracticalCompletionDate?.ToString("MM/yyyy") ?? "No data")
+                                </dd>
+                                    <dd class="govuk-summary-list__actions">
+                                        <a href="#" class="govuk-link" onclick="document.forms[0].submit(); return false;">Change</a>
+                                    </dd>
+
+                            </div>
+
+                        </dl>
+
+                        @Html.HiddenFor(m => m.EstimatedInvestigationCompletionDate)
+                        @Html.HiddenFor(m => m.EstimatedStartOnSiteDate)
+                        @Html.HiddenFor(m => m.EstimatedPracticalCompletionDate)
+
+                        @foreach (var id in Model.AppId)
+                        {
+                            <input name="AppId" type="hidden" value="@id" />
+                        }
+                        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Accept and save applications</govuk-button>
+
+                        <p><a class="govuk-link" href="@Url.Action("Index")">Cancel and exit</a></p>
+                    
+                </div>
+
+            </div>
+        </main>
+
+        </form>
+
+        
+
+    </div>
+</div>
+

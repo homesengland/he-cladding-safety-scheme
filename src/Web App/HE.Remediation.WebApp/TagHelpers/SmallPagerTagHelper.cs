@@ -24,8 +24,10 @@ namespace HE.Remediation.WebApp.TagHelpers
         [HtmlAttributeName("show-filters")]
         public bool ShowFilters { get; set; }
 
+        public Dictionary<string, string> MyProperty { get; set; }
+
         [HtmlAttributeName("selected-filter-stages")]
-        public IEnumerable<EApplicationStage> SelectedFilterStageOptions { get; set; } = [];
+        public Dictionary<string, IEnumerable<string>> SelectedFilterStageOptions { get; set; } = [];
 
         private const int PagesBeforeEllipsis = 2;
 
@@ -126,10 +128,13 @@ namespace HE.Remediation.WebApp.TagHelpers
             sb.Append("      <a class=\"govuk-link govuk-pagination__link\" href=\"");
             var url = new UriBuilder(URIPrefix).AddParameter("pageNo", PageNo).AddParameter("search", SearchParameter);
             sb.Append(url.Build());
-            sb.Append($"&=ShowFilters={ShowFilters}");
-            foreach (var stageOption in SelectedFilterStageOptions)
+            sb.Append($"&ShowFilters={ShowFilters}");
+            foreach (var filter in SelectedFilterStageOptions)
             {
-                sb.Append($"&selectedFilterStages={stageOption}");
+                foreach (var item in filter.Value)
+                {
+                    sb.Append($"&{filter.Key}={item}");
+                }
             }
             sb.Append("\" aria-label=\"Page ");
             sb.Append(PageNo.ToString());
@@ -156,10 +161,13 @@ namespace HE.Remediation.WebApp.TagHelpers
             sb.Append("    <a class=\"govuk-link govuk-pagination__link\" href=\"");
             var url = new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage - 1).AddParameter("search", SearchParameter);
             sb.Append(url.Build());
-            sb.Append($"&=ShowFilters={ShowFilters}");
-            foreach (var stageOption in SelectedFilterStageOptions)
+            sb.Append($"&ShowFilters={ShowFilters}");
+            foreach (var filter in SelectedFilterStageOptions)
             {
-                sb.Append($"&selectedFilterStages={stageOption}");
+                foreach (var item in filter.Value)
+                {
+                    sb.Append($"&{filter.Key}={item}");
+                }
             }
             sb.Append("\" rel=\"prev\">" + Environment.NewLine);
             sb.Append("      <svg class=\"govuk-pagination__icon govuk-pagination__icon--prev\" ");
@@ -180,10 +188,13 @@ namespace HE.Remediation.WebApp.TagHelpers
             sb.Append("    <a class=\"govuk-link govuk-pagination__link\" href=\"");
             var url = new UriBuilder(URIPrefix).AddParameter("pageNo", CurrentPage + 1).AddParameter("search", SearchParameter);
             sb.Append(url.Build());
-            sb.Append($"&=ShowFilters={ShowFilters}");
-            foreach (var stageOption in SelectedFilterStageOptions)
+            sb.Append($"&ShowFilters={ShowFilters}");
+            foreach (var filter in SelectedFilterStageOptions)
             {
-                sb.Append($"&selectedFilterStages={stageOption}");
+                foreach (var item in filter.Value)
+                {
+                    sb.Append($"&{filter.Key}={item}");
+                }
             }
             sb.Append("\" rel=\"next\">"  + Environment.NewLine);
             sb.Append("      <span class=\"govuk-pagination__link-title\">Next</span>"  + Environment.NewLine);

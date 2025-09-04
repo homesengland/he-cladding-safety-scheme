@@ -40,8 +40,16 @@
                     <div class="govuk-grid-column-one-quarter">
                         <a href="@Url.Action("ExistingApplications", "Dashboard", new { area = "Application"})">
                             <div class="app-card">
-                                <p class="govuk-link govuk-heading-m">View existing applications</p>
+                                <p class="govuk-link govuk-heading-m">Manage active applications</p>
                                 <p class="govuk-body">Revisit existing applications for and not for grant funding and review application progress</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="govuk-grid-column-one-quarter">
+                        <a href="@Url.Action("Index", "ManageProgramme", new { area = "Application"})">
+                            <div class="app-card">
+                                <p class="govuk-link govuk-heading-m">Manage programme</p>
+                                <p class="govuk-body">View and update works progression for applications</p>
                             </div>
                         </a>
                     </div>
@@ -60,14 +68,6 @@
                                     }
                                 </div>
                                 <p class="govuk-body">View tasks to complete for your application</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="govuk-grid-column-one-quarter">
-                        <a href="@Url.Action("GetHelp", "Dashboard", new { area = "Application"})">
-                            <div class="app-card">
-                                <p class="govuk-link govuk-heading-m">Get help</p>
-                                <p class="govuk-body">View guidance and get help with your grant application</p>
                             </div>
                         </a>
                     </div>
@@ -92,6 +92,14 @@
                             <div class="app-card app-card-full-width">
                                 <p class="govuk-link govuk-heading-m">Complaints<p>
                                 <p class="govuk-body">Make a complaint</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="govuk-grid-column-one-quarter">
+                        <a href="@Url.Action("GetHelp", "Dashboard", new { area = "Application"})">
+                            <div class="app-card">
+                                <p class="govuk-link govuk-heading-m">Get help</p>
+                                <p class="govuk-body">View guidance and get help with your grant application</p>
                             </div>
                         </a>
                     </div>

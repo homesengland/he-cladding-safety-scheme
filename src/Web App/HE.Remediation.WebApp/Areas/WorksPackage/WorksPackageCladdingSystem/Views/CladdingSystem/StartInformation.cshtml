@@ -1,0 +1,26 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCladdingSystem.StartInformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("TaskList", "WorkPackage", new { Area = "WorksPackage" });
+    ViewData["FullWidth"] = true;
+}
+
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In this section we will ask you about your plans for works to the cladding systems on your building.
+</p>
+<p class="govuk-body">
+    The information about the cladding systems you provided in the FRAEW summary will be populated, and where these are being partially or completely removed, you will need to confirm the details of the replacement cladding and insulation.
+</p>
+
+<form asp-area="WorksPackageCladdingSystem" asp-controller="CladdingSystem" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,167 @@
+﻿@using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.ManageProgrammeViewModel
+
+@{
+    const string WORKS_INVESTIGATION_COMPLETION_DATE = "Est. works investigation completion date";
+    const string START_ON_SITE = "Est. start on site";
+    const string PRACTICAL_COMPLETION = "Est. practical completion";
+    const string SCHEME_TYPE = "Scheme type";
+}
+
+<div class="govuk-grid-row application-filter-border">
+
+    <div class="govuk-grid-row application-filter-bg">
+
+        <div class="govuk-grid-column-three-quarters">
+            <label class="govuk-label--s govuk-label padding-19-5">Filters:</label>
+        </div>
+
+        <div class="govuk-grid-column-one-quarter clear-all-filters">
+            <a href="javascript:void(0);" class="govuk-link clear-filters">Clear filters</a>
+        </div>
+
+    </div>
+
+    @if (Model.FiltersSelected)
+    {
+        <div class="govuk-grid-row padding-19-5">
+
+            <div class="govuk-grid-column-one-quarter">
+                <p class="govuk-heading-s" style="height:50px">@WORKS_INVESTIGATION_COMPLETION_DATE</p>
+                @foreach (var fOption in Model.SelectedInvestigationCompletionYearFilters)
+                {
+                    <govuk-button name="unselectedWic" class="govuk-button govuk-button--secondary remove-buttons govuk-!-margin-bottom-2" value="@fOption">
+                        ✖ @fOption.GetEnumDisplayName()
+                    </govuk-button>
+                }
+            </div>
+
+            <div class="govuk-grid-column-one-quarter">
+                <p class="govuk-heading-s" style="height:50px">@START_ON_SITE</p>
+                @foreach (var fOption in Model.SelectedStartOnSiteYearFilters)
+                {
+                    <govuk-button name="unselectedSos" class="govuk-button govuk-button--secondary remove-buttons govuk-!-margin-bottom-2" value="@fOption">
+                        ✖ @fOption.GetEnumDisplayName()
+                    </govuk-button>
+                }
+            </div>
+
+            <div class="govuk-grid-column-one-quarter">
+                <p class="govuk-heading-s" style="height:50px">@PRACTICAL_COMPLETION</p>
+                @foreach (var fOption in Model.SelectedPracticalCompletionYearFilters)
+                {
+                    <govuk-button name="unselectedPc" class="govuk-button govuk-button--secondary remove-buttons govuk-!-margin-bottom-2" value="@fOption">
+                        ✖ @fOption.GetEnumDisplayName()
+                    </govuk-button>
+                }
+            </div>
+
+            <div class="govuk-grid-column-one-quarter ">
+                <p class="govuk-heading-s" style="height:50px">@SCHEME_TYPE</p>
+                @foreach (var fOption in Model.SelectedSchemeTypeFilters)
+                {
+                    <govuk-button name="unselectedScheme" class="govuk-button govuk-button--secondary remove-buttons govuk-!-margin-bottom-2" value="@fOption">
+                        ✖ @fOption.GetEnumDescription()
+                    </govuk-button>
+                }
+            </div>
+
+            <input type="hidden" name="source" value="" />
+
+        </div>
+    }
+
+    @if (Model.ShowFilters)
+    {
+        <div class="govuk-grid-row">
+
+
+            <div class="govuk-grid-column-one-quarter padding-left-30">
+                <govuk-checkboxes name="selectedWic" asp-for="InvestigationCompletionYearFilters">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-label--s govuk-label margin-top-bottom-5" style="height:50px">
+                            @WORKS_INVESTIGATION_COMPLETION_DATE
+                        </govuk-checkboxes-fieldset-legend>
+                    </govuk-checkboxes-fieldset>
+                    @foreach (var fOption in Model.InvestigationCompletionYearFilters)
+                    {
+                        <govuk-checkboxes-item class="filter-check-boxes" checked="@Model.SelectedInvestigationCompletionYearFilters.Any(x => x == fOption)" value="@fOption">@fOption.GetEnumDisplayName()</govuk-checkboxes-item>
+                    }
+                </govuk-checkboxes>
+            </div>
+
+            <div class="govuk-grid-column-one-quarter padding-left-30">
+                <govuk-checkboxes name="selectedSos" asp-for="SelectedStartOnSiteYearFilters">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-label--s govuk-label margin-top-bottom-5" style="height:50px">
+                            @START_ON_SITE
+                        </govuk-checkboxes-fieldset-legend>
+                    </govuk-checkboxes-fieldset>
+                    @foreach (var fOption in Model.StartOnSiteYearFilters)
+                    {
+                        <govuk-checkboxes-item class="filter-check-boxes" checked="@Model.SelectedStartOnSiteYearFilters.Any(x => x == fOption)" value="@fOption">@fOption.GetEnumDisplayName()</govuk-checkboxes-item>
+                    }
+                </govuk-checkboxes>
+            </div>
+
+            <div class="govuk-grid-column-one-quarter padding-left-30">
+                <govuk-checkboxes name="selectedPc" asp-for="SelectedPracticalCompletionYearFilters">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-label--s govuk-label margin-top-bottom-5" style="height:50px">
+                            @PRACTICAL_COMPLETION
+                        </govuk-checkboxes-fieldset-legend>
+                    </govuk-checkboxes-fieldset>
+                    @foreach (var fOption in Model.PracticalCompletionYearFilters)
+                    {
+                        <govuk-checkboxes-item class="filter-check-boxes" checked="@Model.SelectedPracticalCompletionYearFilters.Any(x => x == fOption)" value="@fOption">@fOption.GetEnumDisplayName()</govuk-checkboxes-item>
+                    }
+                </govuk-checkboxes>
+            </div>
+
+            <div class="govuk-grid-column-one-quarter padding-left-30">
+                <govuk-checkboxes name="selectedScheme" asp-for="SelectedSchemeTypeFilters">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-label--s govuk-label margin-top-bottom-5" style="height:50px">
+                            @SCHEME_TYPE
+                        </govuk-checkboxes-fieldset-legend>
+                    </govuk-checkboxes-fieldset>
+                    @foreach (var fOption in Model.SchemeTypeFilters.Where(s => s != EApplicationScheme.SelfRemediating))
+                    {
+                        <govuk-checkboxes-item class="filter-check-boxes" checked="@Model.SelectedSchemeTypeFilters.Any(x => x == fOption)" value="@fOption">@fOption.GetEnumDescription()</govuk-checkboxes-item>
+                    }
+                </govuk-checkboxes>
+            </div>
+
+        </div>
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter padding-left-30">
+                <govuk-button type="submit" name="source" value="applyFilters">Apply filters</govuk-button>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        @foreach (var fOption in Model.SelectedInvestigationCompletionYearFilters)
+        {
+            <input name="selectedWic" type="hidden" value="@fOption" />
+        }
+
+        @foreach (var fOption in Model.SelectedStartOnSiteYearFilters)
+        {
+            <input name="selectedSos" type="hidden" value="@fOption" />
+        }
+
+        @foreach (var fOption in Model.SelectedPracticalCompletionYearFilters)
+        {
+            <input name="selectedPc" type="hidden" value="@fOption" />
+        }
+
+        @foreach (var fOption in Model.SelectedSchemeTypeFilters)
+        {
+            <input name="selectedScheme" type="hidden" value="@fOption" />
+        }
+    }
+</div>

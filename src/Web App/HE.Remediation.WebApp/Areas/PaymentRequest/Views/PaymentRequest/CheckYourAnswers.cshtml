@@ -2,7 +2,7 @@
 @using HE.Remediation.Core.Extensions;
 @model HE.Remediation.WebApp.ViewModels.PaymentRequest.CheckYourAnswersViewModel
 
-@{  
+@{
     var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
 
     ViewData["Title"] = "Monthly payment request";
@@ -36,12 +36,12 @@
             Payment request for @Model.PaymentRequestName
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-        @if (!Model.IsExpired)
-        {
-            @Html.Raw(Model.CurrentMonthCost > 0 ? $"&pound;{Model.CurrentMonthCost.Value:N0}" : "&pound;0")
-        }
+            @if (!Model.IsExpired)
+            {
+                @Html.Raw(Model.CurrentMonthCost > 0 ? $"&pound;{Model.CurrentMonthCost.Value:N0}" : "&pound;0")
+            }
         </govuk-summary-list-row-value>
-    </govuk-summary-list-row>   
+    </govuk-summary-list-row>
 
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
@@ -62,7 +62,7 @@
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
     }
-    
+
     @if (Model.AdditionalCostAmount != null)
     {
         <govuk-summary-list-row>
@@ -74,7 +74,7 @@
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
     }
-    
+
 </govuk-summary-list>
 
 <govuk-summary-list>
@@ -103,10 +103,10 @@
                 {
                     <span>@costFile.Name<br></span>
                 }
-            }            
+            }
         </govuk-summary-list-row-value>
     </govuk-summary-list-row>
-    
+
 </govuk-summary-list>
 
 <govuk-summary-list>
@@ -128,7 +128,44 @@
         <govuk-summary-list-row-value>
             @foreach (var fileName in Model.PaymentRequestInvoiceFileNames)
             {
-                @fileName<br/>
+                @fileName
+
+                <br />
+            }
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0"> Leaseholder and resident communication</h2>
+        </govuk-summary-list-row-key>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("LeaseholderResidentEvidence", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Date of last communication?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.LastCommunicationDate.HasValue ? Model.LastCommunicationDate.Value.ToString("MMMM yyyy") : string.Empty)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Documents</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @foreach (var fileName in Model.PaymentRequestLastCommunicationFileNames)
+            {
+                @fileName
+
+                <br />
             }
         </govuk-summary-list-row-value>
     </govuk-summary-list-row>
@@ -189,13 +226,13 @@
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Cladding</h2>
         </govuk-summary-list-row-key>
         @if (!readOnly)
-        {            
-            @if(!Model.UnsafeCladdingAlreadyRemoved)
+        {
+            @if (!Model.UnsafeCladdingAlreadyRemoved)
             {
                 <govuk-summary-list-row-action href="@Url.Action("CladdingRemoved", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
                     Change
                 </govuk-summary-list-row-action>
-            }            
+            }
         }
     </govuk-summary-list-row>
 </govuk-summary-list>
@@ -222,7 +259,7 @@
                 }
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
-    }    
+    }
 </govuk-summary-list>
 
 
@@ -249,7 +286,7 @@
         <govuk-summary-list-row-value>
             @(Model.CostsChanged.HasValue ? (Model.CostsChanged == true ? "Yes" : "No") : string.Empty)
         </govuk-summary-list-row-value>
-    </govuk-summary-list-row>    
+    </govuk-summary-list-row>
 </govuk-summary-list>
 
 
@@ -275,7 +312,7 @@
         <govuk-summary-list-row-value>
             @(Model.ThirdPartyContributionsChanged.HasValue ? (Model.ThirdPartyContributionsChanged == true ? "Yes" : "No") : string.Empty)
         </govuk-summary-list-row-value>
-    </govuk-summary-list-row>    
+    </govuk-summary-list-row>
 </govuk-summary-list>
 
 
@@ -303,7 +340,7 @@
             <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-padding-left-2">Role</th>
                 <th scope="col" class="govuk-table__header">Name</th>
-                <th scope="col" class="govuk-table__header">Company name</th>                
+                <th scope="col" class="govuk-table__header">Company name</th>
             </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -319,7 +356,7 @@
                         <td class="govuk-table__cell govuk-!-padding-left-2"><strong>@teamMember.RoleName.ToSentenceCase()</strong></td>
                     }
                     <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
-                    <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>                    
+                    <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
                 </tr>
             }
         </tbody>

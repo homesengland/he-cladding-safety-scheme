@@ -63,12 +63,20 @@
 
                                 </li>
                                 <li class="app-task-list__item">
-                                    <span class="app-task-list__task-name">
-                                        <a class="govuk-link" href="@(Model.ApplicationFundingRoutesStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "AlternativeFundingRoutes" , new { Area="AlternativeFundingRoutes" }) : Url.Action("Start", "AlternativeFundingRoutes" , new { Area="AlternativeFundingRoutes" }))" aria-describedby="list-convictions-status">
-                                            Alternate routes of funding
-                                        </a>
-                                    </span>
-                                    <task-list-status-badge status="@Model.ApplicationFundingRoutesStatusId"></task-list-status-badge>
+                                    @if (Model.ApplicationScheme == EApplicationScheme.SocialSector || Model.ApplicationResponsibleEntityStatusId == ETaskStatus.Completed)
+                                    {
+                                        <span class="app-task-list__task-name">
+                                            <a class="govuk-link" href="@(Model.ApplicationFundingRoutesStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" }) : Url.Action("Start", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" }))" aria-describedby="list-convictions-status">
+                                                Alternate routes of funding
+                                            </a>
+                                        </span>
+                                        <task-list-status-badge status="@Model.ApplicationFundingRoutesStatusId"></task-list-status-badge>
+                                    }
+                                    else
+                                    {
+                                        <span class="govuk-body">Alternate routes of funding</span>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="alternate-routes-of-funding-status">Cannot Start Yet</strong>
+                                    }
                                 </li>
                                 @if (Model.IsBankAccountInformationRequired())
                                 {

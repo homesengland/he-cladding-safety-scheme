@@ -9,6 +9,8 @@ public class TaskListViewModel : WorkPackageBaseViewModel
 
     public ETaskStatus CostsScheduleStatusId { get; set; }
 
+    public ETaskStatus CladdingSystemStatusId { get; set; }
+
     public ETaskStatus InternalDefectsStatusId { get; set; }
 
     public ETaskStatus ThirdPartyContributionsStatusId { get; set; }
@@ -34,6 +36,7 @@ public class TaskListViewModel : WorkPackageBaseViewModel
         !IsSubmitted &&
             (GrantCertifyingOfficerStatusId != ETaskStatus.Completed ||
              CostsScheduleStatusId != ETaskStatus.Completed ||
+             CladdingSystemStatusId != ETaskStatus.Completed ||
              InternalDefectsStatusId != ETaskStatus.Completed ||
              ThirdPartyContributionsStatusId != ETaskStatus.Completed ||
              DeclarationStatusId != ETaskStatus.Completed ||

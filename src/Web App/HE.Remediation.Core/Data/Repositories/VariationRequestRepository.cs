@@ -597,6 +597,41 @@ public class VariationRequestRepository : IVariationRequestRepository
         scope.Complete();
     }
 
+    public async Task<GetVariationContractorContingencyResult> GetVariationContractorContingency(Guid? variationRequestId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<GetVariationContractorContingencyResult>(
+            "GetVariationContractorContingency",
+            new
+            {
+                @VariationRequestId = variationRequestId
+            });
+    }
+
+    public async Task<ENoYes?> UsedVariationContractorContingency(Guid? variationRequestId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<ENoYes?>(
+            "UsedVariationContractorContingency",
+            new
+            {
+                @VariationRequestId = variationRequestId
+            });
+    }
+
+    public async Task UpdateVariationContractorContingency(UpdateVariationContractorContingencyParameters parameters)
+    {
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        await _connection.ExecuteAsync("UpdateVariationContractorContingency", new
+        {
+            parameters.VariationRequestId,
+            parameters.UsedContractorContingency,
+            parameters.UsedContractorContingencyDescription,
+        });
+
+        scope.Complete();
+    }
+
+
     public async Task<Guid?> GetLatestVariationRequestId()
     {
         if (!TryGetApplicationId(out var applicationId))

@@ -3,12 +3,6 @@ using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.BaseInformation.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CheckYourAnswers;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CladdingSystem.Get;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CladdingSystem.Set;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CladdingSystemCheckYourAnswers.Get;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CladdingSystemCheckYourAnswers.Set;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CladdingSystemDetails.Get;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CladdingSystemDetails.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Description;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.InstallationOfCladding;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Other;
@@ -16,8 +10,6 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.C
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Preliminary;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.UnsafeCladding;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CostsTemplate.Get;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.FireRiskAppraisalToExternalWalls.Get;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.FireRiskAppraisalToExternalWalls.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.IneligibleCost;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.IneligibleCosts;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.NoQuotes.Get;
@@ -26,7 +18,6 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.P
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.PreferredContractorLinks.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.RequiresSubcontractors.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.RequiresSubcontractors.Set;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.ResetCladdingSystem;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.SoughtQuotes.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.SoughtQuotes.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.StartInformation.Get;
@@ -202,7 +193,7 @@ public class CostsSchedulingController : StartController
         return submitAction == ESubmitAction.Continue
             ? viewModel?.RequiresSubcontractors is ENoYes.Yes
                 ? RedirectToAction("SubcontractorTeam", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
-                : RedirectToAction("FireRiskAppraisalToExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
+                : RedirectToAction("CostsTemplate", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" })
             : RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" });
     }
 
@@ -235,214 +226,11 @@ public class CostsSchedulingController : StartController
 
         return submitAction == ESubmitAction.Exit
             ? RedirectToAction("TaskList", "WorkPackage", new { area = "WorksPackage" })
-            : RedirectToAction("FireRiskAppraisaltoExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
+            : RedirectToAction("CostsTemplate", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
     }
 
     #endregion
 
-    #region Fire Risk Appraisal to External Walls (FRAEW)
-
-    [HttpGet(nameof(FireRiskAppraisalToExternalWalls))]
-    public async Task<IActionResult> FireRiskAppraisalToExternalWalls(string returnUrl)
-    {
-        var response = await _sender.Send(GetFireRiskAppraisalToExternalWallsRequest.Request);
-        var viewModel = _mapper.Map<FireRiskAppraisalToExternalWallsViewModel>(response);
-
-        viewModel.ReturnUrl = returnUrl;
-
-        return View(viewModel);
-    }
-
-    [HttpPost(nameof(FireRiskAppraisalToExternalWalls))]
-    public async Task<IActionResult> FireRiskAppraisalToExternalWalls(FireRiskAppraisalToExternalWallsViewModel viewModel,
-        ESubmitAction submitAction)
-    {
-        var validator = new FireRiskAppraisalToExternalWallsViewModelValidator();
-        var validationResult = await validator.ValidateAsync(viewModel);
-
-        if (!validationResult.IsValid)
-        {
-            validationResult.AddToModelState(ModelState, string.Empty);
-            return View(viewModel);
-        }
-
-        if (submitAction == ESubmitAction.Continue)
-        {
-            await _sender.Send(SetFireRiskAppraisalToExternalWallsRequest.Request);
-
-            return RedirectToAction("CostsTemplate", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
-        }
-
-        return RedirectToAction("TaskList", "WorkPackage", new { Area = "WorksPackage" });
-    }
-
-    #endregion
-
-    #region Cladding system
-
-    [ExcludeRouteRecording]
-    [HttpGet("CladdingSystem/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystem(Guid fireRiskCladdingSystemsId, int claddingSystemIndex)
-    {
-        var response = await _sender.Send(new GetCladdingSystemRequest
-        {
-            FireRiskCladdingSystemsId = fireRiskCladdingSystemsId,
-            CladdingSystemIndex = claddingSystemIndex
-        });
-
-        var viewModel = _mapper.Map<CladdingSystemViewModel>(response);
-
-        return View(viewModel);
-    }
-
-    [HttpPost("CladdingSystem/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystem(CladdingSystemViewModel viewModel, ESubmitAction submitAction)
-    {
-        var validator = new CladdingSystemViewModelValidator();
-        var validationResult = await validator.ValidateAsync(viewModel);
-
-        if (!validationResult.IsValid)
-        {
-            validationResult.AddToModelState(ModelState, string.Empty);
-            return View(viewModel);
-        }
-
-        var request = _mapper.Map<SetCladdingSystemRequest>(viewModel);
-        await _sender.Send(request);
-
-        if (submitAction == ESubmitAction.Exit)
-        {
-            return RedirectToAction("FireRiskAppraisalToExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
-        }
-
-        return request.IsBeingRemoved is EReplacementCladding.Full or EReplacementCladding.Partial
-            ? RedirectToAction("CladdingSystemDetails", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", viewModel.FireRiskCladdingSystemsId, viewModel.CladdingSystemIndex })
-            : RedirectToAction("FireRiskAppraisalToExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", viewModel.FireRiskCladdingSystemsId, viewModel.CladdingSystemIndex });
-    }
-
-    #endregion
-
-    #region What is replacing cladding system x?
-
-    [ExcludeRouteRecording]
-    [HttpGet("CladdingSystemDetails/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystemDetails(Guid fireRiskCladdingSystemsId, int claddingSystemIndex)
-    {
-        var response = await _sender.Send(new GetCladdingSystemDetailsRequest
-        {
-            FireRiskCladdingSystemsId = fireRiskCladdingSystemsId,
-            CladdingSystemIndex = claddingSystemIndex
-        });
-
-        var viewModel = _mapper.Map<CladdingSystemDetailsViewModel>(response);
-
-        return View(viewModel);
-    }
-
-    [HttpPost("CladdingSystemDetails/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystemDetails(CladdingSystemDetailsViewModel viewModel, ESubmitAction submitAction)
-    {
-        var validator = new CladdingSystemDetailsViewModelValidator();
-        var validationResult = await validator.ValidateAsync(viewModel);
-
-        if (!validationResult.IsValid)
-        {
-            var getCladdingResponse = await _sender.Send(new GetCladdingSystemDetailsRequest
-            {
-                FireRiskCladdingSystemsId = viewModel.FireRiskCladdingSystemsId,
-                CladdingSystemIndex = viewModel.CladdingSystemIndex
-            });
-            var claddingSystem = _mapper.Map<CladdingSystemDetailsViewModel>(getCladdingResponse);
-
-            viewModel.CladdingTypes = claddingSystem.CladdingTypes;
-            viewModel.InsulationTypes = claddingSystem.InsulationTypes;
-            viewModel.CladdingManufacturers = claddingSystem.CladdingManufacturers;
-            viewModel.InsulationManufacturers = claddingSystem.InsulationManufacturers;
-
-            validationResult.AddToModelState(ModelState, string.Empty);
-            return View(viewModel);
-        }
-
-        var request = _mapper.Map<SetCladdingSystemDetailsRequest>(viewModel);
-        await _sender.Send(request);
-
-        if (submitAction == ESubmitAction.Exit)
-        {
-            return RedirectToAction("FireRiskAppraisalToExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
-        }
-
-        return RedirectToAction("CladdingSystemCheckYourAnswers", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", viewModel.FireRiskCladdingSystemsId, viewModel.CladdingSystemIndex });
-    }
-
-    #endregion
-
-    #region Cladding system - check your answers
-
-    [ExcludeRouteRecording]
-    [HttpGet("CladdingSystemCheckYourAnswers/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystemCheckYourAnswers(Guid fireRiskCladdingSystemsId, int claddingSystemIndex)
-    {
-        var response = await _sender.Send(new GetCladdingSystemCheckYourAnswersRequest
-        {
-            FireRiskCladdingSystemsId = fireRiskCladdingSystemsId,
-            CladdingSystemIndex = claddingSystemIndex
-        });
-        var viewModel = _mapper.Map<CladdingSystemCheckYourAnswersViewModel>(response);
-
-        return View(viewModel);
-    }
-
-    [HttpPost("CladdingSystemCheckYourAnswers/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystemCheckYourAnswers(CladdingSystemCheckYourAnswersViewModel viewModel, ESubmitAction submitAction)
-    {
-        if (submitAction == ESubmitAction.Continue)
-        {
-            var request = _mapper.Map<SetCladdingSystemCheckYourAnswersRequest>(viewModel);
-            await _sender.Send(request);
-
-            return RedirectToAction("FireRiskAppraisalToExternalWalls", "CostsScheduling", new { Area = "WorksPackageCostsScheduling" });
-        }
-
-        return View(viewModel);
-    }
-
-    #endregion
-
-    #region Cladding system - Change answers
-
-    [ExcludeRouteRecording]
-    [HttpGet("CladdingSystemChangeAnswers/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystemChangeAnswers(Guid fireRiskCladdingSystemsId, int claddingSystemIndex)
-    {
-        var response = await _sender.Send(GetBaseInformationRequest.Request);
-        var model = _mapper.Map<CladdingSystemChangeAnswersViewModel>(response);
-
-        model.FireRiskCladdingSystemsId = fireRiskCladdingSystemsId;
-        model.CladdingSystemIndex = claddingSystemIndex;
-
-        return View(model);
-    }
-
-    [HttpPost("CladdingSystemChangeAnswers/{fireRiskCladdingSystemsId:guid}/{claddingSystemIndex:int}")]
-    public async Task<IActionResult> CladdingSystemChangeAnswers(CladdingSystemChangeAnswersViewModel viewModel, CancellationToken cancellationToken)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(viewModel);
-        }
-
-        if (viewModel.Proceed == false)
-        {
-            return RedirectToAction("CladdingSystemCheckYourAnswers", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", viewModel.FireRiskCladdingSystemsId, viewModel.CladdingSystemIndex });
-        }
-
-        var request = _mapper.Map<ResetCladdingSystemRequest>(viewModel);
-        await _sender.Send(request, cancellationToken);
-
-        return RedirectToAction("CladdingSystem", "CostsScheduling", new { Area = "WorksPackageCostsScheduling", viewModel.FireRiskCladdingSystemsId, viewModel.CladdingSystemIndex });
-    }
-
-    #endregion
 
     #region Tell us about your costs - Costs template
 

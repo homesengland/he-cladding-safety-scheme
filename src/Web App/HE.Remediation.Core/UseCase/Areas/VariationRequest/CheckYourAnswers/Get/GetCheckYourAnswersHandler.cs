@@ -41,6 +41,8 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
         var thirdPartyContributionPursuingTypes =
             await _variationRequestRepository.GetThirdPartyContributionsThirdPartyContributionPursuingTypesDescription(variationRequestId);
 
+        var usedContractorContingency = await _variationRequestRepository.GetVariationContractorContingency(variationRequestId);
+
         return new GetCheckYourAnswersResponse
         {
             BuildingName = buildingName,
@@ -61,6 +63,9 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             ThirdPartyContributionNotes = checkYourAnswers?.ContributionNotes,
             VariationSummary = checkYourAnswers?.VariationSummary,
             IsSubmitted = checkYourAnswers?.IsSubmitted ?? false,
+            UsedContractorContingency = usedContractorContingency.UsedContractorContingency,
+            UsedContractorContingencyAdditionalNotes = usedContractorContingency.UsedContractorContingencyDescription
+
         };
     }
 

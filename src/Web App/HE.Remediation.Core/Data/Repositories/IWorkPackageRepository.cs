@@ -179,6 +179,8 @@ public interface IWorkPackageRepository
 
     Task UpdateCostsScheduleStatus(ETaskStatus taskStatus);
 
+    Task UpdateWorkPackageCladdingSystemStatus(ETaskStatus taskStatus);
+
     Task<ENoYes?> GetCostsScheduleSoughtQuotes();
 
     Task UpdateCostsScheduleSoughtQuotes(ENoYes? soughtQuotes);

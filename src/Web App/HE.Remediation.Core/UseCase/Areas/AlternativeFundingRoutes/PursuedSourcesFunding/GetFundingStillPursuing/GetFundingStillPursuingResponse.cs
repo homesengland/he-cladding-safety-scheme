@@ -5,4 +5,5 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
 public class GetFundingStillPursuingResponse
 {
     public IEnumerable<EFundingStillPursuing> FundingStillPursuing { get; set; }
+    public bool VisitedCheckYourAnswers { get; set; }
 }

@@ -55,6 +55,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
             GrantCertifyingOfficerStatusId = workPackageTaskListSummary.WorkPackageGrantCertifyingOfficerStatusId,
             InternalDefectsStatusId = workPackageTaskListSummary.WorkPackageInternalDefectsStatusId,
             CostsScheduleStatusId = workPackageTaskListSummary.WorkPackageCostsScheduleStatusId,
+            CladdingSystemStatusId = workPackageTaskListSummary.WorkPackageCladdingSystemStatusId,
             ThirdPartyContributionsStatusId = workPackageTaskListSummary.WorkPackageThirdPartyContributionsStatusId,
             DeclarationStatusId = workPackageTaskListSummary.WorkPackageDeclarationStatusId,
             DutyOfCareDeedStatusId = workPackageTaskListSummary.WorkPackageDutyOfCareDeedStatusId,

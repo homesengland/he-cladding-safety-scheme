@@ -1,0 +1,32 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.OtherPartiesViewModel
+
+@{
+    ViewData["Title"] = "Name of the party or parties that you are pursuing, have pursued, or will pursue for a remediation contribution in relation to this building";
+    ViewData["BackLink"] = !Model.VisitedCheckYourAnswers
+        ? Url.Action("RoleForRemediationContribution", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })
+        : Url.Action("CheckYourAnswers", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="OtherPartyPursuedRole" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+
+<form method="post" asp-area="AlternativeFundingRoutes" asp-controller="AlternativeFundingRoutes" asp-action="OtherParties">
+    
+    <govuk-character-count asp-for="OtherPartyPursuedRole" max-length="500">
+        <govuk-character-count-label></govuk-character-count-label>
+    </govuk-character-count>
+    
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

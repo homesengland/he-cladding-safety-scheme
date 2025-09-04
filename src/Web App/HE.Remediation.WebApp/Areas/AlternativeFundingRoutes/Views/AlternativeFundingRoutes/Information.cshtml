@@ -1,20 +1,31 @@
-﻿@{
-    ViewData["Title"] = "Information about this section";
+﻿@model HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes.InformationViewModel
+@{
+    ViewData["Title"] = "About this section";
     ViewData["BackLink"] = Url.Action("Index", "TaskList", new {Area = "Application"});
     ViewData["FullWidth"] = false;
 }
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">@ViewData["Title"]</h1>
-<p class="govuk-body">
-    Before applying to receive a government grant, you must first confirm that you have exhausted all other routes of funding.
-</p>
-<p class="govuk-body">
-    Other options for funding remediation works can include:
-</p>
-<ul class="govuk-list govuk-list--bullet govuk-!-padding-left-6 govuk-!-margin-bottom-9">
-    <li>The original developer if they have signed up to the Developer's Pledge </li>
-    <li>The building freeholder</li>
-    <li>Warranty, insurance or other claim against contractor or design team</li>
-</ul>
-
+@if (Model.IsSocialSector)
+{
+    <p class="govuk-body">
+        In this section we will ask you about whether you are pursuing alternative sources of funding.
+        If the answer is yes, we will ask you to provide more detail about the cost recovery and the
+        type of party or parties you are pursuing to recover costs.
+    </p>
+}
+else
+{
+    <p class="govuk-body">
+        Before applying to receive a government grant, you must first confirm that you have exhausted all other routes of funding.
+    </p>
+    <p class="govuk-body">
+        Other options for funding remediation works can include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-padding-left-6 govuk-!-margin-bottom-9">
+        <li>The original developer if they have signed up to the Developer's Pledge </li>
+        <li>The building freeholder</li>
+        <li>Warranty, insurance or other claim against contractor or design team</li>
+    </ul>
+}
 <govuk-button href="@Url.Action("PursuedSourcesFunding", "AlternativeFundingRoutes", new {Area = "AlternativeFundingRoutes"})">Continue</govuk-button>
