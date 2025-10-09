@@ -55,7 +55,7 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
             AssignedToUserId = null,
             CreatedByUserId = null,
             Description = "Please review the schedule of works submitted and complete the required checks",
-            RequiredByDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(3)),
+            RequiredByDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)),
             TaskStatus = ETaskStatus.NotStarted.ToString(),
             TaskTypeId = taskType.Id
         });

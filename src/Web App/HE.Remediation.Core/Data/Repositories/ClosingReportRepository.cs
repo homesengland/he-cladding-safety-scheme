@@ -259,4 +259,29 @@ public class ClosingReportRepository : IClosingReportRepository
         await _connection.ExecuteAsync(nameof(UpdateClosingReportHasThirdPartyContributions),
             new { ApplicationId = applicationId, HasThirdPartyContributions = hasThirdPartyContributions });
     }
+    
+    public async Task UpdateClosingReportReasonForNoContributions(Guid applicationId, string reasonForNoContributions)
+    {
+        await _connection.ExecuteAsync(nameof(UpdateClosingReportReasonForNoContributions),
+            new { ApplicationId = applicationId, NoThirdPartyContributionsReason = reasonForNoContributions });
+    }
+    public async Task<EFireRiskAssessmentType?> GetExitFraewDocumentType(Guid applicationId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<EFireRiskAssessmentType?>(
+           nameof(GetExitFraewDocumentType), new
+           {
+               ApplicationId = applicationId
+           });
+    }
+
+    public async Task SetExitFraewDocumentType(Guid applicationId, EFireRiskAssessmentType? fireRiskAssessmentType)
+    {
+        await _connection.ExecuteAsync(nameof(SetExitFraewDocumentType),
+            new
+            {
+                ApplicationId = applicationId,
+                ExitFraewDocumentType = fireRiskAssessmentType
+            });
+    }
+
 }

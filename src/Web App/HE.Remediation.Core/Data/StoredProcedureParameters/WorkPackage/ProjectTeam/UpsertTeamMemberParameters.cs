@@ -20,4 +20,6 @@ public class UpsertTeamMemberParameters
     public int? ConsiderateConstructorSchemeTypeId { get; set; }
     public bool? HasChasCertification { get; set; }
     public string ConsiderateConstructorSchemeReason { get; set; }
+    public DateTime? CreatedDate { get; set; }
+    public DateTime? LastModifiedDate { get; set; }
 }

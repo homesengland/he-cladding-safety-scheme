@@ -47,14 +47,17 @@ namespace HE.Remediation.Core.UseCase.DataIngest.DataImporters
                 });
             });
 
-            await ExecuteWithIdentifierAsync("FRAEW_Company_Name", async () =>
-            {
-                if (lookupData.FireRiskAssessorId != null)
-                {
-                    await _db.ExecuteAsync("InsertOrUpdateAppraisalSurveyDetails",
-                        new { ApplicationId = applicationId, lookupData.FireRiskAssessorId, DateOfInstruction = (DateTime?)null, SurveyDate = (DateTime?)null });
-                }
-            });
+            // NOTE: We do not have DateOfInstruction and SurveyDate (mandatory fields) so have been requested by HE to leave this out for now.
+
+            //await ExecuteWithIdentifierAsync("FRAEW_Company_Name", async () =>
+            //{
+            //    if (lookupData.FireRiskAssessorId != null)
+            //    {
+            //        var defaultDate = DateTime.UtcNow.Date;
+            //        await _db.ExecuteAsync("InsertOrUpdateAppraisalSurveyDetails",
+            //            new { ApplicationId = applicationId, lookupData.FireRiskAssessorId, DateOfInstruction = defaultDate, SurveyDate = defaultDate });
+            //    }
+            //});
 
             await ExecuteWithIdentifierAsync("Defects_Related_To", async () =>
             {

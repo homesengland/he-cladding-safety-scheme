@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -30,6 +31,16 @@ public class GetWorksContractHandler : IRequestHandler<GetWorksContractRequest, 
         var isSubmitted = await _scheduleOfWorksRepository.IsScheduleOfWorksSubmitted();
 
         var contractFiles = await _scheduleOfWorksRepository.GetContracts();
+
+        if (!isSubmitted)
+        {
+            var taskStatusesResult = await _scheduleOfWorksRepository.GetScheduleOfWorksTaskStatuses();
+
+            if (taskStatusesResult?.WorksContractStatusId == null)
+            {
+                await _scheduleOfWorksRepository.UpdateScheduleOfWorksWorksContractStatus(ETaskStatus.InProgress);
+            }
+        }
 
         return new GetWorksContractResponse
         {

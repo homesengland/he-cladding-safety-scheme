@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -33,6 +34,16 @@ public class GetDeclarationHandler : IRequestHandler<GetDeclarationRequest, GetD
         var projectDates = await _scheduleOfWorksRepository.GetProjectDates();
 
         var declaration = await _scheduleOfWorksRepository.GetDeclaration();
+
+        if (!isSubmitted)
+        {
+            var taskStatusesResult = await _scheduleOfWorksRepository.GetScheduleOfWorksTaskStatuses();
+
+            if (taskStatusesResult?.DeclarationStatusId == null)
+            {
+                await _scheduleOfWorksRepository.UpdateScheduleOfWorksDeclarationStatus(ETaskStatus.InProgress);
+            }
+        }
 
         return new GetDeclarationResponse
         {

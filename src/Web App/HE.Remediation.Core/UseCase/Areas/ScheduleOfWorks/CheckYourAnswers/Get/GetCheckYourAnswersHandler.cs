@@ -31,9 +31,6 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
         var isSubmitted = await _scheduleOfWorksRepository.IsScheduleOfWorksSubmitted();
 
         var answers = await _scheduleOfWorksRepository.GetCheckYourAnswers();
-        var contractFileNames = await _scheduleOfWorksRepository.GetContractFileNames();
-        var buildingControlFileNames = (await _scheduleOfWorksRepository.GetScheduleOfWorksBuildingControlFiles(applicationId)).Select(x => x.Name).ToArray();
-        var leaseholderEngagementFileNames = (await _scheduleOfWorksRepository.GetScheduleOfWorksLeaseholderEngagementFiles(applicationId)).Select(x => x.Name).ToArray();
 
         return new GetCheckYourAnswersResponse
         {
@@ -45,9 +42,6 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             ApprovedGrantFunding = answers?.ApprovedGrantFunding,
             GrantPaidToDate = answers?.GrantPaidToDate,
             ProfiledPayments = answers?.ProfiledPayments,
-            ContractFileNames = contractFileNames,
-            BuildingControlFileNames = buildingControlFileNames,
-            LeaseholderEngagementFileNames = leaseholderEngagementFileNames,
             IsSubmitted = isSubmitted
         };
     }

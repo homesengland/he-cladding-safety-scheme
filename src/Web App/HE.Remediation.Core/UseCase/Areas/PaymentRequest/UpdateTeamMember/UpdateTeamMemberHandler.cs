@@ -31,7 +31,9 @@ public class UpdateTeamMemberHandler : IRequestHandler<UpdateTeamMemberRequest, 
             PrimaryContactNumber = request.PrimaryContactNumber,
             TeamMemberId = request.TeamMemberId,
             TeamRoleId = (int)request.Role,
-            HasChasCertification = request.HasChasCertification
+            HasChasCertification = request.HasChasCertification,
+            CreatedDate = DateTime.UtcNow,
+            LastModifiedDate = DateTime.UtcNow
         });
 
         return teamMemberId;

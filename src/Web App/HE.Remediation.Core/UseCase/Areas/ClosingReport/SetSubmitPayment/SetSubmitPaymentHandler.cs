@@ -1,6 +1,4 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using HE.Remediation.Core.Data.StoredProcedureParameters;
-using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 using System.Transactions;
@@ -11,8 +9,6 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest, 
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IClosingReportRepository _closingReportRepository;
-    private readonly ITaskRepository _taskRepository;
-    private readonly IDateRepository _dateRepository;
 
     public SetSubmitPaymentHandler(IClosingReportRepository closingReportRepository,
         IApplicationDataProvider applicationDataProvider, 
@@ -21,8 +17,6 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest, 
     {
         _closingReportRepository = closingReportRepository;
         _applicationDataProvider = applicationDataProvider;
-        _taskRepository = taskRepository;
-        _dateRepository = dateRepository;
     }
 
     public async Task<SetSubmitPaymentResponse> Handle(SetSubmitPaymentRequest request, CancellationToken cancellationToken)
@@ -46,35 +40,13 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest, 
 
         await _closingReportRepository.UpdateClosingReportCostChanged(applicationId, haveCostsChanged);
 
-
-        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Closing payment request checks",
-            "Review closing payment request"));
-        var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
-        {
-            Date = DateTime.UtcNow.Date,
-            WorkingDays = 5
-        });
-        await _taskRepository.InsertTask(new InsertTaskParameters
-        {
-            ReferenceId = applicationId,
-            AssignedToTeamId = (int)ETeam.DaviesOps,
-            AssignedToUserId = null,
-            CreatedByUserId = null,
-            Description =
-                $"Please review the closing payment request and provide a recommendation for HE whether to:{Environment.NewLine}•Approve the request{Environment.NewLine}•Reject the request{Environment.NewLine}•Approve reduced amount{Environment.NewLine}All exit checks must be undertaken as part of this review.",
-            RequiredByDate = DateOnly.FromDateTime(dueDate),
-            TaskStatus = ETaskStatus.NotStarted.ToString(),
-            TopicId = taskType.TopicId,
-            TaskTypeId = taskType.Id
-        });
-
         scope.Complete();
 
         return response;
     } 
 
     
-    public bool HasCurrentCostChanged(decimal originalCost, 
+    public static bool HasCurrentCostChanged(decimal originalCost, 
                                       decimal? newCosts)
     {
         if (newCosts == null)
@@ -85,7 +57,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest, 
         return (newCosts != originalCost);    
     }
 
-    private SetSubmitPaymentResponse ValidateSubmitPaymentRequest(SetSubmitPaymentRequest request, decimal allowedFinalPaymentAmount)
+    private static SetSubmitPaymentResponse ValidateSubmitPaymentRequest(SetSubmitPaymentRequest request, decimal allowedFinalPaymentAmount)
     {
         var validationMessage = string.Empty;
         var validRequest = request.FinalMonthCost.Amount <= allowedFinalPaymentAmount;

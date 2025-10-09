@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -31,6 +32,16 @@ public class GetProjectDatesHandler : IRequestHandler<GetProjectDatesRequest, Ge
         var isSubmitted = await _scheduleOfWorksRepository.IsScheduleOfWorksSubmitted();
 
         var projectDates = await _scheduleOfWorksRepository.GetProjectDates();
+
+        if (!isSubmitted)
+        {
+            var taskStatusesResult = await _scheduleOfWorksRepository.GetScheduleOfWorksTaskStatuses();
+
+            if (taskStatusesResult?.ProfileCostsStatusId == null)
+            {
+                await _scheduleOfWorksRepository.UpdateScheduleOfWorksProfileCostsStatus(ETaskStatus.InProgress);
+            }
+        }
 
         return new GetProjectDatesResponse
         {

@@ -15,26 +15,25 @@ public class SetWorksContractHandler : IRequestHandler<SetWorksContractRequest, 
 
     public SetWorksContractHandler(
         IApplicationDataProvider applicationDataProvider,
-        IScheduleOfWorksRepository scheduleOfWorksRepository, 
-        IStatusTransitionService statusTransitionService)
+        IScheduleOfWorksRepository scheduleOfWorksRepository)
     {
         _applicationDataProvider = applicationDataProvider;
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
-        _statusTransitionService = statusTransitionService;
     }
 
     public async Task<Unit> Handle(SetWorksContractRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        var hasScheduleOfWorks = await _scheduleOfWorksRepository.HasScheduleOfWorks();
-        if (!hasScheduleOfWorks)
-        {
-            await _scheduleOfWorksRepository.InsertScheduleOfWorks();
-        }
-
+       
         var applicationId = _applicationDataProvider.GetApplicationId();
-        await _statusTransitionService.TransitionToStatus(EApplicationStatus.ScheduleOfWorksInProgress, applicationIds: applicationId);
+
+        var taskStatusesResult = await _scheduleOfWorksRepository.GetScheduleOfWorksTaskStatuses();
+
+        if (taskStatusesResult?.WorksContractStatusId != ETaskStatus.Completed)
+        {
+            await _scheduleOfWorksRepository.UpdateScheduleOfWorksWorksContractStatus(ETaskStatus.Completed);
+        }
 
         scope.Complete();
 

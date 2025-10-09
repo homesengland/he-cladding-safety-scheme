@@ -15,8 +15,8 @@ public class GetWorkPackageFraCheckYourAnswersResult
     public string OtherAssessorTelephone { get; set; }
     public DateTime? FireRiskAssessmentDate { get; set; }
     public EFraRiskRating? FireRiskRatingId { get; set; }
-    public bool HasInternalFireSafetyRisks { get; set; }
-    public bool HasFunding { get; set; }
+    public bool? HasInternalFireSafetyRisks { get; set; }
+    public bool? HasFunding { get; set; }
     public EFraFundingType? FraFundingTypeId { get; set; }
     public string OtherInternalFireSafetyRisk { get; set; }
     public bool IsSubmitted { get; set; }

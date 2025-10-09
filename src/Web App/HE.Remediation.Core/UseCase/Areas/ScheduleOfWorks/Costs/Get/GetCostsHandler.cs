@@ -33,6 +33,8 @@ public class GetCostsHandler : IRequestHandler<GetCostsRequest, GetCostsResponse
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
         var isSubmitted = await _scheduleOfWorksRepository.IsScheduleOfWorksSubmitted();
 
+        await _scheduleOfWorksRepository.CreateCosts();
+
         var costs = await _scheduleOfWorksRepository.GetCosts();
 
         if(costs is not null)

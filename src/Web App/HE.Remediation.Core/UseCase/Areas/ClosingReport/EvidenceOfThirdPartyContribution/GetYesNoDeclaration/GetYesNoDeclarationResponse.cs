@@ -6,4 +6,6 @@ public class GetYesNoDeclarationResponse
 {
     public ENoYes? Declaration { get; set; }
     public bool IsSubmitted { get; set; }
+    public string ApplicationReferenceNumber { get; set; }
+    public string BuildingName { get; set; }
 }

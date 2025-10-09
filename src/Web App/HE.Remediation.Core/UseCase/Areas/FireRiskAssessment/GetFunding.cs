@@ -25,13 +25,16 @@ public class GetFundingHandler : IRequestHandler<GetFundingRequest, GetFundingRe
         var funding = await _fireRiskAssessmentRepository.GetFraFunding(applicationId);
 
         var defects = await _fireRiskAssessmentRepository.GetFireRiskRating(applicationId);
-        
+
+        var visitedCheckYourAnswers = await _fireRiskAssessmentRepository.GetFraVisitedCheckYourAnswers(applicationId);
+
         return new GetFundingResponse
         {
             HasFunding = funding?.HasFunding,
             HasDefects = defects.HasInternalFireSafetyRisks,
             HasFundingType = funding?.HasFunding == true ? funding.FraFundingTypeId : null,
-            HasNoFundingType = funding?.HasFunding == false ? funding.FraFundingTypeId : null
+            HasNoFundingType = funding?.HasFunding == false ? funding.FraFundingTypeId : null,
+            VisitedCheckYourAnswers = visitedCheckYourAnswers
         };
     }
 }
@@ -51,4 +54,5 @@ public class GetFundingResponse
     public bool? HasDefects { get; set; }
     public EFraFundingType? HasFundingType { get; set; }
     public EFraFundingType? HasNoFundingType { get; set; }
+    public bool VisitedCheckYourAnswers { get; set; }
 }
