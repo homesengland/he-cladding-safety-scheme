@@ -11,4 +11,5 @@ public interface ISubContractorSurveyRepository
     Task UpdateRating(Guid subcontractorRatingId, UpdateSubcontractorRatingParameters parameters);
     Task<IReadOnlyCollection<GetSubcontractorRatingsSummaryResult>> GetSummary(Guid subcontractorSurveyId);
     Task<int?> GetSubcontractorSurveyCount(Guid applicationId);
+    Task AddSubcontractorSurveyLeadContractor(Guid applicationId, Guid subcontractorSurveyId);
 }

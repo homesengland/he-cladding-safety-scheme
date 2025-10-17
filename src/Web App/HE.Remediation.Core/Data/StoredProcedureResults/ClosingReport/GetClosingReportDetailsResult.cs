@@ -22,5 +22,7 @@ public class GetClosingReportDetailsResult
 
     public bool? HasThirdPartyContributions { get; set; }
 
+    public string NoThirdPartyContributionsReason { get; set; }
+
     public bool IsSubmitted { get; set; }
 }

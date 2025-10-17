@@ -30,7 +30,7 @@ public class SetFireRiskHandler : IRequestHandler<SetFireRiskRequest>
             {
                 ApplicationId = applicationId,
                 FireRiskRatingId = (int)request.FireRiskRating!.Value,
-                HasInteralFireSafetyRisks = request.HasInternalFireSafetyRisks!.Value
+                HasInternalFireSafetyRisks = request.HasInternalFireSafetyRisks!.Value
             });
 
         return Unit.Value;

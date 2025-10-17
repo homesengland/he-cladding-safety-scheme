@@ -3,6 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.ScheduleOfWorks;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.Costs;
 using HE.Remediation.Core.Data.StoredProcedureResults.ScheduleOfWorks;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -58,4 +59,24 @@ public interface IScheduleOfWorksRepository
     Task<OverviewResult> GetOverview();
 
     Task<OverviewResult> GetApprovedScheduleOfWorksOverview();
+
+    Task<bool?> GetScheduleOfWorksIsBuildingControlApprovalApplied();
+
+    Task SetScheduleOfWorksBuildingControlApprovalApplied(ENoYes applied);
+
+    Task<DateTime?> GetScheduleOfWorksBuildingControlApprovalDate();
+
+    Task SetScheduleOfWorksBuildingControlApprovalDate(DateTime buildingControlApprovalDate);
+
+    Task<TaskStatusesResult> GetScheduleOfWorksTaskStatuses();
+
+    Task UpdateScheduleOfWorksLeaseholderEngagementStatus(ETaskStatus status);
+
+    Task UpdateScheduleOfWorksBuildingControlStatus(ETaskStatus status);
+
+    Task UpdateScheduleOfWorksWorksContractStatus(ETaskStatus status);
+
+    Task UpdateScheduleOfWorksProfileCostsStatus(ETaskStatus status);
+
+    Task UpdateScheduleOfWorksDeclarationStatus(ETaskStatus status);
 }

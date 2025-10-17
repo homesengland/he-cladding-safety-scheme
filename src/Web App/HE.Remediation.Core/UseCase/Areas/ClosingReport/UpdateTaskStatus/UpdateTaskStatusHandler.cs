@@ -1,8 +1,9 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
 using MediatR;
 
-namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
+namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.UpdateTaskStatus;
 
 public class UpdateTaskStatusHandler : IRequestHandler<UpdateTaskStatusRequest>
 {

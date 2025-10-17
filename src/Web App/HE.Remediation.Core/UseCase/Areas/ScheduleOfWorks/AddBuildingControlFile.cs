@@ -57,12 +57,6 @@ public class AddBuildingControlFileHandler : IRequestHandler<AddBuildingControlF
             Size = request.File.Length
         });
 
-        var hasScheduleOfWorks = await _scheduleOfWorksRepository.HasScheduleOfWorks();
-        if (!hasScheduleOfWorks)
-        {
-            await _scheduleOfWorksRepository.InsertScheduleOfWorks();
-        }
-
         await _scheduleOfWorksRepository.InsertBuildingControlFile(new InsertBuildingControlFileParameters
         {
             ApplicationId = applicationId,

@@ -6,6 +6,8 @@ using HE.Remediation.Core.Data.StoredProcedureResults.ScheduleOfWorks;
 using Dapper;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Extensions;
+using HE.Remediation.Core.Enums;
+using System.Threading.Tasks;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -410,6 +412,52 @@ public class ScheduleOfWorksRepository : IScheduleOfWorksRepository
             });
     }
 
+    public async Task<bool?> GetScheduleOfWorksIsBuildingControlApprovalApplied()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return false;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<bool?>("GetScheduleOfWorksIsBuildingControlApprovalApplied", new
+        {
+            ApplicationId = applicationId
+        });
+    }
+
+    public async Task SetScheduleOfWorksBuildingControlApprovalApplied(ENoYes applied)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("SetScheduleOfWorksIsBuildingControlApprovalApplied", new { ApplicationId = applicationId, IsBuildingControlApprovalApplied = applied });
+    }
+
+    public async Task<DateTime?> GetScheduleOfWorksBuildingControlApprovalDate()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<DateTime?>("GetScheduleOfWorksBuildingControlApprovalDate", new
+        {
+            ApplicationId = applicationId
+        });
+    }
+
+    public async Task SetScheduleOfWorksBuildingControlApprovalDate(DateTime buildingControlApprovalDate)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("SetScheduleOfWorksIsBuildingControlApprovalDate", new { ApplicationId = applicationId, BuildingControlApprovalDate = buildingControlApprovalDate });
+    }
+
     private bool TryGetApplicationId(out Guid applicationId)
     {
         applicationId = _applicationDataProvider.GetApplicationId();
@@ -432,5 +480,88 @@ public class ScheduleOfWorksRepository : IScheduleOfWorksRepository
         ?? default;
 
         return scheduleOfWorksId != default;
+    }
+    public async Task<TaskStatusesResult> GetScheduleOfWorksTaskStatuses()
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return null;
+        }
+
+        return await _connection.QuerySingleOrDefaultAsync<TaskStatusesResult>(
+            "GetScheduleOfWorksTaskStatuses",
+            new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+
+    public async Task UpdateScheduleOfWorksLeaseholderEngagementStatus(ETaskStatus status)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("UpdateScheduleOfWorksLeaseholderEngagementStatus", new
+        {
+            ApplicationId = applicationId,
+            Status = status
+        });
+    }
+
+    public async Task UpdateScheduleOfWorksBuildingControlStatus(ETaskStatus status)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("UpdateScheduleOfWorksBuildingControlStatus", new
+        {
+            ApplicationId = applicationId,
+            Status = status
+        });
+    }
+
+    public async Task UpdateScheduleOfWorksWorksContractStatus(ETaskStatus status)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("UpdateScheduleOfWorksWorksContractStatus", new
+        {
+            ApplicationId = applicationId,
+            Status = status
+        });
+    }
+    public async Task UpdateScheduleOfWorksProfileCostsStatus(ETaskStatus status)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("UpdateScheduleOfWorksProfileCostsStatus", new
+        {
+            ApplicationId = applicationId,
+            Status = status
+        });
+    }
+    public async Task UpdateScheduleOfWorksDeclarationStatus(ETaskStatus status)
+    {
+        if (!TryGetApplicationId(out var applicationId))
+        {
+            return;
+        }
+
+        await _connection.ExecuteAsync("UpdateScheduleOfWorksDeclarationStatus", new
+        {
+            ApplicationId = applicationId,
+            Status = status
+        });
     }
 }

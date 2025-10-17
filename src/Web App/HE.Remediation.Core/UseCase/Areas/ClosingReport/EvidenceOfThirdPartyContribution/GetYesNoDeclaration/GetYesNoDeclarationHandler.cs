@@ -9,11 +9,18 @@ public class GetYesNoDeclarationHandler : IRequestHandler<GetYesNoDeclarationReq
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IClosingReportRepository _closingReportRepository;
+    private readonly IApplicationRepository _applicationRepository;
+    private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
-    public GetYesNoDeclarationHandler(IApplicationDataProvider applicationDataProvider, IClosingReportRepository closingReportRepository)
+    public GetYesNoDeclarationHandler(IApplicationDataProvider applicationDataProvider, 
+        IClosingReportRepository closingReportRepository,
+        IApplicationRepository applicationRepository,
+        IBuildingDetailsRepository buildingDetailsRepository)
     {
         _applicationDataProvider = applicationDataProvider;
         _closingReportRepository = closingReportRepository;
+        _applicationRepository = applicationRepository;
+        _buildingDetailsRepository = buildingDetailsRepository;
     }
 
     public async Task<GetYesNoDeclarationResponse> Handle(GetYesNoDeclarationRequest request,
@@ -23,11 +30,14 @@ public class GetYesNoDeclarationHandler : IRequestHandler<GetYesNoDeclarationReq
 
         var closingReport = await _closingReportRepository.GetClosingReportDetails(applicationId);
 
+        var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
+        var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
+
         if (closingReport.HasThirdPartyContributions.HasValue)
         {
-            return new GetYesNoDeclarationResponse() { Declaration = closingReport.HasThirdPartyContributions.Value ? ENoYes.Yes : ENoYes.No, IsSubmitted = closingReport.IsSubmitted };
+            return new GetYesNoDeclarationResponse() { Declaration = closingReport.HasThirdPartyContributions.Value ? ENoYes.Yes : ENoYes.No, IsSubmitted = closingReport.IsSubmitted, ApplicationReferenceNumber = applicationReferenceNumber, BuildingName = buildingName };
         }
 
-        return new GetYesNoDeclarationResponse() { Declaration = null };
+        return new GetYesNoDeclarationResponse() { Declaration = null, ApplicationReferenceNumber = applicationReferenceNumber, BuildingName = buildingName };
     }
 }

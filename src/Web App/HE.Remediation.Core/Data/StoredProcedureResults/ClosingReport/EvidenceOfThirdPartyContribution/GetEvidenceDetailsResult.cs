@@ -13,6 +13,7 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport.Evidence
         public string AttemptDetails { get; set; }
         public decimal Amount { get; set; }
         public bool IsSubmitted { get; set; }
+        public bool IsEditable { get; set; }
         public Guid? FileId { get; set; }
         public string Name { get; set; }
         public string Extension { get; set; }

@@ -57,12 +57,6 @@ public class AddLeaseholderEngagementFileHandler : IRequestHandler<AddLeaseholde
             Size = request.File.Length
         });
 
-        var hasScheduleOfWorks = await _scheduleOfWorksRepository.HasScheduleOfWorks();
-        if (!hasScheduleOfWorks)
-        {
-            await _scheduleOfWorksRepository.InsertScheduleOfWorks();
-        }
-
         await _scheduleOfWorksRepository.InsertLeaseholderEngagement(new InsertLeaseholderEngagementParameters
         {
             ApplicationId = applicationId,

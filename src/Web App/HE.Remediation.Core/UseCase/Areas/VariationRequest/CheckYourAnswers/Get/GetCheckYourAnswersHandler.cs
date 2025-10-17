@@ -63,9 +63,8 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             ThirdPartyContributionNotes = checkYourAnswers?.ContributionNotes,
             VariationSummary = checkYourAnswers?.VariationSummary,
             IsSubmitted = checkYourAnswers?.IsSubmitted ?? false,
-            UsedContractorContingency = usedContractorContingency.UsedContractorContingency,
-            UsedContractorContingencyAdditionalNotes = usedContractorContingency.UsedContractorContingencyDescription
-
+            UsedContractorContingency = usedContractorContingency?.UsedContractorContingency,
+            UsedContractorContingencyAdditionalNotes = usedContractorContingency?.UsedContractorContingencyDescription
         };
     }
 

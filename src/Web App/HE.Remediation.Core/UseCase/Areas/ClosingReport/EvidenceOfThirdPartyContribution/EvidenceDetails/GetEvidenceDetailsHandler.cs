@@ -11,17 +11,23 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IEvidenceOfThirdPartyContributionRepository _evidenceOfThirdPartyContributionRepository;
         private readonly IClosingReportRepository _closingReportRepository;
+        private readonly IApplicationRepository _applicationRepository;
+        private readonly IBuildingDetailsRepository _buildingDetailsRepository;
         private readonly ILogger<GetEvidenceDetailsHandler> _logger;
 
         public GetEvidenceDetailsHandler(
             IApplicationDataProvider applicationDataProvider,
             IEvidenceOfThirdPartyContributionRepository evidenceOfThirdPartyContributionRepository,
             IClosingReportRepository closingReportRepository,
-            ILogger<GetEvidenceDetailsHandler> logger)
+            IApplicationRepository applicationRepository,
+            IBuildingDetailsRepository buildingDetailsRepository,
+        ILogger<GetEvidenceDetailsHandler> logger)
         {
             _applicationDataProvider = applicationDataProvider;
             _evidenceOfThirdPartyContributionRepository = evidenceOfThirdPartyContributionRepository;
             _closingReportRepository = closingReportRepository;
+            _applicationRepository = applicationRepository;
+            _buildingDetailsRepository = buildingDetailsRepository;
             _logger = logger;
         }
 
@@ -32,6 +38,9 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
             var evidenceDetails = await _evidenceOfThirdPartyContributionRepository.GetEvidenceDetails(applicationId);
             var isClosingReportSubmitted = await _closingReportRepository.IsClosingReportSubmitted(applicationId);
 
+            var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
+            var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
+
             if (evidenceDetails != null && evidenceDetails.Any())
             {
                 var response = evidenceDetails.Select(detail => new GetEvidenceDetailsResult
@@ -40,18 +49,24 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
                     ThirdPartyName = detail?.ThirdPartyName,
                     DateOfAttempt = detail?.DateOfAttempt,
                     StatusOfAttempt = detail?.StatusOfAttempt,
-                    AttemptDetails = detail?.AttemptDetails
+                    AttemptDetails = detail?.AttemptDetails,
+                    IsEditable = (bool)detail?.IsEditable
                 }).ToList();
 
                 return new GetEvidenceDetailsResponse
                 {
                     ApplicationId = applicationId,
                     EvidenceDetailsResults = response,
-                    IsSubmitted = isClosingReportSubmitted
+                    IsSubmitted = isClosingReportSubmitted,
+                    ApplicationReferenceNumber = applicationReferenceNumber,
+                    BuildingName = buildingName
                 };
             }
 
-            return new GetEvidenceDetailsResponse();
+            return new GetEvidenceDetailsResponse{
+                ApplicationReferenceNumber = applicationReferenceNumber,
+                BuildingName = buildingName
+            };
         }
     }
 

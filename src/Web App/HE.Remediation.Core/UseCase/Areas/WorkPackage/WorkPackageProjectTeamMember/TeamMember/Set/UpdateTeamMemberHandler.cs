@@ -40,7 +40,9 @@ public class UpdateTeamMemberHandler : IRequestHandler<UpdateTeamMemberRequest, 
             TeamMemberId = request.TeamMemberId,
             TeamRoleId = (int)request.Role,
             HasChasCertification = request.HasChasCertification,
-            ConsiderateConstructorSchemeReason = considerateConstructorSchemeReason
+            ConsiderateConstructorSchemeReason = considerateConstructorSchemeReason,
+            CreatedDate = DateTime.UtcNow,
+            LastModifiedDate = DateTime.UtcNow
         });
 
         return teamMemberId;

@@ -1,5 +1,4 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.ClosingReport;
-using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails;
@@ -41,4 +40,7 @@ public interface IClosingReportRepository
     Task<IReadOnlyCollection<ClosingReportTaskStatusResultItem>> GetClosingReportTaskStatus(Guid applicationId);
     Task UpsertClosingReportTaskStatus(Guid applicationId, EClosingReportTask closingReportTask, ETaskStatus taskStatus, bool allowRevert = false);
     Task UpdateClosingReportHasThirdPartyContributions(Guid applicationId, bool hasThirdPartyContributions);
+    Task UpdateClosingReportReasonForNoContributions(Guid applicationId, string reasonForNoContributions);
+    Task<EFireRiskAssessmentType?> GetExitFraewDocumentType(Guid applicationId);
+    Task SetExitFraewDocumentType(Guid applicationId, EFireRiskAssessmentType? fireRiskAssessmentType);
 }

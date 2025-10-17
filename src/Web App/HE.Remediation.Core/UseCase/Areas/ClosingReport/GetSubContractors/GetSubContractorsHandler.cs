@@ -39,6 +39,7 @@ public class GetSubContractorsHandler : IRequestHandler<GetSubContractorsRequest
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             ratingsId = await _subContractorSurveyRepository.CreateSurvey(applicationId);
+            await _subContractorSurveyRepository.AddSubcontractorSurveyLeadContractor(applicationId, ratingsId.Value);
             await _closingReportRepository.UpdateSubcontractorSurveyId(applicationId, ratingsId.Value);
             scope.Complete();
         }

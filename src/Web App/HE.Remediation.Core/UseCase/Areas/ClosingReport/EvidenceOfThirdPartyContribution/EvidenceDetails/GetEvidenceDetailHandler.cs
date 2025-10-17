@@ -3,7 +3,6 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Syncfusion.Pdf.Graphics;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails
 {
@@ -11,14 +10,20 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
     {
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IEvidenceOfThirdPartyContributionRepository _evidenceOfThirdPartyContributionRepository;
+        private readonly IApplicationRepository _applicationRepository;
+        private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
         public GetEvidenceDetailHandler(
             IApplicationDataProvider applicationDataProvider,
             IEvidenceOfThirdPartyContributionRepository evidenceOfThirdPartyContributionRepository,
+            IApplicationRepository applicationRepository,
+            IBuildingDetailsRepository buildingDetailsRepository,
             ILogger<GetEvidenceDetailsHandler> logger)
         {
             _applicationDataProvider = applicationDataProvider;
             _evidenceOfThirdPartyContributionRepository = evidenceOfThirdPartyContributionRepository;
+            _applicationRepository = applicationRepository;
+            _buildingDetailsRepository = buildingDetailsRepository;
         }
 
         public async Task<GetEvidenceDetailResponse> Handle(GetEvidenceDetailRequest request, CancellationToken cancellationToken)
@@ -29,9 +34,12 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
 
             var evidenceDetail = evidenceDetails.FirstOrDefault(detail => detail.Id == request.EvidenceId);
 
-            if(evidenceDetail == null)
+            var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
+            var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
+
+            if (evidenceDetail == null)
             {
-                return new GetEvidenceDetailResponse();
+                return new GetEvidenceDetailResponse { ApplicationReferenceNumber = applicationReferenceNumber , BuildingName = buildingName };
             }
 
             return new GetEvidenceDetailResponse()
@@ -45,11 +53,14 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
                 TypeOfContribution = ConvertToEnumCollection(evidenceDetail.TypeOfContribution),
                 Amount = evidenceDetail.Amount,
                 IsSubmitted = evidenceDetail.IsSubmitted,
+                IsEditable = evidenceDetail.IsEditable,
                 FileId = evidenceDetail.FileId,
                 Name = evidenceDetail.Name,
                 Extension = evidenceDetail.Extension,
                 MimeType = evidenceDetail.MimeType,
                 Size = evidenceDetail.Size,
+                ApplicationReferenceNumber = applicationReferenceNumber,
+                BuildingName = buildingName
             };
         }
 
@@ -91,8 +102,11 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
         public int? Size { get; set; }
 
         public bool IsSubmitted { get; set; }
+        public bool IsEditable { get; set; }
         public string ReturnUrl { get; set; }
-        
+
+        public string ApplicationReferenceNumber { get; set; }
+        public string BuildingName { get; set; }
     }
 
 }

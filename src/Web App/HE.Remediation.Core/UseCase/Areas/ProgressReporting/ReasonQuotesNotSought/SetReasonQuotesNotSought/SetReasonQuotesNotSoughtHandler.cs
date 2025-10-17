@@ -37,7 +37,7 @@ public class SetReasonQuotesNotSoughtHandler : IRequestHandler<SetReasonQuotesNo
         var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
         {
             Date = DateTime.UtcNow.Date,
-            WorkingDays = 5
+            WorkingDays = 1
         });
 
         if (request.WhyYouHaveNotSoughtQuotes == EWhyYouHaveNotSoughtQuotes.IDontPlanTo)
