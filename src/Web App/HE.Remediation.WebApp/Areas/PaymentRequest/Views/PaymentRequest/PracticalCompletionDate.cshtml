@@ -1,0 +1,88 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.PaymentRequest.PracticalCompletionDateViewModel
+@{
+    ViewData["Title"] = "Monthly payment request";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = string.IsNullOrEmpty(Model.ReturnUrl)
+                       ? Url.Action("ForecastGateway3Submission", "PaymentRequest", new { Area = "PaymentRequest" })
+                       : Url.Action(Model.ReturnUrl, "PaymentRequest", new { Area = "PaymentRequest" });
+    ViewData["FullWidth"] = false;
+
+    var readOnly = ((Model.IsSubmitted) || (Model.IsExpired));
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ExpectedPracticalDateMonth" />
+        <govuk-error-summary-item asp-for="ExpectedPracticalDateYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-6">What is your expected practical completion date?</h1>
+
+
+@if (Model.PreviousExpectedPracticalDate != null)
+{
+    <table class="govuk-table govuk-!-margin-top-0">
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell" style="border-top:1px solid #b1b4b6;"><b>Previous expected practical completion date</b></td>
+                <td class="govuk-table__cell" style="border-top:1px solid #b1b4b6;">@Model.PreviousExpectedPracticalDate?.ToString("MM/yyyy")</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<form method="post" asp-area="PaymentRequest" asp-controller="PaymentRequest" asp-action="PracticalCompletionDate">
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="start-date-hint">
+            <div id="start-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ExpectedPracticalDateMonth" />
+            <govuk-error-message asp-for="ExpectedPracticalDateYear" />
+            <div class="govuk-date-input" id="submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedPracticalDateMonth">
+                            Month
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled asp-for="ExpectedPracticalDateMonth" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ExpectedPracticalDateMonth" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedPracticalDateYear">
+                            Year
+                        </label>
+                        @if (@readOnly)
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled asp-for="ExpectedPracticalDateYear" type="number" inputmode="numeric">
+                        }
+                        else
+                        {
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ExpectedPracticalDateYear" type="number" inputmode="numeric">
+                        }
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
+    @Html.HiddenFor(x => x.ReturnUrl)
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@readOnly" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

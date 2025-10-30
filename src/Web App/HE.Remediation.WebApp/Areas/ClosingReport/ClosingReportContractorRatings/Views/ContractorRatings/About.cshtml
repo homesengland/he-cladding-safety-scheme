@@ -1,7 +1,9 @@
 ﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.Shared.ClosingReportAboutViewModel
 @{
     Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
     ViewData["Title"] = "Ratings For Contractors";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["BackLink"] = Url.Action("TaskList", "ClosingReport", new { Area = "ClosingReport" });
     ViewData["FullWidth"] = true;
 }

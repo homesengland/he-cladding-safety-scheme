@@ -1,0 +1,110 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.CheckYourAnswersViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("PaymentsSummary", "ProfileCosts", new { Area = "ScheduleOfWorksProfileCosts" });
+    ViewData["ReturnUrl"] = "CheckYourAnswers";
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+<hr class="govuk-section-break govuk-section-break--m">
+
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Project payment schedule dates</h2>
+        </govuk-summary-list-row-key>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ProjectDates", "ProfileCosts", new { returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Start date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ProjectStartDate is not null ? Model.ProjectStartDate.Value.ToString("MMMM yyyy") : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            End date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ProjectEndDate is not null ? Model.ProjectEndDate.Value.ToString("MMMM yyyy") : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Schedule of works summary</h2>
+        </govuk-summary-list-row-key>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("Milestones", "ProfileCosts", new { returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Approved grant funding
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model is { ApprovedGrantFunding: > 0 } ? $"&pound;{Model.ApprovedGrantFunding:N0}" : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Grant paid to date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model is { GrantPaidToDate: > 0 } ? $"&pound;{Model.GrantPaidToDate:N0}" : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Profiled payments
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model is { ProfiledPayments: > 0 } ? $"&pound;{Model.ProfiledPayments:N0}" : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Duration (months)
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.Duration is not null ? Model.Duration.Value.ToString() : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<form asp-area="ScheduleOfWorksProfileCosts" asp-controller="ProfileCosts" asp-action="CheckYourAnswers" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+</form>

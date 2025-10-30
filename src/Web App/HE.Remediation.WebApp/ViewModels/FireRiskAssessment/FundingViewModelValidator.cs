@@ -17,7 +17,8 @@ public class FundingViewModelValidator : AbstractValidator<FundingViewModel>
                 .NotNull()
                 .WithMessage("Select an option")
                 .Must(x => x is EFraFundingType.PaidForByThirdParty
-                    or EFraFundingType.PaidForFromExistingServiceChargeFunds)
+                    or EFraFundingType.PaidForFromExistingServiceChargeFunds
+                     or EFraFundingType.PaidForByTheApplicant)
                 .WithMessage("Select a valid option");
         });
 

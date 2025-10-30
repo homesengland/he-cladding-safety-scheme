@@ -74,12 +74,26 @@ public class PostCodeLookup : IPostCodeLookup
             var httpResponse = await httpClient.PostAsync(Environment.GetEnvironmentVariable("APIM_POST_CODE_URI"), 
                                                           requestTxt);
 
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                var errorContent = await httpResponse.Content.ReadAsStringAsync();
+                throw new Exception($"Bad call to web service. StatusCode={httpResponse.StatusCode}, Content={errorContent}");
+            }
+
             await using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, _jsonSerializerOptions);            
+            try
+            {
+                return await JsonSerializer.DeserializeAsync<PostCodeResults>(responseStream, _jsonSerializerOptions);
+            }
+            catch (JsonException jsonEx)
+            {
+                var errorContent = await httpResponse.Content.ReadAsStringAsync();
+                throw new Exception($"Failed to deserialize web service response. Content={errorContent}, Message={jsonEx.Message}");
+            }
         }
         catch (Exception ex)
         {
-            throw new Exception("Bad call to web service. Message=" + ex.StackTrace);                
+            throw new Exception("Bad call to web service. Message=" + ex.Message, ex);                
         }
     }
 }

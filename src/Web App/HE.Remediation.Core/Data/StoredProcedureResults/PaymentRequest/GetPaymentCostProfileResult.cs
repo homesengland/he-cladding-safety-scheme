@@ -17,5 +17,7 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.PaymentRequest
         public bool? Paid { get; set; }
 
         public bool? IsApproved { get; set; }
+
+        public int Order { get; set; }
     }
 }

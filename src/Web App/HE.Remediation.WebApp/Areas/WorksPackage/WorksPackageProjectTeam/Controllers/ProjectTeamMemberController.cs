@@ -126,7 +126,7 @@ public class ProjectTeamMemberController : StartController
         }
         catch (EntityNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            throw new EntityNotFoundException("Works package team member not found");
         }
     }
 

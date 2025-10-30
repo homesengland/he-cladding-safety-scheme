@@ -37,7 +37,7 @@
         @if (Model.IsPtfsPaymentPaid == true)
         {
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell govuk-!-padding-left-2">PTFS payment</td>
+                <td class="govuk-table__cell govuk-!-padding-left-2">PTS payment</td>
                 <td class="govuk-table__cell govuk-text-align-right">
                     <govuk-input asp-for="@Model.PtfsPaymentText" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
                         <govuk-input-label></govuk-input-label>
@@ -50,7 +50,7 @@
         @if (Model.IsAdditionalPtfsPaid == true)
         {
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell govuk-!-padding-left-2">Additional PTFS payment</td>
+                <td class="govuk-table__cell govuk-!-padding-left-2">Additional PTS payment</td>
                 <td class="govuk-table__cell govuk-text-align-right">
                     <govuk-input asp-for="@Model.AdditionalPtfsPayment" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
                         <govuk-input-label></govuk-input-label>

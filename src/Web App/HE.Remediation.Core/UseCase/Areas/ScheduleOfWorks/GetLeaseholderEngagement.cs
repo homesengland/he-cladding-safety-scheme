@@ -1,6 +1,7 @@
 ﻿using Auth0.AspNetCore.Authentication;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -35,6 +36,16 @@ public class GetLeaseholderEngagementHandler : IRequestHandler<GetLeaseholderEng
 
         var isSubmitted = await _scheduleOfWorksRepository.IsScheduleOfWorksSubmitted();
         var files = await _scheduleOfWorksRepository.GetScheduleOfWorksLeaseholderEngagementFiles(applicationId);
+
+        if (!isSubmitted)
+        {
+            var taskStatusesResult = await _scheduleOfWorksRepository.GetScheduleOfWorksTaskStatuses();
+
+            if (taskStatusesResult?.LeaseholderEngagementStatusId == null)
+            {
+                await _scheduleOfWorksRepository.UpdateScheduleOfWorksLeaseholderEngagementStatus(ETaskStatus.InProgress);
+            }
+        }
 
         return new GetLeaseholderEngagementResponse
         {

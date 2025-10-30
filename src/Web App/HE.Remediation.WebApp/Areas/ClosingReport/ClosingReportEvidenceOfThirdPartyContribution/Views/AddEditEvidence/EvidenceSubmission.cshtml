@@ -4,7 +4,8 @@
 @model HE.Remediation.WebApp.ViewModels.ClosingReport.UploadEvidenceSubmissionUploadViewModel
 @{
     Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
-    ViewData["Title"] = "Final Report";
+    ViewData["Title"] = "Evidence of Third Party Contribution";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["Backlink"] = ViewData["Backlink"] = Model.ViaCheckAnswer ? Url.Action("CheckYourAnswers", new { id = Model.Id }) : Url.Action("Details2", new { id = Model.Id });
     ViewData["FullWidth"] = true;
     ViewData["ExitLinkHidden"] = true;
@@ -25,7 +26,7 @@ asp-area="ClosingReportEvidenceOfThirdPartyContribution"
 asp-route-id=""
 method="post"
 enctype="multipart/form-data">
-    <h1 class="govuk-heading-xl">Upload Third Party Contribution Evidence (optional)</h1>
+    <h1 class="govuk-heading-xl">Upload Third Party Contribution Evidence</h1>
     <h2 class="govuk-heading-m">Please upload evidence of the outcome or current status of this claim</h2>
     <p class="govuk-caption-m">File must be smaller than 50MB and .pdf format</p>
 
@@ -53,8 +54,13 @@ enctype="multipart/form-data">
                 }
             </govuk-summary-list-row>
         </govuk-summary-list>
+
+
+        <input type="hidden" name="FileId" value="@Model.FileId" />
     }
     <br />
+    @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+    @Html.HiddenFor(x => x.BuildingName)
     <input type="hidden" asp-for="Id" value="@Model.Id" />
     <input type="hidden" asp-for="ViaCheckAnswer" value="@Model.ViaCheckAnswer" />
     <div class="comp-btn-group">

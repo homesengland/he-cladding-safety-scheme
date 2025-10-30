@@ -8,31 +8,27 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IApplicationRepository _applicationRepository;
-    private readonly IPaymentRequestRepository _paymentRequestRepository;
-    private readonly ITaskRepository _taskRepository;
-    private readonly IDateRepository _dateRepository;
+    private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
     public GetSubmittedHandler(IApplicationDataProvider applicationDataProvider,
                                IApplicationRepository applicationRepository,
-                               IPaymentRequestRepository paymentRequestRepository,
-                               ITaskRepository taskRepository,
-                               IDateRepository dateRepository)
+                               IBuildingDetailsRepository buildingDetailsRepository)
     {
         _applicationDataProvider = applicationDataProvider;
         _applicationRepository = applicationRepository;
-        _paymentRequestRepository = paymentRequestRepository;
-        _taskRepository = taskRepository;
-        _dateRepository = dateRepository;
+        _buildingDetailsRepository = buildingDetailsRepository;
     }
 
     public async Task<GetSubmittedResponse> Handle(GetSubmittedRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
+        var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
 
         return new GetSubmittedResponse
         {
-            ApplicationReferenceNumber = applicationReferenceNumber
+            ApplicationReferenceNumber = applicationReferenceNumber,
+            BuildingName = buildingName
         };
     }
 }

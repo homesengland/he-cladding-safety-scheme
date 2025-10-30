@@ -1,11 +1,16 @@
-﻿namespace HE.Remediation.WebApp.ViewModels.BuildingDetails
+﻿using HE.Remediation.Core.Enums;
+
+namespace HE.Remediation.WebApp.ViewModels.BuildingDetails
 {
     public class CheckYourAnswersViewModel
     {
         public string ReturnURL { get; set; }
-
+        public EApplicationScheme ApplicationScheme { get; set; }
         public string BuildingUniqueName { get; set; }
         public bool WorksAlreadyCompleted { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? UnsafeCladdingRemovalDate { get; set; }
+        public DateTime? ExpectedDateForCompletion { get; set; }
         public int ResidentialUnitsCount { get; set; }
         public bool NonResidentialUnits { get; set; }
         public int NonResidentialUnitsCount { get; set; }

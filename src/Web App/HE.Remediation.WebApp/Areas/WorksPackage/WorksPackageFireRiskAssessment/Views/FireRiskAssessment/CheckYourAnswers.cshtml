@@ -5,7 +5,9 @@
 @{
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["Title"] = "Fire risk assessment";
-    ViewData["Backlink"] = Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    ViewData["BackLink"] = Model.HasInternalFireSafetyRisks == true 
+        ? Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
+        : Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
     ViewData["FullWidth"] = false;
 
     const string ErrorClasses = "govuk-form-group--error govuk-error-message govuk-!-margin-bottom-0";
@@ -16,6 +18,8 @@
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="FraFile" />
         <govuk-error-summary-item asp-for="Defects" />
+        <govuk-error-summary-item asp-for="HasFunding" />
+        <govuk-error-summary-item asp-for="FraFundingType" />
     </govuk-error-summary>
 }
 
@@ -142,6 +146,7 @@
                 defectsClass = ErrorClasses;
             }
         }
+
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
                 <div class="@defectsClass" id="@(nameof(Model.Defects))">
@@ -165,31 +170,55 @@
             </govuk-summary-list-row-value>
             <govuk-summary-list-row-action href="@Url.Action("IdentifiedDefects", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
         </govuk-summary-list-row>
-    }
 
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>Have you got any funding in place to cover these works?</govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>@(Model.HasFunding == true ? "Yes" : Model.HasFunding == false ? "No" : "-")</govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>@(Model.HasFunding == true ? "What type of funding?" : "What action are you looking to undertake?")</govuk-summary-list-row-key>
-        @{
-            var fundingType = Model.FraFundingType switch
+        var hasFundingDefects = string.Empty;
+        if (ViewData.ModelState.TryGetValue(nameof(Model.HasFunding), out var hasFundingDefectsValidation))
+        {
+            if (hasFundingDefectsValidation.ValidationState == ModelValidationState.Invalid)
             {
-                EFraFundingType.PaidForByThirdParty => "These works are paid for by a third party",
-                EFraFundingType.PaidForFromExistingServiceChargeFunds => "These works are planned to be paid for from existing service charge funds",
-                EFraFundingType.RequestToBeMadeToThirdParty => "Request to be made to a third party",
-                EFraFundingType.ServiceChargesFollowingS20 => "Service charges following S20 consultation",
-                EFraFundingType.CostOfWorksYetToBeSecured => "The costs of these are works yet to be secured",
-                _ => "-"
-            };
+                hasFundingDefects = ErrorClasses;
+            }
         }
-        <govuk-summary-list-row-value>@fundingType</govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
-    </govuk-summary-list-row>
-    
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <div class="@hasFundingDefects" id="@(nameof(Model.HasFunding))">
+                    Have you got any funding in place to cover these works?
+                </div>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@(Model.HasFunding == true ? "Yes" : Model.HasFunding == false ? "No" : "-")</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        var fundingTypeDefects = string.Empty;
+        if (ViewData.ModelState.TryGetValue(nameof(Model.FraFundingType), out var fundingTypeDefectsValidation))
+        {
+            if (fundingTypeDefectsValidation.ValidationState == ModelValidationState.Invalid)
+            {
+                fundingTypeDefects = ErrorClasses;
+            }
+        }
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <div class="@fundingTypeDefects" id="@(nameof(Model.FraFundingType))">
+                    @(Model.HasFunding == true ? "What type of funding?" : "What action are you looking to undertake?")
+                </div>
+            </govuk-summary-list-row-key>
+            @{
+                var fundingType = Model.FraFundingType switch
+                {
+                    EFraFundingType.PaidForByThirdParty => "These works are paid for by a third party",
+                    EFraFundingType.PaidForFromExistingServiceChargeFunds => "These works are planned to be paid for from existing service charge funds",
+                    EFraFundingType.RequestToBeMadeToThirdParty => "Request to be made to a third party",
+                    EFraFundingType.ServiceChargesFollowingS20 => "Service charges following S20 consultation",
+                    EFraFundingType.CostOfWorksYetToBeSecured => "The costs of these are works yet to be secured",
+                    EFraFundingType.PaidForByTheApplicant => "These works are being paid for by the applicant",
+                    _ => "-"
+                };
+            }
+            <govuk-summary-list-row-value>@fundingType</govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
 </govuk-summary-list>
 
 <form asp-controller="FireRiskAssessment" asp-area="WorksPackageFireRiskAssessment" asp-action="CheckYourAnswers" method="post">
@@ -219,6 +248,9 @@
         var @defect = Model.Defects[i];
         <input name="@($"{nameof(Model.Defects)}[{i}]")" type="hidden" value="@defect" />
     }
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted">Submit</govuk-button>

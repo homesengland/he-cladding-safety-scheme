@@ -37,7 +37,9 @@ public class SetGrantCertifyingOfficerDetailsHandler : IRequestHandler<SetGrantC
             OtherRole = request.OtherRole,
             PrimaryContactNumber = request.PrimaryContactNumber,
             TeamMemberId = request.TeamMemberId,
-            TeamRoleId = (int)request.Role
+            TeamRoleId = (int)request.Role,
+            CreatedDate = DateTime.UtcNow,
+            LastModifiedDate = DateTime.UtcNow
         });
 
         await _progressReportingRepository.UpdateGrantCertifyingOfficerDetails();

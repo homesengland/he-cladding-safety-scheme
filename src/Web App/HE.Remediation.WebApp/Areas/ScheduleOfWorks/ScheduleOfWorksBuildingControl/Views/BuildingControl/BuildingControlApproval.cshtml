@@ -1,0 +1,43 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.BuildingControlApprovalViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("StartInformation", "BuildingControl", new { Area = "ScheduleOfWorksBuildingControl" });
+    ViewData["FullWidth"] = false;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+            <h2 class="govuk-error-summary__title">
+                There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    <li>
+                        <a href="#@(nameof(Model.IsBuildingControlApprovalApplied))">
+                            Select an option
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<h1 class="govuk-heading-xl">Did you apply for Building Control Approval through the Building Safety Regulator Gateway 2 route?</h1>
+
+<form asp-area="ScheduleOfWorksBuildingControl" asp-controller="BuildingControl" asp-action="BuildingControlApproval" method="post">
+    <govuk-radios asp-for="IsBuildingControlApprovalApplied">
+        <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and Continue</govuk-button>
+    <govuk-button name="SubmitAction" class="govuk-button--secondary govuk-!-margin-left-4" value="@ESubmitAction.Exit">Save and return later</govuk-button>
+</form>

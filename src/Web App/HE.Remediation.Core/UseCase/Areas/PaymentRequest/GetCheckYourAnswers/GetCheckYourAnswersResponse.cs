@@ -37,6 +37,10 @@ public class GetCheckYourAnswersResponse
 
     public List<GetTeamMembersResult> TeamMembers { get; set; }
 
+    public DateTime? ExpectedSubmissionDateForGateway3Application { get; set; }
+
+    public DateTime? ExpectedPracticalCompletionDate { get; set; }
+
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }
 

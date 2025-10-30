@@ -3,9 +3,18 @@
 @model HE.Remediation.WebApp.ViewModels.FireRiskAssessment.CheckYourAnswersViewModel
 @{
     ViewData["Title"] = Model.IsSubmitted ? "Your answers" : "Check your answers";
-    ViewData["BackLink"] = Model.HasFra == true
-        ? Url.Action("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
-        : Url.Action("NoCurrentFra", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+
+    if (Model.HasFra == true)
+    {
+        ViewData["BackLink"] = Model.HasInternalFireSafetyRisks == true 
+            ? Url.Action("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" }) 
+            : Url.Action("FireRisk", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+    else
+    {
+        ViewData["BackLink"] = Url.Action("NoCurrentFra", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+    
     ViewData["FullWidth"] = true;
     ViewData["ReadOnly"] = Model.IsSubmitted;
 
@@ -17,6 +26,8 @@
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="FraFile" />
         <govuk-error-summary-item asp-for="Defects" />
+        <govuk-error-summary-item asp-for="HasFunding" />
+        <govuk-error-summary-item asp-for="FraFundingType" />
     </govuk-error-summary>    
 }
 
@@ -188,6 +199,7 @@
                     defectsClass = ErrorClasses;
                 }
             }
+
             <govuk-summary-list-row>
                 <govuk-summary-list-row-key>
                     <div class="@defectsClass" id="@(nameof(Model.Defects))">
@@ -214,36 +226,61 @@
                     <govuk-summary-list-row-action href="@Url.Action("IdentifiedDefects", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Change</govuk-summary-list-row-action>
                 }
             </govuk-summary-list-row>
-        }
 
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>Have you got any funding in place to cover these works?</govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>@(Model.HasFunding == true ? "Yes" : Model.HasFunding == false ? "No" : "-")</govuk-summary-list-row-value>
-            @if (!Model.IsSubmitted)
+            var hasFundingDefects = string.Empty;
+            if (ViewData.ModelState.TryGetValue(nameof(Model.HasFunding), out var hasFundingDefectsValidation))
             {
-                <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Change</govuk-summary-list-row-action>
-            }
-        </govuk-summary-list-row>
-
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>@(Model.HasFunding == true ? "What type of funding?" : "What action are you looking to undertake?")</govuk-summary-list-row-key>
-            @{
-                var fundingType = Model.FraFundingType switch
+                if (hasFundingDefectsValidation.ValidationState == ModelValidationState.Invalid)
                 {
-                    EFraFundingType.PaidForByThirdParty => "These works are paid for by a third party",
-                    EFraFundingType.PaidForFromExistingServiceChargeFunds => "These works are planned to be paid for from existing service charge funds",
-                    EFraFundingType.RequestToBeMadeToThirdParty => "Request to be made to a third party",
-                    EFraFundingType.ServiceChargesFollowingS20 => "Service charges following S20 consultation",
-                    EFraFundingType.CostOfWorksYetToBeSecured => "The costs of these are works yet to be secured",
-                    _ => "-"
-                };
+                    hasFundingDefects = ErrorClasses;
+                }
             }
-            <govuk-summary-list-row-value>@fundingType</govuk-summary-list-row-value>
-            @if (!Model.IsSubmitted)
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <div class="@hasFundingDefects" id="@(nameof(Model.HasFunding))">
+                        Have you got any funding in place to cover these works?
+                    </div>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>@(Model.HasFunding == true ? "Yes" : Model.HasFunding == false ? "No" : "-")</govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Change</govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>
+
+            var fundingTypeDefects = string.Empty;
+            if (ViewData.ModelState.TryGetValue(nameof(Model.FraFundingType), out var fundingTypeDefectsValidation))
             {
-                <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Change</govuk-summary-list-row-action>
+                if (fundingTypeDefectsValidation.ValidationState == ModelValidationState.Invalid)
+                {
+                    fundingTypeDefects = ErrorClasses;
+                }
             }
-        </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <div class="@fundingTypeDefects" id="@(nameof(Model.FraFundingType))">
+                        @(Model.HasFunding == true ? "What type of funding?" : "What action are you looking to undertake?")
+                    </div>
+                </govuk-summary-list-row-key>
+                @{
+                    var fundingType = Model.FraFundingType switch
+                    {
+                        EFraFundingType.PaidForByThirdParty => "These works are paid for by a third party",
+                        EFraFundingType.PaidForFromExistingServiceChargeFunds => "These works are planned to be paid for from existing service charge funds",
+                        EFraFundingType.RequestToBeMadeToThirdParty => "Request to be made to a third party",
+                        EFraFundingType.ServiceChargesFollowingS20 => "Service charges following S20 consultation",
+                        EFraFundingType.CostOfWorksYetToBeSecured => "The costs of these are works yet to be secured",
+                        EFraFundingType.PaidForByTheApplicant => "These works are being paid for by the applicant",
+                        _ => "-"
+                    };
+                }
+                <govuk-summary-list-row-value>@fundingType</govuk-summary-list-row-value>
+                @if (!Model.IsSubmitted)
+                {
+                    <govuk-summary-list-row-action href="@Url.Action("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Change</govuk-summary-list-row-action>
+                }
+            </govuk-summary-list-row>
+        }
     }
 </govuk-summary-list>
 

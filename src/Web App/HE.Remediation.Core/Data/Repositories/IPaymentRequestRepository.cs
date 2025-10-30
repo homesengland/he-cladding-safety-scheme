@@ -37,6 +37,10 @@ public interface IPaymentRequestRepository
 
     Task UpdatePaymentRequestLeaseholderResidentLastCommunicationDate(Guid paymentRequestId, DateTime? lastCommunicationDate);
 
+    Task UpdateExpectedSubmissionDateForGateway3Application(Guid paymentRequestId, DateTime? expectedSubmissionDate);
+
+    Task UpdatePracticalCompletionDate(Guid paymentRequestId, DateTime? expectedPracticalCompletionDate);
+
     Task UpdatePaymentRequestDeclaration(Guid paymentRequestId, PaymentRequestDeclarationParameters declarationParameters);
 
     Task<KeyDatesResult> GetLatestWorkPackageKeyDates(Guid paymentRequestId, bool includeLinked = false);
@@ -82,6 +86,8 @@ public interface IPaymentRequestRepository
     Task<bool> GetUnsafeCladdingAlreadyRemoved(Guid applicationId, Guid paymentRequestId);
 
     Task<Guid?> GetPaymentRequestFirstPaymentRequest(Guid applicationId);
+
+    Task<Guid?> GetPreviousPaymentRequest(Guid applicationId);
 
     Task<OverviewResult> GetOverview(Guid paymentRequestId);
 

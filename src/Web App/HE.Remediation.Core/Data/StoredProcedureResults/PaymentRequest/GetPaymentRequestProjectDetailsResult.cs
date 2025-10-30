@@ -20,4 +20,9 @@ public class GetPaymentRequestProjectDetailsResult
     public bool? ThirdPartyContributionsChanged { get; set; }
 
     public DateTime? LeaseholderResidentCommunicationDate { get; set; }
+
+    public DateTime? ExpectedSubmissionDateForGateway3Application { get; set; }
+
+    public DateTime? ExpectedPracticalCompletionDate { get; set; }
+    
 }

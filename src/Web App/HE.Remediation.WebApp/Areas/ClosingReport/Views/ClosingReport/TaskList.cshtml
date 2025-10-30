@@ -2,8 +2,7 @@
 @using HE.Remediation.WebApp.ViewModels.ClosingReport
 @model TaskListViewModel
 @{
-    ViewData["Title"] = "Submit your closing report and final payment request";
-    ViewData["HideTitle"] = true;
+    ViewData["Title"] = "Final payment request";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
     ViewData["ExitLinkHidden"] = true;

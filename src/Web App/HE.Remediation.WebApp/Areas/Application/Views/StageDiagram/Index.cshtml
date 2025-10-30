@@ -366,7 +366,7 @@
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <div class="govuk-grid-row">
                                 <div class="govuk-grid-column-three-quarters">
-                                    <a href="@Url.Action("Start", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" } )" class="govuk-link">Create schedule of works</a>
+                                    <a href="@Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" } )" class="govuk-link">Create schedule of works</a>
                                 </div>
                                 <div class="govuk-grid-column-one-quarter">
                                     <div class="govuk-flex-row">
@@ -427,7 +427,7 @@
                     !Model.IsScheduleOfWorksApproved)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-                            <a href="@Url.Action("PaymentsSummary", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" } )" class="govuk-link">View schedule of works</a>
+                            <a href="@Url.Action("PaymentsSummary", "ProfileCosts", new { Area = "ScheduleOfWorksProfileCosts" } )" class="govuk-link">View schedule of works</a>
                         </div>
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
                             <p class="govuk-body">
@@ -521,6 +521,11 @@
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <a href="@Url.Action("ConfirmToProceed", "WorkPackage", new { Area = "WorksPackage" } )" class="govuk-link">Compile works package</a>
+                            @if (Model.isWorkPackageConfirmedToProceed == true)
+                            {
+                                <task-list-status-badge status="InProgress"></task-list-status-badge>
+                            }
+
                         </div>
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
                             <p class="govuk-body">

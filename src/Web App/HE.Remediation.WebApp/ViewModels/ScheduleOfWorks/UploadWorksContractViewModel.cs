@@ -9,7 +9,7 @@ public class UploadWorksContractViewModel : ScheduleOfWorksBaseViewModel
 
     public List<File> AddedFiles { get; set; }
 
-    public string DeleteEndpoint => "/ScheduleOfWorks/UploadWorksContract/Delete";
+    public string DeleteEndpoint => "/ScheduleOfWorks/WorksContract/UploadWorksContract/Delete";
 
     public string[] AcceptedFileTypes => new[] { ".pdf" };
 

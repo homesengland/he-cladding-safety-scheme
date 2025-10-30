@@ -145,6 +145,11 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(ManageProgrammeUpdateViewModel model, ESubmitAction? submitAction)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var queryStringFriendlyDto = new UpdateDto()
             {
                 EstimatedInvestigationCompletionDate = model.EstimatedInvestigationCompletionDate?.ToString(DATE_FORMAT),

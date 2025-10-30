@@ -32,6 +32,8 @@ public class GetSubmitPaymentResponse
 
     public IReadOnlyCollection<MonthlyCost> MissedPayments { get; set; }
 
+    public IReadOnlyCollection<MonthlyCost> AllPayments { get; set; }
+
     public MonthlyCost CurrentMonth { get; set; }
 
     public MonthlyCost AdditionalCost { get; set; }
@@ -57,4 +59,6 @@ public class MonthlyCost
     public bool? IsApproved { get; set; }
 
     public EPaymentRequestStatus Status { get; set; }
+
+    public int Order { get; set; }
 }

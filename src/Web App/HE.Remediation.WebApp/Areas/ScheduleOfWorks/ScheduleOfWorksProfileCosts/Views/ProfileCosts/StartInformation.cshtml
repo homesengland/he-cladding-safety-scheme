@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.ProfileCostsStartInformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In this section, you will need to provide us with a monthly cashflow for your eligible costs for the duration of your project. This should cover both the works and all associated fees for the project team that you submitted as part of your works package.
+</p>
+<p class="govuk-body">
+    Your monthly cashflow should include works and fees for the project team, including any ineligible VAT that you cannot reclaim. Your contractor and project team should be able to provide you with the information to complete the profile.
+</p>
+<p class="govuk-body">
+    We appreciate timings can change, but this cashflow will give us important information about when you will complete your project and the likely timing of grant payments.
+</p>
+<p class="govuk-body">
+    Please note:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>The start date of your payment schedule must be a month in the future – you cannot schedule a payment in the same month your Schedule of Works is submitted.</li>
+    <li>If you have moved into the next month by the time you submit the Schedule of Works, the system will ask you to start this section again and you will need to amend your dates accordingly.</li>
+</ul>
+
+<form asp-area="ScheduleOfWorksProfileCosts" asp-controller="ProfileCosts" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

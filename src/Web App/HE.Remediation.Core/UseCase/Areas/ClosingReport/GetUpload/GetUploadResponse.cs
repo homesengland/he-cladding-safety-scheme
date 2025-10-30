@@ -11,4 +11,6 @@ public class GetUploadResponse
     public string ApplicationReferenceNumber { get; set; }
     public string BuildingName { get; set; }
     public bool IsSubmitted { get; set; }
+
+    public EFireRiskAssessmentType? ExitFraewDocumentType { get; set; }
 }

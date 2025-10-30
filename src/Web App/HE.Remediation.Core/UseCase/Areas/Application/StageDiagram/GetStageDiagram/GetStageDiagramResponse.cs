@@ -30,6 +30,8 @@ public class GetStageDiagramResponse
 
     public bool IsWorkPackageSubmitted { get; set; }
 
+    public bool? isWorkPackageConfirmedToProceed { get; set; }
+
     public bool HasSubmittedPaymentRequests { get; set; }
 
     public bool HasInProgressVariationRequest { get; set; }

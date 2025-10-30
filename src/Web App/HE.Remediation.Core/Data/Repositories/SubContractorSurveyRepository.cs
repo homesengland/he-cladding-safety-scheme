@@ -66,4 +66,13 @@ public class SubContractorSurveyRepository : ISubContractorSurveyRepository
             ApplicationId = applicationId
         });
     }
+
+    public async Task AddSubcontractorSurveyLeadContractor(Guid applicationId, Guid subcontractorSurveyId)
+    {
+        await _connection.ExecuteAsync(nameof(AddSubcontractorSurveyLeadContractor), new
+        {
+            Applicationid = applicationId,
+            SubcontractorSurveyId = subcontractorSurveyId
+        });
+    }
 }

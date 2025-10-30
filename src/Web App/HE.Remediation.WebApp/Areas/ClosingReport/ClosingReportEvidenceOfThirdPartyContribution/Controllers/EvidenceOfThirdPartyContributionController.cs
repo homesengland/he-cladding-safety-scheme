@@ -3,6 +3,8 @@ using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.GetYesNoDeclaration;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.ReasonForNoContributions.Get;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.ReasonForNoContributions.Set;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
 using HE.Remediation.WebApp.Areas.ClosingReport.Controllers;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
@@ -32,7 +34,7 @@ public class EvidenceOfThirdPartyContributionController(ISender sender, IMapper 
     {
         var response = await _sender.Send(GetYesNoDeclarationRequest.Request);
 
-        return View(new ThirdPartyYesNoDeclarationViewModel() { Declaration = response.Declaration, IsSubmitted = response.IsSubmitted });
+        return View(new ThirdPartyYesNoDeclarationViewModel() { Declaration = response.Declaration, IsSubmitted = response.IsSubmitted, ApplicationReferenceNumber = response.ApplicationReferenceNumber, BuildingName = response.BuildingName });
     }
 
     [HttpPost(nameof(YesNoDeclaration))]
@@ -51,11 +53,43 @@ public class EvidenceOfThirdPartyContributionController(ISender sender, IMapper 
 
         if (model.Declaration.Equals(ENoYes.No))
         {
-            await _sender.Send(new UpdateTaskStatusRequest(ClosingReportTask, ETaskStatus.Completed));
-            return RedirectToAction("TaskList", "ClosingReport", new { Area = "ClosingReport" });
+            return RedirectToAction("ReasonNoThirdPartyContributions", "EvidenceOfThirdPartyContribution", new { Area = "ClosingReportEvidenceOfThirdPartyContribution" });
         }
 
         return RedirectToAction("EvidenceDetails");
+    }
+
+    #endregion YesNoDeclaration
+
+    #region ReasonNoThirdPartyContributions
+
+    [HttpGet(nameof(ReasonNoThirdPartyContributions))]
+    public async Task<IActionResult> ReasonNoThirdPartyContributions()
+    {
+        var response = await _sender.Send(GetReasonForNoContributionsRequest.Request);
+        var model = _mapper.Map<ReasonNoThirdPartyContributionsViewModel>(response);
+
+        return View(model);
+    }
+
+    [HttpPost(nameof(ReasonNoThirdPartyContributions))]
+    public async Task<IActionResult> ReasonNoThirdPartyContributions(ReasonNoThirdPartyContributionsViewModel model)
+    {
+        var validator = new ReasonNoThirdPartyContributionsViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        var request = _mapper.Map<SetReasonForNoContributionsRequest>(model);
+        await _sender.Send(request);
+
+        await _sender.Send(new UpdateTaskStatusRequest(ClosingReportTask, ETaskStatus.Completed));
+
+        return RedirectToAction("TaskList", "ClosingReport", new { Area = "ClosingReport" });
     }
 
     #endregion YesNoDeclaration

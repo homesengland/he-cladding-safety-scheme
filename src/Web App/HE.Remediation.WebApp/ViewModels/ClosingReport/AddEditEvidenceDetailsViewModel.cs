@@ -2,7 +2,7 @@
 
 namespace HE.Remediation.WebApp.ViewModels.ClosingReport
 {
-    public class AddEditEvidenceDetailsViewModel
+    public class AddEditEvidenceDetailsViewModel : ClosingReportInformationViewModel
     {
         public Guid? Id { get; set; }
         public string ThirdPartyName { get; set; }
@@ -11,10 +11,13 @@ namespace HE.Remediation.WebApp.ViewModels.ClosingReport
         public string AttemptDetails { get; set; }
         public EFundingStillPursuing[] TypeOfContribution { get; set; }
         public decimal Amount { get; set; }
+        public bool IsEditable { get; set; }
 
         public Guid? FileId { get; set; }
         public string Name { get; set; }
         public string Extension { get; set; }
+
+        public int Step { get; set; }
 
         public bool ViaCheckAnswer { get; set; }
     }

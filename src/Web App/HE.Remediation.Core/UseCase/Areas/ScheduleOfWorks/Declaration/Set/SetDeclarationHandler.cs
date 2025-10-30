@@ -1,6 +1,8 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.ScheduleOfWorks;
+using HE.Remediation.Core.Enums;
+
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Declaration.Set;
@@ -24,6 +26,13 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
             ConfirmedAwareOfProcess = request.ConfirmedAwareOfProcess,
             ConfirmedAwareOfVariationApproval = request.ConfirmedAwareOfVariationApproval
         });
+
+        var taskStatusesResult = await _scheduleOfWorksRepository.GetScheduleOfWorksTaskStatuses();
+
+        if (taskStatusesResult?.DeclarationStatusId != ETaskStatus.Completed)
+        {
+            await _scheduleOfWorksRepository.UpdateScheduleOfWorksDeclarationStatus(ETaskStatus.Completed);
+        }
 
         scope.Complete();
 

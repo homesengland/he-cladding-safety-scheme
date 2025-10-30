@@ -212,8 +212,12 @@ namespace HE.Remediation.WebApp.Areas.OrganisationManagement.Controllers
         public async Task<IActionResult> RemoveMember(Guid id)
         {
             var request = new RemoveMembersGetRequest(id);
-
             var response = await _sender.Send(request);
+            if (response == null)
+            {
+                // Member not found, redirect to Users or show a not found page
+                return RedirectToAction(nameof(Users));
+            }
             var model = _mapper.Map<RemoveMemberViewModel>(response);
             return View(model);
         }

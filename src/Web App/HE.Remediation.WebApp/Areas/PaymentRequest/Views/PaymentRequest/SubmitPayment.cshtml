@@ -13,7 +13,7 @@
 }
 
 @section ErrorSummary
-    {
+{
     <govuk-error-summary>
         @if (Model.MonthlyCosts != null)
         {
@@ -21,14 +21,14 @@
             {
                 <govuk-error-summary-item asp-for="@Model.MonthlyCosts[x.index].AmountText" />
             }
-        }        
+        }
         <govuk-error-summary-item asp-for="@Model.UnprofiledGrantFunding" />
     </govuk-error-summary>
 }
 
 
 @section InfoCardSection
-    {
+{
     <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
         <div class="app-card no-bottom-border">
 
@@ -84,25 +84,28 @@
             </tr>
         </thead>
         <tbody class="govuk-table__body">
-            @if (Model.PaidCosts != null)
+            @if (Model.AllPayments != null)
             {
-                @foreach (var x in Model.PaidCosts.Select((value, index) => new { value, index }))
+                @foreach (var x in Model.AllPayments.Select((value, index) => new { value, index }))
                 {
+                    var displayAmount = (x.value.Status == EPaymentRequestStatus.Missed || x.value.Status == EPaymentRequestStatus.Rejected)
+                    ? "-"
+                    : $"£{x.value.AmountText}";
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell govuk-!-padding-left-2">
-                            <label class="govuk-label" for="PaidCosts_@(x.index)__AmountText">
-                                @(Model.PaidCosts[x.index].MonthName)
+                            <label class="govuk-label" for="AllPayments@(x.index)__AmountText">
+                                @(Model.AllPayments[x.index].MonthName)
                             </label>
                         </td>
                         <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
-                            &pound;<span>@Model.PaidCosts[x.index].AmountText</span>
-                            <input asp-for="@Model.PaidCosts[x.index].Id" id="PaidCosts_@(x.index)__Id" name="PaidCosts[@(x.index)].Id" type="hidden" value="@x.value.Id" />
-                            <input asp-for="@Model.PaidCosts[x.index].MonthName" id="PaidCosts_@(x.index)__MonthName" name="PaidCosts[@(x.index)].MonthName" type="hidden" value="@x.value.MonthName" />
-                            <input asp-for="@Model.PaidCosts[x.index].AmountText" id="PaidCosts_@(x.index)__AmountText" name="PaidCosts[@(x.index)].AmountText" type="hidden" value="@x.value.AmountText" />
-                            <input asp-for="@Model.PaidCosts[x.index].Paid" id="PaidCosts_@(x.index)__Paid" name="PaidCosts[@(x.index)].Paid" type="hidden" value="@x.value.Paid" />
+                            <span>@displayAmount</span>
+                            <input asp-for="@Model.AllPayments[x.index].Id" id="AllPayments@(x.index)__Id" name="AllPayments[@(x.index)].Id" type="hidden" value="@x.value.Id" />
+                            <input asp-for="@Model.AllPayments[x.index].MonthName" id="AllPayments@(x.index)__MonthName" name="AllPayments[@(x.index)].MonthName" type="hidden" value="@x.value.MonthName" />
+                            <input asp-for="@Model.AllPayments[x.index].AmountText" id="AllPayments@(x.index)__AmountText" name="AllPayments[@(x.index)].AmountText" type="hidden" value="@x.value.AmountText" />
+                            <input asp-for="@Model.AllPayments[x.index].Paid" id="AllPayments@(x.index)__Paid" name="AllPayments[@(x.index)].Paid" type="hidden" value="@x.value.Paid" />
                         </td>
                         <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
-                            <payment-request-status-badge status="@Model.PaidCosts[x.index].Paid ? EPaymentRequestStatus.Paid : EPaymentRequestStatus.Approved"></payment-request-status-badge>
+                            <payment-request-status-badge status="@Model.AllPayments[x.index].Status"></payment-request-status-badge>
                         </td>
                     </tr>
                 }
@@ -116,56 +119,19 @@
         </tbody>
     </table>
 
-    @if (Model.MissedPayments is not null && Model.MissedPayments.Any())
+    @{
+        // Find the last payment by 'order' field
+        var lastPayment = Model.AllPayments?.OrderBy(p => p.Order).LastOrDefault();
+        var showMissedPaymentWarning = lastPayment != null &&
+            (lastPayment.Status == EPaymentRequestStatus.Missed || lastPayment.Status == EPaymentRequestStatus.Rejected);
+    }
+
+    @if (showMissedPaymentWarning)
     {
         <govuk-warning-text icon-fallback-text="Warning">
             You have missed previous payment requests. Please update your monthly cost profile to match your grant funding amount.
         </govuk-warning-text>
-
-        <table class="govuk-table">
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row bold-bottom-table-border">
-                    <th class="govuk-table__header govuk-!-width-one-half govuk-!-padding-left-2">Missed payments</th>
-                    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric">&nbsp;</th>
-                    <th class="govuk-table__header govuk-!-width-one-quarter govuk-table__header--numeric"></th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body monthly-costs-table">
-                @foreach (var x in Model.MissedPayments.Select((value, index) => new { value, index }))
-                {
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell govuk-!-padding-left-2">
-                            <label class="govuk-label">
-                                @(Model.MissedPayments[x.index].MonthName)
-                            </label>
-                        </td>
-                        <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
-                            &pound;@Model.MissedPayments[x.index].Amount?.ToString("N0")
-                        </td>
-                        <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
-                            <payment-request-status-badge status="@Model.MissedPayments[x.index].Status"></payment-request-status-badge>
-
-                            <input asp-for="@Model.MissedPayments[x.index].Id" id="MissedPayments_@(x.index)__Id" name="MissedPayments[@(x.index)].Id" type="hidden" value="@x.value.Id" />
-                            <input asp-for="@Model.MissedPayments[x.index].MonthName" id="MissedPayments_@(x.index)__MonthName" name="MissedPayments[@(x.index)].MonthName" type="hidden" value="@x.value.MonthName" />
-                            <input asp-for="@Model.MissedPayments[x.index].Amount" id="MissedPayments_@(x.index)__Amount" name="MissedPayments[@(x.index)].Amount" type="hidden" value="@x.value.Amount" />
-                            <input asp-for="@Model.MissedPayments[x.index].Paid" id="MissedPayments_@(x.index)__Paid" name="MissedPayments[@(x.index)].Paid" type="hidden" value="@x.value.Paid" />
-                            <input asp-for="@Model.MissedPayments[x.index].Status" id="MissedPayments_@(x.index)__Status" name="MissedPayments[@(x.index)].Status" type="hidden" value="@x.value.Status" />
-                        </td>
-                    </tr>
-                }
-                <tr class="govuk-table__row govuk-!-font-weight-bold">
-                    <td class="govuk-table__cell govuk-!-padding-left-2">Total</td>
-                    <td class="govuk-table__cell govuk-text-align-right">
-                        &pound;<span class="missed-payment-total">@Model.MissedPaymentTotal?.ToString("N0")</span>
-                        <input asp-for="MissedPaymentTotal" type="hidden" value="@Model.MissedPaymentTotal" />
-                    </td>
-                    <td class="govuk-table__cell govuk-text-align-right">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     }
-
 
     <table class="govuk-table">
         <thead class="govuk-table__head">
@@ -411,6 +377,6 @@
 </form>
 
 @section BodyEnd
-    {
+{
     <script src="~/js/paymentCosts.js"></script>
 }

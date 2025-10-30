@@ -1,4 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -33,13 +34,20 @@ public class GetUploadHandler : IRequestHandler<GetUploadRequest, GetUploadRespo
         var fileList = await _closingReportRepository.GetFiles(applicationId, request.UploadType);
         var isSubmitted = await _closingReportRepository.IsClosingReportSubmitted(applicationId);
 
+        EFireRiskAssessmentType? exitFraewDocumentType = null;
+        if (request.UploadType == EClosingReportFileType.ExitFraew)
+        {
+            exitFraewDocumentType = await _closingReportRepository.GetExitFraewDocumentType(applicationId);
+        }
+
         return new GetUploadResponse
         {
             IsSubmitted = isSubmitted,
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
             AddedFiles = fileList,
-            UploadType = request.UploadType
+            UploadType = request.UploadType,
+            ExitFraewDocumentType = exitFraewDocumentType
         };
     }
 }

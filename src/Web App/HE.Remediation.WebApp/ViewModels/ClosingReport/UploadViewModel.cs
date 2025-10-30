@@ -14,4 +14,6 @@ public class UploadViewModel : ClosingReportBaseViewModel
     public string[] AcceptedFileTypes => new[] { ".pdf" };
 
     public int NumberOfFilesAllowed => 5;
+
+    public EFireRiskAssessmentType? ExitFraewDocumentType { get; set; }
 }

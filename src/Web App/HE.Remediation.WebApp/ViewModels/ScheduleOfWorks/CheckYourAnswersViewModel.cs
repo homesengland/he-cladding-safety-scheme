@@ -16,7 +16,4 @@ public class CheckYourAnswersViewModel : ScheduleOfWorksBaseViewModel
 
     public int? Duration { get; set; }
     
-    public IReadOnlyCollection<string> ContractFileNames { get; set; }
-    public IReadOnlyCollection<string> BuildingControlFileNames { get; set; }
-    public IReadOnlyCollection<string> LeaseholderEngagementFileNames { get; set; }
 }

@@ -1,0 +1,120 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.TaskListViewModel
+@{
+    ViewData["Title"] = "Compile your Schedule of Works";
+    ViewData["HideTitle"] = true;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">Compile your Schedule of Works</h1>
+
+                    <p class="govuk-body">View the steps you'll need to complete to compile and submit your schedule of works.</p>
+
+
+
+                    <ol class="app-task-list">
+
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">1. </span> Supporting Information
+                            </h3>
+                            <ul class="app-task-list__items">
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.LeaseholderEngagementStatusId == ETaskStatus.Completed ? Url.Action("UploadLeaseholderEngagement", "LeaseholderEngagement", new { Area = "ScheduleOfWorksLeaseholderEngagement" }) : Url.Action("Start", "LeaseholderEngagement", new { Area = "ScheduleOfWorksLeaseholderEngagement" }))" aria-describedby="list-convictions-status">
+                                            Leaseholder and resident engagement
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.LeaseholderEngagementStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.BuildingControlStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "BuildingControl", new { Area = "ScheduleOfWorksBuildingControl" }) : Url.Action("Start", "BuildingControl", new { Area = "ScheduleOfWorksBuildingControl" }))">
+                                            Building Control approval
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.BuildingControlStatusId"></task-list-status-badge>
+                                </li>
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.LeaseholderEngagementStatusId == ETaskStatus.Completed ? Url.Action("UploadWorksContract", "WorksContract", new { Area = "ScheduleOfWorksWorksContract" }) : Url.Action("Start", "WorksContract", new { Area = "ScheduleOfWorksWorksContract" }))" aria-describedby="list-convictions-status">
+                                            Works contract
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.WorksContractStatusId"></task-list-status-badge>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">2. </span> Profile your costs
+                            </h3>
+                            <ul class="app-task-list__items">
+                                <li class="app-task-list__item">
+                                    <span class="app-task-list__task-name">
+                                        <a class="govuk-link" href="@(Model.ProfileCostsStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "ProfileCosts", new { Area = "ScheduleOfWorksProfileCosts" }) : Url.Action("Start", "ProfileCosts", new { Area = "ScheduleOfWorksProfileCosts" }))">
+                                            Profile your costs
+                                        </a>
+                                    </span>
+                                    <task-list-status-badge status="@Model.ProfileCostsStatusId"></task-list-status-badge>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">3. </span> Declaration
+                            </h3>
+                            <ul class="app-task-list__items">
+                                @if (Model.LeaseholderEngagementStatusId == ETaskStatus.Completed
+                                && Model.BuildingControlStatusId == ETaskStatus.Completed
+                                && Model.WorksContractStatusId == ETaskStatus.Completed
+                                && Model.ProfileCostsStatusId == ETaskStatus.Completed)
+                                {
+                                    <li class="app-task-list__item">
+                                        <span class="app-task-list__task-name">
+                                            <a class="govuk-link" href="@(Model.DeclarationStatusId == ETaskStatus.Completed ? Url.Action("Submitted", "Declaration", new { Area = "ScheduleOfWorksDeclaration" }) : Url.Action("Declaration", "Declaration", new { Area = "ScheduleOfWorksDeclaration" }))">
+                                                Declaration
+                                            </a>
+                                        </span>
+                                        <task-list-status-badge status="@Model.DeclarationStatusId"></task-list-status-badge>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="app-task-list__item">
+                                        <span class="app-task-list__task-name">
+                                            Declaration
+                                        </span>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">In this section</h2>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://mcas-proxyweb.mcas.ms/certificate-checker?login=false&originalUrl=https%3A%2F%2Fwww.gov.uk.mcas.ms%2Fgovernment%2Fpublications%2Fcladding-safety-scheme%2Fapplying-for-funding-for-the-cladding-safety-scheme%3FMcasTsid%3D26110%23schedule-of-works&McasCSRF=e62b82f1fc72ebfb0365d7d01ec0164aa3c53c4c4c075ea1b92bdb756876c37c">Guidance</a>
+                    <br /><br />
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

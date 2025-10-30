@@ -1,0 +1,29 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.BuildingControlStartInformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In this section, you will need to provide us with evidence of your Building Control approval.
+</p>
+
+<p class="govuk-body">
+    For buildings under 7 storeys or below 18m this will be full plans approval from Building Control. For buildings of at least 7 storeys or over 18m this will be Gateway 2 approval from the Building Safety Regulator.
+</p>
+<p class="govuk-body">
+    If you do not need Building Control approval, please provide evidence of this.
+</p>
+
+<form asp-area="ScheduleOfWorksBuildingControl" asp-controller="BuildingControl" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

@@ -127,7 +127,7 @@ namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageCladdingSystem.Co
 
             if (submitAction == ESubmitAction.Exit)
             {
-                return RedirectToAction("FireRiskAppraisalToExternalWalls", "CladdingSystem", new { Area = "WorksPackageCladdingSystem" });
+                return RedirectToAction("TaskList", "WorkPackage", new { Area = "WorksPackage" });
             }
 
             return request.IsBeingRemoved is EReplacementCladding.Full or EReplacementCladding.Partial

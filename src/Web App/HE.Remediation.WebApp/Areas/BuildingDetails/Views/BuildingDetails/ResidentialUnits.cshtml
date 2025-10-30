@@ -4,15 +4,13 @@
 
 @{
     ViewData["Title"] = "Units";
+    var actionName =
+        (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme
+         || Model.ApplicationScheme == EApplicationScheme.SocialSector)
+            ? (Model.WorksAlreadyCompleted == true ? "ConfirmKeyDates" : "WorksAlreadyCompleted")
+            : "BuildingUniqueName";
 
-    @if (Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
-    {
-        ViewData["Backlink"] = Url.Action("WorksAlreadyCompleted", "BuildingDetails", new { Area = "BuildingDetails" });
-    }
-    else
-    {
-        ViewData["BackLink"] = Url.Action("BuildingUniqueName", "BuildingDetails", new { Area = "BuildingDetails" });
-    }
+    ViewData["BackLink"] = Url.Action(actionName, "BuildingDetails", new { Area = "BuildingDetails" });
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary

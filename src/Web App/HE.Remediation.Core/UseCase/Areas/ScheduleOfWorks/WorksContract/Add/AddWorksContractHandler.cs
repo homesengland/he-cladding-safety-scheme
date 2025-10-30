@@ -43,12 +43,6 @@ public class AddWorksContractHandler : IRequestHandler<AddWorksContractRequest, 
             Size = request.File.Length
         });
 
-        var hasScheduleOfWorks = await _scheduleOfWorksRepository.HasScheduleOfWorks();
-        if (!hasScheduleOfWorks)
-        {
-            await _scheduleOfWorksRepository.InsertScheduleOfWorks();
-        }
-
         await _scheduleOfWorksRepository.InsertContract(processFileResult.FileId);
 
         scope.Complete();

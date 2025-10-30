@@ -2,13 +2,14 @@
 @using HE.Remediation.Core.Enums
 @using HE.Remediation.Core.Extensions
 @{
-    ViewData["Title"] = "Final Report";
+    ViewData["Title"] = "Evidence of Third Party Contribution";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["BackLink"] = Url.Action("EvidenceSubmission", new { id = Model.Id });
     ViewData["FullWidth"] = true;
     ViewData["ExitLinkHidden"] = true;
 }
 
-<h1 class="govuk-heading-xl">Your Answers</h1>
+<h1 class="govuk-heading-xl">Check Your Answers</h1>
 
 <dl class="govuk-summary-list">
 

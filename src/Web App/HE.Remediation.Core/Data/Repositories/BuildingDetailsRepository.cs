@@ -2,6 +2,8 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using System.Transactions;
+using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails;
+using HE.Remediation.Core.Data.StoredProcedureResults.BuildingDetails;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -91,4 +93,33 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
         var uniqueName = await _db.QuerySingleOrDefaultAsync<string>(nameof(GetBuildingUniqueName), new { ApplicationId = applicationId });
         return uniqueName;
     }
+
+    #region Key Dates
+
+    public async Task<BuildingDetailsKeyDatesResult> GetBuildingDetailsKeyDates(Guid applicationId)
+    {
+        return await _db.QuerySingleOrDefaultAsync<BuildingDetailsKeyDatesResult>(
+            "GetBuildingDetailsKeyDates",
+            new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task UpdateBuildingDetailsKeyDates(UpdateBuildingDetailsKeyDatesParameters parameters)
+    {
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        await _db.ExecuteAsync("UpdateBuildingDetailsKeyDates", new
+        {
+            parameters.ApplicationId,
+            parameters.StartDate,
+            parameters.UnsafeCladdingRemovalDate,
+            parameters.ExpectedDateForCompletion
+        });
+
+        scope.Complete();
+    }
+
+    #endregion
 }

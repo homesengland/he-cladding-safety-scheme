@@ -8,6 +8,7 @@ public class FundingViewModel
     public bool? HasDefects { get; set; }
     public EFraFundingType? HasFundingType { get; set; }
     public EFraFundingType? HasNoFundingType { get; set; }
+    public bool VisitedCheckYourAnswers { get; set; }
 
     public ESubmitAction SubmitAction { get; set; }
 }

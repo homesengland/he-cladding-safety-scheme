@@ -39,6 +39,8 @@ public class StageDiagramViewModel
 
     public bool IsWorkPackageSubmitted { get; set; }
 
+    public bool? isWorkPackageConfirmedToProceed { get; set; }
+
     public DateTime? StartedOnSiteMilestoneDate { get; set; }
     public bool IsStartedOnSiteSubmitted { get; set; }
     public DateTime? PracticalCompletionMilestoneDate { get; set; }

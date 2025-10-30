@@ -300,9 +300,9 @@ public class FireRiskAssessmentController : StartController
             return RedirectToAction("IdentifiedDefects", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
         }
 
-        return !model.VisitedCheckYourAnswers
-            ? RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
-            : RedirectToAction("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+        return model.VisitedCheckYourAnswers || model.HasInternalFireSafetyRisks == false
+            ? RedirectToAction("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+            : RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
     }
 
     [HttpGet(nameof(IdentifiedDefects))]
@@ -328,14 +328,9 @@ public class FireRiskAssessmentController : StartController
         var request = _mapper.Map<SetIdentifiedDefectsRequest>(model);
         await _sender.Send(request, cancellationToken);
 
-        if (model.SubmitAction == ESubmitAction.Exit)
-        {
-            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
-        }
-
-        return !model.VisitedCheckYourAnswers
-            ? RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
-            : RedirectToAction("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+        return model.SubmitAction == ESubmitAction.Exit 
+            ? RedirectToAction("Index", "TaskList", new { Area = "Application" }) 
+            : RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
     }
 
     [HttpGet(nameof(Funding))]

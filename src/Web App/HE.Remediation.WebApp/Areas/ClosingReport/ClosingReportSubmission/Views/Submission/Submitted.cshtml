@@ -2,6 +2,7 @@
 @model HE.Remediation.WebApp.ViewModels.ClosingReport.SubmittedViewModel
 @{
     ViewData["Title"] = "Final Payment Request Submitted";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["FullWidth"] = true;
     ViewData["BackLinkHidden"] = true;
     ViewData["ExitLinkHidden"] = true;

@@ -105,5 +105,6 @@ public static class ServicesDependencies
         services.AddScoped<IWorkPackageFireRiskAssessmentRepository, WorkPackageFireRiskAssessmentRepository>();
         services.AddScoped<IAlternateFundingRepository, AlternateFundingRepository>();
         services.AddScoped<IManageProgrammeRepository, ManageProgrammeRepository>();
+        services.AddScoped<IWorksPackageMemorandumRepository, WorksPackageMemorandumRepository>();
     }
 }

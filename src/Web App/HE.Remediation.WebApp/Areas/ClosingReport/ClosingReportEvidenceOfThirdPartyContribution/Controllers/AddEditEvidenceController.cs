@@ -38,6 +38,7 @@ public class AddEditEvidenceController(ISender sender, IMapper mapper, IApplicat
         var response = await _sender.Send(new GetEvidenceDetailRequest() { EvidenceId = id, ApplicationId = applicationId });
         var viewModel = _mapper.Map<AddEditEvidenceDetailsViewModel>(response);
 
+        viewModel.Step = 1;
         viewModel.ViaCheckAnswer = viaCheckAnswer;
 
         return View(viewModel);
@@ -82,14 +83,17 @@ public class AddEditEvidenceController(ISender sender, IMapper mapper, IApplicat
         var applicationId = _applicationDataProvider.GetApplicationId();
         var response = await _sender.Send(new GetEvidenceDetailRequest() { EvidenceId = id, ApplicationId = applicationId });
         var viewModel = _mapper.Map<AddEditEvidenceDetailsViewModel>(response);
+
+        viewModel.Step = 2;
         viewModel.ViaCheckAnswer = viaCheckAnswer;
+
         return View(viewModel);
     }
 
     [HttpPost("Details2")]
     public async Task<IActionResult> Details2(AddEditEvidenceDetailsViewModel model)
     {
-        var validator = new AddEditEvidenceDetails2ViewModelValidator();
+        var validator = new AddEditEvidenceDetailsViewModelValidator();
         var validationResult = await validator.ValidateAsync(model);
 
         if (!validationResult.IsValid)

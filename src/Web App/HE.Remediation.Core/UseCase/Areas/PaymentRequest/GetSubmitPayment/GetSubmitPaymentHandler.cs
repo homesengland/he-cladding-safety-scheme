@@ -22,14 +22,14 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
         _applicationDataProvider = applicationDataProvider;
         _buildingDetailsRepository = buildingDetailsRepository;
         _applicationRepository = applicationRepository;
-        _paymentRequestRepository = paymentRequestRepository;   
+        _paymentRequestRepository = paymentRequestRepository;
     }
 
     public async Task<GetSubmitPaymentResponse> Handle(GetSubmitPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
-        
+
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
         var isSubmitted = await _paymentRequestRepository.IsPaymentRequestSubmitted(paymentRequestId);
@@ -50,35 +50,39 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
 
         var paidCosts = costsProfile.Where(x => ((x.Type == EPaymentRequestCostType.GrantPaidToDate) &&
                                                  (x.IsApproved == true)))
-                                    .Select(x => new MonthlyCost 
-                                    { 
-                                        Id = x.Id, 
-                                        Amount = x.Value, 
-                                        MonthName = x.ItemName, 
+                                    .Select(x => new MonthlyCost
+                                    {
+                                        Id = x.Id,
+                                        Amount = x.Value,
+                                        MonthName = x.ItemName,
                                         Paid = x.Paid,
-                                        IsApproved = x.IsApproved == true
+                                        IsApproved = x.IsApproved == true,
+                                        Status = x.IsApproved == true ? EPaymentRequestStatus.Paid : EPaymentRequestStatus.Approved,
+                                        Order = x.Order
                                     }).ToList();
 
         var missedPayments = costsProfile.Where(x => ((x.Type == EPaymentRequestCostType.GrantPaidToDate) &&
                                                       (x.Paid == false && (x.IsApproved == null || x.IsApproved == false))))
                                          .Select(x => new MonthlyCost
-                                         { 
-                                            Id = x.Id, 
-                                            Amount = x.Value, 
-                                            MonthName = x.ItemName, 
-                                            Paid = x.Paid,
-                                            Status = x.IsApproved == false ? EPaymentRequestStatus.Rejected : EPaymentRequestStatus.Missed
+                                         {
+                                             Id = x.Id,
+                                             Amount = x.Value,
+                                             MonthName = x.ItemName,
+                                             Paid = x.Paid,
+                                             Status = x.IsApproved == false ? EPaymentRequestStatus.Rejected : EPaymentRequestStatus.Missed,
+                                             Order = x.Order
                                          }).ToList();
 
+        var allPayments = paidCosts.Concat(missedPayments).OrderBy(x => x.Order).ToList();
         var missedPaymentTotal = missedPayments.Select(x => x.Amount).Sum() ?? 0;
-        
+
         var monthlyCosts = costsProfile.Where(x => x.Type == EPaymentRequestCostType.MonthlyCosts).Select(x => new MonthlyCost { Id = x.Id, Amount = x.Value, MonthName = x.ItemName, Paid = x.Paid }).ToList();
 
         var totalMonthlyCost = monthlyCosts.Select(x => x.Amount).Sum() ?? 0;
 
         var projectDuration = await _paymentRequestRepository.GetPaymentRequestProjectDuration(paymentRequestId);
-        int projectDurationInMonths = projectDuration ?? 0;        
-                
+        int projectDurationInMonths = projectDuration ?? 0;
+
         var finalMonthTotal = finalPayment?.ConfirmedValue ?? 0;
 
         var calculatedCosts = CostsCalculationHelper.CalculateMonthlyCosts(new MonthlyCostsCalculationRequest
@@ -89,7 +93,7 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
             CurrentCost = currentPayment?.Value ?? 0,
             FinalCost = finalPayment?.ConfirmedValue ?? 0,
             GrantPaidToDate = overview?.TotalGrantPaidToDate
-        });        
+        });
 
         return new GetSubmitPaymentResponse
         {
@@ -106,7 +110,7 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
             IsExpired = isExpired,
             ProjectDuration = projectDurationInMonths,
             CurrentMonth = new MonthlyCost
-            {                
+            {
                 Id = currentPayment?.Id ?? Guid.NewGuid(),
                 MonthName = currentPayment?.ItemName,
                 Amount = (currentPayment?.Value ?? 0),
@@ -127,9 +131,10 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
             },
             PaidCosts = paidCosts,
             MissedPayments = missedPayments,
+            AllPayments = allPayments,
             MissedPaymentTotal = missedPaymentTotal,
             FinalMonthTotal = finalMonthTotal,
             IsItALastSchedulePayment = isItALastSchedulePayment
-    };
+        };
     }
 }

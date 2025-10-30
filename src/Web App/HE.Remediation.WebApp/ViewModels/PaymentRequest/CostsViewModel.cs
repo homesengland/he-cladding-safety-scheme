@@ -34,6 +34,8 @@ namespace HE.Remediation.WebApp.ViewModels.PaymentRequest
 
         public IList<MonthlyCost> MissedPayments { get; set; }
 
+        public IList<MonthlyCostViewModel> AllPayments { get; set; }
+
         public decimal? MonthlyCostsTotal { get; set; }
 
         public decimal? FinalMonthTotal { get; set; }
@@ -68,5 +70,7 @@ namespace HE.Remediation.WebApp.ViewModels.PaymentRequest
         public bool Paid { get; set; }
 
         public EPaymentRequestStatus Status { get; set; }
+
+        public int Order { get; set; }
     }
 }
