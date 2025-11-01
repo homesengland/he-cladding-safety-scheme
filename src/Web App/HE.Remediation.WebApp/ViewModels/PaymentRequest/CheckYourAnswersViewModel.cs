@@ -37,7 +37,11 @@ public class CheckYourAnswersViewModel : PaymentRequestBaseViewModel
 
     public List<PaymentRequestCostFile> PaymentRequestCostFiles { get; set; }
     public IList<string> PaymentRequestInvoiceFileNames { get; set; }
-    public List<GetTeamMembersResult> TeamMembers { get; set; }    
+    public List<GetTeamMembersResult> TeamMembers { get; set; }
+
+    public DateTime? ExpectedSubmissionDateForGateway3Application { get; set; }
+
+    public DateTime? ExpectedPracticalCompletionDate { get; set; }
 }
 
 public class PaymentRequestCostFile

@@ -1,4 +1,6 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.Leaseholder.WhatYoullNeedViewModel
 
 @{
     ViewData["Title"] = "Tell leaseholders and residents you've started to apply";
@@ -7,24 +9,45 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">
-            Tell leaseholders and residents you've started to apply
-        </h1>
+        @if (Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
+        {
+            <h1 class="govuk-heading-xl">
+                Tell leaseholders and residents you've started to apply
+            </h1>
 
-        <p class="govuk-body">You need to tell the building's leaseholders and residents that you've started to apply for this grant.</p>
+            <p class="govuk-body">You need to tell the building's leaseholders and residents that you've started to apply for this grant.</p>
 
-        <h2 class="govuk-heading-s">What you need to include</h2>
-        <p class="govuk-body">Check the guidance we have sent you to help you with the update.</p>
+            <h2 class="govuk-heading-s">What you need to include</h2>
+            <p class="govuk-body">Check the guidance we have sent you to help you with the update.</p>
 
-        <p class="govuk-body">When you send this update, you need to include:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>the building address</li>
+            <p class="govuk-body">When you send this update, you need to include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>the building address</li>
             <li>your application start date</li>
             <li>that you've started to apply for grant funding</li>
             <li>next steps which may include a fire risk appraisal of external walls (FRAEW)</li>
             <li>where to find more information about the relevant scheme</li>
-        </ul>
+            </ul>
+        }
+        else
+        {
+            <h1 class="govuk-heading-xl">
+                Tell leaseholders and residents about plans for their building
+            </h1>
 
+            <p class="govuk-body">You need to tell the building's leaseholders and residents about the plans to remediate their building</p>
+
+            <h2 class="govuk-heading-s">What you need to include</h2>
+            <p class="govuk-body">Check the guidance we have sent you to help you with the update.</p>
+
+            <p class="govuk-body">When you send this update, you need to include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>the building address</li>
+                <li>plans for remediation</li>
+                <li>next steps which may include a fire risk appraisal of external walls (FRAEW)</li>
+                <li>who to contact for more information</li>
+            </ul>
+        }
         <p class="govuk-body">We will ask you to upload the evidence on the next page and to confirm who is responsible for communications to leaseholders and residents.</p>
 
         <h3 class="govuk-heading-s">Other updates</h3>

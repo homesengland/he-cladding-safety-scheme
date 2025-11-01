@@ -1,0 +1,83 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.BuildingControlCheckYourAnswersViewModel
+
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Model.BuildingControlStatusId == ETaskStatus.Completed
+        ? Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })
+        : Url.Action("UploadBuildingControl", "BuildingControl", new { Area = "ScheduleOfWorksBuildingControl" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("BuildingControlApproval", "BuildingControl", new { Area = "ScheduleOfWorksBuildingControl" })">
+                Change your answers
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+
+</govuk-summary-list>
+
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Did you apply for Building control approval through the Building safety Regulator Gateway 2 route ?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.IsBuildingControlApprovalApplied
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+</govuk-summary-list>
+
+
+<govuk-summary-list>
+    @if (Model.IsBuildingControlApprovalApplied == ENoYes.Yes)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Confirm the approval date of your Gateway 2 application
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.BuildingControlApprovalDate.Value.ToString("dd/MM/yyyy")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+    }
+</govuk-summary-list>
+
+<govuk-summary-list>
+    @if (Model.AddedFiles.Any())
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Upload full plans approval /gateway 2 approval
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @foreach (var item in Model.AddedFiles)
+                {
+                    <span>@item.Name<br></span>
+                }
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+<form asp-area="ScheduleOfWorksBuildingControl" asp-controller="BuildingControl" asp-action="CheckYourAnswers" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    @if (!Model.IsSubmitted)
+    {
+        <div class="comp-btn-group">
+            <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+        </div>
+    }
+</form>

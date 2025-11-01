@@ -6,7 +6,7 @@
 
         <form asp-area="Application" asp-controller="ManageProgramme" asp-action="Update" method="post">
 
-            <govuk-back-link href="@Url.Action("Index")">Back</govuk-back-link>
+            <button type="submit" name="BackAction" value="@ESubmitAction.Exit" class="govuk-back-link govuk-link--button">Back</button>
 
             <main class="govuk-main-wrapper">
                 <div class="govuk-grid-row">
@@ -16,8 +16,16 @@
                         {
                             <govuk-error-summary>
                                 <govuk-error-summary-item asp-for="EstimatedInvestigationCompletion" />
+                                <govuk-error-summary-item asp-for="EstimatedInvestigationCompletion.Year" />
+                                <govuk-error-summary-item asp-for="EstimatedInvestigationCompletion.Month" />
+
                                 <govuk-error-summary-item asp-for="EstimatedStartOnSite" />
+                                <govuk-error-summary-item asp-for="EstimatedStartOnSite.Year" />
+                                <govuk-error-summary-item asp-for="EstimatedStartOnSite.Month" />
+
                                 <govuk-error-summary-item asp-for="EstimatedPracticalCompletion" />
+                                <govuk-error-summary-item asp-for="EstimatedPracticalCompletion.Year" />
+                                <govuk-error-summary-item asp-for="EstimatedPracticalCompletion.Month" />
                             </govuk-error-summary>
                         }
 

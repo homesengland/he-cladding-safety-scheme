@@ -3,7 +3,8 @@
 @model ThirdPartyYesNoDeclarationViewModel
 @{
     Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
-    ViewData["Title"] = "Final Report";
+    ViewData["Title"] = "Evidence of Third Party Contribution";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["BackLink"] = Url.Action("About");
     ViewData["FullWidth"] = true;
 }
@@ -15,9 +16,11 @@
                 <govuk-error-summary-item asp-for="Declaration" />
             </govuk-error-summary>
 
-            <h1 class="govuk-heading-xl">Have there been any Third Party Contributions to evidence?</h1>
+            <h1 class="govuk-heading-xl">Have you made any attempts to secure a third party contribution?</h1>
 
             <form asp-action="YesNoDeclaration" method="post">
+                @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+                @Html.HiddenFor(x => x.BuildingName)
                 <govuk-radios asp-for="Declaration">
                     <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
                     <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>

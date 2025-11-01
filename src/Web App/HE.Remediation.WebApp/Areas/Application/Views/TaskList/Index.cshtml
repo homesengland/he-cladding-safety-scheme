@@ -50,14 +50,14 @@
                                     {
                                         <span class="app-task-list__task-name">
                                             <a class="govuk-link" href="@(Model.ApplicationLeaseHolderEngagementStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "Leaseholder" , new { Area="Leaseholder" }) : Url.Action("Start", "Leaseholder" , new { Area="Leaseholder" }))" aria-describedby="list-convictions-status">
-                                                Leaseholder engagement agreement
+                                                Resident and Leaseholder communication
                                             </a>
                                         </span>
                                         <task-list-status-badge status="@Model.ApplicationLeaseHolderEngagementStatusId"></task-list-status-badge>
                                     }
                                     else
                                     {
-                                        <span class="govuk-body">Leaseholder engagement agreement</span>
+                                        <span class="govuk-body">Resident and Leaseholder communication</span>
                                         <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="fraew-eligibility-status">Cannot Start Yet</strong>
                                     }
 

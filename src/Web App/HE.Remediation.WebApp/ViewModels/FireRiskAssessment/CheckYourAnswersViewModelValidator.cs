@@ -6,10 +6,22 @@ public class CheckYourAnswersViewModelValidator : AbstractValidator<CheckYourAns
 {
     public CheckYourAnswersViewModelValidator()
     {
-        RuleFor(x => x.Defects)
-            .NotEmpty()
-            .When(x => x.HasFra == true && x.HasInternalFireSafetyRisks == true)
-            .WithMessage("Enter at least one defect");
+        When(x => x.HasFra == true && x.HasInternalFireSafetyRisks == true, () =>
+        {
+            RuleFor(x => x.Defects)
+                .NotEmpty()
+                .WithMessage("Enter at least one defect");
+
+            RuleFor(x => x.HasFunding)
+                .NotNull()
+                .WithMessage("State if you have funding for your identified defects");
+
+            RuleFor(x => x.FraFundingType)
+                .NotNull()
+                .WithMessage("State the funding type you have or the action you will undertake");
+        });
+
+        
 
         RuleFor(x => x.FraFile)
             .NotEmpty()

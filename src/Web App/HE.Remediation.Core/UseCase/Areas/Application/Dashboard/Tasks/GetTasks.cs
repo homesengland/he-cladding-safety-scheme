@@ -27,7 +27,7 @@ public class GetTasksHandler : IRequestHandler<GetTasksRequest, GetTasksResponse
             UserId = _applicationDataProvider.GetUserId()
         });
 
-        var alertModels = await _alertService.CreateAlertModels(alerts.OrderByDescending(x => x.CreationDate));
+        var alertModels = await _alertService.CreateAlertModels(alerts);
 
         return new GetTasksResponse
         {

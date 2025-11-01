@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.WorksContractStartInformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["FullWidth"] = false;
+}
+
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+
+<p class="govuk-body">
+    In this section, you will need to provide us with the signed works contract with your lead contractor. This should include:
+</p>
+
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>The date of site possession/start</li>
+    <li>the date of completion</li>
+    <li>the contract sum</li>
+    <li>the name of contractor</li>
+</ul>
+
+
+<form asp-area="ScheduleOfWorksWorksContract" asp-controller="WorksContract" asp-action="StartInformation" method="post">
+
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

@@ -67,9 +67,9 @@
                                 </td>
                                 <td class="govuk-table__cell">@application.ApplicationNumber</td>
                                 <td class="govuk-table__cell">@application.UniqueBuildingName</td>
-                                <td class="govuk-table__cell">@(application.InvestigationCompletionDate?.ToString("MM/yy") ?? "No data")</td>
-                                <td class="govuk-table__cell">@(application.StartOnSiteDate?.ToString("MM/yy") ?? "No data")</td>
-                                <td class="govuk-table__cell">@(application.PracticalCompletionDate?.ToString("MM/yy") ?? "No data")</td>
+                                <td class="govuk-table__cell">@(application.InvestigationCompletionDate?.ToString("MM/yy") ?? "-")</td>
+                                <td class="govuk-table__cell">@(application.StartOnSiteDate?.ToString("MM/yy") ?? "-")</td>
+                                <td class="govuk-table__cell">@(application.PracticalCompletionDate?.ToString("MM/yy") ?? "-")</td>
                             </tr>
                         }
                     </tbody>

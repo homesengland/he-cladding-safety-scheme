@@ -3,7 +3,8 @@
 @using GovUk.Frontend.AspNetCore.TagHelpers
 @model HE.Remediation.WebApp.ViewModels.ClosingReport.EvidenceOfThirdPartyContributionViewModel
 @{
-    ViewData["Title"] = "Final Report";
+    ViewData["Title"] = "Evidence of Third Party Contribution";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["Backlink"] = Url.Action("YesNoDeclaration");
     ViewData["FullWidth"] = true;
     ViewData["Readonly"] = Model.IsSubmitted;
@@ -94,13 +95,13 @@
                                 }
                                 @statusText
                             </td>
-                            @if (!Model.IsSubmitted)
+                            @if (!Model.IsSubmitted && evidenceDetail.IsEditable)
                             {
                                 <td class="govuk-table__cell">
                                     <a class="govuk-link" href="@changeEndpoint">Change</a>
                                 </td>
                             }
-                            @if (!Model.IsSubmitted)
+                            @if (!Model.IsSubmitted && evidenceDetail.IsEditable)
                             {
                                 <td class="govuk-table__cell">
                                     <a class="govuk-link" href="@deleteEndpoint">Remove</a>
@@ -109,7 +110,7 @@
                             else
                             {
                                 <td class="govuk-table__cell" colspan="2">
-                                    &nbsp;
+                                    Not Editable
                                 </td>
                             }
                         </tr>

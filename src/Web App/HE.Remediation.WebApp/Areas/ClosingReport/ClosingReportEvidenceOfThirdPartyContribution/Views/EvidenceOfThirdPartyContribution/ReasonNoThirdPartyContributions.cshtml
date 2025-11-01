@@ -1,0 +1,37 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.ClosingReport
+@model ReasonNoThirdPartyContributionsViewModel
+@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    ViewData["Title"] = "Evidence of Third Party Contribution";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("YesNoDeclaration");
+    ViewData["FullWidth"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <govuk-error-summary>
+                <govuk-error-summary-item asp-for="ReasonNoThirdPartyContributions" />
+            </govuk-error-summary>
+
+            <h1 class="govuk-heading-xl">Why did you not pursue any third party contributions?</h1>
+
+            <form asp-action="ReasonNoThirdPartyContributions" method="post">
+                @Html.HiddenFor(x => x.ApplicationReferenceNumber)
+                @Html.HiddenFor(x => x.BuildingName)
+                <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="250">
+                    <div class="govuk-form-group">
+                        <govuk-character-count name="ReasonNoThirdPartyContributions" max-length="250" asp-for="ReasonNoThirdPartyContributions" disabled="@Model.IsSubmitted">
+                            <govuk-character-count-label class="govuk-label--s">
+                                Please explain your answer
+                            </govuk-character-count-label>
+                        </govuk-character-count>
+                    </div>
+                </div>
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue" disabled="@Model.IsSubmitted">Continue</govuk-button>
+            </form>
+        </main>
+    </div>
+</div>

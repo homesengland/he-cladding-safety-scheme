@@ -1,0 +1,121 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.ConfirmKeyDatesViewModel
+@{
+    ViewData["Title"] = "Confirm key dates?";
+    ViewData["BackLink"] = Url.Action("WorksAlreadyCompleted", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+
+    var errors = ViewData.ModelState.Where(x => x.Value.Errors.Any()).ToList();
+    var isStartDateError = errors.Any(x => x.Key is nameof(Model.StartDateMonth) or nameof(Model.StartDateYear));
+    var isCladdingRemovalError = errors.Any(x => x.Key is nameof(Model.UnsafeCladdingRemovalDateMonth) or nameof(Model.UnsafeCladdingRemovalDateYear));
+    var isEndDateError = errors.Any(x => x.Key is nameof(Model.ExpectedDateForCompletionMonth) or nameof(Model.ExpectedDateForCompletionYear));
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="StartDateMonth" />
+        <govuk-error-summary-item asp-for="StartDateYear" />
+        <govuk-error-summary-item asp-for="UnsafeCladdingRemovalDateMonth" />
+        <govuk-error-summary-item asp-for="UnsafeCladdingRemovalDateYear" />
+        <govuk-error-summary-item asp-for="ExpectedDateForCompletionMonth" />
+        <govuk-error-summary-item asp-for="ExpectedDateForCompletionYear" />
+    </govuk-error-summary>
+}
+
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ConfirmKeyDates">
+    <h1 class="govuk-heading-xl">Confirm key dates</h1>
+
+    <div class="govuk-form-group @(isStartDateError ? "govuk-form-group--error" : string.Empty)">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">When did you start on site?</govuk-input-label>
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="start-date-hint">
+            <div id="start-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="StartDateMonth" />
+            <govuk-error-message asp-for="StartDateYear" />
+            <div class="govuk-date-input" id="start-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="StartDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="StartDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="StartDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="StartDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="govuk-form-group @(isCladdingRemovalError ? "govuk-form-group--error" : string.Empty)">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">When did you remove cladding?</govuk-input-label>
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="unsafe-removal-date-hint">
+            <div id="unsafe-removal-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="UnsafeCladdingRemovalDateMonth" />
+            <govuk-error-message asp-for="UnsafeCladdingRemovalDateYear" />
+            <div class="govuk-date-input" id="unsafe-removal-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="UnsafeCladdingRemovalDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="UnsafeCladdingRemovalDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="UnsafeCladdingRemovalDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="UnsafeCladdingRemovalDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="govuk-form-group @(isEndDateError ? "govuk-form-group--error" : string.Empty)">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">When did you complete your works?</govuk-input-label>
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="completion-date-hint">
+            <div id="completion-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ExpectedDateForCompletionMonth" />
+            <govuk-error-message asp-for="ExpectedDateForCompletionYear" />
+            <div class="govuk-date-input" id="completion-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedDateForCompletionMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ExpectedDateForCompletionMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedDateForCompletionYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ExpectedDateForCompletionYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

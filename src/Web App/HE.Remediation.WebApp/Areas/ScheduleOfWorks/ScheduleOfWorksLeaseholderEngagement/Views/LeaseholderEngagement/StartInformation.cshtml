@@ -1,0 +1,32 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.StartInformationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["FullWidth"] = false;
+}
+
+<h1 class="govuk-heading-xl">About this section</h1>
+
+<p class="govuk-body">
+    In this section, you will need to provide evidence of your engagement with residents and leaseholders as part of your project.
+</p>
+
+<p class="govuk-body">
+    This evidence:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>Should inform all residents about the plans for starting on site, including dates and points of contact for queries when works have started.</li>
+    <li>Must not contain any personal information</li>
+    <li>Can be a redacted copy, template or screenshot example of the communication that was sent. You do not need to upload every individual communication</li>
+</ul>
+
+<form asp-area="ScheduleOfWorksLeaseholderEngagement" asp-controller="LeaseholderEngagement" asp-action="StartInformation" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

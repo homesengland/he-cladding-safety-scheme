@@ -96,6 +96,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             stageDiagramResponse.HasSubmittedProgressReports = await _progressReportingRepository.HasSubmittedProgressReports();
             stageDiagramResponse.HasWorkPackage = await _workPackageRepository.HasWorkPackage();
             stageDiagramResponse.IsWorkPackageSubmitted = await _workPackageRepository.IsWorkPackageSubmitted();
+            stageDiagramResponse.isWorkPackageConfirmedToProceed = await _workPackageRepository.GetWorkPackageConfirmToProceed();
             stageDiagramResponse.HasScheduleOfWorks = await _scheduleOfWorksRepository.HasScheduleOfWorks();
             stageDiagramResponse.IsScheduleOfWorksSubmitted = await _scheduleOfWorksRepository.IsScheduleOfWorksSubmitted();
             stageDiagramResponse.IsScheduleOfWorksApproved = await _scheduleOfWorksRepository.IsScheduleOfWorksApproved();

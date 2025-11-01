@@ -6,5 +6,6 @@ public enum EFraFundingType
     PaidForFromExistingServiceChargeFunds = 2,
     RequestToBeMadeToThirdParty = 3,
     ServiceChargesFollowingS20 = 4,
-    CostOfWorksYetToBeSecured = 5
+    CostOfWorksYetToBeSecured = 5,
+    PaidForByTheApplicant = 6,
 }

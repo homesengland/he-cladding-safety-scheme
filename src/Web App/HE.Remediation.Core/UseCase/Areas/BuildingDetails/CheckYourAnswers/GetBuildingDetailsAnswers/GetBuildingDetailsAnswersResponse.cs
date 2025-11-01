@@ -1,9 +1,15 @@
-﻿namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.GetBuildingDetailsAnswers
+﻿using HE.Remediation.Core.Enums;
+
+namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.GetBuildingDetailsAnswers
 {
     public class GetBuildingDetailsAnswersResponse
     {
+        public EApplicationScheme ApplicationScheme { get; set; }
         public string BuildingUniqueName { get; set; }
         public bool WorksAlreadyCompleted { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? UnsafeCladdingRemovalDate { get; set; }
+        public DateTime? ExpectedDateForCompletion { get; set; }
         public int ResidentialUnitsCount { get; set; }
         public bool NonResidentialUnits { get; set; }
         public int NonResidentialUnitsCount { get; set; }

@@ -39,6 +39,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetCommunicationPartyDet
             {
                 ContactName = request.ContactName,
                 CompanyName = request.CompanyName,
+                CompanyRegistrationNumber = request.CompanyRegistrationNumber,
                 EmailAddress = request.EmailAddress,
                 ContactNumber = request.ContactNumber,
                 ApplicationLeaseHolderEngagementId = leaseHolderEngagementId

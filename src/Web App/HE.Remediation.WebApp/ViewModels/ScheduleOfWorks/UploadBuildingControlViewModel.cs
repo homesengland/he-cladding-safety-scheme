@@ -9,7 +9,7 @@ public class UploadBuildingControlViewModel : ScheduleOfWorksBaseViewModel
 
     public List<File> AddedFiles { get; set; }
 
-    public string DeleteEndpoint => "/ScheduleOfWorks/UploadBuildingControl/Delete";
+    public string DeleteEndpoint => "/ScheduleOfWorks/BuildingControl/UploadBuildingControl/Delete";
 
     public string[] AcceptedFileTypes => new[] { ".pdf" };
 

@@ -9,7 +9,7 @@ public class UploadLeaseholderEngagementViewModel : ScheduleOfWorksBaseViewModel
 
     public List<File> AddedFiles { get; set; }
 
-    public string DeleteEndpoint => "/ScheduleOfWorks/UploadLeaseholderEngagement/Delete";
+    public string DeleteEndpoint => "/ScheduleOfWorks/LeaseholderEngagement/UploadLeaseholderEngagement/Delete";
 
     public string[] AcceptedFileTypes => new[] { ".pdf" };
 

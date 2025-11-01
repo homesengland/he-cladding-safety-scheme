@@ -1,0 +1,94 @@
+﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.BuildingControlApprovalDateViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("BuildingControlApproval", "BuildingControl", new { Area = "ScheduleOfWorksBuildingControl" });
+    ViewData["FullWidth"] = false;
+
+    var approvalDateInvalid = ViewData.ModelState.TryGetValue(nameof(Model.ApprovalDateDay), out var dateApprovalDateDayState) && dateApprovalDateDayState.ValidationState == ModelValidationState.Invalid ||
+                                         ViewData.ModelState.TryGetValue(nameof(Model.ApprovalDateMonth), out var dateApprovalDateMonthState) && dateApprovalDateMonthState.ValidationState == ModelValidationState.Invalid ||
+                                         ViewData.ModelState.TryGetValue(nameof(Model.ApprovalDateYear), out var dateApprovalDateYearState) && dateApprovalDateYearState.ValidationState == ModelValidationState.Invalid;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+            <h2 class="govuk-error-summary__title">
+                There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    <li>
+                        <a href="#@(nameof(Model.ApprovalDateDay))">
+                            <govuk-error-message asp-for="ApprovalDateDay" />
+                        </a>
+                    <li>
+                    <li>
+                        <a href="#@(nameof(Model.ApprovalDateMonth))">
+                            <govuk-error-message asp-for="ApprovalDateMonth" />
+                        </a>
+                    <li>
+                    <li>
+                        <a href="#@(nameof(Model.ApprovalDateYear))">
+                            <govuk-error-message asp-for="ApprovalDateYear" />
+                        </a>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+
+<h1 class="govuk-heading-xl"> Confirm the approval date of your Gateway 2 application</h1>
+
+
+<form asp-area="ScheduleOfWorksBuildingControl" asp-controller="BuildingControl" asp-action="ApprovalDate" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="govuk-form-group @(approvalDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="companiesDateOfAppointment-submission-date-hint">
+            <label class="govuk-label govuk-label--s">Please enter the date</label>
+            <div class="govuk-hint">
+                For example, 18 8 2022
+            </div>
+            <govuk-error-message asp-for="ApprovalDateDay" />
+            <govuk-error-message asp-for="ApprovalDateMonth" />
+            <govuk-error-message asp-for="ApprovalDateYear" />
+            <div class="govuk-date-input" id="companiesDateOfAppointment-submission-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ApprovalDateDay">
+                            Day
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ApprovalDateDay" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ApprovalDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ApprovalDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ApprovalDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ApprovalDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

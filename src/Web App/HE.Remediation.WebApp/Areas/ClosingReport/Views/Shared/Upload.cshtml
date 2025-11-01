@@ -6,7 +6,26 @@
     {
         Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
     }
-    ViewData["Title"] = "Final payment request";
+
+    switch (Model.UploadType)
+    {
+        case EClosingReportFileType.PracticalCompletionCertificate:
+            ViewData["Title"] = "Practical Completion Certificate";
+            break;
+        case EClosingReportFileType.BuildingRegulations:
+            ViewData["Title"] = "Building Control Evidence";
+            break;
+        case EClosingReportFileType.LeaseholderResidentCommunication:
+            ViewData["Title"] = "Communication with Leaseholders";
+            break;
+        case EClosingReportFileType.FinalCost:
+            ViewData["Title"] = "Upload Final Cost Report";
+            break;
+        default:
+            ViewData["Title"] = "Final payment request";
+            break;
+    }
+
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["BackLink"] = Model.ReturnUrl;
     ViewData["ReadOnly"] = Model.IsSubmitted;

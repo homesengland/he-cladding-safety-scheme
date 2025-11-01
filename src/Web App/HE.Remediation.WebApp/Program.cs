@@ -42,6 +42,8 @@ namespace HE.Remediation.WebApp
                 options.AreaViewLocationFormats.Insert(1,"/Areas/WorksPackage/Views/Shared/{0}.cshtml");
                 options.AreaViewLocationFormats.Insert(2, "/Areas/ClosingReport/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Insert(3, "/Areas/ClosingReport/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Insert(4, "/Areas/ScheduleOfWorks/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Insert(5, "/Areas/ScheduleOfWorks/Views/Shared/{0}.cshtml");
             });
 
             if (builder.Environment.IsDevelopment())
@@ -66,11 +68,6 @@ namespace HE.Remediation.WebApp
             .AddStandardResilienceHandler();
             
             var mvcBuilder = builder.Services.AddMvc();
-            builder.Services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
         }
 
         public static void ConfigurePipeline(WebApplication app)
@@ -83,7 +80,6 @@ namespace HE.Remediation.WebApp
 
             if (!app.Environment.IsDevelopment())
             {
-                app.UseForwardedHeaders();
                 app.UseHsts();
             }
 
@@ -147,7 +143,16 @@ namespace HE.Remediation.WebApp
                 "ClosingReportEvidenceOfThirdPartyContribution"
             };
 
-            foreach (var areaName in applicationAreas.Union(workPackageAreas).Union(closingReportAreas))
+            var scheduleOfWorksAreas = new[]
+{
+                "ScheduleOfWorks",
+                "ScheduleOfWorksLeaseholderEngagement",
+                "ScheduleOfWorksBuildingControl",
+                "ScheduleOfWorksWorksContract",
+                "ScheduleOfWorksDeclaration"
+            };
+
+            foreach (var areaName in applicationAreas.Union(workPackageAreas).Union(closingReportAreas).Union(scheduleOfWorksAreas))
             {
                 app.MapAreaControllerRoute(
                     name: areaName,

@@ -48,7 +48,7 @@ public class CostsSchedulingSubcontractorController : StartController
         }
         catch (EntityNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            throw new EntityNotFoundException("Subcontractor not found");
         }
     }
 

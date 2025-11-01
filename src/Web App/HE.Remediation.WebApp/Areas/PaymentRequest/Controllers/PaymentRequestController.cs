@@ -59,6 +59,11 @@ using HE.Remediation.Core.UseCase.Areas.PaymentRequest;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetLeaseholderResidentUploadEvidence;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetLeaseholderResidentUploadEvidence;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.DeleteLeaseholderResidentUploadEvidence;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetForecastGateway3Submission;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetForecastGateway3Submission;
+using Microsoft.CodeAnalysis;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetPracticalCompletionDate;
+using HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetPracticalCompletionDate;
 
 namespace HE.Remediation.WebApp.Areas.PaymentRequest.Controllers;
 
@@ -777,7 +782,7 @@ public class PaymentRequestController : StartController
         {
             var paymentRequestDetails = await _sender.Send(GetPaymentRequestDetailsRequest.Request);
 
-            var action = nameof(CheckYourAnswers);
+            var action = nameof(ForecastGateway3Submission);
 
             // Show subcontractor survey on payment request 4 ONLY if we have sub contractors
             if (paymentRequestDetails.Version == 4)
@@ -797,6 +802,93 @@ public class PaymentRequestController : StartController
     }
 
     #endregion
+
+    #region Forecast Gateway 3 submission
+
+    [HttpGet(nameof(ForecastGateway3Submission))]
+    public async Task<IActionResult> ForecastGateway3Submission(string returnUrl)
+    {
+        var response = await _sender.Send(GetForecastGateway3SubmissionRequest.Request);
+        var viewModel = _mapper.Map<ForecastGateway3SubmissionViewModel>(response);
+        viewModel.ReturnUrl = returnUrl;
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(ForecastGateway3Submission))]
+    public async Task<IActionResult> ForecastGateway3Submission(ForecastGateway3SubmissionViewModel viewModel, ESubmitAction submitAction)
+    {
+
+        // Check for model binding errors first
+        if (ModelState.TryGetValue(nameof(viewModel.ExpectedSubmissionDateYear), out var entry) &&
+            entry.Errors.Any(e => e.ErrorMessage.Contains("not valid")))
+        {
+            ModelState.Remove(nameof(viewModel.ExpectedSubmissionDateYear)); // Remove default error
+            ModelState.AddModelError(nameof(viewModel.ExpectedSubmissionDateYear), "Please enter a year no later than 2040");
+        }
+        var validator = new ForecastGateway3SubmissionViewModelValidator();
+        var validationResult = await validator.ValidateAsync(viewModel);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+        }
+
+        if (submitAction == ESubmitAction.Continue)
+        {
+            var request = _mapper.Map<SetForecastGateway3SubmissionRequest>(viewModel);
+            var paymentRequestDetails = await _sender.Send(request);
+
+            var action = nameof(PracticalCompletionDate);
+            action = viewModel.ReturnUrl ?? action;
+
+            return SafeRedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
+        }
+
+        return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+    }
+
+    #endregion
+
+    #region Practical Completion Date
+
+    [HttpGet(nameof(PracticalCompletionDate))]
+    public async Task<IActionResult> PracticalCompletionDate(string returnUrl)
+    {
+        var response = await _sender.Send(GetPracticalCompletionDateRequest.Request);
+        var viewModel = _mapper.Map<PracticalCompletionDateViewModel>(response);
+        viewModel.ReturnUrl = returnUrl;
+        return View(viewModel);
+    }
+
+    [HttpPost(nameof(PracticalCompletionDate))]
+    public async Task<IActionResult> PracticalCompletionDate(PracticalCompletionDateViewModel viewModel, ESubmitAction submitAction)
+    {
+        var validator = new PracticalCompletionDateViewModelValidator();
+        var validationResult = await validator.ValidateAsync(viewModel);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(viewModel);
+        }
+
+        if (submitAction == ESubmitAction.Continue)
+        {
+            var request = _mapper.Map<SetPracticalCompletionDateRequest>(viewModel);
+            var paymentRequestDetails = await _sender.Send(request);
+
+            var action = nameof(CheckYourAnswers);
+            action = viewModel.ReturnUrl ?? action;
+
+            return SafeRedirectToAction(action, "PaymentRequest", new { Area = "PaymentRequest" });
+        }
+
+        return RedirectToAction("Index", "StageDiagram", new { Area = "Application" });
+    }
+
+    #endregion
+
 
     #region Add role
 
@@ -987,7 +1079,7 @@ public class PaymentRequestController : StartController
         
         var paymentRequestDetails = await _sender.Send(GetPaymentRequestDetailsRequest.Request);
         
-        var action = nameof(ProjectTeamOverview);
+        var action = nameof(PracticalCompletionDate);
         if (paymentRequestDetails.Version == 4)
         {                
             if ((paymentRequestDetails.SubContractorCount != null) && (paymentRequestDetails.SubContractorCount > 0))

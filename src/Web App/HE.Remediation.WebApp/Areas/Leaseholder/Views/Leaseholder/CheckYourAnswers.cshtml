@@ -130,6 +130,17 @@
                 </govuk-summary-list-row-value>
             </govuk-summary-list-row>
         }
+        @if (!string.IsNullOrWhiteSpace(Model.CompanyRegistrationNumber))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Company Registration Number
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.CompanyRegistrationNumber
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
         @if (!string.IsNullOrWhiteSpace(Model.EmailAddress))
         {
             <govuk-summary-list-row>

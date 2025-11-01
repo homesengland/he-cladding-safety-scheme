@@ -1,6 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetClosingReportAbout;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
-using HE.Remediation.WebApp.Attributes.Authorisation;
+using HE.Remediation.WebApp.ViewModels.ClosingReport.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +22,11 @@ public abstract class BaseAboutController : StartController
     }
 
     [HttpGet("About")]
-    public IActionResult About()
+    public async Task<IActionResult> About()
     {
-        return View();
+        var response = await _sender.Send(GetClosingReportAboutRequest.Request);
+
+        return View(new ClosingReportAboutViewModel { ApplicationReferenceNumber = response.ApplicationReferenceNumber, BuildingName = response.BuildingName });
     }
 
     [HttpPost("About")]

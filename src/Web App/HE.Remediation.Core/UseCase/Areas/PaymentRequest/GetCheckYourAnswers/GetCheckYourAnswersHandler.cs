@@ -91,6 +91,8 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             PaymentRequestCostFiles = paymentRequestCostFileNames,
             PaymentRequestInvoiceFileNames = invoiceFiles.Select(x => x.Name).ToList(),
             TeamMembers = teamMembers,
+            ExpectedSubmissionDateForGateway3Application = projectDetails?.ExpectedSubmissionDateForGateway3Application,
+            ExpectedPracticalCompletionDate = projectDetails?.ExpectedPracticalCompletionDate,
             UnsafeCladdingAlreadyRemoved = unsafeCladdingAlreadyRemoved,
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber

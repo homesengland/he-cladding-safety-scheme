@@ -202,7 +202,7 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             }
             catch (EntityNotFoundException)
             {
-                return NotFound();
+                throw new EntityNotFoundException("Existing application not found");
             }
         }
 

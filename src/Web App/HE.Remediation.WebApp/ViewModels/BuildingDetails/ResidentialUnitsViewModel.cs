@@ -6,6 +6,7 @@ namespace HE.Remediation.WebApp.ViewModels.BuildingDetails
     {
         public int? ResidentialUnitsCount { get; set; }
         public ENoYes? NonResidentialUnits { get; set; }
+        public bool? WorksAlreadyCompleted { get; set; }
         public string ReturnUrl { get; set; }
         public EApplicationScheme ApplicationScheme { get; set; }
     }

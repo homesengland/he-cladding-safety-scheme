@@ -12,23 +12,25 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageSubmit.Submit
 public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
-    private readonly IApplicationRepository _applicationRepository; 
+    private readonly IApplicationRepository _applicationRepository;
     private readonly IWorkPackageRepository _workPackageRepository;
     private readonly ITaskRepository _taskRepository;
     private readonly ICommunicationService _communicationService;
     private readonly IStatusTransitionService _statusTransitionService;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IDateRepository _dateRepository;
+    private readonly IWorksPackageMemorandumRepository _worksPackageMemorandumRepository;
 
     public SetSubmitHandler(
         IApplicationDataProvider applicationDataProvider,
-        IApplicationRepository applicationRepository, 
+        IApplicationRepository applicationRepository,
         IWorkPackageRepository workPackageRepository,
         ITaskRepository taskRepository,
-        ICommunicationService communicationService, 
-        IStatusTransitionService statusTransitionService, 
-        IDateTimeProvider dateTimeProvider, 
-        IDateRepository dateRepository)
+        ICommunicationService communicationService,
+        IStatusTransitionService statusTransitionService,
+        IDateTimeProvider dateTimeProvider,
+        IDateRepository dateRepository,
+        IWorksPackageMemorandumRepository worksPackageMemorandumRepository)
     {
         _applicationDataProvider = applicationDataProvider;
         _applicationRepository = applicationRepository;
@@ -38,10 +40,12 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
         _statusTransitionService = statusTransitionService;
         _dateTimeProvider = dateTimeProvider;
         _dateRepository = dateRepository;
+        _worksPackageMemorandumRepository = worksPackageMemorandumRepository;
     }
 
     public async Task<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
     {
+
         var applicationId = _applicationDataProvider.GetApplicationId();
         var userId = _applicationDataProvider.GetUserId();
 
@@ -102,11 +106,33 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest, Unit>
             EEmailType.WorksPackageSubmitted
         ));
 
+        await _worksPackageMemorandumRepository.CreateWorkPackageMemorandum(applicationId);
+        await CreateWorkPackageSendLetterTask(applicationId);
+
         scope.Complete();
 
         return Unit.Value;
     }
+    private async Task CreateWorkPackageSendLetterTask(Guid applicationId, int workingDays = 1)
+    {
+        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Works Package", "Send works package memorandum letter"));
 
+        var dueDate = await _dateRepository
+            .AddWorkingDays(new AddWorkingDaysParameters { Date = _dateTimeProvider.UtcNow, WorkingDays = 1 });
+        await _taskRepository.InsertTask(new InsertTaskParameters
+        {
+            Description = "Send works package memorandum letter to the applicant.",
+            TaskTypeId = taskType.Id,
+            AssignedToTeamId = (int)ETeam.DaviesOps,
+            AssignedToUserId = null,
+            RequiredByDate = DateOnly.FromDateTime(dueDate),
+            CreatedByUserId = null,
+            Notes = null,
+            ReferenceId = applicationId,
+            TaskStatus = ETaskStatus.NotStarted.ToString(),
+            TopicId = null
+        });
+    }
     private async Task TryCreateConsiderateConstructorsSchemeTask(Guid applicationId)
     {
         if (await _workPackageRepository.IsSignedUpToConsiderateConstructorsScheme(applicationId))

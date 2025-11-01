@@ -194,7 +194,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return View("NotEligiblePrivateTenantOrUnaffordable");
             }
 
-            return NotFound();
+            throw new Exception("Not Eligible - No valid redirect page found");
         }
 
         [HttpPost(nameof(NotEligible))]

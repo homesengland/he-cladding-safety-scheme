@@ -363,6 +363,48 @@
     </table>
 }
 
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Gateway 3 application</h2>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            When do you expect to submit your Gateway 3 application?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ExpectedSubmissionDateForGateway3Application.HasValue ? Model.ExpectedSubmissionDateForGateway3Application.Value.ToString("MMMM yyyy") : "-")
+        </govuk-summary-list-row-value>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("ForecastGateway3Submission", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            What is your expected practical completion date?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ExpectedPracticalCompletionDate.HasValue ? Model.ExpectedPracticalCompletionDate.Value.ToString("MMMM yyyy") : "-")
+        </govuk-summary-list-row-value>
+        @if (!readOnly)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("PracticalCompletionDate", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = ViewData["ReturnUrl"] })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+
 @if (readOnly)
 {
     <govuk-button href="@Url.Action("Index", "StageDiagram", new {Area = "Application"})">Continue</govuk-button>

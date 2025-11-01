@@ -4,9 +4,17 @@
 @{
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["Title"] = "Fire risk assessment";
-    ViewData["Backlink"] = Model.HasDefects
-        ? Url.Action("IdentifiedDefects", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
-        : Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    if (!Model.VisitedCheckYourAnswers)
+    {
+        ViewData["Backlink"] = Model.HasDefects
+            ? Url.Action("IdentifiedDefects", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" })
+            : Url.Action("FireRisk", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    }
+    else
+    {
+        ViewData["BackLink"] = Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "WorksPackageFireRiskAssessment" });
+    }
+
     ViewData["FullWidth"] = false;
 }
 
@@ -43,6 +51,9 @@
                     </govuk-select-item>
                     <govuk-select-item value="@EFraFundingType.PaidForFromExistingServiceChargeFunds" selected="@Model.HasFundingType == EFraFundingType.PaidForFromExistingServiceChargeFunds">
                         These works are planned to be paid for from existing service charge funds
+                    </govuk-select-item>
+                    <govuk-select-item value="@EFraFundingType.PaidForByTheApplicant" selected="@Model.HasFundingType == EFraFundingType.PaidForByTheApplicant">
+                        These works are being paid for by the applicant
                     </govuk-select-item>
                 </govuk-select>
             </govuk-radios-item-conditional>

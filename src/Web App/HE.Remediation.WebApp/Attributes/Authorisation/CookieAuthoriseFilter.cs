@@ -38,10 +38,16 @@ public class CookieAuthoriseFilter : IAuthorizationFilter
         if (claimId != cookieId)
         {
             context.Result = new NotFoundResult();
+            return;
         }
 
         var sessionTimeoutService = context.HttpContext.RequestServices.GetRequiredService<SessionTimeout>();
         var sessionTimeoutCookie = applicationDataProvider.GetSessionTimeout();
+        if (!sessionTimeoutCookie.HasValue)
+        {
+            context.Result = new RedirectResult("/Authentication/SessionTimeout");
+            return;
+        }
         var span = DateTimeOffset.Now.Subtract(sessionTimeoutCookie.Value);
 
         if (span.Minutes > sessionTimeoutService.Minutes)

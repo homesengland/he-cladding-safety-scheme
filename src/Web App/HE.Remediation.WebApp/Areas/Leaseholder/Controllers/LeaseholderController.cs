@@ -19,6 +19,8 @@ using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetResponsibleForCommunicati
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCommunicationPartyDetails;
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetCommunicationPartyDetails;
 using FluentValidation;
+using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Providers;
 
 namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
 {
@@ -28,12 +30,14 @@ namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
     {
         private readonly ISender _sender;
         private readonly IMapper _mapper;
+        private readonly IApplicationDataProvider _applicationDataProvider;
 
-        public LeaseholderController(ISender sender, IMapper mapper)
+        public LeaseholderController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider)
         : base(sender)
         {
             _sender = sender;
             _mapper = mapper;
+            _applicationDataProvider = applicationDataProvider;
         }
 
         protected override IActionResult DefaultStart => RedirectToAction("WhatYoullNeed", "Leaseholder", new { Area = "Leaseholder" });
@@ -41,7 +45,8 @@ namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
         [HttpGet]
         public IActionResult WhatYoullNeed()
         {
-            return View();
+            var model = new WhatYoullNeedViewModel { ApplicationScheme = _applicationDataProvider.GetApplicationScheme() };
+            return View(model);
         }
 
         #region ResponsibleForCommunication

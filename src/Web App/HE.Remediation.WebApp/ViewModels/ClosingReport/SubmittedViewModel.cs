@@ -3,4 +3,6 @@
 public class SubmittedViewModel
 {
     public string ApplicationReferenceNumber { get; set; }
+
+    public string BuildingName { get; set; }
 }

@@ -13,11 +13,11 @@
 }
 
 <form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="WorksAlreadyCompleted">
-    <h1 class="govuk-heading-xl">Have works to this building already been completed?</h1>
+    <h1 class="govuk-heading-xl">Are works to this building completed?</h1>
 
     <govuk-radios asp-for="WorksAlreadyCompleted">
-        <govuk-radios-item value="True">Yes, I am applying for funding for a building which has been remediated</govuk-radios-item>
-        <govuk-radios-item value="False">No, I am applying for funding for a new remediation project</govuk-radios-item>
+            <govuk-radios-item value="True">Yes</govuk-radios-item>
+            <govuk-radios-item value="False">No</govuk-radios-item>
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>

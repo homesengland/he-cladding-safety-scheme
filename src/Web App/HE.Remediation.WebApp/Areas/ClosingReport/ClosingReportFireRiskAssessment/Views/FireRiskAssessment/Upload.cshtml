@@ -1,0 +1,102 @@
+﻿@using HE.Remediation.Core.Enums;
+@using System.Net
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.UploadViewModel
+@{
+    ViewData["Title"] = "Fire Risk Assessment";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Model.ReturnUrl;
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = true;
+
+    var acceptedTypes = Model.AcceptedFileTypes?.Any() == true ? string.Join(",", Model.AcceptedFileTypes) : "*";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File"/>
+        <govuk-error-summary-item asp-for="ExitFraewDocumentType" />
+    </govuk-error-summary>
+}
+
+<div class="govuk-body">
+
+    <h1 class="govuk-heading-xl">Upload your Fire Risk Assessment</h1>
+
+    <p class="govuk-body">
+        Please upload a current Fire Risk Assessment for this building, which reflects that remediation works to address the unsafe cladding
+        have been completed and the risk to life is now at a tolerable level in line with PAS9980:2022.
+    </p>
+
+    <div class="govuk-hint">
+       File must be smaller than 50MB.
+    </div>
+    <div class="govuk-hint">
+        File format must be PDF.
+    </div>
+
+    @using (Html.BeginForm(FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+    <input asp-for="ApplicationReferenceNumber" type="hidden" />
+    <input asp-for="BuildingName" type="hidden" />
+    <input asp-for="UploadType" type="hidden" />
+    <input asp-for="ReturnUrl" type="hidden" />
+
+    @if ((Model.AddedFiles is null || Model.AddedFiles.Count < 1) && !Model.IsSubmitted)
+    {
+        <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Add file</govuk-button>
+    }
+
+    @if (Model.AddedFiles is { Count: > 0 })
+    {
+        <h2 class="govuk-heading-m">File added</h2>
+        <govuk-summary-list>
+            @for (var i = 0; i < Model.AddedFiles.Count; i++)
+            {
+                var file = Model.AddedFiles[i];
+                var count = i + 1;
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        File
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @file.Name @($"{file.FileSize}")
+                    </govuk-summary-list-row-value>
+                    @if (!Model.IsSubmitted)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Delete", new {fileId = file.Id, Model.UploadType, Model.ReturnUrl})">Delete</govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+            }
+        </govuk-summary-list>
+
+        @foreach (var x in Model.AddedFiles.Select((value, index) => new { value, index }))
+        {
+            <input asp-for="@Model.AddedFiles[x.index].Id" type="hidden" />
+            <input asp-for="@Model.AddedFiles[x.index].Name" type="hidden" />
+            <input asp-for="@Model.AddedFiles[x.index].FileSize" type="hidden" />
+        }
+    }
+    <br/>
+
+        <govuk-radios asp-for="ExitFraewDocumentType">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">Please confirm the type of FRA</govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+            <govuk-radios-item value="@EFireRiskAssessmentType.Type1FireRiskAssessment">Type 1 fire risk assessment (common parts &ndash; non-destructive)</govuk-radios-item>
+            <govuk-radios-item value="@EFireRiskAssessmentType.Type2FireRiskAssessment">Type 2 fire risk assessment (common parts &ndash; destructive)</govuk-radios-item>
+            <govuk-radios-item value="@EFireRiskAssessmentType.Type3FireRiskAssessment">Type 3 fire risk assessment (common parts and flats &ndash; non-destructive)</govuk-radios-item>
+            <govuk-radios-item value="@EFireRiskAssessmentType.Type4FireRiskAssessment">Type 4 fire risk assessment (common parts and flats &ndash; destructive)</govuk-radios-item>
+            <govuk-radios-item value="@EFireRiskAssessmentType.DontKnow">Don't know</govuk-radios-item>
+        </govuk-radios>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+}
+
+
+</div>

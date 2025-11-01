@@ -95,9 +95,12 @@
                 Have you secured, are you attempting to secure, or do you plan to pursue cost recovery towards remediation costs from third parties (not from Government) on this building?
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>@(!string.IsNullOrEmpty(Model.CostRecoveryType) ? Model.CostRecoveryType : "-")</govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("CostRecovery", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
-                Change
-            </govuk-summary-list-row-action>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("CostRecovery", "AlternativeFundingRoutes", new { Area = "AlternativeFundingRoutes" })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
         </govuk-summary-list-row>
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>

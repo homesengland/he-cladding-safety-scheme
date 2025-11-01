@@ -6,5 +6,6 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.Get
     {
         public int? ResidentialUnitsCount { get; set; }
         public ENoYes? NonResidentialUnits { get; set; }
+        public bool? WorksAlreadyCompleted { get; set; }
     }
 }

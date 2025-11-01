@@ -20,6 +20,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.GetBuil
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.SetBuildingDetailsComplete;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmBuildingHeight.GetBuildingHeight;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmBuildingHeight.SetBuildingHeight;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmKeyDates.Get;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmKeyDates.Set;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.GetDeveloperContacted;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.SetDeveloperContacted;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperInBusiness.GetDeveloperInBusiness;
@@ -99,7 +101,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             var request = _mapper.Map<SetBuildingUniqueNameRequest>(viewModel);
             await _sender.Send(request);
 
-            if (viewModel.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
+            if (viewModel.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme || viewModel.ApplicationScheme == EApplicationScheme.SocialSector || viewModel.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
             {
                 return submitAction == ESubmitAction.Continue ?
                     RedirectToAction("WorksAlreadyCompleted", "BuildingDetails", new { Area = "BuildingDetails" }) :
@@ -137,7 +139,50 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 return View(model);
             }
 
+            model.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
+
             var request = _mapper.Map<SetWorksAlreadyCompletedRequest>(model);
+            await _sender.Send(request);
+
+            if (model.SubmitAction == ESubmitAction.Continue)
+            {
+                if ((model.ApplicationScheme == EApplicationScheme.SocialSector || model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) 
+                    && model.WorksAlreadyCompleted == true)
+                {
+                    return RedirectToAction("ConfirmKeyDates", "BuildingDetails", new { Area = "BuildingDetails" });
+                }
+
+                return RedirectToAction("ResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" });
+            }
+            
+            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+        #endregion
+
+        #region Confirm Key Dates
+        [HttpGet(nameof(ConfirmKeyDates))]
+        public async Task<IActionResult> ConfirmKeyDates(string returnUrl)
+        {
+            var response = await _sender.Send(GetConfirmKeyDatesRequest.Request);
+            var viewModel = _mapper.Map<ConfirmKeyDatesViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(ConfirmKeyDates))]
+        public async Task<IActionResult> ConfirmKeyDates(ConfirmKeyDatesViewModel model)
+        {
+            var validator = new ConfirmKeyDatesViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetConfirmKeyDatesRequest>(model);
             await _sender.Send(request);
 
             return model.SubmitAction == ESubmitAction.Continue ?

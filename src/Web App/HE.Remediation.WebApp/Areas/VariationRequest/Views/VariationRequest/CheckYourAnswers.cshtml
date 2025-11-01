@@ -15,24 +15,23 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0 govuk-!-margin-bottom-0">
 
 <govuk-summary-list>
-
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Has your end date changed?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.IsTimescaleVariation.GetValueOrDefault(false) ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        @if (!Model.IsSubmitted)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-
     @if (Model.IsTimescaleVariation.GetValueOrDefault(false))
     {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Has your end date changed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.IsTimescaleVariation.GetValueOrDefault(false) ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
                 What is your new end date?
@@ -53,24 +52,24 @@
             }
         </govuk-summary-list-row>
     }
-
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Has your scope changed?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.IsScopeVariation.GetValueOrDefault(false) ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        @if (!Model.IsSubmitted)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-
     @if (Model.IsScopeVariation.GetValueOrDefault(false))
     {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Has your scope changed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.IsScopeVariation.GetValueOrDefault(false) ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
+
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
                 How has the scope of your project changed?
@@ -86,97 +85,104 @@
             }
         </govuk-summary-list-row>
     }
+    @if (Model.IsCostVariation.GetValueOrDefault(false))
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have your costs changed?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.IsCostVariation.GetValueOrDefault(false) ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
 
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you used your contractor contingency?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.UsedContractorContingency.GetValueOrDefault(false) ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ContractorContingency", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Please explain your answer
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.UsedContractorContingencyAdditionalnotes
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("ContractorContingency", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+
+<govuk-summary-list>
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
-            Have your costs changed?
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Schedule of works summary</h2>
         </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.IsCostVariation.GetValueOrDefault(false) ? "Yes" : "No")
-        </govuk-summary-list-row-value>
         @if (!Model.IsSubmitted)
         {
-            <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Have you used your contractor contingency?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.UsedContractorContingency.GetValueOrDefault(false) ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        @if (!Model.IsSubmitted)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("ContractorContingency", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Please explain your answer 
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @Model.UsedContractorContingencyAdditionalnotes
-        </govuk-summary-list-row-value>
-        @if (!Model.IsSubmitted)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("ContractorContingency", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+            <govuk-summary-list-row-action href="@Url.Action("Costs", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
                 Change
             </govuk-summary-list-row-action>
         }
     </govuk-summary-list-row>
 </govuk-summary-list>
-
-    @if (Model.IsCostVariation.GetValueOrDefault(false))
+<govuk-summary-list>
+    @if (Model.TotalRequestedAmount.HasValue && Model.TotalRequestedAmount>0)
     {
-        <govuk-summary-list>
-            <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
-                    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Schedule of works summary</h2>
-                </govuk-summary-list-row-key>
-                @if (!Model.IsSubmitted)
-                {
-                    <govuk-summary-list-row-action href="@Url.Action("Costs", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
-                        Change
-                    </govuk-summary-list-row-action>
-                }
-            </govuk-summary-list-row>
-        </govuk-summary-list>
-        <govuk-summary-list>
-            <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
-                    Total approved funding
-                </govuk-summary-list-row-key>
-                <govuk-summary-list-row-value>
-                    @Html.Raw(Model.TotalApprovedFunding is not null ? $"&pound;{Model.TotalApprovedFunding.Value:N0}" : "-")
-                </govuk-summary-list-row-value>
-            </govuk-summary-list-row>
-
-            <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
-                    Variation requested
-                </govuk-summary-list-row-key>
-                <govuk-summary-list-row-value>
-                    @Html.Raw(Model.VariationRequested is not null ? $"&pound;{Model.VariationRequested.Value:N0}" : "-")
-                </govuk-summary-list-row-value>
-            </govuk-summary-list-row>
-
-            <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
-                    Total requested amount
-                </govuk-summary-list-row-key>
-                <govuk-summary-list-row-value>
-                    @Html.Raw(Model.TotalRequestedAmount is not null ? $"&pound;{Model.TotalRequestedAmount.Value:N0}" : "-")
-                </govuk-summary-list-row-value>
-            </govuk-summary-list-row>
-        </govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+            Total approved funding
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model.TotalApprovedFunding is not null ? $"&pound;{Model.TotalApprovedFunding.Value:N0}" : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
     }
+    @if (Model.VariationRequested.HasValue && Model.VariationRequested>0)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+            Variation requested
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model.VariationRequested is not null ? $"&pound;{Model.VariationRequested.Value:N0}" : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    }
+    @if (Model.TotalRequestedAmount.HasValue && Model.TotalRequestedAmount>0)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+            Total requested amount
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model.TotalRequestedAmount is not null ? $"&pound;{Model.TotalRequestedAmount.Value:N0}" : "-")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    }
+</govuk-summary-list>
 
 @if (Model.Duration.HasValue)
 {
@@ -197,26 +203,26 @@
         </govuk-summary-list-row>
     </govuk-summary-list>
 }
-
-<govuk-summary-list>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Have you pursued third party contributions
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.IsThirdPartyContributionVariation.GetValueOrDefault(false) ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-        @if (!Model.IsSubmitted)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-</govuk-summary-list>
-
 @if (Model.IsThirdPartyContributionVariation.GetValueOrDefault(false))
 {
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you pursued third party contributions
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.IsThirdPartyContributionVariation.GetValueOrDefault(false) ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+            @if (!Model.IsSubmitted)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("VariationReason", "VariationRequest", new { returnUrl = ViewData["ReturnUrl"] })">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+
     <govuk-summary-list>
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>

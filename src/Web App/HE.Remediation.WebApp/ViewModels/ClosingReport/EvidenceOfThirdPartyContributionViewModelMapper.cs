@@ -20,6 +20,7 @@ namespace HE.Remediation.WebApp.ViewModels.ClosingReport
                 .ForMember(dest => dest.GetEvidenceDetailsResponse, opt => opt.MapFrom(src => src))
                 .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.ApplicationId))
                 .ForMember(dest => dest.IsSubmitted, opt => opt.MapFrom(src => src.IsSubmitted))
+                .ForMember(dest => dest.IsEditable, opt => opt.MapFrom(src => src.IsEditable))
                 .ForMember(dest => dest.ReturnUrl, opt => opt.MapFrom(src => src.ReturnUrl));
 
             CreateMap<EvidenceOfThirdPartyContributionViewModel, SetEvidenceDetailRequest>()

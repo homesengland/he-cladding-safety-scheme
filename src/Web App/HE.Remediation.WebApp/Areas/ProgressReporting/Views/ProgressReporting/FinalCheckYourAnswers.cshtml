@@ -70,7 +70,7 @@
 			Have you informed the leaseholders/residents about the progress of the application?
 		</govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-            @(Model.LeaseholdersInformed!.Value ? "Yes" : "No")
+            @(Model.LeaseholdersInformed.HasValue && Model.LeaseholdersInformed.Value ? "Yes" : "No")
         </govuk-summary-list-row-value>
         <govuk-summary-list-row-action href="@Url.Action("InformedLeaseholder", "ProgressReporting", new { Area = "ProgressReporting" })">
             Change
@@ -101,7 +101,7 @@
             Have you appointed other members of your project team?
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
-            @(Model.OtherMembersAppointed!.Value ? "Yes" : "No")
+            @(Model.OtherMembersAppointed.HasValue && Model.OtherMembersAppointed.Value ? "Yes" : "No")
         </govuk-summary-list-row-value>
         <govuk-summary-list-row-action href="@Url.Action("AppointedOtherMembers", "ProgressReporting", new { Area = "ProgressReporting" })">
             Change

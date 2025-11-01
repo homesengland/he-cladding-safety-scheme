@@ -1,0 +1,108 @@
+﻿@using HE.Remediation.Core.Enums;
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.DeclarationViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Url.Action("TaskList", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    @if (ViewData.ModelState.Count > 0)
+    {
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                <h2 class="govuk-error-summary__title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @if (ViewData.ModelState.ContainsKey(nameof(Model.ConfirmedAwareOfProcess)))
+                        {
+                            foreach (var err in ViewData.ModelState[nameof(Model.ConfirmedAwareOfProcess)].Errors)
+                            {
+                                <li>
+                                    <a href="#@(nameof(Model.ConfirmedAwareOfProcess))">
+                                        @err.ErrorMessage
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (ViewData.ModelState.ContainsKey(nameof(Model.ConfirmedAwareOfVariationApproval)))
+                        {
+                            foreach (var err in ViewData.ModelState[nameof(Model.ConfirmedAwareOfVariationApproval)].Errors)
+                            {
+                                <li>
+                                    <a href="#@(nameof(Model.ConfirmedAwareOfVariationApproval))">
+                                        @err.ErrorMessage
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (ViewData.ModelState.ContainsKey(nameof(Model.ConfirmedAccuratelyProfiledCosts)))
+                        {
+                            foreach (var err in ViewData.ModelState[nameof(Model.ConfirmedAccuratelyProfiledCosts)].Errors)
+                            {
+                                <li>
+                                    <a href="#@(nameof(Model.ConfirmedAccuratelyProfiledCosts))">
+                                        @err.ErrorMessage
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (ViewData.ModelState.ContainsKey(nameof(Model.ProjectStartDate)))
+                        {
+                            <li>
+                                <a href="@Url.Action("ProjectDates", "ScheduleOfWorks", new { Area = "ScheduleOfWorks" })">
+                                    @ViewData.ModelState[nameof(Model.ProjectStartDate)].Errors[0].ErrorMessage
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<h1 class="govuk-heading-xl">Schedule of works declaration</h1>
+
+<p class="govuk-body">
+    Before completing the schedule of works declaration, please take a few moments to check the information you've given us.
+</p>
+
+<form asp-area="ScheduleOfWorksDeclaration" asp-controller="Declaration" asp-action="Declaration" method="post">
+
+    <govuk-checkboxes name="ConfirmedAwareOfProcess" asp-for="ConfirmedAwareOfProcess">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ConfirmedAwareOfProcess">
+            I confirm that I am aware of the process and timeframes for submitting claims and that failure to submit claims in line with the process will result in delayed payments.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="ConfirmedAwareOfVariationApproval" asp-for="ConfirmedAwareOfVariationApproval">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ConfirmedAwareOfVariationApproval">
+            I confirm that I am aware that Homes England approves each variation on its individual merits and that approval does not set a precedent for future variation requests.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <govuk-checkboxes name="ConfirmedAccuratelyProfiledCosts" asp-for="ConfirmedAccuratelyProfiledCosts">
+        <govuk-checkboxes-item disabled="@Model.IsSubmitted" value="true" checked="@Model.ConfirmedAccuratelyProfiledCosts">
+            I confirm that I have profiled my costs as accurately as possible in accordance with my works contract and that this excludes ineligible VAT.
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <govuk-date-input asp-for="ProjectStartDate" class="hidden"></govuk-date-input>
+
+    <div class="comp-btn-group">
+        @if (!Model.IsSubmitted)
+        {
+            <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Confirm and submit</govuk-button>
+        }
+    </div>
+</form>

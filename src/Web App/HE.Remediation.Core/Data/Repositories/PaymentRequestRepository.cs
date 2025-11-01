@@ -109,7 +109,24 @@ public class PaymentRequestRepository : IPaymentRequestRepository
             LastCommunicationDate = lastCommunicationDate
         });
     }
-   
+
+    public async Task UpdateExpectedSubmissionDateForGateway3Application(Guid paymentRequestId, DateTime? expectedSubmissionDate)
+    {
+        await _connection.ExecuteAsync("UpdateExpectedSubmissionDateForGateway3Application", new
+        {
+            PaymentRequestId = paymentRequestId,
+            ExpectedSubmissionDateForGateway3Application = expectedSubmissionDate
+        });
+    }
+
+    public async Task UpdatePracticalCompletionDate(Guid paymentRequestId, DateTime? expectedPracticalCompletionDate)
+    {
+        await _connection.ExecuteAsync("UpdateExpectedPracticalCompletionDate", new
+        {
+            PaymentRequestId = paymentRequestId,
+            ExpectedPracticalCompletionDate = expectedPracticalCompletionDate
+        });
+    }
 
     public async Task<GetPaymentRequestEndVersionDatesResult> GetPaymentRequestEndVersionDates(Guid applicationId)
     {
@@ -434,6 +451,15 @@ public class PaymentRequestRepository : IPaymentRequestRepository
             ApplicationId = applicationId
         });
     }
+
+    public async Task<Guid?> GetPreviousPaymentRequest(Guid applicationId)
+    {
+        return await _connection.QuerySingleOrDefaultAsync<Guid?>(nameof(GetPreviousPaymentRequest), new
+        {
+            ApplicationId = applicationId
+        });
+    }
+
     public async Task<bool> GetUnsafeCladdingAlreadyRemoved(Guid applicationId, Guid paymentRequestId)
     {
         return await _connection.QuerySingleOrDefaultAsync<bool>(nameof(GetUnsafeCladdingAlreadyRemoved), new

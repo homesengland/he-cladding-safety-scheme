@@ -6,7 +6,7 @@
 
         <form asp-area="Application" asp-controller="ManageProgramme" asp-action="SubmitCheckYourAnswers" method="post">
 
-            <a href="#" class="govuk-back-link" onclick="document.forms[0].submit(); return false;">Back</a>
+            <button type="submit" name="BackAction" value="@ESubmitAction.Exit" class="govuk-back-link govuk-link--button">Back</button>
 
             <main class="govuk-main-wrapper">
                 <div class="govuk-grid-row">
@@ -34,10 +34,10 @@
                                     What is the estimated works investigation completion date?
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    @(Model.EstimatedInvestigationCompletionDate?.ToString("MM/yyyy") ?? "No data")
+                                    @(Model.EstimatedInvestigationCompletionDate?.ToString("MM/yyyy") ?? "-")
                                 </dd>
                                 <dd class="govuk-summary-list__actions">
-                                    <a href="#" class="govuk-link" onclick="document.forms[0].submit(); return false;">Change</a>
+                                    <button type="submit" name="BackAction" value="@ESubmitAction.Exit" class="govuk-link--button">Change</button>
                                 </dd>
                             </div>
 
@@ -46,10 +46,10 @@
                                     What is the estimated start on site date?
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    @(Model.EstimatedStartOnSiteDate?.ToString("MM/yyyy") ?? "No data")
+                                    @(Model.EstimatedStartOnSiteDate?.ToString("MM/yyyy") ?? "-")
                                 </dd>
                                 <dd class="govuk-summary-list__actions">
-                                    <a href="#" class="govuk-link" onclick="document.forms[0].submit(); return false;">Change</a>
+                                    <button type="submit" name="BackAction" value="@ESubmitAction.Exit" class="govuk-link--button">Change</button>
                                 </dd>
                             </div>
 
@@ -58,11 +58,11 @@
                                     What is the estimated practical completion date?
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    @(Model.EstimatedPracticalCompletionDate?.ToString("MM/yyyy") ?? "No data")
+                                    @(Model.EstimatedPracticalCompletionDate?.ToString("MM/yyyy") ?? "-")
                                 </dd>
-                                    <dd class="govuk-summary-list__actions">
-                                        <a href="#" class="govuk-link" onclick="document.forms[0].submit(); return false;">Change</a>
-                                    </dd>
+                                <dd class="govuk-summary-list__actions">
+                                    <button type="submit" name="BackAction" value="@ESubmitAction.Exit" class="govuk-link--button">Change</button>
+                                </dd>
 
                             </div>
 

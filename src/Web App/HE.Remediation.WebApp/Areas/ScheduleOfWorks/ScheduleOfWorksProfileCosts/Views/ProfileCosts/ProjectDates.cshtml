@@ -1,0 +1,136 @@
+﻿@using HE.Remediation.Core.Enums;
+@model HE.Remediation.WebApp.ViewModels.ScheduleOfWorks.ProjectDatesViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = !string.IsNullOrEmpty(Model.ReturnUrl)
+                ? Url.Action(Model.ReturnUrl, "ProfileCosts", new { Area = "ScheduleOfWorksProfileCosts" })
+        : Url.Action("StartInformation", "ProfileCosts", new { Area = "ScheduleOfWorksProfileCosts" });
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = false;
+
+    var errors = ViewData.ModelState.Where(x => x.Value.Errors.Any()).ToList();
+    var isStartDateError = errors.Any(x => x.Key is nameof(Model.ProjectStartDateMonth) or nameof(Model.ProjectStartDateYear));
+    var isEndDateError = errors.Any(x => x.Key is nameof(Model.ProjectEndDateMonth) or nameof(Model.ProjectEndDateYear));
+}
+
+@section ErrorSummary
+    {
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ProjectStartDateMonth" />
+        <govuk-error-summary-item asp-for="ProjectStartDateYear" />
+        <govuk-error-summary-item asp-for="ProjectEndDateMonth" />
+        <govuk-error-summary-item asp-for="ProjectEndDateYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What are your payment schedule start and end dates?</h1>
+
+<p class="govuk-body">
+    Please enter the dates for your first and last monthly payment requests. This will create your schedule of works. On the next page we will ask you to add the costs you expect to claim each month for the duration of your works.
+</p>
+<p class="govuk-body">
+    Your first payment cannot be in the current month.
+</p>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Key dates</h2>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Expected start date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ExpectedProjectStartDateMonth is not null
+                ? $"{Model.ExpectedProjectStartDateMonth:0#}/{Model.ExpectedProjectStartDateYear}"
+                : null)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Expected end date
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.ExpectedProjectEndDateMonth is not null
+                ? $"{Model.ExpectedProjectEndDateMonth:0#}/{Model.ExpectedProjectEndDateYear}"
+                : null)
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<form asp-area="ScheduleOfWorksProfileCosts" asp-controller="ProfileCosts" asp-action="ProjectDates" method="post">
+
+    <div class="govuk-form-group @(isStartDateError ? "govuk-form-group--error" : string.Empty)">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">Start date</govuk-input-label>
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="start-date-hint">
+            <div id="start-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ProjectStartDateMonth" />
+            <govuk-error-message asp-for="ProjectStartDateYear" />
+            <div class="govuk-date-input" id="start-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ProjectStartDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled="@Model.IsSubmitted" asp-for="ProjectStartDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ProjectStartDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled="@Model.IsSubmitted" asp-for="ProjectStartDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="govuk-form-group @(isEndDateError ? "govuk-form-group--error" : string.Empty)">
+        <govuk-input-label is-page-heading="false" class="govuk-label--s">End date</govuk-input-label>
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="end-date-hint">
+            <div id="end-date-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ProjectEndDateMonth" />
+            <govuk-error-message asp-for="ProjectEndDateYear" />
+            <div class="govuk-date-input" id="end-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ProjectEndDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" disabled="@Model.IsSubmitted" asp-for="ProjectEndDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ProjectEndDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" disabled="@Model.IsSubmitted" asp-for="ProjectEndDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ExpectedProjectStartDateMonth" type="hidden" value="@Model.ExpectedProjectStartDateMonth" />
+    <input asp-for="ExpectedProjectStartDateYear" type="hidden" value="@Model.ExpectedProjectStartDateYear" />
+    <input asp-for="ExpectedProjectEndDateMonth" type="hidden" value="@Model.ExpectedProjectEndDateMonth" />
+    <input asp-for="ExpectedProjectEndDateYear" type="hidden" value="@Model.ExpectedProjectEndDateYear" />
+    <input asp-for="IsSubmitted" type="hidden" value="@Model.IsSubmitted" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

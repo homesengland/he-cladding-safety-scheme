@@ -86,6 +86,7 @@ namespace HE.Remediation.Core.Data.Repositories
             {
                 ContactName = parameters.ContactName,
                 CompanyName = parameters.CompanyName,
+                CompanyRegistrationNumber = parameters.CompanyRegistrationNumber,
                 EmailAddress = parameters.EmailAddress,
                 ContactNumber = parameters.ContactNumber,
                 ApplicationLeaseHolderEngagementId = parameters.ApplicationLeaseHolderEngagementId,
