@@ -49,7 +49,7 @@
             <govuk-summary-list-row-value>
                 @if (Model.StartDate != null)
                 {
-                    <span>@Model.StartDate.Value.ToString("dd/MM/yyyy")</span>
+                    <span>@Model.StartDate.Value.ToString("MM/yyyy")</span>
                 }
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
@@ -60,7 +60,7 @@
             <govuk-summary-list-row-value>
                 @if (Model.UnsafeCladdingRemovalDate != null)
                 {
-                    <span>@Model.UnsafeCladdingRemovalDate.Value.ToString("dd/MM/yyyy")</span>
+                    <span>@Model.UnsafeCladdingRemovalDate.Value.ToString("MM/yyyy")</span>
                 }
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
@@ -71,7 +71,7 @@
             <govuk-summary-list-row-value>
                 @if (Model.ExpectedDateForCompletion != null)
                 {
-                    <span>@Model.ExpectedDateForCompletion.Value.ToString("dd/MM/yyyy")</span>
+                    <span>@Model.ExpectedDateForCompletion.Value.ToString("MM/yyyy")</span>
                 }
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
@@ -174,14 +174,6 @@
     </govuk-summary-list-row>
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
-            Confirm the building is over 11 metres or 11-18 metres if the building is located in London?
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @(Model.CorrectHeightConfirmedDate is not null ? "Yes" : "No")
-        </govuk-summary-list-row-value>
-    </govuk-summary-list-row>
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
             Do you have a Building Safety Regulator registration code?
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
@@ -199,6 +191,8 @@
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
     }
+   @if( Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme )
+   {
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
             Do you know who the original developer for this building was?
@@ -274,6 +268,51 @@
             }
         }
     }
+    }
+
+    @if (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Are you responsible for the remediation to this building because?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.BuildingRemediationResponsibilityTypeId == (int)EBuildingRemediationResponsibilityType.YouBuiltTheBuilding
+                            ? "You built the building"
+                            : "You refurbished the building in the last 30 years")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.BuildingRemediationResponsibilityTypeId == (int)EBuildingRemediationResponsibilityType.YouBuiltTheBuilding)
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Add a date of completion (Optional)
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (Model.ConstructionCompletionDate != null)
+                    {
+                        <span>@Model.ConstructionCompletionDate.Value.ToString("MM/yyyy")</span>
+                    }
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+        else
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    Add date of major refurbishment completion (Optional)
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (Model.RefurbishmentCompletionDate != null)
+                    {
+                        <span>@Model.RefurbishmentCompletionDate.Value.ToString("MM/yyyy")</span>
+                    }
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        }
+    }
+
     @if (Model.SumInsuredAmount.HasValue)
     {
         <govuk-summary-list-row>

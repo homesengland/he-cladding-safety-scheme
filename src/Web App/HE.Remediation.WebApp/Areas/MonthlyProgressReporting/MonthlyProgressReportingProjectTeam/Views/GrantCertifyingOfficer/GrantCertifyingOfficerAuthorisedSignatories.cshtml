@@ -1,0 +1,59 @@
+﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer
+@model GrantCertifyingOfficerSignatoriesViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("GrantCertifyingOfficerAddress");
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Signatory" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="DateAppointed" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Please tell us who will sign the Duty of Care deed on behalf of the company</h1>
+
+<p class="govuk-body">Please supply the authorised signatory and contact email address, for the firm that is providing the Grant Certifying Officer. This is required in order to enter the firm into a duty of care deed.</p>
+
+<form asp-action="GrantCertifyingOfficerAuthorisedSignatories" method="post">
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="Version" type="hidden" value="@Model.Version" />
+    <input asp-for="IsGcoComplete" type="hidden" value="@Model.IsGcoComplete" />
+    <input asp-for="HasVisitedCheckYourAnswers" type="hidden" value="@Model.HasVisitedCheckYourAnswers" />
+
+    <govuk-fieldset>
+        <govuk-input asp-for="Signatory" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Authorised signatory</govuk-input-label>
+        </govuk-input>
+
+        <govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20">
+            <govuk-input-label class="gov-uk-label--s">Email address</govuk-input-label>
+        </govuk-input>
+
+        <govuk-date-input asp-for="DateAppointed" name="DateAppointed">
+            <govuk-date-input-fieldset class="govuk-!-margin-top-5">
+                <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                    Contract start date
+                </govuk-date-input-fieldset-legend>
+            </govuk-date-input-fieldset>
+            <govuk-date-input-label></govuk-date-input-label>
+            <govuk-date-input-hint>
+                For example, 27 8 2022
+            </govuk-date-input-hint>
+        </govuk-date-input>
+    </govuk-fieldset>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

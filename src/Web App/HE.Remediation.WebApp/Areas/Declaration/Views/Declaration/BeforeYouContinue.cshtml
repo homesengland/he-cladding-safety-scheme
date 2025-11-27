@@ -6,6 +6,7 @@
     ViewData["Title"] = "Before you continue";
     ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
     var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
+    var isRasScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
 }
 
 <h1 class="govuk-heading-xl">
@@ -19,7 +20,10 @@
 <ul class="govuk-list govuk-list--bullet">
     <li>Building details</li>
     <li>Responsible Entity details</li>
-    <li>Alternative routes of funding</li>
+    @if (!isRasScheme)
+    {
+        <li>Alternative routes of funding</li>
+    }
     @if (isCladdingScheme)
     {
         <li>Bank account details</li>

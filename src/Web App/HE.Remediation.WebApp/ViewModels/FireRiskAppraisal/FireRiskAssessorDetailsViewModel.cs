@@ -12,5 +12,6 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public string Telephone { get; set; }
         public string ReturnUrl { get; set; }
         public ESubmitAction SubmitAction { get; set; }
+        public EApplicationScheme ApplicationScheme { get; set; }
     }
 }

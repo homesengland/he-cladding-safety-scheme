@@ -18,7 +18,11 @@
         public UploadSectionSettings PaymentRequestLeaseholderResidentUploadEvidence { get; set; }
         public UploadSectionSettings ProjectPlan { get; set; }
         public UploadSectionSettings RtmEvidence { get; set; }
-    }
+        public UploadSectionSettings MonthlyProgressReportingProjectPlanEvidence { get; set; }
+        public UploadSectionSettings MonthlyProgressReportingBuildingControlEvidence { get; set; }
+        public UploadSectionSettings PtsUplift { get; set; }
+        public UploadSectionSettings MonthlyProgressReportingLeaseholderEvidence { get; set; }
+}
 
     public class UploadSectionSettings
     {

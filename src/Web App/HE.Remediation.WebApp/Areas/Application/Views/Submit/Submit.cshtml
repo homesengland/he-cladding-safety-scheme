@@ -1,8 +1,10 @@
-﻿@{
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.Application.SubmitViewModel
+@{
     ViewData["Title"] = "Submit building application";
 }
 
-<div class="text-center">
+<div class="text-center"
     <div class="govuk-width-container">
         <govuk-back-link href=@Url.Action("Index", "TaskList", new { Area = "Application" })>Back</govuk-back-link>
         <main class="govuk-main-wrapper">
@@ -13,11 +15,12 @@
                         Submit
                     </span>
 
-                    <h1 class="govuk-heading-xl">Submit building application</h1>
+                    <h1 class="govuk-heading-xl">Submit building @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme ? "application" : "record")</h1>
 
                     <p class="govuk-body">Submit this building once you have entered all the relevant information.</p>
 
-                    <p class="govuk-body">By submitting this application, you confirm that the information you have
+                    <p class="govuk-body">
+                        By submitting this @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme ? "application" : "building record"), you confirm that the information you have
                         provided for your fire risk appraisal is true and correct to the best of your
                         knowledge.</p>
 

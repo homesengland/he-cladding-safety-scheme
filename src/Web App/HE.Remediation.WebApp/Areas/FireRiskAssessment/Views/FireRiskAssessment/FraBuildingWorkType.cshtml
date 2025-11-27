@@ -1,0 +1,42 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAssessment.FraBuildingWorkTypeViewModel
+@{
+    ViewData["Title"] = "Get a fire risk assessment";
+
+    if (Model.VisitedCheckYourAnswers)
+    {
+        ViewData["BackLink"] = Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+    else
+    {
+        ViewData["BackLink"] = Url.Action("Information", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FraBuildingWorkTypeId" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What works does your building need?</h1>
+
+<form asp-controller="FireRiskAssessment" asp-area="FireRiskAssessment" asp-action="FraBuildingWorkType" method="post">
+    <govuk-radios asp-for="FraBuildingWorkTypeId">
+        <govuk-radios-item value="@EFraBuildingWorkType.Internal" checked="@(Model.FraBuildingWorkTypeId == EFraBuildingWorkType.Internal)">Internal</govuk-radios-item>
+        <govuk-radios-item value="@EFraBuildingWorkType.External" checked="@(Model.FraBuildingWorkTypeId == EFraBuildingWorkType.External)">External</govuk-radios-item>
+        <govuk-radios-item value="@EFraBuildingWorkType.InternalAndExternal" checked="@(Model.FraBuildingWorkTypeId == EFraBuildingWorkType.InternalAndExternal)">Internal And External</govuk-radios-item>
+        
+    </govuk-radios>
+    
+    <input asp-for="ApplicationScheme" type="hidden" value="@Model.ApplicationScheme" />
+    <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

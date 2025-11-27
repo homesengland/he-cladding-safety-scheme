@@ -19,6 +19,8 @@ public class GetReportDetailsHandler: IRequestHandler<GetReportDetailsRequest, G
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+
         var buildingDetails = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<FRAEWBuildingDetails>("GetFRAEWBuildingDetails",
                                                                                                            new { applicationId });
 
@@ -27,6 +29,7 @@ public class GetReportDetailsHandler: IRequestHandler<GetReportDetailsRequest, G
 
         var response = new GetReportDetailsResponse
         {
+            ApplicationScheme = applicationScheme,
             AuthorsName = reportDetails?.AuthorsName,
             PeerReviewPerson = reportDetails?.PeerReviewPerson,
             FraewCost = reportDetails?.FraewCost,

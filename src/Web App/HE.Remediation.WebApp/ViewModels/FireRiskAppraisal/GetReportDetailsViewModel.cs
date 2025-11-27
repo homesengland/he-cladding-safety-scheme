@@ -5,6 +5,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal;
 
 public class GetReportDetailsViewModel
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public string AuthorsName { get; set; }
     public string PeerReviewPerson { get; set; }
     public decimal? FraewCost { get; set; }

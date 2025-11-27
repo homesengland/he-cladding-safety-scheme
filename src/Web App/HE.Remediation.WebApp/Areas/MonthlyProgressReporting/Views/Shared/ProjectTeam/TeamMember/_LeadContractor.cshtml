@@ -1,0 +1,38 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember.TeamMemberViewModel
+
+<govuk-radios asp-for="ConsiderateConstructorSchemeType">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+            Is your lead contractor signed up to the Considerate Constructors Scheme?
+        </govuk-radios-fieldset-legend>
+    </govuk-radios-fieldset>
+    <govuk-radios-hint class="text-override-colour-default">(Whilst it is desirable for contractors to be registered with the scheme, as a minimum we expect them to adhering to the principles of the Considerate Constructors Scheme to fulfil contractual requirements.)</govuk-radios-hint>
+    <govuk-radios-item value="@(EConsiderateConstructorSchemeType.Yes)">Yes</govuk-radios-item>
+    <govuk-radios-item value="@(EConsiderateConstructorSchemeType.No)">
+        No
+        <govuk-radios-item-conditional>
+            <govuk-character-count asp-for="ConsiderateConstructorSchemeReasonNo" max-length="500">
+                <govuk-character-count-label>Provide a reason</govuk-character-count-label>
+            </govuk-character-count>
+        </govuk-radios-item-conditional>
+    </govuk-radios-item>
+    <govuk-radios-item value="@(EConsiderateConstructorSchemeType.DontKnow)">
+        Don't Know
+        <govuk-radios-item-conditional>
+            <govuk-character-count asp-for="ConsiderateConstructorSchemeReasonDontKnow" max-length="500">
+                <govuk-character-count-label>Provide a reason</govuk-character-count-label>
+            </govuk-character-count>
+        </govuk-radios-item-conditional>
+    </govuk-radios-item>
+</govuk-radios>
+
+<govuk-radios asp-for="HasChasCertification">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+            Has your lead contractor obtained CHAS Elite certification (Common Assessment Standard)? (Optional)
+        </govuk-radios-fieldset-legend>
+    </govuk-radios-fieldset>
+    <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+    <govuk-radios-item value="@(false)">No</govuk-radios-item>
+</govuk-radios>

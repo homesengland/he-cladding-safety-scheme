@@ -34,10 +34,49 @@ public class FireRiskAssessmentController : StartController
     [HttpGet(nameof(Information))]
     public async Task<IActionResult> Information(CancellationToken cancellationToken)
     {
-        await _sender.Send(GetAboutThisSectionRequest.Request, cancellationToken);
-        return View();
+        var response = await _sender.Send(GetAboutThisSectionRequest.Request, cancellationToken);
+        var model = _mapper.Map<AboutThisSectionViewModel>(response);
+        return View(model);
     }
 
+    #region What works does your building need
+
+    [HttpGet(nameof(FraBuildingWorkType))]
+    public async Task<IActionResult> FraBuildingWorkType(CancellationToken cancellationToken)
+    {
+        var response = await _sender.Send(GetBuildingWorkTypeRequest.Request, cancellationToken);
+        var model = _mapper.Map<FraBuildingWorkTypeViewModel>(response);
+        return View(model);
+    }
+
+
+    [HttpPost(nameof(FraBuildingWorkType))]
+    public async Task<IActionResult> FraBuildingWorkType(FraBuildingWorkTypeViewModel model, CancellationToken cancellationToken)
+    {
+        var validator = new FraBuildingWorkTypeViewModelValidator();
+        var validationResult = await validator.ValidateAsync(model, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, string.Empty);
+            return View(model);
+        }
+
+        if (model.SubmitAction == ESubmitAction.Exit)
+        {
+            return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+
+        var request = _mapper.Map<SetBuildingWorkTypeRequest>(model);
+
+        var response = await _sender.Send(request, cancellationToken);
+
+        return !model.VisitedCheckYourAnswers
+            ? RedirectToAction("HasFra", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+            : RedirectToAction("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+    }
+
+    #endregion
     [HttpGet(nameof(HasFra))]
     public async Task<IActionResult> HasFra(CancellationToken cancellationToken)
     {
@@ -85,7 +124,7 @@ public class FireRiskAssessmentController : StartController
         var response = await _sender.Send(GetFireRiskReportAssessmentReportRequest.Request, cancellationToken);
 
         var model = _mapper.Map<UploadFireRiskAssessmentReportViewModel>(response);
-        
+
         return View(model);
     }
 
@@ -300,7 +339,7 @@ public class FireRiskAssessmentController : StartController
             return RedirectToAction("IdentifiedDefects", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
         }
 
-        return model.VisitedCheckYourAnswers || model.HasInternalFireSafetyRisks == false
+        return model.VisitedCheckYourAnswers || model.HasInternalFireSafetyRisks == false || model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme
             ? RedirectToAction("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
             : RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
     }
@@ -328,9 +367,11 @@ public class FireRiskAssessmentController : StartController
         var request = _mapper.Map<SetIdentifiedDefectsRequest>(model);
         await _sender.Send(request, cancellationToken);
 
-        return model.SubmitAction == ESubmitAction.Exit 
-            ? RedirectToAction("Index", "TaskList", new { Area = "Application" }) 
-            : RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+        return model.SubmitAction == ESubmitAction.Exit
+            ? RedirectToAction("Index", "TaskList", new { Area = "Application" })
+            : model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme
+                ? RedirectToAction("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+                : RedirectToAction("Funding", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
     }
 
     [HttpGet(nameof(Funding))]

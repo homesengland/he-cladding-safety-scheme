@@ -23,7 +23,8 @@ public class GetBuildingHasSafetyRegulatorRegistrationCodeHandler : IRequestHand
 
         return new GetBuildingHasSafetyRegulatorRegistrationCodeResponse
         {
-            BuildingHasSafetyRegulatorRegistrationCode = hasBuildingSafetyRegulatorRegistrationCode
+            BuildingHasSafetyRegulatorRegistrationCode = hasBuildingSafetyRegulatorRegistrationCode,
+            ApplicationScheme = _applicationDataProvider.GetApplicationScheme()
         };
     }
 }

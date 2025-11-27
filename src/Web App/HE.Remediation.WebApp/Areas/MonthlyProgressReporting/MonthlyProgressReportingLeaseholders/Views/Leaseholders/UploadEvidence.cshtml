@@ -1,0 +1,77 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.Leaseholders;
+@model UploadEvidenceViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("LastCommunicationDate");
+    ViewData["FullWidth"] = false;
+
+    var acceptedTypes = Model?.AcceptedFileTypes?.Any() == true ? string.Join(",", Model?.AcceptedFileTypes) : "*";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<form asp-action="UploadEvidence" asp-route-id="" method="post" enctype="multipart/form-data">
+    <h1 class="govuk-heading-xl">Upload evidence of your communication with the leaseholders and residents</h1>
+    <h2 class="govuk-heading-s">This can be a copy of an email or other communication you have sent. If possible please don't send personal data (e.g. names) of residents</h2>
+
+    <p class="govuk-caption-m">You can upload up to 5 files.</p>
+    <p class="govuk-caption-m">Each file must be smaller than 50MB, and .pdf file.</p>
+
+    @if ((Model.AddedFiles is null || Model.AddedFiles.Count < Model.NumberOfFilesAllowed) && !Model.IsSubmitted)
+    {
+        <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
+        @if (Model.NumberOfFilesAllowed > 1)
+        {
+            <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Add file</govuk-button>
+        }
+    }
+
+    @if (Model.AddedFiles is { Count: > 0 })
+    {
+        <h2 class="govuk-heading-m">Files added</h2>
+        <govuk-summary-list>
+            @for (var i = 0; i < Model.AddedFiles.Count; i++)
+            {
+                var file = Model.AddedFiles[i];
+                var count = i + 1;
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        File @count
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @file.Name @($"{@file.FileSize}")
+                    </govuk-summary-list-row-value>
+                    @if (!Model.IsSubmitted)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action(Model.DeleteEndpoint, new { fileId = file.Id })">Delete</govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+            }
+        </govuk-summary-list>
+        @for (var i = 0; i < Model.AddedFiles.Count; i++)
+        {
+            var file = Model.AddedFiles[i];
+            <input type="hidden" name="AddedFiles[@i].Id" value="@file.Id" />
+            <input type="hidden" name="AddedFiles[@i].Name" value="@file.Name" />
+            <input type="hidden" name="AddedFiles[@i].FileSize" value="@file.FileSize" />
+        }
+    }
+    <br/>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Continue</govuk-button>
+    </div>
+</form>

@@ -13,6 +13,10 @@
     <govuk-error-summary>
         <govuk-error-summary-item asp-for="AssessorId" />
         <govuk-error-summary-item asp-for="FraDate" />
+        @if (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+        {
+            <govuk-error-summary-item asp-for="FraCommissionerType" />
+        }
     </govuk-error-summary>
 }
 
@@ -41,7 +45,7 @@
             }
         }
     </govuk-select>
-    
+
     <div class="govuk-!-margin-bottom-6">
         <a class="govuk-link" href="@Url.Action("OtherAssessor", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">
             I cannot find the company on this list
@@ -56,13 +60,26 @@
     }
 
     <govuk-date-input asp-for="FraDate">
-        <govuk-date-input-label class="govuk-label--s">What date was the FRA conducted?</govuk-date-input-label>
+        <govuk-date-input-label class="govuk-label--s">@((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "What date was the FRA received?" : "What date was the FRA conducted?")</govuk-date-input-label>
         <govuk-date-input-hint>
             For example, 27 8 2022
         </govuk-date-input-hint>
     </govuk-date-input>
-    
+
+    @if (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+    {
+        <govuk-radios asp-for="FraCommissionerType">
+            <govuk-radios-fieldset>
+                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">Who commissioned the FRA?</govuk-radios-fieldset-legend>
+            </govuk-radios-fieldset>
+            <govuk-radios-item value="@EFraCommissionerType.YouTheDeveloper">You the developer </govuk-radios-item>
+            <govuk-radios-item value="@EFraCommissionerType.ResponsibleEntity">The responsible entity</govuk-radios-item>
+        </govuk-radios>
+    }
+
     <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
+
+    <input asp-for="ApplicationScheme" type="hidden" value="@Model.ApplicationScheme" />
 
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>

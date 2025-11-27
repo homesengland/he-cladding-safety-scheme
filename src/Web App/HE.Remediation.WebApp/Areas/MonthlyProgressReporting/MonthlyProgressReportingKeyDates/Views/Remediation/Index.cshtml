@@ -1,0 +1,66 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates
+@model RemediationViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("Index", "KeyDates");
+    ViewData["ExitLinkHidden"] = false;
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="FullCompletionOfWorksMonthYearInput" />
+        <govuk-error-summary-item asp-for="PracticalCompletionMonthYearInput" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Remediation expected dates</h1>
+
+<p class="govuk-body">Use this page to add or update key dates for remediation works.</p>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="Remediation" asp-action="Index" method="post">
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous remediation start on site date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousFullCompletionOfWorksDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous practical completion date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousPracticalCompletionDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <month-year-input asp-for="FullCompletionOfWorksMonthYearInput"
+                      label="Expected remediation start on site date"
+                      model-state="@ViewData.ModelState" />
+
+    <month-year-input asp-for="PracticalCompletionMonthYearInput"
+                      label="Expected practical completion of works date"
+                      model-state="@ViewData.ModelState" />
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <govuk-date-input class="hidden" asp-for="PreviousFullCompletionOfWorksDate" value="@Model.PreviousFullCompletionOfWorksDate" />
+    <govuk-date-input class="hidden" asp-for="PreviousPracticalCompletionDate" value="@Model.PreviousPracticalCompletionDate" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

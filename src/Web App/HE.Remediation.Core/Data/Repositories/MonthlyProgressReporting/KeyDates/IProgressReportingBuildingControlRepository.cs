@@ -1,0 +1,11 @@
+﻿using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.BuildingControl;
+using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectPlan;
+using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport.KeyDates.BuildingControl;
+
+namespace HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
+public interface IProgressReportingBuildingControlRepository
+{
+    Task<GetUploadBuildingControlDocumentsResult> GetUploadBuildingControlDocuments(GetUploadBuildingControlDocumentsParameters parameters);
+    Task InsertProgressReportBuildingControlFile(InsertProgressReportProjectPlanFileParameters parameters);
+    Task DeleteUploadBuildingControlFile(DeleteUploadBuildingControlParameters parameters);
+}

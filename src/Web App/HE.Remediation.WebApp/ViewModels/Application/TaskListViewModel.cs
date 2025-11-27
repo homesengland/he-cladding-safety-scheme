@@ -18,13 +18,14 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
         public bool IsDataIngestion { get; set; }
         public bool IsSocialSector { get; set; }
+        public EFraBuildingWorkType? FraBuildingWorkType { get; set; }
 
         public bool Phase2ReadyForDeclaration()
         {
             return ApplicationLeaseHolderEngagementStatusId == ETaskStatus.Completed
                    && ApplicationBuildingDetailsStatusId == ETaskStatus.Completed
                    && ApplicationResponsibleEntityStatusId == ETaskStatus.Completed
-                   && ApplicationFundingRoutesStatusId == ETaskStatus.Completed
+                   && (IsRasScheme() || ApplicationFundingRoutesStatusId == ETaskStatus.Completed)
                    && ((IsCladdingSafetyScheme() && ApplicationBankDetailsStatusId == ETaskStatus.Completed) || (!IsCladdingSafetyScheme()));
         }
 
@@ -32,13 +33,15 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         {
             return ApplicationBuildingDetailsStatusId == ETaskStatus.Completed
                    && ApplicationResponsibleEntityStatusId == ETaskStatus.Completed
-                   && ApplicationFundingRoutesStatusId == ETaskStatus.Completed
+                   && (IsRasScheme() || ApplicationFundingRoutesStatusId == ETaskStatus.Completed)
                    && ((IsCladdingSafetyScheme() && ApplicationBankDetailsStatusId == ETaskStatus.Completed) || (!IsCladdingSafetyScheme()))
                    && ConfirmDeclarationStatusId == ETaskStatus.Completed;
         }
         public bool Phase3Completed()
         {
-            return ApplicationFireRiskAssessmentStatusId == ETaskStatus.Completed && ApplicationFraStatusId == ETaskStatus.Completed;
+            var requiresFraTask = ShowFireRiskApraisalForExternalWalls();
+
+            return (!requiresFraTask || ApplicationFireRiskAssessmentStatusId == ETaskStatus.Completed) &&  ApplicationFraStatusId == ETaskStatus.Completed;
         }
 
         public bool Phase4Completed()
@@ -57,5 +60,22 @@ namespace HE.Remediation.WebApp.ViewModels.Application
         {
             return ApplicationScheme == EApplicationScheme.CladdingSafetyScheme;
         }
+
+        public bool IsRasScheme()
+        {
+            return ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme;
+        }
+
+        public bool ShowFireRiskApraisalForExternalWalls()
+        {
+            if ((ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ||
+                 ApplicationScheme == EApplicationScheme.SocialSector)
+                     && FraBuildingWorkType == EFraBuildingWorkType.Internal)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
-} 
+}

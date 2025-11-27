@@ -37,6 +37,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.TaskList.GetTaskList
                 ConfirmDeclarationStatusId = applicationTaskListSummary.ConfirmDeclaration ? ETaskStatus.Completed : ETaskStatus.NotStarted,
                 ApplicationFireRiskAssessmentStatusId = applicationTaskListSummary.ApplicationFireRiskAssessmentStatusId,
                 ApplicationFraStatusId = applicationTaskListSummary.ApplicationFraStatusId,
+                FraBuildingWorkType = applicationTaskListSummary.FraBuildingWorkTypeId,
                 IsDataIngestion = applicationTaskListSummary.IsDataIngestion
             };
         }

@@ -4,9 +4,11 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.G
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddressManual;
 using HE.Remediation.Core.UseCase.Areas.Location.BuildingLookup;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting;
+using ProgressReportings = HE.Remediation.Core.UseCase.Areas.ProgressReporting;
+using ProgressReportingsV2 = HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 using GrantCertifyingOfficerAddressDetails = HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.AddressDetails;
+
 
 namespace HE.Remediation.WebApp.ViewModels.Location;
 
@@ -30,7 +32,9 @@ public class PostCodeManualViewModelMapper: Profile
         CreateMap<PostCodeManualViewModel, SetFreeholderAddressRequest>();
         CreateMap<PostCodeManualViewModel, SetFreeholderAddressManualRequest>();
         CreateMap<PostCodeManualViewModel, GrantCertifyingOfficerAddressDetails.SetManual.SetAddressManualDetailsRequest>();
-        CreateMap<PostCodeManualViewModel, SetGrantCertifyingOfficerAddressRequest>();
-        CreateMap<GetGrantCertifyingOfficerAddressResponse, PostCodeManualViewModel>();
+        CreateMap<PostCodeManualViewModel, ProgressReportings.SetGrantCertifyingOfficerAddressRequest>();
+        CreateMap<ProgressReportings.GetGrantCertifyingOfficerAddressResponse, PostCodeManualViewModel>();
+        CreateMap<PostCodeManualViewModel, ProgressReportingsV2.SetGrantCertifyingOfficerAddressRequest>();
+        CreateMap<ProgressReportingsV2.GetGrantCertifyingOfficerAddressResponse, PostCodeManualViewModel>();
     }
 }

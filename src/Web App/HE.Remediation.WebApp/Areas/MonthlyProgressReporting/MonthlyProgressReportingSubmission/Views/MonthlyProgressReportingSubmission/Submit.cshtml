@@ -1,0 +1,36 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.Submission
+@model SubmissionViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Confirmation" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Monthly report submission</h1>
+
+<p class="govuk-body">
+   Before completing this monthly report, please take a few moments to check the information you've given to us.
+</p>
+
+<form asp-action="Submit" method="post">
+
+    <govuk-checkboxes asp-for="Confirmation">
+        <govuk-checkboxes-item value="true" checked="@Model.Confirmation">
+            I confirm that all of the information that has been provided in this monthly report is correct
+        </govuk-checkboxes-item>
+    </govuk-checkboxes>
+
+    <input type="hidden" asp-for="BuildingName" />
+    <input type="hidden" asp-for="ApplicationReferenceNumber" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

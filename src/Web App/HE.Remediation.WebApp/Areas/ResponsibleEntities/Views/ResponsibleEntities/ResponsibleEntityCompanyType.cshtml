@@ -3,7 +3,7 @@
 @inject IApplicationDataProvider applicationDataProvider;
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityCompanyTypeViewModel
 @{
-    ViewData["Title"] = "What type of company is the Responsible Entity?";
+    ViewData["Title"] = ((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "What type of organisation is the Responsible Entity?" : "What type of company is the Responsible Entity?");
     ViewData["BackLink"] = Model.ResponsibleEntityRelationType == EResponsibleEntityRelation.Freeholder
         ? Url.Action("ResponsibleEntityRelation", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
         : ViewData["BackLink"] = (string)ViewData["CompanyOrIndividual"] == "Individual"
@@ -25,7 +25,7 @@
 @section ErrorSummary
 {
     <govuk-error-summary>
-        <govuk-error-summary-item asp-for="OrganisationType"/>        
+        <govuk-error-summary-item asp-for="OrganisationType" />
     </govuk-error-summary>
 }
 <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityCompanyType">
@@ -36,15 +36,18 @@
             </govuk-radios-fieldset-legend>
         </govuk-radios-fieldset>
 
-        @if(Model.ApplicationScheme == EApplicationScheme.SocialSector) {
+        @if (Model.ApplicationScheme == EApplicationScheme.SocialSector)
+        {
             <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RegisteredProvider)">Registered Provider</govuk-radios-item>
             <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.LocalAuthority)">Local Authority</govuk-radios-item>
         }
         else if (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
         {
             <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.PrivateCompany)">Private company</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.RegisteredProvider)">Registered Provider</govuk-radios-item>
+            <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.LocalAuthority)">Local Authority</govuk-radios-item>
             <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.Other)">Other</govuk-radios-item>
-        } 
+        }
         else
         {
             <govuk-radios-item value="@(EApplicationResponsibleEntityOrganisationType.PrivateCompany)">Private company</govuk-radios-item>
@@ -58,7 +61,7 @@
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
-    
+
     <div class="comp-btn-group">
         <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
         <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>

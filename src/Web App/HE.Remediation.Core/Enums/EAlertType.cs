@@ -7,5 +7,6 @@ public enum EAlertType
     WorksPackage = 3,
     ScheduleOfWorks = 4,
     PaymentRequest = 5,
-    ApplicationDetailsChanged = 6
+    ApplicationDetailsChanged = 6,
+    BuildingBecomingActiveAlert = 7
 }

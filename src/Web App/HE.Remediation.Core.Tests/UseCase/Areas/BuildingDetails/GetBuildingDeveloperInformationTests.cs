@@ -31,7 +31,11 @@ public class GetBuildingDeveloperInformationTests
         
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
-                                .Verifiable(); 
+                                .Verifiable();
+
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+                        .Returns(Enums.EApplicationScheme.ResponsibleActorsScheme)
+                        .Verifiable();
 
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetBuildingDeveloperInformationResponse>("GetBuildingOriginalDeveloperIsKnown", It.IsAny<object>()))
                                 .ReturnsAsync(infoResponse)

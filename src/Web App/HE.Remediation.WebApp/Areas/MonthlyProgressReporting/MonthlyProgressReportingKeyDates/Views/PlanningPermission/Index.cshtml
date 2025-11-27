@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates
+@model PlanningPermissionViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("Index", "KeyDates");
+    ViewData["ExitLinkHidden"] = false;
+    ViewData["FullWidth"] = true;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="WorksNeedPlanningPermission" />
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Do your works need planning permission?</h1>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="PlanningPermission" asp-action="Index" method="post">
+
+    <govuk-radios asp-for="WorksNeedPlanningPermission">
+        <govuk-radios-fieldset>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(EYesNoNonBoolean.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(EYesNoNonBoolean.No)">No</govuk-radios-item>
+        <govuk-radios-item value="@(EYesNoNonBoolean.DontKnow)">Don't know yet</govuk-radios-item>
+    </govuk-radios>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

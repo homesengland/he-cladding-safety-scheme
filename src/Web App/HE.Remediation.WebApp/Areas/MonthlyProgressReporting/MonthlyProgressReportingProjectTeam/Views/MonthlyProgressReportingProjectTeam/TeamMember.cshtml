@@ -1,0 +1,96 @@
+﻿@using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember.TeamMemberViewModel
+@{
+    var pageTitle = Model.Role != ETeamRole.Other
+        ? $"{Model.Role.ToString().SplitCamelCase().ToSentenceCase()} company details"
+        : "Role in project team";
+
+    string backLink;
+
+    if (!string.IsNullOrEmpty(Model.ReturnUrl))
+    {
+        backLink = Url.Action(Model.ReturnUrl, "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam", teamRole=(int)Model.Role });
+    }
+    else if (Model.TeamMemberId is not null && Model.TeamMemberId.HasValue)
+    {
+        backLink = Url.Action("ProjectTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" });
+    }
+    else
+    {
+        backLink = Url.Action("ExistingTeamMember", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam", teamRole = (int)Model.Role, sameAsPrevious = Model.SameAsPrevious });
+    }
+
+    ViewData["BackLink"] = backLink;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="CompanyName" />
+        <govuk-error-summary-item asp-for="CompanyRegistration" />
+        <govuk-error-summary-item asp-for="Name" />
+        <govuk-error-summary-item asp-for="EmailAddress" />
+        <govuk-error-summary-item asp-for="PrimaryContactNumber" />
+
+        @if (Model.Role == ETeamRole.Other)
+        {
+            <govuk-error-summary-item asp-for="OtherRole" />
+        }
+
+        @if (Model.Role != ETeamRole.ManagingAgent)
+        {
+            <govuk-error-summary-item asp-for="ContractSigned" />
+        }
+
+        @if (Model.Role != ETeamRole.ManagingAgent && Model.Role != ETeamRole.Other)
+        {
+            <govuk-error-summary-item asp-for="IndemnityInsurance" />
+            <govuk-error-summary-item asp-for="IndemnityInsuranceReason" />
+            <govuk-error-summary-item asp-for="InvolvedInOriginalInstallation" />
+            <govuk-error-summary-item asp-for="InvolvedRoleReason" />
+            <govuk-error-summary-item asp-for="ConsiderateConstructorSchemeType" />
+        }
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">@pageTitle</h1>
+
+<form action="@Url.Action("TeamMember", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam", TeamRole = (int)Model.Role, TeamMemberId = Model.TeamMemberId })" method="post">
+    <input asp-for="Role" type="hidden" value="@Model.Role" />
+    <input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ReturnUrl" value="@Model.ReturnUrl" type="hidden" />
+    <input asp-for="SameAsPrevious" type="hidden" value="@Model.SameAsPrevious" />
+    <input asp-for="GrantCertifyingOfficerTeamMemberId" type="hidden" value="@Model.GrantCertifyingOfficerTeamMemberId" />
+    <input type="hidden" asp-for="IsChangingExistingMember" />
+    <govuk-fieldset>
+        @await Html.PartialAsync("ProjectTeam/TeamMember/_GenericFields", Model)
+
+        @if (Model.Role == ETeamRole.Other)
+        {
+            @await Html.PartialAsync("ProjectTeam/TeamMember/_OtherRole", Model)
+        }
+
+        @if (Model.Role != ETeamRole.ManagingAgent)
+        {
+            @await Html.PartialAsync("ProjectTeam/TeamMember/_ContractSigned", Model)
+        }
+
+        @if (Model.Role != ETeamRole.ManagingAgent && Model.Role != ETeamRole.Other)
+        {
+            @await Html.PartialAsync("ProjectTeam/TeamMember/_IndemnityAndInvolved", Model)
+        }
+
+        @if (Model.Role == ETeamRole.LeadContractor)
+        {
+            @await Html.PartialAsync("ProjectTeam/TeamMember/_LeadContractor", Model)
+        }
+    </govuk-fieldset>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

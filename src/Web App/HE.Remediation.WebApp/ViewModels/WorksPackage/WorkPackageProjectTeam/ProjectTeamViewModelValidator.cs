@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 
+using HE.Remediation.Core.Enums;
+
 namespace HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeam;
 
 public class ProjectTeamViewModelValidator : AbstractValidator<ProjectTeamViewModel>
@@ -7,7 +9,7 @@ public class ProjectTeamViewModelValidator : AbstractValidator<ProjectTeamViewMo
     public ProjectTeamViewModelValidator()
     {
         RuleFor(x => x.MissingRoles)
-            .Must(x => x is null || x.Count == 0)
+            .Must(x => x is null || !x.Any(role => role != ETeamRole.ManagingAgent))
             .WithMessage("Add missing team members");
 
         RuleFor(x => x.HasChasCertificationValue)

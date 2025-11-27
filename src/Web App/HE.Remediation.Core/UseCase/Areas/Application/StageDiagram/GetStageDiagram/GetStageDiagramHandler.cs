@@ -10,6 +10,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
         private readonly IApplicationDataProvider _applicationDataProvider;
         private readonly IDbConnectionWrapper _db;
         private readonly IProgressReportingRepository _progressReportingRepository;
+        private readonly IMonthlyProgressReportingRepository _monthlyProgressReportingRepository;
         private readonly IScheduleOfWorksRepository _scheduleOfWorksRepository;
         private readonly IWorkPackageRepository _workPackageRepository;
         private readonly IPaymentRequestRepository _paymentRequestRepository;
@@ -20,7 +21,8 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
         public GetStageDiagramHandler(
             IApplicationDataProvider applicationDataProvider, 
             IDbConnectionWrapper db, 
-            IProgressReportingRepository progressReportingRepository, 
+            IProgressReportingRepository progressReportingRepository,
+            IMonthlyProgressReportingRepository monthlyProgressReportingRepository,
             IScheduleOfWorksRepository scheduleOfWorksRepository, 
             IWorkPackageRepository workPackageRepository, 
             IPaymentRequestRepository paymentRequestRepository, 
@@ -31,6 +33,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             _applicationDataProvider = applicationDataProvider;
             _db = db;
             _progressReportingRepository = progressReportingRepository;
+            _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
             _scheduleOfWorksRepository = scheduleOfWorksRepository;
             _workPackageRepository = workPackageRepository;
             _paymentRequestRepository = paymentRequestRepository;
@@ -53,20 +56,23 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
                 ApplicationId = applicationId
             });
 
+            var isApplicationActive = await _db.QuerySingleOrDefaultAsync<bool>("CheckIsApplicationActive", new
+            {
+                ApplicationId = applicationId
+            });
+
+
             var monthlyPaymentsOutstanding = await _paymentRequestRepository.GetMonthlyPaymentsOutstanding(applicationId);
 
             stageDiagramResponse.SubmittedDate = submittedDate;
 
-            var progressReports = await _progressReportingRepository.GetProgressReports();
-
-            if (progressReports.Any())
-            {
-                stageDiagramResponse.HasThePrimaryReportBeenSubmitted = progressReports.Any(x => x.Version == 1 && x.DateSubmitted.HasValue);
-                stageDiagramResponse.ProgressReports = progressReports.OrderByDescending(x => x.DateCreated).Take(2).ToList();
-            }
+            var monthlyProgressReports = await _monthlyProgressReportingRepository.GetProgressReports(applicationId);
+            stageDiagramResponse.HasProgressReports = monthlyProgressReports.Count > 0;
+            stageDiagramResponse.ProgressReports = monthlyProgressReports.OrderByDescending(x => x.DateCreated).Take(2).ToList();
+            stageDiagramResponse.HasSubmittedProgressReports = monthlyProgressReports.Count > 2;
 
             var paymentRequests = await _paymentRequestRepository.GetPaymentRequests();
-            if (paymentRequests.Any())
+            if (paymentRequests != null && paymentRequests.Any())
             {
                 stageDiagramResponse.PaymentRequests = paymentRequests.OrderByDescending(x => x.CreatedDate).Take(2).ToList();
             }
@@ -92,8 +98,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             var startedOnDate = await _milestoneRepository.GetStartOnSite(applicationId);
             var practicalCompletion = await _milestoneRepository.GetPracticalCompletion(applicationId);
 
-            stageDiagramResponse.ShowClosingReport = closingReportAvailable;
-            stageDiagramResponse.HasSubmittedProgressReports = await _progressReportingRepository.HasSubmittedProgressReports();
+            stageDiagramResponse.ShowClosingReport = closingReportAvailable;          
             stageDiagramResponse.HasWorkPackage = await _workPackageRepository.HasWorkPackage();
             stageDiagramResponse.IsWorkPackageSubmitted = await _workPackageRepository.IsWorkPackageSubmitted();
             stageDiagramResponse.isWorkPackageConfirmedToProceed = await _workPackageRepository.GetWorkPackageConfirmToProceed();
@@ -112,6 +117,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             stageDiagramResponse.IsClosingReportSubmitted = closingReportSubmitted;
 
             stageDiagramResponse.ConsiderVariation = monthlyPaymentsOutstanding == 1;
+            stageDiagramResponse.IsApplicationActive = isApplicationActive;
 
             return stageDiagramResponse ?? new GetStageDiagramResponse();
         }

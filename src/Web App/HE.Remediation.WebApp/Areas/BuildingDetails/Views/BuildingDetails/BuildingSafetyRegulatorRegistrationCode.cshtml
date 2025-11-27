@@ -13,6 +13,9 @@
     </govuk-error-summary>
 }
 <form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="BuildingSafetyRegulatorRegistrationCode">
+
+    @Html.HiddenFor(m => m.ApplicationScheme)
+
     <govuk-input asp-for="BuildingSafetyRegulatorRegistrationCode" input-class="govuk-input--width-20">
         <govuk-input-label is-page-heading="true" class="govuk-label--xl">
             What is your Building Safety Regulator registration code?

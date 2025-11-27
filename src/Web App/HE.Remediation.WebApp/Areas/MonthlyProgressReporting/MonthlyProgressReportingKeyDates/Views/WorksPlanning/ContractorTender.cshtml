@@ -1,0 +1,39 @@
+﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates.ContractorTenderViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["FullWidth"] = false;
+    ViewData["BackLink"] = Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" });
+}
+
+@section ErrorSummary 
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ContractorTenderType" />
+    </govuk-error-summary>
+}
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="WorksPlanning" asp-action="ContractorTender" method="post">
+    
+    <govuk-radios asp-for="ContractorTenderType">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">
+                How are you obtaining your contractor?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(EContractorTenderType.Competitive)">Competitive tender</govuk-radios-item>
+        <govuk-radios-item value="@(EContractorTenderType.NonCompetitive)">Non-competitive tender</govuk-radios-item>
+        <govuk-radios-item value="@(EContractorTenderType.UsingOriginalContractor)">Using the original contractor</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ContractorTenderType" type="hidden" value="@Model.ContractorTenderType" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" class="govuk-button--secondary govuk-!-margin-left-4" value="@ESubmitAction.Exit">Save and return later</govuk-button>
+    </div>
+</form>

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.Details.GetProgressReportCompanyDetails;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.Details.GetProgressReportDetails;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProgressReports.GetProgressReports;
-using HE.Remediation.WebApp.Attributes.Authorisation;
-using HE.Remediation.WebApp.ViewModels.ProgressReporting;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using HE.Remediation.WebApp.Attributes.Authorisation;
+using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting;
+using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting;
+using LegacyProgressReportCompanyDetails = HE.Remediation.Core.UseCase.Areas.ProgressReporting.Details.GetProgressReportCompanyDetails;
+using LegacyProgressReportModels = HE.Remediation.WebApp.ViewModels.ProgressReporting;
 
 namespace HE.Remediation.WebApp.Areas.ProgressReportingDetails.Controllers;
 
@@ -35,10 +35,10 @@ public class ProgressReportingDetailsController : Controller
     }
 
     [HttpGet("Details/Company/{teamMemberId:guid}")]
-    public async Task<IActionResult> ProgressReportCompanyDetails([FromRoute] GetProgressReportCompanyDetailsRequest request)
+    public async Task<IActionResult> ProgressReportCompanyDetails([FromRoute] LegacyProgressReportCompanyDetails.GetProgressReportCompanyDetailsRequest request)
     {
         var response = await _sender.Send(request);
-        var model = _mapper.Map<ProgressReportCompanyDetailsViewModel>(response);
+        var model = _mapper.Map<LegacyProgressReportModels.ProgressReportCompanyDetailsViewModel>(response);
 
         return View(model);
     }
@@ -57,4 +57,11 @@ public class ProgressReportingDetailsController : Controller
     }
 
     #endregion
+
+    [HttpGet("MonthlyReportPdf/{progressReportId:guid}")]
+    public async Task<IActionResult> MonthlyReportPdf([FromRoute] MonthlyReportPdfRequest request)
+    {
+        var file = await _sender.Send(request);
+        return File(file.File, "application/pdf", file.Filename);
+    }
 }

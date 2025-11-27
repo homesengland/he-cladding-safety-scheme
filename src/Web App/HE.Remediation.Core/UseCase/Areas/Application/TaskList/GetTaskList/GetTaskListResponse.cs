@@ -15,6 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.TaskList.GetTaskList
         public ETaskStatus ConfirmDeclarationStatusId { get; set; }
         public ETaskStatus ApplicationFraStatusId { get; set; }
         public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
+        public EFraBuildingWorkType? FraBuildingWorkType { get; set; }
         public bool IsDataIngestion { get; set; }
     }
 }

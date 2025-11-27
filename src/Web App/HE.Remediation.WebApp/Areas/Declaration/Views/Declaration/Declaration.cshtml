@@ -7,6 +7,7 @@
     ViewData["Title"] = "Declaration";
     ViewData["Backlink"] = Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
     var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
+    var isRasScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
 }
 
 @if (ViewData.ModelState.ContainsKey(string.Empty))
@@ -33,9 +34,13 @@
 
 <p class="govuk-body">I confirm that:</p>
 <ul class="govuk-list govuk-list--bullet">
-    <li>I will tell Homes England if the application details change</li>
+    <li>@(!isRasScheme ? "I will tell Homes England if the application details change" : "I will tell MHCLG if the building details change")</li>
     <li>The information I have provided is true and correct</li>
-    <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information</li>
+    @if (!isRasScheme)
+    {
+        <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information</li>
+
+    }
     @if (isCladdingScheme)
     {
         <li>I can apply for grant funding for the building in this application as a Responsible Entity or an authorised Representative</li>

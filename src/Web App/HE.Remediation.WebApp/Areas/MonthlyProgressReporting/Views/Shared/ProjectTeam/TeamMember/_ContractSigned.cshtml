@@ -1,0 +1,11 @@
+﻿@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember.TeamMemberViewModel
+
+<govuk-radios asp-for="ContractSigned">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+            Have you formally signed a contract with this company?
+        </govuk-radios-fieldset-legend>
+    </govuk-radios-fieldset>
+    <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+    <govuk-radios-item value="@(false)">No</govuk-radios-item>
+</govuk-radios>

@@ -1,5 +1,6 @@
 using System.Text.Json;
-using HE.Remediation.Core.UseCase.DataIngest;
+using CSS_SSSF = HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF;
+using RAS = HE.Remediation.Core.UseCase.DataIngest.RAS;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -30,7 +31,19 @@ namespace HE.Remediation.Core.Services.DataIngestion
                     try
                     {
                         var data = JsonSerializer.Deserialize<Dictionary<string, string>>(row.RowJson);
-                        await _sender.Send(new CreateImportRequest(data, row.Id, jobContext.JobId, jobContext.TargetScheme), cancellationToken);
+
+                        if(jobContext.TargetScheme == Enums.EApplicationScheme.CladdingSafetyScheme || 
+                                jobContext.TargetScheme == Enums.EApplicationScheme.SocialSector)
+                        {
+                            await _sender.Send(new CSS_SSSF.CreateImportRequest(data, row.Id, jobContext.JobId, jobContext.TargetScheme), cancellationToken);
+                        }
+
+                        if (jobContext.TargetScheme == Enums.EApplicationScheme.ResponsibleActorsScheme)
+                        {
+                            await _sender.Send(new RAS.CreateImportRequest(data, row.Id, jobContext.JobId, jobContext.TargetScheme), cancellationToken);
+                        }
+
+
                         await jobContext.IncrementSuccess();
                     }
                     catch (Exception ex)

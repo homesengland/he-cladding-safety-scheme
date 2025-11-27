@@ -26,10 +26,15 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
 
             if (response == null)
             {
-                return new GetAppraisalSurveyDetailsResponse { FireRiskAssessorCompanies = await _fireAssessorListService.GetFireAssessorList() };
+                return new GetAppraisalSurveyDetailsResponse
+                {
+                    ApplicationScheme = _applicationDataProvider.GetApplicationScheme(), 
+                    FireRiskAssessorCompanies = await _fireAssessorListService.GetFireAssessorList()
+                };
             }
             else
             {
+                response.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
                 response.FireRiskAssessorCompanies = await _fireAssessorListService.GetFireAssessorList();
                 return response;
             }

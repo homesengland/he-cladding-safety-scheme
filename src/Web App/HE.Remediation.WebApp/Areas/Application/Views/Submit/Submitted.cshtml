@@ -1,9 +1,7 @@
 ﻿@using HE.Remediation.Core.Enums
 @using HE.Remediation.Core.Interface
 @model HE.Remediation.WebApp.ViewModels.Application.SubmittedViewModel
-@inject IApplicationDataProvider applicationDataProvider;
 @{
-    var isCladdingSafetyScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
     ViewData["Title"] = "Application submitted";
 }
 
@@ -14,28 +12,30 @@
                 <div class="govuk-grid-column-two-thirds">
                     <govuk-panel heading-level="1">
                         <govuk-panel-title>
-                            Application complete                       
+                            @((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "Building record" : "Application") complete
                         </govuk-panel-title>
                         <govuk-panel-body>
-                            Application ID<br/><strong>@Model.ReferenceNumber</strong>
+                            Application ID<br /><strong>@Model.ReferenceNumber</strong>
                         </govuk-panel-body>
                     </govuk-panel>
 
-                    <h2 class="govuk-heading-m">What happens next</h2>
-
-                    <p class="govuk-body">Confirmation of your application submission will be sent to your email account.</p>
-
-                    <p class="govuk-body">You can monitor the status of your application from the Existing Applications page of your Home dashboard.</p>
-
-                    @if(isCladdingSafetyScheme)
+                    @if (Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme)
                     {
-                        <p class="govuk-body">Once the application has been validated, you will receive an email and notification on the home page with any further actions that are required.</p>
+                        <h2 class="govuk-heading-m">What happens next</h2>
+
+                        <p class="govuk-body">Confirmation of your application submission will be sent to your email account.</p>
+
+                        <p class="govuk-body">You can monitor the status of your application from the Existing Applications page of your Home dashboard.</p>
+
+                        @if (Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
+                        {
+                            <p class="govuk-body">Once the application has been validated, you will receive an email and notification on the home page with any further actions that are required.</p>
+                        }
+                        else
+                        {
+                            <p class="govuk-body">You will receive an email and notification on the home page with any further actions that are required.</p>
+                        }
                     }
-                    else
-                    {
-                        <p class="govuk-body">You will receive an email and notification on the home page with any further actions that are required.</p>
-                    }
-                    
                     <govuk-button href=@Url.Action("Index", "Dashboard", new { Area = "Application" })>Return to home</govuk-button>
                 </div>
             </div>

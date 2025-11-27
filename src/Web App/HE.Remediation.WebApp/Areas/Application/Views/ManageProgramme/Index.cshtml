@@ -65,7 +65,7 @@
                                         <govuk-checkboxes-item value="@application.ApplicationId" />
                                     </govuk-checkboxes>
                                 </td>
-                                <td class="govuk-table__cell">@application.ApplicationNumber</td>
+                                <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("ExistingApplication", "Dashboard", new { Area = "Application", applicationId = @application.ApplicationId, applicationNumber = @application.ApplicationNumber })">@application.ApplicationNumber</a></td>
                                 <td class="govuk-table__cell">@application.UniqueBuildingName</td>
                                 <td class="govuk-table__cell">@(application.InvestigationCompletionDate?.ToString("MM/yy") ?? "-")</td>
                                 <td class="govuk-table__cell">@(application.StartOnSiteDate?.ToString("MM/yy") ?? "-")</td>

@@ -1,0 +1,87 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectSupport.ProjectSupportCheckYourAnswersViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+
+    if (Model.RequiresSupport == true)
+    {
+        ViewData["BackLink"] = Url.Action("ProjectSupportType", "MonthlyProgressReportingProjectSupport", new { Area = "MonthlyProgressReportingProjectSupport" });
+    }
+    else
+    {
+        ViewData["BackLink"] = Url.Action("ProjectSupport", "MonthlyProgressReportingProjectSupport", new { Area = "MonthlyProgressReportingProjectSupport" });
+    }
+    ViewData["FullWidth"] = true;
+
+    string GetSupportTypeDisplay(string supportType)
+    {
+        return supportType switch
+        {
+            "AppointingDesigner" => "Appointing designer",
+            "AppointingTeam" => "Appointing team",
+            "SeekingQuotes" => "Seeking quotes",
+            "PlanningPermission" => "Planning permission",
+            "Other" => "Other",
+            _ => supportType
+        };
+    }
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Do you need support?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.RequiresSupport switch
+            {
+                true => "Yes",
+                false => "No",
+                _ => "-"
+            })
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("ProjectSupport", "MonthlyProgressReportingProjectSupport", new { Area = "MonthlyProgressReportingProjectSupport" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    @if (Model.RequiresSupport == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Selected support types</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.SupportTypes != null && Model.SupportTypes.Any())
+                {
+                        @foreach (var supportType in Model.SupportTypes)
+                        {
+                            <span>@GetSupportTypeDisplay(supportType.ToString())</span>
+                            <br />
+                        }
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ProjectSupportType", "MonthlyProgressReportingProjectSupport", new { Area = "MonthlyProgressReportingProjectSupport" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Reason support is needed</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(string.IsNullOrWhiteSpace(Model.SupportNeededReason) ? "-" : Model.SupportNeededReason)
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ProjectSupportType", "MonthlyProgressReportingProjectSupport", new { Area = "MonthlyProgressReportingProjectSupport" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+<form asp-area="MonthlyProgressReportingProjectSupport" asp-controller="MonthlyProgressReportingProjectSupport" asp-action="CheckYourAnswers" method="post">
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    </div>
+</form>

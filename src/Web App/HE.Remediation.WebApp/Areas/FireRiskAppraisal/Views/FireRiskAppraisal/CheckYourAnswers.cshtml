@@ -49,21 +49,6 @@
         }
     </govuk-summary-list-row>
     
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Fire risk assessment
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            <span>@(!string.IsNullOrEmpty(Model.AssessmentFilename) ? Model.AssessmentFilename : "-")</span>
-        </govuk-summary-list-row-value>
-        @if (!Model.ReadOnly)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-    
     @if (Model.FireRiskAssessmentType.HasValue)
     {
         <govuk-summary-list-row>
@@ -86,7 +71,7 @@
             </govuk-summary-list-row-value>
             @if (!Model.ReadOnly)
             {
-                <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAssessmentReport", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                <govuk-summary-list-row-action href="@Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
                     Change
                 </govuk-summary-list-row-action>
             }
@@ -203,43 +188,102 @@
             }
         </govuk-summary-list-row>
     }
+    @if (Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Date you instructed the company
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.DateOfInstruction != null)
+                {
+                    <span>@Model.DateOfInstruction.Value.ToString("dd/MM/yyyy")</span>
+                }
+            </govuk-summary-list-row-value>
 
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Date you instructed the company
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @if (Model.DateOfInstruction != null)
+            @if (!Model.ReadOnly)
             {
-                <span>@Model.DateOfInstruction.Value.ToString("dd/MM/yyyy")</span>
+                <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
             }
-        </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
 
-        @if (!Model.ReadOnly)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
-
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Survey date
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @if (Model.SurveyDate != null)
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Survey date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.SurveyDate != null)
+                {
+                    <span>@Model.SurveyDate.Value.ToString("dd/MM/yyyy")</span>
+                }
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
             {
-                <span>@Model.SurveyDate.Value.ToString("dd/MM/yyyy")</span>
+                <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
             }
-        </govuk-summary-list-row-value>
-        @if (!Model.ReadOnly)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
+        </govuk-summary-list-row>
+    }
+    else
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Was the FRAEW commissioned by you, the Developer?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.CommissionedByDeveloper is not null)
+                {
+                    <span>@EnumHelpers.GetText((EYesNoNonBoolean)Model.CommissionedByDeveloper)</span>
+                }
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Date the FRAEW was received by the Developer
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.ReceivedByDeveloperDate != null)
+                {
+                    <span>@Model.ReceivedByDeveloperDate.Value.ToString("dd/MM/yyyy")</span>
+                }
+            </govuk-summary-list-row-value>
+
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Was the FRAEW received by the Responsible Entity?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.ReceivedByResponsibleEntity is not null)
+                {
+                    <span>@EnumHelpers.GetText((EYesNoNonBoolean)Model.ReceivedByResponsibleEntity)</span>
+                }
+            </govuk-summary-list-row-value>
+            @if (!Model.ReadOnly)
+            {
+                <govuk-summary-list-row-action href="@Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { returnUrl = ViewData["ReturnUrl"] })" visually-hidden-text="name">
+                    Change
+                </govuk-summary-list-row-action>
+            }
+        </govuk-summary-list-row>
+    }
 </govuk-summary-list>
 
 

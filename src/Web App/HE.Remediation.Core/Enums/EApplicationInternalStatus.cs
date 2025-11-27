@@ -73,6 +73,7 @@
         ApplicationClosed = 69,
         ApplicationClosedReferToGla = 70,
         WorksPackageLetterIssued = 71,
-        WorksPackageMemorandumIssued = 72
+        WorksPackageMemorandumIssued = 72,
+        MonthlyReportingInProgress = 73
     }
 }

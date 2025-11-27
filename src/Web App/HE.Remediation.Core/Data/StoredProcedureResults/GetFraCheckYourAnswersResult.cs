@@ -4,6 +4,8 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults;
 
 public class GetFraCheckYourAnswersResult
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
+    public EFraBuildingWorkType? FraBuildingWorkTypeId { get; set; }
     public bool? HasFra { get; set; }
     public string FraFile { get; set; }
     public EFireRiskAssessmentType? FireRiskAssessmentTypeId { get; set; }
@@ -20,6 +22,7 @@ public class GetFraCheckYourAnswersResult
     public bool? HasFunding { get; set; }
     public EFraFundingType? FraFundingTypeId { get; set; }
     public string OtherInternalFireSafetyRisk { get; set; }
+    public int? FraCommissionerTypeId { get; set; }
     public bool IsSubmitted { get; set; }
     public IList<string> Defects { get; set; } = new List<string>();
 

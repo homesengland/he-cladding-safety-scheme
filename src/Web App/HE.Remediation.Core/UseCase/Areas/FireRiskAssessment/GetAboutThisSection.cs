@@ -1,10 +1,11 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
 
-public class GetAboutThisSectionHandler : IRequestHandler<GetAboutThisSectionRequest>
+public class GetAboutThisSectionHandler : IRequestHandler<GetAboutThisSectionRequest, GetAboutThisSectionResponse>
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IFireRiskAssessmentRepository _fireRiskAssessmentRepository;
@@ -15,22 +16,29 @@ public class GetAboutThisSectionHandler : IRequestHandler<GetAboutThisSectionReq
         _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
     }
 
-    public async Task<Unit> Handle(GetAboutThisSectionRequest request, CancellationToken cancellationToken)
+    public async Task<GetAboutThisSectionResponse> Handle(GetAboutThisSectionRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var applicationId = _applicationDataProvider.GetApplicationId();
         await _fireRiskAssessmentRepository.CreateFra(applicationId);
 
-        return Unit.Value;
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+
+        return new GetAboutThisSectionResponse() { ApplicationScheme = applicationScheme };
     }
 }
 
-public class GetAboutThisSectionRequest : IRequest
+public class GetAboutThisSectionRequest : IRequest<GetAboutThisSectionResponse>
 {
     private GetAboutThisSectionRequest()
     {
     }
 
     public static readonly GetAboutThisSectionRequest Request = new();
+}
+
+public class GetAboutThisSectionResponse
+{
+    public EApplicationScheme ApplicationScheme { get; set; }
 }

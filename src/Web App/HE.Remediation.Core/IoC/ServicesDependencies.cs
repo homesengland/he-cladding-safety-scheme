@@ -2,23 +2,25 @@
 using HE.Remediation.Core.Data;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
+using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
+using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers;
 using HE.Remediation.Core.Services.Alert;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Services.Location;
+using HE.Remediation.Core.Services.PdfRendererService;
+using HE.Remediation.Core.Services.RazorRenderer;
 using HE.Remediation.Core.Services.SessionTimeout;
+using HE.Remediation.Core.Services.StatusTransition;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Settings;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using HE.Remediation.Core.Services.PdfRendererService;
-using HE.Remediation.Core.Services.RazorRenderer;
 using VirusScanner.Client.Interfaces;
 using VirusScanner.Client.Services;
-using HE.Remediation.Core.Services.StatusTransition;
 
 namespace HE.Remediation.Core.IoC;
 
@@ -80,6 +82,13 @@ public static class ServicesDependencies
         services.AddScoped<IApplicationSchemeRepository, ApplicationSchemeRepository>();
         services.AddScoped<IPreTenderRepository, PreTenderRepository>();
         services.AddScoped<IProgressReportingRepository, ProgressReportingRepository>();
+        services.AddScoped<IMonthlyProgressReportingRepository, MonthlyProgressReportingRepository>();
+        services.AddScoped<IProgressReportingKeyDatesRepository, ProgressReportingKeyDatesRepository>();
+        services.AddScoped<IProgressReportingProjectPlanRepository, ProgressReportingProjectPlanRepository>();
+        services.AddScoped<IProgressReportingLeaseholdersRepository, ProgressReportingLeaseholdersRepository>();
+        services.AddScoped<IProgressReportingProjectSupportRepository, ProgressReportingProjectSupportRepository>();
+        services.AddScoped<IProgressReportingBuildingControlRepository, ProgressReportingBuildingControlRepository>();
+        services.AddScoped<IProgressReportingProjectTeamRepository, ProgressReportingProjectTeamRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<IWorkPackageRepository, WorkPackageRepository>();
         services.AddScoped<IScheduleOfWorksRepository, ScheduleOfWorksRepository>();

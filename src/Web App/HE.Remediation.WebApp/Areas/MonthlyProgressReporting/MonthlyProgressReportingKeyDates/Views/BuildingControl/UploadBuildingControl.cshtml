@@ -1,0 +1,33 @@
+﻿@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates.BuildingControl.UploadBuildingControlViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("Index", "BuildingControl");
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Building control decision upload</h1>
+<p class="govuk-body">
+    Upload a copy of your current building control decision.
+</p>
+
+<p class="govuk-body">Each file must be smaller than 50MB and a @Model.AcceptedFileTypes.ToAndOrStringList(", ", EAndOr.Or) file</p>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="BuildingControl" asp-action="UploadBuildingControl" method="post" enctype="multipart/form-data">
+
+    @await Html.PartialAsync("~/Views/Shared/FileUpload.cshtml", Model)
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="BuildingControlDecision" type="hidden" value="@Model.BuildingControlDecision" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    </div>
+</form>

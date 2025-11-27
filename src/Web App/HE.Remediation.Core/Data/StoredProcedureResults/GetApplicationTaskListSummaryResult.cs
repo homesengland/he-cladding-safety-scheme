@@ -14,5 +14,6 @@ public class GetApplicationTaskListSummaryResult
     public bool ConfirmDeclaration { get; set; }
     public ETaskStatus ApplicationFraStatusId { get; set; }
     public ETaskStatus ApplicationFireRiskAssessmentStatusId { get; set; }
+    public EFraBuildingWorkType? FraBuildingWorkTypeId { get; set; }
     public bool IsDataIngestion { get; set; }
 }

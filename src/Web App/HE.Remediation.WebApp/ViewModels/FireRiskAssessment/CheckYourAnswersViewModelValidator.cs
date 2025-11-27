@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.WebApp.ViewModels.FireRiskAssessment;
 
@@ -14,10 +15,12 @@ public class CheckYourAnswersViewModelValidator : AbstractValidator<CheckYourAns
 
             RuleFor(x => x.HasFunding)
                 .NotNull()
+                .When(x => x.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme)
                 .WithMessage("State if you have funding for your identified defects");
 
             RuleFor(x => x.FraFundingType)
                 .NotNull()
+                .When(x => x.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme)
                 .WithMessage("State the funding type you have or the action you will undertake");
         });
 

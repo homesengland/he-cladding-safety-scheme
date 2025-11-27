@@ -16,4 +16,7 @@ public record UserDetailsModel
     public EResponsibleEntityType? ResponsibleEntityType { get; set; }
     public DateTime? LastLoginTime { get; set; }
     public int LoginCount { get; set; }
+
+    public string CompanyName { get; set; }
+    public string CompanyRegistrationNumber { get; set; }
 }

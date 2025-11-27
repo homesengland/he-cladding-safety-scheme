@@ -1,0 +1,26 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates.BuildingControlDatesChangedViewModel;
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["FullWidth"] = false;
+    ViewData["BackLink"] = Url.Action("Index", "BuildingControl");
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ChangeTypeId" />
+        <govuk-error-summary-item asp-for="ChangeReason" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Your key dates have changed</h1>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="BuildingControl" asp-action="DatesChanged" method="post">
+    @await Html.PartialAsync("~/Views/Shared/KeyDatesChanged.cshtml", Model)
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

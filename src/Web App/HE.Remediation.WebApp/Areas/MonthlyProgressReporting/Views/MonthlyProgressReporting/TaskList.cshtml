@@ -1,0 +1,135 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting
+@model TaskListViewModel
+@{
+    ViewData["Title"] = "Progress report";
+    ViewData["HideTitle"] = true;
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("Index", "StageDiagram", new { Area = "Application" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+}
+
+<div class="text-center">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper govuk-!-padding-top-0">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Monthly Report - @Model.DateCreated.ToString("MMMM")</h1>
+
+                    <p class="govuk-body">
+                        Please indicate to Homes England at the earliest available opportunity if you are not going to meet your forecast dates. If you don’t match these dates, we require justification as to why these dates won’t be met.
+                    </p>
+
+                    <p class="govuk-body">
+                        In order to build trust, we are asking for full transparency. We want to be able to see demonstrable progress:
+                    </p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>At 3 months, a fully appointed project team and project plan with high level key dates in the system</li>
+                        <li>At 9 months, full works and costs are presented</li>
+                        <li>At 12 months, works have started (for High Rise buildings, 15 months is accepted)</li>
+                    </ul>
+
+                    <p class="govuk-body">
+                        Even if there are no update to your forecast dates and your project is on track, let us know what your focus is for the coming month and whether you need any help / support.
+                    </p>
+
+                    <p class="govuk-body">
+                        For more information or assistance review the
+                        <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="#">guidance related to the build method being used</a>
+                        for remediation.
+                    </p>
+
+                    <govuk-inset-text>
+                        Please note that in order to complete your monthly reporting obligation, you must complete all sections and then submit your report.
+                    </govuk-inset-text>
+
+                    <ol class="app-task-list">
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">1. </span> Project works
+                            </h3>
+
+                            <ul class="app-task-list__items">
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = "Key dates",
+                                    TaskUrl = Url.Action("Index", "KeyDates", new { Area = "MonthlyProgressReportingKeyDates" }),
+                                    Status = Model.KeyDatesTaskStatusId,
+                                    IsReportSubmitted = Model.TaskStatusId == ETaskStatus.Completed
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = "Project plan",
+                                    TaskUrl = Url.Action("Start", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" }),
+                                    Status = Model.ProjectPlanTaskStatusId,
+                                    IsReportSubmitted = Model.TaskStatusId == ETaskStatus.Completed
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = "Project team",
+                                    TaskUrl = Url.Action("ProjectTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" }),
+                                    Status = Model.ProjectTeamTaskStatusId,
+                                    IsReportSubmitted = Model.TaskStatusId == ETaskStatus.Completed
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = "Leaseholder and resident communication",
+                                    TaskUrl = Url.Action("Start", "Leaseholders", new { Area = "MonthlyProgressReportingLeaseholders" }),
+                                    Status = Model.LeaseholdersTaskStatusId,
+                                    IsReportSubmitted = Model.TaskStatusId == ETaskStatus.Completed
+                                })
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = "Support",
+                                    TaskUrl = Url.Action("ProjectSupport", "MonthlyProgressReportingProjectSupport", new { Area = "MonthlyProgressReportingProjectSupport" }),
+                                    Status = Model.SupportTaskStatusId,
+                                    IsReportSubmitted = Model.TaskStatusId == ETaskStatus.Completed
+                                })
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <h3 class="app-task-list__section">
+                                <span class="app-task-list__section-number">2. </span> Submit report
+                            </h3>
+                            <ul class="app-task-list__items">
+
+                                @await Html.PartialAsync("_TaskListItem", new TaskListItemViewModel
+                                {
+                                    Task = "Submit",
+                                    TaskUrl = Url.Action("Submit", "MonthlyProgressReportingSubmission", new { Area = "MonthlyProgressReportingSubmission" }),
+                                    Status = !Model.IsSubmitActive() 
+                                        ? null // if submit is not active then cannot start
+                                        : Model.TaskStatusId == ETaskStatus.Completed 
+                                            ? ETaskStatus.Completed // if active and submitted then complete
+                                            : ETaskStatus.NotStarted, // if active and not submitted then not started
+                                    IsReportSubmitted = Model.TaskStatusId == ETaskStatus.Completed
+                                })
+
+                            </ul>
+                        </li>
+
+                        
+                    </ol>
+
+                    <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>
+                </div>
+
+                <div class="govuk-grid-column-one-third">
+                    <hr class="related-content-separator-line" />
+                    <h2 class="govuk-heading-m">In this section</h2>
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#progress-reporting-pre-works-package">Guidance</a><br /><br />
+                    <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="#">Infographic</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -1,5 +1,4 @@
 @using HE.Remediation.Core.Enums;
-@using HE.Remediation.WebApp.TagHelpers
 @model HE.Remediation.WebApp.ViewModels.Application.StageDiagramViewModel
 
 @{
@@ -27,7 +26,12 @@
 
 <div class="text-center">
     <div class="govuk-width-container">
-        <a href="@Url.Action("ExistingApplications", "Dashboard", new { area = "Application"})" class="govuk-back-link">Back</a>
+        @{
+            var backUrl = Model.IsApplicationActive
+            ? Url.Action("ExistingApplications", "Dashboard", new { area = "Application" })
+            : Url.Action("Index", "ManageProgramme", new { area = "Application" });
+        }
+        <a href="@backUrl" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
@@ -135,23 +139,23 @@
                             possible when it's due as it lets us track your progress towards submitting your works package.
                         </p>
 
-                        @if (Model.ProgressReports.Any())
+                        @foreach (var currentReport in Model.ProgressReports.OrderByDescending(x => x.DateCreated).Take(2))
                         {
-                            var currentReport = Model.ProgressReports.ElementAt(0);
-
+                            var isPrevious = Model.ProgressReports.Any(x => x.Version > currentReport.Version);
                             <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-three-quarters">
-                                        <a href="@Url.Action("Start", "ProgressReporting", new { Area = "ProgressReporting", Id = @currentReport.Id } )" class="govuk-link">@(currentReport.Version == 1 ? "Primary progress report" : $"{currentReport.DateCreated.ToString("MMMM")} progress report")</a>
+                                        @{
+                                            var progressReportAction = !isPrevious
+                                                ? Url.Action("Create", "StageDiagram", new { Area = "Application", Id = @currentReport.Id })
+                                                : Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", progressReportId = currentReport.Id });
+                                        }
+                                        <a href="@progressReportAction" class="govuk-link">@($"{currentReport.DateCreated:MMMM} progress report")</a>
                                     </div>
                                     <div class="govuk-grid-column-one-quarter">
-                                        @if ((@currentReport.DateDue is not null && @currentReport.DateDue.Value.Date < DateTime.Today) ||
-                                      @currentReport.DateSubmitted is not null)
-                                        {
-                                            <div class="govuk-flex-row">
-                                                <progress-report-status-badge due="@currentReport.DateDue" submitted="@currentReport.DateSubmitted"></progress-report-status-badge>
-                                            </div>
-                                        }
+                                        <div class="govuk-flex-row">
+                                            <progress-report-status-badge suppress-due-status="true" due="@currentReport.DateDue" submitted="@currentReport.DateSubmitted" is-previous="@isPrevious"></progress-report-status-badge>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -169,42 +173,6 @@
                                 </p>
                                 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
                             </div>
-
-                            if (Model.ProgressReports.Count > 1)
-                            {
-                                var previousReport = Model.ProgressReports.ElementAt(1);
-
-                                <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-                                    <div class="govuk-grid-row">
-                                        <div class="govuk-grid-column-three-quarters">
-                                            <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", ProgressReportId = @previousReport.Id } )" class="govuk-link">@(previousReport.Version == 1 ? "Primary progress report" : $"{previousReport.DateCreated.ToString("MMMM")} progress report")</a>
-                                        </div>
-                                        <div class="govuk-grid-column-one-quarter">
-                                            @if ((@previousReport.DateDue is not null && @previousReport.DateDue.Value.Date < DateTime.Today) ||
-                                          @previousReport.DateSubmitted is not null)
-                                            {
-                                                <div class="govuk-flex-row">
-                                                    <progress-report-status-badge is-previous="@true" due="@previousReport.DateDue" submitted="@previousReport.DateSubmitted"></progress-report-status-badge>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
-                                    <p class="govuk-body">
-                                        Fill out the report to update on your progress with works preparation.
-                                        <br />
-                                        <br />
-
-                                        @if (@previousReport.DateDue is not null)
-                                        {
-                                            <b>Report due:</b>
-                                            <span>@previousReport.DateDue.Value.ToString("dd MMM yyyy")</span>
-                                        }
-                                    </p>
-                                    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-                                </div>
-                            }
                         }
                     }
 
@@ -504,7 +472,7 @@
 
 
 
-                    @if (Model.HasSubmittedProgressReports)
+                    @if (Model.HasProgressReports)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <a href="@Url.Action("ProgressReports", "ProgressReportingDetails", new { Area = "ProgressReportingDetails" } )" class="govuk-link">View progress reports</a>
@@ -517,7 +485,7 @@
                         </div>
                     }
 
-                    @if (Model.Stage == EApplicationStage.WorksPackage && Model.HasWorkPackage && !Model.IsWorkPackageSubmitted && Model.HasThePrimaryReportBeenSubmitted)
+                    @if (Model.Stage == EApplicationStage.WorksPackage && Model.HasWorkPackage && !Model.IsWorkPackageSubmitted && Model.HasProgressReports)
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <a href="@Url.Action("ConfirmToProceed", "WorkPackage", new { Area = "WorksPackage" } )" class="govuk-link">Compile works package</a>

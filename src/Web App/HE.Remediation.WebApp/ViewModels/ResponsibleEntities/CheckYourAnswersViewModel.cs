@@ -6,6 +6,7 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
     public class CheckYourAnswersViewModel
     {
         public Guid ApplicationId { get; set; }
+        public EApplicationScheme ApplicationScheme { get; set; }
         public Guid ResponsibleEntityId { get; set; }
         public int? RepresentationTypeId { get; set; }
         public int? ResponsibleEntityTypeId { get; set; }

@@ -129,4 +129,9 @@ public class UserService : IUserService
     {
         return await _db.QuerySingleOrDefaultAsync<UserDetailsModel>("GetUserByCompanyRegistrationNumber", new { companyRegistrationNumber });
     }
+
+    public async Task<UserDetailsModel> GetUserDetailsByCompanyName(string companyName)
+    {
+        return await _db.QuerySingleOrDefaultAsync<UserDetailsModel>("GetUserByCompanyName", new { companyName });
+    }
 }

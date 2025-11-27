@@ -1,0 +1,263 @@
+﻿@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates.WorksPlanningViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["FullWidth"] = true;
+    ViewData["BackLink"] = Url.Action("Index", "KeyDates", new { Area = "MonthlyProgressReportingKeyDates" });
+
+    var expectedTenderDateInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.ExpectedTenderMonth), out var expectedTenderMonthState) && expectedTenderMonthState.ValidationState == ModelValidationState.Invalid) ||
+                              (ViewData.ModelState.TryGetValue(nameof(Model.ExpectedTenderYear), out var expectedTenderYearState) && expectedTenderYearState.ValidationState == ModelValidationState.Invalid);
+
+    var actualTenderDateInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.ActualTenderMonth), out var actaulTenderMonthState) && actaulTenderMonthState.ValidationState == ModelValidationState.Invalid) ||
+                              (ViewData.ModelState.TryGetValue(nameof(Model.ActualTenderYear), out var actualTenderYearState) && actualTenderYearState.ValidationState == ModelValidationState.Invalid);
+
+    var expectedLeadContractorDateInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.ExpectedLeadContractorAppointmentMonth), out var expectedLeadContractMonthState) && expectedLeadContractMonthState.ValidationState == ModelValidationState.Invalid) ||
+                                            (ViewData.ModelState.TryGetValue(nameof(Model.ExpectedLeadContractorAppointmentYear), out var expectedLeadContractorYearState) && expectedLeadContractorYearState.ValidationState == ModelValidationState.Invalid);
+
+    var actualLeadContractorDateInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.ActualLeadContractorAppointmentMonth), out var actualLeadContractorMonthState) && actualLeadContractorMonthState.ValidationState == ModelValidationState.Invalid) ||
+                                          (ViewData.ModelState.TryGetValue(nameof(Model.ActualLeadContractorAppointmentYear), out var actualLeadContractorYearState) && actualLeadContractorYearState.ValidationState == ModelValidationState.Invalid);
+
+    var expectedWorksPackageDateInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.ExpectedWorksPackageSubmissionMonth), out var expectedWorksPackageSubmissionMonthState) && expectedWorksPackageSubmissionMonthState.ValidationState == ModelValidationState.Invalid) ||
+                                          (ViewData.ModelState.TryGetValue(nameof(Model.ExpectedWorksPackageSubmissionYear), out var expectedWorksPackageSubmissionYearState) && expectedWorksPackageSubmissionYearState.ValidationState == ModelValidationState.Invalid);
+}
+
+@section ErrorSummary 
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ExpectedTenderMonth" />
+        <govuk-error-summary-item asp-for="ExpectedTenderYear" />
+        <govuk-error-summary-item asp-for="ExpectedLeadContractorAppointmentMonth" />
+        <govuk-error-summary-item asp-for="ExpectedLeadContractorAppointmentYear" />
+        <govuk-error-summary-item asp-for="ActualTenderMonth" />
+        <govuk-error-summary-item asp-for="ActualTenderYear" />
+        <govuk-error-summary-item asp-for="ActualLeadContractorAppointmentMonth" />
+        <govuk-error-summary-item asp-for="ActualLeadContractorAppointmentYear" />
+        <govuk-error-summary-item asp-for="ExpectedWorksPackageSubmissionMonth" />
+        <govuk-error-summary-item asp-for="ExpectedWorksPackageSubmissionYear" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Works planning</h1>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="WorksPlanning" asp-action="Index" method="post">
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous expected date of tender
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousExpectedTenderDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous actual date of tender
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousActualTenderDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous expected lead contractor appointment date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousExpectedLeadContractorAppointmentDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous lead contractor appointment date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousActualLeadContractorAppointmentDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Previous expected works package submission date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousExpectedWorksPackageSubmissionDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <div class="govuk-form-group @(expectedTenderDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expected-tender-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="ExpectedTenderMonth">What is the expected date of tender?</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ExpectedTenderMonth" />
+            <govuk-error-message asp-for="ExpectedTenderYear" />
+            <div class="govuk-date-input" id="expected-tender-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedTenderMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ExpectedTenderMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedTenderYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ExpectedTenderYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    <div class="govuk-form-group @(actualTenderDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="actual-tender-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="ActualTenderMonth">What is the actual date of tender? @(Model.PreviousActualTenderDate.HasValue ? string.Empty : "(optional)")</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ActualTenderMonth" />
+            <govuk-error-message asp-for="ActualTenderYear" />
+            <div class="govuk-date-input" id="actual-tender-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ActualTenderMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ActualTenderMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ActualTenderYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ActualTenderYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    <div class="govuk-form-group @(expectedLeadContractorDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expected-lead-contractor-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="ExpectedLeadContractorAppointmentMonth">When are you expecting to appoint a lead contractor?</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ExpectedLeadContractorAppointmentMonth" />
+            <govuk-error-message asp-for="ExpectedLeadContractorAppointmentYear" />
+            <div class="govuk-date-input" id="expected-lead-contractor-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedLeadContractorAppointmentMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ExpectedLeadContractorAppointmentMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedLeadContractorAppointmentYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ExpectedLeadContractorAppointmentYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+    <div class="govuk-form-group @(actualLeadContractorDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="actual-lead-contractor-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="ActualLeadContractorAppointmentMonth">When did you appoint a lead contractor? @(Model.PreviousActualLeadContractorAppointmentDate.HasValue ? string.Empty : "(optional)")</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="ActualLeadContractorAppointmentMonth" />
+            <govuk-error-message asp-for="ActualLeadContractorAppointmentYear" />
+            <div class="govuk-date-input" id="actual-lead-contractor-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ActualLeadContractorAppointmentMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ActualLeadContractorAppointmentMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ActualLeadContractorAppointmentYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ActualLeadContractorAppointmentYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    
+<div class="govuk-form-group @(expectedWorksPackageDateInvalid ? "govuk-form-group--error" : string.Empty)">
+    <fieldset class="govuk-fieldset" role="group" aria-describedby="exepcted-works-package-submission-date-hint">
+        <label class="govuk-label govuk-label--s" asp-for="ExpectedWorksPackageSubmissionMonth">When are you expecting to submit your Works Package?</label>
+        <div class="govuk-hint">
+            For example, 8 2022
+        </div>
+            <govuk-error-message asp-for="ExpectedWorksPackageSubmissionMonth" />
+            <govuk-error-message asp-for="ExpectedWorksPackageSubmissionYear" />
+            <div class="govuk-date-input" id="exepcted-works-package-submission-date">
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedWorksPackageSubmissionMonth">
+                        Month
+                    </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ExpectedWorksPackageSubmissionMonth" type="number" inputmode="numeric">
+                </div>
+            </div>
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedWorksPackageSubmissionYear">
+                        Year
+                    </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ExpectedWorksPackageSubmissionYear" type="number" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+    <div class="hidden">
+        <govuk-date-input asp-for="PreviousExpectedTenderDate" value="@Model.PreviousExpectedTenderDate"/>
+    </div>
+    <div class="hidden">
+        <govuk-date-input asp-for="PreviousExpectedLeadContractorAppointmentDate" value="@Model.PreviousExpectedLeadContractorAppointmentDate" />
+    </div>
+    <div class="hidden">
+        <govuk-date-input asp-for="PreviousActualTenderDate" value="@Model.PreviousActualTenderDate"/>
+    </div>
+    <div class="hidden">
+        <govuk-date-input asp-for="PreviousActualLeadContractorAppointmentDate" value="@Model.PreviousActualLeadContractorAppointmentDate" />
+    </div>
+    <div class="hidden">
+        <govuk-date-input asp-for="PreviousExpectedWorksPackageSubmissionDate" value="@Model.PreviousExpectedWorksPackageSubmissionDate" />
+    </div>
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

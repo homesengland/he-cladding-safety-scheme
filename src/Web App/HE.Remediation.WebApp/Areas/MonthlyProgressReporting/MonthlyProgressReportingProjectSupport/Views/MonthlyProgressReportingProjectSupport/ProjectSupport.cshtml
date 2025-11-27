@@ -1,0 +1,35 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectSupport
+@model ProjectSupportViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="RequiresSupport" />
+    </govuk-error-summary>
+}
+
+<form asp-area="MonthlyProgressReportingProjectSupport" asp-controller="MonthlyProgressReportingProjectSupport" asp-action="ProjectSupport" method="post">
+    <govuk-radios asp-for="RequiresSupport">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--l">
+                Do you need support?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ApplicationId" />
+    <input type="hidden" asp-for="BuildingName" />
+    <input type="hidden" asp-for="ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="RequiresSupport" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

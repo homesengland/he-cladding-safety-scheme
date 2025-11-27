@@ -834,11 +834,11 @@ public class PaymentRequestController : StartController
             return View(viewModel);
         }
 
+        var request = _mapper.Map<SetForecastGateway3SubmissionRequest>(viewModel);
+        var paymentRequestDetails = await _sender.Send(request);
+
         if (submitAction == ESubmitAction.Continue)
         {
-            var request = _mapper.Map<SetForecastGateway3SubmissionRequest>(viewModel);
-            var paymentRequestDetails = await _sender.Send(request);
-
             var action = nameof(PracticalCompletionDate);
             action = viewModel.ReturnUrl ?? action;
 
@@ -873,11 +873,11 @@ public class PaymentRequestController : StartController
             return View(viewModel);
         }
 
+        var request = _mapper.Map<SetPracticalCompletionDateRequest>(viewModel);
+        var paymentRequestDetails = await _sender.Send(request);
+
         if (submitAction == ESubmitAction.Continue)
         {
-            var request = _mapper.Map<SetPracticalCompletionDateRequest>(viewModel);
-            var paymentRequestDetails = await _sender.Send(request);
-
             var action = nameof(CheckYourAnswers);
             action = viewModel.ReturnUrl ?? action;
 

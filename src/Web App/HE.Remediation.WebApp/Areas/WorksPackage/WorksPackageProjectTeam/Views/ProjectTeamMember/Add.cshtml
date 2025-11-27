@@ -21,7 +21,7 @@
 @using (Html.BeginForm())
 {
     <govuk-radios class="govuk-!-margin-bottom-8" asp-for="TeamRole">
-        @foreach (var role in Model.AvailableTeamRoles)
+        @foreach (var role in Model.AvailableTeamRoles.Where(r => r != ETeamRole.Other))
         {
             <govuk-radios-item value="@role">@role.ToString().SplitCamelCase().ToSentenceCase()</govuk-radios-item>
         }
@@ -31,7 +31,7 @@
     <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
     <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
 
-    @foreach (var role in Model.AvailableTeamRoles)
+    @foreach (var role in Model.AvailableTeamRoles.Where(r => r != ETeamRole.Other))
     {
         <input value="@role" name="AvailableTeamRoles" type="hidden"/>
     }

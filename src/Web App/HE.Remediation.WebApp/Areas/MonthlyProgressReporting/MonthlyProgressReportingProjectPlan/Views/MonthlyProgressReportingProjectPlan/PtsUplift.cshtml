@@ -1,0 +1,62 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.PtsUpliftViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Request additional pre-tender support (optional)</h1>
+
+<p class="govuk-body">
+    If you require further PTS funds to support the project through to a Start on Site, download the excel template below.
+</p>
+<p class="govuk-body">
+    If you have the information needed readily to hand, you can upload the completed uplift 
+    template here and our team will review this and return to you in the next 10 working days.
+</p>
+<p class="govuk-body">
+    If you do not have the information needed and require more time, 
+    you can still download the template. 
+    Once you have this ready to submit, 
+    you can use next month's progress reporting link or if you require earlier review, 
+    you can submit this to <a class="govuk-link" href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>.
+</p>
+
+<section class="gem-c-attachment govuk-!-margin-left-2">
+    <div class="gem-c-attachment__thumbnail">
+        <svg class="gem-c-attachment__thumbnail-image" version="1.1" viewBox="0 0 99 140" width="99" height="140" aria-hidden="true">
+            <path d="M12 12h75v27H12zm0 47h18.75v63H12zm55 2v59H51V61h16m2-2H49v63h20V59z" stroke-width="0"></path>
+            <path d="M49 61.05V120H32.8V61.05H49m2-2H30.75v63H51V59zm34 2V120H69.05V61.05H85m2-2H67v63h20V59z" stroke-width="0"></path>
+            <path d="M30 68.5h56.5M30 77.34h56.5M30 112.7h56.5M30 95.02h56.5M30 86.18h56.5M30 103.86h56.5" fill="none" stroke-miterlimit="10" stroke-width="2"></path>
+        </svg>
+    </div>
+    <div class="gem-c-attachment__details">
+        <h2 class="gem-c-attachment__title attachment__title">PTS uplift request (XLSX)</h2>
+        <a class="govuk-link govuk-!-font-size-19" rel="noreferrer noopener" target="_blank" href="/ProgressReporting/PtsUpliftTemplate.xlsx">Download XLSX (20 KB)</a>
+    </div>
+</section>
+
+<p class="govuk-body">
+    File must be smaller than 50MB, and a @Model.AcceptedFileTypes.ToAndOrStringList(", ", EAndOr.Or) file.
+</p>
+
+<form asp-area="MonthlyProgressReportingProjectPlan" asp-controller="MonthlyProgressReportingProjectPlan" asp-action="PtsUplift" method="post" enctype="multipart/form-data">
+    
+    @await Html.PartialAsync("~/Views/Shared/FileUpload.cshtml", Model)
+    
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

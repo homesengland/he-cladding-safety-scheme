@@ -1,4 +1,6 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
+
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.GetSubmit
@@ -18,10 +20,16 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.GetSubmit
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var result = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetSubmitResponse>("GetApplicationReferenceNumber",
-                new { applicationId });
+            var applicationScheme = _applicationDataProvider.GetApplicationScheme();
 
-            return result ?? new GetSubmitResponse();
+            var result = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetSubmitResponse>("GetApplicationReferenceNumber",
+                    new { applicationId });
+            if (result == null)
+                result = new GetSubmitResponse() { ApplicationScheme = applicationScheme };
+            else
+                result.ApplicationScheme = applicationScheme;
+
+            return result;
         }
     }
 }

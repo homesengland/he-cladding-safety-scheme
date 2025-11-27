@@ -11,7 +11,9 @@ public interface IFireRiskAssessmentRepository
     Task CreateFra(Guid applicationId);
     Task SetFraTaskStatus(SetFraTaskStatusParameters parameters);
     Task<GetAssessorAndFraDateResult> GetAssessorAndFraDate(Guid applicationId);
+    Task<int?> GetFraCommissionerType(Guid applicationId);
     Task SetAssessorAndFraDate(SetAssessorAndFraDateParameters parameters);
+    Task UpsertFraCommissionerType(UpsertFraCommissionerTypeParameters parameters);
     Task<GetOtherAssessorResult> GetOtherAssessor(Guid applicationId);
     Task SetOtherAssessor(SetOtherAssessorParameters parameters);
     Task<DateTime?> GetFraDate(Guid applicationId);
@@ -30,4 +32,6 @@ public interface IFireRiskAssessmentRepository
     Task ClearFraAnswers(Guid applicationId);
     Task<GetFireRiskAssessmentForApplicationResult> GetFireRiskAssessmentForApplication(Guid applicationId);
     Task DeleteFraForApplication(DeleteFraForApplicationParameters parameters);
+    Task<int?> GetFraBuildingWorkType(Guid applicationId);
+    Task SetFraBuildingWorkType(SetFraBuildingWorkTypeParameters parameters);
 }

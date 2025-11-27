@@ -1,0 +1,52 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.Leaseholders
+@model LastCommunicationDateViewModel
+@{
+    ViewData["Title"] = "Progress report";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("Index");
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = false;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="LastCommunicationDateMonthYearInput.Month" />
+        <govuk-error-summary-item asp-for="LastCommunicationDateMonthYearInput.Year" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">When was the last leaseholder and residents communication issued?</h1>
+
+<form asp-action="LastCommunicationDate" method="post">
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous communication date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousLastCommunicationDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <month-year-input asp-for="LastCommunicationDateMonthYearInput"
+                      label=""
+                      model-state="@ViewData.ModelState" />
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <govuk-date-input class="hidden" asp-for="PreviousLastCommunicationDate" value="@Model.PreviousLastCommunicationDate" />
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>
+
+<div>
+    <a class="govuk-link" href="@Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" })">Cancel and exit</a>
+</div>

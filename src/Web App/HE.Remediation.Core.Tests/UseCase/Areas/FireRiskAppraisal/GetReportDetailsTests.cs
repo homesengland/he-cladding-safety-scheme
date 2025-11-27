@@ -54,6 +54,10 @@ public class GetReportDetailsTests
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
 
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+            .Returns(EApplicationScheme.CladdingSafetyScheme)
+            .Verifiable();
+
         //// Act
         var result = await _handler.Handle(GetReportDetailsRequest.Request, CancellationToken.None);
 
@@ -87,7 +91,11 @@ public class GetReportDetailsTests
 
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
-                                .Verifiable(); 
+                                .Verifiable();
+
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+            .Returns(EApplicationScheme.CladdingSafetyScheme)
+            .Verifiable();
 
         //// Act
         var result = await _handler.Handle(GetReportDetailsRequest.Request, CancellationToken.None);

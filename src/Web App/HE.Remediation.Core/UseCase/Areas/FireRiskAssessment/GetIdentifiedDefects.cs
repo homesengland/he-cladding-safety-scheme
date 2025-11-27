@@ -28,6 +28,7 @@ public class GetIdentifiedDefectsHandler : IRequestHandler<GetIdentifiedDefectsR
 
         return new GetIdentifiedDefectsResponse
         {
+            ApplicationScheme = _applicationDataProvider.GetApplicationScheme(),
             InternalFireSafetyDefects = defects.ToList(),
             OtherInternalDefect = otherDefect,
             VisitedCheckYourAnswers = visitedCheckYourAnswers
@@ -46,6 +47,7 @@ public class GetIdentifiedDefectsRequest : IRequest<GetIdentifiedDefectsResponse
 
 public class GetIdentifiedDefectsResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public IList<EInternalFireSafetyDefect> InternalFireSafetyDefects { get; set; } = new List<EInternalFireSafetyDefect>();
     public string OtherInternalDefect { get; set; }
     public bool VisitedCheckYourAnswers { get; set; }

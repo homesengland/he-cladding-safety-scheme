@@ -50,6 +50,7 @@
         <govuk-radios-item value="@false" checked="@Model.HasInternalFireSafetyRisks == false">No</govuk-radios-item>
     </govuk-radios>
     
+    <input asp-for="ApplicationScheme" type="hidden" value="@Model.ApplicationScheme" />
     <input asp-for="HasOffPanelAssessor" type="hidden" value="@Model.HasOffPanelAssessor" />
     <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
 

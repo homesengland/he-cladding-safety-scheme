@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.WebApp.ViewModels.FireRiskAssessment;
 

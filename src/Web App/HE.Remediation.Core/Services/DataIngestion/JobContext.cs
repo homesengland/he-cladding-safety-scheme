@@ -25,6 +25,7 @@ namespace HE.Remediation.Core.Services.DataIngestion
             {
                 EDataIngestionImportType.SocialSectorSelfFunded => EApplicationScheme.SocialSector,
                 EDataIngestionImportType.SocialSectorCss => EApplicationScheme.CladdingSafetyScheme,
+                EDataIngestionImportType.Ras => EApplicationScheme.ResponsibleActorsScheme,
                 _ => EApplicationScheme.CladdingSafetyScheme
             };
         }

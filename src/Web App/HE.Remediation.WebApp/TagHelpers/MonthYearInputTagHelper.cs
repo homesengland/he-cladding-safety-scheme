@@ -37,7 +37,8 @@ public class MonthYearInputTagHelper : TagHelper
 
         sb.AppendLine("<fieldset class=\"govuk-fieldset\">");
         sb.AppendLine($"<legend class=\"govuk-fieldset__legend govuk-fieldset__legend--s\">{Label}</legend>");
-        sb.AppendLine($"<span class=\"govuk-hint\">For example, 8 2022</span>");
+        var appendLine = baseName.Equals("BuildingControlValidationDateMonthYearInput") ? $"<span class=\"govuk-hint\">The date your application was confirmed as being accepted. \n For example, 8 2022</span>" : $"<span class=\"govuk-hint\">For example, 8 2022</span>";
+        sb.AppendLine(appendLine);
         sb.AppendLine($"<div class=\"govuk-date-input\" id=\"{baseName}\">");
 
         // Month

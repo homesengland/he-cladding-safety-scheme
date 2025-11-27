@@ -4,5 +4,6 @@
     {
         SocialSectorSelfFunded = 1,
         SocialSectorCss = 2,
+        Ras = 3,
     }
 }

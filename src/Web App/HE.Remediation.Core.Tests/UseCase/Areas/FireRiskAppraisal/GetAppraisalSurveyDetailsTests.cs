@@ -1,5 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.GetAppraisalSurveyDetails;
 using Moq;
@@ -34,7 +35,10 @@ public class GetAppraisalSurveyDetailsTests
             FireRiskAssessorId = 1,
             DateOfInstruction = DateTime.Now,
             SurveyDate = DateTime.Now.AddDays(1),
-            FireAccessorNotOnPanel = false
+            FireAccessorNotOnPanel = false,
+            CommissionedByDeveloper = null,
+            ReceivedByDeveloperDate = null,
+            ReceivedByResponsibleEntity = null
         };
 
         var assessorList = new List<GetFireRiskAssessorListResult>
@@ -57,7 +61,11 @@ public class GetAppraisalSurveyDetailsTests
         
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
-                                .Verifiable(); 
+                                .Verifiable();
+
+        _applicationDataProvider
+            .Setup(provider => provider.GetApplicationScheme())
+            .Returns(EApplicationScheme.CladdingSafetyScheme);
 
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetAppraisalSurveyDetailsResponse>("GetAppraisalSurveyDetails", It.IsAny<object>()))
                                 .ReturnsAsync(accessorDetails)

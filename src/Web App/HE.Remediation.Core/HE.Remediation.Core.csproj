@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\StoredProcedureResults\MonthlyProgressReport\ProgressPlan\**" />
+    <EmbeddedResource Remove="Data\StoredProcedureResults\MonthlyProgressReport\ProgressPlan\**" />
+    <None Remove="Data\StoredProcedureResults\MonthlyProgressReport\ProgressPlan\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.101.48" />
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.0.4" />

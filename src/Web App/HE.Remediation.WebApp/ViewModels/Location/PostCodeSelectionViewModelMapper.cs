@@ -3,11 +3,12 @@ using HE.Remediation.Core.UseCase.Areas.Administration.CompanyAddress.SetCompany
 using HE.Remediation.Core.UseCase.Areas.Administration.CorrespondenceAddress.SetCorrespondenceAddress;
 using HE.Remediation.Core.UseCase.Areas.Administration.CorrespondenceAddress.SetCorrespondenceAddressManual;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddress;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 using HE.Remediation.WebApp.ViewModels.Administration;
 using HE.Remediation.WebApp.ViewModels.BuildingDetails;
 using GrantCertifyingOfficerAddressDetails = HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.AddressDetails;
+using ProgressReportings = HE.Remediation.Core.UseCase.Areas.ProgressReporting;
+using ProgressReportingsV2 = HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
 namespace HE.Remediation.WebApp.ViewModels.Location;
 
@@ -27,6 +28,7 @@ public class PostCodeSelectionViewModelMapper : Profile
         CreateMap<PostCodeSelectionViewModel, SetFreeholderAddressRequest>();
         CreateMap<GrantCertifyingOfficerAddressDetails.Get.GetAddressDetailsResponse, PostCodeSelectionViewModel>();
         CreateMap<PostCodeSelectionViewModel, GrantCertifyingOfficerAddressDetails.Set.SetAddressDetailsRequest>();
-        CreateMap<PostCodeSelectionViewModel, SetGrantCertifyingOfficerAddressResultRequest>();
+        CreateMap<PostCodeSelectionViewModel, ProgressReportings.SetGrantCertifyingOfficerAddressResultRequest>();
+        CreateMap<PostCodeSelectionViewModel, ProgressReportingsV2.SetGrantCertifyingOfficerAddressResultRequest>();
     }
 }
