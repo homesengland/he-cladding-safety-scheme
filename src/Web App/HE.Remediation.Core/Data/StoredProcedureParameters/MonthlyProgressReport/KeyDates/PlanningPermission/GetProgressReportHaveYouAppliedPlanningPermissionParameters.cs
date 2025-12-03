@@ -1,0 +1,4 @@
+﻿namespace HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.PlanningPermission;
+public class GetProgressReportHaveYouAppliedPlanningPermissionParameters : GetProgressReportKeyDatesParameters
+{
+}

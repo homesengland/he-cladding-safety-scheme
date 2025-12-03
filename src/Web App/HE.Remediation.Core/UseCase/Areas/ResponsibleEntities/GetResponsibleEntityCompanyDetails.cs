@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
@@ -25,12 +26,19 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
         {
             var response = await _connection.QuerySingleOrDefaultAsync<GetResponsibleEntityCompanyDetailsResponse>("GetResponsibleEntityCompanyDetails", new { applicationId });
 
-            return response ?? new GetResponsibleEntityCompanyDetailsResponse();
+            var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+
+            response ??= new GetResponsibleEntityCompanyDetailsResponse();
+
+            response.ApplicationScheme = applicationScheme;
+
+            return response;
         }
     }
 
     public class GetResponsibleEntityCompanyDetailsResponse
     {
+        public EApplicationScheme ApplicationScheme { get; set; }
         public string CompanyName { get; set; }
         public string CompanyRegistrationNumber { get; set; }
         public bool IsUkBased { get; set; }

@@ -22,8 +22,7 @@
 
         <main class="govuk-main-wrapper">
             @await RenderSectionAsync("ErrorSummary", false)
-            <span class="govuk-caption-xl">@ViewData["Title"]</span>
-            <span class="govuk-caption-m">@ViewData["SubTitle"]</span> <br />
+            <span class="govuk-caption-xl">@ViewData["SubTitle"]</span>
 
             @RenderBody()
             <div>

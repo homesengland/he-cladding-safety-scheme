@@ -1,4 +1,9 @@
-﻿@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.AppraisalSurveyDetailsViewModel
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using InputTagHelper = GovUk.Frontend.AspNetCore.TagHelpers.InputTagHelper
+@using SelectTagHelper = GovUk.Frontend.AspNetCore.TagHelpers.SelectTagHelper
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.AppraisalSurveyDetailsViewModel
 
 @{
     ViewData["Title"] = "Appraisal survey details";
@@ -11,6 +16,9 @@
         <govuk-error-summary-item asp-for="FireRiskAssessorId" />
         <govuk-error-summary-item asp-for="DateOfInstruction" />
         <govuk-error-summary-item asp-for="SurveyDate" />
+        <govuk-error-summary-item asp-for="CommissionedByDeveloper" />
+        <govuk-error-summary-item asp-for="ReceivedByDeveloperDate" />
+        <govuk-error-summary-item asp-for="ReceivedByResponsibleEntity" />
     </govuk-error-summary>
 }
 <h1 class="govuk-heading-xl">Appraisal survey details</h1>
@@ -52,30 +60,68 @@
         I cannot find the company on this list
     </a>
 
-    <govuk-date-input asp-for="DateOfInstruction" name="DateOfInstruction">
-        <govuk-date-input-fieldset class="govuk-!-margin-top-5">
-            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--xl govuk-!-margin-bottom-0">
-                Date you instructed the company
-            </govuk-date-input-fieldset-legend>
-        </govuk-date-input-fieldset>
-        <govuk-date-input-label></govuk-date-input-label>
-        <govuk-date-input-hint>
-            For example, 27 8 2022
-        </govuk-date-input-hint>
-    </govuk-date-input>
+    
+    @if (Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme)
+    {
 
-    <govuk-date-input asp-for="SurveyDate" name="SurveyDate">
-        <govuk-date-input-fieldset>
-            <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
-                Survey date
-            </govuk-date-input-fieldset-legend>
-        </govuk-date-input-fieldset>
-        <govuk-date-input-label></govuk-date-input-label>
-        <govuk-date-input-hint>
-            For example, 27 8 2022
-        </govuk-date-input-hint>
-    </govuk-date-input>
+        <govuk-date-input asp-for="DateOfInstruction" name="DateOfInstruction">
+            <govuk-date-input-fieldset class="govuk-!-margin-top-5">
+                <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--xl govuk-!-margin-bottom-0">
+                    Date you instructed the company
+                </govuk-date-input-fieldset-legend>
+            </govuk-date-input-fieldset>
+            <govuk-date-input-label></govuk-date-input-label>
+            <govuk-date-input-hint>
+                For example, 27 8 2022
+            </govuk-date-input-hint>
+        </govuk-date-input>
 
+        <govuk-date-input asp-for="SurveyDate" name="SurveyDate">
+            <govuk-date-input-fieldset>
+                <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                    Survey date
+                </govuk-date-input-fieldset-legend>
+            </govuk-date-input-fieldset>
+            <govuk-date-input-label></govuk-date-input-label>
+            <govuk-date-input-hint>
+                For example, 27 8 2022
+            </govuk-date-input-hint>
+        </govuk-date-input>
+    }
+    else
+    {
+        <p class="govuk-heading-s govuk-!-margin-top-5">
+            Was the FRAEW commissioned by you, the Developer?
+        </p>
+
+        <govuk-radios asp-for="CommissionedByDeveloper">
+            <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+            <govuk-radios-item value="@(false)">No</govuk-radios-item>
+        </govuk-radios>
+
+        <govuk-date-input asp-for="ReceivedByDeveloperDate" name="ReceivedByDeveloperDate">
+            <govuk-date-input-fieldset>
+                <govuk-date-input-fieldset-legend class="govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+                    Date the FRAEW was received by the Developer
+                </govuk-date-input-fieldset-legend>
+            </govuk-date-input-fieldset>
+            <govuk-date-input-label></govuk-date-input-label>
+            <govuk-date-input-hint>
+                For example, 27 8 2022
+            </govuk-date-input-hint>
+        </govuk-date-input>
+
+        <p class="govuk-heading-s">
+            Was the FRAEW received by the Responsible Entity?
+        </p>
+
+        <govuk-radios asp-for="ReceivedByResponsibleEntity">
+            <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+            <govuk-radios-item value="@(false)">No</govuk-radios-item>
+        </govuk-radios>
+    }
+    
+    <input asp-for="ApplicationScheme" type="hidden" value="@Model.ApplicationScheme" />
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
 
     <div class="comp-btn-group">

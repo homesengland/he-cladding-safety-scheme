@@ -6,4 +6,5 @@ public class FileResult
     public string Name { get; set; }
     public string Extension { get; set; }
     public int Size { get; set; }
+    public DateTime? UploadDate { get; set; }
 }

@@ -1,0 +1,67 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer
+@model HasGrantCertifyingOfficerViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("ProjectTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" });
+    ViewData["FullWidth"] = false;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="DoYouHaveAGrantCertifyingOfficer" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Information about your grant certifying officer</h1>
+
+<p class="govuk-body">
+    Your grant certifying officer must hold the role of either quantity surveyor or project manager if they are also fulfilling the role of grant certifying officer.
+</p>
+
+<p class="govuk-body">
+    This person will be expected to:
+    <ul class="govuk-list govuk-list--bullet">
+        <li>Be qualified in their field</li>
+        <li>Be a member of a professional body</li>
+        <li>Hold Professional Indemnity Insurance</li>
+        <li>Be knowledgeable about the relevant technical principles involved</li>
+    </ul>
+</p>
+
+<p class="govuk-body">
+    In order to complete this section you will need the following information:
+    <ul class="govuk-list govuk-list--bullet">
+        <li>Who is your GCO</li>
+        <li>GCO Company address</li>
+        <li>Authorised signatories names and email</li>
+        <li>GCO Company's Date of Appointment to the project</li>
+    </ul>
+</p>
+
+<govuk-warning-text icon-fallback-text="Warning">
+    Once a GCO has been assigned you'll have to contact Homes England to change this responsibility to another person.
+</govuk-warning-text>
+
+<form asp-action="HasGrantCertifyingOfficer" method="post">
+    <govuk-radios asp-for="DoYouHaveAGrantCertifyingOfficer">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
+                Have you entered a contract with the GCO Firm and have the information required to complete this section?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@true">Yes</govuk-radios-item>
+        <govuk-radios-item value="@false">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber"/>
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName"/>
+    <input asp-for="IsGcoComplete" type="hidden" value="@Model.IsGcoComplete"/>
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="PreviousResponse" type="hidden" value="@Model.PreviousResponse" />
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

@@ -1,0 +1,57 @@
+﻿@using Amazon.Runtime.SharedInterfaces
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums;
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.AddTeamRole
+@model AddTeamRoleViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("ProjectTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" });
+
+    string GetTeamRoleDisplay(string teamRole)
+    {
+        return teamRole switch
+        {
+            "FireSafetyEngineer" => "Fire safety engineer",
+            "LeadDesigner" => "Lead designer",
+            "LeadContractor" => "Lead contractor",
+            "ProjectManager" => "Project manager",
+            "QuantitySurveyor" => "Quantity surveyor",
+            "Other" => "Other",
+            "ManagingAgent" => "Managing agent",
+            _ => teamRole
+        };
+    }
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="TeamRole" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">What role do you want to add?</h1>
+
+<form asp-area="MonthlyProgressReportingProjectTeam" asp-controller="MonthlyProgressReportingProjectTeam" asp-action="AddTeamRole" method="post">
+
+    <govuk-radios class="govuk-!-margin-bottom-8" asp-for="TeamRole">
+        @foreach (var role in Model.AvailableTeamRoles.Where(r => r != ETeamRole.Other))
+        {
+            <govuk-radios-item value="@role">@GetTeamRoleDisplay(role.ToString())</govuk-radios-item>
+        }
+    </govuk-radios>
+
+    @for (var i = 0; i < Model.AvailableTeamRoles.Count; i++)
+    {
+        <input asp-for="@Model.AvailableTeamRoles[i]" type="hidden" value="@Model.AvailableTeamRoles[i]" />
+    }
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="TeamRole" type="hidden" value="@Model.TeamRole" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

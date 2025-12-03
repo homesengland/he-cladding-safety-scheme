@@ -1,0 +1,83 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.ProgressReporting
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model ReasonNotAppliedPlanningPermissionViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("HaveYouAppliedPlanningPermission", "PlanningPermission");
+    ViewData["ExitLinkHidden"] = false;
+    ViewData["FullWidth"] = true;
+
+    var planningPermissionPlanToSubmitDateInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.PlannedMonthToSubmitApplication), out var expectedTenderMonthState) && expectedTenderMonthState.ValidationState == ModelValidationState.Invalid) ||
+                              (ViewData.ModelState.TryGetValue(nameof(Model.PlannedYearToSubmitApplication), out var planToSubmitDateYearState) && planToSubmitDateYearState.ValidationState == ModelValidationState.Invalid);
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ReasonNotAppliedPlanningPermission" />
+        <govuk-error-summary-item asp-for="PlannedMonthToSubmitApplication" />
+        <govuk-error-summary-item asp-for="PlannedYearToSubmitApplication" />
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Why have you not applied for planning permission?</h1>
+<p class="govuk-body">We encourage you to apply for planning permission as soon as you can to get your project moving.</p>
+<p class="govuk-body">If you have not applied for planning permission within two months we'll get in touch to discuss any barriers you've come up against.</p>
+
+@if (Model.PreviousPlanToSubmitDate.HasValue)
+{
+    <hr class="govuk-section-break govuk-section-break--visible"/>
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Previous planned application submission date</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@Model.PreviousPlanToSubmitDate.Value.ToString("MM/yyyy")</govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+}
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="PlanningPermission" asp-action="ReasonNotAppliedPlanningPermission" method="post">
+
+    <govuk-character-count asp-for="ReasonNotAppliedPlanningPermission" max-length="150">
+        <govuk-character-count-label class="govuk-label govuk-label--s">Tell us why you have not applied for planning permission</govuk-character-count-label>
+    </govuk-character-count>
+
+    <div class="govuk-form-group @(planningPermissionPlanToSubmitDateInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expected-tender-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="PlannedMonthToSubmitApplication">When do you plan to submit your application?</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="PlannedMonthToSubmitApplication" />
+            <govuk-error-message asp-for="PlannedYearToSubmitApplication" />
+            <div class="govuk-date-input" id="planned-submit-application-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PlannedMonthToSubmitApplication">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="PlannedMonthToSubmitApplication" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PlannedYearToSubmitApplication">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="PlannedYearToSubmitApplication" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <govuk-date-input asp-for="PreviousPlanToSubmitDate" class="hidden" value="@Model.PreviousPlanToSubmitDate"></govuk-date-input>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

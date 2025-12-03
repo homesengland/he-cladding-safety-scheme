@@ -134,12 +134,13 @@ public class ApplicationRepository : IApplicationRepository
         return creationDate;
     }
 
-    public async Task<bool> IsExistingApplication(string buildingName, string postcode)
+    public async Task<bool> IsExistingApplication(string buildingName, string addressLine1, string postcode)
     {
         var result = await _dbConnection.QuerySingleOrDefaultAsync<bool>(
             "ApplicationExistsWithSameAddress", new
             {
                 BuildingName = buildingName,
+                AddressLine1 = addressLine1,
                 Postcode = postcode
             });
 

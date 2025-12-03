@@ -4,7 +4,10 @@
     ViewData["Title"] = "Do you have a current FRA?";
     ViewData["BackLink"] = Model.VisitedCheckYourAnswers
         ? Url.Action("CheckYourAnswers", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
-        : Url.Action("Information", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
+        : (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ||
+          Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) 
+          ? Url.Action("FraBuildingWorkType", "FireRiskAssessment", new { Area = "FireRiskAssessment" })
+          : Url.Action("Information", "FireRiskAssessment", new { Area = "FireRiskAssessment" });
     ViewData["FullWidth"] = false;
 }
 
@@ -22,7 +25,7 @@
         <govuk-radios-item value="@true">Yes</govuk-radios-item>
         <govuk-radios-item value="@false">No</govuk-radios-item>
     </govuk-radios>
-    
+
     <input asp-for="VisitedCheckYourAnswers" type="hidden" value="@Model.VisitedCheckYourAnswers" />
 
     <div class="comp-btn-group">

@@ -4,6 +4,8 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAssessment;
 
 public class CheckYourAnswersViewModel
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
+    public EFraBuildingWorkType? FraBuildingWorkType { get; set; }
     public bool? HasFra { get; set; }
     public string FraFile { get; set; }
     public EFireRiskAssessmentType? FireRiskAssessmentType { get; set; }
@@ -15,6 +17,7 @@ public class CheckYourAnswersViewModel
     public string OtherAssessorEmailAddress { get; set; }
     public string OtherAssessorTelephone { get; set; }
     public DateTime? FireRiskAssessmentDate { get; set; }
+    public EFraCommissionerType? FraCommissionerType { get; set; }
     public EFraRiskRating? FireRiskRating { get; set; }
     public bool? HasInternalFireSafetyRisks { get; set; }
     public bool? HasFunding { get; set; }

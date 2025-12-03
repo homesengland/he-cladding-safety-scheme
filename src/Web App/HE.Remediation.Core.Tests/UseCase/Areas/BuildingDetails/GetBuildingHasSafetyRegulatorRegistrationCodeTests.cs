@@ -27,6 +27,13 @@ public class GetBuildingHasSafetyRegulatorRegistrationCodeTests
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+                        .Returns(Enums.EApplicationScheme.ResponsibleActorsScheme)
+                        .Verifiable();
+
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+                        .Returns(Enums.EApplicationScheme.ResponsibleActorsScheme)
+                        .Verifiable();
 
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<bool?>("GetBuildingHasSafetyRegulatorRegistrationCode", It.IsAny<object>()))
                                 .ReturnsAsync(true)

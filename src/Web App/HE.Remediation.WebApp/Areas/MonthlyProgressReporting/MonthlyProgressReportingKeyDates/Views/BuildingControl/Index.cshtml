@@ -1,0 +1,116 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates
+@model BuildingControlViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("Index", "KeyDates");
+    ViewData["ExitLinkHidden"] = false;
+    ViewData["FullWidth"] = true;
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="BuildingControlExpectedApplicationDateMonthYearInput" />
+        <govuk-error-summary-item asp-for="BuildingControlActualApplicationDateMonthYearInput" />
+        <govuk-error-summary-item asp-for="Gateway2Reference" />
+        <govuk-error-summary-item asp-for="BuildingControlValidationDateMonthYearInput" />
+        <govuk-error-summary-item asp-for="BuildingControlDecisionDateMonthYearInput" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Building control</h1>
+
+<p class="govuk-body">Use this page to add or update key dates for Building Control.</p>
+
+<p class="govuk-body">
+    This includes standard Building Control and the Building Safety Regulator Gateway 2 route for buildings at least 7 storeys or over 18 metres in height.
+</p>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="BuildingControl" asp-action="Index" method="post">
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous expected application date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousBuildingControlExpectedApplicationDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous actual application date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousBuildingControlActualApplicationDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous validation date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousBuildingControlValidationDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous decision date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousBuildingControlDecisionDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <month-year-input asp-for="BuildingControlExpectedApplicationDateMonthYearInput"
+                      label="Expected application date"
+                      model-state="@ViewData.ModelState" />
+
+    <month-year-input asp-for="BuildingControlActualApplicationDateMonthYearInput"
+                      label="Actual application date (optional)" 
+                      model-state="@ViewData.ModelState" />
+
+    <govuk-input asp-for="Gateway2Reference" class="govuk-!-width-three-quarters">
+        <govuk-input-label class="govuk-label--s">Gateway 2 application reference (optional)</govuk-input-label>
+    </govuk-input>
+
+    <month-year-input asp-for="BuildingControlValidationDateMonthYearInput"
+                      label="Validation date (optional)"
+                      model-state="@ViewData.ModelState" />
+
+    <month-year-input asp-for="BuildingControlDecisionDateMonthYearInput"
+                      label="Decision date (optional)"
+                      model-state="@ViewData.ModelState" />
+    
+    <govuk-radios asp-for="BuildingControlDecisionType">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-label--s">Decision (optional)</govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@EBuildingControlDecisionType.Approved" checked="@Model.BuildingControlDecisionType == EBuildingControlDecisionType.Approved">Approved</govuk-radios-item>
+        <govuk-radios-item value="@EBuildingControlDecisionType.ApproveWithRecommendations" checked="@Model.BuildingControlDecisionType == EBuildingControlDecisionType.ApproveWithRecommendations">Approve with recommendations</govuk-radios-item>
+        <govuk-radios-item value="@EBuildingControlDecisionType.Rejected" checked="@Model.BuildingControlDecisionType == EBuildingControlDecisionType.Rejected">Rejected</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <govuk-date-input class="hidden" asp-for="PreviousBuildingControlExpectedApplicationDate" value="@Model.PreviousBuildingControlExpectedApplicationDate" />
+    <govuk-date-input class="hidden" asp-for="PreviousBuildingControlActualApplicationDate" value="@Model.PreviousBuildingControlActualApplicationDate" />
+    <govuk-date-input class="hidden" asp-for="PreviousBuildingControlValidationDate" value="@Model.PreviousBuildingControlValidationDate" />
+    <govuk-date-input class="hidden" asp-for="PreviousBuildingControlDecisionDate" value="@Model.PreviousBuildingControlDecisionDate" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

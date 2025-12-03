@@ -1,0 +1,49 @@
+﻿@using HE.Remediation.Core.Enums;
+@using GovUk.Frontend.AspNetCore.TagHelpers
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember.RemoveTeamMemberViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Url.Action("ProjectTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" });
+
+    string GetTeamRoleDisplay(string teamRole)
+    {
+        return teamRole switch
+        {
+            "FireSafetyEngineer" => "Fire safety engineer",
+            "LeadDesigner" => "Lead designer",
+            "LeadContractor" => "Lead contractor",
+            "ProjectManager" => "Project manager",
+            "QuantitySurveyor" => "Quantity surveyor",
+            "Other" => "Other",
+            "ManagingAgent" => "Managing agent",
+            _ => teamRole
+        };
+    }
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="Confirm" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Are you sure you want to remove @Model.TeamMemberName (@GetTeamRoleDisplay(Model.Role.ToString())) from your team?</h1>
+
+<form asp-area="MonthlyProgressReportingProjectTeam" asp-controller="MonthlyProgressReportingProjectTeam" asp-action="RemoveTeamMember" method="post">
+
+    <govuk-radios name="Confirm" asp-for="Confirm">
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="TeamMemberId" type="hidden" value="@Model.TeamMemberId" />
+    <input asp-for="TeamMemberName" type="hidden" value="@Model.TeamMemberName" />
+    <input asp-for="Role" type="hidden" value="@Model.Role" />
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

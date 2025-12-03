@@ -60,6 +60,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
                 var isSocialSector = applicationScheme == EApplicationScheme.SocialSector;
 
                 answers.IsSocialSector = isSocialSector;
+                answers.ApplicationScheme = applicationScheme;
             }
 
             return answers ?? new GetResponsibleEntityAnswersResponse();
@@ -76,6 +77,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
     public class GetResponsibleEntityAnswersResponse
     {
         public Guid ApplicationId { get; set; }
+        public EApplicationScheme ApplicationScheme { get; set; }
         public Guid ResponsibleEntityId { get; set; }
         public int? RepresentationTypeId { get; set; }
         public int? ResponsibleEntityTypeId { get; set; }

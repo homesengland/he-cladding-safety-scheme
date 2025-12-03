@@ -1,0 +1,95 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.CheckYourAnswers.MonthlyProgressReportProjectPlanCheckYourAnswersViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Url.Action("UploadProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" });
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>How are you intending to proceed?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.IntentToProceedType switch
+            {
+                EIntentToProceedType.DesignAndBuild => "Design & build",
+                EIntentToProceedType.Traditional => "Traditional",
+                _ => "-"
+            })
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Are you planning to do other internal works at the same time?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.InternalAdditionalWork switch
+            {
+                true => "Yes",
+                false => "No",
+                _ => "-"
+            })
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>How much do you have remaining?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Html.Raw(Model.RemainingAmount.HasValue ? $"&pound;{Model.RemainingAmount:N0}" : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Do you have enough funds to meet your critical path and your first monthly payments in arrears?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>                
+            @(Model.EnoughFunds switch
+            {
+                true => "Yes",
+                false => "No",
+                _ => "-"
+            })
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    @if (Model.EnoughFunds == false)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>PTS uplift upload</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(!string.IsNullOrWhiteSpace(Model.PtsUpliftDocument) ? Model.PtsUpliftDocument : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("PtsUplift", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Project plan upload</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(!string.IsNullOrWhiteSpace(Model.ProjectPlanDocument) ? Model.ProjectPlanDocument : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("UploadProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<form asp-area="MonthlyProgressReportingProjectPlan" asp-controller="MonthlyProgressReportingProjectPlan" asp-action="CheckYourAnswers" method="post">
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+    </div>
+</form>

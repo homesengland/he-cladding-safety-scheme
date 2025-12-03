@@ -5,6 +5,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.G
 
 public class GetCheckYourAnswersResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public string AppraisalReportFilename { get; set; }
 
     public string AppraisalSummaryFilename { get; set; }
@@ -24,6 +25,9 @@ public class GetCheckYourAnswersResponse
     public DateTime? DateOfInstruction { get; set; }
 
     public DateTime? SurveyDate { get; set; }
+    public ENoYes? CommissionedByDeveloper { get; set; }
+    public DateTime? ReceivedByDeveloperDate { get; set; }
+    public ENoYes? ReceivedByResponsibleEntity { get; set; }
 
     public string AuthorsName { get; set; }
 

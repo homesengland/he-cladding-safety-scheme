@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Backlink"] = Url.Action("Submission");
+    ViewData["ReadOnly"] = true;
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["HideTitle"] = true;
+}
+
+<govuk-panel class="govuk-!-padding-bottom-2">
+    <govuk-panel-title>
+        Your monthly report has been successfully submitted
+    </govuk-panel-title>
+</govuk-panel>
+
+<h2 class="govuk-heading-m">What happens next</h2>
+
+<p class="govuk-body">Thank you for submitting your monthly progress report. We will contact you about the information you've provided if necessary, including any support you have requested.</p>
+
+
+<govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-!-margin-right-2">Return to home</govuk-button>
+<govuk-button href=@Url.Action("ProgressReports", "ProgressReporting", new { Area = "ProgressReportingDetails" }) class="govuk-button--secondary">View report</govuk-button>

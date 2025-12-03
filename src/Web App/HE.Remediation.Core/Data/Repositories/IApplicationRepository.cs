@@ -31,7 +31,7 @@ namespace HE.Remediation.Core.Data.Repositories
 
         Task UpdateApplicationReasonForWithdrawalRequest(Guid applicationId, string reasonForWithdrawalRequest);
 
-        Task<bool> IsExistingApplication(string buildingName, string postcode);
+        Task<bool> IsExistingApplication(string buildingName, string addressLine1, string postcode);
 
         Task<bool> IsClosingReportStarted(Guid applicationId);
         Task<GetApplicationTaskListSummaryResult> GetApplicationTaskListSummary(Guid applicationId);

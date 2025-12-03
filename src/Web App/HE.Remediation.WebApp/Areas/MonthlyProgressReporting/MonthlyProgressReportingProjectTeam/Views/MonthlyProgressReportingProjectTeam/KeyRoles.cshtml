@@ -1,0 +1,63 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.KeyRolesViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("ProjectTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" });
+}
+
+<h1 class="govuk-heading-xl">Key roles</h1>
+
+<p class="govuk-body">
+    In this section you will be asked to name the project team members that have responsibility for a set of key roles below.
+</p>
+<form asp-area="MonthlyProgressReportingProjectTeam" asp-controller="MonthlyProgressReportingProjectTeam" asp-action="KeyRoles" method="post">
+    <govuk-select asp-for="ApplicationLeadTeamMemberId" class="govuk-!-width-full">
+        <govuk-select-label class="govuk-label--s">Who is your Application Lead?</govuk-select-label>
+        <govuk-select-hint>
+            The individual currently nominated to update / submit sections of the application on behalf of the applicant organisation.
+        </govuk-select-hint>
+        <govuk-select-item selected="@(!Model.ApplicationLeadTeamMemberId.HasValue)">Not Currently Assigned</govuk-select-item>
+        @foreach (var teamMember in Model.AllTeamMembers)
+        {
+            var nameAndRole = $"{teamMember.Name} ({teamMember.RoleName})";
+            <govuk-select-item selected="@Model.ApplicationLeadTeamMemberId == teamMember.Id" value="@teamMember.Id">
+                @nameAndRole
+            </govuk-select-item>
+        }
+    </govuk-select>
+    
+    <govuk-select asp-for="LeaseholderCommunicatorTeamMemberId" class="govuk-!-width-full">
+        <govuk-select-label class="govuk-label--s">Who is responsible for communication to residents and leaseholders?</govuk-select-label>
+        <govuk-select-item selected="@(!Model.LeaseholderCommunicatorTeamMemberId.HasValue)">Not Currently Assigned</govuk-select-item>
+        @foreach (var teamMember in Model.AllTeamMembers)
+        {
+            var nameAndRole = $"{teamMember.Name} ({teamMember.RoleName})";
+            <govuk-select-item selected="@Model.LeaseholderCommunicatorTeamMemberId == teamMember.Id" value="@teamMember.Id">
+                @nameAndRole
+            </govuk-select-item>
+        }
+    </govuk-select>
+    
+    <govuk-select asp-for="RegulatoryComplianceTeamMemberId" class="govuk-!-width-full">
+        <govuk-select-label class="govuk-label--s">Who is responsible for regulatory compliance?</govuk-select-label>
+        <govuk-select-item selected="@(!Model.RegulatoryComplianceTeamMemberId.HasValue)">Not Currently Assigned</govuk-select-item>
+        @foreach (var teamMember in Model.AllTeamMembers)
+        {
+            var nameAndRole = $"{teamMember.Name} ({teamMember.RoleName})";
+            <govuk-select-item selected="@Model.RegulatoryComplianceTeamMemberId == teamMember.Id" value="@teamMember.Id">
+                @nameAndRole
+            </govuk-select-item>
+        }
+    </govuk-select>
+    
+    @for (var i = 0; i < Model.AllTeamMembers.Count; i++)
+    {
+        var teamMember = Model.AllTeamMembers[i];
+        <input type="hidden" name="@($"{nameof(Model.AllTeamMembers)}[{i}].{nameof(teamMember.Id)}")" value="@teamMember.Id" />
+        <input type="hidden" name="@($"{nameof(Model.AllTeamMembers)}[{i}].{nameof(teamMember.Name)}")" value="@teamMember.Name" />
+    }
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

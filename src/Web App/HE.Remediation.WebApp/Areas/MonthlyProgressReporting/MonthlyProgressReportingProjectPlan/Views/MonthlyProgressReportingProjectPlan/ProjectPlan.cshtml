@@ -1,0 +1,83 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan
+@model ProjectPlanViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="IntentToProceedType" />
+        <govuk-error-summary-item asp-for="InternalAdditionalWork" />
+        <govuk-error-summary-item asp-for="RemainingAmount" />
+        <govuk-error-summary-item asp-for="EnoughFunds" />
+    </govuk-error-summary>
+}
+<h1 class="govuk-heading-xl">Project Plan</h1>
+
+<h1 class="govuk-heading-s">How are you intending to proceed?</h1>
+<form asp-area="MonthlyProgressReportingProjectPlan" asp-controller="MonthlyProgressReportingProjectPlan" asp-action="ProjectPlan" method="post">
+
+    <govuk-radios asp-for="IntentToProceedType">
+        <govuk-radios-item value="@EIntentToProceedType.DesignAndBuild">Design &amp; Build</govuk-radios-item>
+        <govuk-radios-item value="@EIntentToProceedType.Traditional">Traditional</govuk-radios-item>
+    </govuk-radios>
+
+    <govuk-radios asp-for="InternalAdditionalWork">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Are you planning to do other internal work at the same time?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+    
+    <p class="govuk-body">
+        It is likely you have been paid pre-tender support funding (PTS) to enable your remediation project to progress to site at pace. 
+        It is important that you use these funds to achieve this aim and monitor the headroom. 
+        If you require additional PTS, you can request this on the next screen.
+    </p>
+
+    <hr class="govuk-section-break govuk-section-break--visible">
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                PTS paid to date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.AmountPaidForPTS != null ? $"&pound;{Model.AmountPaidForPTS.Value:N0}" : "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <govuk-input asp-for="RemainingAmount" type="number" inputmode="decimal" input-class="govuk-input--width-10">
+        <govuk-input-label class="govuk-label--s">How much do you have remaining?</govuk-input-label>
+        <govuk-input-prefix>&pound;</govuk-input-prefix>
+    </govuk-input>
+
+    <govuk-radios name="EnoughFunds" asp-for="EnoughFunds">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend class="govuk-fieldset__legend--s">
+                Do you have enough PTS funds left to see the project through to a Start on Site?
+            </govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+        <govuk-radios-hint>
+            If you are not sure, select Yes and ensure that you review before your next month's progress report.
+        </govuk-radios-hint>
+        <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(false)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input type="hidden" asp-for="BuildingName" />
+    <input type="hidden" asp-for="ApplicationReferenceNumber" />
+    <input type="hidden" asp-for="AmountPaidForPTS" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>
+

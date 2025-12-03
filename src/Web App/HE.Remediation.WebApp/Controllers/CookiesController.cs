@@ -95,7 +95,8 @@ namespace HE.Remediation.WebApp.Controllers
             var cookieOptions = new CookieOptions
             {
                 Expires = DateTime.Now.AddYears(1),
-                Path = "/"
+                Path = "/",
+                Secure = true
             };
 
             _httpContextAccessor.HttpContext.Response.Cookies.Append("cookies_preferences_set", "true", cookieOptions);

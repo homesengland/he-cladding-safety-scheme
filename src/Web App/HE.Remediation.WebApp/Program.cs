@@ -40,10 +40,15 @@ namespace HE.Remediation.WebApp
             {
                 options.AreaViewLocationFormats.Insert(0,"/Areas/WorksPackage/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Insert(1,"/Areas/WorksPackage/Views/Shared/{0}.cshtml");
+
                 options.AreaViewLocationFormats.Insert(2, "/Areas/ClosingReport/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Insert(3, "/Areas/ClosingReport/Views/Shared/{0}.cshtml");
-                options.AreaViewLocationFormats.Insert(4, "/Areas/ScheduleOfWorks/{2}/Views/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Insert(5, "/Areas/ScheduleOfWorks/Views/Shared/{0}.cshtml");
+
+                options.AreaViewLocationFormats.Insert(4, "/Areas/MonthlyProgressReporting/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Insert(5, "/Areas/MonthlyProgressReporting/Views/Shared/{0}.cshtml");
+
+                options.AreaViewLocationFormats.Insert(6, "/Areas/ScheduleOfWorks/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Insert(7, "/Areas/ScheduleOfWorks/Views/Shared/{0}.cshtml");
             });
 
             if (builder.Environment.IsDevelopment())
@@ -143,8 +148,18 @@ namespace HE.Remediation.WebApp
                 "ClosingReportEvidenceOfThirdPartyContribution"
             };
 
+            var monthlyProgressReportingAreas = new[]
+          {
+                "MonthlyProgressReporting",
+                "MonthlyProgressReportingKeyDates",
+                "MonthlyProgressReportingProjectPlan",
+                "MonthlyProgressReportingProjectSupport",
+                "MonthlyProgressReportingLeaseholders",
+                 "MonthlyProgressReportingProjectTeam"
+            };
+
             var scheduleOfWorksAreas = new[]
-{
+            {
                 "ScheduleOfWorks",
                 "ScheduleOfWorksLeaseholderEngagement",
                 "ScheduleOfWorksBuildingControl",
@@ -152,7 +167,7 @@ namespace HE.Remediation.WebApp
                 "ScheduleOfWorksDeclaration"
             };
 
-            foreach (var areaName in applicationAreas.Union(workPackageAreas).Union(closingReportAreas).Union(scheduleOfWorksAreas))
+            foreach (var areaName in applicationAreas.Union(workPackageAreas).Union(closingReportAreas).Union(monthlyProgressReportingAreas).Union(scheduleOfWorksAreas))
             {
                 app.MapAreaControllerRoute(
                     name: areaName,

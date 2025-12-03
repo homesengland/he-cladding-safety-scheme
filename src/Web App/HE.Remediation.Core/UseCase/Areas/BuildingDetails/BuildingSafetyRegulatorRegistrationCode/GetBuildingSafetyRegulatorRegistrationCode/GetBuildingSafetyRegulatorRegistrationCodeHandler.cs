@@ -1,4 +1,6 @@
 ﻿using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperInformation;
+
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.GetBuildingSafetyRegulatorRegistrationCode
@@ -19,7 +21,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegula
             var applicationId = _applicationDataProvider.GetApplicationId();
 
             var response = await GetBuildingSafetyRegulatorRegistrationCode(applicationId);
-
+           
             return response;
         }
 
@@ -27,7 +29,11 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegula
         {
             var response = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingSafetyRegulatorRegistrationCodeResponse>("GetBuildingSafetyRegulatorRegistrationCode", new { applicationId });
 
-            return response ?? new GetBuildingSafetyRegulatorRegistrationCodeResponse();
+            response ??= new GetBuildingSafetyRegulatorRegistrationCodeResponse();
+
+            response.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
+
+            return response;
         }
     }
 }

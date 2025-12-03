@@ -1,0 +1,5 @@
+﻿@{
+    Layout = "~/Areas/ClosingReport/Views/Shared/_Layout.cshtml";
+    ViewData["ReadOnly"] = false;
+    ViewData["CancelExitLink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+}

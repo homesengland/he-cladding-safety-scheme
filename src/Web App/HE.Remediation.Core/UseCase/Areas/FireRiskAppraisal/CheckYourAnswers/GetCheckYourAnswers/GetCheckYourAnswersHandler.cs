@@ -1,4 +1,5 @@
-﻿using HE.Remediation.Core.Data.Repositories;
+﻿using Azure;
+using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using MediatR;
@@ -63,6 +64,8 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.G
             {
                 ApplicationId = applicationId
             });
+
+            answers.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
 
             return answers;
         }

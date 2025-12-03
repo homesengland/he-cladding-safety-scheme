@@ -1,0 +1,42 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember.TeamMemberViewModel
+
+@{
+    var isCompanyFieldsReadOnly = Model.TeamMemberId != null 
+        && Model.GrantCertifyingOfficerTeamMemberId != null 
+        && Model.TeamMemberId == Model.GrantCertifyingOfficerTeamMemberId;
+}
+
+@if (isCompanyFieldsReadOnly)
+{
+    <input type="hidden" asp-for="CompanyName" />
+    <input type="hidden" asp-for="CompanyRegistration" />
+    <govuk-inset-text>
+        Team member assigned as the GCO. To update Company Name or Registration Number, please contact HE.
+    </govuk-inset-text>
+}
+
+
+
+<govuk-input asp-for="CompanyName" input-class="govuk-input--width-20" disabled=@isCompanyFieldsReadOnly>
+    <govuk-input-label class="gov-uk-label--s">Company name</govuk-input-label>
+</govuk-input>
+
+<govuk-input asp-for="CompanyRegistration" input-class="govuk-input--width-20" disabled=@isCompanyFieldsReadOnly>
+    <govuk-input-label class="gov-uk-label--s">Company registration number</govuk-input-label>
+</govuk-input>
+
+<govuk-input asp-for="Name" input-class="govuk-input--width-20">
+    <govuk-input-label class="gov-uk-label--s">
+        @(Model.Role != ETeamRole.Other ? Model.Role.ToString().SplitCamelCase().ToSentenceCase() + " name" : "Name of person in role")
+    </govuk-input-label>
+</govuk-input>
+
+<govuk-input asp-for="EmailAddress" input-class="govuk-input--width-20">
+    <govuk-input-label class="gov-uk-label--s">Email address</govuk-input-label>
+</govuk-input>
+
+<govuk-input asp-for="PrimaryContactNumber" input-class="govuk-input--width-20" input-maxlength="20">
+    <govuk-input-label class="gov-uk-label--s">Primary contact number</govuk-input-label>
+</govuk-input>

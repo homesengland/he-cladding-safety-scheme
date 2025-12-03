@@ -1,0 +1,33 @@
+﻿@model HE.Remediation.WebApp.ViewModels.Shared.KeyDatesChangedViewModel
+@{
+    Layout = null;
+}
+
+<govuk-select asp-for="ChangeTypeId">
+    <govuk-select-label class="govuk-label--s" is-page-heading="false">
+        Explain why slippage has occured and what you intend to do to mitigate this
+    </govuk-select-label>
+    <govuk-select-item value="" selected="!Model.ChangeTypeId.HasValue"></govuk-select-item>
+    @foreach (var type in Model.ChangeTypes)
+    {
+        <govuk-select-item selected="@type.Id == Model.ChangeTypeId" value="@type.Id">
+            @type.Name
+        </govuk-select-item>
+    }
+</govuk-select>
+
+@for (var i = 0; i < Model.ChangeTypes.Count; i++)
+{
+    var type = Model.ChangeTypes[i];
+    <input type="hidden" name="@($"{nameof(Model.ChangeTypes)}[{i}].Id")" value="@type.Id" />
+    <input type="hidden" name="@($"{nameof(Model.ChangeTypes)}[{i}].Name")" value="@type.Name" />
+}
+
+<govuk-character-count asp-for="ChangeReason" max-length="1000">
+    <govuk-character-count-label is-page-heading="false" class="govuk-label--s">
+        Provide additional details about the slippage
+    </govuk-character-count-label>
+</govuk-character-count>
+
+<input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+<input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />

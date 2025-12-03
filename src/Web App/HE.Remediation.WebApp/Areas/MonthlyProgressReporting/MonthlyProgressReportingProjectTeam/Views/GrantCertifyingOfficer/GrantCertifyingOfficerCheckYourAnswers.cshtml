@@ -1,0 +1,123 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer
+@model GrantCertifyingOfficerCheckYourAnswersViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.ApplicationBuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Model.HasGco ? Url.Action("GrantCertifyingOfficerAuthorisedSignatories") : Url.Action("HasGrantCertifyingOfficer");
+    ViewData["FullWidth"] = true;
+    ViewData["ShowExitLink"] = false;
+}
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <span class="govuk-heading-m">Grant Certifying Officer</span>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Have you entered a contract with the GCO Firm and have the information required to complete this section?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.HasGco ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("HasGrantCertifyingOfficer", null, new { Area = "MonthlyProgressReportingProjectTeam", returnUrl = "GrantCertifyingOfficerCheckYourAnswers" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    @if (Model.HasGco)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Who is your grant certifying officer?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.TeamMemberName
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("WhoIsTheGrantCertifyingOfficer", null, new { Area = "MonthlyProgressReportingProjectTeam", returnUrl = "GrantCertifyingOfficerCheckYourAnswers" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Provide grant certifying officer's company address
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (!string.IsNullOrEmpty(Model.NameNumber))
+                {
+                    <div>@Model.NameNumber</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.AddressLine1))
+                {
+                    <div>@Model.AddressLine1</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.AddressLine2))
+                {
+                    <div>@Model.AddressLine2</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.City))
+                {
+                    <div>@Model.City</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.County))
+                {
+                    <div>@Model.County</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.Postcode))
+                {
+                    <div>@Model.Postcode</div>
+                }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAddress", null, new { Area = "MonthlyProgressReportingProjectTeam", returnUrl = "GrantCertifyingOfficerCheckYourAnswers" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Authorised signatory
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.AuthorisedSignatory
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories")">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Authorised signatory email address
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.AuthorisedSignatoryEmailAddress
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories")">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Contract start date
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.AuthorisedSignatoryDateAppointed.HasValue ? Model.AuthorisedSignatoryDateAppointed.Value.ToString("dd/MM/yyyy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("GrantCertifyingOfficerAuthorisedSignatories")">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+    }
+</govuk-summary-list>
+
+<div class="comp-btn-group">
+    <govuk-button href="@Url.Action("GrantCertifyingOfficerConfirmAnswers")">Save and Continue</govuk-button>
+</div>

@@ -1,0 +1,627 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates
+@model KeyDatesViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = true;
+}
+@functions {
+    private bool HasError(string key, out string errorMessage)
+    {
+        errorMessage = ViewData.ModelState[key]?.Errors.FirstOrDefault()?.ErrorMessage;
+        return errorMessage != null;
+    }
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Project key dates</h1>
+
+<p class="govuk-body">Use this table to add or update your key dates each month to show your progress through your project set-up.<br />Provide accurate dates when they are available.</p>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div aria-labelledby="error-summary-title" class="govuk-error-summary" data-module="govuk-error-summary" role="alert" tabindex="-1">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var state in ViewData.ModelState)
+                        {
+                            foreach (var error in state.Value.Errors)
+                            {
+                                <li>
+                                    <a href="#@state.Key">@error.ErrorMessage</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <!-- WORKS PLANNING -->
+
+        <div id="WorksPlanning" class="govuk-form-group @(HasError("WorksPlanning", out _) ? "govuk-form-group--error" : "")">
+
+            @if (HasError("WorksPlanning", out var worksPlanningError))
+            {
+                <span class="govuk-error-message">@worksPlanningError</span>
+            }
+
+            <govuk-summary-list>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        <span class="govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            Works planning
+                        </span>
+                    </govuk-summary-list-row-key>
+                    @if (!Model.IsWorksPlanning) {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Add
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Expected date of tender
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ExpectedTenderDate.HasValue ? Model.ExpectedTenderDate.Value.ToString("MM/yyyy") : "-")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsWorksPlanning)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Actual date of tender
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ActualTenderDate.HasValue ? Model.ActualTenderDate.Value.ToString("MM/yyyy") : "-")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsWorksPlanning)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Expected lead contractor appointment date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ExpectedLeadContractorAppointmentDate.HasValue ? Model.ExpectedLeadContractorAppointmentDate.Value.ToString("MM/yyyy") : "-")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsWorksPlanning)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Actual lead contractor appointment date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ActualLeadContractAppointmentDate.HasValue ? Model.ActualLeadContractAppointmentDate.Value.ToString("MM/yyyy") : "-")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsWorksPlanning)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+                
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Expected works package submission date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ExpectedWorksPackageSubmissionDate.HasValue? Model.ExpectedWorksPackageSubmissionDate.Value.ToString("MM/yyyy") : "-")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsWorksPlanning)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                @if (Model.WorksPlanningDatesHaveChanged)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Explain why slippage has occured and what you intend to do to mitigate this
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.WorksPlanningChangeType) ? Model.WorksPlanningChangeType : "-")
+                                                                                         </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Provide additional details about the slippage
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.WorksPlanningChangeReason) ? Model.WorksPlanningChangeReason : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+                
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        How are you obtaining your contractor?
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.ContractorTenderTypeId switch
+                        {
+                            EContractorTenderType.Competitive => "Competitive tender",
+                            EContractorTenderType.NonCompetitive => "Non-competitive tender",
+                            EContractorTenderType.UsingOriginalContractor => "Using the original contractor",
+                            _ => "-"
+                        })
+                    </govuk-summary-list-row-value>
+                    @if (Model.ExpectedTenderDate.HasValue || Model.ExpectedLeadContractorAppointmentDate.HasValue
+                                                           || Model.ActualTenderDate.HasValue || Model.ActualLeadContractAppointmentDate.HasValue)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("ContractorTender", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+                
+                @if (Model.ContractorTenderTypeId == EContractorTenderType.NonCompetitive)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Why are you not running a competitive tender
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.ContractorTenderReason) ? Model.ContractorTenderReason : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("ReasonForNonCompetitiveTender", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+            </govuk-summary-list>
+
+        </div>
+
+
+        <!-- BUILDING CONTROL -->
+
+        <div id="BuildingControl" class="govuk-form-group @(HasError("BuildingControl", out _) ? "govuk-form-group--error" : "")">
+
+            @if (HasError("BuildingControl", out var buildingControlError))
+            {
+                <span class="govuk-error-message">@buildingControlError</span>
+            }
+
+            <govuk-summary-list>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        <span class="govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            Building control
+                        </span>
+                    </govuk-summary-list-row-key>
+                    @if (!Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Add
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Building control expected application date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.BuildingControlExpectedApplicationDate?.ToString("MM/yyyy") ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Building control actual application date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.BuildingControlActualApplicationDate?.ToString("MM/yyyy") ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Gateway 2 application reference
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.BuildingControlGateway2Reference ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Building control validation date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.BuildingControlValidationDate?.ToString("MM/yyyy") ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Building control decision date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.BuildingControlDecisionDate?.ToString("MM/yyyy") ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+                
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Building control decision
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.BuildingControlDecision switch
+                        {
+                            EBuildingControlDecisionType.Approved => "Approved",
+                            EBuildingControlDecisionType.ApproveWithRecommendations => "Approve with recommendations",
+                            EBuildingControlDecisionType.Rejected => "Rejected",
+                            _ => "-"
+                        })
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsBuildingControl)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "BuildingControl", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+                
+                @if (Model.BuildingControlDecision is EBuildingControlDecisionType.ApproveWithRecommendations or EBuildingControlDecisionType.Rejected)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>Building control decision uploads</govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            <ul class="govuk-list govuk-list--bullet">
+                                @foreach (var file in Model.BuildingControlDecisionFiles)
+                                {
+                                    <li>@file</li>
+                                }
+                            </ul>
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("UploadBuildingControl", "BuildingControl", new { Area = "MonthlyProgressReportingKeyDates" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+
+                @if (Model.BuildingControlDatesHaveChanged)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Explain why slippage has occured and what you intend to do to mitigate this
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.BuildingControlChangeType) ? Model.BuildingControlChangeType : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Provide additional details about the slippage
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.BuildingControlChangeReason) ? Model.BuildingControlChangeReason : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "BuildingControl", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+
+            </govuk-summary-list>
+
+        </div>
+
+
+        <!-- PLANNING PERMISSION -->
+
+        <div id="PlanningPermission" class="govuk-form-group @(HasError("PlanningPermission", out _) ? "govuk-form-group--error" : "")">
+
+            @if (HasError("PlanningPermission", out var planningPermissionError))
+            {
+                <span class="govuk-error-message">@planningPermissionError</span>
+            }
+
+            <govuk-summary-list>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        <span class="govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            Planning permission
+                        </span>
+                    </govuk-summary-list-row-key>
+                    @if (Model.WorksNeedPlanningPermissionParsed == null)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Add
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Is planning permission required?
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.WorksNeedPlanningPermissionParsed ?? "-")
+                    </govuk-summary-list-row-value>
+                    @if (Model.WorksNeedPlanningPermissionParsed != null)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+
+                @if (Model.WorksNeedPlanningPermissionParsed == "Yes")
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Have you applied for planning permission?
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.HaveAppliedPlanningPermission != null ? (Model.HaveAppliedPlanningPermission.Value ? "Yes" : "No") : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("HaveYouAppliedPlanningPermission", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+
+                @if (Model.IsPlanningPermission && Model.HaveAppliedPlanningPermission == true)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Planning permission submission date
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.PlanningPermissionDateSubmitted?.ToString("MM/yyyy") ?? " - ")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("TellUsAboutPlanningPermission", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Planning permission approval date
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.PlanningPermissionDateApproved?.ToString("MM/yyyy") ?? " - ")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("TellUsAboutPlanningPermission", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+
+                @if (Model.WorksNeedPlanningPermissionParsed == "Yes" && Model.HaveAppliedPlanningPermission == false)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Tell us why you have not applied for planning permission
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.PlanningPermissionReasonNotApplied ?? "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("ReasonNotAppliedPlanningPermission", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            When do you plan to submit your application?
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(Model.PlanningPermissionPlanToSubmitDate?.ToString("MM/yyyy") ?? " - ")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("ReasonNotAppliedPlanningPermission", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+
+                @if (Model.PlanningPermissionDatesHaveChanged)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Explain why slippage has occured and what you intend to do to mitigate this
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.PlanningPermissionChangeType) ? Model.PlanningPermissionChangeType : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Provide additional details about the slippage
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.PlanningPermissionChangeReason) ? Model.PlanningPermissionChangeReason : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "PlanningPermission", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+                
+
+            </govuk-summary-list>
+
+        </div>
+
+
+        <!-- REMEDIATION -->
+
+        <div id="Remediation" class="govuk-form-group @(HasError("Remediation", out _) ? "govuk-form-group--error" : "")">
+
+            @if (HasError("Remediation", out var remediationError))
+            {
+                <span class="govuk-error-message">@remediationError</span>
+            }
+
+            <govuk-summary-list>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        <span class="govuk-!-font-size-24 govuk-!-font-weight-bold">
+                            Remediation
+                        </span>
+                    </govuk-summary-list-row-key>
+                    @if (!Model.IsRemediation)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "Remediation", new { Area = "MonthlyProgressReporting" })">
+                            Add
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Expected remediation start date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.RemediationFullCompletionOfWorksDate?.ToString("MM/yyyy") ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsRemediation)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "Remediation", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        Expected practical completion of works date
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @(Model.RemediationPracticalCompletionDate?.ToString("MM/yyyy") ?? " - ")
+                    </govuk-summary-list-row-value>
+                    @if (Model.IsRemediation)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Index", "Remediation", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+
+                @if (Model.RemediationDatesHaveChanged)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Explain why slippage has occured and what you intend to do to mitigate this
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.RemediationChangeType) ? Model.RemediationChangeType : "-")
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "Remediation", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            Provide additional details about the slippage
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @(!string.IsNullOrWhiteSpace(Model.RemediationChangeReason) ? Model.RemediationChangeReason : "-")
+                                                                                       </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-action href="@Url.Action("DatesChanged", "Remediation", new { Area = "MonthlyProgressReporting" })">
+                            Change
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row>
+                }
+
+            </govuk-summary-list>
+
+        </div>
+
+        <form asp-area="MonthlyProgressReportingKeyDates" asp-controller="KeyDates" asp-action="ValidateAndSave" method="post">
+            <div class="comp-btn-group">
+                <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save key dates</govuk-button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="govuk-link" href="@Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" })">Cancel and exit</a>
+</div>
+
+
+

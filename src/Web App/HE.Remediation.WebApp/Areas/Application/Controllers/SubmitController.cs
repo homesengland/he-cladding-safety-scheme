@@ -24,9 +24,13 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
         #region "Submit"
 
         [HttpGet(nameof(Submit))]
-        public IActionResult Submit()
+        public async Task<IActionResult> Submit()
         {
-            return View();
+            var response = await _sender.Send(GetSubmitRequest.Request);
+
+            var viewModel = _mapper.Map<SubmitViewModel>(response);
+
+            return View(viewModel);
         }
 
         [HttpPost(nameof(SubmitApplication))]

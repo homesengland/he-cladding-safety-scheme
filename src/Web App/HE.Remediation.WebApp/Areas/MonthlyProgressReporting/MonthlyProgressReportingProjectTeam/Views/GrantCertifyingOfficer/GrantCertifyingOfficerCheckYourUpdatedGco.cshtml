@@ -1,0 +1,139 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer
+@model GetCheckYourUpdatedGcoViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.ApplicationBuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("GrantCertifyingOfficerDetails", null, new { Area = "MonthlyProgressReportingProjectTeam", returnUrl = Model.ReturnUrl });
+    ViewData["FullWidth"] = false;
+}
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <span class="govuk-heading-m">@Model.TeamMemberRole.ToSentenceCase() company details</span>
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-action href="@ViewData["BackLink"]">Change</govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company Name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CompanyName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Company registration number
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.CompanyRegistrationNumber
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Name
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.TeamMemberName
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Email address
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.EmailAddress
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Primary contact number
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @Model.PrimaryContactNumber
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (Model.ContractSigned.HasValue)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Have you formally signed a contract with this firm?
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.ContractSigned.Value ? "Yes" : "No")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Confirm that appropriate levels of professional indemnity insurance and limits of liability,
+            for the risk associated and in accordance with industry best practice,
+            are in place for the @Model.TeamMemberRole.ToLower() and evidence of this is available on request.
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.IndemnityInsurance ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (!string.IsNullOrEmpty(Model.IndemnityInsuranceReason) && Model.IndemnityInsurance == false)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Reason provided for not having appropriate levels of professional indemnity insurance and limits of liability,
+                for the risk associated and in accordance with industry best practice.
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.IndemnityInsuranceReason
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Was this @Model.TeamMemberRole.ToLower() involved in the original installation of the building cladding?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.InvolvedInOriginalInstallation ? "Yes" : "No")
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+
+    @if (!string.IsNullOrEmpty(Model.InvolvedRoleReason) && Model.InvolvedInOriginalInstallation == true)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Explanation of this @Model.TeamMemberRole.ToLower()'s involvement in the original installation of the building cladding.
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Model.InvolvedRoleReason
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    }
+</govuk-summary-list>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column govuk-!-padding-left-3">
+        <p class="govuk-body">
+            By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
+        </p>
+    </div>
+</div>
+
+<div class="comp-btn-group">
+    @if(string.IsNullOrEmpty(Model.ReturnUrl)) {
+        <govuk-button href="@Url.Action("GrantCertifyingOfficerAddress")">Continue</govuk-button>
+    } else {
+        <govuk-button href="@Url.Action(Model.ReturnUrl)">Continue</govuk-button>
+    }
+</div>

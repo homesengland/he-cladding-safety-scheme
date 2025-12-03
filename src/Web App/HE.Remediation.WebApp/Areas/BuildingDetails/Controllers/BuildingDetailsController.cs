@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+
 using FluentValidation.AspNetCore;
+
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperAddressInformation;
@@ -10,6 +12,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingHasSafetyRegulat
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingHasSafetyRegulatorRegistrationCode.SetBuildingHasSafetyRegulatorRegistrationCode;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.GetBuildingPartOfDevelopment;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.SetBuildingPartOfDevelopment;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingRemediation.GetBuildingRemediationResponsibilityReason;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingRemediation.SetBuildingRemediationResponsibilityReason;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.GetBuildingSafetyRegulatorRegistrationCode;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.SetBuildingSafetyRegulatorRegistrationCode;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.GetBuildingsInsurance;
@@ -22,6 +26,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmBuildingHeight.Ge
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmBuildingHeight.SetBuildingHeight;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmKeyDates.Get;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmKeyDates.Set;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConstructionCompletionDate.Get;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConstructionCompletionDate.Set;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.GetDeveloperContacted;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.SetDeveloperContacted;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperInBusiness.GetDeveloperInBusiness;
@@ -35,6 +41,8 @@ using HE.Remediation.Core.UseCase.Areas.BuildingDetails.NonResidentialUnits.SetN
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddressManual;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.RefurbishmentCompletionDate.Get;
+using HE.Remediation.Core.UseCase.Areas.BuildingDetails.RefurbishmentCompletionDate.Set;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResetSection;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.GetResidentialUnits;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResidentialUnits.SetResidentialUnits;
@@ -44,7 +52,9 @@ using HE.Remediation.Core.UseCase.Areas.Location.BuildingLookup;
 using HE.Remediation.WebApp.ViewModels.BuildingDetails;
 using HE.Remediation.WebApp.ViewModels.BuildingsInsurance;
 using HE.Remediation.WebApp.ViewModels.Location;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
@@ -146,7 +156,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 
             if (model.SubmitAction == ESubmitAction.Continue)
             {
-                if ((model.ApplicationScheme == EApplicationScheme.SocialSector || model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) 
+                if ((model.ApplicationScheme == EApplicationScheme.SocialSector || model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme)
                     && model.WorksAlreadyCompleted == true)
                 {
                     return RedirectToAction("ConfirmKeyDates", "BuildingDetails", new { Area = "BuildingDetails" });
@@ -154,7 +164,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 
                 return RedirectToAction("ResidentialUnits", "BuildingDetails", new { Area = "BuildingDetails" });
             }
-            
+
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion
@@ -355,10 +365,22 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             }
 
             var action = model.ReturnUrl is null
-                ? (model.BuildingHasSafetyRegulatorRegistrationCode.HasValue && model.BuildingHasSafetyRegulatorRegistrationCode.Value ? nameof(BuildingSafetyRegulatorRegistrationCode) : nameof(BuildingDeveloperInformation))
-                : model.ReturnUrl;
+                             ? (model.BuildingHasSafetyRegulatorRegistrationCode.HasValue &&
+                                model.BuildingHasSafetyRegulatorRegistrationCode.Value
+                                     ? nameof(BuildingSafetyRegulatorRegistrationCode)
+                                     : model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme
+                                         ? nameof(ResponsibleForTheRemediation)
+                                         : nameof(BuildingDeveloperInformation))
+                             : model.ReturnUrl;
 
-            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            // override ReturnUrl ONLY when action is ResponsibleForTheRemediation
+            var returnUrl =
+                action == nameof(ResponsibleForTheRemediation) && (model.BuildingHasSafetyRegulatorRegistrationCode.HasValue &&
+                                !model.BuildingHasSafetyRegulatorRegistrationCode.Value)
+                    ? nameof(BuildingHasSafetyRegulatorRegistrationCode)
+                    : model.ReturnUrl;
+
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails", returnUrl = returnUrl });
         }
         #endregion
 
@@ -391,10 +413,16 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             }
 
             var action = model.ReturnUrl is null
-                ? nameof(BuildingDeveloperInformation)
+                ? model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ? nameof(ResponsibleForTheRemediation) : nameof(BuildingDeveloperInformation)
                 : model.ReturnUrl;
 
-            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+            // override ReturnUrl ONLY when action is ResponsibleForTheRemediation
+            var returnUrl =
+                action == nameof(ResponsibleForTheRemediation)
+                    ? nameof(BuildingSafetyRegulatorRegistrationCode)
+                    : model.ReturnUrl;
+
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails", returnUrl = returnUrl });
         }
         #endregion
 
@@ -598,6 +626,84 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
 
         #endregion
 
+        #region Responsible For The Remediation
+        [HttpGet(nameof(ResponsibleForTheRemediation))]
+        public async Task<IActionResult> ResponsibleForTheRemediation(string returnUrl)
+        {
+            var response = await _sender.Send(GetBuildingRemediationResponsibilityReasonRequest.Request);
+
+            var viewModel = _mapper.Map<ResponsibleForTheRemediationViewModel>(response);
+
+            viewModel.ReturnUrl = returnUrl;
+
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(ResponsibleForTheRemediation))]
+        public async Task<IActionResult> ResponsibleForTheRemediation(ResponsibleForTheRemediationViewModel model)
+        {
+            var validator = new ResponsibleForTheRemediationViewModelValidator();
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetBuildingRemediationResponsibilityReasonRequest>(model);
+            await _sender.Send(request);
+
+            var action = model.BuildingRemediationResponsibilityType == EBuildingRemediationResponsibilityType.YouBuiltTheBuilding
+                         ? nameof(ConstructionCompletionDate) : nameof(RefurbishmentCompletionDate);
+
+            if (model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && model.ReturnUrl == "CheckYourAnswers")
+            {
+                return SafeRedirectToAction(model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" });
+            }
+
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
+        }
+
+        #endregion
+
+        #region Construction Completion Date
+        [HttpGet(nameof(ConstructionCompletionDate))]
+        public async Task<IActionResult> ConstructionCompletionDate(string returnUrl)
+        {
+            var response = await _sender.Send(GetConstructionCompletionDateRequest.Request);
+            var viewModel = _mapper.Map<ConstructionCompletionDateViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(ConstructionCompletionDate))]
+        public async Task<IActionResult> ConstructionCompletionDate(ConstructionCompletionDateViewModel model)
+        {
+            var validator = new ConstructionCompletionDateViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetConstructionCompletionDateRequest>(model);
+            await _sender.Send(request);
+
+            return model.SubmitAction == ESubmitAction.Continue ?
+                RedirectToAction("CheckYourAnswers", "BuildingDetails", new { Area = "BuildingDetails" }) :
+                RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+        #endregion
+
         #region Building Developer Information
         [HttpGet(nameof(BuildingDeveloperInformation))]
         public async Task<IActionResult> BuildingDeveloperInformation(string returnUrl)
@@ -761,6 +867,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             var response = await _sender.Send(GetDeveloperContactedRequest.Request);
             var viewModel = _mapper.Map<DeveloperContactedViewModel>(response);
             viewModel.ReturnUrl = returnUrl;
+            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
             return View(viewModel);
         }
 
@@ -810,6 +917,38 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             return submitAction == ESubmitAction.Continue
                 ? RedirectToAction("ConfirmBuildingHeight", "BuildingDetails", new { Area = "BuildingDetails" })
                 : RedirectToAction("Index", "TaskList", new { Area = "Application" });
+        }
+        #endregion
+
+        #region Refurbishment Completion Date
+        [HttpGet(nameof(RefurbishmentCompletionDate))]
+        public async Task<IActionResult> RefurbishmentCompletionDate(string returnUrl)
+        {
+            var response = await _sender.Send(GetRefurbishmentCompletionDateRequest.Request);
+            var viewModel = _mapper.Map<RefurbishmentCompletionDateViewModel>(response);
+            viewModel.ReturnUrl = returnUrl;
+            return View(viewModel);
+        }
+
+        [HttpPost(nameof(RefurbishmentCompletionDate))]
+        public async Task<IActionResult> RefurbishmentCompletionDate(RefurbishmentCompletionDateViewModel model)
+        {
+            var validator = new RefurbishmentCompletionDateViewModelValidator();
+
+            var validationResult = await validator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState, string.Empty);
+                return View(model);
+            }
+
+            var request = _mapper.Map<SetRefurbishmentCompletionDateRequest>(model);
+            await _sender.Send(request);
+
+            return model.SubmitAction == ESubmitAction.Continue ?
+                RedirectToAction("CheckYourAnswers", "BuildingDetails", new { Area = "BuildingDetails" }) :
+                RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion
 

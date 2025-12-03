@@ -1,0 +1,106 @@
+﻿@using HE.Remediation.Core.Enums;
+@using System.Net
+@model HE.Remediation.WebApp.ViewModels.ClosingReport.UploadViewModel
+@{
+    if (Model.UploadType != EClosingReportFileType.ExitFraew)
+    {
+        Layout = "~/Areas/ClosingReport/Views/Shared/_SideCardLayout.cshtml";
+    }
+    ViewData["Title"] = "Final payment request";
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["BackLink"] = Model.ReturnUrl;
+    ViewData["ReadOnly"] = Model.IsSubmitted;
+    ViewData["FullWidth"] = Model.UploadType != EClosingReportFileType.ExitFraew;
+
+    var acceptedTypes = Model.AcceptedFileTypes?.Any() == true ? string.Join(",", Model.AcceptedFileTypes) : "*";
+}
+
+@if(Model.UploadType != EClosingReportFileType.ExitFraew){
+
+    @section InfoCardSection
+    {
+        <div class="info-card blank-background govuk-!-padding-left-0 govuk-!-padding-right-0 govuk-!-padding-top-1">
+            <h2 class="govuk-heading-m">Related guidance</h2>
+    
+            <a target="_blank" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#practical-completion---scheme-exit" class="govuk-link govuk-!-margin-bottom-2">
+                Practical completion - scheme exit
+            </a>
+        </div>
+    }
+}
+
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File"/>
+    </govuk-error-summary>
+}
+<div class="govuk-body">
+
+    <partial name="@(WebUtility.HtmlEncode($"_{Model.UploadType}"))" view-data="ViewData"/>
+
+<div class="govuk-hint">
+    You can upload up to 5 files.
+</div>
+<div class="govuk-hint">
+    Each file must be smaller than 50MB.
+</div>
+<div class="govuk-hint">
+    File format must be PDF.
+</div>
+
+@using (Html.BeginForm(FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+    <input asp-for="ApplicationReferenceNumber" type="hidden" />
+    <input asp-for="BuildingName" type="hidden" />
+    <input asp-for="UploadType" type="hidden" />
+    <input asp-for="ReturnUrl" type="hidden" />
+
+    @if ((Model.AddedFiles is null || Model.AddedFiles.Count < Model.NumberOfFilesAllowed) && !Model.IsSubmitted)
+    {
+        <govuk-file-Upload asp-for="File" name="File" input-accept="@acceptedTypes">
+            <govuk-file-Upload-label>Upload a file</govuk-file-Upload-label>
+        </govuk-file-Upload>
+        @if (Model.NumberOfFilesAllowed > 1)
+        {
+            <govuk-button name="SubmitAction" value="@(ESubmitAction.Upload)" class="govuk-button--secondary" type="submit">Add file</govuk-button>
+        }
+    }
+
+    @if (Model.AddedFiles is { Count: > 0 })
+    {
+        <h2 class="govuk-heading-m">Files added</h2>
+        <govuk-summary-list>
+            @for (var i = 0; i < Model.AddedFiles.Count; i++)
+            {
+                var file = Model.AddedFiles[i];
+                var count = i + 1;
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        File @count
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @file.Name @($"{file.FileSize}")
+                    </govuk-summary-list-row-value>
+                    @if (!Model.IsSubmitted)
+                    {
+                        <govuk-summary-list-row-action href="@Url.Action("Delete", new {fileId = file.Id, Model.UploadType, Model.ReturnUrl})">Delete</govuk-summary-list-row-action>
+                    }
+                </govuk-summary-list-row>
+            }
+        </govuk-summary-list>
+
+        @foreach (var x in Model.AddedFiles.Select((value, index) => new { value, index }))
+        {
+            <input asp-for="@Model.AddedFiles[x.index].Id" type="hidden" />
+            <input asp-for="@Model.AddedFiles[x.index].Name" type="hidden" />
+            <input asp-for="@Model.AddedFiles[x.index].FileSize" type="hidden" />
+        }
+    }
+    <br/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" disabled="@Model.IsSubmitted" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+}
+</div>

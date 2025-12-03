@@ -1,5 +1,6 @@
 ﻿@using HE.Remediation.WebApp.TagHelpers
-@model HE.Remediation.WebApp.ViewModels.ProgressReporting.ProgressReportsViewModel
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting
+@model ProgressReportsViewModel
 @{
     ViewData["Title"] = "Progress Reporting";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
@@ -9,12 +10,12 @@
     ViewData["ReadOnly"] = false;
 }
 
-<h1 class="govuk-heading-xl">Progress reports</h1>
+<h1 class="govuk-heading-xl">Monthly reports</h1>
 
 @foreach (var progressReportItem in Model.ProgressReports)
 {
     <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
-        <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", progressReportId = @progressReportItem.Id.ToString() } )" class="govuk-link">@(progressReportItem.Version == 1 ?"Primary progress report":@progressReportItem.DateCreated.Value.ToString("MMMM yyyy"))</a>
+        <a href="@Url.Action("ProgressReportDetails", "ProgressReportingDetails", new { Area = "ProgressReportingDetails", progressReportId = @progressReportItem.Id.ToString() } )" class="govuk-link">@progressReportItem.DateCreated.Value.ToString("MMMM yyyy")</a>
     </div>
     <div class="govuk-!-padding-left-0 govuk-!-margin-top-3">
         <p class="govuk-body">

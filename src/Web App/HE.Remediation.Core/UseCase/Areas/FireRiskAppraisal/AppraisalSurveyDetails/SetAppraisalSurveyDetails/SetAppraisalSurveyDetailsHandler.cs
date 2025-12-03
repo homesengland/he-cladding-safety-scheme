@@ -31,7 +31,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            await _dbConnectionWrapper.ExecuteAsync("InsertOrUpdateAppraisalSurveyDetails", new { applicationId, request.FireRiskAssessorId, request.DateOfInstruction, request.SurveyDate });
+            await _dbConnectionWrapper.ExecuteAsync("InsertOrUpdateAppraisalSurveyDetails", new { applicationId, request.FireRiskAssessorId, request.DateOfInstruction, request.SurveyDate, request.CommissionedByDeveloper, request.ReceivedByDeveloperDate, request.ReceivedByResponsibleEntity });
 
             await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.FraewInstructed, applicationIds: applicationId);
         }

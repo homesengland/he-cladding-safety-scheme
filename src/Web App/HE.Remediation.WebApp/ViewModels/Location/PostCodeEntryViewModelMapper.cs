@@ -7,7 +7,8 @@ using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 using GrantCertifyingOfficerAddressDetails = HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.AddressDetails;
 using HE.Remediation.WebApp.ViewModels.BuildingDetails;
-using HE.Remediation.Core.UseCase.Areas.ProgressReporting;
+using GrantCertifyingOfficerAddressDetailsV1 = HE.Remediation.Core.UseCase.Areas.ProgressReporting;
+using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
 namespace HE.Remediation.WebApp.ViewModels.Location;
 
@@ -31,6 +32,8 @@ public class PostCodeEntryViewModelMapper: Profile
         CreateMap<GetResponsibleEntityCompanyAddressResponse, PostCodeEntryViewModel>();
 
         CreateMap<GrantCertifyingOfficerAddressDetails.Get.GetAddressDetailsResponse, PostCodeEntryViewModel>();
+
+        CreateMap<GrantCertifyingOfficerAddressDetailsV1.GetGrantCertifyingOfficerAddressResponse, PostCodeEntryViewModel>();
 
         CreateMap<GetGrantCertifyingOfficerAddressResponse, PostCodeEntryViewModel>();
     }

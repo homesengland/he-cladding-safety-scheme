@@ -1,4 +1,6 @@
-﻿@{
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAssessment.AboutThisSectionViewModel
+@{
     ViewData["Title"] = "About this section";
     ViewData["BackLink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
     ViewData["FullWidth"] = false;
@@ -7,8 +9,16 @@
 <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
 
 <p class="govuk-body">
-    In this section you will be asked to upload your building's Fire Risk Assessment 
+    In this section you will be asked to upload your building's Fire Risk Assessment
     and confirm the type of Fire Risk Assessment that has been undertaken.
 </p>
 
-<govuk-button href="@Url.Action("HasFra", "FireRiskAssessment", new {Area = "FireRiskAssessment"})">Continue</govuk-button>
+@if (Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ||
+    Model.ApplicationScheme == EApplicationScheme.SocialSector)
+{
+    <govuk-button href="@Url.Action("FraBuildingWorkType", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Continue</govuk-button>
+}
+else
+{
+    <govuk-button href="@Url.Action("HasFra", "FireRiskAssessment", new { Area = "FireRiskAssessment" })">Continue</govuk-button>
+}

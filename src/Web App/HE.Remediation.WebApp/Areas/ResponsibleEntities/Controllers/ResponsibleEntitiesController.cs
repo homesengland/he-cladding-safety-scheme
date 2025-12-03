@@ -2,12 +2,18 @@
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
+using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibleForGFA.GetResponsibleEntityResponsibleForGrantFunding;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibleForGFA.SetResponsibleEntityResponsibleForGrantFunding;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrIndividual.GetFreeholderCompanyOrIndividual;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrIndividual.SetFreeholderCompanyOrIndividual;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.DeleteGrantFundingSignatory;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.GetGrantFundingSignatories;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.GetGrantFundingSignatoryDetails;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.SetGrantFundingSignatoryDetails;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.GetNotEligible;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.SetNotEligible;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.GetRepCompanyOrIndividual;
@@ -24,18 +30,13 @@ using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityRel
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityRelation.SetResponsibleEntityRelation;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.GetResponsibleEntityUkRegistered;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.SetResponsibleEntityUkRegistered;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.GetGrantFundingSignatoryDetails;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.SetGrantFundingSignatoryDetails;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.DeleteGrantFundingSignatory;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.GetGrantFundingSignatories;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RightToManage;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.Location;
 using HE.Remediation.WebApp.ViewModels.ResponsibleEntities;
+using HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RightToManage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RightToManage;
-using HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RightToManage;
 
 namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 {
@@ -506,6 +507,11 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return SafeRedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
+            if (applicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+            {
+                return RedirectToAction("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
             switch (model.OrganisationType!.Value)
             {
                 case EApplicationResponsibleEntityOrganisationType.RightToManageCompany:
@@ -786,6 +792,8 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
         [HttpPost(nameof(ResponsibleEntityCompanyAddress))]
         public async Task<IActionResult> ResponsibleEntityCompanyAddress(PostCodeManualViewModel model, ESubmitAction submitAction)
         {
+            var isRasScheme = _applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
+
             var validator = new PostCodeManualViewModelValidator(true);
             var validationResult = await validator.ValidateAsync(model);
 
@@ -804,7 +812,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             }
 
             var action = model.ReturnUrl is null
-                ? nameof(ResponsibleEntityPrimaryContactDetails)
+                ? (isRasScheme ? nameof(CheckYourAnswers) : nameof(ResponsibleEntityPrimaryContactDetails))                            
                 : model.ReturnUrl;
 
             return SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" }); //Should redirect to story 48098 when implemented

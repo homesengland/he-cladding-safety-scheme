@@ -5,7 +5,7 @@
 @{
     var isRas = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
     var isSocialSector = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
-    var backLinkAction = isSocialSector ? "LeaseholderOrPrivateOwner" : "UploadEvidence";
+    var backLinkAction = isRas ? "ResponsibleEntityCompanyType" : isSocialSector ? "LeaseholderOrPrivateOwner" : "UploadEvidence";
 
     ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
     ViewData["FullWidth"] = true;
@@ -160,7 +160,7 @@
 {
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
-            What type of company is the Responsible Entity?
+         @((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "What type of organisation is the Responsible Entity?" : "What type of company is the Responsible Entity?")
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
             @Model.ResponsibleEntityCompanyType
@@ -214,7 +214,7 @@
         )
     )
 {
-    @if (Model.ResponsibleEntityRegisteredInUK.HasValue)
+    @if (!isRas && Model.ResponsibleEntityRegisteredInUK.HasValue)
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
@@ -232,7 +232,7 @@
 
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
-                What are the company details of the Responsible Entity?
+                @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme ? "What are the company details of the Responsible Entity?" : "What are the organisation details of the Responsible Entity?")
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
                 @foreach (var item in details)
@@ -283,7 +283,7 @@
         </govuk-summary-list-row>
     }
 
-    if (!string.IsNullOrEmpty(Model.ResponsibleEntityPrimaryContact))
+    if (!isRas && !string.IsNullOrEmpty(Model.ResponsibleEntityPrimaryContact))
     {
         var details = Model.ResponsibleEntityPrimaryContact.Split(',').ToList();
 
@@ -326,7 +326,7 @@
         }
     }
 
-    @if (Model.RepresentEvidenceFiles.Any() && !isSocialSector)
+    @if (Model.RepresentEvidenceFiles.Any() && !isSocialSector && !isRas)
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
@@ -349,7 +349,7 @@
     Model.ResponsibleEntityCompanySubTypeId is (int)EApplicationResponsibleEntityOrganisationSubType.Individual
     )
 {
-    @if (Model.ResponsibleEntityRegisteredInUK.HasValue)
+    @if (!isRas && Model.ResponsibleEntityRegisteredInUK.HasValue)
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
@@ -361,7 +361,7 @@
         </govuk-summary-list-row>
     }
 
-    if (!string.IsNullOrEmpty(Model.ResponsibleEntityPrimaryContact))
+                if (!isRas && !string.IsNullOrEmpty(Model.ResponsibleEntityPrimaryContact))
     {
         var details = Model.ResponsibleEntityPrimaryContact.Split(',').ToList();
 
@@ -380,7 +380,7 @@
         </govuk-summary-list-row>
     }
 
-    @if (Model.RepresentEvidenceFiles.Any())
+    @if (!isRas && Model.RepresentEvidenceFiles.Any())
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>

@@ -1,0 +1,37 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember.TeamMemberViewModel
+
+<govuk-radios asp-for="IndemnityInsurance">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+            Confirm that this firm holds appropriate levels of professional indemnity insurance and limits of liability for the proposed works in accordance with industry best practice
+        </govuk-radios-fieldset-legend>
+    </govuk-radios-fieldset>
+    <govuk-radios-item value="@(true)">Yes</govuk-radios-item>
+    <govuk-radios-item value="@(false)">
+        No
+        <govuk-radios-item-conditional>
+            <govuk-character-count asp-for="IndemnityInsuranceReason" max-length="150">
+                <govuk-character-count-label>Provide a reason</govuk-character-count-label>
+            </govuk-character-count>
+        </govuk-radios-item-conditional>
+    </govuk-radios-item>
+</govuk-radios>
+
+<govuk-radios asp-for="InvolvedInOriginalInstallation">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend class="govuk-fieldset__legend--m">
+            Was this @(Model.Role != ETeamRole.Other ? Model.Role.ToString().SplitCamelCase().ToLower() : "contractor") involved in the original installation of the building cladding?
+        </govuk-radios-fieldset-legend>
+    </govuk-radios-fieldset>
+    <govuk-radios-item value="@(true)">
+        Yes
+        <govuk-radios-item-conditional>
+            <govuk-character-count asp-for="InvolvedRoleReason" max-length="150">
+                <govuk-character-count-label>Explain their role</govuk-character-count-label>
+            </govuk-character-count>
+        </govuk-radios-item-conditional>
+    </govuk-radios-item>
+    <govuk-radios-item value="@(false)">No</govuk-radios-item>
+</govuk-radios>

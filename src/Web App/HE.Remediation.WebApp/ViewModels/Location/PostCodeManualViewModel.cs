@@ -25,4 +25,6 @@ public class PostCodeManualViewModel : AddressViewModel
     public int ProgressReportVersion { get; set; }
     public bool IsProgressReportGcoComplete { get; set; }
     public bool? IsRepresentativeUkBased { get; set; }
+
+    public ESubmitAction SubmitAction { get; set; }
 }

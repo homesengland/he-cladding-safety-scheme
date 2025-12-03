@@ -38,6 +38,9 @@ namespace HE.Remediation.WebApp.ViewModels.BuildingDetails
         public string DeveloperPostcode { get; set; }
         public string DeveloperStillInBusiness { get; set; }
         public bool DeveloperContacted { get; set; }
+        public DateTime? RefurbishmentCompletionDate { get; set; }
+        public DateTime? ConstructionCompletionDate { get; set; }
+        public int? BuildingRemediationResponsibilityTypeId { get; set; }
         public decimal? SumInsuredAmount { get; set; }
         public decimal? CurrentBuildingInsurancePremiumAmount { get; set; }
         public string IfOtherInsuranceProviderName { get; set; }

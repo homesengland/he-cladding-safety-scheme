@@ -7,6 +7,7 @@ public enum ETeamRole
     LeadContractor = 3,
     ProjectManager = 4,
     QuantitySurveyor = 5,
-    Other = 6
+    Other = 6,
+    ManagingAgent = 7
 }
 

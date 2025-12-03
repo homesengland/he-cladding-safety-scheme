@@ -54,9 +54,24 @@ public class FireRiskAssessmentRepository : IFireRiskAssessmentRepository
         return result;
     }
 
+    public async Task<int?> GetFraCommissionerType(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<int?>(nameof(GetFraCommissionerType), parameters);
+        return result;
+    }
+
     public async Task SetAssessorAndFraDate(SetAssessorAndFraDateParameters parameters)
     {
         await _connection.ExecuteAsync(nameof(SetAssessorAndFraDate), parameters);
+    }
+
+
+    public async Task UpsertFraCommissionerType(UpsertFraCommissionerTypeParameters parameters)
+    {
+        await _connection.ExecuteAsync(nameof(UpsertFraCommissionerType), parameters);
     }
 
     public async Task<GetOtherAssessorResult> GetOtherAssessor(Guid applicationId)
@@ -220,5 +235,20 @@ public class FireRiskAssessmentRepository : IFireRiskAssessmentRepository
     public async Task DeleteFraForApplication(DeleteFraForApplicationParameters parameters)
     {
         await _connection.ExecuteAsync(nameof(DeleteFraForApplication), parameters);
+    }
+
+
+    public async Task<int?> GetFraBuildingWorkType(Guid applicationId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<int?>(nameof(GetFraBuildingWorkType), parameters);
+        return result;
+    }
+
+    public async Task SetFraBuildingWorkType(SetFraBuildingWorkTypeParameters parameters)
+    {
+        await _connection.ExecuteAsync("UpdateFraBuildingWorkType", parameters);
     }
 }

@@ -13,6 +13,8 @@
 }
 
 <form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="BuildingHasSafetyRegulatorRegistrationCode">
+    @Html.HiddenFor(m => m.ApplicationScheme)
+
     <h1 class="govuk-heading-xl">Do you have a Building Safety Regulator registration code?</h1>
 
     <govuk-radios asp-for="BuildingHasSafetyRegulatorRegistrationCode">

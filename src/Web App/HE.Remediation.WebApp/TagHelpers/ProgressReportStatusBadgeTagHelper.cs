@@ -19,6 +19,9 @@ public class ProgressReportStatusBadgeTagHelper : TagHelper
     [HtmlAttributeName("is-previous")]
     public bool? IsPrevious { get; set; }
 
+    [HtmlAttributeName("suppress-due-status")]
+    public bool SuppressDueStatus { get; set; } = false;
+
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "strong";
@@ -31,6 +34,11 @@ public class ProgressReportStatusBadgeTagHelper : TagHelper
         var dateText = ShowDate is true && date is not null ? " " + date.Value.ToString("dd MMM yyyy") : string.Empty;
 
         output.Content.SetHtmlContent($"{statusText}{dateText}");
+
+        if(SuppressDueStatus && status == EProgressReportStatus.Due)
+        {
+            output.SuppressOutput();
+        }
     }
 
     private (EProgressReportStatus, DateTime?) GetStatusAndDate()
@@ -47,10 +55,13 @@ public class ProgressReportStatusBadgeTagHelper : TagHelper
 
         if (DateDue is not null)
         {
-            return (DateDue.Value.Date < DateTime.Today
-                    ? EProgressReportStatus.Overdue
-                    : EProgressReportStatus.Due,
-                DateDue.Value);
+            if (DateDue.Value.Date < DateTime.Today)
+                return (EProgressReportStatus.Overdue, DateDue.Value);
+
+            if (DateDue.Value.Date < DateTime.Today.AddDays(5))
+                return (EProgressReportStatus.ToDo, DateDue.Value);
+
+            return (EProgressReportStatus.Due, DateDue.Value);
         }
 
         return (0, null);
@@ -63,6 +74,7 @@ public class ProgressReportStatusBadgeTagHelper : TagHelper
             EProgressReportStatus.Expired => "govuk-tag--red",
             EProgressReportStatus.Overdue => "govuk-tag--red",
             EProgressReportStatus.Submitted => "govuk-tag--grey",
+            EProgressReportStatus.ToDo => "govuk-tag--blue",
             _ => ""
         };
 }

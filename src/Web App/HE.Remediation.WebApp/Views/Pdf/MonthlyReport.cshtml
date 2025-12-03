@@ -1,0 +1,988 @@
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Services.RazorRenderer.Models
+@using HE.Remediation.WebApp.Extensions
+@model ProgressReportDetailsViewModel
+@{
+
+    string reportSubmittedExpiredText;
+    if (Model.DateSubmitted.HasValue)
+    {
+        reportSubmittedExpiredText = $"This progress report was submitted on {Model.DateSubmitted.Value:dd MMMM yyyy}.";
+    }
+    else if (Model.NextReportExists)
+    {
+        reportSubmittedExpiredText = "This progress report has expired.";
+    }
+    else
+    {
+        reportSubmittedExpiredText = "This progress report has not yet been submitted.";
+    }
+}
+
+@{
+    var domain = $"{Context.Request.Scheme}://{Context.Request.Host}";
+}
+<html>
+<head>
+    <link rel="stylesheet" href="@(domain)/govuk-frontend-3.9.1.min.css">
+</head>
+<body>
+
+    <header class="govuk-header " role="banner" data-module="govuk-header">
+        <div class="govuk-header__container">
+            <div class="govuk-header__logo">
+                <div class="govuk-header__link govuk-header__link--homepage">
+                    <span class="govuk-header__logotype">
+                        <!--[if gt IE 8]><!-->
+                        <svg focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 296 60" height="30" width="148" fill="currentcolor" class="govuk-header__logotype" aria-label="GOV.UK">
+                            <title>GOV.UK</title>
+                            <g>
+                                <circle cx="20" cy="17.6" r="3.7"></circle>
+                                <circle cx="10.2" cy="23.5" r="3.7"></circle>
+                                <circle cx="3.7" cy="33.2" r="3.7"></circle>
+                                <circle cx="31.7" cy="30.6" r="3.7"></circle>
+                                <circle cx="43.3" cy="17.6" r="3.7"></circle>
+                                <circle cx="53.2" cy="23.5" r="3.7"></circle>
+                                <circle cx="59.7" cy="33.2" r="3.7"></circle>
+                                <circle cx="31.7" cy="30.6" r="3.7"></circle>
+                                <path d="M33.1,9.8c.2-.1.3-.3.5-.5l4.6,2.4v-6.8l-4.6,1.5c-.1-.2-.3-.3-.5-.5l1.9-5.9h-6.7l1.9,5.9c-.2.1-.3.3-.5.5l-4.6-1.5v6.8l4.6-2.4c.1.2.3.3.5.5l-2.6,8c-.9,2.8,1.2,5.7,4.1,5.7h0c3,0,5.1-2.9,4.1-5.7l-2.6-8ZM37,37.9s-3.4,3.8-4.1,6.1c2.2,0,4.2-.5,6.4-2.8l-.7,8.5c-2-2.8-4.4-4.1-5.7-3.8.1,3.1.5,6.7,5.8,7.2,3.7.3,6.7-1.5,7-3.8.4-2.6-2-4.3-3.7-1.6-1.4-4.5,2.4-6.1,4.9-3.2-1.9-4.5-1.8-7.7,2.4-10.9,3,4,2.6,7.3-1.2,11.1,2.4-1.3,6.2,0,4,4.6-1.2-2.8-3.7-2.2-4.2.2-.3,1.7.7,3.7,3,4.2,1.9.3,4.7-.9,7-5.9-1.3,0-2.4.7-3.9,1.7l2.4-8c.6,2.3,1.4,3.7,2.2,4.5.6-1.6.5-2.8,0-5.3l5,1.8c-2.6,3.6-5.2,8.7-7.3,17.5-7.4-1.1-15.7-1.7-24.5-1.7h0c-8.8,0-17.1.6-24.5,1.7-2.1-8.9-4.7-13.9-7.3-17.5l5-1.8c-.5,2.5-.6,3.7,0,5.3.8-.8,1.6-2.3,2.2-4.5l2.4,8c-1.5-1-2.6-1.7-3.9-1.7,2.3,5,5.2,6.2,7,5.9,2.3-.4,3.3-2.4,3-4.2-.5-2.4-3-3.1-4.2-.2-2.2-4.6,1.6-6,4-4.6-3.7-3.7-4.2-7.1-1.2-11.1,4.2,3.2,4.3,6.4,2.4,10.9,2.5-2.8,6.3-1.3,4.9,3.2-1.8-2.7-4.1-1-3.7,1.6.3,2.3,3.3,4.1,7,3.8,5.4-.5,5.7-4.2,5.8-7.2-1.3-.2-3.7,1-5.7,3.8l-.7-8.5c2.2,2.3,4.2,2.7,6.4,2.8-.7-2.3-4.1-6.1-4.1-6.1h10.6,0Z"></path>
+                            </g>
+                            <path d="M88.6,33.2c0,1.8.2,3.4.6,5s1.2,3,2,4.4c1,1.2,2,2.2,3.4,3s3,1.2,5,1.2,3.4-.2,4.6-.8,2.2-1.4,3-2.2,1.2-1.8,1.6-3c.2-1,.4-2,.4-3v-.4h-10.6v-6.4h18.8v23h-7.4v-5c-.6.8-1.2,1.6-2,2.2-.8.6-1.6,1.2-2.6,1.8-1,.4-2,.8-3.2,1.2s-2.4.4-3.6.4c-3,0-5.8-.6-8-1.6-2.4-1.2-4.4-2.6-6-4.6s-2.8-4.2-3.6-6.8c-.6-2.8-1-5.6-1-8.6s.4-5.8,1.4-8.4,2.2-4.8,4-6.8,3.8-3.4,6.2-4.6c2.4-1.2,5.2-1.6,8.2-1.6s3.8.2,5.6.6c1.8.4,3.4,1.2,4.8,2s2.8,1.8,3.8,3c1.2,1.2,2,2.6,2.8,4l-7.4,4.2c-.4-.8-1-1.8-1.6-2.4-.6-.8-1.2-1.4-2-2s-1.6-1-2.6-1.4-2.2-.4-3.4-.4c-2,0-3.6.4-5,1.2-1.4.8-2.6,1.8-3.4,3-1,1.2-1.6,2.8-2,4.4-.6,1.6-.8,3.8-.8,5.4ZM161.4,24.6c-.8-2.6-2.2-4.8-4-6.8s-3.8-3.4-6.2-4.6c-2.4-1.2-5.2-1.6-8.4-1.6s-5.8.6-8.4,1.6c-2.2,1.2-4.4,2.8-6,4.6-1.8,2-3,4.2-4,6.8-.8,2.6-1.4,5.4-1.4,8.4s.4,5.8,1.4,8.4c.8,2.6,2.2,4.8,4,6.8s3.8,3.4,6.2,4.6c2.4,1.2,5.2,1.6,8.4,1.6s5.8-.6,8.4-1.6c2.4-1.2,4.6-2.6,6.2-4.6,1.8-2,3-4.2,4-6.8.8-2.6,1.4-5.4,1.4-8.4-.2-3-.6-5.8-1.6-8.4h0ZM154,33.2c0,2-.2,3.8-.8,5.4-.4,1.6-1.2,3.2-2.2,4.4s-2.2,2.2-3.4,2.8c-1.4.6-3,1-4.8,1s-3.4-.4-4.8-1-2.6-1.6-3.4-2.8c-1-1.2-1.6-2.6-2.2-4.4-.4-1.6-.8-3.4-.8-5.4v-.2c0-2,.2-3.8.8-5.4.4-1.6,1.2-3.2,2.2-4.4,1-1.2,2.2-2.2,3.4-2.8,1.4-.6,3-1,4.8-1s3.4.4,4.8,1,2.6,1.6,3.4,2.8c1,1.2,1.6,2.6,2.2,4.4.4,1.6.8,3.4.8,5.4v.2ZM177.8,54l-11.8-42h9.4l8,31.4h.2l8-31.4h9.4l-11.8,42h-11.4,0ZM235.4,46.7c1.2,0,2.4-.2,3.4-.6,1-.4,2-.8,2.8-1.6s1.4-1.6,1.8-2.8c.4-1.2.6-2.4.6-4V11.8h8.2v27.2c0,2.4-.4,4.4-1.2,6.2s-2,3.4-3.6,4.8c-1.4,1.4-3.2,2.4-5.4,3-2,.8-4.4,1-6.8,1s-4.8-.4-6.8-1c-2-.8-3.8-1.8-5.4-3-1.6-1.4-2.6-3-3.6-4.8-.8-1.8-1.2-4-1.2-6.2V11.7h8.4v26c0,1.6.2,2.8.6,4,.4,1.2,1,2,1.8,2.8s1.6,1.2,2.8,1.6c1.2.4,2.2.6,3.6.6h0ZM261.4,11.9h8.4v18.2l14.8-18.2h10.4l-14.4,16.8,15.4,25.2h-9.8l-11-18.8-5.4,6v12.8h-8.4V11.9h0ZM206.2,44.2c-3,0-5.4,2.4-5.4,5.4s2.4,5.4,5.4,5.4,5.4-2.4,5.4-5.4-2.4-5.4-5.4-5.4Z"></path>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <div class="govuk-header__service-name">
+                    <div href="#" class="govuk-header__service-name govuk-caption-l">
+                        <strong>Building Remediation Hub</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div>
+
+        <main class="govuk-main-wrapper" id="main-content" role="main">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+
+                    <main class="govuk-main-wrapper">
+
+                        <span class="govuk-caption-xl">@Model.BuildingName (@Model.ApplicationReferenceNumber)</span>
+
+
+                        <h1 class="govuk-heading-xl">@($"{Model.DateCreated:MMMM yyyy} Monthly Report")</h1>
+
+                        <!-- KEY DATES - WORKS PLANNING -->
+
+                        <govuk-summary-list>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24">
+                                        Works planning
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Expected date of tender
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.ExpectedTenderDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Actual date of tender
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.ActualTenderDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Expected lead contractor appointment date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.ExpectedLeadContractorAppointmentDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Actual lead contractor appointment date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.ActualLeadContractAppointmentDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Expected works package submission date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.ExpectedWorksPackageSubmissionDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        How are you obtaining your contractor?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.ContractorTenderTypeId.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            @if (Model.ContractorTenderTypeId == EContractorTenderType.NonCompetitive)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Why are you not running a competitive tender
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.ContractorTenderReason.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+
+                            @if (Model.WorksPlanningChangeTypeId.HasValue)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Explain why slippage has occured and what you intend to do to mitigate this
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.WorksPlanningChangeTypeId.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Provide additional details about the slippage
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.WorksPlanningChangeReason.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+                        </govuk-summary-list>
+
+                        <!-- KEY DATES - BUILDING CONTROL -->
+
+                        <govuk-summary-list>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24 govuk-!-font-weight-bold">
+                                        Building control
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Expected application date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.BuildingControlExpectedApplicationDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Actual application date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.BuildingControlActualApplicationDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        BSR Gateway 2 reference number
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.BuildingControlGateway2Reference.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Validation date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.BuildingControlValidationDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Decision date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.BuildingControlDecisionDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Decision
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.BuildingControlDecisionType.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            @if (Model.BuildingControlDecisionTypeId is EBuildingControlDecisionType.ApproveWithRecommendations or EBuildingControlDecisionType.Rejected)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Decision upload
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        <ul class="govuk-list govuk-list--bullet">
+                                            @foreach (var file in Model.BuildingControlDecisionDocuments)
+                                            {
+                                                <li>@file</li>
+                                            }
+                                        </ul>
+                                        @(Model.BuildingControlDecisionDocuments.Count == 0 ? "-" : "")
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+
+                            @if (Model.BuildingControlChangeTypeId.HasValue)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Explain why slippage has occured and what you intend to do to mitigate this
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.BuildingControlChangeTypeId.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Provide additional details about the slippage
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.BuildingControlChangeReason.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+                        </govuk-summary-list>
+
+                        <!-- KEY DATES - PLANNING PERMISSION -->
+
+                        <govuk-summary-list>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24">
+                                        Planning permission
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Is planning permission required?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.WorksNeedPlanningPermission.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+                            @if (Model.WorksNeedPlanningPermission == true)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Have you applied for planning permission?
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.HaveAppliedPlanningPermission.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                @if (Model.HaveAppliedPlanningPermission == true)
+                                {
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            <span class="govuk-!-font-weight-regular">
+                                                Planning permission submission date
+                                            </span>
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @Model.PlanningPermissionDateSubmitted.ForDisplay()
+                                        </govuk-summary-list-row-value>
+                                    </govuk-summary-list-row>
+
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            <span class="govuk-!-font-weight-regular">
+                                                Planning permission approval date
+                                            </span>
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @Model.PlanningPermissionDateApproved.ForDisplay()
+                                        </govuk-summary-list-row-value>
+                                    </govuk-summary-list-row>
+                                }
+
+                                @if (Model.HaveAppliedPlanningPermission == false)
+                                {
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            <span class="govuk-!-font-weight-regular">
+                                                Expected planning permission submission date
+                                            </span>
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @Model.PlanningPermissionPlanToSubmitDate.ForDisplay()
+                                        </govuk-summary-list-row-value>
+                                    </govuk-summary-list-row>
+
+                                    <govuk-summary-list-row>
+                                        <govuk-summary-list-row-key>
+                                            <span class="govuk-!-font-weight-regular">
+                                                Tell us why you have not applied for planning permission
+                                            </span>
+                                        </govuk-summary-list-row-key>
+                                        <govuk-summary-list-row-value>
+                                            @Model.PlanningPermissionReasonNotApplied.ForDisplay()
+                                        </govuk-summary-list-row-value>
+                                    </govuk-summary-list-row>
+                                }
+                            }
+
+                            @if (Model.PlanningPermissionChangeTypeId.HasValue)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Explain why slippage has occured and what you intend to do to mitigate this
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.PlanningPermissionChangeTypeId.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Provide additional details about the slippage
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.PlanningPermissionChangeReason.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+                        </govuk-summary-list>
+
+                        <!-- KEY DATES - REMEDIATION -->
+
+                        <govuk-summary-list>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24">
+                                        Remediation
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Expected start on site date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.RemediationFullCompletionOfWorksDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Expected practical completion of works date
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.RemediationPracticalCompletionDate.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            @if (Model.RemediationChangeTypeId.HasValue)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Explain why slippage has occured and what you intend to do to mitigate this
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.RemediationChangeTypeId.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Provide additional details about the slippage
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.RemediationChangeReason.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+                        </govuk-summary-list>
+
+                        <!-- PROJECT PLAN -->
+
+                        <govuk-summary-list>
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24">
+                                        Project plan
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        How are you intending to proceed?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.IntentToProceedType.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Are you planning to do other internal works at the same time?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.InternalAdditionalWork.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        How much do you have remaining?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Html.Raw(Model.RemainingAmount.HasValue ? "&pound;" + Model.RemainingAmount.Value.ToString("N0") : "-")
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Do you have enough funds to meet your critical path and your first monthly payment in arrears?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.EnoughFunds.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            @if (Model.EnoughFunds == false)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            PTS uplift upload
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        <ul class="govuk-list govuk-list--bullet">
+                                            @foreach (var file in Model.PtsUpliftDocuments)
+                                            {
+                                                <li>@file</li>
+                                            }
+                                        </ul>
+                                        @(Model.PtsUpliftDocuments.Count == 0 ? "-" : "")
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Project plan upload
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        @foreach (var file in Model.ProjectPlanDocuments)
+                                        {
+                                            <li>@file</li>
+                                        }
+                                    </ul>
+                                    @(Model.ProjectPlanDocuments.Count == 0 ? "-" : "")
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+                        </govuk-summary-list>
+
+                        <!-- TEAM MEMBERS -->
+                        @if (Model.TeamMembers.Count > 0)
+                        {
+                            <h2 class="govuk-heading-m">Team Members</h2>
+
+                            <table class="govuk-table">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th class="govuk-table__header">Role</th>
+                                        <th class="govuk-table__header">Name</th>
+                                        <th class="govuk-table__header">Company name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var teamMember in Model.TeamMembers)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">@teamMember.Role.SplitCamelCase()</td>
+                                            <td class="govuk-table__cell no-line-wrap">@teamMember.Name</td>
+                                            <td class="govuk-table__cell no-line-wrap">@teamMember.CompanyName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                            @if (Model.ApplicationLead is not null ||
+                                                    Model.LeaseholderCommunicator is not null ||
+                                                    Model.RegulatoryComplianceMember is not null)
+                            {
+                                <h2 class="govuk-heading-m">Key responsibilities</h2>
+                                <table class="govuk-table">
+                                    <thead class="govuk-table__head">
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header">Responsibility</th>
+                                            <th class="govuk-table__header">Name</th>
+                                            <th class="govuk-table__header">Company name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="govuk-table__body">
+                                        @if (Model.ApplicationLead is not null)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">Application lead</td>
+                                                <td class="govuk-table__cell no-line-wrap">@Model.ApplicationLead.Name</td>
+                                                <td class="govuk-table__cell no-line-wrap">@Model.ApplicationLead.CompanyName</td>
+                                            </tr>
+                                        }
+                                        @if (Model.LeaseholderCommunicator is not null)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">Responsible for leaseholder communication</td>
+                                                <td class="govuk-table__cell no-line-wrap">@Model.LeaseholderCommunicator.Name</td>
+                                                <td class="govuk-table__cell no-line-wrap">@Model.LeaseholderCommunicator.CompanyName</td>
+                                            </tr>
+                                        }
+                                        @if (Model.RegulatoryComplianceMember is not null)
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <td class="govuk-table__cell">Responsible for regulatory compliance</td>
+                                                <td class="govuk-table__cell no-line-wrap">@Model.RegulatoryComplianceMember.Name</td>
+                                                <td class="govuk-table__cell no-line-wrap">@Model.RegulatoryComplianceMember.CompanyName</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
+                            <h2 class="govuk-heading-m">Grant Certifying Officer</h2>
+
+                            <govuk-summary-list>
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Name
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.GcoName.ForDisplay()<br />
+                                        @Model.GcoCompanyName.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Company address
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @if (!string.IsNullOrEmpty(Model.GcoNameNumber))
+                                        {
+                                            <div>@Model.GcoNameNumber</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.GcoAddressLine1))
+                                        {
+                                            <div>@Model.GcoAddressLine1</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.GcoAddressLine2))
+                                        {
+                                            <div>@Model.GcoAddressLine2</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.GcoCity))
+                                        {
+                                            <div>@Model.GcoCity</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.GcoCounty))
+                                        {
+                                            <div>@Model.GcoCounty</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.GcoPostCode))
+                                        {
+                                            <div>@Model.GcoPostCode</div>
+                                        }
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Authorised signatory
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.GcoAuthorisedSignatory.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Authorised signatory email address
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.GcoAuthorisedSignatoryEmailAddress.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Contract start date
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.GcoContractStartDate.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            </govuk-summary-list>
+                        }
+                        else
+                        {
+                            <govuk-summary-list>
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <h2 class="govuk-heading-m">Team Members</h2>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        -
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            </govuk-summary-list>
+                        }
+
+                        <!-- LEASEHOLDER & RESIDENT COMMUNICATION -->
+
+                        <govuk-summary-list>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24">
+                                        Leaseholder and resident communication
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Have you contacted leaseholders and residents since your last progress report?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.HasContacted.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            @if (Model.HasContacted == true)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            When was the last leaseholder and residents communication issued?
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.LastCommunicationDate.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Upload evidence of your communication with the leaseholders and residents
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        <ul class="govuk-list govuk-list--bullet">
+                                            @foreach (var file in Model.LeaseholderCommunicationDocuments)
+                                            {
+                                                <li>@file</li>
+                                            }
+                                        </ul>
+                                        @(Model.LeaseholderCommunicationDocuments.Count == 0 ? "-" : "")
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+                            }
+
+                        </govuk-summary-list>
+
+                        <!-- SUPPORT -->
+
+                        <govuk-summary-list>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-size-24">
+                                        Support
+                                    </span>
+                                </govuk-summary-list-row-key>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Do you need support?
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.RequiresSupport.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key>
+                                    <span class="govuk-!-font-weight-regular">
+                                        Type of support
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        @foreach (var item in Model.DisplaySupportNeeds())
+                                        {
+                                            <li>@item</li>
+                                        }
+                                    </ul>
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                    <span class="govuk-!-font-weight-regular">
+                                        Tell us about the help you need
+                                    </span>
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @Model.SupportNeededReason.ForDisplay()
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
+
+                        </govuk-summary-list>
+
+                        <!-- V1 MISC -->
+                        @if (Model.HasLegacyReport)
+                        {
+                            <govuk-summary-list>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-size-24">
+                                            Miscellaneous
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Have you sought quotes or issued a tender?
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.HasSoughtQuotesOrIssuedTender.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key>
+                                        <span class="govuk-!-font-weight-regular">
+                                            Do you have a Building Safety registration code?
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.HasBuildingSafetyRegulatorRegistrationCode.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Building Safety Regulator registration code
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.BuildingSafetyRegulatorRegistrationCode.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Is your building at least 7 storeys or 18m in height?
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.Is7StoreysOr18Metres.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Have you applied for building control approval for higher risk buildings (Gateway 2)?
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.HasAppliedForBuildingControl.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Building control Submission additional detail
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.BuildingControlActualSubmissionInformation.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Building control Validation additional detail
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.BuildingControlValidationInformation.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Building control Decision additional detail
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.BuildingControlDecisionInformation.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class="govuk-!-font-size-12">
+                                        <span class="govuk-!-font-weight-regular">
+                                            Summarise your risks and blockers
+                                        </span>
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @Model.RisksAndBlockersSummary.ForDisplay()
+                                    </govuk-summary-list-row-value>
+                                </govuk-summary-list-row>
+
+                            </govuk-summary-list>
+                        }
+
+
+                        <govuk-inset-text>
+                            @reportSubmittedExpiredText
+                        </govuk-inset-text>
+
+                    </main>
+                </div>
+            </div>
+
+
+
+        </main>
+    </div>
+
+
+
+</body>
+</html>

@@ -44,21 +44,21 @@
                             <govuk-details-text>
                                 <h2 class="govuk-heading-m">How to measure the height of your building</h2>
 
-                        <p class="govuk-body">For a building to be eligible for grant funding, the height of the building must be over 11 metres.</p>
-                        <p class="govuk-body">Use the image below as a guide when measuring the building height.</p>
-                        <p class="govuk-body">You should measure from the lowest ground level up to the finished floor level of the top occupied story.</p>
-                        <p class="govuk-body">Do not count the root-top plant room and any other storeys that are plant rooms.</p>
+                                <p class="govuk-body">For a building to be eligible for grant funding, the height of the building must be over 11 metres.</p>
+                                <p class="govuk-body">Use the image below as a guide when measuring the building height.</p>
+                                <p class="govuk-body">You should measure from the lowest ground level up to the finished floor level of the top occupied story.</p>
+                                <p class="govuk-body">Do not count the root-top plant room and any other storeys that are plant rooms.</p>
 
 
-                        @*TODO government guidance here is to use an svg image because the image contains text and alt text should match the text in the image. (https://design-system.service.gov.uk/styles/images/)*@
-                        <p class="govuk-body">
-                            <img src="~/img/buildingdetails/buildingheight.png" height="100%" width="100%" alt="" />
-                            <span>The height of top storey must be measured from upper floor surface of the top floor, to ground level on the lowest side of building. The height of the top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms.</span>
-                        </p>
+                                @*TODO government guidance here is to use an svg image because the image contains text and alt text should match the text in the image. (https://design-system.service.gov.uk/styles/images/)*@
+                                <p class="govuk-body">
+                                    <img src="~/img/buildingdetails/buildingheight.png" height="100%" width="100%" alt="" />
+                                    <span>The height of top storey must be measured from upper floor surface of the top floor, to ground level on the lowest side of building. The height of the top storey excludes roof-top plant areas and any top storeys consisting exclusively of plant rooms.</span>
+                                </p>
                             </govuk-details-text>
                         </govuk-details>
 
-                         <govuk-input asp-for="AuthorsName" name="AuthorsName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
+                        <govuk-input asp-for="AuthorsName" name="AuthorsName" input-class="govuk-input--width-20" inputmode="text" spellcheck="false">
                             <govuk-input-label is-page-heading="false" class="govuk-label--s">Name of author of report</govuk-input-label>
                         </govuk-input>
 
@@ -88,6 +88,7 @@
                         </div>
 
                         @Html.HiddenFor(x=> x.ReturnUrl)
+                        @Html.HiddenFor(x=> x.ApplicationScheme)
                         @Html.HiddenFor(x=> x.ApplicationReferenceNumber)
                         @Html.HiddenFor(x=> x.BuildingName)
                         @Html.HiddenFor(x=> x.BuildingAddress)
@@ -101,65 +102,68 @@
                         @Html.HiddenFor(x=> x.CompanyUndertakingReport)
                     </form>
                 </div>
-                <div class="govuk-grid-column-one-third">
-                    <hr class="related-content-separator-line" />
-                    <h2 class="govuk-heading-m">Building Details</h2>
+                @if (@Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme)
+                {
+                    <div class="govuk-grid-column-one-third">
+                        <hr class="related-content-separator-line" />
+                        <h2 class="govuk-heading-m">Building Details</h2>
 
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Application Reference Number</div>
-                        <div class="govuk-body no-margin">@Model.ApplicationReferenceNumber</div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>                   
-
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Building name</div>
-                        <div class="govuk-body no-margin">@Model.BuildingName</div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Building Address Line 1</div>
-                        <div class="govuk-body no-margin">@Model.BuildingAddress</div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                    @if (Model.PartOfDevelopment.HasValue && Model.PartOfDevelopment.Value)
-                    {
                         <div class="govuk-grid-row">
-                            <div class="govuk-heading-s no-margin">Block within wider development</div>
-                            <div class="govuk-body no-margin">@Model.Development</div>
+                            <div class="govuk-heading-s no-margin">Application Reference Number</div>
+                            <div class="govuk-body no-margin">@Model.ApplicationReferenceNumber</div>
                             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                         </div>
-                    }
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">FRAEW instructed date</div>
-                        <div class="govuk-body no-margin">
-                            @if (Model.FRAEWInstructedDate is not null)
-                            {
-                                var instructedDate = Model.FRAEWInstructedDate;
-                                <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
-                            }
-                        </div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">FRAEW report completion date</div>
-                        <div class="govuk-body no-margin">
-                            @if (Model.FRAEWCompletedDate is not null)
-                            {
-                                var completedDate = Model.FRAEWCompletedDate;
-                                <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
-                            }
-                        </div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Firm undertaking report</div>
-                        <div class="govuk-body no-margin">
-                            @Model.CompanyUndertakingReport
+
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Building name</div>
+                            <div class="govuk-body no-margin">@Model.BuildingName</div>
                             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                         </div>
+
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Building Address Line 1</div>
+                            <div class="govuk-body no-margin">@Model.BuildingAddress</div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                        @if (Model.PartOfDevelopment.HasValue && Model.PartOfDevelopment.Value)
+                        {
+                            <div class="govuk-grid-row">
+                                <div class="govuk-heading-s no-margin">Block within wider development</div>
+                                <div class="govuk-body no-margin">@Model.Development</div>
+                                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                            </div>
+                        }
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">FRAEW instructed date</div>
+                            <div class="govuk-body no-margin">
+                                @if (Model.FRAEWInstructedDate is not null)
+                                {
+                                    var instructedDate = Model.FRAEWInstructedDate;
+                                    <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
+                                }
+                            </div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">FRAEW report completion date</div>
+                            <div class="govuk-body no-margin">
+                                @if (Model.FRAEWCompletedDate is not null)
+                                {
+                                    var completedDate = Model.FRAEWCompletedDate;
+                                    <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
+                                }
+                            </div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Firm undertaking report</div>
+                            <div class="govuk-body no-margin">
+                                @Model.CompanyUndertakingReport
+                                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </main>
     </div>

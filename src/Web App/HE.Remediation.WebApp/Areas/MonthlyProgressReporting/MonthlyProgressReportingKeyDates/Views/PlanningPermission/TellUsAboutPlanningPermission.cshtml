@@ -1,0 +1,125 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model TellUsAboutPlanningPermissionViewModel
+@{
+    ViewData["Title"] = "Progress report - Project key dates";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("HaveYouAppliedPlanningPermission", "PlanningPermission");
+    ViewData["ExitLinkHidden"] = false;
+    ViewData["FullWidth"] = true;
+
+    var planningPermissionDateSubmittedInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionDateSubmittedMonth), out var planningPermissionDateSubmittedMonthState) && planningPermissionDateSubmittedMonthState.ValidationState == ModelValidationState.Invalid) ||
+                              (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionDateSubmittedYear), out var planningPermissionDateSubmittedYearState) && planningPermissionDateSubmittedYearState.ValidationState == ModelValidationState.Invalid);
+
+    var planningPermissionDateApprovedInvalid = (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionDateApprovedMonth), out var planningPermissionDateApprovedMonthState) && planningPermissionDateApprovedMonthState.ValidationState == ModelValidationState.Invalid) ||
+                              (ViewData.ModelState.TryGetValue(nameof(Model.PlanningPermissionDateApprovedYear), out var planningPermissionDateApprovedYearState) && planningPermissionDateApprovedYearState.ValidationState == ModelValidationState.Invalid);
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="PlanningPermissionDateSubmittedMonth" />
+        <govuk-error-summary-item asp-for="PlanningPermissionDateSubmittedYear" />
+        <govuk-error-summary-item asp-for="PlanningPermissionDateApprovedMonth" />
+        <govuk-error-summary-item asp-for="PlanningPermissionDateApprovedYear" />
+    </govuk-error-summary>
+}
+
+
+<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Tell us about your planning application</h1>
+
+<form asp-area="MonthlyProgressReportingKeyDates" asp-controller="PlanningPermission" asp-action="TellUsAboutPlanningPermission" method="post">
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous application submitted date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousPlanningPermissionDateSubmitted?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous application approval date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousPlanningPermissionDateApproved?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <div class="govuk-form-group @(planningPermissionDateSubmittedInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expected-tender-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="PlanningPermissionDateSubmittedMonth">What date was the application submitted?</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="PlanningPermissionDateSubmittedMonth" />
+            <govuk-error-message asp-for="PlanningPermissionDateSubmittedYear" />
+            <div class="govuk-date-input" id="tell-us-application-submitted-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PlanningPermissionDateSubmittedMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="PlanningPermissionDateSubmittedMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PlanningPermissionDateSubmittedYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="PlanningPermissionDateSubmittedYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="govuk-form-group @(planningPermissionDateApprovedInvalid ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expected-tender-date-hint">
+            <label class="govuk-label govuk-label--s" asp-for="PlanningPermissionDateApprovedMonth">What date was the application approved?</label>
+            <div class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="PlanningPermissionDateApprovedMonth" />
+            <govuk-error-message asp-for="PlanningPermissionDateApprovedYear" />
+            <div class="govuk-date-input" id="tell-us-application-approved-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PlanningPermissionDateApprovedMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="PlanningPermissionDateApprovedMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PlanningPermissionDateApprovedYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="PlanningPermissionDateApprovedYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+
+    <govuk-date-input class="hidden" asp-for="PreviousPlanningPermissionDateSubmitted" value="@Model.PreviousPlanningPermissionDateSubmitted" />
+    <govuk-date-input class="hidden" asp-for="PreviousPlanningPermissionDateApproved" value="@Model.PreviousPlanningPermissionDateApproved" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>

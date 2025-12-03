@@ -29,8 +29,16 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
 
             var viewModel = _mapper.Map<StageDiagramViewModel>(taskListResponse);
             viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
-
+            viewModel.IsApplicationActive = taskListResponse.IsApplicationActive;
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("Application/StageDiagram/MonthlyProgressReporting/{id:guid}")]
+        public IActionResult Create(Guid id)
+        {
+            _applicationDataProvider.SetProgressReportId(id);
+            return RedirectToAction("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
         }
     }
 }

@@ -1,0 +1,6 @@
+﻿using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates;
+
+namespace HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectSupport;
+public class GetProgressReportTellUsAboutPlanningPermissionParameters : GetProgressReportKeyDatesParameters
+{
+}

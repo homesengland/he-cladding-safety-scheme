@@ -24,6 +24,8 @@
                 <ul>
                     @foreach (var role in Model.MissingRoles)
                     {
+                        if (role == ETeamRole.ManagingAgent)
+                            continue;
                         <li>@role.ToString().SplitCamelCase().ToSentenceCase()</li>
                     }
                 </ul>
@@ -54,15 +56,26 @@
 }
 @using (Html.BeginForm())
 {
-    <div class="@(isRolesError ? "govuk-form-group--error" : string.Empty)">
+    <div class="@(isRolesError || isChasCertificationError ? "govuk-form-group--error" : string.Empty)">
         <h2 class="govuk-heading-m">Team members</h2>
         @if (Model.TeamMembers != null && Model.TeamMembers.Any())
         {
-            @if (isRolesError)
+            @if (isRolesError || isChasCertificationError)
             {
                 <div class="govuk-form-group govuk-form-group--error">
-                    <p id="MissingRoles" class="govuk-error-message">
-                        Add missing team members
+                    <p id="@(nameof(Model.MissingRoles))" class="govuk-error-message">
+                        @if (isRolesError && isChasCertificationError)
+                        {
+                            <text>Add missing team members and state if your lead contractor has obtained CHAS Elite certification (Common Assessment Standard)</text>
+                        }
+                        else if (isRolesError)
+                        {
+                            <text>Add missing team members</text>
+                        }
+                        else
+                        {
+                            <text>State if your lead contractor has obtained CHAS Elite certification (Common Assessment Standard)</text>
+                        }
                     </p>
                 </div>
             }
@@ -159,7 +172,7 @@
                 There are no team members to show
             </div>
         }
-        @if (!Model.IsSubmitted)
+        @if (!Model.IsSubmitted && Model.MissingRoles.Count > 0)
         {
             <govuk-button href="@Url.Action("Add", "ProjectTeamMember")" class="govuk-button--secondary">Add team member</govuk-button>
         }

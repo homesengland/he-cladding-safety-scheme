@@ -5,6 +5,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.GetR
 
 public class GetReportDetailsResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public string AuthorsName { get; set; }
     public string PeerReviewPerson { get; set; }
     public decimal? FraewCost { get; set; }

@@ -1,0 +1,55 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.Leaseholders.CheckYourAnswersViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["BackLink"] = Model.HasContacted == ENoYes.Yes ? Url.Action("UploadEvidence") : Url.Action("Index");
+    ViewData["FullWidth"] = true;
+}
+
+<h1 class="govuk-heading-xl">Check your answers</h1>
+
+<govuk-summary-list>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>Have you contacted leaseholders and residents since your last progress report?</govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.HasContacted == ENoYes.Yes ? "Yes": "No")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("Index")">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    @if(Model.HasContacted == ENoYes.Yes)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>When was the last leaseholder and residents communication issued?</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.LastCommunicationDate.HasValue ? Model.LastCommunicationDate.Value.ToString("MM/yyyy") : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("LastCommunicationDate")">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Upload evidence of your communication with the leaseholders and residents</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                    @foreach (var fileName in Model.AddedFiles)
+                    {
+                        @fileName<br/>
+                    }
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("UploadEvidence")">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
+    }
+   
+</govuk-summary-list>
+
+<form asp-action="CheckYourAnswers" method="post">
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and Continue</govuk-button>
+    </div>
+</form>

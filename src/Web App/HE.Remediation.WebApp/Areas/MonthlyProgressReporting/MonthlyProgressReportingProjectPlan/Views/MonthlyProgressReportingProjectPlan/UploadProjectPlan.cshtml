@@ -1,0 +1,48 @@
+﻿@using HE.Remediation.Core.Extensions
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.Upload.UploadProjectPlanViewModel
+@{
+    ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
+    ViewData["Backlink"] = Model.HasEnoughFunds == true
+        ? Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })
+        : Url.Action("PtsUplift", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" });
+    ViewData["FullWidth"] = false;
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="File" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-xl">Project Plan Upload</h1>
+@if (Model.PreviousUploadDate.HasValue)
+{
+    <hr class="govuk-section-break govuk-section-break--visible">
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Previous project plan upload date</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>@Model.PreviousUploadDate.Value.ToString("MM/yyyy")</govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+}
+<p class="govuk-body">
+    Upload a copy of your current project plan. 
+    We understand that you plan may be subject to change at this stage. 
+    You will be asked to provide your final copy with firm details as part of your works package.
+</p>
+
+<p class="govuk-body">Each file must be smaller than 50MB and a @Model.AcceptedFileTypes.ToAndOrStringList(", ", EAndOr.Or) file</p>
+
+<form asp-area="MonthlyProgressReportingProjectPlan" asp-controller="MonthlyProgressReportingProjectPlan" asp-action="UploadProjectPlan" method="post" enctype="multipart/form-data">
+    
+    @await Html.PartialAsync("~/Views/Shared/FileUpload.cshtml", Model)
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <input asp-for="HasEnoughFunds" type="hidden" value="@Model.HasEnoughFunds" />
+    
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

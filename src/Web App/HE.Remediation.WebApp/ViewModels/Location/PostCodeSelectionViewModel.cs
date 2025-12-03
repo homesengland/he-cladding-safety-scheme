@@ -23,5 +23,7 @@ public class PostCodeSelectionViewModel
     public string BuildingName { get; set; }
     public int ProgressReportVersion { get; set; }
     public bool IsProgressReportGcoComplete { get; set; }
+
+    public ESubmitAction SubmitAction { get; set; }
 }
 

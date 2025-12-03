@@ -5,7 +5,7 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
 {
     public class CheckYourAnswersViewModel
     {
-        // new fields below
+        public EApplicationScheme ApplicationScheme { get; set; }
 
         public string AppraisalReportFilename { get; set; }
 
@@ -23,8 +23,10 @@ namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal
         public string AssessorDetailsTelephone { get; set; }
 
         public DateTime? DateOfInstruction { get; set; }
-
         public DateTime? SurveyDate { get; set; }
+        public ENoYes? CommissionedByDeveloper { get; set; }
+        public DateTime? ReceivedByDeveloperDate { get; set; }
+        public ENoYes? ReceivedByResponsibleEntity { get; set; }
 
         public string AuthorsName { get; set; }
 

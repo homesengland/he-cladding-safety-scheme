@@ -1,0 +1,6 @@
+﻿@{
+    Layout = "~/Areas/MonthlyProgressReporting/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Progress report";
+    ViewData["ReadOnly"] = false;
+    ViewData["CancelExitLink"] = Url.Action("Index", "KeyDates", new { Area = "MonthlyProgressReportingKeyDates" });
+}

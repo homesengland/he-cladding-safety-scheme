@@ -1,0 +1,56 @@
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.RefurbishmentCompletionDateViewModel
+@{
+    ViewData["Title"] = "Add date of major refurbishment completion (Optional)";
+    ViewData["BackLink"] = Url.Action("ResponsibleForTheRemediation", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["FullWidth"] = false;
+
+    var errors = ViewData.ModelState.Where(x => x.Value.Errors.Any()).ToList();
+    var isRefurbishmentCompletionDateError = errors.Any(x => x.Key is nameof(Model.RefurbishmentCompletionDateMonth) or nameof(Model.RefurbishmentCompletionDateYear));
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="RefurbishmentCompletionDateMonth" />
+        <govuk-error-summary-item asp-for="RefurbishmentCompletionDateYear" />
+    </govuk-error-summary>
+}
+
+<form method="post" asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="RefurbishmentCompletionDate">
+    <h1 class="govuk-heading-xl">Add date of major refurbishment completion (Optional)</h1>
+
+    <div class="govuk-form-group @(isRefurbishmentCompletionDateError ? "govuk-form-group--error" : string.Empty)">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="refurbishment-completion-date-hint">
+            <div id="refurbishment-completion-hint" class="govuk-hint">
+                For example, 8 2022
+            </div>
+            <govuk-error-message asp-for="RefurbishmentCompletionDateMonth" />
+            <govuk-error-message asp-for="RefurbishmentCompletionDateYear" />
+            <div class="govuk-date-input" id="refurbishment-completion-date">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="RefurbishmentCompletionDateMonth">
+                            Month
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="RefurbishmentCompletionDateMonth" type="number" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" asp-for="RefurbishmentCompletionDateYear">
+                            Year
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="RefurbishmentCompletionDateYear" type="number" inputmode="numeric">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl"/>
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Continue)">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@(ESubmitAction.Exit)" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

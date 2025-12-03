@@ -1,7 +1,9 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
@@ -13,8 +15,8 @@ public class GetReportHandler : IRequestHandler<GetReportRequest, GetReportRespo
     private readonly IFireRiskAppraisalRepository _fireRiskAppraisalRepository;
 
     public GetReportHandler(
-        IApplicationDataProvider applicationDataProvider, 
-        IFireRiskAssessmentRepository fireRiskAssessmentRepository, 
+        IApplicationDataProvider applicationDataProvider,
+        IFireRiskAssessmentRepository fireRiskAssessmentRepository,
         IFireRiskAppraisalRepository fireRiskAppraisalRepository)
     {
         _applicationDataProvider = applicationDataProvider;
@@ -28,6 +30,14 @@ public class GetReportHandler : IRequestHandler<GetReportRequest, GetReportRespo
 
         var applicationId = _applicationDataProvider.GetApplicationId();
 
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+
+        int? fraTypeId = null;
+        if (applicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+        {
+            fraTypeId = await _fireRiskAssessmentRepository.GetFraCommissionerType(applicationId);
+        }
+
         var assessors = await _fireRiskAppraisalRepository.GetFireAssessorList();
 
         var assessorAndFraDate = await _fireRiskAssessmentRepository.GetAssessorAndFraDate(applicationId);
@@ -37,6 +47,8 @@ public class GetReportHandler : IRequestHandler<GetReportRequest, GetReportRespo
         {
             AssessorId = assessorAndFraDate.FireRiskAssessorListId,
             FraDate = assessorAndFraDate.FireRiskAssessmentDate,
+            FraCommissionerType = fraTypeId.HasValue? (EFraCommissionerType?)fraTypeId.Value: null,
+            ApplicationScheme = applicationScheme,
             FireRiskAssessorCompanies = assessors,
             VisitedCheckYourAnswers = visitedCheckYourAnswers
         };
@@ -56,6 +68,8 @@ public class GetReportResponse
 {
     public int? AssessorId { get; set; }
     public DateTime? FraDate { get; set; }
+    public EFraCommissionerType? FraCommissionerType { get; set; }
+    public EApplicationScheme ApplicationScheme { get; set; }
     public IList<GetFireRiskAssessorListResult> FireRiskAssessorCompanies { get; set; }
     public bool VisitedCheckYourAnswers { get; set; }
 }

@@ -18,4 +18,12 @@ public interface IBuildingDetailsRepository
     Task<BuildingDetailsKeyDatesResult> GetBuildingDetailsKeyDates(Guid applicationId);
 
     Task UpdateBuildingDetailsKeyDates(UpdateBuildingDetailsKeyDatesParameters parameters);
+
+    Task<DateTime?> GetConstructionCompletionDate(Guid applicationId);
+
+    Task UpdateConstructionCompletionDate(UpdateConstructionCompletionDateParameters parameters);
+
+    Task<RefurbishmentCompletionDateResult> GetRefurbishmentCompletionDate(Guid applicationId);
+
+    Task UpdateRefurbishmentCompletionDate(UpdateRefurbishmentCompletionDateParameters parameters);
 }

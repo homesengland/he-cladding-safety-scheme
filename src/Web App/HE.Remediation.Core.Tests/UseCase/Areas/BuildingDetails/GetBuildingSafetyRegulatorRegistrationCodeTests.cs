@@ -33,6 +33,10 @@ public class GetBuildingSafetyRegulatorRegistrationCodeTests
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
 
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+                        .Returns(Enums.EApplicationScheme.ResponsibleActorsScheme)
+                        .Verifiable();
+
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetBuildingSafetyRegulatorRegistrationCodeResponse>("GetBuildingSafetyRegulatorRegistrationCode", It.IsAny<object>()))
                                 .ReturnsAsync(buildingSafetyRegulatorRegistrationCodeResponse)
                                 .Verifiable();

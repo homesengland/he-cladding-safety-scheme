@@ -55,7 +55,7 @@ public abstract class StartController : Controller
     /// <summary>
     /// Use when action can be set by user input (to prevent malicious behaviour)
     /// </summary>
-    protected IActionResult SafeRedirectToAction(string actionName, string controllerName, object routeValues)
+    protected IActionResult SafeRedirectToAction(string actionName, string controllerName = null, object routeValues = null)
     {       
         var url = Url.Action(actionName, controllerName, routeValues);
         if (Url.IsLocalUrl(url))

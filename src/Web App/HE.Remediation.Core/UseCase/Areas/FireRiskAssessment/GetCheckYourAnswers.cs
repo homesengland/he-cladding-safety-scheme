@@ -2,6 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
@@ -22,6 +23,7 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
         cancellationToken.ThrowIfCancellationRequested();
 
         var applicationId = _applicationDataProvider.GetApplicationId();
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
 
         var answers = await _fireRiskAssessmentRepository.GetFraCheckYourAnswers(applicationId);
         await _fireRiskAssessmentRepository.SetFraVisitedCheckYourAnswers(new SetFraVisitedCheckYourAnswersParameters
@@ -32,6 +34,8 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
 
         return new GetCheckYourAnswersResponse
         {
+            ApplicationScheme = applicationScheme,
+            FraBuildingWorkType = answers.FraBuildingWorkTypeId.HasValue ? (EFraBuildingWorkType?)answers.FraBuildingWorkTypeId.Value : null,
             HasFra = answers.HasFra,
             FraFile = answers.FraFile,
             FireRiskAssessmentType = answers.FireRiskAssessmentTypeId,
@@ -43,6 +47,7 @@ public class GetCheckYourAnswersHandler : IRequestHandler<GetCheckYourAnswersReq
             OtherAssessorEmailAddress = answers.OtherAssessorEmailAddress,
             OtherAssessorTelephone = answers.OtherAssessorTelephone,
             FireRiskAssessmentDate = answers.FireRiskAssessmentDate,
+            FraCommissionerType = answers.FraCommissionerTypeId.HasValue ? (EFraCommissionerType?)answers.FraCommissionerTypeId.Value : null,
             FireRiskRating = answers.FireRiskRatingId,
             HasInternalFireSafetyRisks = answers.HasInternalFireSafetyRisks,
             HasFunding = answers.HasFunding,
@@ -65,6 +70,8 @@ public class GetCheckYourAnswersRequest : IRequest<GetCheckYourAnswersResponse>
 
 public class GetCheckYourAnswersResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
+    public EFraBuildingWorkType? FraBuildingWorkType { get; set; }
     public bool? HasFra { get; set; }
     public string FraFile { get; set; }
     public EFireRiskAssessmentType? FireRiskAssessmentType { get; set; }
@@ -76,6 +83,7 @@ public class GetCheckYourAnswersResponse
     public string OtherAssessorEmailAddress { get; set; }
     public string OtherAssessorTelephone { get; set; }
     public DateTime? FireRiskAssessmentDate { get; set; }
+    public EFraCommissionerType? FraCommissionerType { get; set; }
     public EFraRiskRating? FireRiskRating { get; set; }
     public bool? HasInternalFireSafetyRisks { get; set; }
     public bool? HasFunding { get; set; }

@@ -1,0 +1,54 @@
+﻿@using HE.Remediation.Core.Enums;
+@using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.Leaseholders
+@model HaveYouContactedViewModel
+@{
+    ViewData["Title"] = "Progress report";
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+    ViewData["ExitLinkHidden"] = true;
+    ViewData["FullWidth"] = false;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="HasContacted" />
+    </govuk-error-summary>
+}
+
+<h1 class="govuk-heading-l govuk-!-margin-bottom-5">Have you contacted leaseholders and residents since your last progress report?</h1>
+
+<form asp-action="Index" method="post">
+
+    <govuk-summary-list>
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                <span class="govuk-!-font-weight-bold">
+                    Previous communication date
+                </span>
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.PreviousLastCommunicationDate?.ToString("MM/yyyy") ?? "-")
+            </govuk-summary-list-row-value>
+        </govuk-summary-list-row>
+    </govuk-summary-list>
+
+    <govuk-radios asp-for="HasContacted">
+        <govuk-radios-fieldset>
+        </govuk-radios-fieldset>
+        <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>
+        <govuk-radios-item value="@(ENoYes.No)">No</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ApplicationReferenceNumber" type="hidden" value="@Model.ApplicationReferenceNumber" />
+    <input asp-for="BuildingName" type="hidden" value="@Model.BuildingName" />
+    <govuk-date-input class="hidden" asp-for="PreviousLastCommunicationDate" value="@Model.PreviousLastCommunicationDate" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+    </div>
+</form>
+
+<div>
+    <a class="govuk-link" href="@Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" })">Cancel and exit</a>
+</div>

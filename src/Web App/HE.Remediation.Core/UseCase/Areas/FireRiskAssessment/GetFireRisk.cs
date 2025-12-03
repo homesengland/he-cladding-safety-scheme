@@ -28,6 +28,7 @@ public class GetFireRiskHandler : IRequestHandler<GetFireRiskRequest, GetFireRis
 
         return new GetFireRiskResponse
         {
+            ApplicationScheme = _applicationDataProvider.GetApplicationScheme(),
             FireRiskRating = fireRisk?.FireRiskRatingId,
             HasInternalFireSafetyRisks = fireRisk?.HasInternalFireSafetyRisks,
             HasOffPanelAssessor = assessor?.FireRiskAssessorListId is null,
@@ -47,6 +48,7 @@ public class GetFireRiskRequest : IRequest<GetFireRiskResponse>
 
 public class GetFireRiskResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public EFraRiskRating? FireRiskRating { get; set; }
     public bool? HasInternalFireSafetyRisks { get; set; }
     public bool HasOffPanelAssessor { get; set; }

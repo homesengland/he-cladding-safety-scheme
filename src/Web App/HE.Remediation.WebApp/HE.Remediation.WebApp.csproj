@@ -43,7 +43,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\AlternativeFundingRoutes\Controllers\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -115,6 +114,9 @@
     <Content Update="wwwroot\js\gridRowSelection.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\ProgressReporting\PtsUpliftTemplate.xlsx">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

@@ -20,11 +20,9 @@ using HE.Remediation.Core.Services.GovNotify.Models;
 using HE.Remediation.Core.Services.Communication;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using HE.Remediation.Core.Services.DataIngestion;
-using HE.Remediation.Core.Settings;
-using System.Configuration;
-using HE.Remediation.Core.UseCase.DataIngest.Validation;
-using HE.Remediation.Core.UseCase.DataIngest.Lookups;
-using HE.Remediation.Core.UseCase.DataIngest.DataImporters;
+using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
+using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF;
+using HE.Remediation.Core.UseCase.DataIngest.RAS;
 
 namespace HE.Remediation.Core.Extensions
 {
@@ -55,6 +53,7 @@ namespace HE.Remediation.Core.Extensions
                 .AddCheck<ReadyHealthCheck>("ready");
 
             services.AddServicesDependencies(builder.Configuration);
+            services.AddScoped<IApplicationDetailsProvider, ApplicationDetailsProvider>();
 
             builder.Services.AddSingleton<IBackgroundEmailCommunicationQueue, BackgroundEmailCommunicationQueue>();
             builder.Services.AddHostedService<EmailCommunicationHostedService>();
@@ -72,12 +71,8 @@ namespace HE.Remediation.Core.Extensions
             services.AddScoped<DataIngestionProducer>();
             services.AddScoped<DataIngestionConsumer>();
             services.AddHostedService<DataIngestionBackgroundService>();
-            services.AddScoped<IAddressResolver, AddressResolver>();
-            services.AddTransient<JsonDataIngestMapperIValidator>();
-            services.AddScoped<IBuildingDetailsDataImporter, BuildingDetailsDataImporter>();
-            services.AddScoped<IResponsibleEntityDataImporter, ResponsibleEntityDataImporter>();
-            services.AddScoped<IFraDataImporter, FraDataImporter>();
-            services.AddScoped<IDataIngestionLookupService, DataIngestionLookupService>();
+            services.AddDataImportForCss_Sssf();
+            services.AddDataImportForRas();
 
             services.AddAuth0WebAppAuthentication(options =>
             {

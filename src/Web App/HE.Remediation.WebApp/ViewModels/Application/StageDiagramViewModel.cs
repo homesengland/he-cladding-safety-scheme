@@ -1,4 +1,4 @@
-﻿using HE.Remediation.Core.Data.StoredProcedureResults;
+﻿using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport;
 using HE.Remediation.Core.Data.StoredProcedureResults.PaymentRequest;
 using HE.Remediation.Core.Enums;
 
@@ -56,9 +56,11 @@ public class StageDiagramViewModel
 
     public bool ClosingReportStarted { get; set; }
 
-    public bool HasThePrimaryReportBeenSubmitted { get; set; }
+    public bool HasProgressReports { get; set; }
 
     public bool ConsiderVariation { get; set; }
 
     public bool IsClosingReportSubmitted { get; set; }
+
+    public bool IsApplicationActive { get; set; }
 }

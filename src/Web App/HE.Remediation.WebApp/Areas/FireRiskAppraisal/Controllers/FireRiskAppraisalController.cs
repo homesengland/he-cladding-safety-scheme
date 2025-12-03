@@ -69,7 +69,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         [HttpGet(nameof(WhatYouWillNeed))]
         public IActionResult WhatYouWillNeed()
         {
-            return View();
+            var model = new FireRiskAssessorDetailsViewModel { ApplicationScheme = _applicationDataProvider.GetApplicationScheme() };
+            return View(model);
         }
         #endregion
 

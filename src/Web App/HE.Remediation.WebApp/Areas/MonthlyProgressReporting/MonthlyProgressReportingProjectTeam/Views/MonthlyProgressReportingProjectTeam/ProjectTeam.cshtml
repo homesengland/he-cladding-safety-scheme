@@ -1,0 +1,126 @@
+﻿@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.ProjectTeamViewModel
+@{
+    ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
+    ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+    ViewData["FullWidth"] = true;
+    ViewData["CancelExitLink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+}
+
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-5">Tell us about your project team</h1>
+
+<p class="govuk-body">
+    Tell us about any firms that have been appointed to project manage, design, cost and undertake your works package.
+</p>
+
+<p class="govuk-body">
+    Please tell us as soon as you appoint them. You can add or review further entries each month until your team is complete.
+</p>
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            <span class="govuk-heading-m">Key Roles</span>
+        </govuk-summary-list-row-key>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Application lead
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(!string.IsNullOrWhiteSpace(Model.ApplicationLeadTeamMember) ? Model.ApplicationLeadTeamMember : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("KeyRoles", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Responsible for leaseholder communication
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(!string.IsNullOrWhiteSpace(Model.LeaseholderCommunicatorTeamMember) ? Model.LeaseholderCommunicatorTeamMember : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("KeyRoles", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Responsible for regulatory compliance
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(!string.IsNullOrWhiteSpace(Model.RegulatoryComplianceTeamMember) ? Model.RegulatoryComplianceTeamMember : "-")
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-action href="@Url.Action("KeyRoles", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" })">
+            Change
+        </govuk-summary-list-row-action>
+    </govuk-summary-list-row>
+
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Grant certifying officer
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @if (Model.HasAssignedGco != false)
+            {
+                <text>@(!string.IsNullOrWhiteSpace(Model.GrantCertifyingOfficerTeamMember) ? Model.GrantCertifyingOfficerTeamMember : "-")</text>
+            }
+            else
+            {
+                <text>Unassigned</text>
+            }
+        </govuk-summary-list-row-value>
+        @if (Model.HasAssignedGco == false)
+        {
+            <govuk-summary-list-row-action href="@Url.Action("HasGrantCertifyingOfficer", "GrantCertifyingOfficer", new { Area = "MonthlyProgressReportingProjectTeam" })">
+                Change
+            </govuk-summary-list-row-action>
+        }
+    </govuk-summary-list-row>
+</govuk-summary-list>
+
+<h2 class="govuk-heading-m">Team Members</h2>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Role</th>
+            <th scope="col" class="govuk-table__header">Name</th>
+            <th scope="col" class="govuk-table__header">Company name</th>
+            <th scope="colgroup" class="govuk-table__header" colspan="2">Change or Remove</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var teamMember in Model.TeamMembers)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@teamMember.Role</td>
+                <td class="govuk-table__cell">@teamMember.Name</td>
+                <td class="govuk-table__cell">@teamMember.CompanyName</td>
+                <td class="govuk-table__cell">
+                    <a class="govuk-link" href="@Url.Action("TeamMember", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam", TeamRole = teamMember.RoleId, TeamMemberId = teamMember.Id, isChangingExistingMember = true })">
+                        Change
+                    </a>
+                </td>
+                <td class="govuk-table__cell">
+                    @if (teamMember.Id != Model.GrantCertifyingOfficerTeamMemberId)
+                    {
+                        <a class="govuk-link" href="@Url.Action("RemoveTeamMember", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam", TeamMemberId = teamMember.Id })">
+                            Remove
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if(Model.HasAvailableRoles)
+{
+    <govuk-button href=@Url.Action("AddTeamRole") class="govuk-button--secondary">Add team member</govuk-button>
+    <br />
+}
+<govuk-button href=@Url.Action("SaveProjectTeam", "GrantCertifyingOfficer", new { Area = "MonthlyProgressReportingProjectTeam" }) class="govuk-button">Save project team</govuk-button>

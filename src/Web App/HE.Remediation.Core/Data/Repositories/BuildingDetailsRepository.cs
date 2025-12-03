@@ -121,5 +121,57 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
         scope.Complete();
     }
 
+
+    #endregion
+
+    #region Construction Completion Date
+
+    public async Task<DateTime?> GetConstructionCompletionDate(Guid applicationId)
+    {
+        return await _db.QuerySingleOrDefaultAsync<DateTime?>(
+            "GetConstructionCompletionDate",
+            new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task UpdateConstructionCompletionDate(UpdateConstructionCompletionDateParameters parameters)
+    {
+        await _db.ExecuteAsync("UpdateConstructionCompletionDate", new
+        {
+            parameters.ApplicationId,
+            parameters.ConstructionCompletionDate
+        });
+
+    }
+
+    #endregion
+
+    #region Refurbishment Completion Date
+
+    public async Task<RefurbishmentCompletionDateResult> GetRefurbishmentCompletionDate(Guid applicationId)
+    {
+        return await _db.QuerySingleOrDefaultAsync<RefurbishmentCompletionDateResult>(
+            "GetRefurbishmentCompletionDate",
+            new
+            {
+                ApplicationId = applicationId
+            });
+    }
+
+    public async Task UpdateRefurbishmentCompletionDate(UpdateRefurbishmentCompletionDateParameters parameters)
+    {
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        await _db.ExecuteAsync("UpdateRefurbishmentCompletionDate", new
+        {
+            parameters.ApplicationId,
+            parameters.RefurbishmentCompletionDate
+        });
+
+        scope.Complete();
+    }
+
     #endregion
 }
