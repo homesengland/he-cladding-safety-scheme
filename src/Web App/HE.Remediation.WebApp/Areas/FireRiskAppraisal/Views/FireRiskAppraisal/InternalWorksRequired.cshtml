@@ -14,11 +14,14 @@
     Are there any internal works which you are recommending to address the life safety risk you have identified?
 </p>
 
-<p class="govuk-body">
-Only complete this section if you are proposing internal works in lieu of removal of cladding systems as a more proportionate alternative. 
-Internal works are eligible but only if they are a more proportionate alternative to replacing the cladding system(s) or other external wall elements. 
-Internal works that do no fit this definition are ineligible for the Cladding Safety Scheme.</p>
-
+@if (Model.ApplicationScheme != EApplicationScheme.SocialSector)
+{
+    <p class="govuk-body">
+        Only complete this section if you are proposing internal works in lieu of removal of cladding systems as a more proportionate alternative.
+        Internal works are eligible but only if they are a more proportionate alternative to replacing the cladding system(s) or other external wall elements.
+        Internal works that do not fit this definition are ineligible for the Cladding Safety Scheme.
+    </p>
+}
 <form asp-area="FireRiskAppraisal" asp-controller="FireRiskAppraisal" asp-action="InternalWorksRequired" method="post">
     <govuk-radios asp-for="WorksRequired">
         <govuk-radios-item value="@(ENoYes.Yes)">Yes</govuk-radios-item>

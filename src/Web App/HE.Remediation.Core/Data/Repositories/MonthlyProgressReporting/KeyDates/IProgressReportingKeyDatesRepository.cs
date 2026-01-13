@@ -35,7 +35,7 @@ public interface IProgressReportingKeyDatesRepository
     // Building Control
 
     Task<GetProgressReportBuildingControlKeyDatesResult> GetBuildingControlKeyDates(GetProgressReportBuildingControlKeyDatesParameters parameters);
-    Task<bool> SetBuildingControlKeyDates(SetProgressReportBuildingControlKeyDatesParameters parameters);
+    Task SetBuildingControlKeyDates(SetProgressReportBuildingControlKeyDatesParameters parameters);
     Task<GetBuildingControlDatesChangedResult> GetBuildingControlDatesChanged(GetBuildingControlDatesChangedParameters parameters);
     Task SetBuildingControlDatesChanged(SetBuildingControlDatesChangedParameters parameters);
 
@@ -46,7 +46,7 @@ public interface IProgressReportingKeyDatesRepository
     Task<GetProgressReportReasonNotAppliedPlanningPermissionResult> GetProgressReportReasonNotAppliedPlanningPermission(GetProgressReportReasonNotAppliedPlanningPermissionParameters parameters);
     Task<GetProgressReportTellUsAboutPlanningPermissionResult> GetProgressReportTellUsAboutPlanningPermission(GetProgressReportTellUsAboutPlanningPermissionParameters parameters);
     Task SetProgressReportReasonNotAppliedPlanningPermission(SetProgressReportReasonNotAppliedPlanningPermissionParameters parameters);
-    Task<bool> SetProgressReportTellUsAboutPlanningPermission(SetProgressReportTellUsAboutPlanningPermissionParameters parameters);
+    Task SetProgressReportTellUsAboutPlanningPermission(SetProgressReportTellUsAboutPlanningPermissionParameters parameters);
     Task SetProgressReportPlanningPermissionKeyDates(SetProgressReportPlanningPermissionKeyDatesParameters parameters);
     Task<bool?> GetProgressReportHaveYouAppliedPlanningPermission(GetProgressReportHaveYouAppliedPlanningPermissionParameters parameters);
     Task SetProgressReportHaveYouAppliedPlanningPermission(SetProgressReportHaveYouAppliedPlanningPermissionParameters parameters);
@@ -57,7 +57,7 @@ public interface IProgressReportingKeyDatesRepository
     // Remediation
 
     Task<GetProgressReportRemediationKeyDatesResult> GetRemediationKeyDates(GetProgressReportRemediationKeyDatesParameters parameters);
-    Task<bool> SetRemediationKeyDates(SetProgressReportRemediationKeyDatesParameters parameters);
+    Task SetRemediationKeyDates(SetProgressReportRemediationKeyDatesParameters parameters);
     Task<GetRemediationDatesChangedResult> GetRemediationDatesChanged(GetRemediationDatesChangedParameters parameters);
     Task SetRemediationDatesChanged(SetRemediationDatesChangedParameters parameters);
 }

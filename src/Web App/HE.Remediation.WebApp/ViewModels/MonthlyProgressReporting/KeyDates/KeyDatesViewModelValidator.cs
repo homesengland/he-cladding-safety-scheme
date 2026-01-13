@@ -39,7 +39,8 @@ public class KeyDatesViewModelValidator : AbstractValidator<KeyDatesViewModel>
                     context.AddFailure(WorksPlanning, "Please enter how you are obtaining your contractor");
                 }
 
-                if (model.ContractorTenderTypeId == EContractorTenderType.NonCompetitive && string.IsNullOrWhiteSpace(model.ContractorTenderReason))
+                if ((model.ContractorTenderTypeId is EContractorTenderType.NonCompetitive or EContractorTenderType.UsingOriginalContractor) 
+                    && string.IsNullOrWhiteSpace(model.ContractorTenderReason))
                 {
                     context.AddFailure(WorksPlanning, "Please enter the reason you are not running a competitive tender to obtain your contractor");
                 }

@@ -94,6 +94,10 @@ namespace HE.Remediation.WebApp
             app.UseStatusCodePagesWithReExecute("/Error/HandleError/{0}");
 
             app.UseRouting();
+            
+            // Track original request paths before error handling - must be after UseRouting()
+            // so route information is available, but before error handlers
+            app.UseOriginalRequestTracking();
 
             app.UseAuthentication();
             app.UseAuthorization();

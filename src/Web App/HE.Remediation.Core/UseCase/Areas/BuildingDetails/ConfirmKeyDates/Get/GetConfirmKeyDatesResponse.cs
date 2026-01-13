@@ -8,7 +8,7 @@ public class GetConfirmKeyDatesResponse
     
     public int? UnsafeCladdingRemovalDateMonth { get; set; }
     public int? UnsafeCladdingRemovalDateYear { get; set; }
-    
-    public int? ExpectedDateForCompletionMonth { get; set; }
-    public int? ExpectedDateForCompletionYear { get; set; }
+
+    public int? PracticalCompletionDateMonth { get; set; }
+    public int? PracticalCompletionDateYear { get; set; }
 }

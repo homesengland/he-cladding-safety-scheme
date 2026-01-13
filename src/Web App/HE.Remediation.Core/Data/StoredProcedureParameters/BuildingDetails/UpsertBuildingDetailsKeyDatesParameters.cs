@@ -8,5 +8,5 @@ public class UpdateBuildingDetailsKeyDatesParameters
     
     public DateTime? UnsafeCladdingRemovalDate { get; set; }
     
-    public DateTime? ExpectedDateForCompletion { get; set; }
+    public DateTime? PracticalCompletionDate { get; set; }
 }

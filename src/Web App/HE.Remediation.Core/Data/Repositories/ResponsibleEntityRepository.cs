@@ -1,6 +1,8 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Data.StoredProcedureParameters.ResponsibleEntities;
 using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 
 namespace HE.Remediation.Core.Data.Repositories;
@@ -142,5 +144,16 @@ public class ResponsibleEntityRepository : IResponsibleEntityRepository
                 new { ApplicationId = applicationId });
 
         return result;
+    }
+
+    public async Task<int?> GetResponsibleEntityCompanyRelationDetails(Guid applicationId)
+    {
+        var result = await _connection.QuerySingleOrDefaultAsync<int?>("GetResponsibleEntityCompanyRelationDetails", new { applicationId });
+        return result;
+    }
+
+    public async Task SetResponsibleEntityCompanyRelationDetails(SetResponsibleEntityCompanyRelationDetailsParameters parameters)
+    {
+        await _connection.ExecuteAsync("SetResponsibleEntityCompanyRelationDetails", parameters);
     }
 }

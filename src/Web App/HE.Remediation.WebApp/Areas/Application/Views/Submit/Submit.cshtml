@@ -15,12 +15,12 @@
                         Submit
                     </span>
 
-                    <h1 class="govuk-heading-xl">Submit building @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme ? "application" : "record")</h1>
+                    <h1 class="govuk-heading-xl">Submit building @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme && Model.ApplicationScheme != EApplicationScheme.SocialSector ? "application" : "record")</h1>
 
-                    <p class="govuk-body">Submit this building once you have entered all the relevant information.</p>
+                    <p class="govuk-body">@(Model.ApplicationScheme != EApplicationScheme.SocialSector ? "Submit this building" : "Submit this building record") once you have entered all the relevant information.</p>
 
                     <p class="govuk-body">
-                        By submitting this @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme ? "application" : "building record"), you confirm that the information you have
+                        By submitting this @(Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme && Model.ApplicationScheme != EApplicationScheme.SocialSector ? "application" : "building record"), you confirm that the information you have
                         provided for your fire risk appraisal is true and correct to the best of your
                         knowledge.</p>
 

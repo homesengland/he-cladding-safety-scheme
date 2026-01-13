@@ -339,7 +339,7 @@
                                     @Model.WorksNeedPlanningPermission.ForDisplay()
                                 </govuk-summary-list-row-value>
                             </govuk-summary-list-row>
-                            @if (Model.WorksNeedPlanningPermission == true)
+                            @if (Model.WorksNeedPlanningPermission == EYesNoNonBoolean.Yes)
                             {
                                 <govuk-summary-list-row>
                                     <govuk-summary-list-row-key>

@@ -12,21 +12,21 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     <span class="govuk-caption-xl">
-                        New application
+                        @(Model.ApplicationScheme == EApplicationScheme.SocialSector ? "New building record" : "New application")
                     </span>
 
                     <h1 class="govuk-heading-xl">
                         Task list
                     </h1>
 
-                    <p class="govuk-body">Application ID: <span class="govuk-!-font-weight-bold">@Model.ApplicationReferenceNumber</span></p>
+                    <p class="govuk-body">@(Model.ApplicationScheme == EApplicationScheme.SocialSector ? "Building Record ID:" : "Application ID:") <span class="govuk-!-font-weight-bold">@Model.ApplicationReferenceNumber</span></p>
 
-                    <p class="govuk-body">View the required steps to submit a new application.</p>
+                    <p class="govuk-body">@(Model.ApplicationScheme == EApplicationScheme.SocialSector ? "View the required steps to submit a new building record" : "View the required steps to submit a new application.")</p>
 
                     <ol class="app-task-list">
                         <li>
                             <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">1. </span> @((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "Prepare building record" : "Prepare application")
+                                <span class="app-task-list__section-number">1. </span> @((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme || Model.ApplicationScheme == EApplicationScheme.SocialSector) ? "Prepare building record" : "Prepare application")
                             </h2>
                             <ul class="app-task-list__items">
                                 <li class="app-task-list__item">
@@ -163,7 +163,7 @@
 
                         <li>
                             <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">3. </span>@((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "Submit building record" : "Submit application")
+                                <span class="app-task-list__section-number">3. </span>@((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme || Model.ApplicationScheme == EApplicationScheme.SocialSector) ? "Submit building record" : "Submit application")
                             </h2>
                             <ul class="app-task-list__items">
                                 <li class="app-task-list__item">
@@ -190,7 +190,7 @@
                                     else
                                     {
                                         <span class="govuk-body">Submit</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="submit-eligibility-status">Cannot Complete</strong>
+                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey" id="submit-eligibility-status">@(Model.ApplicationScheme == EApplicationScheme.SocialSector ? "CANNOT START YET" : "Cannot Complete")</strong>
                                     }
                                 </li>
                             </ul>

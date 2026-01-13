@@ -27,8 +27,8 @@ public class GetConfirmKeyDatesHandler : IRequestHandler<GetConfirmKeyDatesReque
             StartDateYear = buildingDetailsKeyDates?.StartDate?.Year,
             UnsafeCladdingRemovalDateMonth = buildingDetailsKeyDates?.UnsafeCladdingRemovalDate?.Month,
             UnsafeCladdingRemovalDateYear = buildingDetailsKeyDates?.UnsafeCladdingRemovalDate?.Year,
-            ExpectedDateForCompletionMonth = buildingDetailsKeyDates?.ExpectedDateForCompletion?.Month,
-            ExpectedDateForCompletionYear = buildingDetailsKeyDates?.ExpectedDateForCompletion?.Year
+            PracticalCompletionDateMonth = buildingDetailsKeyDates?.PracticalCompletionDate?.Month,
+            PracticalCompletionDateYear = buildingDetailsKeyDates?.PracticalCompletionDate?.Year
         };
     }
 }

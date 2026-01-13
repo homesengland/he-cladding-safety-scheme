@@ -5,32 +5,51 @@
 @{
     ViewData["Title"] = "Before you continue";
     ViewData["Backlink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
-    var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
-    var isRasScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
+    var applicationScheme = applicationDataProvider.GetApplicationScheme();
+    var isCladdingSafetyScheme = applicationScheme == EApplicationScheme.CladdingSafetyScheme;
+    var isRasScheme = applicationScheme == EApplicationScheme.ResponsibleActorsScheme;
+    var isSSSF = applicationScheme == EApplicationScheme.SocialSector;
 }
 
 <h1 class="govuk-heading-xl">
     Before you continue
 </h1>
 
-<p class="govuk-body">You cannot change your application answers after you continue.</p>
+<p class="govuk-body">
+    @(isSSSF
+        ? "You cannot change your answers after you continue."
+        : "You cannot change your application answers after you continue.")
+</p>
 
 <p class="govuk-body">Check your answers for the following sections before you continue:</p>
 
 <ul class="govuk-list govuk-list--bullet">
     <li>Building details</li>
     <li>Responsible Entity details</li>
-    @if (!isRasScheme)
+    @if (!isRasScheme && !isSSSF)
     {
         <li>Alternative routes of funding</li>
     }
-    @if (isCladdingScheme)
+    @if (isCladdingSafetyScheme)
     {
         <li>Bank account details</li>
     }
+    @if(isSSSF)
+    {
+        <li>Resident and leaseholder communication</li>
+        <li>Alternative routes of funding</li>
+    }
 </ul>
 
-<p class="govuk-body">You can still view the details you've entered after you continue, but you will not be able to change them.</p>
+@if (isSSSF)
+{
+    <p class="govuk-body">You can still view the details by clicking on the 'Go back to task list' button to check what you've entered. After you save and continue you will not be able to change them.</p>
+} 
+else
+{
+    <p class="govuk-body">You can still view the details you've entered after you continue, but you will not be able to change them.</p>
+}
+
 
 <div class="comp-btn-group">
     <govuk-button href="@Url.Action("Declaration", "Declaration", new {Area = "Declaration"})">Continue</govuk-button>

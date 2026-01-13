@@ -18,7 +18,7 @@ namespace HE.Remediation.WebApp.ViewModels.Leaseholder
         public string CompanyRegistrationNumber { get; set; }
         public string EmailAddress { get; set; }
         public string ContactNumber { get; set; }
-
+        public EApplicationScheme ApplicationScheme { get; set; }
         public bool ReadOnly { get; set; }
     }
 

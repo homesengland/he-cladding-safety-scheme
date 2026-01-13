@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.WorksPlanning;
+using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
 using MediatR;
 
@@ -24,7 +25,7 @@ public class SetWorksPlanningHandler : IRequestHandler<SetWorksPlanningRequest, 
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
 
-        var worksPlanningDates = await _keyDatesRepository.GetProgressReportWorksPlanningKeyDates(
+        var keyDates = await _keyDatesRepository.GetProgressReportWorksPlanningKeyDates(
             new GetProgressReportWorksPlanningKeyDatesParameters
             {
                 ApplicationId = applicationId,
@@ -45,11 +46,17 @@ public class SetWorksPlanningHandler : IRequestHandler<SetWorksPlanningRequest, 
                 ExpectedWorksPackageSubmissionDate = request.ExpectedWorksPackageSubmissionDate
             });
 
-        var hasChangedDates = (worksPlanningDates?.PreviousTenderDate.HasValue == true && request.ExpectedTenderDate != worksPlanningDates.PreviousTenderDate)
-                           || (worksPlanningDates?.PreviousContractorAppointmentDate.HasValue == true && request.ExpectedLeadContractorAppointmentDate != worksPlanningDates.PreviousContractorAppointmentDate)
-                           || (worksPlanningDates?.PreviousActualTenderDate.HasValue == true && request.ActualTenderDate != worksPlanningDates.PreviousActualTenderDate)
-                           || (worksPlanningDates?.PreviousActualContractorAppointmentDate.HasValue == true && request.ActualLeadContractorAppointmentDate != worksPlanningDates.PreviousActualContractorAppointmentDate)
-                           || (worksPlanningDates?.PreviousExpectedWorksPackageSubmissionDate.HasValue == true && request.ExpectedWorksPackageSubmissionDate.HasValue && request.ExpectedWorksPackageSubmissionDate != worksPlanningDates.ExpectedWorksPackageSubmissionDate);
+        var expectedTenderDateChanged = keyDates.PreviousTenderDate.HasChanged(request.ExpectedTenderDate);
+        var expectedLeadContractorAppointmentDateChanged = keyDates.PreviousContractorAppointmentDate.HasChanged(request.ExpectedLeadContractorAppointmentDate); 
+        var actualTenderDateChanged = keyDates.PreviousActualTenderDate.HasChanged(request.ActualTenderDate);
+        var actualLeadContractorAppointmentDateChanged = keyDates.PreviousActualContractorAppointmentDate.HasChanged(request.ActualLeadContractorAppointmentDate);
+        var expectedWorksPackageSubmissionDateChanged = keyDates.PreviousExpectedWorksPackageSubmissionDate.HasChanged(request.ExpectedWorksPackageSubmissionDate);
+
+        var hasChangedDates = expectedTenderDateChanged ||
+                              expectedLeadContractorAppointmentDateChanged ||
+                              actualTenderDateChanged ||
+                              actualLeadContractorAppointmentDateChanged ||
+                              expectedWorksPackageSubmissionDateChanged;
 
         if (!hasChangedDates)
         {

@@ -542,6 +542,7 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
 
             var model = new InternalWorksRequiredViewModel
             {
+                ApplicationScheme = _applicationDataProvider.GetApplicationScheme(),
                 WorksRequired = response.WorksRequired,
                 ExternalWorksRequired = response.ExternalWorksRequired,
                 ReturnUrl = returnUrl
@@ -941,7 +942,8 @@ namespace HE.Remediation.WebApp.Areas.FireRiskAppraisal.Controllers
         [HttpGet(nameof(Guidance))]
         public IActionResult Guidance()
         {
-            return View();
+            var model = new GuidanceViewModel { ApplicationScheme = _applicationDataProvider.GetApplicationScheme() };
+            return View(model);
         }
 
         #endregion

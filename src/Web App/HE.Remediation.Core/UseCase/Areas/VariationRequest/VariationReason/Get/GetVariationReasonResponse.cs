@@ -24,6 +24,6 @@ public class GetVariationReasonResponse
 
     public bool ClosingReportStarted { get; set; }
 
-    public bool LastMonthlyPaymentCompleted { get; set; }
+    public bool NoMonthlyPaymentsOutstanding { get; set; }
 
 }

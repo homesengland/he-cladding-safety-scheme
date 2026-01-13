@@ -42,37 +42,42 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
         var userId = _applicationDataProvider.GetUserId();
 
-        await _paymentRequestRepository.SubmitPaymentRequest(paymentRequestId, userId);
+        var paymentRequest = await _paymentRequestRepository.GetPaymentRequestDetails(applicationId, paymentRequestId);
 
-        await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PaymentRequestSubmitted, applicationIds: applicationId);
-
-        var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Payment Request Checks", "Review Submitted Payment Request"));
-        var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
+        if (!paymentRequest.IsSubmitted)
         {
-            Date = DateTime.UtcNow.Date,
-            WorkingDays = 1
-        });
+            await _paymentRequestRepository.SubmitPaymentRequest(paymentRequestId, userId);
 
-        await _taskRepository.InsertTask(new InsertTaskParameters
-        {
-            ReferenceId = applicationId,
-            AssignedToTeamId = (int)ETeam.DaviesOps,
-            AssignedToUserId = null,
-            CreatedByUserId = null,
-            Description = $"Please review the payment request and provide a recommendation to HE whether to:{Environment.NewLine}•Approve the request{Environment.NewLine}•Reject the request{Environment.NewLine}•Approve reduced amount",
-            RequiredByDate = DateOnly.FromDateTime(dueDate),
-            TaskStatus = ETaskStatus.NotStarted.ToString(),
-            TopicId = taskType.TopicId,
-            TaskTypeId = taskType.Id
-        });
+            await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.PaymentRequestSubmitted, applicationIds: applicationId);
 
-        await _paymentRequestRepository.UpdatePaymentRequestTaskStatus(paymentRequestId, EPaymentRequestTaskStatus.Submitted);
+            var taskType = await _taskRepository.GetTaskType(new GetTaskTypeParameters("Payment Request Checks", "Review Submitted Payment Request"));
+            var dueDate = await _dateRepository.AddWorkingDays(new AddWorkingDaysParameters
+            {
+                Date = DateTime.UtcNow.Date,
+                WorkingDays = 1
+            });
 
-        await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest
-        (
-            applicationId,
-            EEmailType.PaymentRequestSubmitted
-        ));
+            await _taskRepository.InsertTask(new InsertTaskParameters
+            {
+                ReferenceId = applicationId,
+                AssignedToTeamId = (int)ETeam.DaviesOps,
+                AssignedToUserId = null,
+                CreatedByUserId = null,
+                Description = $"Please review the payment request and provide a recommendation to HE whether to:{Environment.NewLine}•Approve the request{Environment.NewLine}•Reject the request{Environment.NewLine}•Approve reduced amount",
+                RequiredByDate = DateOnly.FromDateTime(dueDate),
+                TaskStatus = ETaskStatus.NotStarted.ToString(),
+                TopicId = taskType.TopicId,
+                TaskTypeId = taskType.Id
+            });
+
+            await _paymentRequestRepository.UpdatePaymentRequestTaskStatus(paymentRequestId, EPaymentRequestTaskStatus.Submitted);
+
+            await _communicationService.QueueEmailCommunication(new EmailCommunicationRequest
+            (
+                applicationId,
+                EEmailType.PaymentRequestSubmitted
+            ));
+        }
 
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
 

@@ -2,8 +2,11 @@
 @model HE.Remediation.WebApp.ViewModels.BuildingDetails.ResponsibleForTheRemediationViewModel
 @{
     ViewData["Title"] = "Building developer information";
-    ViewData["BackLink"] = Model.ReturnUrl != null ? Url.Action(Model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" })
-       : Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["BackLink"] = !string.IsNullOrWhiteSpace(Model.ReturnUrl)
+        ? Url.Action(Model.ReturnUrl, "BuildingDetails", new { Area = "BuildingDetails" })
+        : Model.HasBsrCode == true
+            ? Url.Action("BuildingSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" })
+            : Url.Action("BuildingHasSafetyRegulatorRegistrationCode", "BuildingDetails", new { Area = "BuildingDetails" });
 
     ViewData["FullWidth"] = false;
     
@@ -14,12 +17,12 @@
         <govuk-error-summary-item asp-for="BuildingRemediationResponsibilityType" />
     </govuk-error-summary>
 }
-<h1 class="govuk-heading-xl">Are you responsible for the remediation to this building because:</h1>
+<h1 class="govuk-heading-xl">Why are you responsible for the remediation of this building?</h1>
 
 <form asp-area="BuildingDetails" asp-controller="BuildingDetails" asp-action="ResponsibleForTheRemediation" method="post">
     <govuk-radios asp-for="BuildingRemediationResponsibilityType">
-        <govuk-radios-item value="@EBuildingRemediationResponsibilityType.YouBuiltTheBuilding">You built the building?</govuk-radios-item>
-        <govuk-radios-item value="@EBuildingRemediationResponsibilityType.RefurbishedinTheLast30Years">You refurbished the building in the last 30 years?</govuk-radios-item>
+        <govuk-radios-item value="@EBuildingRemediationResponsibilityType.YouBuiltTheBuilding">You built the building</govuk-radios-item>
+        <govuk-radios-item value="@EBuildingRemediationResponsibilityType.RefurbishedinTheLast30Years">You refurbished the building in the last 30 years</govuk-radios-item>
     </govuk-radios>
 
     <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />

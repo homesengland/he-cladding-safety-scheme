@@ -1,9 +1,8 @@
-﻿using System.Transactions;
-using HE.Remediation.Core.Data.Repositories;
+﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.Services.StatusTransition;
 using MediatR;
+using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Set;
 
@@ -11,7 +10,6 @@ public class SetWorksContractHandler : IRequestHandler<SetWorksContractRequest, 
 {
     private readonly IApplicationDataProvider _applicationDataProvider;
     private readonly IScheduleOfWorksRepository _scheduleOfWorksRepository;
-    private readonly IStatusTransitionService _statusTransitionService;
 
     public SetWorksContractHandler(
         IApplicationDataProvider applicationDataProvider,

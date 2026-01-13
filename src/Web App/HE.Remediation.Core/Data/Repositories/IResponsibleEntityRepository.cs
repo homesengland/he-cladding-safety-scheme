@@ -1,5 +1,7 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Data.StoredProcedureParameters.ResponsibleEntities;
 using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -20,4 +22,7 @@ public interface IResponsibleEntityRepository
     Task<GetResponsibleEntityOrganisationAndRepresentationTypeResult> GetResponsibleEntityOrganisationAndRepresentationType(Guid applicationId);
 
     Task<bool?> GetResponsibleEntityUkRegistered(Guid applicationId);
+
+    Task<int?> GetResponsibleEntityCompanyRelationDetails(Guid applicationId);
+    Task SetResponsibleEntityCompanyRelationDetails(SetResponsibleEntityCompanyRelationDetailsParameters parameters);
 }

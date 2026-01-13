@@ -1,4 +1,6 @@
-﻿@{
+﻿@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.GuidanceViewModel
+@{
     ViewData["Title"] = "Fire risk appraisal summary";
     ViewData["BackLink"] = Url.Action("AppraisalSurveyDetails", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
     ViewData["FullWidth"] = true;
@@ -20,14 +22,24 @@
                             assessor. You will then need to enter the data from the template when the assessor returns it to 
                             you.
                     </p>
-
-                    <p class="govuk-body">
-                        Please enter the information your FRAEW assessor has completed on the summary template
-                        over the next few pages. The information should come from the FRAEW summary template and
-                        be a straight copy across the application system. If there is missing information
-                        on the summary, please raise this with your FRAEW assessor and get them to provide any missing information.
-                    </p>
-
+                        
+                    @if( Model.ApplicationScheme != EApplicationScheme.SocialSector)
+                    {
+                        <p class="govuk-body">
+                            Please enter the information your FRAEW assessor has completed on the summary template
+                            over the next few pages. The information should come from the FRAEW summary template and
+                            be a straight copy across the application system. If there is missing information
+                            on the summary, please raise this with your FRAEW assessor and get them to provide any missing information.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="govuk-body">
+                            In this section we will ask you to enter the information your FRAEW assessor has completed on the summary template.
+                            The information should be a straight copy from the template into the system. If there is missing information on the 
+                            summary, raise this with your FRAEW assessor and get them to provide any missing information.
+                        </p>
+                    }
                     <div class="comp-btn-group">
                         <govuk-button href="@Url.Action("UploadFireRiskAppraisalReport", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" })">Continue</govuk-button>
                     </div>

@@ -29,6 +29,12 @@ public class SetBuildingWorkTypeHandler : IRequestHandler<SetBuildingWorkTypeReq
             FraBuildingWorkTypeId = (int)(request.FraBuildingWorkTypeId.Value)
         });
 
+        await _fireRiskAssessmentRepository.SetFraTaskStatus(new SetFraTaskStatusParameters
+        {
+            ApplicationId = applicationId,
+            TaskStatusId = (int)ETaskStatus.InProgress
+        });
+
         return Unit.Value;
     }
 }

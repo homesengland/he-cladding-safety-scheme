@@ -12,7 +12,7 @@
                 <div class="govuk-grid-column-two-thirds">
                     <govuk-panel heading-level="1">
                         <govuk-panel-title>
-                            @((Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme) ? "Building record" : "Application") complete
+                            @(Model.ApplicationScheme is EApplicationScheme.ResponsibleActorsScheme or EApplicationScheme.SocialSector ? "Building record" : "Application") complete
                         </govuk-panel-title>
                         <govuk-panel-body>
                             Application ID<br /><strong>@Model.ReferenceNumber</strong>
@@ -23,9 +23,19 @@
                     {
                         <h2 class="govuk-heading-m">What happens next</h2>
 
-                        <p class="govuk-body">Confirmation of your application submission will be sent to your email account.</p>
+                        @if (Model.ApplicationScheme == EApplicationScheme.SocialSector)
+                        {
+                            <p class="govuk-body">Confirmation of your submission will be sent to your email account.</p>
 
-                        <p class="govuk-body">You can monitor the status of your application from the Existing Applications page of your Home dashboard.</p>
+                            <p class="govuk-body">You can view your building record in the Manage Active Applications page of your Home Dashboard.</p>
+                        }
+                        else
+                        {
+                            <p class="govuk-body">Confirmation of your application submission will be sent to your email account.</p>
+
+                            <p class="govuk-body">You can monitor the status of your application from the Existing Applications page of your Home dashboard.</p>
+                        }
+                       
 
                         @if (Model.ApplicationScheme == EApplicationScheme.CladdingSafetyScheme)
                         {

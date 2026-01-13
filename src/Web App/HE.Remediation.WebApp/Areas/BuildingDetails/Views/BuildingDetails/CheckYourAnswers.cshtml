@@ -69,9 +69,9 @@
                 When did you complete your works?
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
-                @if (Model.ExpectedDateForCompletion != null)
+                @if (Model.PracticalCompletionDate != null)
                 {
-                    <span>@Model.ExpectedDateForCompletion.Value.ToString("MM/yyyy")</span>
+                    <span>@Model.PracticalCompletionDate.Value.ToString("MM/yyyy")</span>
                 }
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
@@ -170,6 +170,14 @@
         </govuk-summary-list-row-key>
         <govuk-summary-list-row-value>
             @Model.Storeys
+        </govuk-summary-list-row-value>
+    </govuk-summary-list-row>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            What is the height of the building in metres?
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            @(Model.BuildingHeight.HasValue ? Model.BuildingHeight.Value.ToString("N2") : "-")
         </govuk-summary-list-row-value>
     </govuk-summary-list-row>
     <govuk-summary-list-row>
@@ -274,7 +282,7 @@
     {
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
-                Are you responsible for the remediation to this building because?
+                Why are you responsible for the remediation of this building?
             </govuk-summary-list-row-key>
             <govuk-summary-list-row-value>
                 @(Model.BuildingRemediationResponsibilityTypeId == (int)EBuildingRemediationResponsibilityType.YouBuiltTheBuilding

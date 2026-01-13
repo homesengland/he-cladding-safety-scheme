@@ -1,0 +1,33 @@
+﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityCompanyRelationDetailsViewModel
+@{
+    ViewData["Title"] = "Which of these best describes the Responsible Entity in relation to the building?";
+    ViewData["BackLink"] = Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+}
+@section ErrorSummary
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item asp-for="ResponsibleEntityRelation" />
+    </govuk-error-summary>
+}
+<form method="post" asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="ResponsibleEntityCompanyRelationDetails">
+    <govuk-radios asp-for="ResponsibleEntityRelation">
+        <govuk-radios-fieldset>
+            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--xl">@ViewData["Title"]</govuk-radios-fieldset-legend>
+        </govuk-radios-fieldset>
+
+        <govuk-radios-item value="@(EResponsibleEntityRelation.Freeholder)">Freeholder</govuk-radios-item>
+        <govuk-radios-item value="@(EResponsibleEntityRelation.HeadLeaseholder)">Head leaseholder</govuk-radios-item>
+        <govuk-radios-item value="@(EResponsibleEntityRelation.RightToManageCompany)">Right-to-Manage company</govuk-radios-item>
+        <govuk-radios-item value="@(EResponsibleEntityRelation.ResidentLedOrganisation)">Resident Led Organisation</govuk-radios-item>
+        <govuk-radios-item value="@(EResponsibleEntityRelation.Other)">Other</govuk-radios-item>
+    </govuk-radios>
+
+    <input asp-for="ReturnUrl" type="hidden" value="@Model.ReturnUrl" />
+
+    <div class="comp-btn-group">
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Continue">Save and continue</govuk-button>
+        <govuk-button name="SubmitAction" value="@ESubmitAction.Exit" class="govuk-button--secondary">Save and return later</govuk-button>
+    </div>
+</form>

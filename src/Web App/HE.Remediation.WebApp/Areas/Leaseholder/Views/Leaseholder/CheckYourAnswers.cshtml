@@ -56,9 +56,10 @@
     </govuk-summary-list>
 }
 
-<govuk-summary-list>
-    @if (Model.ResponsibleForCommunicationTypeId != null)
-    {
+@if (Model.ResponsibleForCommunicationTypeId != null)
+{
+    <govuk-summary-list>
+
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
                 Who is responsible for communications to leaseholders and residents?
@@ -91,12 +92,14 @@
                 </govuk-summary-list-row-value>
             </govuk-summary-list-row>
         }
-    }
-</govuk-summary-list>
+    
+    </govuk-summary-list>
+}
 
-<govuk-summary-list>
-    @if (Model.ResponsibleForCommunicationTypeId is EResponsibleForCommunicationType.ManagingAgent or EResponsibleForCommunicationType.Other)
-    {
+@if (Model.ResponsibleForCommunicationTypeId is EResponsibleForCommunicationType.ManagingAgent or EResponsibleForCommunicationType.Other)
+{
+    <govuk-summary-list>
+
         <govuk-summary-list-row>
             <govuk-summary-list-row-key>
                 Responsible party details
@@ -163,13 +166,18 @@
                 </govuk-summary-list-row-value>
             </govuk-summary-list-row>
         }
-    }
-</govuk-summary-list>
 
+    </govuk-summary-list>
+}
 
 @if (!Model.ReadOnly)
 {
-    <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
+    <h2 class="govuk-heading-s">
+        @(Model.ApplicationScheme != EApplicationScheme.SocialSector
+            ? "Proceed to next step of your application"
+            : "Proceed to next step")
+    </h2>
+
     <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
 
     <form asp-area="Leaseholder" asp-controller="Leaseholder" asp-action="CheckYourAnswers" method="post">

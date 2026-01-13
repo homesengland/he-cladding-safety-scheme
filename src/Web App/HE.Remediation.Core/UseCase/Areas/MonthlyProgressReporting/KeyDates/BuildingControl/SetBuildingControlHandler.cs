@@ -1,9 +1,10 @@
-﻿using System.Transactions;
-using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
+﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.BuildingControl;
 using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
 using MediatR;
+using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.BuildingControl;
 
@@ -25,9 +26,16 @@ public class SetBuildingControlHandler : IRequestHandler<SetBuildingControlReque
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
 
+        var keyDates = await _keyDatesRepository.GetBuildingControlKeyDates(
+           new GetProgressReportBuildingControlKeyDatesParameters
+           {
+               ApplicationId = applicationId,
+               ProgressReportId = progressReportId
+           });
+
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        var hasChangedDates = await _keyDatesRepository.SetBuildingControlKeyDates(
+        await _keyDatesRepository.SetBuildingControlKeyDates(
             new SetProgressReportBuildingControlKeyDatesParameters
             {
                 ApplicationId = applicationId,
@@ -39,6 +47,16 @@ public class SetBuildingControlHandler : IRequestHandler<SetBuildingControlReque
                 Gateway2Reference = request.Gateway2Reference,
                 BuildingControlDecisionTypeId = (int?)request.BuildingControlDecisionType
             });
+
+        var buildingControlExpectedApplicationDateChanged = keyDates.PreviousBuildingControlExpectedApplicationDate.HasChanged(request.BuildingControlExpectedApplicationDate);
+        var buildingControlActualApplicationDateChanged = keyDates.PreviousBuildingControlActualApplicationDate.HasChanged(request.BuildingControlActualApplicationDate);
+        var buildingControlValidationDateChanged = keyDates.PreviousBuildingControlValidationDate.HasChanged(request.BuildingControlValidationDate);
+        var buildingControlDecisionDateChanged = keyDates.PreviousBuildingControlDecisionDate.HasChanged(request.BuildingControlDecisionDate);
+
+        var hasChangedDates = buildingControlExpectedApplicationDateChanged ||
+                              buildingControlActualApplicationDateChanged ||
+                              buildingControlValidationDateChanged ||
+                              buildingControlDecisionDateChanged;
 
         if (!hasChangedDates)
         {

@@ -9,9 +9,13 @@ public class ConfirmBuildingHeightViewModelValidator : AbstractValidator<Confirm
         RuleFor(x => x.NumberOfStoreys)
             .NotEmpty()
             .WithMessage("Enter a number of storeys")
-            .GreaterThan(0)
-            .WithMessage("Enter a number of storeys")
-            .LessThanOrEqualTo(999)
-            .WithMessage("No more than 999 can be entered");
+            .InclusiveBetween(1, 200)
+            .WithMessage("Enter a number of storeys between 1 and 200");
+
+        RuleFor(x => x.BuildingHeight)
+            .NotEmpty()
+            .WithMessage("Enter a height in metres")
+            .InclusiveBetween(11, 1000)
+            .WithMessage("Enter a height between 11 and 1000");
     }
 }

@@ -14,7 +14,7 @@ public class CheckYourAnswersViewModel
 
     public bool IsSocialSector { get; set; }
     public bool ReadOnly { get; set; }
-
+    public EApplicationScheme ApplicationScheme { get; set; }
     public class PartyPursuedRoleViewModel
     {
         public EPartyPursuedRole Id { get; set; }

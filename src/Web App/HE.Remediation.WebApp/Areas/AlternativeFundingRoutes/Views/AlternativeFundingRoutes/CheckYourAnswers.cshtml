@@ -160,7 +160,11 @@
 
 @if (!Model.ReadOnly)
 {
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Proceed to next step of your application</h2>
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+        @(Model.ApplicationScheme != EApplicationScheme.SocialSector
+            ? "Proceed to next step of your application"
+            : "Proceed to next step")
+    </h2>
     <p class="govuk-body">By submitting this notification you are confirming that, to the best of
         your knowledge, the details you are providing are correct.</p>
 

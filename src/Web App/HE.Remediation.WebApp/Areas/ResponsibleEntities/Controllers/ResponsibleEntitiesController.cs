@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibleForGFA.GetResponsibleEntityResponsibleForGrantFunding;
@@ -22,6 +21,7 @@ using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.GetRe
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.SetRepresentativeType;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentativeBasedInUk.GetRepresentativeBasedInUk;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentativeBasedInUk.SetRepresentativeBasedInUk;
+using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanyRelationDetails;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanySubType.GetResponsibleEntityCompanySubType;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanySubType.SetResponsibleEntityCompanySubType;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanyType.GetResponsibleEntityCompanyType;
@@ -509,7 +509,7 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
             if (applicationScheme == EApplicationScheme.ResponsibleActorsScheme)
             {
-                return RedirectToAction("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                return RedirectToAction("ResponsibleEntityCompanyRelationDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             switch (model.OrganisationType!.Value)
@@ -525,6 +525,48 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                     return RedirectToAction("ResponsibleEntityCompanySubType");
                 default:
                     return RedirectToAction("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+        }
+        #endregion
+
+        #region ResponsibleEntityCompanyRelationDetails
+        [HttpGet(nameof(ResponsibleEntityCompanyRelationDetails))]
+        public async Task<IActionResult> ResponsibleEntityCompanyRelationDetails(string returnUrl)
+        {
+            var response = await _sender.Send(GetResponsibleEntityCompanyRelationDetailsRequest.Request);
+            var model = _mapper.Map<ResponsibleEntityCompanyRelationDetailsViewModel>(response);
+            model.ReturnUrl = returnUrl;
+            return View(model);
+        }
+        [HttpPost(nameof(ResponsibleEntityCompanyRelationDetails))]
+        public async Task<IActionResult> ResponsibleEntityCompanyRelationDetails(ResponsibleEntityCompanyRelationDetailsViewModel model)
+        {
+            var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+            if (applicationScheme == EApplicationScheme.ResponsibleActorsScheme)
+            {
+                var validator = new ResponsibleEntityCompanyRelationDetailsViewModelValidator();
+                var validationResult = await validator.ValidateAsync(model);
+                if (!validationResult.IsValid)
+                {
+                    validationResult.AddToModelState(ModelState, string.Empty);
+                    return View(model);
+                }
+                var request = _mapper.Map<SetResponsibleEntityCompanyRelationDetailsRequest>(model);
+                await _sender.Send(request);
+                if (model.SubmitAction == ESubmitAction.Exit)
+                {
+                    return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+                }
+                if (model.ReturnUrl is not null)
+                {
+                    return SafeRedirectToAction(model.ReturnUrl, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+                }
+
+                return RedirectToAction("ResponsibleEntityCompanyDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+            else
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
             }
         }
         #endregion
@@ -1357,16 +1399,39 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
             var request = _mapper.Map<SetLeaseholderOrPrivateOwnerRequest>(model);
             await _sender.Send(request);
 
+            // get organisation type
+            var organisationTypeResponse = await _sender.Send(GetResponsibleEntityCompanyTypeRequest.Request);
+            var defaultOrgType = new GetResponsibleEntityCompanyTypeResponse() { OrganisationType = EApplicationResponsibleEntityOrganisationType.Other };
+            var organisationType = (organisationTypeResponse ?? defaultOrgType).OrganisationType;
+
+            // set conditionals
             var applicationScheme = _applicationDataProvider.GetApplicationScheme();
+            var isCss = applicationScheme == EApplicationScheme.CladdingSafetyScheme;
             var isSocialSector = applicationScheme == EApplicationScheme.SocialSector;
+            var isRegisteredProvider = organisationType == EApplicationResponsibleEntityOrganisationType.RegisteredProvider;
+            var isLocalAuthority = organisationType == EApplicationResponsibleEntityOrganisationType.LocalAuthority;
 
-            var action = model.ReturnUrl is null
-                ? isSocialSector ? nameof(CheckYourAnswers) : nameof(ClaimingGrant)
-                : model.ReturnUrl;
+            if(model.SubmitAction == ESubmitAction.Exit)
+            {
+                return RedirectToAction("Index", "TaskList", new { Area = "Application" });
+            }
 
-            return model.SubmitAction == ESubmitAction.Exit
-                ? RedirectToAction("Index", "TaskList", new { Area = "Application" })
-                : SafeRedirectToAction(action, "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            if(model.ReturnUrl != null)
+            {
+                return SafeRedirectToAction(model.ReturnUrl);
+            }
+
+            if(isCss && (isRegisteredProvider || isLocalAuthority))
+            {
+                return RedirectToAction(nameof(ResponsibleEntityResponsibleForGrantFunding));
+            }
+
+            if (isSocialSector)
+            {
+                return RedirectToAction(nameof(CheckYourAnswers));
+            }
+
+            return RedirectToAction(nameof(ClaimingGrant));
         }
         #endregion
 
@@ -1463,6 +1528,11 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
 
         private string GetBackLinkForResponsibleEntityResponsibleForGrantFunding(ResponsibleEntityResponsibleForGrantFundingViewModel model)
         {
+            if (model is { IsClaimingGrant: false, HasOwners: true })
+            {
+                return Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
+            }
+
             if (model.RepresentationType == EApplicationRepresentationType.ResponsibleEntity
                 && model.OrganisationType != EApplicationResponsibleEntityOrganisationType.LocalAuthority
                 && model.OrganisationType != EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
@@ -1470,15 +1540,9 @@ namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers
                 return Url.Action("ResponsibleEntityPrimaryContactDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
-            if (model is { IsClaimingGrant: false, HasOwners: true })
-            {
-                return Url.Action("ClaimingGrant", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
-            }
-
             if (model.OrganisationType is EApplicationResponsibleEntityOrganisationType.LocalAuthority or EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
             {
-                var uploadType = model.OrganisationType == EApplicationResponsibleEntityOrganisationType.LocalAuthority ? EResponsibleEntityUploadType.S151 : EResponsibleEntityUploadType.ChiefExec;
-                return Url.Action("UploadEvidence", "ResponsibleEntities", new { Area = "ResponsibleEntities", UploadType = uploadType });
+                return Url.Action("LeaseholderOrPrivateOwner", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
             }
 
             if (model.RepresentationType == EApplicationRepresentationType.Representative)

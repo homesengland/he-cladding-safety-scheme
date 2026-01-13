@@ -70,6 +70,12 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
                 Schemes = response.Schemes.ToList()
             };
 
+            if (TempData.ContainsKey(TempDataKey_SelectedScheme))
+            {
+                viewModel.SelectedSchemeId = (int)(EApplicationScheme)TempData[TempDataKey_SelectedScheme];
+                TempData.Keep(TempDataKey_SelectedScheme);
+            }
+
             return View(viewModel);
         }
 
@@ -124,6 +130,9 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
             var request = CreateNewApplicationRequest.Request;
             request.ApplicationScheme = (EApplicationScheme)scheme;
             await _sender.Send(request);
+
+            TempData.Remove(TempDataKey_SelectedScheme);
+
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
 

@@ -6,5 +6,5 @@ public class BuildingDetailsKeyDatesResult
     
     public DateTime? UnsafeCladdingRemovalDate { get; set; }
     
-    public DateTime? ExpectedDateForCompletion { get; set; }
+    public DateTime? PracticalCompletionDate { get; set; }
 }

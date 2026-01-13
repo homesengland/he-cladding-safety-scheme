@@ -103,7 +103,7 @@ public class VariationRequestController : StartController
     public async Task<IActionResult> VariationReason(VariationReasonViewModel viewModel)
     {
         var response = await _sender.Send(GetVariationReasonRequest.Request);
-        viewModel.LastMonthlyPaymentCompleted = response.LastMonthlyPaymentCompleted;
+        viewModel.NoMonthlyPaymentsOutstanding = response.NoMonthlyPaymentsOutstanding;
         viewModel.ClosingReportStarted = response.ClosingReportStarted;
 
         var validator = new VariationReasonViewModelValidator();

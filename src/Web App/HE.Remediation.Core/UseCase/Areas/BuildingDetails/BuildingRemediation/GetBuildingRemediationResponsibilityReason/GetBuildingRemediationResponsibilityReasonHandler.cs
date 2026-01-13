@@ -1,43 +1,34 @@
-﻿using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperInformation;
-using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.GetBuildingPartOfDevelopment;
-
 using MediatR;
-
-using System;
 
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingRemediation.GetBuildingRemediationResponsibilityReason
 {
     internal class GetBuildingRemediationResponsibilityReasonHandler : IRequestHandler<GetBuildingRemediationResponsibilityReasonRequest, GetBuildingRemediationResponsibilityResponse>
     {
-        private readonly IDbConnectionWrapper _dbConnectionWrapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
+        private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
-        public GetBuildingRemediationResponsibilityReasonHandler(IDbConnectionWrapper dbConnectionWrapper, IApplicationDataProvider applicationDataProvider)
+        public GetBuildingRemediationResponsibilityReasonHandler(
+            IApplicationDataProvider applicationDataProvider, 
+            IBuildingDetailsRepository buildingDetailsRepository)
         {
-            _dbConnectionWrapper = dbConnectionWrapper;
             _applicationDataProvider = applicationDataProvider;
+            _buildingDetailsRepository = buildingDetailsRepository;
         }
 
         public async Task<GetBuildingRemediationResponsibilityResponse> Handle(GetBuildingRemediationResponsibilityReasonRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
-            var response = await GetBuildingRemediationResponsibilityReason(applicationId);
+            var result = await _buildingDetailsRepository.GetBuildingRemediationResponsibilityType(applicationId);
 
-            return response;
-        }
-
-        private async Task<GetBuildingRemediationResponsibilityResponse> GetBuildingRemediationResponsibilityReason(Guid applicationId)
-        {
-            var BuildingRemediationResponsibilityTypeId = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<int?>("GetBuildingRemediationResponsibilityType", new { applicationId });
             var response = new GetBuildingRemediationResponsibilityResponse
             {
-                BuildingRemediationResponsibilityType = BuildingRemediationResponsibilityTypeId.HasValue
-                ? (EBuildingRemediationResponsibilityType?)BuildingRemediationResponsibilityTypeId.Value
-                 : null,
+                BuildingRemediationResponsibilityType = result?.BuildingRemediationResponsibilityTypeId,
+                HasBsrCode = result?.BuildingHasSafetyRegulatorRegistrationCode,
                 ApplicationScheme = _applicationDataProvider.GetApplicationScheme()
             };
 

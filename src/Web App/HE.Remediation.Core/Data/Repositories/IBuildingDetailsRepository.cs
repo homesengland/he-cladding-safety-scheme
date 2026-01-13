@@ -1,5 +1,6 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails;
+using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails.ConfirmBuildingHeight;
 using HE.Remediation.Core.Data.StoredProcedureResults.BuildingDetails;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 
@@ -26,4 +27,7 @@ public interface IBuildingDetailsRepository
     Task<RefurbishmentCompletionDateResult> GetRefurbishmentCompletionDate(Guid applicationId);
 
     Task UpdateRefurbishmentCompletionDate(UpdateRefurbishmentCompletionDateParameters parameters);
+
+    Task UpdateBuildingHeight(SetBuildingHeightParameters parameters);
+    Task<GetBuildingRemediationResponsibilityTypeResult> GetBuildingRemediationResponsibilityType(Guid applicationId);
 }

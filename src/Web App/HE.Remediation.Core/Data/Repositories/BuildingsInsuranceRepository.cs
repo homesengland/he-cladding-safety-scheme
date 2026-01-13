@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Transactions;
 using Dapper;
+using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.GetBuildingsInsurance;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.SetBuildingsInsurance;
@@ -18,9 +19,9 @@ public class BuildingsInsuranceRepository(IDbConnectionWrapper db) : IBuildingsI
         return insuranceProviders?.ToList();
     }
 
-    public async Task<GetBuildingsInsuranceResponse> GetBuildingsInsurance(Guid applicationId)
+    public async Task<GetBuildingInsuranceResult> GetBuildingInsurance(Guid applicationId)
     {
-        return await GetBuildingsInsurance<GetBuildingsInsuranceResponse>(applicationId, "GetBuildingInsurance");
+        return await GetBuildingsInsurance<GetBuildingInsuranceResult>(applicationId, "GetBuildingInsurance");
     }
 
     public async Task<UseCase.Areas.ClosingReport.BuildingsInsurance.GetBuildingsInsurance.GetBuildingsInsuranceResponse> GetClosingReportBuildingsInsurance(Guid applicationId)

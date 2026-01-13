@@ -109,10 +109,9 @@ namespace HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDate
             return result;
         }
 
-        public async Task<bool> SetBuildingControlKeyDates(SetProgressReportBuildingControlKeyDatesParameters parameters)
+        public async Task SetBuildingControlKeyDates(SetProgressReportBuildingControlKeyDatesParameters parameters)
         {
-            var isDateChange = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<bool>("SetProgressReportBuildingControlKeyDates", parameters);
-            return isDateChange;
+            await _dbConnectionWrapper.ExecuteAsync("SetProgressReportBuildingControlKeyDates", parameters);
         }
 
         public async Task<GetBuildingControlDatesChangedResult> GetBuildingControlDatesChanged(GetBuildingControlDatesChangedParameters parameters)
@@ -174,10 +173,9 @@ namespace HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDate
             await _dbConnectionWrapper.ExecuteAsync(nameof(SetProgressReportReasonNotAppliedPlanningPermission), parameters);
         }
 
-        public async Task<bool> SetProgressReportTellUsAboutPlanningPermission(SetProgressReportTellUsAboutPlanningPermissionParameters parameters)
+        public async Task SetProgressReportTellUsAboutPlanningPermission(SetProgressReportTellUsAboutPlanningPermissionParameters parameters)
         {
-            var isDateChange = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<bool>(nameof(SetProgressReportTellUsAboutPlanningPermission), parameters);
-            return isDateChange;
+            await _dbConnectionWrapper.ExecuteAsync(nameof(SetProgressReportTellUsAboutPlanningPermission), parameters);
         }
 
         public async Task SetProgressReportPlanningPermissionKeyDates(SetProgressReportPlanningPermissionKeyDatesParameters parameters)
@@ -227,10 +225,9 @@ namespace HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDate
             return result;
         }
 
-        public async Task<bool> SetRemediationKeyDates(SetProgressReportRemediationKeyDatesParameters parameters)
+        public async Task SetRemediationKeyDates(SetProgressReportRemediationKeyDatesParameters parameters)
         {
-            var isDateChange = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<bool>("SetProgressReportRemediationKeyDates", parameters);
-            return isDateChange;
+            await _dbConnectionWrapper.ExecuteAsync("SetProgressReportRemediationKeyDates", parameters);
         }
 
         public async Task<GetRemediationDatesChangedResult> GetRemediationDatesChanged(GetRemediationDatesChangedParameters parameters)

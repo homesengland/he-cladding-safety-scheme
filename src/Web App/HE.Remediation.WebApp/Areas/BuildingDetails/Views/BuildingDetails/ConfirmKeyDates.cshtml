@@ -8,7 +8,7 @@
     var errors = ViewData.ModelState.Where(x => x.Value.Errors.Any()).ToList();
     var isStartDateError = errors.Any(x => x.Key is nameof(Model.StartDateMonth) or nameof(Model.StartDateYear));
     var isCladdingRemovalError = errors.Any(x => x.Key is nameof(Model.UnsafeCladdingRemovalDateMonth) or nameof(Model.UnsafeCladdingRemovalDateYear));
-    var isEndDateError = errors.Any(x => x.Key is nameof(Model.ExpectedDateForCompletionMonth) or nameof(Model.ExpectedDateForCompletionYear));
+    var isEndDateError = errors.Any(x => x.Key is nameof(Model.PracticalCompletionDateMonth) or nameof(Model.PracticalCompletionDateYear));
 }
 @section ErrorSummary
 {
@@ -17,8 +17,8 @@
         <govuk-error-summary-item asp-for="StartDateYear" />
         <govuk-error-summary-item asp-for="UnsafeCladdingRemovalDateMonth" />
         <govuk-error-summary-item asp-for="UnsafeCladdingRemovalDateYear" />
-        <govuk-error-summary-item asp-for="ExpectedDateForCompletionMonth" />
-        <govuk-error-summary-item asp-for="ExpectedDateForCompletionYear" />
+        <govuk-error-summary-item asp-for="PracticalCompletionDateMonth" />
+        <govuk-error-summary-item asp-for="PracticalCompletionDateYear" />
     </govuk-error-summary>
 }
 
@@ -89,23 +89,23 @@
             <div id="completion-date-hint" class="govuk-hint">
                 For example, 8 2022
             </div>
-            <govuk-error-message asp-for="ExpectedDateForCompletionMonth" />
-            <govuk-error-message asp-for="ExpectedDateForCompletionYear" />
+            <govuk-error-message asp-for="PracticalCompletionDateMonth" />
+            <govuk-error-message asp-for="PracticalCompletionDateYear" />
             <div class="govuk-date-input" id="completion-date">
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedDateForCompletionMonth">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PracticalCompletionDateMonth">
                             Month
                         </label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="ExpectedDateForCompletionMonth" type="number" inputmode="numeric">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" asp-for="PracticalCompletionDateMonth" type="number" inputmode="numeric">
                     </div>
                 </div>
                 <div class="govuk-date-input__item">
                     <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" asp-for="ExpectedDateForCompletionYear">
+                        <label class="govuk-label govuk-date-input__label" asp-for="PracticalCompletionDateYear">
                             Year
                         </label>
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="ExpectedDateForCompletionYear" type="number" inputmode="numeric">
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" asp-for="PracticalCompletionDateYear" type="number" inputmode="numeric">
                     </div>
                 </div>
             </div>

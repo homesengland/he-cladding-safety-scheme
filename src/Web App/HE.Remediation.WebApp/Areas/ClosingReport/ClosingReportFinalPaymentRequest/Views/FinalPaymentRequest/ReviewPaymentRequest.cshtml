@@ -82,6 +82,9 @@
             <govuk-summary-list-row-value>
                 @Html.Raw(Model.RequestedAmount > 0 ? $"&pound;{Model.RequestedAmount.Value:N0}" : "&pound;0")
             </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("SubmitPayment", "FinalPaymentRequest", new { Area = "ClosingReportFinalPaymentRequest" })">
+                Change
+            </govuk-summary-list-row-action>
         </govuk-summary-list-row>
 
          @if (Model.ChangeToMonthlyCost)
@@ -95,16 +98,7 @@
                 </govuk-summary-list-row-value>
             </govuk-summary-list-row>
         }
-
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                &nbsp;
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                <govuk-button href="@Url.Action("SubmitPayment", "FinalPaymentRequest", new {Area = "ClosingReportFinalPaymentRequest"})">Change</govuk-button>
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-            
+           
     </govuk-summary-list>
 
     @if (Model.ChangeToMonthlyCost)

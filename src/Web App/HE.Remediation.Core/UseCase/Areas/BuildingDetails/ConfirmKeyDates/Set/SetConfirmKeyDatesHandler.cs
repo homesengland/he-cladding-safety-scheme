@@ -28,7 +28,7 @@ public class SetConfirmKeyDatesHandler : IRequestHandler<SetConfirmKeyDatesReque
             ApplicationId = applicationId,
             StartDate = GetDate(request.StartDateMonth, request.StartDateYear),
             UnsafeCladdingRemovalDate = GetDate(request.UnsafeCladdingRemovalDateMonth, request.UnsafeCladdingRemovalDateYear),
-            ExpectedDateForCompletion = GetDate(request.ExpectedDateForCompletionMonth, request.ExpectedDateForCompletionYear)
+            PracticalCompletionDate = GetDate(request.PracticalCompletionDateMonth, request.PracticalCompletionDateYear)
         });
 
         scope.Complete();
