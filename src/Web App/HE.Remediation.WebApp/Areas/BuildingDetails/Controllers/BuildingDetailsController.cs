@@ -81,7 +81,8 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
         [HttpGet(nameof(WhatYoullNeed))]
         public IActionResult WhatYoullNeed()
         {
-            return View();
+            var model = new WhatYoullNeedViewModel{ ApplicationScheme = _applicationDataProvider.GetApplicationScheme() };
+            return View(model);
         }
         #endregion
 
@@ -416,13 +417,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
                 ? model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ? nameof(ResponsibleForTheRemediation) : nameof(BuildingDeveloperInformation)
                 : model.ReturnUrl;
 
-            // override ReturnUrl ONLY when action is ResponsibleForTheRemediation
-            var returnUrl =
-                action == nameof(ResponsibleForTheRemediation)
-                    ? nameof(BuildingSafetyRegulatorRegistrationCode)
-                    : model.ReturnUrl;
-
-            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails", returnUrl = returnUrl });
+            return SafeRedirectToAction(action, "BuildingDetails", new { Area = "BuildingDetails" });
         }
         #endregion
 
@@ -699,7 +694,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             await _sender.Send(request);
 
             return model.SubmitAction == ESubmitAction.Continue ?
-                RedirectToAction("CheckYourAnswers", "BuildingDetails", new { Area = "BuildingDetails" }) :
+                RedirectToAction("BuildingsInsurance", "BuildingDetails", new { Area = "BuildingDetails" }) :
                 RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion
@@ -947,7 +942,7 @@ namespace HE.Remediation.WebApp.Areas.BuildingDetails.Controllers
             await _sender.Send(request);
 
             return model.SubmitAction == ESubmitAction.Continue ?
-                RedirectToAction("CheckYourAnswers", "BuildingDetails", new { Area = "BuildingDetails" }) :
+                RedirectToAction("BuildingsInsurance", "BuildingDetails", new { Area = "BuildingDetails" }) :
                 RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
         #endregion

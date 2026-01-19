@@ -1,13 +1,14 @@
-﻿@using GovUk.Frontend.AspNetCore.TagHelpers
-@using HE.Remediation.Core.Enums
+﻿@using HE.Remediation.Core.Enums
 @using HE.Remediation.Core.Interface
 @inject IApplicationDataProvider applicationDataProvider;
 
 @{
     ViewData["Title"] = "Declaration";
     ViewData["Backlink"] = Url.Action("BeforeYouContinue", "Declaration", new { Area = "Declaration" });
-    var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
-    var isRasScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
+    var scheme = applicationDataProvider.GetApplicationScheme();
+
+    var isCladdingScheme = scheme == EApplicationScheme.CladdingSafetyScheme;
+    var isRasScheme = scheme == EApplicationScheme.ResponsibleActorsScheme;
 }
 
 @if (ViewData.ModelState.ContainsKey(string.Empty))
@@ -34,11 +35,20 @@
 
 <p class="govuk-body">I confirm that:</p>
 <ul class="govuk-list govuk-list--bullet">
-    <li>@(!isRasScheme ? "I will tell Homes England if the application details change" : "I will tell MHCLG if the building details change")</li>
+    <li>
+        @(scheme switch
+        {
+            EApplicationScheme.CladdingSafetyScheme => "I will tell Homes England if the application details change",
+            EApplicationScheme.SelfRemediating => "I will tell Homes England if the application details change",
+            EApplicationScheme.SocialSector => "I will tell Homes England if the details change",
+            EApplicationScheme.ResponsibleActorsScheme => "I will tell MHCLG if the building details change",
+            _ => "I will tell Homes England if the application details change"
+        })
+    </li>
     <li>The information I have provided is true and correct</li>
     @if (!isRasScheme)
     {
-        <li>I have read, understood and accepted the <a class="govuk-footer__link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information</li>
+        <li>I have read, understood and accepted the <a class="govuk-link" href="https://www.gov.uk/government/publications/homes-england-privacy-notice" rel="noreferrer noopener" target="_blank">Homes England privacy notice</a>, which explains how we'll use and share your information</li>
 
     }
     @if (isCladdingScheme)
@@ -52,14 +62,14 @@
     }
 </ul>
 
-    @if (isCladdingScheme)
-    {
-		<govuk-warning-text icon-fallback-text="Warning">
-			You may have to pay back any grant funding you receive if you submit untrue or incorrect information.
-		</govuk-warning-text>
-    }
+@if (isCladdingScheme)
+{
+    <govuk-warning-text icon-fallback-text="Warning">
+        You may have to pay back any grant funding you receive if you submit untrue or incorrect information.
+    </govuk-warning-text>
+}
 
 <form asp-area="Declaration" asp-controller="Declaration" asp-action="ConfirmDeclaration" method="post">
     <govuk-button type="submit">Confirm and continue</govuk-button>
 </form>
-<br/>
+<br />

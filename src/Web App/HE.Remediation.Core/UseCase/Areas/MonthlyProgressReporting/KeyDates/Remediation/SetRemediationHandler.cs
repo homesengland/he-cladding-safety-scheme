@@ -1,8 +1,9 @@
-﻿using System.Transactions;
-using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
+﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.Remediation;
+using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
 using MediatR;
+using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.Remediation;
 
@@ -24,9 +25,16 @@ public class SetRemediationHandler : IRequestHandler<SetRemediationRequest, SetR
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
 
+        var keyDates = await _keyDatesRepository.GetRemediationKeyDates(
+            new GetProgressReportRemediationKeyDatesParameters
+            {
+                ApplicationId = applicationId,
+                ProgressReportId = progressReportId
+            });
+
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        var hasChangedDates = await _keyDatesRepository.SetRemediationKeyDates(
+        await _keyDatesRepository.SetRemediationKeyDates(
             new SetProgressReportRemediationKeyDatesParameters
             {
                 ApplicationId = applicationId,
@@ -34,6 +42,12 @@ public class SetRemediationHandler : IRequestHandler<SetRemediationRequest, SetR
                 FullCompletionOfWorksDate = request.FullCompletionOfWorksDate,
                 PracticalCompletionDate = request.PracticalCompletionDate
             });
+
+        var fullCompletionOfWorksDateChanged = keyDates.PreviousFullCompletionOfWorksDate.HasChanged(request.FullCompletionOfWorksDate);
+        var practicalCompletionDateChanged = keyDates.PreviousPracticalCompletionDate.HasChanged(request.PracticalCompletionDate);
+
+        var hasChangedDates = fullCompletionOfWorksDateChanged ||
+                              practicalCompletionDateChanged;
 
         if (!hasChangedDates)
         {

@@ -228,8 +228,9 @@ namespace HE.Remediation.WebApp.Areas.Leaseholder.Controllers
         public async Task<IActionResult> CheckYourAnswers()
         {
             var response = await _sender.Send(GetCheckYourAnswersRequest.Request);
-
-            return View(_mapper.Map<CheckYourAnswersViewModel>(response));
+            var model = _mapper.Map<CheckYourAnswersViewModel>(response);
+            model.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
+            return View(model);
         }
 
         [HttpPost(nameof(CheckYourAnswers))]

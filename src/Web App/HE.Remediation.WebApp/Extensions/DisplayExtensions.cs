@@ -19,6 +19,17 @@ namespace HE.Remediation.WebApp.Extensions
             return nullableBoolean == null ? "-" : nullableBoolean.Value ? "Yes" : "No";
         }
 
+        public static string ForDisplay(this EYesNoNonBoolean? yesNoNonBoolean)
+        {
+            return yesNoNonBoolean switch
+            {
+                EYesNoNonBoolean.Yes => "Yes",
+                EYesNoNonBoolean.No => "No",
+                EYesNoNonBoolean.DontKnow => "Don't Know",
+                _ => "-"
+            };
+        }
+
         public static string ForDisplay(this EProgressReportKeyDatesChangeType? nullableKeyDatesChangeType)
         {
             return nullableKeyDatesChangeType switch

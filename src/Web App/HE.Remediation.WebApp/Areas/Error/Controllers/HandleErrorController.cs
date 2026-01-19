@@ -1,5 +1,4 @@
 ﻿using HE.Remediation.Core.Interface;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 namespace HE.Remediation.WebApp.Areas.Error.Controllers
 {
@@ -19,15 +18,6 @@ namespace HE.Remediation.WebApp.Areas.Error.Controllers
         public IActionResult Index(int errorStatusCode)
         {
             var auth0UserId = _applicationDataProvider.GetAuth0UserId();
-
-            if (errorStatusCode == 404 && !string.IsNullOrEmpty(auth0UserId))
-            {
-                var reExecuteFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
-                var originalPath = reExecuteFeature?.OriginalPath;
-                var originalQueryString = reExecuteFeature?.OriginalQueryString;
-                var originalUrl = originalPath + originalQueryString;
-                _logger.LogWarning("404 Not Found: {Url}", originalUrl);
-            }
 
             if (errorStatusCode == 503)
             {

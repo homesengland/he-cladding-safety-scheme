@@ -1,9 +1,10 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureParameters;
+using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails;
+using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails.ConfirmBuildingHeight;
+using HE.Remediation.Core.Data.StoredProcedureResults.BuildingDetails;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using System.Transactions;
-using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails;
-using HE.Remediation.Core.Data.StoredProcedureResults.BuildingDetails;
 
 namespace HE.Remediation.Core.Data.Repositories;
 
@@ -115,7 +116,7 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
             parameters.ApplicationId,
             parameters.StartDate,
             parameters.UnsafeCladdingRemovalDate,
-            parameters.ExpectedDateForCompletion
+            parameters.PracticalCompletionDate
         });
 
         scope.Complete();
@@ -172,6 +173,22 @@ public class BuildingDetailsRepository : IBuildingDetailsRepository
 
         scope.Complete();
     }
-
     #endregion
+
+    public async Task UpdateBuildingHeight(SetBuildingHeightParameters parameters)
+    {
+        await _db.ExecuteAsync("UpdateBuildingHeight", parameters);
+    }
+
+    public async Task<GetBuildingRemediationResponsibilityTypeResult> GetBuildingRemediationResponsibilityType(Guid applicationId)
+    {
+        var result = await _db.QuerySingleOrDefaultAsync<GetBuildingRemediationResponsibilityTypeResult>(
+            nameof(GetBuildingRemediationResponsibilityType),
+            new
+            {
+                ApplicationId = applicationId
+            });
+
+        return result;
+    }
 }

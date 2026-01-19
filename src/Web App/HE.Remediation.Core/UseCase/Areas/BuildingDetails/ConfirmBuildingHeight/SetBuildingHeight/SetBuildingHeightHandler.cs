@@ -1,17 +1,19 @@
-﻿using HE.Remediation.Core.Interface;
+﻿using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails.ConfirmBuildingHeight;
+using HE.Remediation.Core.Interface;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmBuildingHeight.SetBuildingHeight;
 
 public class SetBuildingHeightHandler : IRequestHandler<SetBuildingHeightRequest>
 {
-    private readonly IDbConnectionWrapper _connection;
     private readonly IApplicationDataProvider _applicationDataProvider;
+    private readonly IBuildingDetailsRepository _buildingDetailsRepository;
 
-    public SetBuildingHeightHandler(IDbConnectionWrapper connection, IApplicationDataProvider applicationDataProvider)
+    public SetBuildingHeightHandler(IApplicationDataProvider applicationDataProvider, IBuildingDetailsRepository buildingDetailsRepository)
     {
-        _connection = connection;
         _applicationDataProvider = applicationDataProvider;
+        _buildingDetailsRepository = buildingDetailsRepository;
     }
 
     public async Task<Unit> Handle(SetBuildingHeightRequest request, CancellationToken cancellationToken)
@@ -22,10 +24,12 @@ public class SetBuildingHeightHandler : IRequestHandler<SetBuildingHeightRequest
 
     private async Task SaveBuildingHeight(SetBuildingHeightRequest request)
     {
-        await _connection.ExecuteAsync("UpdateBuildingHeight", new
+        var parameters = new SetBuildingHeightParameters
         {
             ApplicationId = _applicationDataProvider.GetApplicationId(),
-            request.NumberOfStoreys
-        });
+            NumberOfStoreys = request.NumberOfStoreys,
+            BuildingHeight = request.BuildingHeight
+        };
+        await _buildingDetailsRepository.UpdateBuildingHeight(parameters);
     }
 }

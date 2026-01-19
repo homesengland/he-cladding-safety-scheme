@@ -151,7 +151,7 @@ namespace HE.Remediation.WebApp.Areas.AlternativeFundingRoutes.Controllers
         {
             var response = await _sender.Send(GetCheckYourAnswersRequest.Request);
             var viewModel = _mapper.Map<CheckYourAnswersViewModel>(response);
-
+            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
             return View(viewModel);
         }
         #endregion

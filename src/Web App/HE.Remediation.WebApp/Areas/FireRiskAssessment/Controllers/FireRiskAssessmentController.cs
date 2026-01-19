@@ -62,14 +62,14 @@ public class FireRiskAssessmentController : StartController
             return View(model);
         }
 
+        var request = _mapper.Map<SetBuildingWorkTypeRequest>(model);
+
+        var response = await _sender.Send(request, cancellationToken);
+
         if (model.SubmitAction == ESubmitAction.Exit)
         {
             return RedirectToAction("Index", "TaskList", new { Area = "Application" });
         }
-
-        var request = _mapper.Map<SetBuildingWorkTypeRequest>(model);
-
-        var response = await _sender.Send(request, cancellationToken);
 
         return !model.VisitedCheckYourAnswers
             ? RedirectToAction("HasFra", "FireRiskAssessment", new { Area = "FireRiskAssessment" })

@@ -20,7 +20,7 @@ public class VariationReasonViewModel : VariationRequestBaseViewModel
 
     public decimal? UnclaimedGrantFunding { get; set; }
 
-    public bool LastMonthlyPaymentCompleted { get; set; }
+    public bool NoMonthlyPaymentsOutstanding { get; set; }
     
     public bool ClosingReportStarted { get; set; }
 }

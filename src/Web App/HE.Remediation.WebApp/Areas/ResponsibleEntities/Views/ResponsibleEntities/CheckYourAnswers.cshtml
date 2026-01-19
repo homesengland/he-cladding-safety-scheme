@@ -5,6 +5,7 @@
 @{
     var isRas = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
     var isSocialSector = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
+    var isCladdingScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.CladdingSafetyScheme;
     var backLinkAction = isRas ? "ResponsibleEntityCompanyType" : isSocialSector ? "LeaseholderOrPrivateOwner" : "UploadEvidence";
 
     ViewData["Title"] = Model.ReadOnly ? "Your answers" : "Check your answers";
@@ -398,140 +399,6 @@
     }
 }
 
-@if (Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.RegisteredProvider)
-{
-    @if (Model.ResponsibleEntitySharedOwners is not null)
-    {
-        @if (Model.IsSocialSector)
-        {
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Do you have any homes owned by long-term leaseholders or shared owners within the building?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(Model.ResponsibleEntitySharedOwners.GetValueOrDefault() > 0 ? "Yes" : "No")
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-        }
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-					@(Model.IsSocialSector ? "How many leaseholders and/or shared owners?" : "How many shared owners")
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.ResponsibleEntitySharedOwners
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-
-    @if (Model.ResponsibleEntityClaimingGrant.HasValue)
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Are you claiming a grant for the affordable units on the grounds of the works not being affordable to your organisation
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.ResponsibleEntityClaimingGrant!.Value ? "Yes" : "No")
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-
-    @if (Model.ConfirmedNotViable.HasValue)
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Has the Chief Executive confirmed that remediation works are not affordable?
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.ConfirmedNotViable!.Value ? "Yes" : "No")
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-
-    @if (Model.CheifExecEvidenceFiles.Any())
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Please provide evidence from the Chief Executive
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @foreach (var item in Model.CheifExecEvidenceFiles)
-                {
-                    <span>
-                        @item.Name<br>
-                    </span>
-                }
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-}
-
-@if (Model.ResponsibleEntityCompanyTypeId == (int)EApplicationResponsibleEntityOrganisationType.LocalAuthority)
-{
-    @if (Model.ResponsibleEntitySharedOwners is not null)
-    {
-        @if (Model.IsSocialSector)
-        {
-			<govuk-summary-list-row>
-				<govuk-summary-list-row-key>
-					Do you have any homes owned by long-term leaseholders or shared owners within the building?
-				</govuk-summary-list-row-key>
-				<govuk-summary-list-row-value>
-					@(Model.ResponsibleEntitySharedOwners.GetValueOrDefault() > 0 ? "Yes" : "No")
-				</govuk-summary-list-row-value>
-			</govuk-summary-list-row>
-        }
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-					@(Model.IsSocialSector ? "How many leaseholders and/or shared owners?" : "How many shared owners")
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.ResponsibleEntitySharedOwners
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-
-    @if (Model.ResponsibleEntityClaimingGrant.HasValue)
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Are you claiming a grant for the affordable units on the grounds of the works not being affordable to your organisation
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.ResponsibleEntityClaimingGrant!.Value ? "Yes" : "No")
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-
-    @if (Model.ConfirmedNotViable.HasValue)
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Has the Section 151 (S151) officer confirmed that these remediation works are not affordable?
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.ConfirmedNotViable!.Value ? "Yes" : "No")
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-
-    @if (Model.S151EvidenceFiles.Any())
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                Please provide evidence from the S151 officer
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @foreach (var item in Model.S151EvidenceFiles)
-                {
-                    <span>
-                        @item.Name<br>
-                    </span>
-                }
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    }
-}
-
 </govuk-summary-list>
 </div>
 </div>
@@ -706,14 +573,59 @@
             </govuk-summary-list>
         </div>
     </div>
+
+    if (Model.IsClaimingGrant.HasValue || Model.IsConfirmedNotViable.HasValue)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <govuk-summary-list>
+                    @if (Model.IsClaimingGrant.HasValue)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Are you claiming a grant for the affordable units on the grounds of the works not being affordable to you organisation?
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.IsClaimingGrant.Value ? "Yes" : "No")
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                    }
+
+                    @if (Model.IsConfirmedNotViable.HasValue)
+                    {
+                        <govuk-summary-list-row>
+                            <govuk-summary-list-row-key>
+                                Has the Chief Executive confirmed that remediation works are not affordable?
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.IsConfirmedNotViable.Value ? "Yes" : "No")
+                            </govuk-summary-list-row-value>
+                        </govuk-summary-list-row>
+                    }
+                </govuk-summary-list>
+            </div>
+        </div>
+    }
 }
 
 @if (!Model.ReadOnly)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
-            <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct, and that Homes England can contact the Responsible Entity to validate you have been authorised to apply on their behalf.</p>
+            @if (isCladdingScheme)
+            {
+                <h2 class="govuk-heading-s">Proceed to next step of your application</h2>
+                <p class="govuk-body">
+                    By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct, and that Homes England can contact the Responsible Entity to validate you have been authorised to apply on their behalf.
+                </p>
+            }
+            else
+            {
+                <h2 class="govuk-heading-s">Proceed to next step</h2>
+                <p class="govuk-body">
+                    By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct, and that you have been authorised to register this building.
+                </p>
+            }
 
             <form asp-area="ResponsibleEntities" asp-controller="ResponsibleEntities" asp-action="CheckYourAnswers" method="post">
                 <govuk-button type="submit">Accept and save application</govuk-button>

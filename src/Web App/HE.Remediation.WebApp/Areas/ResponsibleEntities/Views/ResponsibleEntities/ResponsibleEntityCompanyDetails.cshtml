@@ -3,7 +3,7 @@
 @model HE.Remediation.WebApp.ViewModels.ResponsibleEntities.ResponsibleEntityCompanyDetailsViewModel
 @{
     ViewData["Title"] = @Model.ApplicationScheme != EApplicationScheme.ResponsibleActorsScheme ? "What are the company details of the Responsible Entity?" : "What are the organisation details of the Responsible Entity?";
-    ViewData["BackLink"] = Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ? Url.Action("ResponsibleEntityCompanyType", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
+    ViewData["BackLink"] = Model.ApplicationScheme == EApplicationScheme.ResponsibleActorsScheme ? Url.Action("ResponsibleEntityCompanyRelationDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities" })
         : Url.Action("ResponsibleEntityUkRegistered", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
     var companyRegNumberMaxLength = Model.IsUkBased ? 8 : 20;
 }

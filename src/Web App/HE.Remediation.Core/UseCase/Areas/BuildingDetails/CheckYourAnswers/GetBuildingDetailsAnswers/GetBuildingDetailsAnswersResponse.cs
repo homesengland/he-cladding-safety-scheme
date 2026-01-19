@@ -9,7 +9,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Get
         public bool WorksAlreadyCompleted { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? UnsafeCladdingRemovalDate { get; set; }
-        public DateTime? ExpectedDateForCompletion { get; set; }
+        public DateTime? PracticalCompletionDate { get; set; }
         public int ResidentialUnitsCount { get; set; }
         public bool NonResidentialUnits { get; set; }
         public int NonResidentialUnitsCount { get; set; }
@@ -26,6 +26,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Get
         public bool PartOfDevelopment { get; set; }
         public string DevelopmentName { get; set; }
         public int Storeys { get; set; }
+        public decimal? BuildingHeight { get; set; }
         public DateTime? CorrectHeightConfirmedDate { get; set; }
         public bool OriginalDeveloperKnown { get; set; }
         public string DeveloperCompanyName { get; set; }

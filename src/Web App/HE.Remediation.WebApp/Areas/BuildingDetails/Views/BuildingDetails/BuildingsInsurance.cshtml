@@ -3,7 +3,13 @@
 @{
     ViewData["Title"] = "Buildings Insurance";
     ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ReferenceNumber})";
-    ViewData["BackLink"] = Url.Action("BuildingDeveloperInformation", "BuildingDetails", new { Area = "BuildingDetails" });
+    ViewData["BackLink"] = Model.BuildingRemediationResponsibilityTypeId switch
+    {
+        EBuildingRemediationResponsibilityType.YouBuiltTheBuilding => Url.Action("ConstructionCompletionDate", "BuildingDetails", new { Area = "BuildingDetails" }),
+        EBuildingRemediationResponsibilityType.RefurbishedinTheLast30Years => Url.Action("RefurbishmentCompletionDate", "BuildingDetails", new { Area = "BuildingDetails" }),
+        _ => Url.Action("BuildingDeveloperInformation", "BuildingDetails", new { Area = "BuildingDetails" })
+    };
+
     ViewData["FullWidth"] = false;
 }
 @section ErrorSummary

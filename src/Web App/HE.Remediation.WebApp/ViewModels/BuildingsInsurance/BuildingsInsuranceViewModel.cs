@@ -5,7 +5,6 @@ namespace HE.Remediation.WebApp.ViewModels.BuildingsInsurance
 {
     public class BuildingsInsuranceViewModel
     {
-        public Guid Id { get; set; }
         public string SumInsuredAmountText { get; set; }
 
         public decimal? SumInsuredAmount =>
@@ -22,6 +21,7 @@ namespace HE.Remediation.WebApp.ViewModels.BuildingsInsurance
         public string IfOtherInsuranceProviderName { get; set; }
         public string AdditionalInfo { get; set; }
         public List<InsuranceProvider> InsuranceProviders { get; set; }
+        public EBuildingRemediationResponsibilityType? BuildingRemediationResponsibilityTypeId { get; set; }
         public ESubmitAction SubmitAction { get; set; }
         public string ReturnUrl { get; set; }
         public string ReferenceNumber { get; set; }

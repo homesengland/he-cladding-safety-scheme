@@ -3,7 +3,7 @@
 @inject IApplicationDataProvider applicationDataProvider;
 @{
     ViewData["Title"] = "Information about this section";
-    ViewData["BackLink"] = Url.Action("Index", "TaskList", new {Area = "Application"});
+    ViewData["BackLink"] = Url.Action("Index", "TaskList", new { Area = "Application" });
 
     var applicationScheme = applicationDataProvider.GetApplicationScheme();
     var continueDestination = Url.Action("Representative", "ResponsibleEntities", new { Area = "ResponsibleEntities" });
@@ -19,9 +19,24 @@
     }
 }
 
-<h1 class="govuk-heading-xl">Information about this section</h1>
+<h1 class="govuk-heading-xl">
+    @(applicationScheme == EApplicationScheme.SocialSector
+        ? "What you'll need"
+        : "Information about this section")
+</h1>
 
-@if (applicationScheme != EApplicationScheme.ResponsibleActorsScheme)
+
+@if (applicationScheme == EApplicationScheme.SocialSector)
+{
+    <p class="govuk-body">
+        The Responsible Entity is the organisation that has the legal obligation or right to carry out remediation works. They are responsible for the external repair and maintenance of their buildings.
+    </p>
+    <p class="govuk-body">
+        The Responsible Entity may be the building freeholder or head leaseholder who has primary responsibility for the repair of the property. In the Social Sector Self-funded remediation route this will always be a registered provider or local authority.
+    </p>
+
+}
+else if (applicationScheme != EApplicationScheme.ResponsibleActorsScheme)
 {
     <p class="govuk-body">
         The Responsible Entity is the organisation that has the legal obligation or right to carry out remediation works. They are responsible for the external repair and maintenance of their buildings.
@@ -30,7 +45,7 @@
         The Responsible Entity may be the building freeholder or head leaseholder or a management company or Right To Manage (RTM) company who has primary responsibility for the repair of the property.
     </p>
     <p class="govuk-body">
-        Representatives of the Responsible Entity must be authorised to apply on behalf of the Responsible Entity. Evidence must be provided of this authorisation in order to complete the application. 
+        Representatives of the Responsible Entity must be authorised to apply on behalf of the Responsible Entity. Evidence must be provided of this authorisation in order to complete the application.
     </p>
     <p class="govuk-body">
         The Representative is an administrative role only, helping coordinate the details of the remediation works, and is not taking on liability.

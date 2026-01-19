@@ -71,7 +71,7 @@ public class GetVariationReasonHandler : IRequestHandler<GetVariationReasonReque
             GrantPaidToDate = overview?.TotalGrantPaidToDate ?? 0,
             UnclaimedGrantFunding = overview?.TotalUnclaimedGrant ?? 0,
             ClosingReportStarted = overview?.ClosingReportStarted ?? false,
-            LastMonthlyPaymentCompleted = monthlyPaymentsOutstanding == 0
+            NoMonthlyPaymentsOutstanding = monthlyPaymentsOutstanding == 0
         };
     }
 }

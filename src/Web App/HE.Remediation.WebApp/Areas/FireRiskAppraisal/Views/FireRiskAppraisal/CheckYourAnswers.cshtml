@@ -733,11 +733,21 @@
 <h2 class="govuk-heading-m">Internal elements</h2>
 <govuk-summary-list>
     <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Are there any elements of the interior of the building 
-            which you are recommending are subject
-            to remediation/mitigation works to address the life safety risk you have identified?
-        </govuk-summary-list-row-key>
+        @if (Model.ApplicationScheme == EApplicationScheme.SocialSector)
+        {
+            <govuk-summary-list-row-key>
+                Are there any internal works which you are recommending to address the life safety risk you have identified?
+            </govuk-summary-list-row-key>
+        }
+        else
+        {
+            <govuk-summary-list-row-key>
+                Are there any elements of the interior of the building
+                which you are recommending are subject
+                to remediation/mitigation works to address the life safety risk you have identified?
+            </govuk-summary-list-row-key>
+
+        }
         <govuk-summary-list-row-value>
             @if (Model.InternalWorksRequired != null)
             {

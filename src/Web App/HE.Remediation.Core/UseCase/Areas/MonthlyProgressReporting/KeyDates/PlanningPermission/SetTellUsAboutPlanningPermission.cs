@@ -1,8 +1,10 @@
-﻿using System.Transactions;
-using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
+﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.PlanningPermission;
+using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectSupport;
+using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
 using MediatR;
+using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.PlanningPermission;
 public class SetTellUsAboutPlanningPermission : IRequestHandler<SetTellUsAboutPlanningPermissionRequest, SetTellUsAboutPlanningPermissionResponse>
@@ -20,17 +22,28 @@ public class SetTellUsAboutPlanningPermission : IRequestHandler<SetTellUsAboutPl
         cancellationToken.ThrowIfCancellationRequested();
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
+
+        var keyDates = await _keyDatesRepository.GetProgressReportTellUsAboutPlanningPermission(new GetProgressReportTellUsAboutPlanningPermissionParameters
+        {
+            ApplicationId = applicationId,
+            ProgressReportId = progressReportId
+        });
+
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-        var hasChangedDates = await _keyDatesRepository.SetProgressReportTellUsAboutPlanningPermission(new SetProgressReportTellUsAboutPlanningPermissionParameters
+        await _keyDatesRepository.SetProgressReportTellUsAboutPlanningPermission(new SetProgressReportTellUsAboutPlanningPermissionParameters
         {
             ApplicationId = applicationId,
             ProgressReportId = progressReportId,
-            PlanningPermissionDateSubmitted = request.PlanningPermissionDateSubmittedYear.HasValue && request.PlanningPermissionDateSubmittedMonth.HasValue ?
-                new DateTime(request.PlanningPermissionDateSubmittedYear.Value, request.PlanningPermissionDateSubmittedMonth.Value, 1) : null,
-            PlanningPermissionDateApproved = request.PlanningPermissionDateApprovedYear.HasValue && request.PlanningPermissionDateApprovedMonth.HasValue ?
-                new DateTime(request.PlanningPermissionDateApprovedYear.Value, request.PlanningPermissionDateApprovedMonth.Value, 1) : null
+            PlanningPermissionDateSubmitted = request.PlanningPermissionDateSubmitted,
+            PlanningPermissionDateApproved = request.PlanningPermissionDateApproved
         });
+
+        var planningPermissionDateSubmittedChanged = keyDates.PreviousPlanningPermissionDateSubmitted.HasChanged(request.PlanningPermissionDateSubmitted);
+        var planningPermissionDateApprovedChanged = keyDates.PreviousPlanningPermissionDateApproved.HasChanged(request.PlanningPermissionDateApproved);
+
+        var hasChangedDates = planningPermissionDateSubmittedChanged ||
+                              planningPermissionDateApprovedChanged;
 
         if (!hasChangedDates)
         {
@@ -56,6 +69,22 @@ public class SetTellUsAboutPlanningPermissionRequest : IRequest<SetTellUsAboutPl
     public int? PlanningPermissionDateSubmittedYear { get; set; }
     public int? PlanningPermissionDateApprovedMonth { get; set; }
     public int? PlanningPermissionDateApprovedYear { get; set; }
+
+    public DateTime? PlanningPermissionDateSubmitted { 
+        get {
+            return PlanningPermissionDateSubmittedYear.HasValue && PlanningPermissionDateSubmittedMonth.HasValue ?
+                    new DateTime(PlanningPermissionDateSubmittedYear.Value, PlanningPermissionDateSubmittedMonth.Value, 1) : null;
+        } 
+    }
+
+    public DateTime? PlanningPermissionDateApproved
+    {
+        get
+        {
+            return PlanningPermissionDateApprovedYear.HasValue && PlanningPermissionDateApprovedMonth.HasValue ?
+                new DateTime(PlanningPermissionDateApprovedYear.Value, PlanningPermissionDateApprovedMonth.Value, 1) : null;
+        }
+    }
 }
 
 public class SetTellUsAboutPlanningPermissionResponse

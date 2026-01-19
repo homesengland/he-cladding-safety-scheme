@@ -1,5 +1,5 @@
-﻿using FluentValidation.Results;
-using HE.Remediation.Core.Enums;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.Core.Extensions;
 
 namespace HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates;
 public class KeyDatesViewModel
@@ -25,11 +25,12 @@ public class KeyDatesViewModel
     public DateTime? PreviousActualTenderDate { get; set; }
     public DateTime? PreviousActualLeadContractAppointmentDate { get; set; }
     public DateTime? PreviousExpectedWorksPackageSubmissionDate { get; set; }
-    public bool WorksPlanningDatesHaveChanged => ((PreviousExpectedTenderDate.HasValue && ExpectedTenderDate.HasValue && ExpectedTenderDate != PreviousExpectedTenderDate)
-                    || (PreviousExpectedLeadContractorAppointmentDate.HasValue && ExpectedLeadContractorAppointmentDate.HasValue && ExpectedLeadContractorAppointmentDate != PreviousExpectedLeadContractorAppointmentDate)
-                    || (PreviousActualTenderDate.HasValue && ActualTenderDate.HasValue && ActualTenderDate != PreviousActualTenderDate)
-                    || (PreviousActualLeadContractAppointmentDate.HasValue && ActualLeadContractAppointmentDate.HasValue && ActualLeadContractAppointmentDate != PreviousActualLeadContractAppointmentDate)
-                    || (PreviousExpectedWorksPackageSubmissionDate.HasValue && ExpectedWorksPackageSubmissionDate.HasValue && ExpectedWorksPackageSubmissionDate != PreviousExpectedWorksPackageSubmissionDate));
+    public bool WorksPlanningDatesHaveChanged => 
+                       PreviousExpectedTenderDate.HasChanged(ExpectedTenderDate)
+                    || PreviousExpectedLeadContractorAppointmentDate.HasChanged(ExpectedLeadContractorAppointmentDate)
+                    || PreviousActualTenderDate.HasChanged(ActualTenderDate)
+                    || PreviousActualLeadContractAppointmentDate.HasChanged(ActualLeadContractAppointmentDate)
+                    || PreviousExpectedWorksPackageSubmissionDate.HasChanged(ExpectedWorksPackageSubmissionDate);
 
     // Building Control
     public bool IsBuildingControl { get { return BuildingControlExpectedApplicationDate != null || BuildingControlActualApplicationDate != null || BuildingControlDecisionDate != null; } }
@@ -47,10 +48,11 @@ public class KeyDatesViewModel
     public DateTime? PreviousBuildingControlActualApplicationDate { get; set; }
     public DateTime? PreviousBuildingControlValidationDate { get; set; }
     public DateTime? PreviousBuildingControlDecisionDate { get; set; }
-    public bool BuildingControlDatesHaveChanged => ((PreviousBuildingControlExpectedApplicationDate.HasValue && BuildingControlExpectedApplicationDate.HasValue && BuildingControlExpectedApplicationDate != PreviousBuildingControlExpectedApplicationDate)
-                                                    || (PreviousBuildingControlActualApplicationDate.HasValue && BuildingControlActualApplicationDate.HasValue && BuildingControlActualApplicationDate != PreviousBuildingControlActualApplicationDate)
-                                                    || (PreviousBuildingControlValidationDate.HasValue && BuildingControlValidationDate.HasValue && BuildingControlValidationDate != PreviousBuildingControlValidationDate)
-                                                    || (PreviousBuildingControlDecisionDate.HasValue && BuildingControlDecisionDate.HasValue && BuildingControlDecisionDate != PreviousBuildingControlDecisionDate));
+    public bool BuildingControlDatesHaveChanged =>     
+                                                    PreviousBuildingControlExpectedApplicationDate.HasChanged(BuildingControlExpectedApplicationDate)
+                                                    || PreviousBuildingControlActualApplicationDate.HasChanged(BuildingControlActualApplicationDate)
+                                                    || PreviousBuildingControlValidationDate.HasChanged(BuildingControlValidationDate)
+                                                    || PreviousBuildingControlDecisionDate.HasChanged(BuildingControlDecisionDate);
 
     // Planning Permission
     public bool IsPlanningPermission { get { return WorksNeedPlanningPermission != null; } }
@@ -74,9 +76,10 @@ public class KeyDatesViewModel
     public DateTime? PreviousPlanningPermissionDateSubmitted { get; set; }
     public DateTime? PreviousPlanningPermissionDateApproved { get; set; }
     public DateTime? PreviousPlanningPermissionPlanToSubmitDate { get; set; }
-    public bool PlanningPermissionDatesHaveChanged => ((PreviousPlanningPermissionDateSubmitted.HasValue && PlanningPermissionDateSubmitted.HasValue && PlanningPermissionDateSubmitted != PreviousPlanningPermissionDateSubmitted)
-                                                       || (PreviousPlanningPermissionDateApproved.HasValue && PlanningPermissionDateApproved.HasValue && PlanningPermissionDateApproved != PreviousPlanningPermissionDateApproved)
-                                                       || (PreviousPlanningPermissionPlanToSubmitDate.HasValue && PlanningPermissionPlanToSubmitDate.HasValue && PlanningPermissionPlanToSubmitDate != PreviousPlanningPermissionPlanToSubmitDate));
+    public bool PlanningPermissionDatesHaveChanged => 
+                                                          PreviousPlanningPermissionDateSubmitted.HasChanged(PlanningPermissionDateSubmitted)
+                                                       || PreviousPlanningPermissionDateApproved.HasChanged(PlanningPermissionDateApproved)
+                                                       || PreviousPlanningPermissionPlanToSubmitDate.HasChanged(PlanningPermissionPlanToSubmitDate);
 
     // Remediation
     public bool IsRemediation { get { return RemediationFullCompletionOfWorksDate != null; } }
@@ -87,8 +90,9 @@ public class KeyDatesViewModel
 
     public DateTime? PreviousRemediationFullCompletionOfWorksDate { get; set; }
     public DateTime? PreviousRemediationPracticalCompletionDate { get; set; }
-    public bool RemediationDatesHaveChanged => ((PreviousRemediationFullCompletionOfWorksDate.HasValue && RemediationFullCompletionOfWorksDate.HasValue && RemediationFullCompletionOfWorksDate != PreviousRemediationFullCompletionOfWorksDate)
-                                                || (PreviousRemediationPracticalCompletionDate.HasValue && RemediationPracticalCompletionDate.HasValue && RemediationPracticalCompletionDate != PreviousRemediationPracticalCompletionDate));
+    public bool RemediationDatesHaveChanged => 
+                                                   PreviousRemediationFullCompletionOfWorksDate.HasChanged(RemediationFullCompletionOfWorksDate)
+                                                || PreviousRemediationPracticalCompletionDate.HasChanged(RemediationPracticalCompletionDate);
 
     public bool RemediationDatesComeLast()
     {

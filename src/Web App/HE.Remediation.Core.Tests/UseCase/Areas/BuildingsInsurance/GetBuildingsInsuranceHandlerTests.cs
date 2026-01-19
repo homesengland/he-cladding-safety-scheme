@@ -1,30 +1,33 @@
-﻿using Moq;
-using HE.Remediation.Core.Interface;
+﻿using AutoFixture;
+using Moq;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.GetBuildingsInsurance;
 using HE.Remediation.Core.Data.Repositories;
+using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
 
 namespace HE.Remediation.Core.Tests.UseCase.Areas.BuildingsInsurance
 {
-    public class GetBuildingsInsuranceHandlerTests
+    public class GetBuildingsInsuranceHandlerTests : TestBase
     {
-        private readonly Mock<IApplicationDataProvider> _applicationDataProviderMock;
+        private readonly Mock<IApplicationDetailsProvider> _applicationDetailsProviderMock;
         private readonly Mock<IBuildingsInsuranceRepository> _buildingsInsuranceRepositoryMock;
         private readonly GetBuildingsInsuranceHandler _handler;
 
         public GetBuildingsInsuranceHandlerTests()
         {
-            _applicationDataProviderMock = new Mock<IApplicationDataProvider>();
+            _applicationDetailsProviderMock = new Mock<IApplicationDetailsProvider>();
             _buildingsInsuranceRepositoryMock = new Mock<IBuildingsInsuranceRepository>();
-            _handler = new GetBuildingsInsuranceHandler(_applicationDataProviderMock.Object, _buildingsInsuranceRepositoryMock.Object);
+            _handler = new GetBuildingsInsuranceHandler(_applicationDetailsProviderMock.Object, _buildingsInsuranceRepositoryMock.Object);
         }
 
         [Fact]
         public async Task Should_Return_NewResponse_When_No_Data_Found()
         {
             // Arrange
-            _applicationDataProviderMock.Setup(x => x.GetApplicationId()).Returns(Guid.NewGuid());
+            _applicationDetailsProviderMock.Setup(x => x.GetApplicationDetails())
+                .ReturnsAsync(() => Fixture.Create<ApplicationDetailsModel>());
 
-            _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingsInsurance(It.IsAny<Guid>())).ReturnsAsync((GetBuildingsInsuranceResponse)null);
+            _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsurance(It.IsAny<Guid>())).ReturnsAsync((GetBuildingInsuranceResult)null);
 
             _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsuranceProviders()).ReturnsAsync([]);
 
@@ -40,7 +43,8 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.BuildingsInsurance
         public async Task Should_Return_Response_With_Data_When_Data_Is_Found()
         {
             // Arrange
-            _applicationDataProviderMock.Setup(x => x.GetApplicationId()).Returns(Guid.NewGuid());
+            _applicationDetailsProviderMock.Setup(x => x.GetApplicationDetails())
+                .ReturnsAsync(() => Fixture.Create<ApplicationDetailsModel>());
 
             var insuranceProviders = new List<InsuranceProvider>
         {
@@ -48,7 +52,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.BuildingsInsurance
             new() { Id = 2, Name = "Provider B", Order = 2 }
         };
 
-            _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingsInsurance(It.IsAny<Guid>())).ReturnsAsync(new GetBuildingsInsuranceResponse());
+            _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsurance(It.IsAny<Guid>())).ReturnsAsync(new GetBuildingInsuranceResult());
 
             _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsuranceProviders()).ReturnsAsync(insuranceProviders);
 

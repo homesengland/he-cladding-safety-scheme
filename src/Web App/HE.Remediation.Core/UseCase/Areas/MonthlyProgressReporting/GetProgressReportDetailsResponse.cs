@@ -36,7 +36,7 @@ public class GetProgressReportDetailsResponse
     public string BuildingControlChangeReason { get; set; }
 
     // KD - Planning Permission
-    public bool? WorksNeedPlanningPermission { get; set; }
+    public EYesNoNonBoolean? WorksNeedPlanningPermission { get; set; }
     public bool? HaveAppliedPlanningPermission { get; set; }
     public DateTime? PlanningPermissionDateSubmitted { get; set; }
     public DateTime? PlanningPermissionDateApproved { get; set; }

@@ -51,17 +51,9 @@ public class GetDetailsForSaveProjectTeamHandler : IRequestHandler<GetDetailsFor
                     .GetProjectTeamMembers(new GetTeamMembersParameters() { ApplicationId = applicationId, ProgressReportId = progressReportId }
                 );
 
-        var applicableRoles = new[] { (int)ETeamRole.ProjectManager, (int)ETeamRole.QuantitySurveyor };
-
-        var hasGcoTeamMember = false;
-        foreach (var person in teamMembers)
-        {
-            if (applicableRoles.Contains(person.RoleId ?? 0))
-            {
-                hasGcoTeamMember = true;
-            }
-        }
-        return new HasTeamMembersResult(teamMembers.Count > 0, hasGcoTeamMember);
+        var hasProjectManager = teamMembers.Any(person => person.RoleId == (int)ETeamRole.ProjectManager);
+        var hasQuantitySurveyor = teamMembers.Any(person => person.RoleId == (int)ETeamRole.QuantitySurveyor);
+        return new HasTeamMembersResult(teamMembers.Count > 0, hasProjectManager && hasQuantitySurveyor);
     }
 
     private record HasTeamMembersResult(bool HasAnyTeamMembers, bool HasGcoTeamMember);

@@ -1,4 +1,6 @@
 ﻿@using GovUk.Frontend.AspNetCore.TagHelpers
+@using HE.Remediation.Core.Enums
+@model HE.Remediation.WebApp.ViewModels.BuildingDetails.WhatYoullNeedViewModel
 
 @{
     ViewData["Title"] = "What you'll need";
@@ -17,9 +19,15 @@
     <li>number of storeys (starting from ground level – do not include any underground storeys)</li>
     <li>number of residential units</li>
     <li>number of any non-residential units (if any)</li>
+    @if (Model.ApplicationScheme == EApplicationScheme.SocialSector)
+    {
+    <li>details of building insurance</li>
+    }
 </ul>
 
-<h3 class="govuk-heading-s">Building height</h3>
+@if (Model.ApplicationScheme!= EApplicationScheme.SocialSector)
+{
+    <h3 class="govuk-heading-s">Building height</h3>
 <p class="govuk-body">You have told us this building is over 11 metres. If it is not this height, it will not be eligible for funding at this time.</p>
-
-<govuk-button href="@Url.Action("BuildingUniqueName", "BuildingDetails", new {Area = "BuildingDetails"})">Continue</govuk-button>
+}
+<govuk-button href="@Url.Action("BuildingUniqueName", "BuildingDetails", new { Area = "BuildingDetails" })">Continue</govuk-button>

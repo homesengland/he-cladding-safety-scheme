@@ -36,7 +36,7 @@ namespace HE.Remediation.Core.Services.Communication.Collaboration
                     using IServiceScope scope = _serviceScopeFactory.CreateScope();
                     var communicationService = scope.ServiceProvider.GetRequiredService<ICommunicationService>();
                     await communicationService.SendEmailInvite(item, cancellationToken);
-                    _logger.LogWarning("Email communication (Type: {EmailType}, Info: {TraceInfo}) sent successfully.", item.EmailType, item.TraceInfo);
+                    _logger.LogInformation("Email communication (Type: {EmailType}, Info: {TraceInfo}) sent successfully.", item.EmailType, item.TraceInfo);
                 }
                 catch (Exception ex)
                 {

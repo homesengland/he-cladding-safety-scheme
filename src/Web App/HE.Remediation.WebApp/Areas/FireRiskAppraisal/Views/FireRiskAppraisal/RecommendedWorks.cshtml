@@ -1,7 +1,9 @@
 ﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface
 @model HE.Remediation.WebApp.ViewModels.FireRiskAppraisal.GetRecommendedWorksViewModel
-
+@inject IApplicationDataProvider applicationDataProvider;
 @{
+    var applicationScheme = applicationDataProvider.GetApplicationScheme();
     ViewData["Title"] = "Recommended works";
     ViewData["FullWidth"] = true;
     ViewData["BackLink"] = Url.Action("RecommendedWorksStart", "FireRiskAppraisal", new { Area = "FireRiskAppraisal" });
@@ -183,65 +185,68 @@
 
                     </form>
                 </div>
-                <div class="govuk-grid-column-one-third">
-                    <hr class="related-content-separator-line" />
-                    <h2 class="govuk-heading-m">Building Details</h2>
+                @if (applicationScheme != EApplicationScheme.ResponsibleActorsScheme)
+                {
+                    <div class="govuk-grid-column-one-third">
+                        <hr class="related-content-separator-line" />
+                        <h2 class="govuk-heading-m">Building Details</h2>
 
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Application Reference Number</div>
-                        <div class="govuk-body no-margin">@Model.ApplicationReferenceNumber</div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>                   
-
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Building name</div>
-                        <div class="govuk-body no-margin">@Model.BuildingName</div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Building Address Line 1</div>
-                        <div class="govuk-body no-margin">@Model.BuildingAddress</div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                    @if (Model.PartOfDevelopment.HasValue && Model.PartOfDevelopment.Value)
-                    {
                         <div class="govuk-grid-row">
-                            <div class="govuk-heading-s no-margin">Block within wider development</div>
-                            <div class="govuk-body no-margin">@Model.Development</div>
+                            <div class="govuk-heading-s no-margin">Application Reference Number</div>
+                            <div class="govuk-body no-margin">@Model.ApplicationReferenceNumber</div>
                             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                         </div>
-                    }
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">FRAEW instructed date</div>
-                        <div class="govuk-body no-margin">
-                            @if (Model.FRAEWInstructedDate is not null)
+
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Building name</div>
+                            <div class="govuk-body no-margin">@Model.BuildingName</div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Building Address Line 1</div>
+                            <div class="govuk-body no-margin">@Model.BuildingAddress</div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        </div>
+                        @if (Model.PartOfDevelopment.HasValue && Model.PartOfDevelopment.Value)
+                        {
+                            <div class="govuk-grid-row">
+                                <div class="govuk-heading-s no-margin">Block within wider development</div>
+                                <div class="govuk-body no-margin">@Model.Development</div>
+                                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                            </div>
+                        }
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">FRAEW instructed date</div>
+                            <div class="govuk-body no-margin">
+                                @if (Model.FRAEWInstructedDate is not null)
                                 {
                                     var instructedDate = Model.FRAEWInstructedDate;
                                     <span>@instructedDate.Value.ToString("dd MMMM yyyy")</span>
                                 }
+                            </div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                         </div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">FRAEW report completion date</div>
-                        <div class="govuk-body no-margin">
-                            @if (Model.FRAEWCompletedDate is not null)
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">FRAEW report completion date</div>
+                            <div class="govuk-body no-margin">
+                                @if (Model.FRAEWCompletedDate is not null)
                                 {
                                     var completedDate = Model.FRAEWCompletedDate;
                                     <span>@completedDate.Value.ToString("dd MMMM yyyy")</span>
                                 }
+                            </div>
+                            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                         </div>
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                        <div class="govuk-grid-row">
+                            <div class="govuk-heading-s no-margin">Firm undertaking report</div>
+                            <div class="govuk-body no-margin">
+                                @Model.CompanyUndertakingReport
+                                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                            </div>
+                        </div>
                     </div>
-                    <div class="govuk-grid-row">
-                        <div class="govuk-heading-s no-margin">Firm undertaking report</div>
-                        <div class="govuk-body no-margin">
-                             @Model.CompanyUndertakingReport
-                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                    </div>
-                </div>
-            </div>
+                }
             </div>
         </main>
     </div>

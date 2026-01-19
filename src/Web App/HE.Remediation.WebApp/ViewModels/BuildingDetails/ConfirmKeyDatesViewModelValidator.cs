@@ -79,33 +79,33 @@ public class ConfirmKeyDatesViewModelValidator : AbstractValidator<ConfirmKeyDat
 
         #region ExpectedDateForCompletion (required)
 
-        RuleFor(x => x.ExpectedDateForCompletionMonth)
+        RuleFor(x => x.PracticalCompletionDateMonth)
                     .Cascade(CascadeMode.Stop)
                     .NotNull().WithMessage("Please enter a month")
                     .InclusiveBetween(1, 12).WithMessage("Please enter a valid month (1–12)");
 
-        RuleFor(x => x.ExpectedDateForCompletionYear)
+        RuleFor(x => x.PracticalCompletionDateYear)
                     .Cascade(CascadeMode.Stop)
                     .NotNull().WithMessage("Please enter a year")
                     .GreaterThanOrEqualTo(SqlMinYear)
-                    .When(x => x.ExpectedDateForCompletionYear != null, ApplyConditionTo.CurrentValidator)
+                    .When(x => x.PracticalCompletionDateYear != null, ApplyConditionTo.CurrentValidator)
                     .WithMessage("Please enter a valid year");
 
         // Must be in the past
-        RuleFor(x => new { x.ExpectedDateForCompletionMonth, x.ExpectedDateForCompletionYear })
-                    .Must(p => BeInThePastOrCurrentMonth(p.ExpectedDateForCompletionMonth, p.ExpectedDateForCompletionYear))
+        RuleFor(x => new { x.PracticalCompletionDateMonth, x.PracticalCompletionDateYear })
+                    .Must(p => BeInThePastOrCurrentMonth(p.PracticalCompletionDateMonth, p.PracticalCompletionDateYear))
                     .WithName("ExpectedDateForCompletionMonth")
                     .WithMessage("The completion date must be in the past")
-                    .When(x => x.ExpectedDateForCompletionMonth.HasValue && x.ExpectedDateForCompletionYear.HasValue);
+                    .When(x => x.PracticalCompletionDateMonth.HasValue && x.PracticalCompletionDateYear.HasValue);
 
         // Must be after the start date
         RuleFor(x => x)
-            .Must(x => BeAfter(x.ExpectedDateForCompletionMonth, x.ExpectedDateForCompletionYear,
+            .Must(x => BeAfter(x.PracticalCompletionDateMonth, x.PracticalCompletionDateYear,
                                x.StartDateMonth, x.StartDateYear))
             .WithName("ExpectedDateForCompletionMonth")
             .WithMessage("The completion date must be after the start date")
             .When(x => x.StartDateMonth.HasValue && x.StartDateYear.HasValue
-                       && x.ExpectedDateForCompletionMonth.HasValue && x.ExpectedDateForCompletionYear.HasValue);
+                       && x.PracticalCompletionDateMonth.HasValue && x.PracticalCompletionDateYear.HasValue);
 
         #endregion
     }

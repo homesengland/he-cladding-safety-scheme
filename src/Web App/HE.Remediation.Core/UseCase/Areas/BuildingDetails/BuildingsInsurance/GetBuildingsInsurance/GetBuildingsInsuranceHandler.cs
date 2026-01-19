@@ -1,25 +1,40 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
+using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
 using MediatR;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.GetBuildingsInsurance;
 
-public partial class GetBuildingsInsuranceHandler(IApplicationDataProvider applicationDataProvider, IBuildingsInsuranceRepository buildingsInsuranceRepository) : IRequestHandler<GetBuildingsInsuranceRequest, GetBuildingsInsuranceResponse>
+public class GetBuildingsInsuranceHandler : IRequestHandler<GetBuildingsInsuranceRequest, GetBuildingsInsuranceResponse>
 {
-    private readonly IApplicationDataProvider _applicationDataProvider = applicationDataProvider;
-    private readonly IBuildingsInsuranceRepository _buildingsInsuranceRepository = buildingsInsuranceRepository;
+    private readonly IApplicationDetailsProvider _applicationDetailsProvider;
+    private readonly IBuildingsInsuranceRepository _buildingsInsuranceRepository;
+
+    public GetBuildingsInsuranceHandler(IApplicationDetailsProvider applicationDetailsProvider, IBuildingsInsuranceRepository buildingsInsuranceRepository)
+    {
+        _applicationDetailsProvider = applicationDetailsProvider;
+        _buildingsInsuranceRepository = buildingsInsuranceRepository;
+    }
 
     public async Task<GetBuildingsInsuranceResponse> Handle(GetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
     {
-        var applicationId = _applicationDataProvider.GetApplicationId();
+        var details = await _applicationDetailsProvider.GetApplicationDetails();
 
-        var response = await _buildingsInsuranceRepository.GetBuildingsInsurance(applicationId);
-
-        response ??= new GetBuildingsInsuranceResponse();
+        var buildingInsurance = await _buildingsInsuranceRepository.GetBuildingInsurance(details.ApplicationId);
 
         var insuranceProviders = await _buildingsInsuranceRepository.GetBuildingInsuranceProviders();
-        response.InsuranceProviders = insuranceProviders?.ToList();
 
-        return response;
+        return new GetBuildingsInsuranceResponse
+        {
+            ReferenceNumber = details.ApplicationReferenceNumber,
+            BuildingName = details.BuildingName,
+            SumInsuredAmount = buildingInsurance?.SumInsuredAmount,
+            CurrentBuildingInsurancePremiumAmount = buildingInsurance?.CurrentBuildingInsurancePremiumAmount,
+            IfOtherInsuranceProviderName = buildingInsurance?.IfOtherInsuranceProviderName,
+            AdditionalInfo = buildingInsurance?.AdditionalInfo,
+            InsuranceProvidersJson = buildingInsurance?.InsuranceProvidersJson,
+            BuildingRemediationResponsibilityTypeId = buildingInsurance?.BuildingRemediationResponsibilityTypeId,
+            InsuranceProviders = insuranceProviders?.ToList()
+        };
     }
 }

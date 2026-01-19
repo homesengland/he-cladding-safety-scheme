@@ -52,6 +52,10 @@ namespace HE.Remediation.WebApp.ViewModels.ResponsibleEntities
         public string FreeholderCompanyDetails { get; set; }
         public string FreeholderDetails { get; set; }
         public string FreeholderAddress { get; set; }
+
+        public bool? IsClaimingGrant { get; set; }
+        public bool? IsConfirmedNotViable { get; set; }
+
         public bool IsSocialSector { get; set; }
         public string ReturnUrl { get; set; }
         public bool ReadOnly { get; set; }

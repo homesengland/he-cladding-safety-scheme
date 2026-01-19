@@ -6,11 +6,12 @@
 @{
     ViewData["Title"] = "New building record";
     var isRasScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.ResponsibleActorsScheme;
+    var isSocialSector = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
 }
 
 <div class="text-center">
     <div class="govuk-width-container">
-        <a href="/Application/Dashboard" class="govuk-back-link">Back</a>
+        <a href="/SchemeSelection" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
@@ -21,13 +22,17 @@
                     <p class="govuk-body">You can save each building record as a draft at any stage.</p>
                     <h2 class="govuk-heading-m">Use this service to:</h2>
                     <ul class="govuk-list govuk-list--bullet">
-                        @if (!isRasScheme)
+                        @if (isSocialSector)
                         {
-                            <li>supply building details for one of the government's building remediation schemes (Responsible Actors Scheme, Social Sector Schemes etc)</li>
+                            <li>supply building details for a building being remediated via the Social Sector Self-funded route</li>
+                        }
+                        else if (isRasScheme)
+                        {
+                            <li>supply building details for the Responsible Actors Scheme (RAS)</li>
                         }
                         else
                         {
-                            <li>supply building details for the Responsible Actors Scheme (RAS)</li>
+                            <li>supply building details for one of the government's building remediation schemes (Responsible Actors Scheme, Social Sector Schemes etc)</li>
                         }
                         <li>provide information on the Responsible Entity</li>
                     </ul>
@@ -35,7 +40,7 @@
                     <p class="govuk-body">The building record can be submitted once all details have been added.</p>
 
                     <p class="govuk-body">
-                        In order to finalise and submit your building record, you @(isRasScheme ? "will" : "should") need to submit outputs from a Fire Risk Assessment(FRA) and a
+                        In order to finalise and submit your building record, you @(isRasScheme ? "will" : "should") need to submit outputs from a Fire Risk Assessment (FRA) and a
                                                                                                                                                                   <a class="govuk-link" href="https://www.bsigroup.com/en-GB/standards/pas-9980/" rel="noreferrer noopener" target="_blank">Fire Risk Assessment of External Walls (FRAEW)</a>. These will be provided by an accredited panel member.
                     </p>
                     

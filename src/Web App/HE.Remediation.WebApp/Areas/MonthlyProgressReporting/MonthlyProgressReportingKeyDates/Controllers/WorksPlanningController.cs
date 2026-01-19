@@ -111,12 +111,9 @@ public class WorksPlanningController : StartController
             return RedirectToAction("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
         }
 
-        if (model.SubmitAction == ESubmitAction.Continue && model.ContractorTenderType == EContractorTenderType.NonCompetitive)
-        {
-            return RedirectToAction("ReasonForNonCompetitiveTender", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" });
-        }
-
-        return RedirectToAction("Index", "KeyDates", new { Area = "MonthlyProgressReportingKeyDates" });
+        return model.ContractorTenderType is EContractorTenderType.NonCompetitive or EContractorTenderType.UsingOriginalContractor 
+            ? RedirectToAction("ReasonForNonCompetitiveTender", "WorksPlanning", new { Area = "MonthlyProgressReportingKeyDates" }) 
+            : RedirectToAction("Index", "KeyDates", new { Area = "MonthlyProgressReportingKeyDates" });
     }
     #endregion
 

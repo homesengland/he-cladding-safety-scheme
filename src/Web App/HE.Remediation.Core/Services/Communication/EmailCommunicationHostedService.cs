@@ -46,7 +46,7 @@ namespace HE.Remediation.Core.Services.Communication
                     _logger.LogError(ex, "Sending email communication ({TraceId}) failed.", sendEmailCommunicationTask.TraceId);
                 }
 
-                _logger.LogWarning("Email communication ({TraceId}) sent successfully.", sendEmailCommunicationTask.TraceId);
+                _logger.LogInformation("Email communication ({TraceId}) sent successfully.", sendEmailCommunicationTask.TraceId);
             }
         }
 

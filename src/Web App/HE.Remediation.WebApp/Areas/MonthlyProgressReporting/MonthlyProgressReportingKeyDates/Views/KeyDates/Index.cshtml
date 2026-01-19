@@ -192,7 +192,7 @@
                     }
                 </govuk-summary-list-row>
                 
-                @if (Model.ContractorTenderTypeId == EContractorTenderType.NonCompetitive)
+                @if (Model.ContractorTenderTypeId is EContractorTenderType.NonCompetitive or EContractorTenderType.UsingOriginalContractor)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>

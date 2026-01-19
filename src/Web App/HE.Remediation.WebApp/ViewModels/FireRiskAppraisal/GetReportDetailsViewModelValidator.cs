@@ -2,7 +2,7 @@
 
 namespace HE.Remediation.WebApp.ViewModels.FireRiskAppraisal;
 
-public class GetReportDetailsViewModelValidator: AbstractValidator<GetReportDetailsViewModel>
+public class GetReportDetailsViewModelValidator : AbstractValidator<GetReportDetailsViewModel>
 {
     public GetReportDetailsViewModelValidator()
     {
@@ -21,25 +21,23 @@ public class GetReportDetailsViewModelValidator: AbstractValidator<GetReportDeta
         RuleFor(x => x.NumberOfStoreys)
             .NotEmpty()
             .WithMessage("Enter a number of storeys")
-            .GreaterThan(0)
-            .WithMessage("Enter a number of storeys")
-            .LessThanOrEqualTo(999)
-            .WithMessage("No more than 999 can be entered");
-        
+            .InclusiveBetween(1, 200)
+            .WithMessage("Enter a number of storeys between 1 and 200");
+
         RuleFor(x => x.BuildingHeight)
             .NotEmpty()
-            .WithMessage("Enter a height in meters")
-            .GreaterThanOrEqualTo(11)
-            .WithMessage("The height of the building must be 11m or more");
+            .WithMessage("Enter a height in metres")
+            .InclusiveBetween(11, 1000)
+            .WithMessage("Enter a height between 11 and 1000");
 
-         RuleFor(x => x.BasicComplexId)
+        RuleFor(x => x.BasicComplexId)
                 .NotEmpty()
                 .WithMessage("Select an option");
 
-         RuleFor(x => x.FraewCost)
-             .NotEmpty()
-             .WithMessage("Enter the cost of FRAEW report")
-             .GreaterThanOrEqualTo(0)
-             .WithMessage("Enter a positive number");
+        RuleFor(x => x.FraewCost)
+            .NotEmpty()
+            .WithMessage("Enter the cost of FRAEW report")
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Enter a positive number");
     }
 }

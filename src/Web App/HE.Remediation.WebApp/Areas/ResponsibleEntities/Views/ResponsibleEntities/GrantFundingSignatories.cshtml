@@ -34,11 +34,14 @@
                 <govuk-summary-list-row-key>
                     Signatory @(x.index + 1)
                 </govuk-summary-list-row-key>
-                <govuk-summary-list-row-action href="@Url.Action("GrantFundingSignatoryDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities", GrantFundingSignatoryId = x.value.Id.ToString() })" visually-hidden-text="name">
-                    Change
-                </govuk-summary-list-row-action>
-                <govuk-summary-list-row-action href="@Url.Action("RemoveGrantFundingSignatory", "ResponsibleEntities", new { Area = "ResponsibleEntities", GrantFundingSignatoryId = x.value.Id.ToString() })" visually-hidden-text="name">
-                    Remove
+                <govuk-summary-list-row-action visually-hidden-text="name">
+                    <a href="@Url.Action("GrantFundingSignatoryDetails", "ResponsibleEntities", new { Area = "ResponsibleEntities", GrantFundingSignatoryId = x.value.Id.ToString() })" class="govuk-link">
+                        Change
+                    </a>
+                    <span class="govuk-visually-hidden"> | </span>
+                    <a href="@Url.Action("RemoveGrantFundingSignatory", "ResponsibleEntities", new { Area = "ResponsibleEntities", GrantFundingSignatoryId = x.value.Id.ToString() })" class="govuk-link govuk-link--destructive" style="margin-left: 1em;">
+                        Remove
+                    </a>
                 </govuk-summary-list-row-action>
             </govuk-summary-list-row>
         </govuk-summary-list>
