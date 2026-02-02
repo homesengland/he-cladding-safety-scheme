@@ -5,7 +5,7 @@ using HE.Remediation.Core.UseCase.Areas.Application.ManageProgramme;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.Helpers;
 using HE.Remediation.WebApp.ViewModels.Application;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 

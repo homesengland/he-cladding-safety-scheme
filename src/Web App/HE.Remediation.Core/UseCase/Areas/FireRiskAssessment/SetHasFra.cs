@@ -5,7 +5,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
 
@@ -28,7 +28,7 @@ public class SetHasFraHandler : IRequestHandler<SetHasFraRequest, SetHasFraRespo
         _fileService = fileService;
     }
 
-    public async Task<SetHasFraResponse> Handle(SetHasFraRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetHasFraResponse> Handle(SetHasFraRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

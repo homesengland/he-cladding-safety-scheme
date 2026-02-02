@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.GrantCertifyingOfficer;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.Select.Set;
@@ -15,7 +15,7 @@ public class SetSelectHandler : IRequestHandler<SetSelectRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetSelectRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetSelectRequest request, CancellationToken cancellationToken)
     {
         var grantCertifyingOfficer = await _workPackageRepository.GetGrantCertifyingOfficerDetails();
 

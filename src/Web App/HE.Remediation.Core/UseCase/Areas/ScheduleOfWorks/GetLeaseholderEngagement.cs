@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks;
 
@@ -26,7 +26,7 @@ public class GetLeaseholderEngagementHandler : IRequestHandler<GetLeaseholderEng
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetLeaseholderEngagementResponse> Handle(GetLeaseholderEngagementRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetLeaseholderEngagementResponse> Handle(GetLeaseholderEngagementRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

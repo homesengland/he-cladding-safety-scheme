@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetThirdPartyContributionsChanged;
 
@@ -22,7 +22,7 @@ public class GetThirdPartyContributionsChangedHandler : IRequestHandler<GetThird
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetThirdPartyContributionsChangedResponse> Handle(GetThirdPartyContributionsChangedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetThirdPartyContributionsChangedResponse> Handle(GetThirdPartyContributionsChangedRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

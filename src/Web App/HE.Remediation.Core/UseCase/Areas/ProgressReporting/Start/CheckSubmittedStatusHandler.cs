@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.Start;
 
@@ -17,7 +17,7 @@ public class CheckSubmittedStatusHandler : IRequestHandler<CheckSubmittedStatusR
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<bool> Handle(CheckSubmittedStatusRequest request, CancellationToken cancellationToken)
+    public async ValueTask<bool> Handle(CheckSubmittedStatusRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var isSubmitted = await _progressReportingRepository.IsProgressReportSubmitted(applicationId, request.ProgressReportId);

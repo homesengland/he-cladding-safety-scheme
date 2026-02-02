@@ -1,7 +1,7 @@
 ﻿using Moq;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.OrganisationManagement.RemoveMember;
-using MediatR;
+using Mediator;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using HE.Remediation.Core.Enums;
 

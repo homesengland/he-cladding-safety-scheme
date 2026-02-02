@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetChangeCladdingRemovedDate;
 
@@ -22,7 +22,7 @@ public class GetChangeCladdingRemovedDateHandler : IRequestHandler<GetChangeClad
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetChangeCladdingRemovedDateResponse> Handle(GetChangeCladdingRemovedDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetChangeCladdingRemovedDateResponse> Handle(GetChangeCladdingRemovedDateRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

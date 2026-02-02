@@ -10,9 +10,9 @@
     ViewData["FullWidth"] = true;
 }
 
-<h1 class="govuk-heading-xl">@(Model.IsSubmitted ? "Your answers" : "Check your answers")</h1>
+<h1 class="govuk-heading-xl">@(Model.IsSubmitted || Model.IsProgressReportGrantCertifyingOfficerComplete ? "Your answers" : "Check your answers")</h1>
 
-@if (!Model.IsSubmitted)
+@if (!Model.IsSubmitted && !Model.IsProgressReportGrantCertifyingOfficerComplete)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full govuk-text-align-right">

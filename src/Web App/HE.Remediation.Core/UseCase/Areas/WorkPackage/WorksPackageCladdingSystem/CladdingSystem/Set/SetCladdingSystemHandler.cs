@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorksPackageCladdingSystem.CladdingSystem.Set;
@@ -15,7 +15,7 @@ public class SetCladdingSystemHandler : IRequestHandler<SetCladdingSystemRequest
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetCladdingSystemRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCladdingSystemRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 
@@ -20,7 +20,7 @@ public class GetInformationHandler : IRequestHandler<GetInformationRequest, GetI
         _buildingDetailsRepository = buildingDetailsRepository;
     }
 
-    public async Task<GetInformationResponse> Handle(GetInformationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetInformationResponse> Handle(GetInformationRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Get;
 
@@ -10,7 +10,7 @@ public class GetThirdPartyHandler(IApplicationDataProvider applicationDataProvid
     private readonly IApplicationDataProvider _applicationDataProvider = applicationDataProvider;
     private readonly IThirdPartyCollaboratorRepository _thirdPartyCollaboratorRepository = thirdPartyCollaboratorRepository;
 
-    public async Task<GetThirdPartyResponse> Handle(GetThirdPartyRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetThirdPartyResponse> Handle(GetThirdPartyRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var result = await _thirdPartyCollaboratorRepository.GetTeamMembersForThirdPartyCollaboration(applicationId);

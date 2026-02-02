@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -28,7 +28,7 @@ public class AddWorksContractHandler : IRequestHandler<AddWorksContractRequest, 
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(AddWorksContractRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AddWorksContractRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
@@ -50,7 +50,7 @@ public class AddWorksContractHandler : IRequestHandler<AddWorksContractRequest, 
         return Unit.Value;
     }
 
-    private async Task<ProcessFileResult> ProcessFile(IFormFile file)
+    private async ValueTask<ProcessFileResult> ProcessFile(IFormFile file)
     {
         if (file == null)
         {

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.TeamMember.Set;
 
@@ -14,7 +14,7 @@ public class UpdateTeamMemberHandler : IRequestHandler<UpdateTeamMemberRequest, 
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Guid> Handle(UpdateTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(UpdateTeamMemberRequest request, CancellationToken cancellationToken)
     {
         var considerateConstructorSchemeReason = request.ConsiderateConstructorSchemeType switch
         {

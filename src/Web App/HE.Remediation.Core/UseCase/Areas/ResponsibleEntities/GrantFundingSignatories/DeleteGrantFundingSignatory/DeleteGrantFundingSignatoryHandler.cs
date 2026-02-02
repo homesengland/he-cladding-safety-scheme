@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatories.DeleteGrantFundingSignatory
 {
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSign
             _connection = connection;
         }
 
-        public async Task<Unit> Handle(DeleteGrantFundingSignatoryRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(DeleteGrantFundingSignatoryRequest request, CancellationToken cancellationToken)
         {
             await _connection.ExecuteAsync("DeleteResponsibleEntitiesGrantFundingSignatory",
                     new

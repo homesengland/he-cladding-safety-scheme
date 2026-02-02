@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.Remediation;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.Remediation;
 
@@ -18,7 +18,7 @@ public class SetRemediationDatesChangedHandler : IRequestHandler<SetRemediationD
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<Unit> Handle(SetRemediationDatesChangedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRemediationDatesChangedRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

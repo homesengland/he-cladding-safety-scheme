@@ -11,7 +11,7 @@ using HE.Remediation.Core.UseCase.Areas.PreTenderSupport.Submit.GetSubmit;
 using HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.GetSupportRequired;
 using HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.SetSupportRequired;
 using HE.Remediation.WebApp.ViewModels.PreTenderSupport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.PreTenderSupport.Controllers

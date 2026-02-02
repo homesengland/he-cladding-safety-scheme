@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BankAccount.CheckYourAnswers.GetCheckYourAnswers
 {
@@ -17,12 +17,12 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.CheckYourAnswers.GetChec
             _applicationRepository = applicationRepository;
         }
 
-        public async Task<GetCheckYourAnswersResponse> Handle(GetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetCheckYourAnswersResponse> Handle(GetCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             return await GetCheckYourAnswers();
         }
 
-        private async Task<GetCheckYourAnswersResponse> GetCheckYourAnswers()
+        private async ValueTask<GetCheckYourAnswersResponse> GetCheckYourAnswers()
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

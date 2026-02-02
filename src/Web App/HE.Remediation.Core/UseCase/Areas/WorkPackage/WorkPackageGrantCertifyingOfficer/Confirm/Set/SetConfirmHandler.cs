@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.Confirm.Set;
@@ -14,7 +14,7 @@ public class SetConfirmHandler : IRequestHandler<SetConfirmRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetConfirmRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetConfirmRequest request, CancellationToken cancellationToken)
     {
         await UpdateGrantCertifyingOfficerConfirmation(request);
 

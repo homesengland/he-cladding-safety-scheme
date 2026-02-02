@@ -81,14 +81,14 @@ public class SetBuildingAddressManualTests
     public async Task Handler_Sets_Building_Address_Manual_With_Insert()
     {
         //Arrange                        
-        GetBuildingAddressResponse addressResponse = null;
+        GetBuildingAddressResponse? addressResponse = null;
         
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
                                 .Verifiable(); 
         
         _buildingDetailsRepo.Setup(x => x.GetBuildingAddress(It.IsAny<Guid>()))
-                            .ReturnsAsync(addressResponse)
+                            .ReturnsAsync(addressResponse!)
                             .Verifiable();
 
         _buildingDetailsRepo.Setup(x => x.InsertBuildingAddress(It.IsAny<BuildingDetailsAddressDetails>(), It.IsAny<Guid>()))

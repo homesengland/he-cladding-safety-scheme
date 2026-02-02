@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.SetSupportRequired
 {
@@ -20,7 +20,7 @@ namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.SupportRequired.Set
             _preTenderRepository = preTenderRepository;
         }
 
-        public async Task<Unit> Handle(SetSupportRequiredRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetSupportRequiredRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             if (await _preTenderRepository.IsPreTenderSubmitted(applicationId))

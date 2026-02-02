@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SelectedReport.SetSelectReport;
 
@@ -12,10 +12,10 @@ public class SetSelectReportHandler : IRequestHandler<SetSelectReportRequest>
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public Task<Unit> Handle(SetSelectReportRequest request, CancellationToken cancellationToken)
+    public ValueTask<Unit> Handle(SetSelectReportRequest request, CancellationToken cancellationToken)
     {
         _progressReportingRepository.SetProgressReportId(request.Id);
 
-        return Task.FromResult(Unit.Value);
+        return ValueTask.FromResult(Unit.Value);
     }
 }

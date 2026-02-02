@@ -1,7 +1,7 @@
 ﻿using Auth0.AspNetCore.Authentication;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.Authentication.Login.PostLogin;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;

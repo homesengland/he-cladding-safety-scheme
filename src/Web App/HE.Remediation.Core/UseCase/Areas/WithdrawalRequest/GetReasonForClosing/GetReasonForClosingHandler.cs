@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 
 namespace HE.Remediation.Core.UseCase.Areas.WithdrawalRequest.GetReasonForClosing
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WithdrawalRequest.GetReasonForClosin
             _closingReportRepository = closingReportRepository;
         }
 
-        public async Task<GetReasonForClosingResponse> Handle(GetReasonForClosingRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetReasonForClosingResponse> Handle(GetReasonForClosingRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

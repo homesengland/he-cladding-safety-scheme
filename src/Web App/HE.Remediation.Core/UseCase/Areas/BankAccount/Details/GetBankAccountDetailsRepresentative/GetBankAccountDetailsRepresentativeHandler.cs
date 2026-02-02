@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetBankAccountDetailsRepresentative
 {
@@ -14,12 +14,12 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetBankAccountDe
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetBankAccountDetailsRepresentativeResponse> Handle(GetBankAccountDetailsRepresentativeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBankAccountDetailsRepresentativeResponse> Handle(GetBankAccountDetailsRepresentativeRequest request, CancellationToken cancellationToken)
         {
             return await GetBankAccountDetailsRepresentative(request);
         }
 
-        private async Task<GetBankAccountDetailsRepresentativeResponse> GetBankAccountDetailsRepresentative(GetBankAccountDetailsRepresentativeRequest request)
+        private async ValueTask<GetBankAccountDetailsRepresentativeResponse> GetBankAccountDetailsRepresentative(GetBankAccountDetailsRepresentativeRequest request)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

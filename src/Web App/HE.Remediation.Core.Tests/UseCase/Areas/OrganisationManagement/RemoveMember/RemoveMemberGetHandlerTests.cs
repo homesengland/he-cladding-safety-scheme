@@ -50,10 +50,10 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.OrganisationManagement.RemoveM
             // Arrange
             var request = new RemoveMembersGetRequest(Guid.NewGuid());
 
-            _mockConnection.Setup(conn => conn.QuerySingleOrDefaultAsync<RemoveMembersResponse>(
+            _mockConnection.Setup(conn => conn.QuerySingleOrDefaultAsync<RemoveMembersResponse?>(
                 "GetCollaborationOrganisationUser",
                 It.IsAny<object>()))
-            .ReturnsAsync((RemoveMembersResponse)null);
+            .ReturnsAsync((RemoveMembersResponse?)null);
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);

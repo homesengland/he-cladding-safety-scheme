@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 
@@ -19,7 +19,7 @@ public class SetFireRiskHandler : IRequestHandler<SetFireRiskRequest>
         _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
     }
 
-    public async Task<Unit> Handle(SetFireRiskRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetFireRiskRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

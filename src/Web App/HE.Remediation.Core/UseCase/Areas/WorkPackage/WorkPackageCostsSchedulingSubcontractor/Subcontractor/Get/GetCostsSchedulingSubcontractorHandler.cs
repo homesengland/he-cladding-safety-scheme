@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsSchedulingSubcontractor.Subcontractor.Get;
 
@@ -24,7 +24,7 @@ public class GetCostsSchedulingSubcontractorHandler : IRequestHandler<GetCostsSc
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetCostsSchedulingSubcontractorResponse> Handle(GetCostsSchedulingSubcontractorRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCostsSchedulingSubcontractorResponse> Handle(GetCostsSchedulingSubcontractorRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

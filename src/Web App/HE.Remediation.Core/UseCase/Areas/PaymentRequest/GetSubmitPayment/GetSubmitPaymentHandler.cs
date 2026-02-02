@@ -3,7 +3,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Helpers;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetSubmitPayment;
 
@@ -25,7 +25,7 @@ public class GetSubmitPaymentHandler : IRequestHandler<GetSubmitPaymentRequest, 
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetSubmitPaymentResponse> Handle(GetSubmitPaymentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetSubmitPaymentResponse> Handle(GetSubmitPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

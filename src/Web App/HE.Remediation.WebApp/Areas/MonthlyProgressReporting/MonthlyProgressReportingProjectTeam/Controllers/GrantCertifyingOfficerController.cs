@@ -2,7 +2,7 @@
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.WebApp.Attributes.Authorisation;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
@@ -40,7 +40,7 @@ public class GrantCertifyingOfficerController : StartController
             return RedirectToAction("NoTeam", "MonthlyProgressReportingProjectTeam", new { Area = "MonthlyProgressReportingProjectTeam" });
         }
 
-        if (response.IsGcoComplete || response.HasTeamMembersButNoGcoRoles)
+        if (response.IsGcoComplete || response.HasTeamMembersButNoGcoRoles || response.ApplicationScheme == EApplicationScheme.SocialSector)
         {
             // complete Team Members
             await _sender.Send(new SetProjectTeamStatusRequest(ETaskStatus.Completed), cancellationToken);

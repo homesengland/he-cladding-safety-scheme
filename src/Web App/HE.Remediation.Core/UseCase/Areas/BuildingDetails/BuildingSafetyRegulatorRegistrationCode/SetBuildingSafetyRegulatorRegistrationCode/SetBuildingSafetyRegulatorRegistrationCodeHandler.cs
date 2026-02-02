@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.SetBuildingSafetyRegulatorRegistrationCode
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegula
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetBuildingSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetBuildingSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

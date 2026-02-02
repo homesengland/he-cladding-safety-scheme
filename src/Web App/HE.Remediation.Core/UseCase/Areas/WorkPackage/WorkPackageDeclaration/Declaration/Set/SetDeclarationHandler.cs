@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.Declaration;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageDeclaration.Declaration.Set;
 
@@ -15,7 +15,7 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

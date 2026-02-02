@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
@@ -21,7 +21,7 @@ public class GetGrantCertifyingOfficerCheckYourAnswersHandler : IRequestHandler<
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<GetGrantCertifyingOfficerCheckYourAnswersResponse> Handle(GetGrantCertifyingOfficerCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetGrantCertifyingOfficerCheckYourAnswersResponse> Handle(GetGrantCertifyingOfficerCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

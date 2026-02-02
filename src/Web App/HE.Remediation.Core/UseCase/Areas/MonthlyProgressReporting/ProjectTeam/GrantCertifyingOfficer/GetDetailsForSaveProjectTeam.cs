@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
@@ -23,12 +23,13 @@ public class GetDetailsForSaveProjectTeamHandler : IRequestHandler<GetDetailsFor
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<GetDetailsForSaveProjectTeamResponse> Handle(GetDetailsForSaveProjectTeamRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetDetailsForSaveProjectTeamResponse> Handle(GetDetailsForSaveProjectTeamRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var details = await _detailsProvider.GetApplicationDetails();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
 
         var gcoDetails = await _progressReportingProjectTeamRepository.GetGrantCertifyingOfficer(progressReportId);
         var hasTeamMembers = await HasTeamMembers(details.ApplicationId, progressReportId);
@@ -38,6 +39,7 @@ public class GetDetailsForSaveProjectTeamHandler : IRequestHandler<GetDetailsFor
 
         return new GetDetailsForSaveProjectTeamResponse
         {
+            ApplicationScheme = applicationScheme,
             HasReasonNoTeam = reasonNoTeam?.ReasonNoTeam != null,
             HasZeroTeamMembers = !hasTeamMembers.HasAnyTeamMembers,
             HasTeamMembersButNoGcoRoles = hasTeamMembers.HasAnyTeamMembers && !hasTeamMembers.HasGcoTeamMember,
@@ -45,7 +47,7 @@ public class GetDetailsForSaveProjectTeamHandler : IRequestHandler<GetDetailsFor
         };
     }
 
-    private async Task<HasTeamMembersResult> HasTeamMembers(Guid applicationId, Guid progressReportId)
+    private async ValueTask<HasTeamMembersResult> HasTeamMembers(Guid applicationId, Guid progressReportId)
     {
         var teamMembers = await _progressReportingProjectTeamRepository
                     .GetProjectTeamMembers(new GetTeamMembersParameters() { ApplicationId = applicationId, ProgressReportId = progressReportId }
@@ -70,6 +72,7 @@ public class GetDetailsForSaveProjectTeamRequest : IRequest<GetDetailsForSavePro
 
 public class GetDetailsForSaveProjectTeamResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public bool HasZeroTeamMembers { get; set; }
     public bool HasTeamMembersButNoGcoRoles { get; set; }
     public bool IsGcoComplete { get; set; }

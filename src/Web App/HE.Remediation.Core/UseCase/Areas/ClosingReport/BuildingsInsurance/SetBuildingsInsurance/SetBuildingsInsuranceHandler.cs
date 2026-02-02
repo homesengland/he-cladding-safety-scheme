@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.BuildingsInsurance.SetBuildingsInsurance;
@@ -13,7 +13,7 @@ public class SetBuildingsInsuranceHandler(IApplicationDataProvider applicationDa
     private readonly IBuildingsInsuranceRepository _buildingsInsuranceRepository = buildingsInsuranceRepository;
     private readonly IClosingReportRepository _closingReportRepository = closingReportRepository;
 
-    public async Task<SetBuildingsInsuranceResponse> Handle(SetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetBuildingsInsuranceResponse> Handle(SetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

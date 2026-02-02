@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.GetYesNoDeclaration;
 
@@ -23,7 +23,7 @@ public class GetYesNoDeclarationHandler : IRequestHandler<GetYesNoDeclarationReq
         _buildingDetailsRepository = buildingDetailsRepository;
     }
 
-    public async Task<GetYesNoDeclarationResponse> Handle(GetYesNoDeclarationRequest request,
+    public async ValueTask<GetYesNoDeclarationResponse> Handle(GetYesNoDeclarationRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.IsCorrectPerson.Get;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.CorrectPerson.Get;
 
@@ -23,7 +23,7 @@ public class GetIsCorrectPersonHandler : IRequestHandler<GetIsCorrectPersonReque
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetIsCorrectPersonResponse> Handle(GetIsCorrectPersonRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetIsCorrectPersonResponse> Handle(GetIsCorrectPersonRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

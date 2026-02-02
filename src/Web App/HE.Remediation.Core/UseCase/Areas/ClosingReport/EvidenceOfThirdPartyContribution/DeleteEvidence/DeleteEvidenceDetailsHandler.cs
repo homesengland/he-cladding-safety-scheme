@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.DeleteEvidence
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
             _fileRepository = fileRepository;
         }
 
-        public async Task<Unit> Handle(DeleteEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(DeleteEvidenceRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

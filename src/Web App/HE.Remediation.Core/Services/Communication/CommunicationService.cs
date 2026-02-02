@@ -65,6 +65,10 @@ namespace HE.Remediation.Core.Services.Communication
             {
                 case EEmailType.ApplicationSubmitted:
                     return "ApplicationSubmittedEmail.cshtml";
+                case EEmailType.SssfBuildingCompleteApplicationSubmitted:
+                    return "SssfBuildingCompleteApplicationSubmitted.cshtml";
+                case EEmailType.SssfBuildingNonCompleteApplicationSubmitted:
+                    return "SssfBuildingNonCompleteApplicationSubmitted.cshtml";
                 case EEmailType.WorksPackageSubmitted:
                     return "WorksPackageSubmittedEmail.cshtml";
                 case EEmailType.ScheduleOfWorksSubmitted:

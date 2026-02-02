@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.SetPursuedSourcesFunding
 {
@@ -30,7 +30,7 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
             _alternateFundingRepository = alternateFundingRepository;
         }
 
-        public async Task<SetPursuedSourcesFundingResponse> Handle(SetPursuedSourcesFundingRequest request, CancellationToken cancellationToken)
+        public async ValueTask<SetPursuedSourcesFundingResponse> Handle(SetPursuedSourcesFundingRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -63,7 +63,7 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
             };
         }
 
-        private async Task SetPursuedSourcesFunding(SetPursuedSourcesFundingRequest request, Guid applicationId)
+        private async ValueTask SetPursuedSourcesFunding(SetPursuedSourcesFundingRequest request, Guid applicationId)
         {
             await _db.ExecuteAsync("UpsertPursuedSourcesFunding", new
             {

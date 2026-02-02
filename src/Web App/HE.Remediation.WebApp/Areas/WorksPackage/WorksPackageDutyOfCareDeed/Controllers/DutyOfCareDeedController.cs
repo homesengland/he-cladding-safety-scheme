@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageDutyOfCareDeed.Progress.Get;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageDutyOfCareDeed;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageDutyOfCareDeed.Controllers;

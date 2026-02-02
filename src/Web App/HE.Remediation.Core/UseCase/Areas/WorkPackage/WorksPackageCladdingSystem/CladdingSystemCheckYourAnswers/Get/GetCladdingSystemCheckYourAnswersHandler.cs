@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCladdingSystem.CladdingSystemCheckYourAnswers.Get;
 
@@ -22,7 +22,7 @@ public class GetCladdingSystemCheckYourAnswersHandler : IRequestHandler<GetCladd
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetCladdingSystemCheckYourAnswersResponse> Handle(GetCladdingSystemCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCladdingSystemCheckYourAnswersResponse> Handle(GetCladdingSystemCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

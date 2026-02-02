@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -14,7 +14,7 @@ public class SetConfirmedNotViableHandler : IRequestHandler<SetConfirmedNotViabl
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetConfirmedNotViableRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetConfirmedNotViableRequest request, CancellationToken cancellationToken)
     {
         await _connection.ExecuteAsync("SetConfirmedNotViable", new
         {

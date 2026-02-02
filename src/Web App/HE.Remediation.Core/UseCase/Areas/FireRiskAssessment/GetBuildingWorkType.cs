@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment
             _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
         }
 
-        public async Task<GetBuildingWorkTypeResponse> Handle(GetBuildingWorkTypeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingWorkTypeResponse> Handle(GetBuildingWorkTypeRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

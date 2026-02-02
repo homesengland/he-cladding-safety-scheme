@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.SetFundingStillPursuing
 {
@@ -26,13 +26,13 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
             _statusTransitionService = statusTransitionService;
         }
 
-        public async Task<Unit> Handle(SetFundingStillPursuingRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetFundingStillPursuingRequest request, CancellationToken cancellationToken)
         {
             await SetFundingStillPursuing(request);
             return Unit.Value;
         }
 
-        private async Task SetFundingStillPursuing(SetFundingStillPursuingRequest request)
+        private async ValueTask SetFundingStillPursuing(SetFundingStillPursuingRequest request)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

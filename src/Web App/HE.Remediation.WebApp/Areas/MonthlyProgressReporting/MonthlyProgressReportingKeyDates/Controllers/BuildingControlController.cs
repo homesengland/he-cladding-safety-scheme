@@ -8,7 +8,7 @@ using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates.BuildingControl;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.MonthlyProgressReporting.MonthlyProgressReportingKeyDates.Controllers;

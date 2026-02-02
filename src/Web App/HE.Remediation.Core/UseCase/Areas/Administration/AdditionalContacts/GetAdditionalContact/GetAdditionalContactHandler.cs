@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Administration.AddExtraContact.GetExtraContact;
 using HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.GetSecondaryContactDetails;
-using MediatR;
+using Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +21,13 @@ public class GetAdditionalContactHandler: IRequestHandler<GetAdditionalContactRe
         _db = db;
     }
 
-    public async Task<IReadOnlyCollection<GetAdditionalContactResponse>> Handle(GetAdditionalContactRequest request, CancellationToken cancellationToken)
+    public async ValueTask<IReadOnlyCollection<GetAdditionalContactResponse>> Handle(GetAdditionalContactRequest request, CancellationToken cancellationToken)
     {
         var userId = _applicationDataProvider.GetUserId();            
         return await GetAdditionalContactDetails(request);
     }
 
-    private async Task<IReadOnlyCollection<GetAdditionalContactResponse>> GetAdditionalContactDetails(GetAdditionalContactRequest request)
+    private async ValueTask<IReadOnlyCollection<GetAdditionalContactResponse>> GetAdditionalContactDetails(GetAdditionalContactRequest request)
     {
         var userId = _applicationDataProvider.GetUserId();
         var results = await _db.QueryAsync<GetAdditionalContactResponse>("GetUserSecondaryContactDetails", new

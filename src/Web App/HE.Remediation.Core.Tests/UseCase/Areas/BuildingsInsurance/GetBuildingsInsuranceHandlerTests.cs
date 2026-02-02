@@ -27,7 +27,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.BuildingsInsurance
             _applicationDetailsProviderMock.Setup(x => x.GetApplicationDetails())
                 .ReturnsAsync(() => Fixture.Create<ApplicationDetailsModel>());
 
-            _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsurance(It.IsAny<Guid>())).ReturnsAsync((GetBuildingInsuranceResult)null);
+            _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsurance(It.IsAny<Guid>())).ReturnsAsync((GetBuildingInsuranceResult?)null);
 
             _buildingsInsuranceRepositoryMock.Setup(x => x.GetBuildingInsuranceProviders()).ReturnsAsync([]);
 

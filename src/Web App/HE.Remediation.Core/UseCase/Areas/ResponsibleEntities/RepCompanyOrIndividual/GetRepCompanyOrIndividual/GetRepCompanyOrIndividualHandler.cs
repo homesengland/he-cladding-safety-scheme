@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.GetRepCompanyOrIndividual;
 
@@ -15,7 +15,7 @@ public class GetRepCompanyOrIndividualHandler : IRequestHandler<GetRepCompanyOrI
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetRepCompanyOrIndividualResponse> Handle(GetRepCompanyOrIndividualRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRepCompanyOrIndividualResponse> Handle(GetRepCompanyOrIndividualRequest request, CancellationToken cancellationToken)
     {
         var responsibleEntityTypeId = await _connection.QuerySingleOrDefaultAsync<int?>("GetRepresentationEntityType", new
         {

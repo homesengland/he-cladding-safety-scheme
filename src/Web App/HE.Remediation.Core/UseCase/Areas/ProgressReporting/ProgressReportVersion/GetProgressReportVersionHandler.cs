@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProgressReportVersion;
 
@@ -12,7 +12,7 @@ public class GetProgressReportVersionHandler : IRequestHandler<GetProgressReport
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<int> Handle(GetProgressReportVersionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<int> Handle(GetProgressReportVersionRequest request, CancellationToken cancellationToken)
     {
         var versionNumber = await _progressReportingRepository.GetProgressReportVersion();
         return versionNumber;

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 
 namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.RemoveMember
@@ -7,7 +7,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.RemoveMember
     {
         private readonly IDbConnectionWrapper _connection = connection;
 
-        public async Task<RemoveMembersResponse> Handle(RemoveMembersGetRequest request, CancellationToken cancellationToken)
+        public async ValueTask<RemoveMembersResponse> Handle(RemoveMembersGetRequest request, CancellationToken cancellationToken)
         {
             var result = await _connection.QuerySingleOrDefaultAsync<RemoveMembersResponse>("GetCollaborationOrganisationUser", new { request.CollaborationUserId });
             return result;

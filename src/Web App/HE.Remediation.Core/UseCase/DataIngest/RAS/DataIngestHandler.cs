@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.UseCase.DataIngest.RAS.DataImporters;
 using HE.Remediation.Core.UseCase.DataIngest.RAS.Lookups;
 using HE.Remediation.Core.UseCase.DataIngest.RAS.Validation;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.DataIngest.RAS;
 
@@ -24,7 +24,7 @@ public class DataIngestHandler(
     private readonly IFraDataImporter _fraDataImporter = fraDataImporter;
     private readonly IFraewDataImporter _fraewDataImporter = fraewDataImporter;
 
-    public async Task<Unit> Handle(CreateImportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(CreateImportRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

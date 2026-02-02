@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepCompanyOrIndividual.SetRepCompanyOrIndividual;
 
@@ -15,7 +15,7 @@ public class SetRepCompanyOrIndividualHandler : IRequestHandler<SetRepCompanyOrI
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetRepCompanyOrIndividualRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRepCompanyOrIndividualRequest request, CancellationToken cancellationToken)
     {
         await SaveCompanyOrIndividual(request.ReponsibleEntityType!.Value);
         return Unit.Value;

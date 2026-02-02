@@ -78,7 +78,10 @@
                         There are no team members to show
                     </div>
                 }
-                <govuk-button disabled="@readOnly" href="@Url.Action("AddRole", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = Model.ReturnUrl })" class="govuk-button--secondary">Add team member</govuk-button>
+                @if (Model.MissingRoles != null && Model.MissingRoles.Any())
+                {
+                    <govuk-button disabled="@readOnly" href="@Url.Action("AddRole", "PaymentRequest", new { Area = "PaymentRequest", returnUrl = Model.ReturnUrl })" class="govuk-button--secondary">Add team member</govuk-button>
+                }
             </main>
         </div>
     </div>

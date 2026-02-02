@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingRemediation.GetBuildingRemediationResponsibilityReason
@@ -19,7 +19,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingRemediation.
             _buildingDetailsRepository = buildingDetailsRepository;
         }
 
-        public async Task<GetBuildingRemediationResponsibilityResponse> Handle(GetBuildingRemediationResponsibilityReasonRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingRemediationResponsibilityResponse> Handle(GetBuildingRemediationResponsibilityReasonRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.WorksPlanning;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.WorksPlanning;
 
@@ -18,7 +18,7 @@ public class SetWorksPlanningHandler : IRequestHandler<SetWorksPlanningRequest, 
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<SetWorksPlanningResponse> Handle(SetWorksPlanningRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetWorksPlanningResponse> Handle(SetWorksPlanningRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

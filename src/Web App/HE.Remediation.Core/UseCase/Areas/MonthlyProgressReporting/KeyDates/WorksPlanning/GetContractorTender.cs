@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.WorksPlanning;
 public class GetContractorTenderHandler : IRequestHandler<GetContractorTenderRequest, GetContractorTenderResponse>
@@ -20,7 +20,7 @@ public class GetContractorTenderHandler : IRequestHandler<GetContractorTenderReq
         _detailsProvider = detailsProvider;
         _keyDatesRepository = keyDatesRepository;
     }
-    public async Task<GetContractorTenderResponse> Handle(GetContractorTenderRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetContractorTenderResponse> Handle(GetContractorTenderRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNewApplication
 {
@@ -17,7 +17,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.CreateNew
             _db = db;
         }
 
-        public async Task<Unit> Handle(CreateNewApplicationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(CreateNewApplicationRequest request, CancellationToken cancellationToken)
         {
             var userId = _applicationDataProvider.GetUserId();
 

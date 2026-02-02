@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageThirdPartyContributions.PursuingThirdPartyContribution.Get;
 
@@ -22,7 +22,7 @@ public class GetPursuingThirdPartyContributionHandler : IRequestHandler<GetPursu
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetPursuingThirdPartyContributionResponse> Handle(GetPursuingThirdPartyContributionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPursuingThirdPartyContributionResponse> Handle(GetPursuingThirdPartyContributionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

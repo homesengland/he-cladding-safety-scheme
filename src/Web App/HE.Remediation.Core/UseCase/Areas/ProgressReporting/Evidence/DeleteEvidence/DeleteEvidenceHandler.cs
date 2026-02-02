@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.Evidence.DeleteEvidence;
 
@@ -26,7 +26,7 @@ public class DeleteEvidenceHandler : IRequestHandler<DeleteEvidenceRequest>
         _fileRepository = fileRepository;
     }
 
-    public async Task<Unit> Handle(DeleteEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteEvidenceRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.LocalAuthority.SetLocalAuthorityCostCentre
 {
@@ -18,7 +18,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.LocalAuthority.SetLo
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetLocalAuthorityCostCentreRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetLocalAuthorityCostCentreRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             await UpdateLocalAuthority(request, applicationId);

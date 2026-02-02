@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -14,7 +14,7 @@ public class SetGcoDetailsHandler : IRequestHandler<SetGcoDetailsRequest>
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetGcoDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetGcoDetailsRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

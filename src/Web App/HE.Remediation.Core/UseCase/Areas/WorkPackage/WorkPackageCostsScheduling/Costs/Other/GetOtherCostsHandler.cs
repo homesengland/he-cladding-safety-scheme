@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Other;
 
@@ -23,7 +23,7 @@ public class GetOtherCostsHandler : IRequestHandler<GetOtherCostsRequest, GetOth
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetOtherCostsResponse> Handle(GetOtherCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetOtherCostsResponse> Handle(GetOtherCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.AuthorisedSignatories.Get;
 
@@ -22,7 +22,7 @@ public class GetAuthorisedSignatoriesHandler : IRequestHandler<GetAuthorisedSign
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetAuthorisedSignatoriesResponse> Handle(GetAuthorisedSignatoriesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAuthorisedSignatoriesResponse> Handle(GetAuthorisedSignatoriesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

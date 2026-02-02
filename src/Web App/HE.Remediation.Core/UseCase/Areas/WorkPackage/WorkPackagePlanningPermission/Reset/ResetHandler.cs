@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermission.Reset
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermi
             _workPackageRepository = workPackageRepository;
         }
 
-        public async Task<Unit> Handle(ResetRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(ResetRequest request, CancellationToken cancellationToken)
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

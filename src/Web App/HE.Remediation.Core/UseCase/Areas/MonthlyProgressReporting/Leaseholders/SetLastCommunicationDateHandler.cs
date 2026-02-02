@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.Leaseholders;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholders;
 
@@ -16,7 +16,7 @@ public class SetLastCommunicationDateHandler : IRequestHandler<SetLastCommunicat
         _progressReportingLeaseholdersRepository = progressReportingLeaseholdersRepository;
     }
 
-    public async Task<Unit> Handle(SetLastCommunicationDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetLastCommunicationDateRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

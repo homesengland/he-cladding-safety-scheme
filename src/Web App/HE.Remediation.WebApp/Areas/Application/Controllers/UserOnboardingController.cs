@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using System.Security.Claims;
-using MediatR;
+using Mediator;
 using AutoMapper;
 using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Join;
 using HE.Remediation.WebApp.ViewModels.Application;

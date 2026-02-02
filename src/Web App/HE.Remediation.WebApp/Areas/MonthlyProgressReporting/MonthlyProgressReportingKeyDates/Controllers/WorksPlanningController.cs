@@ -4,7 +4,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.WorksPlanning;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.KeyDates;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.MonthlyProgressReporting.MonthlyProgressReportingKeyDates.Controllers;

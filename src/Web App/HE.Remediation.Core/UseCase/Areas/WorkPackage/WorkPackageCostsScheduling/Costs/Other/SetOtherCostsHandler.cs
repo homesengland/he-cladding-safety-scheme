@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Other;
 
@@ -13,7 +13,7 @@ public class SetOtherCostsHandler : IRequestHandler<SetOtherCostsRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetOtherCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetOtherCostsRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateOtherCosts(new UpdateOtherCostsParameters
         {

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ApprovedScheduleOfWorks.CostProfile.Get;
 
@@ -23,7 +23,7 @@ public class GetCostProfileHandler : IRequestHandler<GetCostProfileRequest, GetC
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetCostProfileResponse> Handle(GetCostProfileRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCostProfileResponse> Handle(GetCostProfileRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -41,4 +41,6 @@ public class CheckYourAnswersViewModel : WorkPackageBaseViewModel
     public string AuthorisedSignatory1EmailAddress { get; set; }
 
     public DateTime? CompaniesDateOfAppointment { get; set; }
+
+    public bool IsProgressReportGrantCertifyingOfficerComplete { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -13,7 +13,7 @@ public class SetGrantCertifyingOfficerAddressHandler : IRequestHandler<SetGrantC
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetGrantCertifyingOfficerAddressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetGrantCertifyingOfficerAddressRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

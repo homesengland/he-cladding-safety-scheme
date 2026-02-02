@@ -3,8 +3,9 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDiagram;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Application;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.WebApp.Areas.Application.Controllers
 {
@@ -12,25 +13,35 @@ namespace HE.Remediation.WebApp.Areas.Application.Controllers
     [CookieApplicationAuthorise]
     public class StageDiagramController : Controller
     {
-
         private readonly ISender _sender;
         private readonly IMapper _mapper;
         private readonly IApplicationDataProvider _applicationDataProvider;
-        public StageDiagramController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider)
+        private readonly ILogger<StageDiagramController> _logger;
+
+        public StageDiagramController(ISender sender, IMapper mapper, IApplicationDataProvider applicationDataProvider, ILogger<StageDiagramController> logger)
         {
             _sender = sender;
             _mapper = mapper;
             _applicationDataProvider = applicationDataProvider;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            var taskListResponse = await _sender.Send(GetStageDiagramRequest.Request);
-
-            var viewModel = _mapper.Map<StageDiagramViewModel>(taskListResponse);
-            viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
-            viewModel.IsApplicationActive = taskListResponse.IsApplicationActive;
-            return View(viewModel);
+            try
+            {
+                var taskListResponse = await _sender.Send(GetStageDiagramRequest.Request);
+                var viewModel = _mapper.Map<StageDiagramViewModel>(taskListResponse);
+                viewModel.ApplicationScheme = _applicationDataProvider.GetApplicationScheme();
+                viewModel.IsApplicationActive = taskListResponse.IsApplicationActive;
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                var userId = _applicationDataProvider.GetUserId();
+                _logger.LogError(ex, "Error in StageDiagramController.Index for user {UserId}", userId);
+                throw;
+            }
         }
 
         [HttpGet]

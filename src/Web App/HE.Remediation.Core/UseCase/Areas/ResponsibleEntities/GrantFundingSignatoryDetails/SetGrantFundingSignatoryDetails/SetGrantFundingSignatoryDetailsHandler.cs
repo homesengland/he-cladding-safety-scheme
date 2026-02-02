@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSignatoryDetails.SetGrantFundingSignatoryDetails
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.GrantFundingSign
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetGrantFundingSignatoryDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetGrantFundingSignatoryDetailsRequest request, CancellationToken cancellationToken)
         {
             if (request.Id is null || request.Id == Guid.Empty)
             {

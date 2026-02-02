@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -14,7 +14,7 @@ public class GetLeaseholderOrPrivateOwnerHandler : IRequestHandler<GetLeaseholde
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetLeaseholderOrPrivateOwnerResponse> Handle(GetLeaseholderOrPrivateOwnerRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetLeaseholderOrPrivateOwnerResponse> Handle(GetLeaseholderOrPrivateOwnerRequest request, CancellationToken cancellationToken)
     {
         var result = await _connection.QuerySingleOrDefaultAsync<GetLeaseholderOrPrivateOwnerResponse>("GetHasOwners", new
         {

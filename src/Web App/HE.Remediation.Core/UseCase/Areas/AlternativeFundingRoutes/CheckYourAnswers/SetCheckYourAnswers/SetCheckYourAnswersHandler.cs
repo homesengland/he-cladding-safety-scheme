@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.CheckYourAnswers.SetCheckYourAnswers
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.CheckYourAn
             _db = db;
         }
 
-        public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

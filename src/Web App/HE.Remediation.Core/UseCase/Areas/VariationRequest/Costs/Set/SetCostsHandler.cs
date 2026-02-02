@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Costs.Set
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Costs.Set
             _variationRequestRepository = variationRequestRepository;
         }
 
-        public async Task<SetCostsResponse> Handle(SetCostsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<SetCostsResponse> Handle(SetCostsRequest request, CancellationToken cancellationToken)
         {
             var currentVariationRequestId = await _variationRequestRepository.GetCurrentVariationRequestId();
 

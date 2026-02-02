@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 
@@ -23,7 +23,7 @@ public class GetOtherAssessorHandler : IRequestHandler<GetOtherAssessorRequest, 
         _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
     }
 
-    public async Task<GetOtherAssessorResponse> Handle(GetOtherAssessorRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetOtherAssessorResponse> Handle(GetOtherAssessorRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

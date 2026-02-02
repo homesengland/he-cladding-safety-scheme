@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
-using MediatR;
+using Mediator;
 using Moq;
 
 namespace HE.Remediation.Core.Tests.UseCase.Areas.ResponsibleEntities;

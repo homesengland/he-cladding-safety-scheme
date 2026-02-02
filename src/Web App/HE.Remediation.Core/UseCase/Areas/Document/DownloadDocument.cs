@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Document;
 
@@ -20,7 +20,7 @@ public class DownloadDocumentHandler : IRequestHandler<DownloadDocumentRequest, 
         _fileService = fileService;
     }
 
-    public async Task<DownloadDocumentResponse> Handle(DownloadDocumentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<DownloadDocumentResponse> Handle(DownloadDocumentRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var applicationId = _applicationDataProvider.GetApplicationId();

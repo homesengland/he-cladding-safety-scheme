@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.SetBuildingsInsurance;
 
@@ -9,7 +9,7 @@ public class SetBuildingsInsuranceHandler(IApplicationDataProvider applicationDa
     private readonly IApplicationDataProvider _applicationDataProvider = applicationDataProvider;
     private readonly IBuildingsInsuranceRepository _buildingsInsuranceRepository = buildingsInsuranceRepository;
 
-    public async Task<SetBuildingsInsuranceResponse> Handle(SetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetBuildingsInsuranceResponse> Handle(SetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

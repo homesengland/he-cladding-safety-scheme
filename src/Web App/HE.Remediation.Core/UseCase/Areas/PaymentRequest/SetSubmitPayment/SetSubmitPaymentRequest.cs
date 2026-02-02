@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureResults.Costs;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetSubmitPayment;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetSubmitPayment;
 

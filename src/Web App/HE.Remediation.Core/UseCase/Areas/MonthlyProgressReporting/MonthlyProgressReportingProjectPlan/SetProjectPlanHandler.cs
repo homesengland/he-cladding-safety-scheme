@@ -6,7 +6,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
 
@@ -32,7 +32,7 @@ public class SetProjectPlanHandler : IRequestHandler<SetProjectPlanRequest>
         _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetProjectPlanRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetProjectPlanRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
 using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholder
             _progressReportingLeaseholdersRepository = progressReportingLeaseholdersRepository;
         }
 
-        public async Task<GetUploadEvidenceResponse> Handle(GetUploadEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetUploadEvidenceResponse> Handle(GetUploadEvidenceRequest request, CancellationToken cancellationToken)
         {
             var details = await _detailsProvider.GetApplicationDetails();
             var progressReportId = _dataProvider.GetProgressReportId();

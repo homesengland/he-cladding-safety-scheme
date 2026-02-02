@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using System.Transactions;
 using Microsoft.Extensions.Options;
@@ -23,7 +23,7 @@ public class SetLeaseholderEngagementHandler : IRequestHandler<SetLeaseholderEng
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetLeaseholderEngagementRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetLeaseholderEngagementRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

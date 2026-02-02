@@ -1,9 +1,13 @@
 ﻿@using HE.Remediation.Core.Enums
 @using HE.Remediation.Core.Extensions
+@using HE.Remediation.Core.Interface
 @using HE.Remediation.WebApp.Extensions
 @using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting
+@inject IApplicationDataProvider applicationDataProvider;
 @model ProgressReportDetailsViewModel
 @{
+    var isSssfScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
+    
     ViewData["Title"] = $"{Model.DateCreated:MMMM yyyy} Monthly Report";
     ViewData["BackLink"] = Url.Action("ProgressReports", "ProgressReportingDetails", new { Area = "ProgressReportingDetails" });
     ViewData["FullWidth"] = true;
@@ -471,6 +475,8 @@
         </govuk-summary-list-row-value>
     </govuk-summary-list-row>
     
+    @if (Model.ApplicationSchemeId != 3)
+    {
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>
             <span class="govuk-!-font-weight-regular">
@@ -511,6 +517,7 @@
                 @(Model.PtsUpliftDocuments.Count == 0 ? "-" : "")
             </govuk-summary-list-row-value>
         </govuk-summary-list-row>
+    }
     }
     
     <govuk-summary-list-row>
@@ -598,89 +605,90 @@
             </tbody>
         </table>
     }
+    @if (!isSssfScheme) {
+        <h2 class="govuk-heading-m">Grant Certifying Officer</h2>
 
-    <h2 class="govuk-heading-m">Grant Certifying Officer</h2>
+        <govuk-summary-list>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <span class="govuk-!-font-weight-regular">
+                        Name
+                    </span>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.GcoName.ForDisplay()<br />
+                    @Model.GcoCompanyName.ForDisplay()
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
 
-    <govuk-summary-list>
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                <span class="govuk-!-font-weight-regular">
-                    Name
-                </span>
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.GcoName.ForDisplay()<br />
-                @Model.GcoCompanyName.ForDisplay()
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <span class="govuk-!-font-weight-regular">
+                        Company address
+                    </span>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @if (!string.IsNullOrEmpty(Model.GcoNameNumber))
+                    {
+                        <div>@Model.GcoNameNumber</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.GcoAddressLine1))
+                    {
+                        <div>@Model.GcoAddressLine1</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.GcoAddressLine2))
+                    {
+                        <div>@Model.GcoAddressLine2</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.GcoCity))
+                    {
+                        <div>@Model.GcoCity</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.GcoCounty))
+                    {
+                        <div>@Model.GcoCounty</div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.GcoPostCode))
+                    {
+                        <div>@Model.GcoPostCode</div>
+                    }
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
 
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                <span class="govuk-!-font-weight-regular">
-                    Company address
-                </span>
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @if (!string.IsNullOrEmpty(Model.GcoNameNumber))
-                {
-                    <div>@Model.GcoNameNumber</div>
-                }
-                @if (!string.IsNullOrEmpty(Model.GcoAddressLine1))
-                {
-                    <div>@Model.GcoAddressLine1</div>
-                }
-                @if (!string.IsNullOrEmpty(Model.GcoAddressLine2))
-                {
-                    <div>@Model.GcoAddressLine2</div>
-                }
-                @if (!string.IsNullOrEmpty(Model.GcoCity))
-                {
-                    <div>@Model.GcoCity</div>
-                }
-                @if (!string.IsNullOrEmpty(Model.GcoCounty))
-                {
-                    <div>@Model.GcoCounty</div>
-                }
-                @if (!string.IsNullOrEmpty(Model.GcoPostCode))
-                {
-                    <div>@Model.GcoPostCode</div>
-                }
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <span class="govuk-!-font-weight-regular">
+                        Authorised signatory
+                    </span>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.GcoAuthorisedSignatory.ForDisplay()
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
 
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                <span class="govuk-!-font-weight-regular">
-                    Authorised signatory
-                </span>
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.GcoAuthorisedSignatory.ForDisplay()
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <span class="govuk-!-font-weight-regular">
+                        Authorised signatory email address
+                    </span>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @Model.GcoAuthorisedSignatoryEmailAddress.ForDisplay()
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
 
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                <span class="govuk-!-font-weight-regular">
-                    Authorised signatory email address
-                </span>
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @Model.GcoAuthorisedSignatoryEmailAddress.ForDisplay()
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>
-                <span class="govuk-!-font-weight-regular">
-                    Contract start date
-                </span>
-            </govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(Model.GcoContractStartDate.HasValue ? Model.GcoContractStartDate.Value.ToString("dd/MM/yyyy") : "-")
-            </govuk-summary-list-row-value>
-        </govuk-summary-list-row>
-    </govuk-summary-list>
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    <span class="govuk-!-font-weight-regular">
+                        Contract start date
+                    </span>
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(Model.GcoContractStartDate.HasValue ? Model.GcoContractStartDate.Value.ToString("dd/MM/yyyy") : "-")
+                </govuk-summary-list-row-value>
+            </govuk-summary-list-row>
+        </govuk-summary-list>
+    }
 } else
 {
     <govuk-summary-list>

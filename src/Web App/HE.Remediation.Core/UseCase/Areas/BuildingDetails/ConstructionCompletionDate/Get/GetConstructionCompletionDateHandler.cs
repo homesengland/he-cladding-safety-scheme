@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConstructionCompletionDate.Get;
 
@@ -15,7 +15,7 @@ internal class GetConstructionCompletionDateHandler : IRequestHandler<GetConstru
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetConstructionCompletionDateResponse> Handle(GetConstructionCompletionDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetConstructionCompletionDateResponse> Handle(GetConstructionCompletionDateRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

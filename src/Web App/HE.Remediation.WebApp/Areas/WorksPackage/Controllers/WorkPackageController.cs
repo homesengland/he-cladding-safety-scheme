@@ -7,7 +7,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.TaskList.GetTaskList;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.WorksPackage;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.ConfirmToProceed;
-using MediatR;
+using Mediator;
 
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetAccountGrantPaidTo
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetAccountGrantP
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetAccountGrantPaidToResponse> Handle(GetAccountGrantPaidToRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetAccountGrantPaidToResponse> Handle(GetAccountGrantPaidToRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

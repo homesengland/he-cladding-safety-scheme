@@ -19,6 +19,10 @@ namespace HE.Remediation.Core.Services.Communication
             {
                 case EEmailType.ApplicationSubmitted:
                     return _govNotifySettings.ApplicationSubmittedEmailTemplateId;
+                case EEmailType.SssfBuildingCompleteApplicationSubmitted:
+                    return _govNotifySettings.SssfBuildingCompleteApplicationSubmittedTemplateId;
+                case EEmailType.SssfBuildingNonCompleteApplicationSubmitted:
+                    return _govNotifySettings.SssfBuildingNonCompleteApplicationSubmittedEmailTemplateId;
                 case EEmailType.WorksPackageSubmitted:
                     return _govNotifySettings.WorksPackageSubmittedEmailTemplateId;
                 case EEmailType.ScheduleOfWorksSubmitted:
@@ -47,6 +51,8 @@ namespace HE.Remediation.Core.Services.Communication
             switch (emailType)
             {
                 case EEmailType.ApplicationSubmitted:
+                case EEmailType.SssfBuildingCompleteApplicationSubmitted:
+                case EEmailType.SssfBuildingNonCompleteApplicationSubmitted:
                     return "Apply for grant - Application submitted confirmation";
                 case EEmailType.WorksPackageSubmitted:
                     return "Works Package - Works Package submitted confirmation";

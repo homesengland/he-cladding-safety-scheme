@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -25,7 +25,7 @@ public class GetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<GetWhoIs
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetWhoIsTheGrantCertifyingOfficerResponse> Handle(GetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetWhoIsTheGrantCertifyingOfficerResponse> Handle(GetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.GetCladdingSystem;
 
@@ -17,7 +17,7 @@ public class GetCladdingSystemHandler : IRequestHandler<GetCladdingSystemRequest
         _fireRiskAppraisalRepository = fireRiskAppraisalRepository;
     }
 
-    public async Task<GetCladdingSystemResponse> Handle(GetCladdingSystemRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCladdingSystemResponse> Handle(GetCladdingSystemRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var response = new GetCladdingSystemResponse();

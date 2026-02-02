@@ -14,8 +14,16 @@ public class CostsResult
     public decimal? PtfsPayment { get; set; }
 
     public decimal? GrantPaidToDate { get; set; }
-    public decimal? AdditionalPtfsPayment { get; set; }
+
     public bool? IsAdditionalPtfsPaid { get; set; }
+
+    public decimal? AdditionalPtfsPayment { get; set; }
+
+    public bool? IsThirdPtfsPaid { get; set; }
+
+    public decimal? ThirdPtfsPayment { get; set; }
+
+    public decimal? PtfsReclaimAmount { get; set; }
 
     public IList<MonthlyCostResult> MonthlyCosts { get; set; } = new List<MonthlyCostResult>();
 }

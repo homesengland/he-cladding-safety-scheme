@@ -40,7 +40,7 @@ public class GetExternalWorksRequiredTests
         var result = await _handler.Handle(new GetExternalWorksRequiredRequest(), CancellationToken.None);
 
         // Assert        
-        Assert.NotNull(result);        
+        Assert.NotNull(result?.WorksRequired);        
         Assert.True(result.WorksRequired.Value == ENoYes.Yes);
         _applicationDataProvider.Verify();
     }

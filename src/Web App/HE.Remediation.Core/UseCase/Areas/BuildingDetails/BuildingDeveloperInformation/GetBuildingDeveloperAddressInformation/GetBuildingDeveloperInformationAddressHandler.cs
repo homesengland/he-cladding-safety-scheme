@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperAddressInformation;
 
@@ -15,7 +15,7 @@ public class GetBuildingDeveloperInformationAddressHandler: IRequestHandler<GetB
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetBuildingDeveloperInformationAddressResponse> Handle(GetBuildingDeveloperInformationAddressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingDeveloperInformationAddressResponse> Handle(GetBuildingDeveloperInformationAddressRequest request, CancellationToken cancellationToken)
     {
         var response = await _connection.QuerySingleOrDefaultAsync<GetBuildingDeveloperInformationAddressResponse>("GetBuildingDeveloperInformation", new
         {

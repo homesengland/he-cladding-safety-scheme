@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Administration.DeleteExtraContact.SetDeleteExtraContact;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWallWorks;
@@ -23,7 +23,7 @@ public class SetDeleteExternalWallWorksHandler: IRequestHandler<SetDeleteExterna
         _fireRiskWorksRepository = fireRiskWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetDeleteExternalWallWorksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeleteExternalWallWorksRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

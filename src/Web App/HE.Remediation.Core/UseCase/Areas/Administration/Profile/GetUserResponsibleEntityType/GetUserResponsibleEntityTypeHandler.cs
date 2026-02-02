@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.Profile.GetUserResponsibleEntityType;
 
@@ -17,7 +17,7 @@ public class GetUserResponsibleEntityTypeHandler : IRequestHandler<GetUserRespon
         _adp = adp;
     }
 
-    public async Task<EResponsibleEntityType?> Handle(GetUserResponsibleEntityTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<EResponsibleEntityType?> Handle(GetUserResponsibleEntityTypeRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
         

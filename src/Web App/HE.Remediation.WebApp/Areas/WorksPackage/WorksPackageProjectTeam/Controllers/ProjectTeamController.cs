@@ -8,7 +8,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.Regul
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.StartInformation.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.StartInformation.Set;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeam;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageProjectTeam.Controllers;

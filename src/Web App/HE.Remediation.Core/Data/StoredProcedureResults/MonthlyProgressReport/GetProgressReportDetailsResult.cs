@@ -5,6 +5,7 @@ namespace HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport;
 public class GetProgressReportDetailsResult
 {
     public Guid Id { get; set; }
+    public int ApplicationSchemeId { get; set; }
     public DateTime? DateCreated { get; set; }
     public DateTime? DateDue { get; set; }
     public DateTime? DateSubmitted { get; set; }

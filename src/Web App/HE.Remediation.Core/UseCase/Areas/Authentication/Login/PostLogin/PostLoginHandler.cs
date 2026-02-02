@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Model;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.Authentication.Login.PostLogin;
@@ -17,7 +17,7 @@ public class PostLoginHandler : IRequestHandler<PostLoginRequest, PostLoginRespo
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<PostLoginResponse> Handle(PostLoginRequest request, CancellationToken cancellationToken)
+    public async ValueTask<PostLoginResponse> Handle(PostLoginRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

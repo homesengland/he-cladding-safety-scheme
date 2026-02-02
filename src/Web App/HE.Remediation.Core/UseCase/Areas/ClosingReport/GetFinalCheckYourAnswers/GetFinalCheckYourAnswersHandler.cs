@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetFinalCheckYourAnswers;
 
@@ -24,7 +24,7 @@ public class GetFinalCheckYourAnswersHandler : IRequestHandler<GetFinalCheckYour
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<GetFinalCheckYourAnswersResponse> Handle(GetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetFinalCheckYourAnswersResponse> Handle(GetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

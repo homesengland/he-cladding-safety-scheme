@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetFraewEvidence
 {
@@ -18,7 +18,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetFraewEvidence
             _closingReportRepository = closingReportRepository;
         }
 
-        public async Task<Unit> Handle(SetFraewEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetFraewEvidenceRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _adp.GetApplicationId();
 

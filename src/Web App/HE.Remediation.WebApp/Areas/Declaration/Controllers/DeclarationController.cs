@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.Declaration.Controllers

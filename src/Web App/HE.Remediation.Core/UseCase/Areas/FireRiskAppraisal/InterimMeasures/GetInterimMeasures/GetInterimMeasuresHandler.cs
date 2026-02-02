@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InterimMeasures.GetInterimMeasures
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InterimMeasures.Ge
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetInterimMeasuresResponse> Handle(GetInterimMeasuresRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetInterimMeasuresResponse> Handle(GetInterimMeasuresRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

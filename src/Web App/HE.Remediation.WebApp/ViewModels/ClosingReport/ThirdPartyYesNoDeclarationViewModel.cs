@@ -5,7 +5,7 @@ namespace HE.Remediation.WebApp.ViewModels.ClosingReport
     public class ThirdPartyYesNoDeclarationViewModel : ClosingReportInformationViewModel
     {
         public ENoYes? Declaration { get; set; }
-        public bool IsSubmitted { get; set; }
+        public new bool IsSubmitted { get; set; }
     }
 }
  

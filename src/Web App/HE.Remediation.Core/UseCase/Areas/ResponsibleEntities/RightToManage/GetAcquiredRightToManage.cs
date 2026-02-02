@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RightToManage;
 
@@ -15,7 +15,7 @@ public class GetAcquiredRightToManageHandler : IRequestHandler<GetAcquiredRightT
         _rightToManageRepository = rightToManageRepository;
     }
 
-    public async Task<GetAcquiredRightToManageResponse> Handle(GetAcquiredRightToManageRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAcquiredRightToManageResponse> Handle(GetAcquiredRightToManageRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         

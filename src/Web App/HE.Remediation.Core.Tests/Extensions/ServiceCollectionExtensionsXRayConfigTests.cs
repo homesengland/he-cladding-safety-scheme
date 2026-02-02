@@ -19,9 +19,9 @@ namespace HE.Remediation.Core.Tests.Extensions
             {
                 cfg.AddInMemoryCollection(new[]
                 {
-                    new KeyValuePair<string, string>("AWSXRay:Endpoint", "http://localhost:4317"),
-                    new KeyValuePair<string, string>("AWSXRay:ServiceName", "TestService"),
-                    new KeyValuePair<string, string>("AWSXRay:ExportProcessorType", "Batch")
+                    new KeyValuePair<string, string?>("AWSXRay:Endpoint", "http://localhost:4317"),
+                    new KeyValuePair<string, string?>("AWSXRay:ServiceName", "TestService"),
+                    new KeyValuePair<string, string?>("AWSXRay:ExportProcessorType", "Batch")
                 });
             });
 
@@ -66,11 +66,11 @@ namespace HE.Remediation.Core.Tests.Extensions
             // Arrange
             var values = new[]
             {
-                new KeyValuePair<string, string>("AWSXRay:Endpoint", "http://localhost:4317"),
-                new KeyValuePair<string, string>("AWSXRay:ServiceName", "TestService"),
-                new KeyValuePair<string, string>("AWSXRay:ExportProcessorType", "Batch")
+                new KeyValuePair<string, string?>("AWSXRay:Endpoint", "http://localhost:4317"),
+                new KeyValuePair<string, string?>("AWSXRay:ServiceName", "TestService"),
+                new KeyValuePair<string, string?>("AWSXRay:ExportProcessorType", "Batch")
             };
-            var filtered = new List<KeyValuePair<string, string>>(values);
+            var filtered = new List<KeyValuePair<string, string?>>(values);
             filtered.RemoveAll(kv => kv.Key.EndsWith(missingKey));
 
             var config = BuildConfig(cfg => cfg.AddInMemoryCollection(filtered));

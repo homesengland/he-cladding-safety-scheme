@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorDetails.SetAssessorDetails
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorDetails.Se
             _db = db;
         }
 
-        public async Task<Unit> Handle(SetAssessorDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetAssessorDetailsRequest request, CancellationToken cancellationToken)
         {
             await SetAccessorDetails(request);
             return Unit.Value;

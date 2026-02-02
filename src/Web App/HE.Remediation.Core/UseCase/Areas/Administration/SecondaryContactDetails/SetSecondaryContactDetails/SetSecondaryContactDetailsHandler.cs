@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.SetSecondaryContactDetails;
@@ -20,13 +20,13 @@ public class SetSecondaryContactDetailsHandler : IRequestHandler<SetSecondaryCon
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetSecondaryContactDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetSecondaryContactDetailsRequest request, CancellationToken cancellationToken)
     {
         await SetContactDetails(request);
         return Unit.Value;
     }
 
-    private async Task SetContactDetails(SetSecondaryContactDetailsRequest request)
+    private async ValueTask SetContactDetails(SetSecondaryContactDetailsRequest request)
     {
         var userId = _applicationDataProvider.GetUserId();
 

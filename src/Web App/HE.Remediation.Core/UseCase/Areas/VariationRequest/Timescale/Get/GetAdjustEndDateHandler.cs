@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
 {
@@ -28,7 +28,7 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Get
             _paymentRequestRepository = paymentRequestRepository;
         }
 
-        public async Task<GetAdjustEndDateResponse> Handle(GetAdjustEndDateRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetAdjustEndDateResponse> Handle(GetAdjustEndDateRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

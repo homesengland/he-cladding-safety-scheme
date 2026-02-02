@@ -73,13 +73,13 @@ public class UpsertMemberHandlerTests
         var insertRequest = new UpsertMemberRequest() { CollaborationUserId = null };
 
         // Act / Assert
-        await Assert.ThrowsAsync(expectedExceptionType, () => _handler.Handle(insertRequest, CancellationToken.None));
+        await Assert.ThrowsAsync(expectedExceptionType, () => _handler.Handle(insertRequest, CancellationToken.None).AsTask());
     }
 
     // Helper method to create a SqlException instance for testing (no public constructor)
     private static SqlException CreateSqlException(string message)
     {
-        var errorCollection = (SqlErrorCollection)Activator.CreateInstance(
+        var errorCollection = (SqlErrorCollection?)Activator.CreateInstance(
             typeof(SqlErrorCollection), true);
 
         var constructors = typeof(SqlError).GetConstructors(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
@@ -89,7 +89,7 @@ public class UpsertMemberHandlerTests
             .Invoke([0, (byte)0, (byte)0, "", "", message, 0, new Exception()]);
 
         typeof(SqlErrorCollection)
-            .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            .GetMethod("Add", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)!
             .Invoke(errorCollection, [error]);
 
         var exception = (SqlException)typeof(SqlException)

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.BuildingSafetyRegulator.Get;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.BuildingSafetyRegulator.Set;
 
@@ -14,7 +14,7 @@ public class SetBuildingControlApprovalHandler : IRequestHandler<SetBuildingCont
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetBuildingControlApprovalRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetBuildingControlApprovalRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

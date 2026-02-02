@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Helpers;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetReviewPayment;
 
@@ -27,7 +27,7 @@ public class GetReviewPaymentHandler : IRequestHandler<GetReviewPaymentRequest, 
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<GetReviewPaymentResponse> Handle(GetReviewPaymentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetReviewPaymentResponse> Handle(GetReviewPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -55,7 +55,7 @@ public class GetReviewPaymentHandler : IRequestHandler<GetReviewPaymentRequest, 
         };
     }
 
-    private async Task<MonthlyCostsCalculationResult> GetCalculatedCosts(Guid applicationId)
+    private async ValueTask<MonthlyCostsCalculationResult> GetCalculatedCosts(Guid applicationId)
     {
         decimal totalGrantPaidToDate = 0.0m;
         decimal totalGrantFunding = 0.0m;

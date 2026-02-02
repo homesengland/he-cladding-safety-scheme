@@ -3,7 +3,7 @@ using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.DataImporters;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.Lookups;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.Validation;
-using MediatR;
+using Mediator;
 using Moq;
 using static HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.Lookups.AddressResolver;
 

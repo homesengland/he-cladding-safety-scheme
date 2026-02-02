@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetChangeProjectDates;
 
@@ -22,7 +22,7 @@ public class GetChangeProjectDatesHandler : IRequestHandler<GetChangeProjectDate
         _paymentRequestRepository = paymentRequestRepository;   
     }
 
-    public async Task<GetChangeProjectDatesResponse> Handle(GetChangeProjectDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetChangeProjectDatesResponse> Handle(GetChangeProjectDatesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

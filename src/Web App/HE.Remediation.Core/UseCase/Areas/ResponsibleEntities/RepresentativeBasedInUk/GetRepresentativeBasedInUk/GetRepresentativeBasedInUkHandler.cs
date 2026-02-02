@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentativeBasedInUk.GetRepresentativeBasedInUk;
 
@@ -14,7 +14,7 @@ public class GetRepresentativeBasedInUkHandler : IRequestHandler<GetRepresentati
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetRepresentativeBasedInUkResponse> Handle(GetRepresentativeBasedInUkRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRepresentativeBasedInUkResponse> Handle(GetRepresentativeBasedInUkRequest request, CancellationToken cancellationToken)
     {
         var basedInUk = await _connection.QuerySingleOrDefaultAsync<bool?>("GetRepresentativeBasedInUk", new
         {

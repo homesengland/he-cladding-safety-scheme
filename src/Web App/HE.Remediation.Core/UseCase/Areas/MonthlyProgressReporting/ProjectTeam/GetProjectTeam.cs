@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 using System.Linq;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam;
@@ -25,7 +25,7 @@ public class GetProjectTeamHandler : IRequestHandler<GetProjectTeamRequest, GetP
     }
 
 
-    public async Task<GetProjectTeamResponse> Handle(GetProjectTeamRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProjectTeamResponse> Handle(GetProjectTeamRequest request, CancellationToken cancellationToken)
     {
         var applicationDetails = await _applicationDetailsProvider.GetApplicationDetails();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

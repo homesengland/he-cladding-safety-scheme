@@ -8,7 +8,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsSchedulingSu
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsSchedulingSubcontractor.Subcontractor.Set;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageCostsScheduling.Controllers;
@@ -46,7 +46,7 @@ public class CostsSchedulingSubcontractorController : StartController
 
             return View(model);
         }
-        catch (EntityNotFoundException ex)
+        catch (EntityNotFoundException)
         {
             throw new EntityNotFoundException("Subcontractor not found");
         }

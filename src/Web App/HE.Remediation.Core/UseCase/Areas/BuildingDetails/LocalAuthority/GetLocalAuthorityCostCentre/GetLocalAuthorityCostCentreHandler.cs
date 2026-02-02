@@ -4,7 +4,7 @@ using System;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingPartOfDevelopment.GetBuildingPartOfDevelopment;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.LocalAuthority.GetLocalAuthorityCostCentre
 {
@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.LocalAuthority.GetLo
             _costcentreRepository = costcentreRepository;
         }
 
-        public async Task<GetLocalAuthorityCostCentreResponse> Handle(GetLocalAuthorityCostCentreRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetLocalAuthorityCostCentreResponse> Handle(GetLocalAuthorityCostCentreRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             var costCentres = await _costcentreRepository.GetCostCentres();

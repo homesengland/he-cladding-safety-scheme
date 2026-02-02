@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.DeveloperPledgeStop.SetDeveloperPledgeStop
 {
@@ -26,13 +26,13 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.DeveloperPl
             _applicationRepository = applicationRepository;
         }
 
-        public async Task<Unit> Handle(SetDeveloperPledgeStopRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetDeveloperPledgeStopRequest request, CancellationToken cancellationToken)
         {
             await SetDeveloperPledgeStop();
             return Unit.Value;
         }
 
-        private async Task SetDeveloperPledgeStop()
+        private async ValueTask SetDeveloperPledgeStop()
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

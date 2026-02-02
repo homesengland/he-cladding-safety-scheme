@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAssessmentReport.GetFireRiskAssessmentReport
 {
@@ -17,7 +17,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAss
             _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
         }
 
-        public async Task<GetFireRiskAssessmentReportResponse> Handle(GetFireRiskReportAssessmentReportRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFireRiskAssessmentReportResponse> Handle(GetFireRiskReportAssessmentReportRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProgrammePlan;
 
@@ -23,7 +23,7 @@ public class GetHasProjectPlanHandler : IRequestHandler<GetHasProjectPlanRequest
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetHasProjectPlanResponse> Handle(GetHasProjectPlanRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetHasProjectPlanResponse> Handle(GetHasProjectPlanRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

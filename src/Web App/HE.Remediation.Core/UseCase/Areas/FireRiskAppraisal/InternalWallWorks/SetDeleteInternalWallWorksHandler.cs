@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InternalWallWorks;
 
@@ -20,7 +20,7 @@ public class SetDeleteInternalWallWorksHandler: IRequestHandler<SetDeleteInterna
         _fireRiskWorksRepository = fireRiskWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetDeleteInternalWallWorksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeleteInternalWallWorksRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

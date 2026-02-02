@@ -61,7 +61,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.ManageProgramme
             _applicationDataProviderMock.Setup(x => x.GetUserId()).Returns(userId);
 
             var expected = new List<GetManageProgrammeResponse>();
-            GetManageProgrammeRequest capturedParams = null;
+            GetManageProgrammeRequest? capturedParams = null;
 
             _manageProgrammeRepositoryMock
                 .Setup(x => x.GetManageProgrammeDetails(It.IsAny<GetManageProgrammeRequest>(), It.IsAny<Guid?>()))

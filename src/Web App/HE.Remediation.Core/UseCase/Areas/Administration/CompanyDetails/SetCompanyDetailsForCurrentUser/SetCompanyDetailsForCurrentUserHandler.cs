@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CompanyDetails.SetCompanyDetailsForCurrentUser;
 
@@ -19,7 +19,7 @@ public class SetCompanyDetailsForCurrentUserHandler : IRequestHandler<SetCompany
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetCompanyDetailsForCurrentUserRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCompanyDetailsForCurrentUserRequest request, CancellationToken cancellationToken)
     {
         var userId = _adc.GetUserId();
 

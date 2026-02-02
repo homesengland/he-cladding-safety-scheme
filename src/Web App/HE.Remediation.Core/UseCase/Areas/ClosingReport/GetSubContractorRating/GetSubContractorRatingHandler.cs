@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetSubContractorRating;
 
@@ -25,7 +25,7 @@ public class GetSubContractorRatingsHandler : IRequestHandler<GetSubContractorRa
         _subContractorSurveyRepository = subContractorSurveyRepository;
     }
 
-    public async Task<GetSubContractorRatingsResponse> Handle(GetSubContractorRatingsRequest request,
+    public async ValueTask<GetSubContractorRatingsResponse> Handle(GetSubContractorRatingsRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

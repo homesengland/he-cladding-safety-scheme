@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.Submit.GetSubmit;
 
@@ -22,7 +22,7 @@ public class GetSubmitHandler : IRequestHandler<GetSubmitRequest, GetSubmitRespo
     }
 
 
-    public async Task<GetSubmitResponse> Handle(GetSubmitRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetSubmitResponse> Handle(GetSubmitRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -17,7 +17,7 @@ namespace HE.Remediation.WebApp.Tests
             var expectedControllersWithoutSecurityCount = 6;
 
             // Act
-            var controllersWithoutAnySecurityAttributes = assembly.GetTypes()
+            var controllersWithoutAnySecurityAttributes = assembly!.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(baseType) && !t.IsSubclassOf(typeof(StartController))
                 && (!t.GetCustomAttributes(typeof(CookieAuthoriseAttribute), true).Any() &&
                     !t.GetCustomAttributes(typeof(CookieApplicationAuthoriseAttribute), true).Any() &&

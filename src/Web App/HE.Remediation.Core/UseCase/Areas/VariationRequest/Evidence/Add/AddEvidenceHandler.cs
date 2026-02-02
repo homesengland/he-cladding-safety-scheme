@@ -5,7 +5,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -32,7 +32,7 @@ public class AddEvidenceHandler : IRequestHandler<AddEvidenceRequest, Unit>
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<Unit> Handle(AddEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AddEvidenceRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
@@ -56,7 +56,7 @@ public class AddEvidenceHandler : IRequestHandler<AddEvidenceRequest, Unit>
         return Unit.Value;
     }
 
-    private async Task<ProcessFileResult> ProcessFile(IFormFile file)
+    private async ValueTask<ProcessFileResult> ProcessFile(IFormFile file)
     {
         if (file == null)
         {

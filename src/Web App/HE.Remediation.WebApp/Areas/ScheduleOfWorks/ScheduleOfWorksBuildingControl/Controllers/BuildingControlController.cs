@@ -13,7 +13,7 @@ using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.ScheduleOfWorks;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.BuildingControlCheckYourAnswers.Set;
 
-using MediatR;
+using Mediator;
 
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;

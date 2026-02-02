@@ -3,7 +3,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.TaskList.GetTaskList;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Application;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.Application.Controllers

@@ -6,7 +6,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.BuildingControl;
 
@@ -26,7 +26,7 @@ public class GetUploadBuildingControl : IRequestHandler<GetUploadBuildingControl
         _buildingControlRepository = buildingControlRepository;
     }
 
-    public async Task<GetUploadBuildingControlResponse> Handle(GetUploadBuildingControlRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUploadBuildingControlResponse> Handle(GetUploadBuildingControlRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

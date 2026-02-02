@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholders
@@ -22,7 +22,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholder
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(DeleteUploadEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(DeleteUploadEvidenceRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             var progressReportId = _applicationDataProvider.GetProgressReportId();

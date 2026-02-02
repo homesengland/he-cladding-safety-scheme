@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -12,7 +12,7 @@ public class GetRequireBsrCodeHandler : IRequestHandler<GetRequireBsrCodeRequest
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetRequireBsrCodeResponse> Handle(GetRequireBsrCodeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRequireBsrCodeResponse> Handle(GetRequireBsrCodeRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var showBsr = await _progressReportingRepository.GetProgressReportShowBuildingSafetyRegulatorRegistrationCode();

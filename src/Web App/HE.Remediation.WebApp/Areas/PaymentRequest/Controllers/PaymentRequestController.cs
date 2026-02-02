@@ -37,7 +37,7 @@ using HE.Remediation.Core.UseCase.Areas.PaymentRequest.UpdateTeamMember;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.PaymentRequest;
 using HE.Remediation.WebApp.ViewModels.PaymentRequest.Shared;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetPaymentRequestDetails;

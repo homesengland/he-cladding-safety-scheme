@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -15,7 +15,7 @@ public class SetLeaseholderOrPrivateOwnerHandler : IRequestHandler<SetLeaseholde
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetLeaseholderOrPrivateOwnerRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetLeaseholderOrPrivateOwnerRequest request, CancellationToken cancellationToken)
     {
         if (request.HasOwners != true)
         {

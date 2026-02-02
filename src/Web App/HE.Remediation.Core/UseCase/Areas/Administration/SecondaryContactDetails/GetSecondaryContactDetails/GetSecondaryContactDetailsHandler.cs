@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.GetSecondaryContactDetails;
 
@@ -14,13 +14,13 @@ public class GetSecondaryContactDetailsHandler : IRequestHandler<GetSecondaryCon
         _db = db;
     }
 
-    public async Task<GetSecondaryContactDetailsResponse> Handle(GetSecondaryContactDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetSecondaryContactDetailsResponse> Handle(GetSecondaryContactDetailsRequest request, CancellationToken cancellationToken)
     {
         var userId = _applicationDataProvider.GetUserId();            
         return await GetContactDetails(request);
     }
 
-    private async Task<GetSecondaryContactDetailsResponse> GetContactDetails(GetSecondaryContactDetailsRequest request)
+    private async ValueTask<GetSecondaryContactDetailsResponse> GetContactDetails(GetSecondaryContactDetailsRequest request)
     {
         var userId = _applicationDataProvider.GetUserId();
         var results = await _db.QuerySingleOrDefaultAsync<GetSecondaryContactDetailsResponse>("GetUserAdditionalContactDetails", new

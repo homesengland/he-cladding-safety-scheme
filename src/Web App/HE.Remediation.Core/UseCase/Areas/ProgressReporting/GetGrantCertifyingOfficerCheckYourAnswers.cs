@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -20,7 +20,7 @@ public class GetGrantCertifyingOfficerCheckYourAnswersHandler : IRequestHandler<
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetGrantCertifyingOfficerCheckYourAnswersResponse> Handle(GetGrantCertifyingOfficerCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetGrantCertifyingOfficerCheckYourAnswersResponse> Handle(GetGrantCertifyingOfficerCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

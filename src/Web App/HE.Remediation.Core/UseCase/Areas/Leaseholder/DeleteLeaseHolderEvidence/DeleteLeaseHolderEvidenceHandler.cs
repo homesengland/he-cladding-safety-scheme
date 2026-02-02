@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.DeleteLeaseHolderEvidence
 {
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.DeleteLeaseHolderEvidenc
             _fileRepository = fileRepository;
             _applicationDataProvider = applicationDataProvider;
         }
-        public async Task<Unit> Handle(DeleteLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(DeleteLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

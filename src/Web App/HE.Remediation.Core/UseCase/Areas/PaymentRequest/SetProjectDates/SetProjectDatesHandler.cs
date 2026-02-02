@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetProjectDates;
 
@@ -16,7 +16,7 @@ public class SetProjectDatesHandler : IRequestHandler<SetProjectDatesRequest, Se
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<SetProjectDatesResponse> Handle(SetProjectDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetProjectDatesResponse> Handle(SetProjectDatesRequest request, CancellationToken cancellationToken)
     {   
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

@@ -35,8 +35,8 @@ namespace HE.Remediation.Core.Tests.UseCase.DataIngest.RAS
             var mapper = new ImportedDataRow(new Dictionary<string, string> { { "Address_Line_1", "123 Main St" } });
             Assert.Equal("123 Main St", mapper.AddressLine1);
 
-            mapper = new ImportedDataRow(new Dictionary<string, string> { { "Address_Line_1", null } });
-            Assert.Null(mapper.AddressLine1);
+            mapper = new ImportedDataRow(new Dictionary<string, string> { { "Address_Line_1", string.Empty } });
+            Assert.Equal(string.Empty, mapper.AddressLine1);
 
             mapper = new ImportedDataRow(new Dictionary<string, string>());
             Assert.Equal(string.Empty, mapper.AddressLine1);

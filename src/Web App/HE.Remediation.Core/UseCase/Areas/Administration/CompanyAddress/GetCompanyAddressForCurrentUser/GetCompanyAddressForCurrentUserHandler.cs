@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CompanyAddress.GetCompanyAddressForCurrentUser;
 
@@ -16,7 +16,7 @@ public class GetCompanyAddressForCurrentUserHandler
         _db = db;
     }
 
-    public Task<GetCompanyAddressForCurrentUserResponse> Handle(
+    public async ValueTask<GetCompanyAddressForCurrentUserResponse> Handle(
         GetCompanyAddressForCurrentUserRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
@@ -27,7 +27,6 @@ public class GetCompanyAddressForCurrentUserHandler
                 "Cannot get current user company address because the current user could be determined.");
         }
 
-        return _db.QuerySingleOrDefaultAsync<GetCompanyAddressForCurrentUserResponse>(
-            "GetCompanyAddressByUserId", new { userId });
+        return await _db.QuerySingleOrDefaultAsync<GetCompanyAddressForCurrentUserResponse>("GetCompanyAddressByUserId", new { userId });
     }
 }

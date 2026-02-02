@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommunication;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetCommunicationPartyDetails
 {

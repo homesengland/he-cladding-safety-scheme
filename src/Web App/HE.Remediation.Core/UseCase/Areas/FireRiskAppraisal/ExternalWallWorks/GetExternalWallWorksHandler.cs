@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWallWorks;
 
@@ -21,12 +21,12 @@ public class GetExternalWallWorksHandler : IRequestHandler<GetExternalWallWorksR
         _fireRiskWorksRepository = fireRiskWorksRepository;
     }
 
-    public async Task<List<GetWallWorksListResult>> Handle(GetExternalWallWorksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<List<GetWallWorksListResult>> Handle(GetExternalWallWorksRequest request, CancellationToken cancellationToken)
     {
         return await GetExternalWallWorks();
     }
 
-    private async Task<List<GetWallWorksListResult>> GetExternalWallWorks()
+    private async ValueTask<List<GetWallWorksListResult>> GetExternalWallWorks()
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

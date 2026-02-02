@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 
@@ -24,7 +24,7 @@ public class GetFraDateHandler : IRequestHandler<GetFraDateRequest, GetFraDateRe
         _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
     }
 
-    public async Task<GetFraDateResponse> Handle(GetFraDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetFraDateResponse> Handle(GetFraDateRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

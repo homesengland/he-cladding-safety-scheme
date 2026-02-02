@@ -13,7 +13,7 @@ using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Helpers;
 using HE.Remediation.WebApp.ViewModels.Application;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.Application.Controllers

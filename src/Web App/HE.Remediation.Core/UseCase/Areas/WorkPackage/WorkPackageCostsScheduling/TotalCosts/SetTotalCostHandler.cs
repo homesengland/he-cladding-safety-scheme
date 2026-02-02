@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.TotalCosts;
 
@@ -13,7 +13,7 @@ public class SetTotalCostHandler : IRequestHandler<SetTotalCostRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetTotalCostRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetTotalCostRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateCostsScheduleStatus(ETaskStatus.Completed);
 

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes;
 
@@ -16,7 +16,7 @@ public class GetCostRecoveryHandler : IRequestHandler<GetCostRecoveryRequest, Ge
         _alternateFundingRepository = alternateFundingRepository;
     }
 
-    public async Task<GetCostRecoveryResponse> Handle(GetCostRecoveryRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCostRecoveryResponse> Handle(GetCostRecoveryRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

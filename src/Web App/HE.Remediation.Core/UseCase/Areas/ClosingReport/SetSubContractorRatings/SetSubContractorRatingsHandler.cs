@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.ClosingReport;
 using HE.Remediation.Core.Data.StoredProcedureParameters.SubContractorRatings;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetSubContractorRatings;
 
@@ -19,7 +19,7 @@ public class SetSubContractorRatingsHandler : IRequestHandler<SetSubContractorRa
         _subContractorSurveyRepository = subContractorSurveyRepository;
     }
 
-    public async Task<Unit> Handle(SetSubContractorRatingsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetSubContractorRatingsRequest request, CancellationToken cancellationToken)
     {
         await _subContractorSurveyRepository.UpdateRating(request.Ratings.Id, new UpdateSubcontractorRatingParameters
         {

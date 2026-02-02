@@ -21,9 +21,13 @@ public class DetailsViewModelValidator : AbstractValidator<DetailsViewModel>
 
         RuleFor(x => x.CompanyRegistrationNumber)
             .NotEmpty()
-            .WithMessage("Enter company registration number")
-            .Matches("^[a-zA-Z0-9]{8}$")
-            .WithMessage("Please enter a valid Company registration number");
+            .WithMessage("Enter the Company Registration Number")
+            .MinimumLength(4)
+            .WithMessage("Company Registration Number must be between 4 and 8 digits")
+            .MaximumLength(8)
+            .WithMessage("Company Registration Number must be between 4 and 8 digits")
+            .Matches("^[a-zA-Z0-9]{4,8}$")
+            .WithMessage("Company Registration Number must contain only alphanumeric characters");
 
         RuleFor(x => x.EmailAddress)
             .NotEmpty()

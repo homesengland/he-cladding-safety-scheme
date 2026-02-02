@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AreaProgress;
 
@@ -14,7 +14,7 @@ public class GetAreaProgressHandler : IRequestHandler<GetAreaProgressRequest, Ge
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetAreaProgressResponse> Handle(GetAreaProgressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAreaProgressResponse> Handle(GetAreaProgressRequest request, CancellationToken cancellationToken)
     {
         var response = await _connection.QuerySingleOrDefaultAsync<GetAreaProgressResponse>("GetAreaProgress", new
         {

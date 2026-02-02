@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.UnsafeCladding;
 
@@ -23,7 +23,7 @@ public class GetUnsafeCladdingCostsHandler : IRequestHandler<GetUnsafeCladdingCo
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetUnsafeCladdingCostsResponse> Handle(GetUnsafeCladdingCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUnsafeCladdingCostsResponse> Handle(GetUnsafeCladdingCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

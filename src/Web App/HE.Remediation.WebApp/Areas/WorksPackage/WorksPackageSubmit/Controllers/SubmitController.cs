@@ -4,7 +4,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageSubmit.Submit.Get
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageSubmit.Submit.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageSubmit.Submitted.Get;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageSubmit;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageSubmit.Controllers;

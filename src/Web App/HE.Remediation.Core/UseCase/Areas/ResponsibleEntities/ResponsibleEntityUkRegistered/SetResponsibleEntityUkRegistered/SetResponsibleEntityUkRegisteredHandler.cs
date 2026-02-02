@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.SetResponsibleEntityUkRegistered;
 
@@ -25,7 +25,7 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<SetResponsibleEntityUkRegisteredResponse> Handle(SetResponsibleEntityUkRegisteredRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetResponsibleEntityUkRegisteredResponse> Handle(SetResponsibleEntityUkRegisteredRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -45,7 +45,7 @@ public class SetResponsibleEntityUkRegisteredHandler : IRequestHandler<SetRespon
         });
     }
 
-    private async Task<SetResponsibleEntityUkRegisteredResponse> GetRepresentativeUKStatusAndOrganisationTypes(Guid applicationId)
+    private async ValueTask<SetResponsibleEntityUkRegisteredResponse> GetRepresentativeUKStatusAndOrganisationTypes(Guid applicationId)
     {
         var representativeType = await _connection.QuerySingleOrDefaultAsync<int>("GetRepresentativeType", new { applicationId });
 

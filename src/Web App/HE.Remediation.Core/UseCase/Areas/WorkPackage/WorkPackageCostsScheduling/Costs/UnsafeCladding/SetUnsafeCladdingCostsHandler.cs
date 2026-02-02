@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.UnsafeCladding;
 
@@ -13,7 +13,7 @@ public class SetUnsafeCladdingCostsHandler : IRequestHandler<SetUnsafeCladdingCo
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetUnsafeCladdingCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetUnsafeCladdingCostsRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateUnsafeCladdingCosts(new UpdateUnsafeCladdingCostsParameters
         {

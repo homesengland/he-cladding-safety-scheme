@@ -69,7 +69,7 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.OrganisationManagement.RemoveM
             var handler = _serviceProvider.GetRequiredService<RemoveMemberSetHandler>();
 
             // ... Setup communication service to capture the request
-            var capturedCollaborationEmailRequest = (CollaborationEmailRequest)null;
+            var capturedCollaborationEmailRequest = (CollaborationEmailRequest?)null;
             _communicationServiceMock
                 .Setup(x => x.SendEmailInvite(It.IsAny<CollaborationEmailRequest>(), It.IsAny<CancellationToken>()))
                 .Callback<CollaborationEmailRequest, CancellationToken>((req, _) => capturedCollaborationEmailRequest = req)

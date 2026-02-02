@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProgrammePlan;
 
@@ -19,7 +19,7 @@ public class SetProjectPlanCheckYourAnswersHandler : IRequestHandler<SetProjectP
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetProjectPlanCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetProjectPlanCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

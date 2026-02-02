@@ -4,6 +4,10 @@
     {
         public Guid ApplicationSubmittedEmailTemplateId { get; set; }
 
+        public Guid  SssfBuildingCompleteApplicationSubmittedTemplateId { get; set; }
+
+        public Guid  SssfBuildingNonCompleteApplicationSubmittedEmailTemplateId { get; set; }
+
         public Guid WorksPackageSubmittedEmailTemplateId { get; set; }
 
         public Guid ScheduleOfWorksSubmittedEmailTemplateId { get; set; }

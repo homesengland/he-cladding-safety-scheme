@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.NewApplication;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Dashboard.AcknowledgeNotification;
 
@@ -16,7 +16,7 @@ public class GetAcknowledgeNotificationHandler : IRequestHandler<GetAcknowledgeN
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(GetAcknowledgeNotificationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(GetAcknowledgeNotificationRequest request, CancellationToken cancellationToken)
     {
         await _db.ExecuteAsync("SetAlertAcknowledgement", new 
         { 

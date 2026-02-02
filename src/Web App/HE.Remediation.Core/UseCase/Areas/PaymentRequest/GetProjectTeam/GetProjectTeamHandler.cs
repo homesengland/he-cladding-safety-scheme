@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetProjectTeam;
 
@@ -23,7 +23,7 @@ public class GetProjectTeamHandler : IRequestHandler<GetProjectTeamRequest, GetP
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetProjectTeamResponse> Handle(GetProjectTeamRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProjectTeamResponse> Handle(GetProjectTeamRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
@@ -61,7 +61,7 @@ public class GetProjectTeamHandler : IRequestHandler<GetProjectTeamRequest, GetP
         };
     }
 
-    public async Task<bool> EndDateHasSlipped(Guid applicationId, int slippageInMonths)
+    public async ValueTask<bool> EndDateHasSlipped(Guid applicationId, int slippageInMonths)
     {
         var endVersionDates = await _paymentRequestRepository.GetPaymentRequestEndVersionDates(applicationId);
         if (endVersionDates == null)

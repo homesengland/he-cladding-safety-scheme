@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetRemoveTeamMember;
 
@@ -25,7 +25,7 @@ public class GetRemoveTeamMemberHandler : IRequestHandler<GetRemoveTeamMemberReq
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetRemoveTeamMemberResponse> Handle(GetRemoveTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRemoveTeamMemberResponse> Handle(GetRemoveTeamMemberRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

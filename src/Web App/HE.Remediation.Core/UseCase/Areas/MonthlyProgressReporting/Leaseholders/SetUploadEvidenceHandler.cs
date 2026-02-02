@@ -5,7 +5,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.L
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Transactions;
@@ -34,7 +34,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholder
             _fileServiceSettings = fileServiceSettings.Value;
         }
 
-        public async Task<Unit> Handle(SetUploadEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetUploadEvidenceRequest request, CancellationToken cancellationToken)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Enums;
 
@@ -13,7 +13,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
             _connection = connection;
         }
 
-        public async Task<GetMemberResponse> Handle(GetMemberRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetMemberResponse> Handle(GetMemberRequest request, CancellationToken cancellationToken)
         {
             var result = await _connection.QuerySingleOrDefaultAsync<GetMemberResult>("GetCollaborationOrganisationUser", request);
             var response = new GetMemberResponse()

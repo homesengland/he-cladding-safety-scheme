@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.GetNotEligible;
 
@@ -15,7 +15,7 @@ public class GetNotEligibleHandler : IRequestHandler<GetNotEligibleRequest, GetN
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetNotEligibleResponse> Handle(GetNotEligibleRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetNotEligibleResponse> Handle(GetNotEligibleRequest request, CancellationToken cancellationToken)
     {
         var response = await _connection.QuerySingleOrDefaultAsync<GetNotEligibleResponse>("GetNotEligibleInformation", new
         {

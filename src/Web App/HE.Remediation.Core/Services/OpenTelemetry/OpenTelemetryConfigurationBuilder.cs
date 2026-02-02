@@ -24,7 +24,8 @@ public class OpenTelemetryConfigurationBuilder : IOpenTelemetryConfigurationBuil
             EnableSqlFiltering = ParseBool(configurationGetter("OpenTelemetry:EnableSqlFiltering"), false),
             EnableEnhancedSqlEnrichment = ParseBool(configurationGetter("OpenTelemetry:EnableEnhancedSqlEnrichment"), true),
             EnableSqlMetrics = ParseBool(configurationGetter("OpenTelemetry:EnableSqlMetrics"), false),
-            SqlFilterExcludePatterns = ParseStringArray(configurationGetter("OpenTelemetry:SqlFilterExcludePatterns"))
+            SqlFilterExcludePatterns = ParseStringArray(configurationGetter("OpenTelemetry:SqlFilterExcludePatterns")),
+            SuppressSqlInstrumentation = ParseBool(configurationGetter("OpenTelemetry:SuppressSqlInstrumentation"), false)
         };
 
         return options;

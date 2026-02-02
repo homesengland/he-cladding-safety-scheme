@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.UpdateBuildingControlRequired
 {
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.Up
             _progressReportingRepository = progressReportingRepository;
         }
 
-        public async Task<Unit> Handle(UpdateBuildingControlRequiredRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(UpdateBuildingControlRequiredRequest request, CancellationToken cancellationToken)
         {
             await _progressReportingRepository.UpdateBuildingControlRequired(request.BuildingControlRequired);
 

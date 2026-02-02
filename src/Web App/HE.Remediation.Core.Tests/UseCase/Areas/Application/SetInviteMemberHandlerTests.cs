@@ -88,10 +88,10 @@ namespace HE.Remediation.Core.Tests.UseCase.Areas.Application
 
             _thirdPartyCollaboratorRepository
                 .Setup(repo => repo.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source))
-                .ReturnsAsync((GetInviteResponse)null); // Simulate not found
+                .ReturnsAsync((GetInviteResponse?)null); // Simulate not found
 
             // Act & Assert
-            await Assert.ThrowsAsync<NullReferenceException>(() => _handler.Handle(request, CancellationToken.None));
+            await Assert.ThrowsAsync<NullReferenceException>(() => _handler.Handle(request, CancellationToken.None).AsTask());
         }
     }
 }

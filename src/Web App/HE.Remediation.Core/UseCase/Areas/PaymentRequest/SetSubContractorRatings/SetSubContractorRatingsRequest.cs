@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetSubContractorRatings;
 
@@ -8,7 +8,7 @@ public class SetSubContractorRatingsRequest : IRequest
     public bool Complete { get; set; }
 }
 
-public class SubContractorRating : IRequest
+public class SubContractorRating
 {
     public Guid Id { get; set; }
     public int QualityOfWork { get; set; }

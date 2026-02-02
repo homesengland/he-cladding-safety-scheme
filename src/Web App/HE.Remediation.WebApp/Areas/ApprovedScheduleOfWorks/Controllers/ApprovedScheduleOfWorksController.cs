@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.UseCase.Areas.ApprovedScheduleOfWorks.BaseInformation.Get;
 using HE.Remediation.Core.UseCase.Areas.ApprovedScheduleOfWorks.CostProfile.Get;

@@ -1,9 +1,9 @@
 using Dapper;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Data.StoredProcedureResults;
+using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress;
-using HE.Remediation.Core.Enums;
 using static HE.Remediation.Core.Data.StoredProcedureResults.GetProgressReportResult;
 
 namespace HE.Remediation.Core.Data.Repositories;
@@ -251,7 +251,7 @@ public class ProgressReportingRepository : IProgressReportingRepository
                 ApplicationId = applicationId,
                 ProgressReportId = progressReportId
             });
-        
+
         return result;
     }
 
@@ -1479,5 +1479,19 @@ public class ProgressReportingRepository : IProgressReportingRepository
     public async Task SetHasVisitedCheckYourAnswers(SetHasVisitedCheckYourAnswersParameters parameters)
     {
         await _connection.ExecuteAsync(nameof(SetHasVisitedCheckYourAnswers), parameters);
+    }
+
+    public async Task<bool> IsDutyOfCareComplete()
+    {
+        if (!TryGetApplicationAndProgressReportIds(out var applicationId, out var progressReportId))
+        {
+            return false;
+        }
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@ApplicationId", applicationId);
+
+        var result = await _connection.QuerySingleOrDefaultAsync<bool>(nameof(IsDutyOfCareComplete), parameters);
+        return result;
     }
 }

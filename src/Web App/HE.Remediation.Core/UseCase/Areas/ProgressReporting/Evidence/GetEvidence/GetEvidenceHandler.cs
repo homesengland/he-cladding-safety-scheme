@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.Evidence.GetEvidence;
 
@@ -24,7 +24,7 @@ public class GetEvidenceHandler : IRequestHandler<GetEvidenceRequest, GetEvidenc
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetEvidenceResponse> Handle(GetEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetEvidenceResponse> Handle(GetEvidenceRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

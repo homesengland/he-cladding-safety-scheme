@@ -7,7 +7,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholders;
@@ -35,7 +35,7 @@ public class SetHaveYouContactedHandler : DeleteUploadEvidenceService, IRequestH
         _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetHaveYouContactedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetHaveYouContactedRequest request, CancellationToken cancellationToken)
     {
         var details = await _detailsProvider.GetApplicationDetails();
         var progressReportId = _dataProvider.GetProgressReportId();

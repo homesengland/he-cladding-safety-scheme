@@ -9,7 +9,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermissio
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermission.WorksRequirePermission.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermission.WorksRequirePermission.Set;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackagePlanningPermission;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackagePlanningPermission.Controllers;

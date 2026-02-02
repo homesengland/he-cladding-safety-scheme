@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -15,7 +15,7 @@ public class SetRepresentationCompanyOrIndividualAddressManualDetails : IRequest
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetRepresentationCompanyOrIndividualAddressManualDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetRepresentationCompanyOrIndividualAddressManualDetailsRequest request, CancellationToken cancellationToken)
         {
             var parameters = new DynamicParameters(request);
             parameters.Add("@ApplicationId", _applicationDataProvider.GetApplicationId());

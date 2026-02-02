@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.AspNetCore.Http;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Add;

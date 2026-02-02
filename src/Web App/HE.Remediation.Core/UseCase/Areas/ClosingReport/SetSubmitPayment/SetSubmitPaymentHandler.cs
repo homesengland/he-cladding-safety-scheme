@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetSubmitPayment;
@@ -19,7 +19,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest, 
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<SetSubmitPaymentResponse> Handle(SetSubmitPaymentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetSubmitPaymentResponse> Handle(SetSubmitPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

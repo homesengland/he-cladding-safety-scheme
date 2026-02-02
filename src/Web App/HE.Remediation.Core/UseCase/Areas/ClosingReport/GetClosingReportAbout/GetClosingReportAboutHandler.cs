@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetClosingReportAbout;
 
@@ -19,7 +19,7 @@ public class GetClosingReportAboutHandler : IRequestHandler<GetClosingReportAbou
         _buildingDetailsRepository = buildingDetailsRepository;
     }
 
-    public async Task<GetClosingReportAboutResponse> Handle(GetClosingReportAboutRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetClosingReportAboutResponse> Handle(GetClosingReportAboutRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

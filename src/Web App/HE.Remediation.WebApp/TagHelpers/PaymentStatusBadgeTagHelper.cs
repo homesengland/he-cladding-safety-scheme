@@ -30,6 +30,7 @@ namespace HE.Remediation.WebApp.TagHelpers
                 EPaymentStatus.Rejected => "govuk-tag--orange",
                 EPaymentStatus.Approved => "govuk-tag--green",
                 EPaymentStatus.Recommended => "govuk-tag--green",
+                EPaymentStatus.Reclaimed => "govuk-tag--blue",
                 _ => string.Empty,
             };
         }
@@ -43,6 +44,7 @@ namespace HE.Remediation.WebApp.TagHelpers
                 EPaymentStatus.Rejected => "Rejected",
                 EPaymentStatus.Approved => "Approved",
                 EPaymentStatus.Recommended => "Recommended",
+                EPaymentStatus.Reclaimed => "Reclaimed",
                 _ => string.Empty,
             };
         }

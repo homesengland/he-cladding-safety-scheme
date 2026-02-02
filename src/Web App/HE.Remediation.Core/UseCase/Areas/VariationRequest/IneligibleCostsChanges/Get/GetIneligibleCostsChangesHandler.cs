@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.IneligibleCostsChanges.Get;
 
@@ -23,7 +23,7 @@ public class GetIneligibleCostsChangesHandler : IRequestHandler<GetIneligibleCos
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<GetIneligibleCostsChangesResponse> Handle(GetIneligibleCostsChangesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetIneligibleCostsChangesResponse> Handle(GetIneligibleCostsChangesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

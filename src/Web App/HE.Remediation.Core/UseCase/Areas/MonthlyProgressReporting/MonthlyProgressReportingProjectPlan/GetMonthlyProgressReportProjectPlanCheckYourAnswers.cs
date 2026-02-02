@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
 
@@ -20,10 +20,11 @@ public class GetMonthlyProgressReportProjectPlanCheckYourAnswersHandler : IReque
         _projectPlanRepository = projectPlanRepository;
     }
 
-    public async Task<GetMonthlyProgressReportProjectPlanCheckYourAnswersResponse> Handle(GetMonthlyProgressReportProjectPlanCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetMonthlyProgressReportProjectPlanCheckYourAnswersResponse> Handle(GetMonthlyProgressReportProjectPlanCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var applicationId = _applicationDataProvider.GetApplicationId();
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
         var applicationDetails = await _applicationDetailsProvider.GetApplicationDetails();
 
@@ -36,6 +37,7 @@ public class GetMonthlyProgressReportProjectPlanCheckYourAnswersHandler : IReque
 
         return new GetMonthlyProgressReportProjectPlanCheckYourAnswersResponse
         {
+            ApplicationScheme = applicationScheme,
             ApplicationReferenceNumber = applicationDetails.ApplicationReferenceNumber,
             BuildingName = applicationDetails.BuildingName,
             IntentToProceedType = checkYourAnswers.IntentToProceedTypeId,
@@ -59,6 +61,7 @@ public class GetMonthlyProgressReportProjectPlanCheckYourAnswersRequest : IReque
 
 public class GetMonthlyProgressReportProjectPlanCheckYourAnswersResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public EIntentToProceedType? IntentToProceedType { get; set; }

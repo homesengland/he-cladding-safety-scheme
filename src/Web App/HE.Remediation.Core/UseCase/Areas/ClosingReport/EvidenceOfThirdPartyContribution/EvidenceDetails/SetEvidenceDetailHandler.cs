@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails
 {
@@ -10,7 +10,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
         private readonly IApplicationDataProvider _applicationDataProvider = applicationDataProvider;
         private readonly IEvidenceOfThirdPartyContributionRepository _evidenceOfThirdPartyContributionRepository = evidenceOfThirdPartyContributionRepository;
 
-        public async Task<SetEvidenceDetailResponse> Handle(SetEvidenceDetailRequest request, CancellationToken cancellationToken)
+        public async ValueTask<SetEvidenceDetailResponse> Handle(SetEvidenceDetailRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

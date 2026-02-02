@@ -1,9 +1,12 @@
-﻿using HE.Remediation.WebApp.ViewModels.Shared;
+﻿using HE.Remediation.Core.Enums;
+using HE.Remediation.WebApp.ViewModels.Shared;
 
 namespace HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.Upload;
 
 public class UploadProjectPlanViewModel : FileUploadViewModel
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
+
     public string ApplicationReferenceNumber { get; set; }
 
     public string BuildingName { get; set; }

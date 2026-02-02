@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddre
             _dbConnectionWrapper = dbConnectionWrapper;
         }
 
-        public async Task<GetBuildingAddressResponse> Handle(GetBuildingAddressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingAddressResponse> Handle(GetBuildingAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddre
             return response;
         }
 
-        private async Task<GetBuildingAddressResponse> GetBuildingAddress(Guid applicationId)
+        private async ValueTask<GetBuildingAddressResponse> GetBuildingAddress(Guid applicationId)
         {
             var response = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingAddressResponse>("GetBuildingAddress", new { applicationId });
 

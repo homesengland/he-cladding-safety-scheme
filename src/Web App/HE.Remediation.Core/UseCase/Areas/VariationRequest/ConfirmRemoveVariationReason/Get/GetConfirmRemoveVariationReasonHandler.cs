@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.ConfirmRemoveVariationReason.Get;
 
@@ -22,7 +22,7 @@ public class GetConfirmRemoveVariationReasonHandler : IRequestHandler<GetConfirm
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetConfirmRemoveVariationReasonResponse> Handle(GetConfirmRemoveVariationReasonRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetConfirmRemoveVariationReasonResponse> Handle(GetConfirmRemoveVariationReasonRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

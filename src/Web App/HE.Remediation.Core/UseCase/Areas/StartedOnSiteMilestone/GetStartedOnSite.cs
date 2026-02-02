@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.StartedOnSiteMilestone;
 
@@ -23,7 +23,7 @@ public class GetStartedOnSiteHandler : IRequestHandler<GetStartedOnSiteRequest, 
         _milestoneRepository = milestoneRepository;
     }
 
-    public async Task<GetStartedOnSiteResponse> Handle(GetStartedOnSiteRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetStartedOnSiteResponse> Handle(GetStartedOnSiteRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

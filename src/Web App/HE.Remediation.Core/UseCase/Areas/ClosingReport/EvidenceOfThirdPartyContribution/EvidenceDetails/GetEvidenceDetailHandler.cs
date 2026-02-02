@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails
@@ -26,7 +26,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
             _buildingDetailsRepository = buildingDetailsRepository;
         }
 
-        public async Task<GetEvidenceDetailResponse> Handle(GetEvidenceDetailRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetEvidenceDetailResponse> Handle(GetEvidenceDetailRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

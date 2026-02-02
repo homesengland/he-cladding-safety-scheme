@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ManageProgramme
 {
@@ -18,7 +18,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ManageProgramme
             _manageProgrammeRepository = manageProgrammeRepository;
         }
 
-        public async Task<IReadOnlyCollection<GetManageProgrammeResponse>> Handle(GetManageProgrammeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<IReadOnlyCollection<GetManageProgrammeResponse>> Handle(GetManageProgrammeRequest request, CancellationToken cancellationToken)
         {
             var userId = _applicationDataProvider.GetUserId();
             var programmeApplications = await _manageProgrammeRepository.GetManageProgrammeDetails(request, userId);

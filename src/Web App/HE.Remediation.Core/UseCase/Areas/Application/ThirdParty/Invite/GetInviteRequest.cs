@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Enums;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;

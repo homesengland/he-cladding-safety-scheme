@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.IneligibleCosts;
 
@@ -23,7 +23,7 @@ public class GetIneligibleCostsHandler : IRequestHandler<GetIneligibleCostsReque
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetIneligibleCostsResponse> Handle(GetIneligibleCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetIneligibleCostsResponse> Handle(GetIneligibleCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

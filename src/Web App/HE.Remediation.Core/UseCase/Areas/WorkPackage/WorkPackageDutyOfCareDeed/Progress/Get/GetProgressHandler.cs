@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageDutyOfCareDeed.Progress.Get;
 
@@ -22,7 +22,7 @@ public class GetProgressHandler : IRequestHandler<GetProgressRequest, GetProgres
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetProgressResponse> Handle(GetProgressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProgressResponse> Handle(GetProgressRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

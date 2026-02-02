@@ -13,7 +13,7 @@ using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Set;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.ScheduleOfWorks;
 
-using MediatR;
+using Mediator;
 
 using Microsoft.AspNetCore.Mvc;
 

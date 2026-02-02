@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.CostsScheduling;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.CheckYourAnswers
 {
@@ -19,7 +19,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduli
             _buildDetailsRepository = buildingDetailsRepository;
             _applicationDataProvider = applicationDataProvider; 
         }
-        public async Task<GetCheckYourAnswersResponse> Handle(GetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetCheckYourAnswersResponse> Handle(GetCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             var quotes = await _workPackageRepository.GetCostsScheduleSoughtQuotes();
             var subcontractors = await _workPackageRepository.GetCostsScheduleSubcontractors();

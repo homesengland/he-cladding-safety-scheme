@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WorksRequirePermission.GetWorksRequirePermission;
 
@@ -23,7 +23,7 @@ public class GetWorksRequirePermissionHandler : IRequestHandler<GetWorksRequireP
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetWorksRequirePermissionResponse> Handle(GetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetWorksRequirePermissionResponse> Handle(GetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.NonResidentialUnits.SetNonResidentialUnits
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.NonResidentialUnits.
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetNonResidentialUnitsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetNonResidentialUnitsRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

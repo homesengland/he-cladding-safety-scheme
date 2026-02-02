@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorDetails.GetAssessorDetails
 {
@@ -14,12 +14,12 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorDetails.Ge
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetAssessorDetailsResponse> Handle(GetAssessorDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetAssessorDetailsResponse> Handle(GetAssessorDetailsRequest request, CancellationToken cancellationToken)
         {
             return await GetAssessorDetails(request);
         }
 
-        private async Task<GetAssessorDetailsResponse> GetAssessorDetails(GetAssessorDetailsRequest request)
+        private async ValueTask<GetAssessorDetailsResponse> GetAssessorDetails(GetAssessorDetailsRequest request)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             var result = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetAssessorDetailsResponse>("GetFireRiskAssessmentAssessorDetails", new

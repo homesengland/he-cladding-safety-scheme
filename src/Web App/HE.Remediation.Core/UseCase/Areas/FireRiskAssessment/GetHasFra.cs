@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
 
@@ -17,7 +17,7 @@ public class GetHasFraHandler : IRequestHandler<GetHasFraRequest, GetHasFraRespo
         _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
     }
 
-    public async Task<GetHasFraResponse> Handle(GetHasFraRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetHasFraResponse> Handle(GetHasFraRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

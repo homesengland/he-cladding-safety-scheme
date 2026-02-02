@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNeedsSupport.GetReasonNeedsSupport;
 
@@ -23,7 +23,7 @@ public class GetReasonNeedsSupportHandler : IRequestHandler<GetReasonNeedsSuppor
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetReasonNeedsSupportResponse> Handle(GetReasonNeedsSupportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetReasonNeedsSupportResponse> Handle(GetReasonNeedsSupportRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

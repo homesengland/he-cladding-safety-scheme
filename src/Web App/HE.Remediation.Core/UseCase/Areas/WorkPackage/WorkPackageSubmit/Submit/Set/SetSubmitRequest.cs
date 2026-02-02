@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageSubmit.Submit.Set;
 
 public class SetSubmitRequest : IRequest<Unit>

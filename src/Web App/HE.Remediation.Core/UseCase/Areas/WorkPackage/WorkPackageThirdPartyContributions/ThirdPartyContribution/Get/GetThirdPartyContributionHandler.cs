@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageThirdPartyContributions.ThirdPartyContribution.Get;
 
@@ -23,7 +23,7 @@ public class GetThirdPartyContributionHandler : IRequestHandler<GetThirdPartyCon
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetThirdPartyContributionResponse> Handle(GetThirdPartyContributionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetThirdPartyContributionResponse> Handle(GetThirdPartyContributionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

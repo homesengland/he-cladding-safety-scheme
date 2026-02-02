@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 using System.Transactions;
 
@@ -30,7 +30,7 @@ public class SetCostHandler : IRequestHandler<SetCostRequest>
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<Unit> Handle(SetCostRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCostRequest request, CancellationToken cancellationToken)
     {
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
         

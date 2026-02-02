@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetLeaseHolderEvidence
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetLeaseHolderEvidence
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<IReadOnlyCollection<GetLeaseHolderEvidenceResponse>> Handle(GetLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<IReadOnlyCollection<GetLeaseHolderEvidenceResponse>> Handle(GetLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

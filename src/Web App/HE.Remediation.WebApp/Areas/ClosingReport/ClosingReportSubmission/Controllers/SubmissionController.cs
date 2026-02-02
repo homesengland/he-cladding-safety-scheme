@@ -6,7 +6,7 @@ using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetSubmitted;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetDeclaration;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.ClosingReportSubmission.Controllers;

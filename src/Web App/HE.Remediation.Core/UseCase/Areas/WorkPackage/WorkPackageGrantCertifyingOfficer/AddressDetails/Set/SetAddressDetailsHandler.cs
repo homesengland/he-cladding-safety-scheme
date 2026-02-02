@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.GrantCertifyingOfficer;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.AddressDetails.Set;
 
@@ -14,7 +14,7 @@ public class SetAddressDetailsHandler : IRequestHandler<SetAddressDetailsRequest
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetAddressDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetAddressDetailsRequest request, CancellationToken cancellationToken)
     {
         var parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
         if (parsedAddress != null)

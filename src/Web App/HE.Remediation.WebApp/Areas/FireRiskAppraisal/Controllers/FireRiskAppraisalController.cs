@@ -40,7 +40,7 @@ using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.FireRiskAppraisal;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

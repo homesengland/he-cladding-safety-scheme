@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
 
@@ -22,14 +22,16 @@ public class GetProjectPlanHandler : IRequestHandler<GetProjectPlanRequest, GetP
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetProjectPlanResponse> Handle(GetProjectPlanRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProjectPlanResponse> Handle(GetProjectPlanRequest request, CancellationToken cancellationToken)
     {
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
         var applicationDetails = await _applicationDetailsProvider.GetApplicationDetails();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
         var projectPlan = await _projectPlanRepository.GetProjectPlanDetails(applicationDetails.ApplicationId, progressReportId);
 
         return new GetProjectPlanResponse
         {
+            ApplicationScheme = applicationScheme,
             BuildingName = applicationDetails.BuildingName,
             ApplicationReferenceNumber = applicationDetails.ApplicationReferenceNumber,
             AmountPaidForPTS = projectPlan?.AmountPaidForPTS,
@@ -52,6 +54,7 @@ public class GetProjectPlanRequest : IRequest<GetProjectPlanResponse>
 
 public class GetProjectPlanResponse
 {
+    public EApplicationScheme ApplicationScheme { get; set; }
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
     public EIntentToProceedType? IntentToProceedType { get; set; }

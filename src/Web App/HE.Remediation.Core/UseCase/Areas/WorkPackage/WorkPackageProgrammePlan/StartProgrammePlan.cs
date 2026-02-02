@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProgrammePlan;
 public class StartProgrammePlanHandler : IRequestHandler<StartProgrammePlanRequest>
@@ -17,7 +17,7 @@ public class StartProgrammePlanHandler : IRequestHandler<StartProgrammePlanReque
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(StartProgrammePlanRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(StartProgrammePlanRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

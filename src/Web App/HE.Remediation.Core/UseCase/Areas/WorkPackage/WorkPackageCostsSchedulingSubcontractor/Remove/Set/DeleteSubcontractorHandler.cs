@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsSchedulingSubcontractor.Remove.Set;
 
@@ -12,7 +12,7 @@ public class DeleteSubcontractorHandler : IRequestHandler<DeleteSubcontractorReq
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(DeleteSubcontractorRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteSubcontractorRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.DeleteCostsScheduleSubcontractor(request.SubcontractorId);
         return Unit.Value;

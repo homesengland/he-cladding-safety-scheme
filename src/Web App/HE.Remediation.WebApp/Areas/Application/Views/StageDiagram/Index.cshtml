@@ -485,7 +485,7 @@
                         </div>
                     }
 
-                    @if (Model.Stage == EApplicationStage.WorksPackage && Model.HasWorkPackage && !Model.IsWorkPackageSubmitted && Model.HasProgressReports)
+                    @if (Model.DisplayWorksPackage())
                     {
                         <div class="govuk-!-padding-left-0 govuk-!-margin-top-5 govuk-!-font-size-24 govuk-!-font-weight-bold">
                             <a href="@Url.Action("ConfirmToProceed", "WorkPackage", new { Area = "WorksPackage" } )" class="govuk-link">Compile works package</a>

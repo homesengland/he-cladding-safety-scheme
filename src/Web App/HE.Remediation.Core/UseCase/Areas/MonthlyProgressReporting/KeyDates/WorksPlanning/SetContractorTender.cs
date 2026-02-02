@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.WorksPlanning;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.WorksPlanning;
 public class SetContractorTenderHandler : IRequestHandler<SetContractorTenderRequest>
@@ -15,7 +15,7 @@ public class SetContractorTenderHandler : IRequestHandler<SetContractorTenderReq
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<Unit> Handle(SetContractorTenderRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetContractorTenderRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var applicationId = _applicationDataProvider.GetApplicationId();

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
 {
@@ -13,7 +13,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
         }
 
 
-        public async Task<Unit> Handle(SetSummariseProgressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetSummariseProgressRequest request, CancellationToken cancellationToken)
         {
             await UpdateSummariseProgress(request);
             return Unit.Value;

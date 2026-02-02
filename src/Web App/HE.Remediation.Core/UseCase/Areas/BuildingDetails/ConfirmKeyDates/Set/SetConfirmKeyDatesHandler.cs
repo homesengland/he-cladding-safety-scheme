@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.BuildingDetails;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmKeyDates.Set;
@@ -17,7 +17,7 @@ public class SetConfirmKeyDatesHandler : IRequestHandler<SetConfirmKeyDatesReque
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetConfirmKeyDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetConfirmKeyDatesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

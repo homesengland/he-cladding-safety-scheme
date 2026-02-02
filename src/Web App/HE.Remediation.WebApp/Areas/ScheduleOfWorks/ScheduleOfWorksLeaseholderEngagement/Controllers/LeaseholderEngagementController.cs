@@ -6,7 +6,7 @@ using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.BaseInformation.Get;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.ScheduleOfWorks;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 

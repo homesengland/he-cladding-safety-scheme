@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.SoughtQuotes.Get;
 
@@ -22,7 +22,7 @@ public class GetSoughtQuotesHandler : IRequestHandler<GetSoughtQuotesRequest, Ge
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetSoughtQuotesResponse> Handle(GetSoughtQuotesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetSoughtQuotesResponse> Handle(GetSoughtQuotesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

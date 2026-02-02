@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.VariationRequest;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
@@ -24,7 +24,7 @@ public class SetVariationReasonHandler : IRequestHandler<SetVariationReasonReque
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<Unit> Handle(SetVariationReasonRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetVariationReasonRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

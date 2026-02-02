@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.ContactDetails.GetContactDetails
 {
@@ -15,13 +15,13 @@ namespace HE.Remediation.Core.UseCase.Areas.Administration.ContactDetails.GetCon
             _db = db;
         }
 
-        public async Task<GetContactDetailsResponse> Handle(GetContactDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetContactDetailsResponse> Handle(GetContactDetailsRequest request, CancellationToken cancellationToken)
         {
             var userId = _applicationDataProvider.GetUserId();            
             return await GetContactDetails(request);
         }
 
-        private async Task<GetContactDetailsResponse> GetContactDetails(GetContactDetailsRequest request)
+        private async ValueTask<GetContactDetailsResponse> GetContactDetails(GetContactDetailsRequest request)
         {
             var userId = _applicationDataProvider.GetUserId();
             var result = await _db.QuerySingleOrDefaultAsync<GetContactDetailsResponse>("GetUserContactDetails", new

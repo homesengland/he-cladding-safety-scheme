@@ -1,7 +1,7 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InternalWorksRequired;
 
@@ -16,7 +16,7 @@ public class GetInternalWorksRequiredHandler: IRequestHandler<GetInternalWorksRe
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetInternalWorksRequiredResponse> Handle(GetInternalWorksRequiredRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetInternalWorksRequiredResponse> Handle(GetInternalWorksRequiredRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

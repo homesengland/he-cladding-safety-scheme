@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 
-using MediatR;
+using Mediator;
 
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ public class GetBuildingControlApprovalHandler : IRequestHandler<GetBuildingCont
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetBuildingControlApprovalResponse> Handle(GetBuildingControlApprovalRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingControlApprovalResponse> Handle(GetBuildingControlApprovalRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

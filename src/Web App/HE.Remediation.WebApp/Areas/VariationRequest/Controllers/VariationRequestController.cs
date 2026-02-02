@@ -41,7 +41,7 @@ using HE.Remediation.Core.UseCase.Areas.VariationRequest.VariationReason.Set;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.VariationRequest;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.VariationRequest.ThirdPartyContribution.Get;

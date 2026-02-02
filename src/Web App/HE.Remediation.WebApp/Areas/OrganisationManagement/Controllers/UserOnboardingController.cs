@@ -2,7 +2,7 @@
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using System.Security.Claims;
 using HE.Remediation.Core.UseCase.Areas.OrganisationManagement.UserOnboarding;
-using MediatR;
+using Mediator;
 using HE.Remediation.WebApp.ViewModels.OrganisationManagement;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;

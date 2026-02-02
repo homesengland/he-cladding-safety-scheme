@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Submitted.Get;
 
@@ -22,7 +22,7 @@ public class GetSubmittedHandler : IRequestHandler<GetSubmittedRequest, GetSubmi
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<GetSubmittedResponse> Handle(GetSubmittedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetSubmittedResponse> Handle(GetSubmittedRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

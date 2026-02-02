@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.ReasonForNoContributions.Get;
 
 public class GetReasonForNoContributionsRequest : IRequest<GetReasonForNoContributionsResponse>

@@ -9,7 +9,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using System.Transactions;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectTeam;
@@ -52,7 +52,7 @@ public class MonthlyReportSubmissionHandler : IRequestHandler<MonthlyReportSubmi
         _logger = logger;
     }
 
-    public async Task<MonthlyReportSubmissionResponse> Handle(MonthlyReportSubmissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<MonthlyReportSubmissionResponse> Handle(MonthlyReportSubmissionRequest request, CancellationToken cancellationToken)
     {
         var appDetails = await _applicationDetailsProvider.GetApplicationDetails();
         var progressReportId = _applicationDataProvider.GetProgressReportId();
@@ -314,7 +314,7 @@ public class MonthlyReportSubmissionHandler : IRequestHandler<MonthlyReportSubmi
         return areas;
     }
 
-    private async Task<GetTaskTypeResult> GetTaskType(string parentType, string childType, Guid applicationId, Guid progressReportId)
+    private async ValueTask<GetTaskTypeResult> GetTaskType(string parentType, string childType, Guid applicationId, Guid progressReportId)
     {
         var key = (parentType, childType);
         if (_TaskTypeCache.TryGetValue(key, out var type))

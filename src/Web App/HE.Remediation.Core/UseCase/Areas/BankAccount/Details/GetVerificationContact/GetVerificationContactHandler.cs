@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.GetVerificationContact;
 
@@ -15,7 +15,7 @@ public class GetVerificationContactHandler : IRequestHandler<GetVerificationCont
         _bankDetailsRepository = bankDetailsRepository;
     }
 
-    public async Task<GetVerificationContactResponse> Handle(GetVerificationContactRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetVerificationContactResponse> Handle(GetVerificationContactRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

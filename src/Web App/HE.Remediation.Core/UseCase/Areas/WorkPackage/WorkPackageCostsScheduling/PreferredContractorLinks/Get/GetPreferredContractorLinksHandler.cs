@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.PreferredContractorLinks.Get;
 
@@ -23,7 +23,7 @@ public class GetPreferredContractorLinksHandler : IRequestHandler<GetPreferredCo
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetPreferredContractorLinksResponse> Handle(GetPreferredContractorLinksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPreferredContractorLinksResponse> Handle(GetPreferredContractorLinksRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

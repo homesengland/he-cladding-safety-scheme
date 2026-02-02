@@ -105,7 +105,7 @@
                             <input asp-for="@Model.AllPayments[x.index].Paid" id="AllPayments@(x.index)__Paid" name="AllPayments[@(x.index)].Paid" type="hidden" value="@x.value.Paid" />
                         </td>
                         <td class="govuk-table__cell govuk-text-align-right govuk-!-padding-left-2">
-                            <payment-request-status-badge status="@Model.AllPayments[x.index].Status"></payment-request-status-badge>
+                            <payment-request-status-badge status="@Model.AllPayments[x.index].Amount < 0 ? EPaymentRequestStatus.Reclaimed : Model.AllPayments[x.index].Status"></payment-request-status-badge>
                         </td>
                     </tr>
                 }

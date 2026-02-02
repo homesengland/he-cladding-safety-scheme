@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService.Model;
 using HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.SetSecondaryContactDetails;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.DeleteExtraContact.SetDeleteExtraContact;
@@ -18,7 +18,7 @@ public class SetDeleteExtraContactHandler: IRequestHandler<SetDeleteExtraContact
         _db = db;
     }
 
-    public async Task<Unit> Handle(SetDeleteExtraContactRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeleteExtraContactRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

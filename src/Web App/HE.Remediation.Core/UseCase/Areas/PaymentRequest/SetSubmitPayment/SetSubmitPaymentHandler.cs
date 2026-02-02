@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.PaymentRequest;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Services.StatusTransition;
 
@@ -24,7 +24,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest>
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetSubmitPaymentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetSubmitPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
@@ -92,7 +92,7 @@ public class SetSubmitPaymentHandler : IRequestHandler<SetSubmitPaymentRequest>
         return false;
     }
 
-    private async Task<UpdateCostParameters> ObtainExistingCost()
+    private async ValueTask<UpdateCostParameters> ObtainExistingCost()
     {
         var existingCostsProfile = await _paymentRequestRepository.GetCostsProfile();
         if (existingCostsProfile == null)

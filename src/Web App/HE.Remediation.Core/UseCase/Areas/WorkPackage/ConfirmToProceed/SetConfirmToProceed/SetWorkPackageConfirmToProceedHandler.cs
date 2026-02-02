@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.VariationRequest.Costs.Set;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.ConfirmToProceed.SetConfirmToProceed
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.ConfirmToProceed.SetConf
             _workPackageRepository = workPackageRepository;
         }
 
-        public async Task<Unit> Handle(SetWorkPackageConfirmToProceedRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetWorkPackageConfirmToProceedRequest request, CancellationToken cancellationToken)
         {
             bool? isConfirmedToProceed = request.IsConfirmedToProceed switch
             {

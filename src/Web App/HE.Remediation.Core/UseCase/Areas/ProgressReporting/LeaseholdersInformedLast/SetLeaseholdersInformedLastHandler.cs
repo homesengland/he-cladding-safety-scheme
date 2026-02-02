@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.InformedLeaseholder.SetInformedLeaseholder;
-using MediatR;
+using Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeaseholderInforme
         }
 
 
-        public async Task<Unit> Handle(SetLeaseholdersInformedLastRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetLeaseholdersInformedLastRequest request, CancellationToken cancellationToken)
         {
             await UpdateLeaseholderInformedLastDate(request);
             return Unit.Value;

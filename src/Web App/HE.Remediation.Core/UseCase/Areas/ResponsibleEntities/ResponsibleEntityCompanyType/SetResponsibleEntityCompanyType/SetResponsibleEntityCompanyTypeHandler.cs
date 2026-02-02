@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanyType.SetResponsibleEntityCompanyType;
 
@@ -15,7 +15,7 @@ public class SetResponsibleEntityCompanyTypeHandler : IRequestHandler<SetRespons
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetResponsibleEntityCompanyTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetResponsibleEntityCompanyTypeRequest request, CancellationToken cancellationToken)
     {       
         await _connection.ExecuteAsync("UpdateResponsibleEntityCompanyType", new
         {

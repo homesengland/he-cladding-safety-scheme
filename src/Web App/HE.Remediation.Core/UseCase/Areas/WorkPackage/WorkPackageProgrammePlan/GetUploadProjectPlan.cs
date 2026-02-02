@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProgrammePlan;
 
@@ -24,7 +24,7 @@ public class GetUploadProjectPlanHandler : IRequestHandler<GetUploadProjectPlanR
         _wokPackageRepository = wokPackageRepository;
     }
 
-    public async Task<GetUploadProjectPlanResponse> Handle(GetUploadProjectPlanRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUploadProjectPlanResponse> Handle(GetUploadProjectPlanRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

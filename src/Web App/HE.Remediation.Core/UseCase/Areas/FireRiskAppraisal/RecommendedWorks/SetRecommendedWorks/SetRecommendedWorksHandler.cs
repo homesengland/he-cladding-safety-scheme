@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Data;
 using System.Transactions;
 
@@ -18,7 +18,7 @@ public class SetRecommendedWorksHandler: IRequestHandler<SetRecommendedWorksRequ
         _db = db;
     }
 
-    public async Task<Unit> Handle(SetRecommendedWorksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRecommendedWorksRequest request, CancellationToken cancellationToken)
     {
         await SetRecommendedWorkDetails(request);
         return Unit.Value;

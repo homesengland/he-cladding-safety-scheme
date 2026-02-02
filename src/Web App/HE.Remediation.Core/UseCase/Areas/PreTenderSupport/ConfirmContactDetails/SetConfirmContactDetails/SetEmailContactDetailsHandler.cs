@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.ConfirmContactDetails.SetConfirmContactDetails;
 
@@ -20,7 +20,7 @@ public class SetEmailContactDetailsHandler : IRequestHandler<SetEmailContactDeta
         _preTenderRepository = preTenderRepository;
     }
 
-    public async Task<Unit> Handle(SetEmailContactDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetEmailContactDetailsRequest request, CancellationToken cancellationToken)
     {
         if (await _preTenderRepository.IsPreTenderSubmitted(_applicationDataProvider.GetApplicationId()))
         {

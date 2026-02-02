@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectTeam;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
@@ -19,7 +19,7 @@ public class SetGrantCertifyingOfficerAddressResultHandler : IRequestHandler<Set
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<Unit> Handle(SetGrantCertifyingOfficerAddressResultRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetGrantCertifyingOfficerAddressResultRequest request, CancellationToken cancellationToken)
     {
         var progressReportId = _applicationDataProvider.GetProgressReportId();
         var parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);

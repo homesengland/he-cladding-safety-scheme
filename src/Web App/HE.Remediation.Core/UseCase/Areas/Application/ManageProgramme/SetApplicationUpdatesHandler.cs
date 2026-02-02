@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ManageProgramme
 {
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ManageProgramme
             _manageProgrammeRepository = manageProgrammeRepository;
         }
 
-        public async Task<Unit> Handle(SetApplicationUpdatesRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetApplicationUpdatesRequest request, CancellationToken cancellationToken)
         {
             await _manageProgrammeRepository.SaveManageProgrammeUpdates(request);
             return Unit.Value;

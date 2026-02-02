@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -21,7 +21,7 @@ public class SetResponsibleEntityPrimaryContactDetailsHandler : IRequestHandler<
         _responsibleEntityRepository = responsibleEntityRepository;
     }
 
-    public async Task<SetResponsibleEntityPrimaryContactDetailsResponse> Handle(SetResponsibleEntityPrimaryContactDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetResponsibleEntityPrimaryContactDetailsResponse> Handle(SetResponsibleEntityPrimaryContactDetailsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

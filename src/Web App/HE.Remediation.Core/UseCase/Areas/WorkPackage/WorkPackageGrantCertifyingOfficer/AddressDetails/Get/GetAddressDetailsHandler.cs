@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.AddressDetails.Get;
 
@@ -22,7 +22,7 @@ public class GetAddressDetailsHandler : IRequestHandler<GetAddressDetailsRequest
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetAddressDetailsResponse> Handle(GetAddressDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAddressDetailsResponse> Handle(GetAddressDetailsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

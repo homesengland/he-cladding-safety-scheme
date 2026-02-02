@@ -1,6 +1,6 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibleForGFA.SetResponsibleEntityResponsibleForGrantFunding
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.EntityResponsibl
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<SetResponsibleEntityResponsibleForGrantFundingResponse> Handle(SetResponsibleEntityResponsibleForGrantFundingRequest request, CancellationToken cancellationToken)
+        public async ValueTask<SetResponsibleEntityResponsibleForGrantFundingResponse> Handle(SetResponsibleEntityResponsibleForGrantFundingRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

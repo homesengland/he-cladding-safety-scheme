@@ -1,7 +1,7 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.ConfirmContactDetails.GetConfirmContactDetails;
 
@@ -23,7 +23,7 @@ public class GetConfirmContactDetailsHandler : IRequestHandler<GetConfirmContact
         _applicationRepository = applicationRepository;
     }
 
-    public async Task<GetConfirmContactDetailsResponse> Handle(GetConfirmContactDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetConfirmContactDetailsResponse> Handle(GetConfirmContactDetailsRequest request, CancellationToken cancellationToken)
     {           
         var applicationId = _applicationDataProvider.GetApplicationId();
                     

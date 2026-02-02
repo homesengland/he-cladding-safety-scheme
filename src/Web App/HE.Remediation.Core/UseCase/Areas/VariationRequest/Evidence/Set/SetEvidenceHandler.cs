@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Evidence.Set;
 
@@ -21,8 +21,8 @@ public class SetEvidenceHandler : IRequestHandler<SetEvidenceRequest, Unit>
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public Task<Unit> Handle(SetEvidenceRequest request, CancellationToken cancellationToken)
+    public ValueTask<Unit> Handle(SetEvidenceRequest request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(Unit.Value);
+        return ValueTask.FromResult(Unit.Value);
     }
 }

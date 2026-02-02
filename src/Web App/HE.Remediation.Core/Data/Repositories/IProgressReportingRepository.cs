@@ -182,4 +182,5 @@ public interface IProgressReportingRepository
     Task UpdateHasAppliedForBuildingControl(UpdateHasAppliedForBuildingControlParameters parameters);
     Task<bool> GetHasVisitedCheckYourAnswers(GetHasVisitedCheckYourAnswersParameters parameters);
     Task SetHasVisitedCheckYourAnswers(SetHasVisitedCheckYourAnswersParameters parameters);
+    Task<bool> IsDutyOfCareComplete();
 }

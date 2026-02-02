@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _responsibleEntityRepository = responsibleEntityRepository;
         }
 
-        public async Task<Unit> Handle(SetFreeholderAddressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetFreeholderAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             ParsedAddress parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);

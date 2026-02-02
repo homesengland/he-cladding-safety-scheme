@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureResults.VariationRequest;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.UnsafeCladdingCosts.Get;
 
@@ -24,7 +24,7 @@ public class GetUnsafeCladdingCostsHandler : IRequestHandler<GetUnsafeCladdingCo
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<GetUnsafeCladdingCostsResponse> Handle(GetUnsafeCladdingCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUnsafeCladdingCostsResponse> Handle(GetUnsafeCladdingCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

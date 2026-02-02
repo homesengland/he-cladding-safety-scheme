@@ -15,7 +15,7 @@ using HE.Remediation.Core.Settings;
 using HE.Remediation.Core.TypeHandlers;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF;
 using HE.Remediation.Core.UseCase.DataIngest.RAS;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +24,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
-using OpenTelemetry.Extensions.Propagators;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -41,7 +40,11 @@ namespace HE.Remediation.Core.Extensions
             var connectionString = builder.Configuration["DB_CONNSTRING"]
                                     ?? throw new InvalidOperationException("The DB_CONNSTRING configuration value has not been specified");
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediator(options =>
+            {
+                options.ServiceLifetime = ServiceLifetime.Transient;
+                options.Assemblies = [typeof(ServiceCollectionExtensions).Assembly];
+            });
 
             services.AddScoped<IDbConnection>(e => new SqlConnection(connectionString));
 
@@ -193,11 +196,16 @@ namespace HE.Remediation.Core.Extensions
                                     }
                                 }
                             };
-                        })
-                        .AddSqlClientInstrumentation(sqlOptions =>
-                        {
-                            // Always record exceptions
-                            sqlOptions.RecordException = true;
+                    });
+
+                // Only add SQL instrumentation if not suppressed
+                // Suppressing prevents database from appearing as separate node in X-Ray
+                if (!options.SuppressSqlInstrumentation)
+                {
+                    tracerProviderBuilder.AddSqlClientInstrumentation(sqlOptions =>
+                    {
+                        // Always record exceptions
+                        sqlOptions.RecordException = true;
 
                             // Enhanced enrichment with additional metadata
                             if (options.EnableEnhancedSqlEnrichment)
@@ -278,7 +286,11 @@ namespace HE.Remediation.Core.Extensions
                                     return true; // Include by default
                                 };
                             }
-                        })
+                        });
+                    }
+
+                    tracerProviderBuilder
+                        .AddProcessor(new DatabaseAsSubsegmentProcessor())
                         .AddProcessor(new ExceptionAlwaysExportProcessor())
                         .AddOtlpExporter(otlpOptions =>
                         {

@@ -7,7 +7,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilestones;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilestones.GetHasProjectPlanMilestones
 {
@@ -29,7 +29,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilesto
             _progressReportingRepository = progressReportingRepository;
         }
 
-        public async Task<GetHasProjectPlanMilestonesResponse> Handle(GetHasProjectPlanMilestonesRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetHasProjectPlanMilestonesResponse> Handle(GetHasProjectPlanMilestonesRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

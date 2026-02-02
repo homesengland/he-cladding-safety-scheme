@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.WithdrawalRequest.GetReasonForClosing;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WithdrawalRequest.GetFinalCheckYourAnswers
 {
@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WithdrawalRequest.GetFinalCheckYourA
             _closingReportRepository = closingReportRepository;
         }
 
-        public async Task<GetFinalCheckYourAnswersResponse> Handle(GetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFinalCheckYourAnswersResponse> Handle(GetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

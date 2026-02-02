@@ -3,7 +3,7 @@ using HE.Remediation.Core.UseCase.Areas.CostSchedule;
 using HE.Remediation.Core.UseCase.Areas.CostSchedulePdf;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.ViewModels.CostSchedule;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

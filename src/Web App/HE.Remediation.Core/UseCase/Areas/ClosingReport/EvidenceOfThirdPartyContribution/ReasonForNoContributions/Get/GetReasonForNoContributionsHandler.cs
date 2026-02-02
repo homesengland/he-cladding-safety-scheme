@@ -3,7 +3,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.GetYesNoDeclaration;
 
-using MediatR;
+using Mediator;
 
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.ReasonForNoContributions.Get;
@@ -26,7 +26,7 @@ public class GetReasonForNoContributionsHandler : IRequestHandler<GetReasonForNo
         _buildingDetailsRepository = buildingDetailsRepository;
     }
 
-    public async Task<GetReasonForNoContributionsResponse> Handle(GetReasonForNoContributionsRequest request,
+    public async ValueTask<GetReasonForNoContributionsResponse> Handle(GetReasonForNoContributionsRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

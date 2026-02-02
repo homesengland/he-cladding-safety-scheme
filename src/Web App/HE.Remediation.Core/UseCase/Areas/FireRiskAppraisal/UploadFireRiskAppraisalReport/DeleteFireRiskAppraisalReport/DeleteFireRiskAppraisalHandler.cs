@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Services.StatusTransition;
 
@@ -34,7 +34,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
             _statusTransitionService = statusTransitionService;
         }
 
-        public async Task<Unit> Handle(DeleteFireRiskAppraisalRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(DeleteFireRiskAppraisalRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

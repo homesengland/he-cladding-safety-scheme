@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MediatR;
+using Mediator;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.WebApp.Areas.Application.Controllers;
@@ -80,8 +80,8 @@ namespace HE.Remediation.WebApp.Tests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("InvitationDeclaration", result.ActionName);
-            Assert.Equal(viewModel.TeamMemberId, result.RouteValues["teamMemberId"]);
+            Assert.Equal("InvitationDeclaration", result!.ActionName);
+            Assert.Equal(viewModel.TeamMemberId, result.RouteValues!["teamMemberId"]);
         }
 
         [Fact]
@@ -101,8 +101,8 @@ namespace HE.Remediation.WebApp.Tests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("InvitationSent", result.ActionName);
-            Assert.Equal(viewModel.TeamMemberId, result.RouteValues["teamMemberId"]);
+            Assert.Equal("InvitationSent", result!.ActionName);
+            Assert.Equal(viewModel.TeamMemberId, result.RouteValues!["teamMemberId"]);
         }
 
         [Fact]

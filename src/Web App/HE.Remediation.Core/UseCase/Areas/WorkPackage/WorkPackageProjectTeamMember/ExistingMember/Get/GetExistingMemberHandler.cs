@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.ExistingMember.Get;
 
@@ -23,7 +23,7 @@ public class GetExistingMemberHandler : IRequestHandler<GetExistingMemberRequest
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetExistingMemberResponse> Handle(GetExistingMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetExistingMemberResponse> Handle(GetExistingMemberRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

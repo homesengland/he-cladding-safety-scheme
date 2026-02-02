@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.IneligibleCost;
 
@@ -23,7 +23,7 @@ public class GetIneligibleCostHandler : IRequestHandler<GetIneligibleCostRequest
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetIneligibleCostResponse> Handle(GetIneligibleCostRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetIneligibleCostResponse> Handle(GetIneligibleCostRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -49,7 +49,7 @@ public class GetBuildingAddressTests
         // Assert        
         Assert.NotNull(result);
 
-        var resultValid = ((result != null) &&
+        var resultValid = ((result?.NonResidentialUnits != null) &&
                            (result.NonResidentialUnits.Value == true));
         Assert.True(resultValid);
         _connection.Verify();

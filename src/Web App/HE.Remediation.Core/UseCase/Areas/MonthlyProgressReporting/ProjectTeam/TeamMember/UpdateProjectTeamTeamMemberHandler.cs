@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectTeam;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport;
@@ -24,7 +24,7 @@ public class UpdateProjectTeamTeamMemberHandler : IRequestHandler<UpdateProjectT
         _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
     }
 
-    public async Task<Guid> Handle(UpdateProjectTeamTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(UpdateProjectTeamTeamMemberRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

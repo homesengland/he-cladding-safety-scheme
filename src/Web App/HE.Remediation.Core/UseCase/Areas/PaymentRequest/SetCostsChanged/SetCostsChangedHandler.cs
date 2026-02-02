@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.PaymentRequest;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetCostsChanged;
 
@@ -17,7 +17,7 @@ public class SetCostsChangedHandler : IRequestHandler<SetCostsChangedRequest, Se
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<SetCostsChangedResponse> Handle(SetCostsChangedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetCostsChangedResponse> Handle(SetCostsChangedRequest request, CancellationToken cancellationToken)
     {
         var paymentRequestId = _adp.GetPaymentRequestId();
 

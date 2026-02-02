@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanySubType.SetResponsibleEntityCompanySubType;
 
@@ -14,7 +14,7 @@ public class SetResponsibleEntityCompanySubTypeHandler : IRequestHandler<SetResp
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetResponsibleEntityCompanySubTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetResponsibleEntityCompanySubTypeRequest request, CancellationToken cancellationToken)
     {                
         await _connection.ExecuteAsync("UpdateResponsibleEntityCompanySubType", new
         {

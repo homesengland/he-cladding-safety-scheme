@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.UpdateTaskStatus;
 
@@ -18,7 +18,7 @@ public class UpdateTaskStatusHandler : IRequestHandler<UpdateTaskStatusRequest>
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<Unit> Handle(UpdateTaskStatusRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(UpdateTaskStatusRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _adp.GetApplicationId();
         await _closingReportRepository.UpsertClosingReportTaskStatus(applicationId, request.ClosingReportTask, request.TaskStatus, request.AllowRevert);

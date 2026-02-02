@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 {
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _connection = connection;
         }
 
-        public async Task<GetCountriesResponse> Handle(GetCountriesRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetCountriesResponse> Handle(GetCountriesRequest request, CancellationToken cancellationToken)
         {
             var result = new GetCountriesResponse();
             var countries = await _connection.QueryAsync<Country>("GetCountries");

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RightToManage;
 
@@ -16,7 +16,7 @@ public class GetRightToManageEvidenceHandler : IRequestHandler<GetRightToManageE
         _rightToManageRepository = rightToManageRepository;
     }
 
-    public async Task<GetRightToManageEvidenceResponse> Handle(GetRightToManageEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRightToManageEvidenceResponse> Handle(GetRightToManageEvidenceRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         

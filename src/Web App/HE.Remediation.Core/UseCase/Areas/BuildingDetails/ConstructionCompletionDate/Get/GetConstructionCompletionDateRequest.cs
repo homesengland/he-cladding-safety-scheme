@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConstructionCompletionDate.Get
 {

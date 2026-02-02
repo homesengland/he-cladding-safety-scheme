@@ -8,7 +8,7 @@ using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContri
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
 using HE.Remediation.WebApp.Areas.ClosingReport.Controllers;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.ClosingReportEvidenceOfThirdPartyContribution.Controllers;

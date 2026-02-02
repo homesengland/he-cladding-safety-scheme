@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.KeyDates.Get;
 
@@ -22,7 +22,7 @@ public class GetKeyDatesHandler : IRequestHandler<GetKeyDatesRequest, GetKeyDate
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetKeyDatesResponse> Handle(GetKeyDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetKeyDatesResponse> Handle(GetKeyDatesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

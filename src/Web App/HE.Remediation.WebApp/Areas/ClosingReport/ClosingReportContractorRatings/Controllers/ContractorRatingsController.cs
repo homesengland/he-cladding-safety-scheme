@@ -9,7 +9,7 @@ using HE.Remediation.Core.UseCase.Areas.ClosingReport.SetSubContractorRatings;
 using HE.Remediation.WebApp.Areas.ClosingReport.Controllers;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
 using HE.Remediation.WebApp.ViewModels.ClosingReport.Shared;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.ClosingReportContractorRatings.Controllers;

@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetSubContractorCheckYourAnswers;
 
@@ -26,7 +26,7 @@ public class GetSubContractorCheckYourAnswersHandler : IRequestHandler<GetSubCon
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetSubContractorCheckYourAnswersResponse> Handle(GetSubContractorCheckYourAnswersRequest request,
+    public async ValueTask<GetSubContractorCheckYourAnswersResponse> Handle(GetSubContractorCheckYourAnswersRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectTeam;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.NoTeam;
 public class GetProjectTeamNoTeamHandler : IRequestHandler<GetProjectTeamNoTeamRequest, GetProjectTeamNoTeamResponse>
@@ -20,7 +20,7 @@ public class GetProjectTeamNoTeamHandler : IRequestHandler<GetProjectTeamNoTeamR
         _applicationDetailsProvider = applicationDetailsProvider;
     }
 
-    public async Task<GetProjectTeamNoTeamResponse> Handle(GetProjectTeamNoTeamRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProjectTeamNoTeamResponse> Handle(GetProjectTeamNoTeamRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

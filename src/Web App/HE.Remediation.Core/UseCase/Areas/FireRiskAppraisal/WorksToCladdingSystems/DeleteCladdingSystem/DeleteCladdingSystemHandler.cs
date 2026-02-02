@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.DeleteCladdingSystem;
 
@@ -20,7 +20,7 @@ public class DeleteCladdingSystemHandler : IRequestHandler<DeleteCladdingSystemR
         _fireRiskAppraisalRepository = fireRiskAppraisalRepository;
     }
 
-    public async Task<Unit> Handle(DeleteCladdingSystemRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteCladdingSystemRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId(); 
         await _dbConnectionWrapper

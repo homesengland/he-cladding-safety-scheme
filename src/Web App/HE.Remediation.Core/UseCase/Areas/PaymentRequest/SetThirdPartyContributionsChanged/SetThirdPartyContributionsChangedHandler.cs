@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.PaymentRequest;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetThirdPartyContributionsChanged;
 
 public class SetThirdPartyContributionsChangedHandler : IRequestHandler<SetThirdPartyContributionsChangedRequest, SetThirdPartyContributionsChangedResponse>
@@ -16,7 +16,7 @@ public class SetThirdPartyContributionsChangedHandler : IRequestHandler<SetThird
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<SetThirdPartyContributionsChangedResponse> Handle(SetThirdPartyContributionsChangedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetThirdPartyContributionsChangedResponse> Handle(SetThirdPartyContributionsChangedRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _adp.GetApplicationId(); 
         var paymentRequestId = _adp.GetPaymentRequestId();
@@ -44,7 +44,7 @@ public class SetThirdPartyContributionsChangedHandler : IRequestHandler<SetThird
     }
 
 
-    public async Task<bool> EndDateHasSlipped(Guid applicationId, int slippageInMonths)
+    public async ValueTask<bool> EndDateHasSlipped(Guid applicationId, int slippageInMonths)
     {
         var endVersionDates = await _paymentRequestRepository.GetPaymentRequestEndVersionDates(applicationId);
         if (endVersionDates == null)

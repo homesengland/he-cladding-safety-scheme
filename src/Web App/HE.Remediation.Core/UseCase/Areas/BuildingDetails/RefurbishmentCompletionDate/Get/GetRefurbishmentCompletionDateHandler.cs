@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.RefurbishmentCompletionDate.Get;
 
@@ -15,7 +15,7 @@ public class GetRefurbishmentCompletionDateHandler : IRequestHandler<GetRefurbis
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetRefurbishmentCompletionDateResponse> Handle(GetRefurbishmentCompletionDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRefurbishmentCompletionDateResponse> Handle(GetRefurbishmentCompletionDateRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

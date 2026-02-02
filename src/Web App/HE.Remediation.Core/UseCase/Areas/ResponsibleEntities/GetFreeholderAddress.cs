@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 {
@@ -19,7 +19,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _responsibleEntityRepository = responsibleEntityRepository;
         }
 
-        public async Task<GetFreeholderAddressResponse> Handle(GetFreeholderAddressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFreeholderAddressResponse> Handle(GetFreeholderAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -28,7 +28,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             return response;
         }
 
-        private async Task<GetFreeholderAddressResponse> GetFreeholderAddress(Guid applicationId)
+        private async ValueTask<GetFreeholderAddressResponse> GetFreeholderAddress(Guid applicationId)
         {
             var address = await _responsibleEntityRepository.GetFreeholderAddress(applicationId);        
             if (address is null)

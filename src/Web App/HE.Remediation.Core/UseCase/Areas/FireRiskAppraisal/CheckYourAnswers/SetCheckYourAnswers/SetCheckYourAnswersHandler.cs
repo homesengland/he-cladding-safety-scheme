@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.SetCheckYourAnswers
 {
@@ -21,7 +21,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.CheckYourAnswers.S
             _statusTransitionService = statusTransitionService;
         }
 
-        public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

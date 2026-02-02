@@ -129,7 +129,21 @@ public class StatusTransitionService : IStatusTransitionService
     //    { EApplicationInternalStatus.ApplicationNotEligiblePostDays, Array.Empty<EApplicationInternalStatus>() }
     //};
     #endregion
-    
+
+    public async Task TransitionToStatus(EApplicationStage stage, EApplicationStatus status, string reason = null, params Guid[] applicationIds)
+    {
+        reason = !string.IsNullOrWhiteSpace(reason) ? reason : null;
+        using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+        foreach (var applicationId in applicationIds)
+        {
+            await _applicationRepository.UpdateApplicationStage(applicationId, stage);
+            await _applicationRepository.UpdateStatus(applicationId, status, reason);
+        }
+
+        scope.Complete();
+    }
+
     public async Task TransitionToStatus(EApplicationStatus status, string reason = null, params Guid[] applicationIds)
     {
         reason = !string.IsNullOrWhiteSpace(reason) ? reason : null;

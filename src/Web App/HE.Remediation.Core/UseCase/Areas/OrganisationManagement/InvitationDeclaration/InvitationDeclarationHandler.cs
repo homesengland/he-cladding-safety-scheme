@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using HE.Remediation.Core.Enums;
@@ -17,7 +17,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InvitationDec
             _emailInviteSendQueue = emailInviteSendQueue;
         }
 
-        public async Task<InvitationDeclarationResponse> Handle(InvitationDeclarationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<InvitationDeclarationResponse> Handle(InvitationDeclarationRequest request, CancellationToken cancellationToken)
         {
             // Confirm invite and get details for invite email
             var response = await _connection.QuerySingleOrDefaultAsync<InvitationDeclarationResponse>(

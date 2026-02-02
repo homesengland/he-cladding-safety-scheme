@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetBankAccountDetailsRepresentative
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetBankAccountDe
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetBankAccountDetailsRepresentativeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetBankAccountDetailsRepresentativeRequest request, CancellationToken cancellationToken)
         {
             await UpsertBankAccountDetailsRepresentative(request);
             return Unit.Value;

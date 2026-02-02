@@ -4,7 +4,7 @@ using HE.Remediation.Core.Helpers;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetSubmitPayment;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetReviewPayment;
 
@@ -26,7 +26,7 @@ public class GetReviewPaymentHandler : IRequestHandler<GetReviewPaymentRequest, 
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetReviewPaymentResponse> Handle(GetReviewPaymentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetReviewPaymentResponse> Handle(GetReviewPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

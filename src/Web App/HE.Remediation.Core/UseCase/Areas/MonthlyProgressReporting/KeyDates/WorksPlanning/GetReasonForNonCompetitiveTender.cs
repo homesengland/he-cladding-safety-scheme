@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ public class GetReasonForNonCompetitiveTenderHandler : IRequestHandler<GetReason
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<GetReasonForNonCompetitiveTenderResponse> Handle(GetReasonForNonCompetitiveTenderRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetReasonForNonCompetitiveTenderResponse> Handle(GetReasonForNonCompetitiveTenderRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

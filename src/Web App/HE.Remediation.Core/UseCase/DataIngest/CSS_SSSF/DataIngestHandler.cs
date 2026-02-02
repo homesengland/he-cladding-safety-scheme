@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.DataImporters;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.Lookups;
 using HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.Validation;
-using MediatR;
+using Mediator;
 using static HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF.Lookups.AddressResolverException;
 
 namespace HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF;
@@ -23,7 +23,7 @@ public class DataIngestHandler(
     private readonly IResponsibleEntityDataImporter _responsibleEntityDataImporter = responsibleEntityDataImporter;
     private readonly IFraDataImporter _fraDataImporter = fraDataImporter;
 
-    public async Task<Unit> Handle(CreateImportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(CreateImportRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -3,7 +3,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
 
-using MediatR;
+using Mediator;
 
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.TaskList.GetTaskList;
@@ -29,7 +29,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

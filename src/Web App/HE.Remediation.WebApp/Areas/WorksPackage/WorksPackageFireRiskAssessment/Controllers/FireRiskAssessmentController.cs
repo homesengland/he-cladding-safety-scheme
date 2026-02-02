@@ -3,7 +3,7 @@ using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageFireRiskAssessment;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageFireRiskAssessment.Controllers;

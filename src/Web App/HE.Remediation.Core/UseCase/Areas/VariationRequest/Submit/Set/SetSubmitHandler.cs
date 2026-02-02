@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Services.StatusTransition;
 
@@ -34,7 +34,7 @@ public class SetSubmitHandler : IRequestHandler<SetSubmitRequest>
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetSubmitRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

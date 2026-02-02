@@ -1,5 +1,10 @@
-﻿@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.ProjectTeamViewModel
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Interface 
+@inject IApplicationDataProvider applicationDataProvider;
+@model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.ProjectTeamViewModel
 @{
+    var isSssfScheme = applicationDataProvider.GetApplicationScheme() == EApplicationScheme.SocialSector;
+
     ViewData["SubTitle"] = $"{Model.BuildingName} ({Model.ApplicationReferenceNumber})";
     ViewData["Backlink"] = Url.Action("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
     ViewData["FullWidth"] = true;
@@ -59,27 +64,29 @@
         </govuk-summary-list-row-action>
     </govuk-summary-list-row>
 
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>
-            Grant certifying officer
-        </govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @if (Model.HasAssignedGco != false)
+    @if (!isSssfScheme) {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>
+                Grant certifying officer
+            </govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @if (Model.HasAssignedGco != false)
+                {
+                    <text>@(!string.IsNullOrWhiteSpace(Model.GrantCertifyingOfficerTeamMember) ? Model.GrantCertifyingOfficerTeamMember : "-")</text>
+                }
+                else
+                {
+                    <text>Unassigned</text>
+                }
+            </govuk-summary-list-row-value>
+            @if (Model.HasAssignedGco == false)
             {
-                <text>@(!string.IsNullOrWhiteSpace(Model.GrantCertifyingOfficerTeamMember) ? Model.GrantCertifyingOfficerTeamMember : "-")</text>
+                <govuk-summary-list-row-action href="@Url.Action("HasGrantCertifyingOfficer", "GrantCertifyingOfficer", new { Area = "MonthlyProgressReportingProjectTeam" })">
+                    Change
+                </govuk-summary-list-row-action>
             }
-            else
-            {
-                <text>Unassigned</text>
-            }
-        </govuk-summary-list-row-value>
-        @if (Model.HasAssignedGco == false)
-        {
-            <govuk-summary-list-row-action href="@Url.Action("HasGrantCertifyingOfficer", "GrantCertifyingOfficer", new { Area = "MonthlyProgressReportingProjectTeam" })">
-                Change
-            </govuk-summary-list-row-action>
-        }
-    </govuk-summary-list-row>
+        </govuk-summary-list-row>
+    }
 </govuk-summary-list>
 
 <h2 class="govuk-heading-m">Team Members</h2>

@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.RegulatoryCompliance;
 
@@ -14,7 +14,7 @@ public class SetRegulatoryComplianceHandler : IRequestHandler<SetRegulatoryCompl
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetRegulatoryComplianceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRegulatoryComplianceRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.VariationRequest;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.ThirdPartyContribution.Set;
 
@@ -14,7 +14,7 @@ public class SetThirdPartyContributionHandler : IRequestHandler<SetThirdPartyCon
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<Unit> Handle(SetThirdPartyContributionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetThirdPartyContributionRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

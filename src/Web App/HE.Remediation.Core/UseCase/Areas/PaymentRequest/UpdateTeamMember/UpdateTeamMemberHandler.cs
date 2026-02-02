@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.ProjectTeam;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.UpdateTeamMember;
@@ -13,7 +13,7 @@ public class UpdateTeamMemberHandler : IRequestHandler<UpdateTeamMemberRequest, 
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Guid> Handle(UpdateTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(UpdateTeamMemberRequest request, CancellationToken cancellationToken)
     {
         var teamMemberId = await _workPackageRepository.UpsertTeamMember(new UpsertTeamMemberParameters
         {

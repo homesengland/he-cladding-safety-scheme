@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ExternalWallWorks;
 

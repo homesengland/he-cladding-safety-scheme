@@ -1,10 +1,11 @@
 ﻿using Moq;
-using MediatR;
+using Mediator;
 using HE.Remediation.WebApp.Areas.Application.Controllers;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDiagram;
 using HE.Remediation.WebApp.ViewModels.Application;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using AutoMapper;
 using HE.Remediation.Core.Enums;
 
@@ -19,6 +20,7 @@ namespace HE.Remediation.WebApp.Tests.Controllers
             var mockSender = new Mock<ISender>();
             var mockMapper = new Mock<IMapper>();
             var mockApplicationDataProvider = new Mock<IApplicationDataProvider>();
+            var mockLogger = new Mock<ILogger<StageDiagramController>>();
 
             var stageDiagramResponse = new GetStageDiagramResponse();
             var stageDiagramViewModel = new StageDiagramViewModel();
@@ -38,7 +40,8 @@ namespace HE.Remediation.WebApp.Tests.Controllers
             var controller = new StageDiagramController(
                 mockSender.Object,
                 mockMapper.Object,
-                mockApplicationDataProvider.Object
+                mockApplicationDataProvider.Object,
+                mockLogger.Object
             );
 
             // Act

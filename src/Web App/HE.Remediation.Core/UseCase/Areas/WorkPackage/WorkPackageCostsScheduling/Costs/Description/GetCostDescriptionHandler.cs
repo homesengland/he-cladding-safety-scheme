@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Description;
 
@@ -23,7 +23,7 @@ public class GetCostDescriptionHandler : IRequestHandler<GetCostDescriptionReque
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetCostDescriptionResponse> Handle(GetCostDescriptionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCostDescriptionResponse> Handle(GetCostDescriptionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

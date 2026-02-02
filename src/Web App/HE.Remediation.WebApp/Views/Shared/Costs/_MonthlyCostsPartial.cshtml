@@ -37,7 +37,7 @@
         @if (Model.IsPtfsPaymentPaid == true)
         {
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell govuk-!-padding-left-2">PTS payment</td>
+                <td class="govuk-table__cell govuk-!-padding-left-2">Initial PTS payment</td>
                 <td class="govuk-table__cell govuk-text-align-right">
                     <govuk-input asp-for="@Model.PtfsPaymentText" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
                         <govuk-input-label></govuk-input-label>
@@ -53,6 +53,32 @@
                 <td class="govuk-table__cell govuk-!-padding-left-2">Additional PTS payment</td>
                 <td class="govuk-table__cell govuk-text-align-right">
                     <govuk-input asp-for="@Model.AdditionalPtfsPayment" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+                </td>
+            </tr>
+        }
+
+        @if (Model.IsThirdPtfsPaid == true)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">2nd Additional PTS payment</td>
+                <td class="govuk-table__cell govuk-text-align-right">
+                    <govuk-input asp-for="@Model.ThirdPtfsPayment" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
+                        <govuk-input-label></govuk-input-label>
+                        <govuk-input-prefix>&pound;</govuk-input-prefix>
+                    </govuk-input>
+                </td>
+            </tr>
+        }
+
+        @if (Model.IsPtfsReclaimPaid == true)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-padding-left-2">PTS reclaim amount</td>
+                <td class="govuk-table__cell govuk-text-align-right">
+                    <govuk-input asp-for="@Model.PtfsReclaimAmount" input-class="govuk-!-width-full govuk-!-margin-0 right-aligned" input-inputmode="numeric" disabled="true">
                         <govuk-input-label></govuk-input-label>
                         <govuk-input-prefix>&pound;</govuk-input-prefix>
                     </govuk-input>
@@ -285,6 +311,16 @@
 <input id="@(modelNamePrefix)_IsPtfsPaymentPaid" name="@(modelNamePrefix).IsPtfsPaymentPaid" type="hidden" value="@Model.IsPtfsPaymentPaid.ToString()" />
 <input id="@(modelNamePrefix)_PtfsPayment" name="@(modelNamePrefix).PtfsPayment" type="hidden" value="@Model.PtfsPayment" />
 <input id="@(modelNamePrefix)_PtfsPaymentText" name="@(modelNamePrefix).PtfsPaymentText" type="hidden" value="@Model.PtfsPaymentText" />
+
+<input id="@(modelNamePrefix)_IsAdditionalPtfsPaid" name="@(modelNamePrefix).IsAdditionalPtfsPaid" type="hidden" value="@Model.IsAdditionalPtfsPaid.ToString()" />
+<input id="@(modelNamePrefix)_AdditionalPtfsPayment" name="@(modelNamePrefix).AdditionalPtfsPayment" type="hidden" value="@Model.AdditionalPtfsPayment" />
+
+<input id="@(modelNamePrefix)_IsThirdPtfsPaid" name="@(modelNamePrefix).IsThirdPtfsPaid" type="hidden" value="@Model.IsThirdPtfsPaid.ToString()" />
+<input id="@(modelNamePrefix)_ThirdPtfsPayment" name="@(modelNamePrefix).ThirdPtfsPayment" type="hidden" value="@Model.ThirdPtfsPayment" />
+
+<input id="@(modelNamePrefix)_IsPtfsReclaimPaid" name="@(modelNamePrefix).IsPtfsReclaimPaid" type="hidden" value="@Model.IsPtfsReclaimPaid.ToString()" />
+<input id="@(modelNamePrefix)_PtfsReclaimAmount" name="@(modelNamePrefix).PtfsReclaimAmount" type="hidden" value="@Model.PtfsReclaimAmount" />
+
 <input id="@(modelNamePrefix)_GrantPaidToDate" name="@(modelNamePrefix).GrantPaidToDate" type="hidden" value="@Model.GrantPaidToDate" class="grant-paid-to-date" />
 <input id="@(modelNamePrefix)_TotalGrantPaidToDate" name="@(modelNamePrefix).TotalGrantPaidToDate" type="hidden" value="@Model.TotalGrantPaidToDate" />
 <input id="@(modelNamePrefix)_UnprofiledGrantFunding" name="@(modelNamePrefix).UnprofiledGrantFunding" type="hidden" value="@Model.UnprofiledGrantFunding" />

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageThirdPartyContributions;

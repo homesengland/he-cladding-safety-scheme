@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.Remediation;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.Remediation
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.Re
             _progressReportingKeyDatesRepository = progressReportingKeyDatesRepository;
         }
 
-        public async Task<GetRemediationResponse> Handle(GetRemediationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetRemediationResponse> Handle(GetRemediationRequest request, CancellationToken cancellationToken)
         {
             var details = await _detailsProvider.GetApplicationDetails();
 

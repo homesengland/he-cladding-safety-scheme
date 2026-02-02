@@ -7,6 +7,6 @@ public enum EPaymentStatus
     Missed = 2,
     Rejected = 3,
     Approved = 4,
-    Recommended = 5
-
+    Recommended = 5,
+    Reclaimed= 6
 };

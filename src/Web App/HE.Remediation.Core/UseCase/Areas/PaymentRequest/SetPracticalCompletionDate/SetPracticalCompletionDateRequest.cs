@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetPracticalCompletionDate;
 
 public class SetPracticalCompletionDateRequest : IRequest

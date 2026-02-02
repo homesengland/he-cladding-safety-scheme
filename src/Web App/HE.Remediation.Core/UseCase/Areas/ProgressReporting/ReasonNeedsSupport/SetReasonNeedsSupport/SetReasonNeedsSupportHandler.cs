@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonNeedsSupport.SetReasonNeedsSupport;
 
@@ -13,7 +13,7 @@ public class SetReasonNeedsSupportHandler : IRequestHandler<SetReasonNeedsSuppor
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetReasonNeedsSupportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetReasonNeedsSupportRequest request, CancellationToken cancellationToken)
     {
         await UpdateLeadDesignerAppointed(request);
         return Unit.Value;

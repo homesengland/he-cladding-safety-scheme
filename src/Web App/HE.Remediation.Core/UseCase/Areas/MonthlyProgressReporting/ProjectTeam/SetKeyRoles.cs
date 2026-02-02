@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectTeam;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam;
 
@@ -18,7 +18,7 @@ public class SetKeyRolesHandler : IRequestHandler<SetKeyRolesRequest>
         _projectTeamRepository = projectTeamRepository;
     }
 
-    public async Task<Unit> Handle(SetKeyRolesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetKeyRolesRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenSubmit.SetWhenSubmit;
 
@@ -28,7 +28,7 @@ public class SetWhenSubmitHandler : IRequestHandler<SetWhenSubmitRequest>
         _grantFundingRepository = grantFundingRepository;
     }
 
-    public async Task<Unit> Handle(SetWhenSubmitRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetWhenSubmitRequest request, CancellationToken cancellationToken)
     {
         var forecastRoundedDate = ToMonthEnd(request.SubmissionMonth, request.SubmissionYear);
         await CreateTaskIfNineMonthGap(forecastRoundedDate);

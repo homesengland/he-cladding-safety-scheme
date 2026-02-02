@@ -1,21 +1,13 @@
 ﻿using FluentValidation;
 
+using HE.Remediation.Core.Enums;
+
 namespace HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan
 {
     public class ProjectPlanViewModelValidator : AbstractValidator<ProjectPlanViewModel>
     {
         public ProjectPlanViewModelValidator()
         {
-            RuleFor(x => x.RemainingAmount)
-                .NotNull()
-                .WithMessage("Please enter the remaining amount")
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("Remaining amount must be greater than zero")
-                .Must((model, remainingAmount) =>
-                    !remainingAmount.HasValue ||
-                    !model.AmountPaidForPTS.HasValue ||
-                    remainingAmount.Value <= model.AmountPaidForPTS.Value)
-                .WithMessage("Remaining amount cannot be greater than the amount paid for PTS");
 
             RuleFor(x => x.InternalAdditionalWork)
                 .NotEmpty()
@@ -27,9 +19,23 @@ namespace HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan
                 .NotEmpty()
                 .WithMessage("Please select an intent to proceed type");
 
-            RuleFor(x => x.EnoughFunds)
-                .NotEmpty()
-                .WithMessage("Please specify if you have enough funds");
+            When(x => x.ApplicationScheme != EApplicationScheme.SocialSector, () =>
+            {
+                RuleFor(x => x.RemainingAmount)
+                    .NotNull()
+                    .WithMessage("Please enter the remaining amount")
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage("Remaining amount must be greater than zero")
+                    .Must((model, remainingAmount) =>
+                        !remainingAmount.HasValue ||
+                        !model.AmountPaidForPTS.HasValue ||
+                        remainingAmount.Value <= model.AmountPaidForPTS.Value)
+                    .WithMessage("Remaining amount cannot be greater than the amount paid for PTS");
+
+                RuleFor(x => x.EnoughFunds)
+                    .NotEmpty()
+                    .WithMessage("Please specify if you have enough funds");
+            });
         }
     }
 }

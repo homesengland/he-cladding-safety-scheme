@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.ClosingReport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetConfirmation;
 
@@ -23,7 +23,7 @@ public class SetConfirmationHandler : IRequestHandler<SetConfirmationRequest>
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<Unit> Handle(SetConfirmationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetConfirmationRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _adp.GetApplicationId();
 

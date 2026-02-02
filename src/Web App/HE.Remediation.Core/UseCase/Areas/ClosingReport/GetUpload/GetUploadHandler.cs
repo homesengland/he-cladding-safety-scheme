@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetUpload;
 
@@ -23,7 +23,7 @@ public class GetUploadHandler : IRequestHandler<GetUploadRequest, GetUploadRespo
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<GetUploadResponse> Handle(GetUploadRequest request,
+    public async ValueTask<GetUploadResponse> Handle(GetUploadRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

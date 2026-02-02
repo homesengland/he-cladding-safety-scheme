@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetNeedVariations
 {
@@ -22,7 +22,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetNeedVariations
             _statusTransitionService = statusTransitionService;
         }
 
-        public async Task<Unit> Handle(SetNeedVariationsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetNeedVariationsRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _adp.GetApplicationId();
 

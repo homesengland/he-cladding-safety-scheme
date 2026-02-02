@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
 
@@ -23,7 +23,7 @@ public class GetPtsUpliftHandler : IRequestHandler<GetPtsUpliftRequest, GetPtsUp
         _projectPlanRepository = projectPlanRepository;
     }
 
-    public async Task<GetPtsUpliftResponse> Handle(GetPtsUpliftRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPtsUpliftResponse> Handle(GetPtsUpliftRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

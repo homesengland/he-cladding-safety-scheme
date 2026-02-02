@@ -10,7 +10,7 @@ using HE.Remediation.Core.UseCase.Areas.ClosingReport.ProceedFromAbout;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.ClosingReportEvidenceOfThirdPartyContribution.Controllers;

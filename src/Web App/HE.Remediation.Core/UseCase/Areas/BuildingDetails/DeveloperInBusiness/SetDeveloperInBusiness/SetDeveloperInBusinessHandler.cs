@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperInBusiness.SetDeveloperInBusiness;
 
@@ -14,7 +14,7 @@ public class SetDeveloperInBusinessHandler : IRequestHandler<SetDeveloperInBusin
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetDeveloperInBusinessRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeveloperInBusinessRequest request, CancellationToken cancellationToken)
     {
         await SaveDeverloperInBusiness(request);
         return Unit.Value;

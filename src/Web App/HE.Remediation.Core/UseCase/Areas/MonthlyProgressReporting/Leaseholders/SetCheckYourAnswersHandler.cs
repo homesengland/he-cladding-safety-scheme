@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.Leaseholders;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.Leaseholders;
 
@@ -23,7 +23,7 @@ public class SetCheckYourAnswersHandler : IRequestHandler<SetCheckYourAnswersReq
         _progressReportingLeaseholdersRepository = progressReportingLeaseholdersRepository;
     }
 
-    public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var details = await _detailsProvider.GetApplicationDetails();
         var progressReportId = _dataProvider.GetProgressReportId();

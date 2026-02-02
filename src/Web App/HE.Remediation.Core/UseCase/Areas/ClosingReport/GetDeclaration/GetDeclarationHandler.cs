@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetDeclaration;
 
@@ -22,7 +22,7 @@ public class GetDeclarationHandler : IRequestHandler<GetDeclarationRequest, GetD
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<GetDeclarationResponse> Handle(GetDeclarationRequest request,
+    public async ValueTask<GetDeclarationResponse> Handle(GetDeclarationRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

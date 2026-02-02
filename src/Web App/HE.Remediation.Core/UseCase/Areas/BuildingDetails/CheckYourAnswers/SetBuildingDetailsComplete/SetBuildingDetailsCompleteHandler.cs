@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.SetBuildingDetailsComplete
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Set
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetBuildingDetailsCompleteRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetBuildingDetailsCompleteRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

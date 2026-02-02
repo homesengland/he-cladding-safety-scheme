@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetPaymentRequestDetails;
 
@@ -21,7 +21,7 @@ public class
         _subContractorSurveyRepository = subContractorSurveyRepository;
     }
 
-    public async Task<GetPaymentRequestDetailsResponse> Handle(GetPaymentRequestDetailsRequest request,
+    public async ValueTask<GetPaymentRequestDetailsResponse> Handle(GetPaymentRequestDetailsRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

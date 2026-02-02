@@ -1,5 +1,5 @@
 ﻿
-using MediatR;
+using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.Submit.GetSubmit;
 
 public class GetSubmitRequest : IRequest<GetSubmitResponse>

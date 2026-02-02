@@ -5,7 +5,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember;
 
@@ -20,7 +20,7 @@ public class SetInviteMemberHandler(
     private readonly IBackgroundCollaborationCommunicationQueue _emailInviteSendQueue = emailInviteSendQueue;
     private readonly IThirdPartyCollaboratorRepository _thirdPartyCollaboratorRepository = thirdPartyCollaboratorRepository;
 
-    public async Task<SetInviteMemberResponse> Handle(SetInviteMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetInviteMemberResponse> Handle(SetInviteMemberRequest request, CancellationToken cancellationToken)
     {
         var teamMember = await _thirdPartyCollaboratorRepository.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source);
         var applicationId = _applicationDataProvider.GetApplicationId();
@@ -54,7 +54,7 @@ public class SetInviteMemberHandler(
         };
     }
 
-    private async Task<Guid?> UpsertThirdPartyCollaborator(GetInviteResponse teamMember, Guid applicationId)
+    private async ValueTask<Guid?> UpsertThirdPartyCollaborator(GetInviteResponse teamMember, Guid applicationId)
     {
         var @params = new DynamicParameters();
         @params.Add("@ApplicationId", value: applicationId, dbType: DbType.Guid, direction: ParameterDirection.Input);

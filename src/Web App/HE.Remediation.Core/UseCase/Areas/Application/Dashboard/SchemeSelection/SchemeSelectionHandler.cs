@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection
 {
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelectio
             _applicationSchemeRepositroy = applicationSchemeRepository;
         }
 
-        public async Task<SchemeSelectionResponse> Handle(SchemeSelectionRequest request, CancellationToken cancellationToken)
+        public async ValueTask<SchemeSelectionResponse> Handle(SchemeSelectionRequest request, CancellationToken cancellationToken)
         {
             var response = new SchemeSelectionResponse();
             var schemes = await _applicationSchemeRepositroy.GetApplicationSchemes();

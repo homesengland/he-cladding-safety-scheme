@@ -12,7 +12,7 @@ using HE.Remediation.Core.UseCase.Areas.Administration.Profile.SetUserResponsibl
 using HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.GetSecondaryContactDetails;
 using HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.SetSecondaryContactDetails;
 using HE.Remediation.WebApp.ViewModels.Administration;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.UseCase.Areas.Administration.Profile.GetUserResponsibleEntityType;
 using HE.Remediation.Core.UseCase.Areas.Administration.Dashboard.GetProfile;
