@@ -47,7 +47,7 @@ public class GetBuildingDeveloperInformationTests
         // Assert        
         Assert.NotNull(result);
 
-        var resultValid = ((result != null) &&
+        var resultValid = ((result?.DoYouKnowOriginalDeveloper != null) &&
                            (result.DoYouKnowOriginalDeveloper.Value));
         Assert.True(resultValid);
         _connection.Verify();

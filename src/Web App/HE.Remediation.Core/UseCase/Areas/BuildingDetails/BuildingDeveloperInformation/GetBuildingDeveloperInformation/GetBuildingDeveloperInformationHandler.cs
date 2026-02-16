@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Application.Dashboard.SchemeSelection;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperInformation;
 
@@ -16,7 +16,7 @@ public class GetBuildingDeveloperInformationHandler : IRequestHandler<GetBuildin
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetBuildingDeveloperInformationResponse> Handle(GetBuildingDeveloperInformationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingDeveloperInformationResponse> Handle(GetBuildingDeveloperInformationRequest request, CancellationToken cancellationToken)
     {
         var response = await _connection.QuerySingleOrDefaultAsync<GetBuildingDeveloperInformationResponse>("GetBuildingOriginalDeveloperIsKnown", new
         {

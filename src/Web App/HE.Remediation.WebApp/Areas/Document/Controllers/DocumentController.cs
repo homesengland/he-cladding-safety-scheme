@@ -3,7 +3,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.UseCase.Areas.Document;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Document;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.Document.Controllers;

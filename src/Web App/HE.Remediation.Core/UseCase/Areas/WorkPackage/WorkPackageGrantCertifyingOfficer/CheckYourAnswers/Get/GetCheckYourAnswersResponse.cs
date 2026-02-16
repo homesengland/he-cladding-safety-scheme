@@ -45,4 +45,6 @@ public class GetCheckYourAnswersResponse
     public DateTime? CompaniesDateOfAppointment { get; set; }
 
     public bool IsSubmitted { get; internal set; }
+
+    public bool IsProgressReportGrantCertifyingOfficerComplete { get; set; }
 }

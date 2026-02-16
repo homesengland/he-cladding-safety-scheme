@@ -6,7 +6,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport.Proj
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
 using HE.Remediation.Core.Services.PdfRendererService;
 using HE.Remediation.Core.Services.RazorRenderer.Models;
-using MediatR;
+using Mediator;
 using Syncfusion.Pdf.Graphics;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting;
@@ -27,7 +27,7 @@ public class MonthlyReportPdfHandler : IRequestHandler<MonthlyReportPdfRequest, 
         _pdfRenderer = pdfRenderer;
     }
 
-    public async Task<MonthlyReportPdfResponse> Handle(MonthlyReportPdfRequest request, CancellationToken cancellationToken)
+    public async ValueTask<MonthlyReportPdfResponse> Handle(MonthlyReportPdfRequest request, CancellationToken cancellationToken)
     {
         var app = await _applicationDetailsProvider.GetApplicationDetails();
         var mainDetails = await _monthlyProgressReportingRepository.GetProgressReportDetails(request.ProgressReportId);
@@ -66,6 +66,7 @@ public class MonthlyReportPdfHandler : IRequestHandler<MonthlyReportPdfRequest, 
         {
             ApplicationReferenceNumber = app.ApplicationReferenceNumber,
             BuildingName = app.BuildingName,
+            ApplicationSchemeId = mainDetails.ApplicationSchemeId,
 
             Id = mainDetails.Id,
             DateCreated = mainDetails.DateCreated,

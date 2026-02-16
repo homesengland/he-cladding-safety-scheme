@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults.WorkPackage.ProjectTeam;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeam.RegulatoryCompliance;
 
@@ -24,7 +24,7 @@ public class GetRegulatoryComplianceHandler : IRequestHandler<GetRegulatoryCompl
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetRegulatoryComplianceResponse> Handle(GetRegulatoryComplianceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRegulatoryComplianceResponse> Handle(GetRegulatoryComplianceRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var applicationId = _applicationDataProvider.GetApplicationId();

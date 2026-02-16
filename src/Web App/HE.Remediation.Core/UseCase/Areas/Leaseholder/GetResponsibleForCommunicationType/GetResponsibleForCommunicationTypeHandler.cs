@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommunication;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommunicationType
 {
@@ -19,7 +19,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.GetResponsibleForCommuni
             _leaseHolderRepository = leaseHolderRepository;
         }
 
-        public async Task<GetResponsibleForCommunicationTypeResponse> Handle(GetResponsibleForCommunicationTypeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetResponsibleForCommunicationTypeResponse> Handle(GetResponsibleForCommunicationTypeRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

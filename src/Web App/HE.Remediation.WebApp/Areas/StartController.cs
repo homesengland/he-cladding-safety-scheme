@@ -2,7 +2,7 @@ using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.AreaProgress;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.Attributes.Routing;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas;

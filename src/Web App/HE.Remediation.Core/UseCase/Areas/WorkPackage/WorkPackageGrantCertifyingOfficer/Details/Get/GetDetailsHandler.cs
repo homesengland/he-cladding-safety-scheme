@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.Details.Get;
 
@@ -23,7 +23,7 @@ public class GetDetailsHandler : IRequestHandler<GetDetailsRequest, GetDetailsRe
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetDetailsResponse> Handle(GetDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetDetailsResponse> Handle(GetDetailsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

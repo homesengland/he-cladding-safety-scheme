@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks;
 
@@ -24,7 +24,7 @@ public class GetBuildingControlHandler : IRequestHandler<GetBuildingControlReque
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetBuildingControlResponse> Handle(GetBuildingControlRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingControlResponse> Handle(GetBuildingControlRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

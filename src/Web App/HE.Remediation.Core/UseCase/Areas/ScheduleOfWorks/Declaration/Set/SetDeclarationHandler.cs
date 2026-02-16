@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.ScheduleOfWorks;
 using HE.Remediation.Core.Enums;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Declaration.Set;
 
@@ -16,7 +16,7 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

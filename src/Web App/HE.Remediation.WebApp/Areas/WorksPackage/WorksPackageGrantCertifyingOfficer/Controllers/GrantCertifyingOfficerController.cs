@@ -22,7 +22,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOf
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.StartInformation.Get;
 using HE.Remediation.WebApp.ViewModels.Location;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageGrantCertifyingOfficer;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageGrantCertifyingOfficer.Controllers;

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Administration.CorrespondenceAddress.GetCorrespondenceAddress;
-using MediatR;
+using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CorrespondenceAddress.GetCorrespondenceAddress;
 
 public class GetCorrespondenceAddressHandler : IRequestHandler<GetCorrespondenceAddressRequest, GetCorrespondenceAddressResponse>
@@ -15,7 +15,7 @@ public class GetCorrespondenceAddressHandler : IRequestHandler<GetCorrespondence
         _db = db;
     }
 
-    public async Task<GetCorrespondenceAddressResponse> Handle(GetCorrespondenceAddressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCorrespondenceAddressResponse> Handle(GetCorrespondenceAddressRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

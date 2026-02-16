@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingHasSafetyRegulatorRegistrationCode.SetBuildingHasSafetyRegulatorRegistrationCode;
 
@@ -14,7 +14,7 @@ public class SetBuildingHasSafetyRegulatorRegistrationCodeHandler : IRequestHand
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetBuildingHasSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetBuildingHasSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
     {
         await SaveBuildingHasSafetyRegulatorRegistrationCode(request);
         return Unit.Value;

@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.ScheduleOfWorks;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.ProjectDates.Set;
 
@@ -14,7 +14,7 @@ public class SetProjectDatesHandler : IRequestHandler<SetProjectDatesRequest>
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetProjectDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetProjectDatesRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

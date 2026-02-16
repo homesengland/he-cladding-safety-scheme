@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -18,7 +18,7 @@ public class GetIsClaimingGrantHandler : IRequestHandler<GetIsClaimingGrantReque
         _responsibleEntityRepository = responsibleEntityRepository;
     }
 
-    public async Task<GetIsClaimingGrantResponse> Handle(GetIsClaimingGrantRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetIsClaimingGrantResponse> Handle(GetIsClaimingGrantRequest request, CancellationToken cancellationToken)
     {
         var result = await _connection.QuerySingleOrDefaultAsync<GetIsClaimingGrantResponse>("GetIsClaimingGrant", new
         {

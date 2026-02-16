@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCladdingSystem;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
 using HE.Remediation.WebApp.Attributes.Routing;
@@ -15,8 +15,8 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorksPackageCladdingSystem.C
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCladdingSystem.FireRiskAppraisalToExternalWalls.Get;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCladdingSystem.FireRiskAppraisalToExternalWalls.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCladdingSystem.ResetCladdingSystem;
-using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorksPackageCladdingSystem.ResetCladdingSystem;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.BaseInformation.Get;
+using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorksPackageCladdingSystem.ResetCladdingSystem;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageCladdingSystem.Controllers
 {

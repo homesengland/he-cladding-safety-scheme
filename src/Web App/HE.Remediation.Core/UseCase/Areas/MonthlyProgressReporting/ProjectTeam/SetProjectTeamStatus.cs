@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam;
 
@@ -18,7 +18,7 @@ public class SetProjectTeamStatusHandler : IRequestHandler<SetProjectTeamStatusR
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<Unit> Handle(SetProjectTeamStatusRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetProjectTeamStatusRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

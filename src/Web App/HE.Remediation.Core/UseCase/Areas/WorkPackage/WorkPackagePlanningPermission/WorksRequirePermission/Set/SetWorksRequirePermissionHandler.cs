@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermission.WorksRequirePermission.Set;
 
@@ -14,7 +14,7 @@ public class SetWorksRequirePermissionHandler : IRequestHandler<SetWorksRequireP
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
     {
 
         var requirePlanningPermission = await _workPackageRepository.GetRequirePlanningPermission();

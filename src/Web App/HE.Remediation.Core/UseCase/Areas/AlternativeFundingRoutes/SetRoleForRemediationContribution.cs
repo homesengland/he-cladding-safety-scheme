@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes;
 
@@ -18,7 +18,7 @@ public class SetRoleForRemediationContributionHandler : IRequestHandler<SetRoleF
         _alternateFundingRepository = alternateFundingRepository;
     }
 
-    public async Task<Unit> Handle(SetRoleForRemediationContributionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRoleForRemediationContributionRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

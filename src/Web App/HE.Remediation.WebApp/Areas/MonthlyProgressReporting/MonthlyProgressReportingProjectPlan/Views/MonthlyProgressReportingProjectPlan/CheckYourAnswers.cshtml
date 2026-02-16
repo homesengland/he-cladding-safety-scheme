@@ -39,25 +39,27 @@
         </govuk-summary-list-row-action>
     </govuk-summary-list-row>
 
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>How much do you have remaining?</govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>
-            @Html.Raw(Model.RemainingAmount.HasValue ? $"&pound;{Model.RemainingAmount:N0}" : "-")
-        </govuk-summary-list-row-value>
-        <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
-            Change
-        </govuk-summary-list-row-action>
-    </govuk-summary-list-row>
+    @if (Model.ApplicationScheme != EApplicationScheme.SocialSector)
+    {
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>How much do you have remaining?</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @Html.Raw(Model.RemainingAmount.HasValue ? $"&pound;{Model.RemainingAmount:N0}" : "-")
+            </govuk-summary-list-row-value>
+            <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+                Change
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row>
 
-    <govuk-summary-list-row>
-        <govuk-summary-list-row-key>Do you have enough funds to meet your critical path and your first monthly payments in arrears?</govuk-summary-list-row-key>
-        <govuk-summary-list-row-value>                
-            @(Model.EnoughFunds switch
-            {
-                true => "Yes",
-                false => "No",
-                _ => "-"
-            })
+        <govuk-summary-list-row>
+            <govuk-summary-list-row-key>Do you have enough funds to meet your critical path and your first monthly payments in arrears?</govuk-summary-list-row-key>
+            <govuk-summary-list-row-value>
+                @(Model.EnoughFunds switch
+                {
+                    true => "Yes",
+                    false => "No",
+                    _ => "-"
+                })
         </govuk-summary-list-row-value>
         <govuk-summary-list-row-action href="@Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
             Change
@@ -65,18 +67,18 @@
     </govuk-summary-list-row>
 
     @if (Model.EnoughFunds == false)
-    {
-        <govuk-summary-list-row>
-            <govuk-summary-list-row-key>PTS uplift upload</govuk-summary-list-row-key>
-            <govuk-summary-list-row-value>
-                @(!string.IsNullOrWhiteSpace(Model.PtsUpliftDocument) ? Model.PtsUpliftDocument : "-")
-            </govuk-summary-list-row-value>
-            <govuk-summary-list-row-action href="@Url.Action("PtsUplift", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
-                Change
-            </govuk-summary-list-row-action>
-        </govuk-summary-list-row>
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>PTS uplift upload</govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(!string.IsNullOrWhiteSpace(Model.PtsUpliftDocument) ? Model.PtsUpliftDocument : "-")
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-action href="@Url.Action("PtsUplift", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })">
+                    Change
+                </govuk-summary-list-row-action>
+            </govuk-summary-list-row>
+        }
     }
-
     <govuk-summary-list-row>
         <govuk-summary-list-row-key>Project plan upload</govuk-summary-list-row-key>
         <govuk-summary-list-row-value>

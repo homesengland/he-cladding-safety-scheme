@@ -1,0 +1,93 @@
+@model HE.Remediation.Core.Services.GovNotify.ViewModels.GovNotifyEmailViewModel
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/gov-notify-footer.css">
+</head>
+<body>
+    <div class="head">
+        <img class="logo" src="img/LetterLogo.png" />
+        <span class="slogan">The Housing and Regeneration Agency</span>
+    </div>
+    <div class="body">
+        <div class="avoid-break">
+            <p>
+                Dear @Model.ContactFirstName @Model.ContactSurname,
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>Reference number:</strong> @Model.ReferenceNumber
+            </p>
+            <p>
+                <strong>Social Sector funded scheme:</strong> @Model.BuildingName
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Thank you for submitting a building record to the Social Sector self-funded scheme. We are pleased to confirm the next stages following the building record submission.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Based on the information you have provided in the building record, you have confirmed that building remediation is necessary and is being self-funded.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Please ensure that you have fully read and understood the scheme guidance to understand the detail of the works required, prior to the submission of your works package.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>What happens next?</strong>
+            </p>
+            <p>
+                Ahead of the submission of the works package, you are required to submit monthly updates to Homes England. Providing both timely and quality information is critical to enable us to monitor progress at building level and to identify areas where we can offer support and/or enable pace.
+            </p>
+            <p>
+                Monthly Progress reporting has five sections to complete:
+            </p>
+            <ul>
+                <li>key dates</li>
+                <li>project plan</li>
+                <li>project team</li>
+                <li>resident and leaseholder communication</li>
+                <li>support</li>
+            </ul>
+            <p>
+                Progress reports must be submitted within five working days of the first working day of the month.
+            </p>
+            <p>
+                You will need to complete all sections before you can submit your report. If you don't submit the report, any data you have updated will be lost when the next report is created.
+            </p>
+            <p>
+                To assist you with your progress reporting, we've created a Progress Reporting video demonstration. We have also updated our Progress Reporting guidance on gov.uk.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>Code of Practice for the remediation of residential buildings (the Code)</strong>
+            </p>
+            <p>
+                As you are responsible for this project, you must consider the impact these works can have on residents' homes and lives. You will be expected to keep residents up to date so that they know what to expect at each stage and who can answer their questions. Residents should feel safe and engaged and you should take reasonable steps to limit disruption. We expect you to demonstrate good practice in your work with residents and will be checking the quality of communication and your compliance with the Code. You can read more about the Code here.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>Contact us</strong>
+            </p>
+            <p>
+                If you have any questions, you should first read the guidance available in the online Building Remediation Hub. If you are unable to find the answer you need, contact the Cladding Safety Scheme by emailing <a href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>. Include the building name, post code and reference number in the email subject line. Alternatively, you can call the team on 0300 323 0180.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Yours sincerely,
+            </p>
+            <p>
+                The Cladding Safety Scheme Team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.SetReportDetails;
@@ -15,7 +15,7 @@ public class SetReportDetailsHandler : IRequestHandler<SetReportDetailsRequest, 
         _db = db;
     }
 
-    public async Task<Unit> Handle(SetReportDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetReportDetailsRequest request, CancellationToken cancellationToken)
     {
         await SetReportDetails(request);
         return Unit.Value;

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.ReportDetails.GetReportDetails;
 
@@ -15,7 +15,7 @@ public class GetReportDetailsHandler: IRequestHandler<GetReportDetailsRequest, G
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetReportDetailsResponse> Handle(GetReportDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetReportDetailsResponse> Handle(GetReportDetailsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

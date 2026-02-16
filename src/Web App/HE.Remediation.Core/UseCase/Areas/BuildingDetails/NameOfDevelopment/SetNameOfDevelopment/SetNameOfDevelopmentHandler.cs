@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.NameOfDevelopment.SetNameOfDevelopment
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.NameOfDevelopment.Se
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetNameOfDevelopmentRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetNameOfDevelopmentRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

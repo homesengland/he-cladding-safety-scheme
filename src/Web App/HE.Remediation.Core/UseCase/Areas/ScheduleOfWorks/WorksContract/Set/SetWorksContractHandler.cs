@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Set;
@@ -19,7 +19,7 @@ public class SetWorksContractHandler : IRequestHandler<SetWorksContractRequest, 
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetWorksContractRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetWorksContractRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

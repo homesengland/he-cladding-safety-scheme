@@ -8,7 +8,7 @@ using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Submit.Set;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Submitted.Get;
 using HE.Remediation.WebApp.ViewModels.ScheduleOfWorks;
 
-using MediatR;
+using Mediator;
 
 using Microsoft.AspNetCore.Mvc;
 

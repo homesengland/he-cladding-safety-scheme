@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.WorksAlreadyCompleted.GetWorksAlreadyCompleted;
 
@@ -14,7 +14,7 @@ public class GetWorksAlreadyCompletedHandler : IRequestHandler<GetWorksAlreadyCo
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetWorksAlreadyCompletedResponse> Handle(GetWorksAlreadyCompletedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetWorksAlreadyCompletedResponse> Handle(GetWorksAlreadyCompletedRequest request, CancellationToken cancellationToken)
     {
         var worksAlreadyCompleted = await _connection.QuerySingleOrDefaultAsync<bool?>("GetBuildingWorksAlreadyCompleted", new
         {

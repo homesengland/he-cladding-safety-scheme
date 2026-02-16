@@ -5,7 +5,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectSupport
@@ -26,7 +26,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectSupp
             _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
         }
 
-        public async Task<Unit> Handle(SetProjectSupportRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetProjectSupportRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             var progressReportId = _applicationDataProvider.GetProgressReportId();

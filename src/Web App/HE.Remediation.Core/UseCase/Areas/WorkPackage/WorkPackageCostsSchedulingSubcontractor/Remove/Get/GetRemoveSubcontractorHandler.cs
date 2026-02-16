@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsSchedulingSubcontractor.Remove.Get;
 
@@ -22,7 +22,7 @@ public class GetRemoveSubcontractorHandler : IRequestHandler<GetRemoveSubcontrac
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetRemoveSubcontractorResponse> Handle(GetRemoveSubcontractorRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRemoveSubcontractorResponse> Handle(GetRemoveSubcontractorRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

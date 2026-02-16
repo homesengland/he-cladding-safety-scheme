@@ -32,9 +32,17 @@ public class GetCostsResponse
 
     public decimal? UnprofiledGrantFunding { get; set; }
 
+    public bool IsAdditionalPtfsPaid { get; set; }
+    
     public decimal? AdditionalPtfsPayment { get; set; }
 
-    public bool IsAdditionalPtfsPaid { get; set; }
+    public bool? IsThirdPtfsPaid { get; set; }
+
+    public decimal? ThirdPtfsPayment { get; set; }
+
+    public bool IsPtfsReclaimPaid { get; set; }
+
+    public decimal? PtfsReclaimAmount { get; set; }
 
     public IReadOnlyCollection<MonthlyCostResult> MonthlyCosts { get; set; } = new List<MonthlyCostResult>();
 

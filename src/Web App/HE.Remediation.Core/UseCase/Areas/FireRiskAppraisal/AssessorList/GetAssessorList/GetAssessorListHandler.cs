@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorList.GetAssessorList
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AssessorList.GetAs
             _fireAssessorListService = fireAssessorListService;
         }
 
-        public async Task<GetAssessorListResponse> Handle(GetAssessorListRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetAssessorListResponse> Handle(GetAssessorListRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

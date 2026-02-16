@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetConfirmation;
 
@@ -22,7 +22,7 @@ public class GetConfirmationHandler : IRequestHandler<GetConfirmationRequest, Ge
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<GetConfirmationResponse> Handle(GetConfirmationRequest request,
+    public async ValueTask<GetConfirmationResponse> Handle(GetConfirmationRequest request,
         CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();

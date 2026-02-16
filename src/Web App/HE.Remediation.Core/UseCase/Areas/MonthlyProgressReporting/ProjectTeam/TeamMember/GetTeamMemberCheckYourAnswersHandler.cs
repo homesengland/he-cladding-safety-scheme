@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectTeam;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.TeamMember;
 public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMemberCheckYourAnswersRequest, GetTeamMemberCheckYourAnswersResponse>
@@ -20,7 +20,7 @@ public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMembe
         _applicationDetailsProvider = applicationDetailsProvider;
     }
 
-    public async Task<GetTeamMemberCheckYourAnswersResponse> Handle(GetTeamMemberCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTeamMemberCheckYourAnswersResponse> Handle(GetTeamMemberCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

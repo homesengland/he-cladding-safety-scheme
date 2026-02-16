@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddExternalWallWorks;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AddInternalWallWorks;
 
@@ -17,7 +17,7 @@ public class SetAddInternalWallWorksHandler: IRequestHandler<SetAddInternalWallW
         _fireRiskWorksRepository = fireRiskWorksRepository;
     }
 
-    public async Task<Unit> Handle(SetAddInternalWallWorksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetAddInternalWallWorksRequest request, CancellationToken cancellationToken)
     {
         if (request.Id is null)
         {

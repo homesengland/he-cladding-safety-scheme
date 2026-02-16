@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;

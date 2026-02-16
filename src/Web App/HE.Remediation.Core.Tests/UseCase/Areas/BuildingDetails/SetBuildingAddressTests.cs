@@ -78,12 +78,12 @@ public class SetBuildingAddressTests
     public async Task Handler_Sets_Building_Address_With_Insert()
     {
         //Arrange                        
-        GetBuildingAddressResponse response = null;
+        GetBuildingAddressResponse? response = null;
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
                                 .Verifiable(); 
 
-        _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetBuildingAddressResponse>("GetBuildingAddress", It.IsAny<object>()))
+        _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetBuildingAddressResponse?>("GetBuildingAddress", It.IsAny<object>()))
                                 .ReturnsAsync(response)
                                 .Verifiable();
 

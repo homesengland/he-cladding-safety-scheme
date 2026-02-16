@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.SetRepresentativeType;
 
@@ -19,7 +19,7 @@ public class SetRepresentativeTypeHandler : IRequestHandler<SetRepresentativeTyp
         _applicationRepository = applicationRepository;
     }
 
-    public async Task<Unit> Handle(SetRepresentativeTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRepresentativeTypeRequest request, CancellationToken cancellationToken)
     {
         await SaveResponse(request);
         return Unit.Value;

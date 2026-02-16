@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
 {
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
             _statusTransitionService = statusTransitionService;
         }
 
-        public async Task<SetConfirmDeclarationResponse> Handle(SetConfirmDeclarationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<SetConfirmDeclarationResponse> Handle(SetConfirmDeclarationRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
             var canSubmit = await CanSubmit(applicationId);
@@ -48,7 +48,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Declaration.SetConfirmDeclaration
             await _statusTransitionService.TransitionToInternalStatus(EApplicationInternalStatus.InitialApplicationSubmitted, applicationIds: applicationId);
         }
 
-        private async Task<bool> CanSubmit(Guid applicationId)
+        private async ValueTask<bool> CanSubmit(Guid applicationId)
         {
             var statusResult = await _applicationRepository.GetApplicationStatus(applicationId);
             return statusResult.Stage != EApplicationStage.Closed;

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Services.StatusTransition;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
@@ -37,7 +37,7 @@ public class SetDeclarationHandler : IRequestHandler<SetDeclarationRequest>
         _dateRepository = dateRepository;
     }
 
-    public async Task<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetDeclarationRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _adp.GetApplicationId();
 

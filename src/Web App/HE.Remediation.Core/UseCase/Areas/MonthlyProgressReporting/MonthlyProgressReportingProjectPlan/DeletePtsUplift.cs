@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectPlan;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
 
@@ -27,7 +27,7 @@ public class DeletePtsUpliftHandler : IRequestHandler<DeletePtsUpliftRequest>
         _projectPlanRepository = projectPlanRepository;
     }
 
-    public async Task<Unit> Handle(DeletePtsUpliftRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeletePtsUpliftRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

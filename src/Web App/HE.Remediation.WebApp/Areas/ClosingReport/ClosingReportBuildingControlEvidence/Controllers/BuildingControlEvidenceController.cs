@@ -1,7 +1,7 @@
 using AutoMapper;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.WebApp.Areas.ClosingReport.Controllers;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.ClosingReportBuildingControlEvidence.Controllers;

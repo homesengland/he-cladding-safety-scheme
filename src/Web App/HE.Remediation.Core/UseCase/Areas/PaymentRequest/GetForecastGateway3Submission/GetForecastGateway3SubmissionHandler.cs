@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetForecastGateway3Submission;
 
 public class GetForecastGateway3SubmissionHandler : IRequestHandler<GetForecastGateway3SubmissionRequest, GetForecastGateway3SubmissionResponse>
@@ -21,7 +21,7 @@ public class GetForecastGateway3SubmissionHandler : IRequestHandler<GetForecastG
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetForecastGateway3SubmissionResponse> Handle(GetForecastGateway3SubmissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetForecastGateway3SubmissionResponse> Handle(GetForecastGateway3SubmissionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.Credentials.ChangePassword
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Administration.Credentials.ChangePas
             _db = db;
         }
 
-        public Task<Unit> Handle(ChangePasswordRequest request, CancellationToken cancellationToken)
+        public ValueTask<Unit> Handle(ChangePasswordRequest request, CancellationToken cancellationToken)
         {
             var auth0UserId = _applicationDataProvider.GetAuth0UserId();
 
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Administration.Credentials.ChangePas
             //    return new List<ChangePasswordResponse>();
             //}
 
-            return Task.FromResult(Unit.Value);
+            return ValueTask.FromResult(Unit.Value);
         }
     }
 }

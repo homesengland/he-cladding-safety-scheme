@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport;
 using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport.ProjectTeam;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting;
 
@@ -22,7 +22,7 @@ public class GetProgressReportDetailsHandler : IRequestHandler<GetProgressReport
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<GetProgressReportDetailsResponse> Handle(GetProgressReportDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProgressReportDetailsResponse> Handle(GetProgressReportDetailsRequest request, CancellationToken cancellationToken)
     {
         var app = await _applicationDetailsProvider.GetApplicationDetails();
         var mainDetails = await _monthlyProgressReportingRepository.GetProgressReportDetails(request.ProgressReportId);
@@ -44,6 +44,7 @@ public class GetProgressReportDetailsHandler : IRequestHandler<GetProgressReport
         {
             ApplicationReferenceNumber = app.ApplicationReferenceNumber,
             BuildingName = app.BuildingName,
+            ApplicationSchemeId = mainDetails.ApplicationSchemeId,
 
             Id = mainDetails.Id,
             DateCreated = mainDetails.DateCreated,

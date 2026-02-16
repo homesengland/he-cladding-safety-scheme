@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.ClaimPreTender.GetClaimPretenderSupport;
@@ -20,7 +20,7 @@ public class GetClaimPretenderSupportHandler: IRequestHandler<GetClaimPretenderS
         _preTenderRepo = preTenderRepo;
     }
 
-    public async Task<GetClaimPretenderSupportResponse> Handle(GetClaimPretenderSupportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetClaimPretenderSupportResponse> Handle(GetClaimPretenderSupportRequest request, CancellationToken cancellationToken)
     {           
         var applicationId = _applicationDataProvider.GetApplicationId();
 

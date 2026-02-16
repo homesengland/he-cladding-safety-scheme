@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetNeedVariations
 {
@@ -27,7 +27,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.GetNeedVariations
             _closingReportRepository = closingReportRepository;
         }
 
-        public async Task<GetNeedVariationsReponse> Handle(GetNeedVariationsRequest request,
+        public async ValueTask<GetNeedVariationsReponse> Handle(GetNeedVariationsRequest request,
             CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();

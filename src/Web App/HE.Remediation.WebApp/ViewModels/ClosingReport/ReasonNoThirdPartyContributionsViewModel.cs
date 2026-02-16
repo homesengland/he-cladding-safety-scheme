@@ -3,6 +3,6 @@
     public class ReasonNoThirdPartyContributionsViewModel : ClosingReportInformationViewModel
     {
         public string ReasonNoThirdPartyContributions { get; set; }
-        public bool IsSubmitted { get; set; }
+        public new bool IsSubmitted { get; set; }
     }
 }

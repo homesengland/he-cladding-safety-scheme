@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingHasSafetyRegulatorRegistrationCode.SetBuildingHasSafetyRegulatorRegistrationCode;
 
@@ -12,7 +12,7 @@ public class SetBuildingHasSafetyRegulatorRegistrationCodeHandler : IRequestHand
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetBuildingHasSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetBuildingHasSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
     {
         await _progressReportingRepository.UpdateProgressReportingBuildingHasSafetyRegulatorRegistrationCode(request.BuildingHasSafetyRegulatorRegistrationCode);
 

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.UseCase.Areas.Administration.SecondaryContactDetails.GetSecondaryContactDetails;
-using MediatR;
+using Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;

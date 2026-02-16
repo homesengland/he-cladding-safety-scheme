@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermissionPlannedSubmitDate.SetPlanningPermissionPlannedSubmitDate
 {
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermission
             _progressReportingRepository = progressReportingRepository;
         }
 
-        public async Task<Unit> Handle(SetPlanningPermissionPlannedSubmitDateRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetPlanningPermissionPlannedSubmitDateRequest request, CancellationToken cancellationToken)
         {
             await UpdateProgressReportPlanningPermissionPlannedSubmitDate(request);
 

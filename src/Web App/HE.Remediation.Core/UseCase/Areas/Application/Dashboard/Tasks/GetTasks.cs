@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Alert;
 using HE.Remediation.Core.Services.Alert.Models;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Dashboard.Tasks;
 
@@ -20,7 +20,7 @@ public class GetTasksHandler : IRequestHandler<GetTasksRequest, GetTasksResponse
         _alertService = alertService;
     }
 
-    public async Task<GetTasksResponse> Handle(GetTasksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTasksResponse> Handle(GetTasksRequest request, CancellationToken cancellationToken)
     {
         var alerts = await _alertRepository.GetAlerts(new GetAlertsParameters
         {

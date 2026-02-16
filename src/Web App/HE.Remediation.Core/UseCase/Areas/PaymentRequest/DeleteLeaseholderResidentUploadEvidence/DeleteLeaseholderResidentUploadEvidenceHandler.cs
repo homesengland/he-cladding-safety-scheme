@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.DeleteLeaseholderResidentUploadEvidence;
@@ -24,7 +24,7 @@ public class DeleteLeaseholderResidentUploadEvidenceHandler : IRequestHandler<De
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<Unit> Handle(DeleteLeaseholderResidentUploadEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteLeaseholderResidentUploadEvidenceRequest request, CancellationToken cancellationToken)
     {
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
 

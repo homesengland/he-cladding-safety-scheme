@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureResults.VariationRequest;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Costs.Get;
 
@@ -27,7 +27,7 @@ public class GetCostsHandler : IRequestHandler<GetCostsRequest, GetCostsResponse
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetCostsResponse> Handle(GetCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCostsResponse> Handle(GetCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -41,6 +41,16 @@ public class CostsViewModel
     public decimal? CurrentMonthTotal { get; set; }
 
     public MonthlyCostViewModel FinalMonthCost { get; set; }
-    public decimal? AdditionalPtfsPayment { get; set; }
+
     public bool? IsAdditionalPtfsPaid { get; set; }
+    
+    public decimal? AdditionalPtfsPayment { get; set; }
+
+    public bool? IsThirdPtfsPaid { get; set; }
+    
+    public decimal? ThirdPtfsPayment { get; set; }
+
+    public bool IsPtfsReclaimPaid { get; set; }
+    
+    public decimal? PtfsReclaimAmount { get; set; }
 }

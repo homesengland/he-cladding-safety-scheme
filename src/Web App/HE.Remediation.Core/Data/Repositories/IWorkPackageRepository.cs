@@ -31,6 +31,8 @@ public interface IWorkPackageRepository
     Task UpdateWorkPackageConfirmToProceed(bool? isConfirmedToProceed);
     #endregion
 
+    Task InsertWorkPackage(Guid applicationId); 
+    
     Task<WorkPackageTaskListSummaryResult> GetWorkPackageTaskListSummary();
 
     Task<bool> HasWorkPackage();

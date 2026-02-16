@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.GetYesNoDeclaration;
@@ -24,7 +24,7 @@ public class SetYesNoDeclarationHandler : IRequestHandler<SetYesNoDeclarationReq
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(SetYesNoDeclarationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetYesNoDeclarationRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

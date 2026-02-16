@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.StartedOnSiteMilestone;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PracticalCompletionMilestone;
 
@@ -16,7 +16,7 @@ public class SubmitCheckYourAnswersHandler : IRequestHandler<SubmitCheckYourAnsw
         _milestoneRepository = milestoneRepository;
     }
 
-    public async Task<Unit> Handle(SubmitCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SubmitCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

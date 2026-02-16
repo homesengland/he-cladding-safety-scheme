@@ -25,7 +25,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.S
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.TotalCosts;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageCostsScheduling;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageCostsScheduling.Controllers;

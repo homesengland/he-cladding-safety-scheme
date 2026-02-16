@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetVariationRequired;
 
@@ -22,7 +22,7 @@ public class GetVariationRequiredHandler : IRequestHandler<GetVariationRequiredR
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetVariationRequiredResponse> Handle(GetVariationRequiredRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetVariationRequiredResponse> Handle(GetVariationRequiredRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
@@ -50,7 +50,7 @@ public class GetVariationRequiredHandler : IRequestHandler<GetVariationRequiredR
         };        
     }
 
-    public async Task<bool> EndDateHasSlipped(Guid applicationId, int slippageInMonths)
+    public async ValueTask<bool> EndDateHasSlipped(Guid applicationId, int slippageInMonths)
     {
         var endVersionDates = await _paymentRequestRepository.GetPaymentRequestEndVersionDates(applicationId);
         if (endVersionDates == null)

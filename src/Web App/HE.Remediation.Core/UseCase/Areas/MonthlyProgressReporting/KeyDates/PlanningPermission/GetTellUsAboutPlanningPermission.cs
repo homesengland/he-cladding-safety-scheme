@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectSupport;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.PlanningPermission;
 public class GetTellUsAboutPlanningPermission : IRequestHandler<GetTellUsAboutPlanningPermissionRequest, GetTellUsAboutPlanningPermissionResponse>
@@ -19,7 +19,7 @@ public class GetTellUsAboutPlanningPermission : IRequestHandler<GetTellUsAboutPl
         _detailsProvider = detailsProvider;
         _keyDatesRepository = keyDatesRepository;
     }
-    public async Task<GetTellUsAboutPlanningPermissionResponse> Handle(GetTellUsAboutPlanningPermissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTellUsAboutPlanningPermissionResponse> Handle(GetTellUsAboutPlanningPermissionRequest request, CancellationToken cancellationToken)
     {
         var progressReportId = _dataProvider.GetProgressReportId();
         var applicationDetails = await _detailsProvider.GetApplicationDetails();

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.AddFile;

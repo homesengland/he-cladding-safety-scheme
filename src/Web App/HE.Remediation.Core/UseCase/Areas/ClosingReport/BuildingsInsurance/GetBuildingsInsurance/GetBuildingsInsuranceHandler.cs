@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.BuildingsInsurance.GetBuildingsInsurance;
 
@@ -13,7 +13,7 @@ public partial class GetBuildingsInsuranceHandler(
     private readonly IBuildingsInsuranceRepository _buildingsInsuranceRepository = buildingsInsuranceRepository;
     private readonly IClosingReportRepository _closingReportRepository = closingReportRepository;
 
-    public async Task<GetBuildingsInsuranceResponse> Handle(GetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingsInsuranceResponse> Handle(GetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

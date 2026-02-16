@@ -4,7 +4,7 @@ using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
 using HE.Remediation.Core.UseCase.Areas.Administration.CorrespondenceAddress.SetCorrespondenceAddress;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CorrespondanceAddress.SetCorrespondanceAddress;
 
@@ -21,7 +21,7 @@ public class SetCorrespondenceAddressHandler : IRequestHandler<SetCorrespondence
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetCorrespondenceAddressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCorrespondenceAddressRequest request, CancellationToken cancellationToken)
     {
         var userId = _adc.GetUserId();
 

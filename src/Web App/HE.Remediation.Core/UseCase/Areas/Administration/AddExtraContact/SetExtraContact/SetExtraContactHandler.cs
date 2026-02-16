@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.AddExtraContact.SetExtraContact;
 
@@ -21,7 +21,7 @@ public class SetExtraContactHandler: IRequestHandler<SetExtraContactRequest>
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetExtraContactRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetExtraContactRequest request, CancellationToken cancellationToken)
     {
         var userId = _applicationDataProvider.GetUserId();
         if (userId is null)

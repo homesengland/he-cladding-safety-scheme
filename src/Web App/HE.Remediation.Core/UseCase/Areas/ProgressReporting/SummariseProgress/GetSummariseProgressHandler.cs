@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.LeaseholderInformedLast;
-using MediatR;
+using Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SummariseProgress
             _progressReportingRepository = progressReportingRepository;
         }
 
-        public async Task<GetSummariseProgressResponse> Handle(GetSummariseProgressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetSummariseProgressResponse> Handle(GetSummariseProgressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

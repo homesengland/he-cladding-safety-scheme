@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingsInsurance.GetBuildingsInsurance;
 
@@ -16,7 +16,7 @@ public class GetBuildingsInsuranceHandler : IRequestHandler<GetBuildingsInsuranc
         _buildingsInsuranceRepository = buildingsInsuranceRepository;
     }
 
-    public async Task<GetBuildingsInsuranceResponse> Handle(GetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingsInsuranceResponse> Handle(GetBuildingsInsuranceRequest request, CancellationToken cancellationToken)
     {
         var details = await _applicationDetailsProvider.GetApplicationDetails();
 

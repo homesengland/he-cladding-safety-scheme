@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetPracticalCompletionDate;
 
 public class GetPracticalCompletionDateHandler : IRequestHandler<GetPracticalCompletionDateRequest, GetPracticalCompletionDateResponse>
@@ -21,7 +21,7 @@ public class GetPracticalCompletionDateHandler : IRequestHandler<GetPracticalCom
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetPracticalCompletionDateResponse> Handle(GetPracticalCompletionDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPracticalCompletionDateResponse> Handle(GetPracticalCompletionDateRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

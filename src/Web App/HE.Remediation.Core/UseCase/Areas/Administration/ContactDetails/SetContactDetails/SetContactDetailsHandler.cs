@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.ContactDetails.SetContactDetails
 {
@@ -19,13 +19,13 @@ namespace HE.Remediation.Core.UseCase.Areas.Administration.ContactDetails.SetCon
             _userService = userService;
         }
 
-        public async Task<Unit> Handle(SetContactDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetContactDetailsRequest request, CancellationToken cancellationToken)
         {
             await SetContactDetails(request);
             return Unit.Value;
         }
 
-        private async Task SetContactDetails(SetContactDetailsRequest request)
+        private async ValueTask SetContactDetails(SetContactDetailsRequest request)
         {
             var userId = _applicationDataProvider.GetUserId();
             

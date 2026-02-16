@@ -3,7 +3,7 @@ using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetClosingReportInformation;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetFinalCheckYourAnswers;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetNeedVariations;

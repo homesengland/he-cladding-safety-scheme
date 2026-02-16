@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.WorksContract.Delete;
 
@@ -21,7 +21,7 @@ public class DeleteWorksContractHandler : IRequestHandler<DeleteWorksContractReq
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(DeleteWorksContractRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteWorksContractRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

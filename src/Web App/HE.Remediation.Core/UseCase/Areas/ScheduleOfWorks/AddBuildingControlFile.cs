@@ -5,7 +5,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -33,7 +33,7 @@ public class AddBuildingControlFileHandler : IRequestHandler<AddBuildingControlF
         _fileServiceSettings = fileServiceSettings.Value;
     }
 
-    public async Task<Unit> Handle(AddBuildingControlFileRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AddBuildingControlFileRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         

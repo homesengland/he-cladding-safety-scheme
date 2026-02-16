@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.InstallationOfCladding;
 
@@ -13,7 +13,7 @@ public class SetInstallationOfCladdingHandler : IRequestHandler<SetInstallationO
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetInstallationOfCladdingRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetInstallationOfCladdingRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateInstallationOfCladdingCosts(new UpdateInstallationOfCladdingCostsParameters
         {

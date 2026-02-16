@@ -6,7 +6,7 @@ using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgress
 using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectSupport;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectSupport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectSupport.Controllers;

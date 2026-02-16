@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.AddRole.Set;
 
@@ -13,7 +13,7 @@ public class SetAddRoleHandler : IRequestHandler<SetAddRoleRequest, SetAddRoleRe
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<SetAddRoleResponse> Handle(SetAddRoleRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetAddRoleResponse> Handle(SetAddRoleRequest request, CancellationToken cancellationToken)
     {
         var teamMembers = await _workPackageRepository.GetTeamMembers();
         var teamMemberRoles = teamMembers.Select(tm => tm.Role);

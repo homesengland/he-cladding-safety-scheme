@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.InstallationOfCladdingCosts.Get;
 
@@ -23,7 +23,7 @@ public class GetInstallationOfCladdingCostsHandler : IRequestHandler<GetInstalla
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<GetInstallationOfCladdingCostsResponse> Handle(GetInstallationOfCladdingCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetInstallationOfCladdingCostsResponse> Handle(GetInstallationOfCladdingCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

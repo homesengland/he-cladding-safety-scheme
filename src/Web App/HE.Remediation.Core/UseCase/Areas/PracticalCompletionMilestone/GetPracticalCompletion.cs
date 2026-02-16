@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PracticalCompletionMilestone;
 
@@ -23,7 +23,7 @@ public class GetPracticalCompletionHandler : IRequestHandler<GetPracticalComplet
         _milestoneRepository = milestoneRepository;
     }
 
-    public async Task<GetPracticalCompletionResponse> Handle(GetPracticalCompletionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPracticalCompletionResponse> Handle(GetPracticalCompletionRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.GetBuildingDeveloperInformation;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegulatorRegistrationCode.GetBuildingSafetyRegulatorRegistrationCode
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegula
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetBuildingSafetyRegulatorRegistrationCodeResponse> Handle(GetBuildingSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingSafetyRegulatorRegistrationCodeResponse> Handle(GetBuildingSafetyRegulatorRegistrationCodeRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingSafetyRegula
             return response;
         }
 
-        private async Task<GetBuildingSafetyRegulatorRegistrationCodeResponse> GetBuildingSafetyRegulatorRegistrationCode(Guid applicationId)
+        private async ValueTask<GetBuildingSafetyRegulatorRegistrationCodeResponse> GetBuildingSafetyRegulatorRegistrationCode(Guid applicationId)
         {
             var response = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetBuildingSafetyRegulatorRegistrationCodeResponse>("GetBuildingSafetyRegulatorRegistrationCode", new { applicationId });
 

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetFreeholderCompanyDetailsResponse> Handle(GetFreeholderCompanyDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFreeholderCompanyDetailsResponse> Handle(GetFreeholderCompanyDetailsRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             return response;
         }
 
-        private async Task<GetFreeholderCompanyDetailsResponse> GetFreeholderCompanyDetails(Guid applicationId)
+        private async ValueTask<GetFreeholderCompanyDetailsResponse> GetFreeholderCompanyDetails(Guid applicationId)
         {
             var response = await _connection.QuerySingleOrDefaultAsync<GetFreeholderCompanyDetailsResponse>("GetFreeholderCompanyDetails", new { applicationId });
 

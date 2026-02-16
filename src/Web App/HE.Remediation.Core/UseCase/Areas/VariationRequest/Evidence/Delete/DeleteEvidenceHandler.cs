@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Evidence.Delete;
 
@@ -20,7 +20,7 @@ public class DeleteEvidenceHandler : IRequestHandler<DeleteEvidenceRequest>
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<Unit> Handle(DeleteEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteEvidenceRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

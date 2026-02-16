@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.VariationRequest;
 using HE.Remediation.Core.Exceptions;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.IneligibleCostsChanges.Set;
@@ -15,7 +15,7 @@ public class SetIneligibleCostsChangesHandler : IRequestHandler<SetIneligibleCos
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<Unit> Handle(SetIneligibleCostsChangesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetIneligibleCostsChangesRequest request, CancellationToken cancellationToken)
     {
         var currentVariationRequestId = await _variationRequestRepository.GetCurrentVariationRequestId();
 

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CompanyDetails.GetCompanyDetailsForCurrentUser;
 
@@ -15,7 +15,7 @@ public class GetCompanyDetailsForCurrentUserHandler : IRequestHandler<GetCompany
         _db = db;
     }
 
-    public async Task<GetCompanyDetailsForCurrentUserResponse> Handle(GetCompanyDetailsForCurrentUserRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCompanyDetailsForCurrentUserResponse> Handle(GetCompanyDetailsForCurrentUserRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

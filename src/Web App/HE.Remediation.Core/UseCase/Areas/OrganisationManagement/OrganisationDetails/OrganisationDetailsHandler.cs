@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using Microsoft.Data.SqlClient;
 
@@ -13,7 +13,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.OrganisationD
             _connection = connection;
         }
 
-        public async Task<OrganisationDetailsResponse> Handle(OrganisationDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<OrganisationDetailsResponse> Handle(OrganisationDetailsRequest request, CancellationToken cancellationToken)
         {
             try
             {

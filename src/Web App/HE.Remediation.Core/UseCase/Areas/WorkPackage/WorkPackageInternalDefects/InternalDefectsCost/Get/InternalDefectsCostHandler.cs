@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefects.InternalDefectsCost.Set;
-using MediatR;
+using Mediator;
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefects.InternalDefectsCost.Get;
 
 public class InternalDefectsCostHandler : IRequestHandler<GetInternalDefectsCostRequest, GetInternalDefectsCostResponse>
@@ -24,7 +24,7 @@ public class InternalDefectsCostHandler : IRequestHandler<GetInternalDefectsCost
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetInternalDefectsCostResponse> Handle(GetInternalDefectsCostRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetInternalDefectsCostResponse> Handle(GetInternalDefectsCostRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

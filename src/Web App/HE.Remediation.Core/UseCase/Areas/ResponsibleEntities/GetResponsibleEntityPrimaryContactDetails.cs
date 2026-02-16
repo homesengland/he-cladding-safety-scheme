@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetResponsibleEntityPrimaryContactDetailsResponse> Handle(GetResponsibleEntityPrimaryContactDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetResponsibleEntityPrimaryContactDetailsResponse> Handle(GetResponsibleEntityPrimaryContactDetailsRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             return response;
         }
 
-        private async Task<GetResponsibleEntityPrimaryContactDetailsResponse> GetResponsibleEntityPrimaryContactDetails(Guid applicationId)
+        private async ValueTask<GetResponsibleEntityPrimaryContactDetailsResponse> GetResponsibleEntityPrimaryContactDetails(Guid applicationId)
         {
             var response = await _connection.QuerySingleOrDefaultAsync<GetResponsibleEntityPrimaryContactDetailsResponse>("GetResponsibleEntityPrimaryContactDetails", new { applicationId });
 

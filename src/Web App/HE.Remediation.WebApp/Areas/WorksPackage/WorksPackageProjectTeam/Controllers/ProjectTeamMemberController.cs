@@ -12,7 +12,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.TeamMember.Set;
 using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageProjectTeamMember;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageProjectTeam.Controllers;
@@ -124,7 +124,7 @@ public class ProjectTeamMemberController : StartController
 
             return View(model);
         }
-        catch (EntityNotFoundException ex)
+        catch (EntityNotFoundException)
         {
             throw new EntityNotFoundException("Works package team member not found");
         }

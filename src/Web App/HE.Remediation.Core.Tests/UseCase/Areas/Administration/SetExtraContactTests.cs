@@ -78,6 +78,6 @@ public class SetExtraContactTests
                                              .Verifiable();
         
         // Act / Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(() => _handler.Handle(new SetExtraContactRequest(), CancellationToken.None));
+        await Assert.ThrowsAsync<EntityNotFoundException>(() => _handler.Handle(new SetExtraContactRequest(), CancellationToken.None).AsTask());
     }
 }

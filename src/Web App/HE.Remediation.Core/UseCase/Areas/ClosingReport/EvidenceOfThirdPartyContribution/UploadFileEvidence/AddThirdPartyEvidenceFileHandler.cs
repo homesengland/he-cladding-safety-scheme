@@ -7,7 +7,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.AddFile;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -35,7 +35,7 @@ public class AddThirdPartyEvidenceFileHandler : IRequestHandler<AddThirdPartyEvi
         _thirdPartyEvidenceRepository = thirdPartyEvidenceRepository;
     }
 
-    public async Task<Unit> Handle(AddThirdPartyEvidenceFileRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AddThirdPartyEvidenceFileRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
@@ -57,7 +57,7 @@ public class AddThirdPartyEvidenceFileHandler : IRequestHandler<AddThirdPartyEvi
         return Unit.Value;
     }
 
-    private async Task<ProcessFileResult> ProcessFile(IFormFile file)
+    private async ValueTask<ProcessFileResult> ProcessFile(IFormFile file)
     {
         if (file == null)
         {

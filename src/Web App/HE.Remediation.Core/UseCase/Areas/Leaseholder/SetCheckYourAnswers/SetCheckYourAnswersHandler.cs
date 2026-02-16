@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetCheckYourAnswers
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetCheckYourAnswers
             _db = db;
         }
 
-        public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

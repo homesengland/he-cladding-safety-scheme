@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Preliminary;
 
@@ -23,7 +23,7 @@ public class GetPreliminaryHandler : IRequestHandler<GetPreliminaryRequest, GetP
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetPreliminaryResponse> Handle(GetPreliminaryRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPreliminaryResponse> Handle(GetPreliminaryRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

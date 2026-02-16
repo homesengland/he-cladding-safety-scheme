@@ -1,7 +1,7 @@
 using System.Text.Json;
 using CSS_SSSF = HE.Remediation.Core.UseCase.DataIngest.CSS_SSSF;
 using RAS = HE.Remediation.Core.UseCase.DataIngest.RAS;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.Services.DataIngestion

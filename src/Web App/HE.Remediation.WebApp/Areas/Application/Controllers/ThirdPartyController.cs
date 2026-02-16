@@ -7,7 +7,7 @@ using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember;
 using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.RemoveAccess;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.WebApp.ViewModels.Application;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.Enums;
 

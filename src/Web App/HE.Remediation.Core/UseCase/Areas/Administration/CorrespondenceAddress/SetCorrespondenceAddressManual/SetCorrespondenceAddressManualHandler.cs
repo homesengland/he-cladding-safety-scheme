@@ -1,9 +1,8 @@
-﻿
-using HE.Remediation.Core.Exceptions;
+﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CorrespondenceAddress.SetCorrespondenceAddressManual;
 
@@ -20,7 +19,7 @@ public class SetCorrespondenceAddressManualHandler : IRequestHandler<SetCorrespo
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetCorrespondenceAddressManualRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCorrespondenceAddressManualRequest request, CancellationToken cancellationToken)
     {
         var userId = _adc.GetUserId();
 

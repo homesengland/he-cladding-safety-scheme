@@ -1,0 +1,61 @@
+@model HE.Remediation.Core.Services.GovNotify.ViewModels.GovNotifyEmailViewModel
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/gov-notify-footer.css">
+</head>
+<body>
+    <div class="head">
+        <img class="logo" src="img/LetterLogo.png" />
+        <span class="slogan">The Housing and Regeneration Agency</span>
+    </div>
+    <div class="body">
+        <div class="avoid-break">
+            <p>
+                Dear @Model.ContactFirstName @Model.ContactSurname,
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>Reference number:</strong> @Model.ReferenceNumber
+            </p>
+            <p>
+                <strong>Social Sector funded scheme:</strong> @Model.BuildingName
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Thank you for submitting a completed building record to the Social Sector self-funded scheme. We are pleased to confirm the next stages following the building record submission.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Based on the information you have provided in the building record, you have confirmed that building remediation has been completed and was self-funded.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>What happens next?</strong>
+            </p>
+            <p>
+                You are required to submit a works package, including the detail of the works that were undertaken and details of the project team assembled to deliver the remediation works. For more detail of the requirements included in the Works Package please review our <a href="#">published guidance</a>.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                <strong>Contact us</strong>
+            </p>
+            <p>
+                If you have any questions, you should first read the guidance available in the online Building Remediation Hub. If you are unable to find the answer you need, contact the Cladding Safety Scheme by emailing <a href="mailto:support@claddingsafetyscheme.co.uk">support@claddingsafetyscheme.co.uk</a>. Include the building name, post code and reference number in the email subject line. Alternatively, you can call the team on 0300 323 0180.
+            </p>
+        </div>
+        <div class="avoid-break">
+            <p>
+                Yours sincerely,
+            </p>
+            <p>
+                The Cladding Safety Scheme Team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

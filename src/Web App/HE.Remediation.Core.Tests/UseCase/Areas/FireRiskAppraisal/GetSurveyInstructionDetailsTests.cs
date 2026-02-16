@@ -84,16 +84,17 @@ public class GetSurveyInstructionDetailsTests
     public async Task Handler_Returns_Nothing_From_DB()
     {
         //Arrange        
-        _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetSurveyInstructionDetailsResponse>("GetSurveyInstructionDetails", It.IsAny<object>()))
+        _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetSurveyInstructionDetailsResponse?>("GetSurveyInstructionDetails", It.IsAny<object>()))
                                 .ReturnsAsync(() => null)
                                 .Verifiable();
+#pragma warning restore CS8620
 
         _applicationDataProvider.Setup(x => x.GetApplicationId())
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
 
         _fireAssessorListService.Setup(x => x.GetFireAssessorList())
-                                .ReturnsAsync(() => null)
+                                .ReturnsAsync((List<GetFireRiskAssessorListResult>?)null)
                                 .Verifiable();
 
         //// Act

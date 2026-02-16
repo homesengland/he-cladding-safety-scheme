@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.GetYesNoDeclaration;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.ReasonForNoContributions.Set;
@@ -25,7 +25,7 @@ public class SetReasonForNoContributionHandler : IRequestHandler<SetReasonForNoC
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(SetReasonForNoContributionsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetReasonForNoContributionsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

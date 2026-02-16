@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.FireRiskAppraisal;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment;
 
@@ -24,7 +24,7 @@ public class GetReportHandler : IRequestHandler<GetReportRequest, GetReportRespo
         _fireRiskAppraisalRepository = fireRiskAppraisalRepository;
     }
 
-    public async Task<GetReportResponse> Handle(GetReportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetReportResponse> Handle(GetReportRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

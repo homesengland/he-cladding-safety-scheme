@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -32,7 +32,7 @@ public class AddRightToManageEvidenceHandler : IRequestHandler<AddRightToManageE
         _settings = settings.Value;
     }
 
-    public async Task<Unit> Handle(AddRightToManageEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AddRightToManageEvidenceRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

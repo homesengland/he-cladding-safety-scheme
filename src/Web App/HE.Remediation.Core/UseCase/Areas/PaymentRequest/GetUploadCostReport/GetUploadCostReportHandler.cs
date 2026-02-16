@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetUploadCostReport;
 
@@ -22,7 +22,7 @@ public class GetUploadCostReportHandler : IRequestHandler<GetUploadCostReportReq
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetUploadCostReportResponse> Handle(GetUploadCostReportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUploadCostReportResponse> Handle(GetUploadCostReportRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

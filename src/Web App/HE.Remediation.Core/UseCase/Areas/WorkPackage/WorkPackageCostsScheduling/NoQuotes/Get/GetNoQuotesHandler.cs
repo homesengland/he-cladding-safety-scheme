@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.NoQuotes.Get;
 
@@ -22,7 +22,7 @@ public class GetNoQuotesHandler : IRequestHandler<GetNoQuotesRequest, GetNoQuote
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetNoQuotesResponse> Handle(GetNoQuotesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetNoQuotesResponse> Handle(GetNoQuotesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

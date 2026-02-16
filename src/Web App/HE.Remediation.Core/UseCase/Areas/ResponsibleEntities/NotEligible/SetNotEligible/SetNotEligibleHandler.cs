@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.NotEligible.SetNotEligible;
 
@@ -22,7 +22,7 @@ public class SetNotEligibleHandler : IRequestHandler<SetNotEligibleRequest>
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<Unit> Handle(SetNotEligibleRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetNotEligibleRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

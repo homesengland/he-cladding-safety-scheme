@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetSelectPayment;
 
@@ -13,9 +13,9 @@ public class SetSelectPaymentHandler : IRequestHandler<SetSelectPaymentRequest>
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public Task<Unit> Handle(SetSelectPaymentRequest request, CancellationToken cancellationToken)
+    public ValueTask<Unit> Handle(SetSelectPaymentRequest request, CancellationToken cancellationToken)
     {
         _paymentRequestRepository.SetPaymentRequestId(request.Id);        
-        return Task.FromResult(Unit.Value);
+        return ValueTask.FromResult(Unit.Value);
     }
 }

@@ -314,7 +314,9 @@ public class OriginalRequestTrackingMiddlewareTests : IDisposable
         var exception = new Exception("Test error");
         var exceptionFeature = new Mock<IExceptionHandlerFeature>();
         exceptionFeature.Setup(e => e.Error).Returns(exception);
-        exceptionFeature.Setup(e => e.Path).Returns((string)null);
+#pragma warning disable CS8604 // Possible null reference argument - testing null path scenario
+        exceptionFeature.Setup(e => e.Path).Returns(null as string);
+#pragma warning restore CS8604
 
         _httpContext.Features.Set(exceptionFeature.Object);
 

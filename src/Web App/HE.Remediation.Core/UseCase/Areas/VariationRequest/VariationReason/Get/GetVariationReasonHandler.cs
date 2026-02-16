@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults.VariationRequest;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.VariationReason.Get;
 
@@ -26,7 +26,7 @@ public class GetVariationReasonHandler : IRequestHandler<GetVariationReasonReque
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetVariationReasonResponse> Handle(GetVariationReasonRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetVariationReasonResponse> Handle(GetVariationReasonRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

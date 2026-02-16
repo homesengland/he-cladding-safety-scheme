@@ -4,7 +4,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Transactions;
@@ -35,7 +35,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAss
             _fileRepository = fileRepository;
         }
 
-        public async Task<Unit> Handle(UploadFireRiskAssessmentReportRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(UploadFireRiskAssessmentReportRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -74,7 +74,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAss
             return Unit.Value;
         }
 
-        private async Task<ProcessFileResult> ProcessFile(IFormFile file, UploadSectionSettings settings)
+        private async ValueTask<ProcessFileResult> ProcessFile(IFormFile file, UploadSectionSettings settings)
         {
             try
             {

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 
-using MediatR;
+using Mediator;
 
 using Microsoft.Extensions.Options;
 
@@ -20,7 +20,7 @@ public class SetForecastGateway3SubmissionHandler : IRequestHandler<SetForecastG
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<Unit> Handle(SetForecastGateway3SubmissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetForecastGateway3SubmissionRequest request, CancellationToken cancellationToken)
     {
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
 

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -12,7 +12,7 @@ public class SetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<SetWhoIs
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

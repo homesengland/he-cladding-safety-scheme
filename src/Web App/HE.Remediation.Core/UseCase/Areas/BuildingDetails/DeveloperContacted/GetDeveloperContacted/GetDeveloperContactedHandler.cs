@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.DeveloperContacted.GetDeveloperContacted;
 
@@ -14,7 +14,7 @@ public class GetDeveloperContactedHandler : IRequestHandler<GetDeveloperContacte
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetDeveloperContactedResponse> Handle(GetDeveloperContactedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetDeveloperContactedResponse> Handle(GetDeveloperContactedRequest request, CancellationToken cancellationToken)
     {
         var isDeveloperContacted = await _connection.QuerySingleOrDefaultAsync<bool?>("GetDeveloperContacted", new
         {

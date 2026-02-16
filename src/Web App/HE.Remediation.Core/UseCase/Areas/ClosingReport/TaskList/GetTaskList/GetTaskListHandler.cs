@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.TaskList.GetTaskList;
 
@@ -24,7 +24,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
         _closingReportRepository = closingReportRepository;
     }
 
-    public async Task<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

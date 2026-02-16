@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermissionPlannedSubmitDate.GetPlanningPermissionPlannedSubmitDate
 {
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.PlanningPermission
             _progressReportingRepository = progressReportingRepository;
         }
 
-        public async Task<GetPlanningPermissionPlannedSubmitDateResponse> Handle(GetPlanningPermissionPlannedSubmitDateRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetPlanningPermissionPlannedSubmitDateResponse> Handle(GetPlanningPermissionPlannedSubmitDateRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

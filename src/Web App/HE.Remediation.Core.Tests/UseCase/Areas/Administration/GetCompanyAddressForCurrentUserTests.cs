@@ -53,10 +53,10 @@ public class GetCompanyAddressForCurrentUserTests
     public async Task Handler_Returns_Null_With_No_DB_Results()
     {
         //Arrange
-        GetCompanyAddressForCurrentUserResponse response = null;
+        GetCompanyAddressForCurrentUserResponse? response = null;
 
         _connection.Setup(x => x.QuerySingleOrDefaultAsync<GetCompanyAddressForCurrentUserResponse>("GetCompanyAddressByUserId", It.IsAny<object>()))
-                                .ReturnsAsync(response)
+                                .ReturnsAsync(response!)
                                 .Verifiable();
 
         _applicationDataProvider.Setup(x => x.GetUserId())

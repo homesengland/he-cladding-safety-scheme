@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.TeamMember.DeleteTeamMember;
 
@@ -13,7 +13,7 @@ public class DeleteTeamMemberHandler : IRequestHandler<DeleteTeamMemberRequest>
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
     {
         await _progressReportingRepository.DeleteProgressReportTeamMember(request.TeamMemberId);
         return Unit.Value;

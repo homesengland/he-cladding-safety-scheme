@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest;
 
@@ -25,7 +25,7 @@ public class GetPaymentRequestInvoicesHandler : IRequestHandler<GetPaymentReques
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetPaymentRequestInvoicesResponse> Handle(GetPaymentRequestInvoicesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPaymentRequestInvoicesResponse> Handle(GetPaymentRequestInvoicesRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

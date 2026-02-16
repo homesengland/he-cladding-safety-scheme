@@ -1,6 +1,6 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Costs.Create;
 
@@ -13,7 +13,7 @@ public class CreateCostsHandler : IRequestHandler<CreateCostsRequest>
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<Unit> Handle(CreateCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(CreateCostsRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

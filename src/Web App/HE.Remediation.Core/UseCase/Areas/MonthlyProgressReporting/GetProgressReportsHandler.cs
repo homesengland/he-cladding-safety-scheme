@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting;
 
@@ -17,7 +17,7 @@ public class GetProgressReportsHandler : IRequestHandler<GetProgressReportsReque
         _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
     }
 
-    public async Task<GetProgressReportsResponse> Handle(GetProgressReportsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProgressReportsResponse> Handle(GetProgressReportsRequest request, CancellationToken cancellationToken)
     {
         var details = await _applicationDetailsProvider.GetApplicationDetails();
         var progressReports = await _monthlyProgressReportingRepository.GetProgressReports(details.ApplicationId);

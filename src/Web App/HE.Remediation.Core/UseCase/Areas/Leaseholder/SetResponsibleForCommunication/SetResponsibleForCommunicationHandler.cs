@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Leaseholder.SetLeaseholderEvidence;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetResponsibleForCommunication
 {
@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetResponsibleForCommuni
             _leaseHolderRepository = leaseHolderRepository;
         }
 
-        public async Task<Unit> Handle(SetResponsibleForCommunicationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetResponsibleForCommunicationRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

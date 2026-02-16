@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ReasonPlanningNotApplied.SetReasonPlanningNotApplied;
 
@@ -13,7 +13,7 @@ public class SetReasonPlanningNotAppliedHandler : IRequestHandler<SetReasonPlann
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetReasonPlanningNotAppliedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetReasonPlanningNotAppliedRequest request, CancellationToken cancellationToken)
     {
         await UpdatePlanningPermissionNotAppliedReason(request);
         return Unit.Value;

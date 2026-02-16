@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 
@@ -26,7 +26,7 @@ public class DeleteUploadFireRiskAssessmentReportHandler : IRequestHandler<Delet
         _fileService = fileService;
     }
 
-    public async Task<Unit> Handle(DeleteUploadFireRiskAssessmentReportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteUploadFireRiskAssessmentReportRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

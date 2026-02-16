@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates;
 public class GetKeyDatesHandler : KeyDatesEntryPoint, IRequestHandler<GetKeyDatesRequest, GetKeyDatesResponse>
@@ -22,7 +22,7 @@ public class GetKeyDatesHandler : KeyDatesEntryPoint, IRequestHandler<GetKeyDate
         _progressReportingKeyDatesRepository = progressReportingKeyDatesRepository;
     }
 
-    public async Task<GetKeyDatesResponse> Handle(GetKeyDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetKeyDatesResponse> Handle(GetKeyDatesRequest request, CancellationToken cancellationToken)
     {
         var details = await _detailsProvider.GetApplicationDetails();
         var result = await _progressReportingKeyDatesRepository.GetProgressReportKeyDates(request.MonthlyProgressReportId);

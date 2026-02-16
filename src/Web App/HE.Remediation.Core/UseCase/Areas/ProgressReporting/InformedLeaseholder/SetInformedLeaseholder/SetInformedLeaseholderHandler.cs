@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Services.StatusTransition;
 
@@ -23,7 +23,7 @@ public class SetInformedLeaseholderHandler : IRequestHandler<SetInformedLeasehol
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<Unit> Handle(SetInformedLeaseholderRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetInformedLeaseholderRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportVersion = await _progressReportingRepository.GetProgressReportVersion();

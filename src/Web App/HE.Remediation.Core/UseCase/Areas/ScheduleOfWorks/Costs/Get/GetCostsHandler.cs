@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.Costs;
 using HE.Remediation.Core.Helpers;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Shared.Costs.Get;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.Costs.Get;
 
@@ -25,7 +25,7 @@ public class GetCostsHandler : IRequestHandler<GetCostsRequest, GetCostsResponse
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetCostsResponse> Handle(GetCostsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetCostsResponse> Handle(GetCostsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();        
 
@@ -69,7 +69,11 @@ public class GetCostsHandler : IRequestHandler<GetCostsRequest, GetCostsResponse
             UnprofiledGrantFunding = calculatedCosts.UnprofiledAmount,
             IsSubmitted = isSubmitted,
             IsAdditionalPtfsPaid = costs?.IsAdditionalPtfsPaid ?? false,
-            AdditionalPtfsPayment = costs?.AdditionalPtfsPayment
+            AdditionalPtfsPayment = costs?.AdditionalPtfsPayment,
+            IsThirdPtfsPaid = costs?.IsThirdPtfsPaid ?? false,
+            ThirdPtfsPayment = costs?.ThirdPtfsPayment,
+            IsPtfsReclaimPaid = costs?.PtfsReclaimAmount.HasValue == true && costs.PtfsReclaimAmount > 0 ? true : false,
+            PtfsReclaimAmount = costs?.PtfsReclaimAmount
         };
     }
 
@@ -79,6 +83,8 @@ public class GetCostsHandler : IRequestHandler<GetCostsRequest, GetCostsResponse
         costs.GrantPaidToDate = costs.GrantPaidToDate.HasValue ? Math.Truncate(costs.GrantPaidToDate.Value) : null;
         costs.PtfsPayment = costs.PtfsPayment.HasValue ? Math.Truncate(costs.PtfsPayment.Value) : null;
         costs.AdditionalPtfsPayment = costs.AdditionalPtfsPayment.HasValue ? Math.Truncate(costs.AdditionalPtfsPayment.Value) : null;
+        costs.ThirdPtfsPayment = costs.ThirdPtfsPayment.HasValue ? Math.Truncate(costs.ThirdPtfsPayment.Value) : null;
+        costs.PtfsReclaimAmount = costs.PtfsReclaimAmount.HasValue ? Math.Truncate(costs.PtfsReclaimAmount.Value) : null;
 
         foreach (var month in costs.MonthlyCosts)
         {

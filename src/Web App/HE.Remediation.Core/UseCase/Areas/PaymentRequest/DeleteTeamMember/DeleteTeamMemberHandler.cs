@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.DeleteTeamMember;
 
@@ -12,7 +12,7 @@ public class DeleteTeamMemberHandler : IRequestHandler<DeleteTeamMemberRequest>
         _paymentRequestRepository = paymentRequestRepository;   
     }
 
-    public async Task<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
     {
         await DeleteTeamMember(request);
         return Unit.Value;

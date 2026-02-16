@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.GetBuildingDetailsAnswers
 {
@@ -20,7 +20,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Get
             _applicationRepository = applicationRepository;
         }
 
-        public async Task<GetBuildingDetailsAnswersResponse> Handle(GetBuildingDetailsAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingDetailsAnswersResponse> Handle(GetBuildingDetailsAnswersRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -29,7 +29,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.CheckYourAnswers.Get
             return response;
         }
 
-        private async Task<GetBuildingDetailsAnswersResponse> GetBuildingDetailsAnswers(Guid applicationId)
+        private async ValueTask<GetBuildingDetailsAnswersResponse> GetBuildingDetailsAnswers(Guid applicationId)
         {
             var applicationStatus = await _applicationRepository.GetApplicationStatus(applicationId);
 

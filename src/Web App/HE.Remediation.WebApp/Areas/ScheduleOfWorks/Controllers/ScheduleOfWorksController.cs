@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.BaseInformation.Get;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.CheckYourAnswers.Get;

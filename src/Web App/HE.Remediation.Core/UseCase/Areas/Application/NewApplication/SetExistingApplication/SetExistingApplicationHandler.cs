@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExistingApplication
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.NewApplication.SetExisti
             _db = db;
         }
 
-        public async Task<Unit> Handle(SetExistingApplicationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
             var cookieUserId = _applicationDataProvider.GetUserId();
 

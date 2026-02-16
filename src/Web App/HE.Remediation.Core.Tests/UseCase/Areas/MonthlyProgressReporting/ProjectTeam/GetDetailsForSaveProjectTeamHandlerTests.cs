@@ -263,6 +263,10 @@ public class GetDetailsForSaveProjectTeamHandlerTests
         _applicationDataProvider.Setup(x => x.GetProgressReportId())
             .Returns(progressReportId)
             .Verifiable();
+        
+        _applicationDataProvider.Setup(x => x.GetApplicationScheme())
+            .Returns(EApplicationScheme.CladdingSafetyScheme)
+            .Verifiable();
     }
 
     private void SetupGcoDetails(GetGrantCertifyingOfficerResult? gcoDetails)

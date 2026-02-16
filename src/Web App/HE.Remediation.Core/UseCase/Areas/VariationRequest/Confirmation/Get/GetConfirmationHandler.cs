@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Confirmation.Get
 {
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Confirmation.Get
             _variationRequestRepository = variationRequestRepository;
         }
 
-        public async Task<GetConfirmationResponse> Handle(GetConfirmationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetConfirmationResponse> Handle(GetConfirmationRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

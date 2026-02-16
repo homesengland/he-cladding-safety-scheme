@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.VariationRequest;
 using HE.Remediation.Core.UseCase.Areas.VariationRequest.VariationReason.Set;
-using MediatR;
+using Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Timescale.Set
             _variationRequestRepository = variationRequestRepository;
         }
 
-        public async Task<Unit> Handle(SetAdjustEndDateRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetAdjustEndDateRequest request, CancellationToken cancellationToken)
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

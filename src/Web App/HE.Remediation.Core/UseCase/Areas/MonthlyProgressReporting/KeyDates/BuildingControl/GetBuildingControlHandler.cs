@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.K
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.BuildingControl
 {
@@ -22,7 +22,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.Bu
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetBuildingControlResponse> Handle(GetBuildingControlRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingControlResponse> Handle(GetBuildingControlRequest request, CancellationToken cancellationToken)
         {
             var details = await _detailsProvider.GetApplicationDetails();
             var applicationId = _applicationDataProvider.GetApplicationId();

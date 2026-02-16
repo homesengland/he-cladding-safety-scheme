@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.RepresentativeBasedInUk.SetRepresentativeBasedInUk;
 
@@ -21,7 +21,7 @@ public class SetRepresentativeBasedInUkHandler : IRequestHandler<SetRepresentati
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<Unit> Handle(SetRepresentativeBasedInUkRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRepresentativeBasedInUkRequest request, CancellationToken cancellationToken)
     {
         await SaveResponse(request.BasedInUk!.Value);
         return Unit.Value;

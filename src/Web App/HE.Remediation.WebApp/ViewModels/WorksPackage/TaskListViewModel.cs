@@ -32,9 +32,11 @@ public class TaskListViewModel : WorkPackageBaseViewModel
     public ETaskStatus WorkPackageFireRiskAssessmentStatusId { get; set; }
     public bool HasFra { get; set; }
 
+    public EApplicationScheme ApplicationScheme { get; set; }
+
     public bool CannotSubmit =>
         !IsSubmitted &&
-            (GrantCertifyingOfficerStatusId != ETaskStatus.Completed ||
+            ((ApplicationScheme != EApplicationScheme.SocialSector && GrantCertifyingOfficerStatusId != ETaskStatus.Completed) ||
              CostsScheduleStatusId != ETaskStatus.Completed ||
              CladdingSystemStatusId != ETaskStatus.Completed ||
              InternalDefectsStatusId != ETaskStatus.Completed ||
@@ -45,5 +47,5 @@ public class TaskListViewModel : WorkPackageBaseViewModel
              KeyDatesStatusId != ETaskStatus.Completed ||
              ProgrammePlanStatusId != ETaskStatus.Completed ||
              WorkPackageFireRiskAssessmentStatusId != ETaskStatus.Completed ||
-             !DutyOfCareDeedSent);
+             (ApplicationScheme != EApplicationScheme.SocialSector && !DutyOfCareDeedSent));
 }

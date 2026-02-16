@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCladdingSystem.FireRiskAppraisalToExternalWalls.Get;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCladdingSystem.FireRiskAppraisalToExternalWalls.Set;
 
@@ -14,7 +14,7 @@ public class SetFireRiskAppraisalToExternalWallsHandler : IRequestHandler<SetFir
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetFireRiskAppraisalToExternalWallsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetFireRiskAppraisalToExternalWallsRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateWorkPackageCladdingSystemStatus(ETaskStatus.Completed);
 

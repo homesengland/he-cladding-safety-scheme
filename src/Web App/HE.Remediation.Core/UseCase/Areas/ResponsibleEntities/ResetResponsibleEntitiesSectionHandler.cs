@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 
@@ -38,7 +38,7 @@ internal class ResetResponsibleEntitiesSectionHandler : IRequestHandler<ResetRes
         _fileRepository = fileRepository;
     }
 
-    public async Task<Unit> Handle(ResetResponsibleEntitiesSectionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(ResetResponsibleEntitiesSectionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = GetApplicationId();
 

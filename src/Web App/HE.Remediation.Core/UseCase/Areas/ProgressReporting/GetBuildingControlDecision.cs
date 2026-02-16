@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -24,7 +24,7 @@ public class GetBuildingControlDecisionHandler : IRequestHandler<GetBuildingCont
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetBuildingControlDecisionResponse> Handle(GetBuildingControlDecisionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingControlDecisionResponse> Handle(GetBuildingControlDecisionRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

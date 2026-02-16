@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.Evidence.SetEvidence;
@@ -28,7 +28,7 @@ public class SetEvidenceHandler : IRequestHandler<SetEvidenceRequest>
         _fileServiceSettings = fileServiceSettings.Value;
     }
 
-    public async Task<Unit> Handle(SetEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetEvidenceRequest request, CancellationToken cancellationToken)
     {
         await ValidateFile(request);
 

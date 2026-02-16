@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureResults.Costs;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Shared.Costs.Set;
 

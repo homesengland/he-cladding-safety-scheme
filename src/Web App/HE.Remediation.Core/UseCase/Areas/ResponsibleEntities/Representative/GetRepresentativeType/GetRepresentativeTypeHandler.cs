@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.GetRepresentativeType;
 
@@ -15,7 +15,7 @@ public class GetRepresentativeTypeHandler : IRequestHandler<GetRepresentativeTyp
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetRepresentativeTypeResponse> Handle(GetRepresentativeTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRepresentativeTypeResponse> Handle(GetRepresentativeTypeRequest request, CancellationToken cancellationToken)
     {
         var representationType = await _connection.QuerySingleOrDefaultAsync<int?>("GetRepresentativeType", new { ApplicationId = _applicationDataProvider.GetApplicationId() });
         return new GetRepresentativeTypeResponse

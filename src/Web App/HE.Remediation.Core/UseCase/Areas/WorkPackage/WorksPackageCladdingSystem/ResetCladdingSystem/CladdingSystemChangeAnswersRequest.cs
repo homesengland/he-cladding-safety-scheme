@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorksPackageCladdingSystem.ResetCladdingSystem
+﻿namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorksPackageCladdingSystem.ResetCladdingSystem
 {
-    public class CladdingSystemChangeAnswersRequest : IRequest
+    public class CladdingSystemChangeAnswersRequest
     {
         public Guid FireRiskCladdingSystemsId { get; set; }
 

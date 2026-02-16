@@ -67,9 +67,9 @@ public class SetBuildingUniqueNameTests
                                 .Returns(Task.CompletedTask)
                                 .Verifiable();
 
-        string buildingName = null; // "my building";
+        string? buildingName = null; // "my building";
         _buildingDetailsRepository.Setup(x => x.GetBuildingUniqueName(It.IsAny<Guid>()))
-                                .ReturnsAsync(buildingName)
+                                .ReturnsAsync(buildingName!)
                                 .Verifiable();
 
         _applicationDataProvider.Setup(x => x.GetApplicationId())

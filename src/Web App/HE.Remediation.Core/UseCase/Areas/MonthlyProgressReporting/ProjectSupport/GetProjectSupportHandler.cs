@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
 using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectSupport
@@ -25,7 +25,7 @@ namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectSupp
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetProjectSupportResponse> Handle(GetProjectSupportRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetProjectSupportResponse> Handle(GetProjectSupportRequest request, CancellationToken cancellationToken)
         {
             var applicationDetails = await _applicationDetailsProvider.GetApplicationDetails();
             var applicationId = _applicationDataProvider.GetApplicationId();

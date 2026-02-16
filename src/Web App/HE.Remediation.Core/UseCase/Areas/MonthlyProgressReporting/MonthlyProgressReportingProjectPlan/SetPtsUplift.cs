@@ -6,7 +6,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -34,7 +34,7 @@ public class SetPtsUpliftHandler : IRequestHandler<SetPtsUpliftRequest>
         _settings = settings.Value;
     }
 
-    public async Task<Unit> Handle(SetPtsUpliftRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetPtsUpliftRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

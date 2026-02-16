@@ -13,7 +13,7 @@ using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetBankAccountDetail
 using HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetVerificationContact;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.Representative.GetRepresentativeType;
 using HE.Remediation.WebApp.ViewModels.BankAccount;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.BankAccount.Controllers

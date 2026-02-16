@@ -58,4 +58,6 @@ public class GetStageDiagramResponse
 
     public bool ConsiderVariation { get; set; }
     public bool IsClosingReportSubmitted { get; set; }
+
+    public bool WorksAlreadyCompleted { get; set; }
 }

@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageFireRiskAssessment;
 
@@ -26,7 +26,7 @@ public class GetUploadFireRiskAssessmentReportHandler : IRequestHandler<GetUploa
         _fireRiskAssessmentRepository = fireRiskAssessmentRepository;
     }
 
-    public async Task<GetUploadFireRiskAssessmentReportResponse> Handle(GetUploadFireRiskAssessmentReportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUploadFireRiskAssessmentReportResponse> Handle(GetUploadFireRiskAssessmentReportRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

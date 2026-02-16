@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -20,7 +20,7 @@ public class SetFreeholderAddressManual: IRequestHandler<SetFreeholderAddressMan
         _responsibleEntityRepository = responsibleEntityRepository;
     }
 
-    public async Task<Unit> Handle(SetFreeholderAddressManualRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetFreeholderAddressManualRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -46,7 +46,7 @@ public class SetFreeholderAddressManual: IRequestHandler<SetFreeholderAddressMan
     }
 }
 
-public class SetFreeholderAddressManualRequest : MediatR.IRequest
+public class SetFreeholderAddressManualRequest : IRequest
 {
     public string NameNumber { get; set; }
     public string AddressLine1 { get; set; }

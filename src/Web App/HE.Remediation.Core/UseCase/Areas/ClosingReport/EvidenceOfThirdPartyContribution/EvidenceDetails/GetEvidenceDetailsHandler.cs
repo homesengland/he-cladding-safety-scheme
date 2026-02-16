@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults.ClosingReport.EvidenceOfThirdPartyContribution;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails
@@ -31,7 +31,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
             _logger = logger;
         }
 
-        public async Task<GetEvidenceDetailsResponse> Handle(GetEvidenceDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetEvidenceDetailsResponse> Handle(GetEvidenceDetailsRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

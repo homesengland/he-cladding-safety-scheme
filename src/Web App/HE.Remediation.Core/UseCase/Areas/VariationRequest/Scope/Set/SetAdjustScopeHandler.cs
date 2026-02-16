@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.VariationRequest;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Scope.Set
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Scope.Set
             _variationRequestRepository = variationRequestRepository;
         }
 
-        public async Task<Unit> Handle(SetAdjustScopeRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetAdjustScopeRequest request, CancellationToken cancellationToken)
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 

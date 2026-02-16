@@ -36,6 +36,8 @@ public class PaymentRequestStatusBadgeTagHelper : TagHelper
                 return "govuk-tag--orange";
             case EPaymentRequestStatus.Todo:
                 return "govuk-tag--grey";
+            case EPaymentRequestStatus.Reclaimed:
+                return "govuk-tag--blue";
         }
 
         return string.Empty;
@@ -55,6 +57,8 @@ public class PaymentRequestStatusBadgeTagHelper : TagHelper
                 return "TO DO";
             case EPaymentRequestStatus.Approved:
                 return "Approved";
+            case EPaymentRequestStatus.Reclaimed:
+                return "Reclaimed";
         }
         return string.Empty;
     }

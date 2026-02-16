@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.GetCompanyAddress;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.SetCompanyAddress
@@ -21,7 +21,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.S
             _responsibleEntityRepository = responsibleEntityRepository;
         }
 
-        public async Task<Unit> Handle(SetCompanyAddressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetCompanyAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

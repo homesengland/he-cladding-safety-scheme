@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Location;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Location.PostCode;
 
@@ -18,7 +18,7 @@ public class GetPostCodeHandler : IRequestHandler<GetPostCodeRequest, GetPostCod
         _pcl = pcl;
     }
 
-    public async Task<GetPostCodeResponse> Handle(GetPostCodeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPostCodeResponse> Handle(GetPostCodeRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

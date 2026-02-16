@@ -1,7 +1,7 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PreTenderSupport.EmailContactDetails;
 
@@ -21,7 +21,7 @@ public class GetEmailContactDetailsHandler : IRequestHandler<GetEmailContactDeta
         _preTenderRepository = preTenderRepository;
     }
 
-    public async Task<GetEmailContactDetailsResponse> Handle(GetEmailContactDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetEmailContactDetailsResponse> Handle(GetEmailContactDetailsRequest request, CancellationToken cancellationToken)
     {
         var results = await _dbConnectionWrapper.QuerySingleOrDefaultAsync<GetEmailContactDetailsResponse>("GetGrantFundingSignatoryDetails", new
         {

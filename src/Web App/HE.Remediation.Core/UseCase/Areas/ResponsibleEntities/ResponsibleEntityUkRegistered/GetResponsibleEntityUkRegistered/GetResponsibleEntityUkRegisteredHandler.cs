@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityUkRegistered.GetResponsibleEntityUkRegistered;
 
@@ -20,7 +20,7 @@ public class GetResponsibleEntityUkRegisteredHandler : IRequestHandler<GetRespon
         _responsibleEntityRepository = responsibleEntityRepository;
     }
 
-    public async Task<GetResponsibleEntityUkRegisteredResponse> Handle(GetResponsibleEntityUkRegisteredRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetResponsibleEntityUkRegisteredResponse> Handle(GetResponsibleEntityUkRegisteredRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

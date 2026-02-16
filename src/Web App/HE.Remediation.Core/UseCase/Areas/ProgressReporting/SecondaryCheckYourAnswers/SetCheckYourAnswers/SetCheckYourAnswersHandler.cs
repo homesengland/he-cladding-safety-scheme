@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System;
 using System.Transactions;
 using HE.Remediation.Core.Data.StoredProcedureResults;
@@ -31,7 +31,7 @@ public class SetCheckYourAnswersHandler : IRequestHandler<SetCheckYourAnswersReq
         _dateTimeProvider = dateTimeProvider;
     }
 
-    public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var userId = _applicationDataProvider.GetUserId();

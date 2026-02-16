@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Services.PdfRendererService;
 using HE.Remediation.Core.Services.RazorRenderer.Models;
-using MediatR;
+using Mediator;
 using Syncfusion.Pdf.Graphics;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.FireRiskAssessorListPdf;
@@ -19,7 +19,7 @@ public class FireRiskAssessorListPdfHandler : IRequestHandler<FireRiskAssessorLi
         _pdfRenderer = pdfRenderer;
     }
 
-    public async Task<byte[]> Handle(FireRiskAssessorListPdfRequest request, CancellationToken cancellationToken)
+    public async ValueTask<byte[]> Handle(FireRiskAssessorListPdfRequest request, CancellationToken cancellationToken)
     {
         var assessors = await _fireRiskAppraisalRepository.GetFireRiskAssessorPdfList();
 

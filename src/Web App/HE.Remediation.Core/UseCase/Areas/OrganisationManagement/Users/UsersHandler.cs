@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using Dapper;
 using System.Data;
@@ -17,7 +17,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.Users
             _connection = connection;
         }
 
-        public async Task<UsersResponse> Handle(UsersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<UsersResponse> Handle(UsersRequest request, CancellationToken cancellationToken)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@Auth0UserId", request.Auth0UserId);

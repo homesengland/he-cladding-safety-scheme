@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.SetReviewPayment;

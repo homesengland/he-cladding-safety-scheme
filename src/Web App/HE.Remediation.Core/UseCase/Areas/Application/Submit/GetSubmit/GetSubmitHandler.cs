@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.GetSubmit
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.Submit.GetSubmit
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetSubmitResponse> Handle(GetSubmitRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetSubmitResponse> Handle(GetSubmitRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

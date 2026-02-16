@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.PreferredContractorLinks.Set;
 
@@ -14,7 +14,7 @@ public class SetPreferredContractorLinksHandler : IRequestHandler<SetPreferredCo
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetPreferredContractorLinksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetPreferredContractorLinksRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
         

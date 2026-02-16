@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using Microsoft.Data.SqlClient;
 using HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember;
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.RemoveMember
         private readonly IDbConnectionWrapper _connection = connection;
         private readonly IBackgroundCollaborationCommunicationQueue _emailInviteSendQueue = emailInviteSendQueue;
 
-        public async Task<Unit> Handle(RemoveMembersSetRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(RemoveMembersSetRequest request, CancellationToken cancellationToken)
         {
             try
             {

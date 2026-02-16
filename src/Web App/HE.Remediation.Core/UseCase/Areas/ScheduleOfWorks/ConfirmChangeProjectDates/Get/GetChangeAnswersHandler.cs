@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.ConfirmChangeProjectDates.Get;
 
@@ -22,7 +22,7 @@ public class GetConfirmChangeProjectDatesHandler : IRequestHandler<GetConfirmCha
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetConfirmChangeProjectDatesResponse> Handle(GetConfirmChangeProjectDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetConfirmChangeProjectDatesResponse> Handle(GetConfirmChangeProjectDatesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

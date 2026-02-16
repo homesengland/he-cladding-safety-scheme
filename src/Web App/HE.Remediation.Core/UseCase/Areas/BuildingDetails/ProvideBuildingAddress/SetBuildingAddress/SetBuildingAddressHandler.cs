@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.GetBuildingAddress;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ProvideBuildingAddress.SetBuildingAddress;
@@ -23,7 +23,7 @@ public class SetBuildingAddressHandler : IRequestHandler<SetBuildingAddressReque
         _buildingDetailsRepo = buildingDetailsRepo;
     }
 
-    public async Task<Unit> Handle(SetBuildingAddressRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetBuildingAddressRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

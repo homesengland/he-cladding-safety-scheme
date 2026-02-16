@@ -35,4 +35,5 @@ public class GetTaskListResponse
     public ETaskStatus WorkPackageFireRiskAssessmentStatusId { get; set; }
     public bool HasFra { get; set; }
     public bool IsSubmitted { get; set; }
+    public EApplicationScheme ApplicationScheme { get; set; }
 }

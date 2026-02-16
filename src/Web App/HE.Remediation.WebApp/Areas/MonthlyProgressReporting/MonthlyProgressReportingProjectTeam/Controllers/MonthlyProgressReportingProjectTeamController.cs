@@ -15,7 +15,7 @@ using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.AddT
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.ExistingTeamMember;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.NoTeam;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectTeam.TeamMember;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectTeam.Controllers;

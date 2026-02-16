@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ConfirmBuildingHeight.GetBuildingHeight;
 
@@ -14,7 +14,7 @@ public class GetBuildingHeightHandler : IRequestHandler<GetBuildingHeightRequest
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetBuildingHeightResponse> Handle(GetBuildingHeightRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetBuildingHeightResponse> Handle(GetBuildingHeightRequest request, CancellationToken cancellationToken)
     {
         var response = await _connection.QuerySingleOrDefaultAsync<GetBuildingHeightResponse>("GetBuildingHeight", new
         {

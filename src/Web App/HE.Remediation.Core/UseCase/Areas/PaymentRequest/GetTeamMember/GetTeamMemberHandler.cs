@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetTeamMember;
 
@@ -27,7 +27,7 @@ public class GetTeamMemberHandler : IRequestHandler<GetTeamMemberRequest, GetTea
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetTeamMemberResponse> Handle(GetTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTeamMemberResponse> Handle(GetTeamMemberRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDetails.SetAppraisalSurveyDetails
 {
@@ -21,7 +21,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.AppraisalSurveyDet
             _statusTransitionService = statusTransitionService;
         }
 
-        public async Task<Unit> Handle(SetAppraisalSurveyDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetAppraisalSurveyDetailsRequest request, CancellationToken cancellationToken)
         {
             await InsertAppraisalSurveyDetailsRequest(request);
             return Unit.Value;

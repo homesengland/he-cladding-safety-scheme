@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureResults.MonthlyProgressReport.Proj
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
@@ -24,7 +24,7 @@ public class GetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<GetWhoIs
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<GetWhoIsTheGrantCertifyingOfficerResponse> Handle(GetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetWhoIsTheGrantCertifyingOfficerResponse> Handle(GetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -50,7 +50,7 @@ public class GetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<GetWhoIs
         };
     }
 
-    private async Task<List<GetTeamMembersResult>> GetApplicableTeamMembers(Guid applicationId, Guid progressReportId)
+    private async ValueTask<List<GetTeamMembersResult>> GetApplicableTeamMembers(Guid applicationId, Guid progressReportId)
     {
         var teamMembers = await _progressReportingProjectTeamRepository
                     .GetProjectTeamMembers(new GetTeamMembersParameters() { ApplicationId = applicationId, ProgressReportId = progressReportId }

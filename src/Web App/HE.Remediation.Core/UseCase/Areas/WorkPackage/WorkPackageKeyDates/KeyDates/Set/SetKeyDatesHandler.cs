@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.KeyDates;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.KeyDates.Set;
 
@@ -15,7 +15,7 @@ public class SetKeyDatesHandler : IRequestHandler<SetKeyDatesRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetKeyDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetKeyDatesRequest request, CancellationToken cancellationToken)
     {
         var keyDates = await _workPackageRepository.GetKeyDates();
 

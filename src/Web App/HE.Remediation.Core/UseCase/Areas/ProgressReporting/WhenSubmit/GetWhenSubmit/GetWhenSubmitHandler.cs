@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenSubmit.GetWhenSubmit;
 
@@ -23,7 +23,7 @@ public class GetWhenSubmitHandler : IRequestHandler<GetWhenSubmitRequest, GetWhe
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetWhenSubmitResponse> Handle(GetWhenSubmitRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetWhenSubmitResponse> Handle(GetWhenSubmitRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

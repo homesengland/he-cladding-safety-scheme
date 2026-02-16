@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.ProjectDates.Get;
 
@@ -23,7 +23,7 @@ public class GetProjectDatesHandler : IRequestHandler<GetProjectDatesRequest, Ge
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetProjectDatesResponse> Handle(GetProjectDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProjectDatesResponse> Handle(GetProjectDatesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

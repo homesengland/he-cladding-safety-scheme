@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.RequiresSubcontractors.Set;
 
@@ -12,7 +12,7 @@ public class SetRequiresSubcontractorsHandler : IRequestHandler<SetRequiresSubco
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetRequiresSubcontractorsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetRequiresSubcontractorsRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateCostsScheduleRequiresSubcontractors(request.RequiresSubcontractors);
         

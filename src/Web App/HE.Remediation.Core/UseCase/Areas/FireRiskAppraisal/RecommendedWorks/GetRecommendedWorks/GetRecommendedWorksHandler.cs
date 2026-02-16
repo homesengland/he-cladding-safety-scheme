@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.RecommendedWorks.GetRecommendedWorks;
 
@@ -15,7 +15,7 @@ public class GetRecommendedWorksHandler: IRequestHandler<GetRecommendedWorksRequ
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetRecommendedWorksResponse> Handle(GetRecommendedWorksRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetRecommendedWorksResponse> Handle(GetRecommendedWorksRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

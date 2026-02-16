@@ -9,7 +9,7 @@ using HE.Remediation.Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAssessm
 using HE.Remediation.Core.UseCase.Areas.FireRiskAssessment.UploadFireRiskAssessmentReport.UploadFireRiskAssessmentReport;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.FireRiskAssessment;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.FireRiskAssessment.Controllers;

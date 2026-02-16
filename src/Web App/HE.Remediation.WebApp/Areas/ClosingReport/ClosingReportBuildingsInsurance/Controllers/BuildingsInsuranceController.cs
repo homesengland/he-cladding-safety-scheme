@@ -7,7 +7,7 @@ using HE.Remediation.Core.UseCase.Areas.ClosingReport.GetSubContractors;
 using HE.Remediation.WebApp.Areas.ClosingReport.Controllers;
 using HE.Remediation.WebApp.ViewModels.BuildingsInsurance;
 using HE.Remediation.WebApp.ViewModels.ClosingReport;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ClosingReport.ClosingReportBuildingsInsurance.Controllers;

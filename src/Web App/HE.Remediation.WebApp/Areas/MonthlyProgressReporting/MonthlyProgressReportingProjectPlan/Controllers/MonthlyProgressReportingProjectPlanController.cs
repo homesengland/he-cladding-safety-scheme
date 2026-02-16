@@ -8,7 +8,7 @@ using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.CheckYourAnswers;
 using HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.Upload;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectPlan.Controllers;
@@ -57,6 +57,15 @@ public class MonthlyProgressReportingProjectPlanController : StartController
         if (viewModel.SubmitAction == ESubmitAction.Exit)
         {
             return RedirectToAction("TaskList", "MonthlyProgressReporting", new { Area = "MonthlyProgressReporting" });
+        }
+
+        // Social Sector ALWAYS goes to UploadProjectPlan
+        if (viewModel.ApplicationScheme == EApplicationScheme.SocialSector)
+        {
+            return RedirectToAction(
+                "UploadProjectPlan",
+                "MonthlyProgressReportingProjectPlan",
+                new { Area = "MonthlyProgressReportingProjectPlan" });
         }
 
         return viewModel.EnoughFunds == true

@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingDeveloperInformation.SetBuildingDeveloperInformation;
 
@@ -15,7 +15,7 @@ public class SetBuildingDeveloperInformationHandler : IRequestHandler<SetBuildin
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetBuildingDeveloperInformationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetBuildingDeveloperInformationRequest request, CancellationToken cancellationToken)
     {
         await SaveBuildingDeveloperInformation(request);
         return Unit.Value;

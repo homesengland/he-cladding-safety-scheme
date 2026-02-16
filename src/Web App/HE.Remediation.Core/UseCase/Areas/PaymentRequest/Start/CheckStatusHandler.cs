@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.Start;
 
@@ -16,7 +16,7 @@ public class CheckStatusHandler : IRequestHandler<CheckStatusRequest, CheckStatu
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<CheckStatusResponse> Handle(CheckStatusRequest request, CancellationToken cancellationToken)
+    public async ValueTask<CheckStatusResponse> Handle(CheckStatusRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var isSubmitted = await _paymentRequestRepository.IsPaymentRequestSubmitted(request.PaymentRequestId);

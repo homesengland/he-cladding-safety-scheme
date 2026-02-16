@@ -9,7 +9,7 @@ using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.DeveloperPledge
 using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.GetFundingStillPursuing;
 using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.GetPursuedSourcesFunding;
 using HE.Remediation.WebApp.ViewModels.AlternativeFundingRoutes;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes;

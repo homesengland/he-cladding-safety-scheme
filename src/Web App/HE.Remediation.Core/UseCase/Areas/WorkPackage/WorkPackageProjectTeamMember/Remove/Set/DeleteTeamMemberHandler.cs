@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.Remove.Set;
 
@@ -14,7 +14,7 @@ public class DeleteTeamMemberHandler : IRequestHandler<DeleteTeamMemberRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteTeamMemberRequest request, CancellationToken cancellationToken)
     {
         using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
         

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 using Microsoft.Data.SqlClient;
 using HE.Remediation.Core.Enums;
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
             _connection = connection;
         }
 
-        public async Task<UpsertMemberResponse> Handle(UpsertMemberRequest request, CancellationToken cancellationToken)
+        public async ValueTask<UpsertMemberResponse> Handle(UpsertMemberRequest request, CancellationToken cancellationToken)
         {
             if (request.CollaborationUserId.HasValue)
             {
@@ -26,7 +26,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
             }
         }
 
-        private async Task<UpsertMemberResponse> UpdateCollaborationUser(UpsertMemberRequest request)
+        private async ValueTask<UpsertMemberResponse> UpdateCollaborationUser(UpsertMemberRequest request)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.InviteMember
             return new UpsertMemberResponse() { CollaborationUserId = request.CollaborationUserId.Value };
         }
 
-        private async Task<UpsertMemberResponse> InsertProvisionalCollaborationUser(UpsertMemberRequest request)
+        private async ValueTask<UpsertMemberResponse> InsertProvisionalCollaborationUser(UpsertMemberRequest request)
         {
             try
             {

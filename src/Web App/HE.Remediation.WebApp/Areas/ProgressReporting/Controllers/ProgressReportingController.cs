@@ -59,7 +59,7 @@ using HE.Remediation.WebApp.Attributes.Routing;
 using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.Location;
 using HE.Remediation.WebApp.ViewModels.ProgressReporting;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingHasSafetyRegulatorRegistrationCode.GetBuildingHasSafetyRegulatorRegistrationCode;

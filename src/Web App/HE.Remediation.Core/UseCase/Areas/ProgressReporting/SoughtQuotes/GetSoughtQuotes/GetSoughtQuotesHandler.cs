@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SoughtQuotes.GetSoughtQuotes;
 
@@ -23,7 +23,7 @@ public class GetSoughtQuotesHandler : IRequestHandler<GetSoughtQuotesRequest, Ge
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetSoughtQuotesResponse> Handle(GetSoughtQuotesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetSoughtQuotesResponse> Handle(GetSoughtQuotesRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

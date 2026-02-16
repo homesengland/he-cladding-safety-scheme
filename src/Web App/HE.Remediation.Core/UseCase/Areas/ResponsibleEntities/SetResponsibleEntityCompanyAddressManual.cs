@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
@@ -21,7 +21,7 @@ public class SetResponsibleEntityCompanyAddressManual : IRequestHandler<SetRespo
         _responsibleEntityRepository = responsibleEntityRepository;
     }
 
-    public async Task<Unit> Handle(SetResponsibleEntityCompanyAddressManualRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetResponsibleEntityCompanyAddressManualRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

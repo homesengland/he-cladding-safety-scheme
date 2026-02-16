@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.BuildingControl;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.BuildingControl;
@@ -27,7 +27,7 @@ public class DeleteUploadBuildingControl : IRequestHandler<DeleteUploadBuildingC
         _fileRepository = fileRepository;
     }
 
-    public async Task<Unit> Handle(DeleteUploadBuildingControlRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(DeleteUploadBuildingControlRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

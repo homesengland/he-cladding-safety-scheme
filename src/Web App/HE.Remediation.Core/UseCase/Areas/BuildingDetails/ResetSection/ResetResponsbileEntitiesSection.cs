@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResetSection
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.ResetSection
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(ResetBuildingDetailsSectionRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(ResetBuildingDetailsSectionRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

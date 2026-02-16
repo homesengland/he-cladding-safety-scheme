@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.Evidence.Get;
 
@@ -24,7 +24,7 @@ public class GetEvidenceHandler : IRequestHandler<GetEvidenceRequest, GetEvidenc
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<GetEvidenceResponse> Handle(GetEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetEvidenceResponse> Handle(GetEvidenceRequest request, CancellationToken cancellationToken)
     {
         var variationRequestId = await _variationRequestRepository.GetLatestVariationRequestId();
 

@@ -3,7 +3,7 @@ using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 using HE.Remediation.Core.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +40,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
             _fileRepository = fileRepository;
             _dbConnection = dbConnection;
         }
-        public async Task<GetEvidenceSubmissionUploadResponse> Handle(GetEvidenceSubmissionUploadRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetEvidenceSubmissionUploadResponse> Handle(GetEvidenceSubmissionUploadRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -63,7 +63,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
 
         }
 
-        public async Task<Unit> Handle(AddFileRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(AddFileRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -89,7 +89,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
 
 
 
-        private async Task<ProcessFileResult> ProcessFile(IFormFile file, string propertyName, UploadSectionSettings settings)
+        private async ValueTask<ProcessFileResult> ProcessFile(IFormFile file, string propertyName, UploadSectionSettings settings)
         {
             try
             {

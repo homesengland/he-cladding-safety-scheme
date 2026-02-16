@@ -5,7 +5,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.PdfRendererService;
 using HE.Remediation.Core.Services.RazorRenderer.Models;
 using HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.FireRiskAssessorListPdf;
-using MediatR;
+using Mediator;
 using Syncfusion.Pdf.Graphics;
 
 
@@ -33,7 +33,7 @@ namespace HE.Remediation.Core.UseCase.Areas.CostSchedulePdf
             _pdfRenderer = pdfRenderer;
         }
 
-        public async Task<byte[]> Handle(CostSchedulePdfRequest request, CancellationToken cancellationToken)
+        public async ValueTask<byte[]> Handle(CostSchedulePdfRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

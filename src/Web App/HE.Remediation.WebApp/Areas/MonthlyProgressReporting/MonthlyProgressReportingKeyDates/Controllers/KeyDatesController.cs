@@ -1,5 +1,5 @@
 using AutoMapper;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using HE.Remediation.WebApp.Attributes.Authorisation;
 using HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates;

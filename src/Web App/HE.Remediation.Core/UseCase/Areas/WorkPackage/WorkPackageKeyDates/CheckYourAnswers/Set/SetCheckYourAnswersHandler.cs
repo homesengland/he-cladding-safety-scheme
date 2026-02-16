@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.CheckYourAnswers.Set;
 
@@ -14,7 +14,7 @@ public class SetCheckYourAnswersHandler : IRequestHandler<SetCheckYourAnswersReq
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var taskStatus = await _workPackageRepository.GetKeyDatesStatus();
 

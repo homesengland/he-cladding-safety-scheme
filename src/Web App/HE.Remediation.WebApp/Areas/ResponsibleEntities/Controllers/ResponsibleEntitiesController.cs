@@ -35,7 +35,7 @@ using HE.Remediation.WebApp.Constants;
 using HE.Remediation.WebApp.ViewModels.Location;
 using HE.Remediation.WebApp.ViewModels.ResponsibleEntities;
 using HE.Remediation.WebApp.ViewModels.ResponsibleEntities.RightToManage;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.ResponsibleEntities.Controllers

@@ -63,4 +63,19 @@ public class StageDiagramViewModel
     public bool IsClosingReportSubmitted { get; set; }
 
     public bool IsApplicationActive { get; set; }
+
+    public bool DisplayWorksPackage()
+    {
+        var isWorkPackageActive = HasWorkPackage && !IsWorkPackageSubmitted;
+
+        var standardRule = Stage == EApplicationStage.WorksPackage
+                        && isWorkPackageActive
+                        && HasProgressReports;
+
+        var sssfRule = ((Stage == EApplicationStage.ApplyForGrant && Status == EApplicationStatus.ApplicationSubmitted) || (Stage == EApplicationStage.WorksPackage))
+                        && isWorkPackageActive
+                        && ApplicationScheme == EApplicationScheme.SocialSector;
+
+        return standardRule || sssfRule;
+    }
 }

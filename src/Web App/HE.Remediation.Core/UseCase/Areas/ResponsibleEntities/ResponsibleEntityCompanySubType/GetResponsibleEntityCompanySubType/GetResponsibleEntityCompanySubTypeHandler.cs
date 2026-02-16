@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.ResponsibleEntityCompanySubType.GetResponsibleEntityCompanySubType;
 
@@ -15,7 +15,7 @@ public class GetResponsibleEntityCompanySubTypeHandler : IRequestHandler<GetResp
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetResponsibleEntityCompanySubTypeResponse> Handle(GetResponsibleEntityCompanySubTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetResponsibleEntityCompanySubTypeResponse> Handle(GetResponsibleEntityCompanySubTypeRequest request, CancellationToken cancellationToken)
     {
         var result = await _responsibleEntityRepository.GetResponsibleEntityCompanyType(
                 _applicationDataProvider.GetApplicationId());

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.StatusTransition;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -25,7 +25,7 @@ public class SetIsClaimingGrantHandler : IRequestHandler<SetIsClaimingGrantReque
         _statusTransitionService = statusTransitionService;
     }
 
-    public async Task<SetIsClaimingGrantResponse> Handle(SetIsClaimingGrantRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetIsClaimingGrantResponse> Handle(SetIsClaimingGrantRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         await _connection.ExecuteAsync("UpdateIsClaimingGrant", new

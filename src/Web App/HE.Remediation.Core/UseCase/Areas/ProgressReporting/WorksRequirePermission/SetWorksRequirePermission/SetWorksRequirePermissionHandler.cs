@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.WorksRequirePermission.SetWorksRequirePermission;
 
@@ -13,7 +13,7 @@ public class SetWorksRequirePermissionHandler : IRequestHandler<SetWorksRequireP
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
     {
         await _progressReportingRepository.UpdateRequirePlanningPermission(request.PermissionRequired);
         return Unit.Value;

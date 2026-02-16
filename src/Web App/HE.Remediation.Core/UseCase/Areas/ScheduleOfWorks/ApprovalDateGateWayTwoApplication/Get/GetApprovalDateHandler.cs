@@ -3,7 +3,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.BuildingSafetyRegulator.Get;
 
-using MediatR;
+using Mediator;
 
 
 namespace HE.Remediation.Core.UseCase.Areas.ScheduleOfWorks.ApprovalDateGateWayTwoApplication.Get;
@@ -27,7 +27,7 @@ public class GetApprovalDateHandler : IRequestHandler<GetApprovalDateRequest, Ge
         _scheduleOfWorksRepository = scheduleOfWorksRepository;
     }
 
-    public async Task<GetApprovalDateResponse> Handle(GetApprovalDateRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetApprovalDateResponse> Handle(GetApprovalDateRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

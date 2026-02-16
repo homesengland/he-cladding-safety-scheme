@@ -11,6 +11,7 @@ public enum EEmailType
     CollaborationOrganisationInvite = 7,
     CollaborationOrganisationUserRemoval = 8,
     CollaborationThirdPartyInvite = 9,
-    CollaborationThirdPartyRemoveAccess = 10
-
+    CollaborationThirdPartyRemoveAccess = 10,
+    SssfBuildingCompleteApplicationSubmitted = 11,
+    SssfBuildingNonCompleteApplicationSubmitted = 12
 }

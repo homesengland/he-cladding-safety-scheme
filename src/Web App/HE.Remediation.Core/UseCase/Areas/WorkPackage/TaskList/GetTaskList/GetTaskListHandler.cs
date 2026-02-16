@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.TaskList.GetTaskList;
 
@@ -19,8 +19,8 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
                               IBuildingDetailsRepository buildingDetailsRepository,
                               IApplicationRepository applicationRepository,
                               IProgressReportingRepository progressReportingRepository,
-                              IWorkPackageRepository workPackageRepository, 
-                              IWorkPackageFireRiskAssessmentRepository fireRiskAssessmentRepository, 
+                              IWorkPackageRepository workPackageRepository,
+                              IWorkPackageFireRiskAssessmentRepository fireRiskAssessmentRepository,
                               IFireRiskAssessmentRepository fraRepository)
     {
         _applicationDataProvider = applicationDataProvider;
@@ -32,12 +32,13 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
         _fraRepository = fraRepository;
     }
 
-    public async Task<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);
         var buildingName = await _buildingDetailsRepository.GetBuildingUniqueName(applicationId);
+        var applicationScheme = _applicationDataProvider.GetApplicationScheme();
 
         var hasFra = await _fraRepository.GetHasFra(applicationId);
 
@@ -45,20 +46,26 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
 
         var workPackageTaskListSummary = await _workPackageRepository.GetWorkPackageTaskListSummary();
 
+        var isDutyOfCareCompletedInProgressReport = await IsDutyOfCareCompleteInProgressReport();
+        var isGCOCompleteInProgressReport = await IsGCOCompleteInProgressReport();
+
         var planningPermissionStatus = await SetStatusToInProgressIfHasSubmittedProgressReporRequirePlanningPermissio(workPackageTaskListSummary.WorkPackagePlanningPermissionStatusId);
-        var projectTeamStatus = await SetStatusToInProgressIfHasSubmittedProgressReportTeamMembers(workPackageTaskListSummary.WorkPackageProjectTeamStatusId);
+        var projectTeamStatus = await SetStatusToInProgressIfHasSubmittedProgressReportTeamMembers(workPackageTaskListSummary.WorkPackageProjectTeamStatusId, isGCOCompleteInProgressReport);
 
         return new GetTaskListResponse
         {
             BuildingName = buildingName,
             ApplicationReferenceNumber = applicationReferenceNumber,
-            GrantCertifyingOfficerStatusId = workPackageTaskListSummary.WorkPackageGrantCertifyingOfficerStatusId,
+            ApplicationScheme = applicationScheme,
+            GrantCertifyingOfficerStatusId = isGCOCompleteInProgressReport ? ETaskStatus.Completed
+                                             : workPackageTaskListSummary.WorkPackageGrantCertifyingOfficerStatusId,
             InternalDefectsStatusId = workPackageTaskListSummary.WorkPackageInternalDefectsStatusId,
             CostsScheduleStatusId = workPackageTaskListSummary.WorkPackageCostsScheduleStatusId,
             CladdingSystemStatusId = workPackageTaskListSummary.WorkPackageCladdingSystemStatusId,
             ThirdPartyContributionsStatusId = workPackageTaskListSummary.WorkPackageThirdPartyContributionsStatusId,
             DeclarationStatusId = workPackageTaskListSummary.WorkPackageDeclarationStatusId,
-            DutyOfCareDeedStatusId = workPackageTaskListSummary.WorkPackageDutyOfCareDeedStatusId,
+            DutyOfCareDeedStatusId = isDutyOfCareCompletedInProgressReport ? ETaskStatus.Completed
+                                     : workPackageTaskListSummary.WorkPackageDutyOfCareDeedStatusId,
             DutyOfCareDeedSent = workPackageTaskListSummary.WorkPackageDutyOfCareDeedSent,
             ProjectTeamStatusId = projectTeamStatus,
             PlanningPermissionStatusId = planningPermissionStatus,
@@ -70,7 +77,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
         };
     }
 
-    private async Task<ETaskStatus> SetStatusToInProgressIfHasSubmittedProgressReporRequirePlanningPermissio(ETaskStatus taskStatus)
+    private async ValueTask<ETaskStatus> SetStatusToInProgressIfHasSubmittedProgressReporRequirePlanningPermissio(ETaskStatus taskStatus)
     {
         if (taskStatus == ETaskStatus.NotStarted)
         {
@@ -85,14 +92,33 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
         return taskStatus;
     }
 
-    private async Task<ETaskStatus> SetStatusToInProgressIfHasSubmittedProgressReportTeamMembers(ETaskStatus taskStatus)
+    private async Task<bool> IsGCOCompleteInProgressReport()
     {
-        if (taskStatus == ETaskStatus.NotStarted)
+        var isGrantCertifyingOfficerComplete = await _progressReportingRepository.IsGrantCertifyingOfficerComplete();
+        if (isGrantCertifyingOfficerComplete)
         {
-            var otherMembersAppointed = await _progressReportingRepository.GetLastSubmittedProgressReportOtherMembersAppointed();
+            await _workPackageRepository.UpdateGrantCertifyingOfficerStatus(ETaskStatus.Completed);
+        }
+        return isGrantCertifyingOfficerComplete;
+    }
+
+    private async Task<bool> IsDutyOfCareCompleteInProgressReport()
+    {
+        var isDutyOfCareComplete = await _progressReportingRepository.IsDutyOfCareComplete();
+        if (isDutyOfCareComplete)
+        {
+            await _workPackageRepository.UpdateDutyOfCareDeedStatus(ETaskStatus.Completed);
+        }
+        return isDutyOfCareComplete;
+    }
+
+    private async ValueTask<ETaskStatus> SetStatusToInProgressIfHasSubmittedProgressReportTeamMembers(ETaskStatus taskStatus, bool isGCOCompleteInProgressReport)
+    {
+        if (taskStatus != ETaskStatus.Completed)
+        {
             var teamMembers = await _progressReportingRepository.GetLastSubmittedProgressReportTeamMembers();
 
-            if (otherMembersAppointed == true && teamMembers != null && teamMembers.Any())
+            if (isGCOCompleteInProgressReport || (teamMembers != null && teamMembers.Any()))
             {
                 return ETaskStatus.InProgress;
             }

@@ -4,7 +4,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using System.Transactions;
 using Microsoft.Extensions.Options;
@@ -33,7 +33,7 @@ public class AddLeaseholderEngagementFileHandler : IRequestHandler<AddLeaseholde
         _fileServiceSettings = fileServiceSettings.Value;
     }
 
-    public async Task<Unit> Handle(AddLeaseholderEngagementFileRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AddLeaseholderEngagementFileRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

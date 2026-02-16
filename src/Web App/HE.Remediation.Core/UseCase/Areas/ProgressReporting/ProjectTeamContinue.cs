@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -19,7 +19,7 @@ public class ProjectTeamContinueHandler : IRequestHandler<ProjectTeamContinueReq
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<ProjectTeamContinueResponse> Handle(ProjectTeamContinueRequest request,
+    public async ValueTask<ProjectTeamContinueResponse> Handle(ProjectTeamContinueRequest request,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

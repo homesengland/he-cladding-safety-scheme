@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetAccountGrantPaidTo
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BankAccount.Details.SetAccountGrantP
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetAccountGrantPaidToRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetAccountGrantPaidToRequest request, CancellationToken cancellationToken)
         {
             await UpsertAccountGrantPaidTo(request);
             return Unit.Value;

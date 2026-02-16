@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.NoQuotes.Set;
 
@@ -12,7 +12,7 @@ public class SetNoQuotesHandler : IRequestHandler<SetNoQuotesRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetNoQuotesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetNoQuotesRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdateCostsScheduleNoQuotesReason(request.Reason);
 

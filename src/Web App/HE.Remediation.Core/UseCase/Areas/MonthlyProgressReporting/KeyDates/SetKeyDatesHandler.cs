@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates;
 
@@ -19,7 +19,7 @@ public class SetKeyDatesHandler : IRequestHandler<SetKeyDatesRequest>
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<Unit> Handle(SetKeyDatesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetKeyDatesRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

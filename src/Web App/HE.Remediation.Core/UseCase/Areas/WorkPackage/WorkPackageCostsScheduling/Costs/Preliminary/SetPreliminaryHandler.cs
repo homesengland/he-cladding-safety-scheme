@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.Preliminary;
 
@@ -13,7 +13,7 @@ public class SetPreliminaryHandler : IRequestHandler<SetPreliminaryRequest>
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Unit> Handle(SetPreliminaryRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetPreliminaryRequest request, CancellationToken cancellationToken)
     {
         await _workPackageRepository.UpdatePreliminaryCosts(new UpdatePreliminaryCostsParameters
         {

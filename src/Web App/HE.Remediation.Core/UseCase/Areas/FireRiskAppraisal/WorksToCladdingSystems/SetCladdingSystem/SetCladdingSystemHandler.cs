@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.SetCladdingSystem;
 
@@ -15,7 +15,7 @@ public class SetCladdingSystemHandler : IRequestHandler<SetCladdingSystemRequest
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetCladdingSystemRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCladdingSystemRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

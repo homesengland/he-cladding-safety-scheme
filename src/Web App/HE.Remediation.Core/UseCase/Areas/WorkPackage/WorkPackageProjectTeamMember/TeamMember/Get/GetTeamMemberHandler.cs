@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageProjectTeamMember.TeamMember.Get;
 
@@ -25,7 +25,7 @@ public class GetTeamMemberHandler : IRequestHandler<GetTeamMemberRequest, GetTea
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetTeamMemberResponse> Handle(GetTeamMemberRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTeamMemberResponse> Handle(GetTeamMemberRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -6,7 +6,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefects.I
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefects.InternalDefectsCost.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefects.StartInformation;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageInternalDefects;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using System.Threading;

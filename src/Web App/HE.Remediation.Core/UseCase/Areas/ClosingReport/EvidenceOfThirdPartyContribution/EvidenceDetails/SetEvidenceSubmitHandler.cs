@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyContribution.EvidenceDetails
 {
@@ -13,7 +13,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ClosingReport.EvidenceOfThirdPartyCo
             _evidenceOfThirdPartyContributionRepository = evidenceOfThirdPartyContributionRepository;
         }
 
-        public async Task<Unit> Handle(SetEvidenceSubmitRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetEvidenceSubmitRequest request, CancellationToken cancellationToken)
         {
             await _evidenceOfThirdPartyContributionRepository.UpdateClosingReportThirdPartyEvidenceAsSubmitted(request.ApplicationId, request.EvidenceId);
             return Unit.Value;

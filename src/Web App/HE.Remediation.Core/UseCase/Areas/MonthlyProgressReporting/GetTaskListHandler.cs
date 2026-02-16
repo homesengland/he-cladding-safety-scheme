@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting;
 public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskListResponse>
@@ -22,7 +22,7 @@ public class GetTaskListHandler : IRequestHandler<GetTaskListRequest, GetTaskLis
         _monthlyProgressReportingRepository = monthlyProgressReportingRepository;
     }
 
-    public async Task<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTaskListResponse> Handle(GetTaskListRequest request, CancellationToken cancellationToken)
     {
         var details = await _applicationDetailsProvider.GetApplicationDetails();
 

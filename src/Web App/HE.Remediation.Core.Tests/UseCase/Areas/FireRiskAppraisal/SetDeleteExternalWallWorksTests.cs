@@ -62,6 +62,6 @@ public class SetDeleteExternalWallWorksTests
                                 .Verifiable(); 
         
         //// Act
-        await Assert.ThrowsAsync<EntityNotFoundException>(() => _handler.Handle(new SetDeleteExternalWallWorksRequest(), CancellationToken.None));
+        await Assert.ThrowsAsync<EntityNotFoundException>(() => _handler.Handle(new SetDeleteExternalWallWorksRequest(), CancellationToken.None).AsTask());
     }
 }

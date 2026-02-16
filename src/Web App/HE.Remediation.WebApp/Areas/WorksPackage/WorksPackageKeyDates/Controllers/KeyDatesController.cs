@@ -8,7 +8,7 @@ using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.KeyDates
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.KeyDates.Set;
 using HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageKeyDates.Reset;
 using HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageKeyDates;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.WorksPackage.WorksPackageKeyDates.Controllers;

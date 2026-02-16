@@ -3,7 +3,7 @@ using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.UseCase.Areas.StartedOnSiteMilestone;
 using HE.Remediation.WebApp.ViewModels.StartedOnSiteMilestone;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HE.Remediation.WebApp.Areas.StartedOnSiteMilestone.Controllers;

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.GetBuildingUniqueName;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.SetBuildingUniqueName
@@ -22,7 +22,7 @@ namespace HE.Remediation.Core.UseCase.Areas.BuildingDetails.BuildingUniqueName.S
             _buildingDetailsRepository = buildingDetailsRepository;
         }
 
-        public async Task<Unit> Handle(SetBuildingUniqueNameRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetBuildingUniqueNameRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

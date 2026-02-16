@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.AddRole.GetAddRole;
 
@@ -25,7 +25,7 @@ public class GetAddRoleHandler : IRequestHandler<GetAddRoleRequest, GetAddRoleRe
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetAddRoleResponse> Handle(GetAddRoleRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAddRoleResponse> Handle(GetAddRoleRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

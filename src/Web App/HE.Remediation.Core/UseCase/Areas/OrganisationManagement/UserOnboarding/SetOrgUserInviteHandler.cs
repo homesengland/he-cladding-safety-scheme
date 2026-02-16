@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 
 namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.UserOnboarding
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.OrganisationManagement.UserOnboardin
             _connection = connection;
         }
 
-        public async Task<Unit> Handle(SetOrgUserInviteRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetOrgUserInviteRequest request, CancellationToken cancellationToken)
         {
             await _connection.ExecuteAsync("SetOrgUserInviteResponse", request);
             return Unit.Value;

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompanyOrIndividual.GetFreeholderCompanyOrIndividual
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompan
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetFreeholderCompanyOrIndividualResponse> Handle(GetFreeholderCompanyOrIndividualRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFreeholderCompanyOrIndividualResponse> Handle(GetFreeholderCompanyOrIndividualRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -24,7 +24,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.FreeholderCompan
             return response;
         }
 
-        private async Task<GetFreeholderCompanyOrIndividualResponse> GetFreeholderCompanyOrIndividual(Guid applicationId)
+        private async ValueTask<GetFreeholderCompanyOrIndividualResponse> GetFreeholderCompanyOrIndividual(Guid applicationId)
         {
             var reponsibleEntityTypeId = await _connection.QuerySingleOrDefaultAsync<int>("GetFreeholderCompanyOrIndividual", new { applicationId });
 

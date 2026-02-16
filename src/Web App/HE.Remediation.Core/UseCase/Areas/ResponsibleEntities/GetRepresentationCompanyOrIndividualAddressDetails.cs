@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetRepresentationCompanyOrIndividualAddressDetailsResponse> Handle(GetRepresentationCompanyOrIndividualAddressDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetRepresentationCompanyOrIndividualAddressDetailsResponse> Handle(GetRepresentationCompanyOrIndividualAddressDetailsRequest request, CancellationToken cancellationToken)
         {
             var result = await _connection.QuerySingleOrDefaultAsync<GetRepresentationCompanyOrIndividualAddressDetailsResponse>("GetRepresentationCompanyOrIndividualAddress",
                 new

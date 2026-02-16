@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefects.CheckYourAnswers;
 
@@ -23,7 +23,7 @@ namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageInternalDefec
             _workPackageRepository = workPackageRepository;
         }
 
-        public async Task<GetInternalDefectsCheckYourAnswersResponse> Handle(GetInternalDefectsCheckYourAnswersRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetInternalDefectsCheckYourAnswersResponse> Handle(GetInternalDefectsCheckYourAnswersRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using HE.Remediation.Core.Exceptions;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using File = HE.Remediation.WebApp.ViewModels.Shared.File;
 using HE.Remediation.WebApp.Constants;

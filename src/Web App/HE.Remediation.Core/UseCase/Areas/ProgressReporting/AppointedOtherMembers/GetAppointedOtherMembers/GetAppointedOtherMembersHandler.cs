@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.AppointedOtherMembers.GetAppointedOtherMembers;
 
@@ -23,7 +23,7 @@ public class GetAppointedOtherMembersHandler : IRequestHandler<GetAppointedOther
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetAppointedOtherMembersResponse> Handle(GetAppointedOtherMembersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAppointedOtherMembersResponse> Handle(GetAppointedOtherMembersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

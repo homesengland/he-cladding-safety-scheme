@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsScheduling.Costs.InstallationOfCladding;
 
@@ -23,7 +23,7 @@ public class GetInstallationOfCladdingHandler : IRequestHandler<GetInstallationO
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetInstallationOfCladdingResponse> Handle(GetInstallationOfCladdingRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetInstallationOfCladdingResponse> Handle(GetInstallationOfCladdingRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

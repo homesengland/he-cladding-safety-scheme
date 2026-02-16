@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.GetBuildingControlRequired
 {
@@ -21,7 +21,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.BuildingControl.Ge
             _buildingDetailsRepository = buildingDetailsRepository;
         }
 
-        public async Task<GetBuildingControlRequiredResponse> Handle(GetBuildingControlRequiredRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetBuildingControlRequiredResponse> Handle(GetBuildingControlRequiredRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

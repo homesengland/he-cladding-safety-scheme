@@ -55,7 +55,7 @@
         @if (Model.Costs?.IsPtfsPaymentPaid == true)
         {
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell govuk-!-padding-left-2">PTS payment</td>
+                <td class="govuk-table__cell govuk-!-padding-left-2">Initial PTS payment</td>
                 <td class="govuk-table__cell govuk-!-width-one-quarter govuk-text-align-right">
                     &pound;@Model.Costs?.PtfsPayment?.ToString("N0")
                 </td>
@@ -74,6 +74,32 @@
                 </td>
                 <td class="govuk-table__cell govuk-!-width-one-quarter govuk-text-align-right">
                     <payment-status-badge status="@(Model.Costs?.IsAdditionalPtfsPaid == true ? EPaymentStatus.Paid : default)"></payment-status-badge>
+                </td>
+            </tr>
+        }
+
+        @if (Model.Costs?.IsThirdPtfsPaid == true)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-padding-left-2">2nd Additional PTS payment</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-text-align-right">
+                    &pound;@Model.Costs?.ThirdPtfsPayment?.ToString("N0")
+                </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-text-align-right">
+                    <payment-status-badge status="@(Model.Costs?.IsThirdPtfsPaid == true ? EPaymentStatus.Paid : default)"></payment-status-badge>
+                </td>
+            </tr>
+        }
+
+        @if (Model.Costs?.IsPtfsReclaimPaid == true)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell govuk-!-width-one-half govuk-!-padding-left-2">PTS reclaim amount</td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-text-align-right">
+                    &pound;@Model.Costs?.PtfsReclaimAmount?.ToString("N0")
+                </td>
+                <td class="govuk-table__cell govuk-!-width-one-quarter govuk-text-align-right">
+                    <payment-status-badge status="@(Model.Costs?.IsPtfsReclaimPaid == true ? EPaymentStatus.Reclaimed : default)"></payment-status-badge>
                 </td>
             </tr>
         }

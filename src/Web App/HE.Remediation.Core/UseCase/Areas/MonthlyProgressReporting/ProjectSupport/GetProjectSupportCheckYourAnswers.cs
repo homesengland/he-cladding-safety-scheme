@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.MonthlyProgressReportingProjectSupport;
 
@@ -20,7 +20,7 @@ public class GetProjectSupportCheckYourAnswers : IRequestHandler<GetProjectSuppo
         _projectSupportRepository = projectSupportRepository;
     }
 
-    public async Task<GetProjectSupportCheckYourAnswersResponse> Handle(GetProjectSupportCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProjectSupportCheckYourAnswersResponse> Handle(GetProjectSupportCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var applicationId = _applicationDataProvider.GetApplicationId();

@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.UserContactConsent.GetUserContactConsent;
 
@@ -14,13 +14,13 @@ public class GetUserContactConsentHandler : IRequestHandler<GetUserContactConsen
         _db = db;
     }
 
-    public async Task<GetUserContactConsentResponse> Handle(GetUserContactConsentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUserContactConsentResponse> Handle(GetUserContactConsentRequest request, CancellationToken cancellationToken)
     {
         var userId = _applicationDataProvider.GetUserId();
         return await GetUserContactConsentResponse(request);
     }
 
-    private async Task<GetUserContactConsentResponse> GetUserContactConsentResponse(GetUserContactConsentRequest request)
+    private async ValueTask<GetUserContactConsentResponse> GetUserContactConsentResponse(GetUserContactConsentRequest request)
     {
         var userId = _applicationDataProvider.GetUserId();
 

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Interface;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Join
@@ -12,7 +12,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Join
             _connection = connection;
         }
 
-        public async Task<Unit> Handle(SetThirdPartyJoinRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetThirdPartyJoinRequest request, CancellationToken cancellationToken)
         {
             await _connection.ExecuteAsync("SetThirdPartyUserInviteResponse", request);
             return Unit.Value;

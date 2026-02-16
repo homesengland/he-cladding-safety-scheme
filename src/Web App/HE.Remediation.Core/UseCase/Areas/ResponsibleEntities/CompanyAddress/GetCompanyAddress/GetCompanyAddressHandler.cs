@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.GetCompanyAddress
 {
@@ -19,14 +19,14 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities.CompanyAddress.G
             _responsibleEntityRepository = responsibleEntityRepository;
         }
 
-        public async Task<GetCompanyAddressResponse> Handle(GetCompanyAddressRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetCompanyAddressResponse> Handle(GetCompanyAddressRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
             return await GetCompanyAddress(applicationId);
         }
 
-        private async Task<GetCompanyAddressResponse> GetCompanyAddress(Guid applicationId)
+        private async ValueTask<GetCompanyAddressResponse> GetCompanyAddress(Guid applicationId)
         {
             var address = await _responsibleEntityRepository.GetCompanyAddress(applicationId);
             

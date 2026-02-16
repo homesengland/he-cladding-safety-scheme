@@ -4,7 +4,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.P
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 using System;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.AddTeamRole;
@@ -24,7 +24,7 @@ public class SetAddTeamRoleHandler : IRequestHandler<SetAddTeamRoleRequest, SetA
         _applicationDetailsProvider = applicationDetailsProvider;
     }
 
-    public async Task<SetAddTeamRoleResponse> Handle(SetAddTeamRoleRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetAddTeamRoleResponse> Handle(SetAddTeamRoleRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var applicationDetails = await _applicationDetailsProvider.GetApplicationDetails();

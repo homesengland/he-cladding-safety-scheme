@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.TeamMember.GetTeamMemberCheckYourAnswers;
 
@@ -24,7 +24,7 @@ public class GetTeamMemberCheckYourAnswersHandler : IRequestHandler<GetTeamMembe
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetTeamMemberCheckYourAnswersResponse> Handle(GetTeamMemberCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetTeamMemberCheckYourAnswersResponse> Handle(GetTeamMemberCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

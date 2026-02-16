@@ -90,9 +90,9 @@ public class SetCompanyAddressTests
                                 .Returns(Guid.NewGuid())
                                 .Verifiable();
 
-        CompanyAddressManualDetails companyAddress = null;
+        CompanyAddressManualDetails? companyAddress = null;
         _responsibleEntityRepository.Setup(x => x.GetCompanyAddress(It.IsAny<Guid>()))
-                                    .ReturnsAsync(companyAddress)
+                                    .ReturnsAsync(companyAddress!)
                                     .Verifiable();
                 
         //// Act

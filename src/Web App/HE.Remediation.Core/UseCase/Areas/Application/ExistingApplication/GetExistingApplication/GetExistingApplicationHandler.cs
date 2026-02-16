@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetExistingApplication
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.ExistingApplication.GetE
             _applicationDataProvider = applicationDataProvider; 
         }
 
-        public async Task<IReadOnlyCollection<GetExistingApplicationResponse>> Handle(GetExistingApplicationRequest request, CancellationToken cancellationToken)
+        public async ValueTask<IReadOnlyCollection<GetExistingApplicationResponse>> Handle(GetExistingApplicationRequest request, CancellationToken cancellationToken)
         {
             var stages = request.SelectedFilterStageOptions.Select(x => (int)x).ToArray();
             var dynamicParams = new DynamicParameters();

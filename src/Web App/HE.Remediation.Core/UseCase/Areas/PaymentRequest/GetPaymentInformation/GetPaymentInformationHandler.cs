@@ -1,7 +1,7 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetPaymentInformation;
 
@@ -23,7 +23,7 @@ public class GetPaymentInformationHandler : IRequestHandler<GetPaymentInformatio
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<GetPaymentInformationResponse> Handle(GetPaymentInformationRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetPaymentInformationResponse> Handle(GetPaymentInformationRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();        

@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.UserContactConsent.SetUserContactConsent;
 
@@ -19,13 +19,13 @@ public class SetUserContactConsentHandler : IRequestHandler<SetUserContactConsen
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetUserContactConsentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetUserContactConsentRequest request, CancellationToken cancellationToken)
     {
         await SetContactConsentDetails(request);
         return Unit.Value;
     }
 
-    private async Task SetContactConsentDetails(SetUserContactConsentRequest request)
+    private async ValueTask SetContactConsentDetails(SetUserContactConsentRequest request)
     {
         var userId = _applicationDataProvider.GetUserId();
             

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Data.StoredProcedureParameters.WorkPackage.CostsScheduling;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageCostsSchedulingSubcontractor.Subcontractor.Set;
 
@@ -13,7 +13,7 @@ public class SetCostsSchedulingSubcontractorHandler : IRequestHandler<SetCostsSc
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<Guid> Handle(SetCostsSchedulingSubcontractorRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Guid> Handle(SetCostsSchedulingSubcontractorRequest request, CancellationToken cancellationToken)
     {
         var subcontractorId = await _workPackageRepository.UpsertCostsScheduleSubcontractor(new UpsertCostsSchedulingSubcontractorParameters
         {

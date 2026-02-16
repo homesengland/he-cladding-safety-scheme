@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.StoredProcedureResults;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -16,7 +16,7 @@ public class GetUploadResponsibleEntitiesEvidenceHandler : IRequestHandler<GetUp
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetUploadResponsibleEntitiesEvidenceResponse> Handle(GetUploadResponsibleEntitiesEvidenceRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetUploadResponsibleEntitiesEvidenceResponse> Handle(GetUploadResponsibleEntitiesEvidenceRequest request, CancellationToken cancellationToken)
     {
         var result = default(GetUploadResponsibleEntitiesEvidenceResponse);
         await _connection.QueryAsync<GetUploadResponsibleEntitiesEvidenceResponse, FileResult, GetUploadResponsibleEntitiesEvidenceResponse>("GetResponsibleEntityEvidence",

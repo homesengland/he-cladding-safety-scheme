@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InterimMeasures.SetInterimMeasures
 {
@@ -15,7 +15,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.InterimMeasures.Se
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetInterimMeasuresRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetInterimMeasuresRequest request, CancellationToken cancellationToken)
         {
             await SetInterimMeasures(request);
             return Unit.Value;

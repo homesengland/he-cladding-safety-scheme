@@ -52,7 +52,7 @@ public class GetAdditionalContactTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.False(result.FirstOrDefault().Id != firstGuid);
+        Assert.False(result.FirstOrDefault()?.Id != firstGuid);
         _connection.Verify();
         _applicationDataProvider.Verify();
     }

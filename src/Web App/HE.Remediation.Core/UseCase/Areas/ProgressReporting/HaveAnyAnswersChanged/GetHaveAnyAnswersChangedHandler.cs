@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.HaveAnyAnswersChanged;
 
@@ -26,7 +26,7 @@ public class GetHaveAnyAnswersChangedHandler : IRequestHandler<GetHaveAnyAnswers
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetHaveAnyAnswersChangedResponse> Handle(GetHaveAnyAnswersChangedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetHaveAnyAnswersChangedResponse> Handle(GetHaveAnyAnswersChangedRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var reference = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

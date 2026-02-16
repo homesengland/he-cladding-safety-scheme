@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.GetAddRole;
 
@@ -26,7 +26,7 @@ public class GetAddRoleHandler : IRequestHandler<GetAddRoleRequest, GetAddRoleRe
         _paymentRequestRepository = paymentRequestRepository;   
     }
 
-    public async Task<GetAddRoleResponse> Handle(GetAddRoleRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAddRoleResponse> Handle(GetAddRoleRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var paymentRequestId = _applicationDataProvider.GetPaymentRequestId();
@@ -38,13 +38,7 @@ public class GetAddRoleHandler : IRequestHandler<GetAddRoleRequest, GetAddRoleRe
 
         var allOptions = Enum.GetValues<ETeamRole>().ToList();
         var consumedOptions = teamMembers.Select(tm => (ETeamRole)tm.Role);
-        var availableOptions = allOptions.Except(consumedOptions).ToList();
-
-        // Other should always be available.
-        if (!availableOptions.Contains(ETeamRole.Other))
-        {
-            availableOptions.Add(ETeamRole.Other);
-        }
+        var availableOptions = allOptions.Except(consumedOptions).Where(x => x != ETeamRole.Other).ToList();
 
         var isSubmitted = await _paymentRequestRepository.IsPaymentRequestSubmitted(paymentRequestId);
         var isExpired = await _paymentRequestRepository.IsPaymentRequestExpired(paymentRequestId);

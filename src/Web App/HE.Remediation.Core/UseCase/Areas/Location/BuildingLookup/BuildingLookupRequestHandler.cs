@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Services.Location;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Location.BuildingLookup
 {
@@ -11,7 +11,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Location.BuildingLookup
             _postCodeLookup = postCodeLookup;
         }
 
-        public async Task<BuildingLookupResponse> Handle(BuildingLookupRequest request, CancellationToken cancellationToken)
+        public async ValueTask<BuildingLookupResponse> Handle(BuildingLookupRequest request, CancellationToken cancellationToken)
         {
             var results = await _postCodeLookup.SearchBuildings(request.Postcode);
 

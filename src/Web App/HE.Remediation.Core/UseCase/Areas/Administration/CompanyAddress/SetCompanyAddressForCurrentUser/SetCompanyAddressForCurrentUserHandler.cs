@@ -3,7 +3,7 @@ using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.CompanyAddress.SetCompanyAddressForCurrentUser;
 
@@ -20,7 +20,7 @@ public class SetCompanyAddressForCurrentUserHandler : IRequestHandler<SetCompany
         _userService = userService;
     }
 
-    public async Task<Unit> Handle(SetCompanyAddressForCurrentUserRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCompanyAddressForCurrentUserRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

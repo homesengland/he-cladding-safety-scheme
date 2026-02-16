@@ -8,7 +8,7 @@ using HE.Remediation.WebApp.ViewModels.ScheduleOfWorks;
 using HE.Remediation.WebApp.ViewModels.Shared;
 using HE.Remediation.Core.UseCase.Shared.Costs.Get;
 using HE.Remediation.Core.UseCase.Shared.Costs.Set;
-using MediatR;
+using Mediator;
 
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;

@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.PaymentRequest.SetReviewPayment;
 
@@ -16,7 +16,7 @@ public class SetReviewPaymentHandler : IRequestHandler<SetReviewPaymentRequest>
         _paymentRequestRepository = paymentRequestRepository;
     }
 
-    public async Task<Unit> Handle(SetReviewPaymentRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetReviewPaymentRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _adp.GetApplicationId();
         var paymentRequestId = _adp.GetPaymentRequestId();

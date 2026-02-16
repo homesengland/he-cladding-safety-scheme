@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -17,7 +17,7 @@ public class SetIntentToProceedHandler : IRequestHandler<SetIntentToProceedReque
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetIntentToProceedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetIntentToProceedRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

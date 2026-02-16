@@ -5,7 +5,7 @@ using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.Communication.Collaboration;
 using HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.Invite;
-using MediatR;
+using Mediator;
 using static HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.InviteMember.SetInviteMemberHandler;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.ThirdParty.RemoveAccess;
@@ -17,7 +17,7 @@ public class SetRemoveAccessHandler(IThirdPartyCollaboratorRepository thirdParty
     private readonly IApplicationDataProvider _applicationDataProvider = applicationDataProvider;
     private readonly IBackgroundCollaborationCommunicationQueue _emailInviteSendQueue = emailInviteSendQueue;
 
-    public async Task<SetRemoveAccessResponse> Handle(SetRemoveAccessRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetRemoveAccessResponse> Handle(SetRemoveAccessRequest request, CancellationToken cancellationToken)
     {
         var teamMember = await _thirdPartyCollaboratorRepository.GetTeamMemberForThirdPartyCollaboration(request.TeamMemberId, request.Source);
         var applicationId = _applicationDataProvider.GetApplicationId();
@@ -62,7 +62,7 @@ public class SetRemoveAccessHandler(IThirdPartyCollaboratorRepository thirdParty
         });
     }
 
-    private async Task<Guid?> GetCollaborationUserId(GetInviteResponse teamMember, Guid applicationId)
+    private async ValueTask<Guid?> GetCollaborationUserId(GetInviteResponse teamMember, Guid applicationId)
     {
         var @params = new DynamicParameters();
         @params.Add("@ApplicationId", value: applicationId, dbType: DbType.Guid, direction: ParameterDirection.Input);

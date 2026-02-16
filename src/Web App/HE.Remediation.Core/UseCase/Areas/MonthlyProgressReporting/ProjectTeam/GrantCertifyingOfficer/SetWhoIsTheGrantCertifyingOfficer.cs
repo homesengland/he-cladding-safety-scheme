@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
@@ -17,7 +17,7 @@ public class SetWhoIsTheGrantCertifyingOfficerHandler : IRequestHandler<SetWhoIs
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<Unit> Handle(SetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetWhoIsTheGrantCertifyingOfficerRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

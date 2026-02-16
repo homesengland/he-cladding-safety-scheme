@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.AddExtraContact.GetExtraContact;
 
@@ -14,13 +14,13 @@ public class GetExtraContactHandler: IRequestHandler<GetExtraContactRequest, Get
         _db = db;
     }
 
-    public async Task<GetExtraContactResponse> Handle(GetExtraContactRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetExtraContactResponse> Handle(GetExtraContactRequest request, CancellationToken cancellationToken)
     {
         var userId = _applicationDataProvider.GetUserId();
         return await GetUserExtraContactResponse(request);
     }
 
-    private async Task<GetExtraContactResponse> GetUserExtraContactResponse(GetExtraContactRequest request)
+    private async ValueTask<GetExtraContactResponse> GetUserExtraContactResponse(GetExtraContactRequest request)
     {
         var userId = _applicationDataProvider.GetUserId();
 

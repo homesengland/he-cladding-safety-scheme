@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackageGrantCertifyingOfficer.CheckYourAnswers.Set;
 
@@ -22,7 +22,7 @@ public class SetCheckYourAnswersHandler : IRequestHandler<SetCheckYourAnswersReq
         _taskRepository = taskRepository;
     }
 
-    public async Task<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var dutyOfCareDeedTaskRaised = await _workPackageRepository.GetGrantCertifyingOfficerDutyOfCareDeedTaskRaised();
         if (!dutyOfCareDeedTaskRaised)

@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSourcesFunding.GetFundingStillPursuing
 {
@@ -21,7 +21,7 @@ namespace HE.Remediation.Core.UseCase.Areas.AlternativeFundingRoutes.PursuedSour
             _alternateFundingRepository = alternateFundingRepository;
         }
 
-        public async Task<GetFundingStillPursuingResponse> Handle(GetFundingStillPursuingRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFundingStillPursuingResponse> Handle(GetFundingStillPursuingRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

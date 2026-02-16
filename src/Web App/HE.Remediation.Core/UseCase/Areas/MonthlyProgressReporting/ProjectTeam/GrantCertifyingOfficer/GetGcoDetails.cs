@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Providers.ApplicationDetailsProvider;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectTeam.GrantCertifyingOfficer;
 
@@ -22,7 +22,7 @@ public class GetGcoDetailsHandler : IRequestHandler<GetGcoDetailsRequest, GetGco
         _progressReportingProjectTeamRepository = progressReportingProjectTeamRepository;
     }
 
-    public async Task<GetGcoDetailsResponse> Handle(GetGcoDetailsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetGcoDetailsResponse> Handle(GetGcoDetailsRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

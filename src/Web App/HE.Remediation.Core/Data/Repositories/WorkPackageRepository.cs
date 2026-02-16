@@ -42,6 +42,14 @@ public class WorkPackageRepository : IWorkPackageRepository
         _applicationDataProvider = applicationDataProvider;
         _statusTransitionService = statusTransitionService;
     }
+    public async Task InsertWorkPackage(Guid applicationId)
+    {
+        await _connection.ExecuteAsync(
+            "InsertWorkPackage", new
+            {
+                ApplicationId = applicationId,
+            });
+    }
 
     public async Task<bool?> GetWorkPackageConfirmToProceed()
     {
@@ -563,7 +571,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -679,7 +687,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -798,7 +806,7 @@ public class WorkPackageRepository : IWorkPackageRepository
             parameters.AcceptGrantAwardBasedOnCosts
         });
 
-        await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+        await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
 
         scope.Complete();
     }
@@ -856,7 +864,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -926,7 +934,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -1118,7 +1126,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -1141,7 +1149,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -1774,7 +1782,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();
@@ -2078,7 +2086,7 @@ public class WorkPackageRepository : IWorkPackageRepository
 
         if (taskStatus == ETaskStatus.InProgress)
         {
-            await _statusTransitionService.TransitionToStatus(EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
+            await _statusTransitionService.TransitionToStatus(EApplicationStage.WorksPackage, EApplicationStatus.WorksPackageInProgress, applicationIds: applicationId);
         }
 
         scope.Complete();

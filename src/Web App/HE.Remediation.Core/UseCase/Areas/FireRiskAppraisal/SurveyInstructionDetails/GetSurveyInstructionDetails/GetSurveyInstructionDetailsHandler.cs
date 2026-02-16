@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories.FireRiskAppraisal;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionDetails.GetSurveyInstructionDetails
 {
@@ -17,7 +17,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.SurveyInstructionD
             _fireAssessorListService = fireAssessorListService;
         }
 
-        public async Task<GetSurveyInstructionDetailsResponse> Handle(GetSurveyInstructionDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetSurveyInstructionDetailsResponse> Handle(GetSurveyInstructionDetailsRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

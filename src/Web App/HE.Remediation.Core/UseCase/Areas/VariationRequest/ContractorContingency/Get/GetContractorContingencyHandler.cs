@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.VariationRequest.ContractorContingency.Get;
 
@@ -23,7 +23,7 @@ public class GetContractorContingencyHandler : IRequestHandler<GetContractorCont
         _variationRequestRepository = variationRequestRepository;
     }
 
-    public async Task<GetContractorContingencyResponse> Handle(GetContractorContingencyRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetContractorContingencyResponse> Handle(GetContractorContingencyRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var applicationReferenceNumber = await _applicationRepository.GetApplicationReferenceNumber(applicationId);

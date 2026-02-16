@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.WorkPackage.WorkPackagePlanningPermission.WorksRequirePermission.Get;
 
@@ -26,7 +26,7 @@ public class GetWorksRequirePermissionHandler : IRequestHandler<GetWorksRequireP
         _workPackageRepository = workPackageRepository;
     }
 
-    public async Task<GetWorksRequirePermissionResponse> Handle(GetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetWorksRequirePermissionResponse> Handle(GetWorksRequirePermissionRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

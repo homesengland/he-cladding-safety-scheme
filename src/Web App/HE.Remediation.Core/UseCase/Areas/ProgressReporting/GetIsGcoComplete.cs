@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting;
 
@@ -12,7 +12,7 @@ public class GetIsGcoCompleteHandler : IRequestHandler<GetIsGcoCompleteRequest, 
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<bool> Handle(GetIsGcoCompleteRequest request, CancellationToken cancellationToken)
+    public async ValueTask<bool> Handle(GetIsGcoCompleteRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

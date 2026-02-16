@@ -53,7 +53,7 @@ using HE.Remediation.WebApp.ViewModels.BuildingDetails;
 using HE.Remediation.WebApp.ViewModels.BuildingsInsurance;
 using HE.Remediation.WebApp.ViewModels.Location;
 
-using MediatR;
+using Mediator;
 
 using Microsoft.AspNetCore.Mvc;
 

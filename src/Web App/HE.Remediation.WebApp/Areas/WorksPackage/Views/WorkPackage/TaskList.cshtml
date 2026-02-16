@@ -74,30 +74,33 @@
                                     </span>
                                     <task-list-status-badge status="@Model.ProjectTeamStatusId"></task-list-status-badge>
                                 </li>
-                                <li class="app-task-list__item">
-                                    @if (Model.ProjectTeamStatusId != ETaskStatus.Completed)
-                                    {
-                                        <span class="govuk-body">Grant certifying officer details</span>
-                                        <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
-                                    }
-                                    else
-                                    {
+                                @if (Model.ApplicationScheme != EApplicationScheme.SocialSector)
+                                {
+                                    <li class="app-task-list__item">
+                                        @if (Model.ProjectTeamStatusId != ETaskStatus.Completed)
+                                        {
+                                            <span class="govuk-body">Grant certifying officer details</span>
+                                            <strong class="govuk-tag app-task-list__tag govuk-tag--grey">Cannot Start Yet</strong>
+                                        }
+                                        else
+                                        {
+                                            <span class="app-task-list__task-name">
+                                                <a class="govuk-link" href="@(Model.GrantCertifyingOfficerStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" }) : Url.Action("Start", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" }))" aria-describedby="list-convictions-status">
+                                                    Grant certifying officer details
+                                                </a>
+                                            </span>
+                                            <task-list-status-badge status="@Model.GrantCertifyingOfficerStatusId"></task-list-status-badge>
+                                        }
+                                    </li>
+                                    <li class="app-task-list__item">
                                         <span class="app-task-list__task-name">
-                                            <a class="govuk-link" href="@(Model.GrantCertifyingOfficerStatusId == ETaskStatus.Completed ? Url.Action("CheckYourAnswers", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" }) : Url.Action("Start", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" }))" aria-describedby="list-convictions-status">
-                                                Grant certifying officer details
+                                            <a class="govuk-link" href="@Url.Action("Start", "DutyOfCareDeed", new { Area = "WorksPackageDutyOfCareDeed" })" aria-describedby="list-convictions-status">
+                                                Duty of care deed
                                             </a>
                                         </span>
-                                        <task-list-status-badge status="@Model.GrantCertifyingOfficerStatusId"></task-list-status-badge>
-                                    }
-                                </li>
-                                <li class="app-task-list__item">
-                                    <span class="app-task-list__task-name">
-                                        <a class="govuk-link" href="@Url.Action("Start", "DutyOfCareDeed", new { Area = "WorksPackageDutyOfCareDeed" })" aria-describedby="list-convictions-status">
-                                            Duty of care deed
-                                        </a>
-                                    </span>
-                                    <task-list-status-badge status="@Model.DutyOfCareDeedStatusId"></task-list-status-badge>
-                                </li>
+                                        <task-list-status-badge status="@Model.DutyOfCareDeedStatusId"></task-list-status-badge>
+                                    </li>
+                                }
                             </ul>
                         </li>
 
@@ -220,9 +223,12 @@
                         </li>
                     </ol>
 
-                    <govuk-inset-text>
-                        The duty of care deed must be signed by your nominated grant certifying officer before you can submit your works package.
-                    </govuk-inset-text>
+                    @if (Model.ApplicationScheme != EApplicationScheme.SocialSector)
+                    {
+                        <govuk-inset-text>
+                            The duty of care deed must be signed by your nominated grant certifying officer before you can submit your works package.
+                        </govuk-inset-text>
+                    }
 
                     <govuk-button href=@Url.Action("Index", "StageDiagram", new { Area = "Application" }) class="govuk-button--secondary">Return to application</govuk-button>
                 </div>

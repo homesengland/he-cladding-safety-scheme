@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.Dashboard.GetProfile;
 
@@ -15,7 +15,7 @@ public class GetProfileHandler : IRequestHandler<GetProfileRequest, GetProfileRe
         _db = db;
     }
 
-    public async Task<GetProfileResponse> Handle(GetProfileRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProfileResponse> Handle(GetProfileRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 

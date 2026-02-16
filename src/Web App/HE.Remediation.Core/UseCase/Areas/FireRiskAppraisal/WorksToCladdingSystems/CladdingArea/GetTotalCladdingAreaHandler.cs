@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSystems.CladdingArea
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.WorksToCladdingSys
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetTotalCladdingAreaResponse> Handle(GetTotalCladdingAreaRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetTotalCladdingAreaResponse> Handle(GetTotalCladdingAreaRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

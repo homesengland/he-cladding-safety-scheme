@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
 using System.Transactions;
@@ -37,7 +37,7 @@ public class SetFinalCheckYourAnswersHandler : IRequestHandler<SetFinalCheckYour
         _alertRepository = alertRepository;
     }
 
-    public async Task<Unit> Handle(SetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetFinalCheckYourAnswersRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var userId = _applicationDataProvider.GetUserId();

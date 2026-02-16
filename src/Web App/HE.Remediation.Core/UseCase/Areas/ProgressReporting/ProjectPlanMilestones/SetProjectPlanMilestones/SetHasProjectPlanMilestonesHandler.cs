@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.UseCase.Areas.ProgressReporting.WhenStartOnSite.SetWhenStartOnSite;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilestones.SetProjectPlanMilestones
 {
@@ -18,7 +18,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProjectPlanMilesto
             _progressReportingRepository = progressReportingRepository;
         }
 
-        public async Task<Unit> Handle(SetHasProjectPlanMilestonesRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetHasProjectPlanMilestonesRequest request, CancellationToken cancellationToken)
         {
             await UpdateProgressReportHasProjectPlanMilestonesHandler(request);
             return Unit.Value;

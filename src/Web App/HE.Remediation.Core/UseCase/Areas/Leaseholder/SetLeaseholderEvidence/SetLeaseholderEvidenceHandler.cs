@@ -6,7 +6,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.FileService;
 using HE.Remediation.Core.Settings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -34,7 +34,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetLeaseholderEvidence
             _fileServiceSettings = fileServiceSettings.Value;
         }
 
-        public async Task<Unit> Handle(SetLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetLeaseHolderEvidenceRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 
@@ -72,12 +72,12 @@ namespace HE.Remediation.Core.UseCase.Areas.Leaseholder.SetLeaseholderEvidence
             return Unit.Value;
         }
 
-        private async Task<bool> ValidateCompletion(Guid applicationId)
+        private async ValueTask<bool> ValidateCompletion(Guid applicationId)
         {
             return await _dbConnection.QuerySingleOrDefaultAsync<bool>("CheckCanCompleteLeaseHolderEngagement", new { applicationId });
         }
 
-        private async Task<ProcessFileResult> ProcessFile(IFormFile file)
+        private async ValueTask<ProcessFileResult> ProcessFile(IFormFile file)
         {
             if (file == null)
             {

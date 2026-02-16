@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.UseCase.Areas.Location.PostCode;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
 {
@@ -16,7 +16,7 @@ namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<Unit> Handle(SetRepresentationCompanyOrIndividualAddressDetailsRequest request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(SetRepresentationCompanyOrIndividualAddressDetailsRequest request, CancellationToken cancellationToken)
         {
             ParsedAddress parsedAddress = PostCodeUtility.ParseAddressJson(request.SelectedAddressId);
             if (parsedAddress != null)

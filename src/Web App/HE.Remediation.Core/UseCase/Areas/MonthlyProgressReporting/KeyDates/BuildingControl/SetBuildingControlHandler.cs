@@ -3,7 +3,7 @@ using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.K
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Extensions;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.BuildingControl;
@@ -19,7 +19,7 @@ public class SetBuildingControlHandler : IRequestHandler<SetBuildingControlReque
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<SetBuildingControlResponse> Handle(SetBuildingControlRequest request, CancellationToken cancellationToken)
+    public async ValueTask<SetBuildingControlResponse> Handle(SetBuildingControlRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

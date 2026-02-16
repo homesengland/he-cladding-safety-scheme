@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProgressReports.GetProgressReports;
 
@@ -22,7 +22,7 @@ public class GetProgressReportsHandler : IRequestHandler<GetProgressReportsReque
         _buildingDetailsRepository = buildingDetailsRepository;
     }
 
-    public async Task<GetProgressReportsResponse> Handle(GetProgressReportsRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProgressReportsResponse> Handle(GetProgressReportsRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

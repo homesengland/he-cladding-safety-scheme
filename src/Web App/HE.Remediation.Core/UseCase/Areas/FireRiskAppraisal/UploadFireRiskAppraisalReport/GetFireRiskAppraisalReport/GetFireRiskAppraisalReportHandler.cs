@@ -1,5 +1,5 @@
 ﻿using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppraisalReport.GetFireRiskAppraisalReport
 {
@@ -14,7 +14,7 @@ namespace HE.Remediation.Core.UseCase.Areas.FireRiskAppraisal.UploadFireRiskAppr
             _applicationDataProvider = applicationDataProvider;
         }
 
-        public async Task<GetFireRiskAppraisalReportResponse> Handle(GetFireRiskReportAppraisalReportRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetFireRiskAppraisalReportResponse> Handle(GetFireRiskReportAppraisalReportRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -1,7 +1,7 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Services.FileService;
-using MediatR;
+using Mediator;
 using System.Transactions;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ChangeAnswers;
@@ -18,7 +18,7 @@ public class ChangeYourAnswersHandler : IRequestHandler<ChangeYourAnswersRequest
         _fileService = fileService;
     }
 
-    public async Task<Unit> Handle(ChangeYourAnswersRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(ChangeYourAnswersRequest request, CancellationToken cancellationToken)
     {
         await ResetProgressReport(request);
         return Unit.Value;

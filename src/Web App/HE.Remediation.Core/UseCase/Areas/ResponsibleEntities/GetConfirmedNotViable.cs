@@ -1,6 +1,6 @@
 ﻿using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ResponsibleEntities;
 
@@ -15,7 +15,7 @@ public class GetConfirmedNotViableHandler : IRequestHandler<GetConfirmedNotViabl
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<GetConfirmedNotViableResponse> Handle(GetConfirmedNotViableRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetConfirmedNotViableResponse> Handle(GetConfirmedNotViableRequest request, CancellationToken cancellationToken)
     {
         var result = await _connection.QuerySingleOrDefaultAsync<GetConfirmedNotViableResponse>("GetConfirmedNotViable",
             new

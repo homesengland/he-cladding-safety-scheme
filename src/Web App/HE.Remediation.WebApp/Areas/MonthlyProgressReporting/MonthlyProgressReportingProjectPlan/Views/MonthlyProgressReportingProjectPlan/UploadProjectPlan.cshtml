@@ -1,8 +1,9 @@
-﻿@using HE.Remediation.Core.Extensions
+﻿@using HE.Remediation.Core.Enums
+@using HE.Remediation.Core.Extensions
 @model HE.Remediation.WebApp.ViewModels.MonthlyProgressReporting.ProjectPlan.Upload.UploadProjectPlanViewModel
 @{
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
-    ViewData["Backlink"] = Model.HasEnoughFunds == true
+    ViewData["Backlink"] = Model.HasEnoughFunds == true || Model.ApplicationScheme == EApplicationScheme.SocialSector
         ? Url.Action("ProjectPlan", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" })
         : Url.Action("PtsUplift", "MonthlyProgressReportingProjectPlan", new { Area = "MonthlyProgressReportingProjectPlan" });
     ViewData["FullWidth"] = false;

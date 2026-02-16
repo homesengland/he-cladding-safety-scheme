@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDiagram
 {
@@ -42,7 +42,7 @@ namespace HE.Remediation.Core.UseCase.Areas.Application.StageDiagram.GetStageDia
             _milestoneRepository = milestoneRepository;
         }
 
-        public async Task<GetStageDiagramResponse> Handle(GetStageDiagramRequest request, CancellationToken cancellationToken)
+        public async ValueTask<GetStageDiagramResponse> Handle(GetStageDiagramRequest request, CancellationToken cancellationToken)
         {
             var applicationId = _applicationDataProvider.GetApplicationId();
 

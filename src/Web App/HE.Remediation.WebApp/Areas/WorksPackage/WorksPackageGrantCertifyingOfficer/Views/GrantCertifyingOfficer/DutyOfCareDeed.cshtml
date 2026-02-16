@@ -1,10 +1,30 @@
 ﻿@using HE.Remediation.Core.Enums;
 @model HE.Remediation.WebApp.ViewModels.WorksPackage.WorkPackageGrantCertifyingOfficer.DutyOfCareDeedViewModel
 @{
+    Layout = "_SideCardLayout";
     ViewData["Title"] = "Grant certifying officer - Duty of care deed";
     ViewData["SubTitle"] = Model.BuildingName + " (" + Model.ApplicationReferenceNumber + ")";
     ViewData["Backlink"] = Url.Action("CheckYourAnswers", "GrantCertifyingOfficer", new { Area = "WorksPackageGrantCertifyingOfficer" });
     ViewData["FullWidth"] = false;
+}
+
+@section InfoCardSection
+{
+    <aside class="app-related-items" role="complementary">
+        <h2 class="govuk-heading-s" id="subsection-title">
+            Related content
+        </h2>
+        <nav role="navigation" aria-labelledby="subsection-title">
+            <ul class="govuk-list govuk-!-font-size-16">
+                <li>
+                    <a class="govuk-link" href="https://www.gov.uk/government/publications/cladding-safety-scheme/applying-for-funding-for-the-cladding-safety-scheme#the-grant-certifying-officer-and-duty-of-care-deed" target="_blank" rel="noopener noreferrer">
+                        The Grant Certifying Officer and duty of care deed
+                        <span class="govuk-visually-hidden">(opens in new tab)</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 }
 
 <h1 class="govuk-heading-xl">Duty of care deed</h1>
@@ -12,13 +32,7 @@
 <h2 class="govuk-heading-m">We've emailed the duty of care deed to the grant certifying officer.</h2>
 
 <p class="govuk-body">
-    The deed is a legal contract between Homes England and the grant certifying officer. You can view an example deed below.
-</p>
-
-<p class="govuk-body">
-    <a class="govuk-link" href="https://www.gov.uk/government/publications/cladding-safety-scheme-grant-funding-agreement-and-associated-legal-documents" rel="noreferrer noopener" target="_blank">
-        View duty of care deed template online
-    </a>
+    The deed is a legal contract between Homes England and the grant certifying officer.
 </p>
 
 <p class="govuk-body">

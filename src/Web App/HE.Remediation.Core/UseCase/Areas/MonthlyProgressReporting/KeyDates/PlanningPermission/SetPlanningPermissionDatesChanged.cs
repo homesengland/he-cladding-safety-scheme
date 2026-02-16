@@ -1,7 +1,7 @@
 ﻿using HE.Remediation.Core.Data.Repositories.MonthlyProgressReporting.KeyDates;
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.KeyDates.PlanningPermission;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.KeyDates.PlanningPermission;
 
@@ -18,7 +18,7 @@ public class SetPlanningPermissionDatesChangedHandler : IRequestHandler<SetPlann
         _keyDatesRepository = keyDatesRepository;
     }
 
-    public async Task<Unit> Handle(SetPlanningPermissionDatesChangedRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetPlanningPermissionDatesChangedRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

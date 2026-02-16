@@ -45,7 +45,7 @@ public class GetBuildingHasSafetyRegulatorRegistrationCodeTests
         // Assert        
         Assert.NotNull(result);
 
-        var resultValid = ((result != null) &&
+        var resultValid = ((result?.BuildingHasSafetyRegulatorRegistrationCode != null) &&
                            (result.BuildingHasSafetyRegulatorRegistrationCode.Value));
         Assert.True(resultValid);
         _connection.Verify();

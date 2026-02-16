@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.ProgressSupport.GetProgressSupport;
 
@@ -25,7 +25,7 @@ public class GetProgressSupportHandler : IRequestHandler<GetProgressSupportReque
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<GetProgressSupportResponse> Handle(GetProgressSupportRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetProgressSupportResponse> Handle(GetProgressSupportRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
 

@@ -1,6 +1,6 @@
 ﻿
 using HE.Remediation.Core.Data.Repositories;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.ProgressReporting.SoughtQuotes.SetSoughtQuotes;
 
@@ -13,7 +13,7 @@ public class SetSoughtQuotesHandler : IRequestHandler<SetSoughtQuotesRequest>
         _progressReportingRepository = progressReportingRepository;
     }
 
-    public async Task<Unit> Handle(SetSoughtQuotesRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetSoughtQuotesRequest request, CancellationToken cancellationToken)
     {
         await _progressReportingRepository.UpdateQuotesSought(request.QuotesSought);
         return Unit.Value;

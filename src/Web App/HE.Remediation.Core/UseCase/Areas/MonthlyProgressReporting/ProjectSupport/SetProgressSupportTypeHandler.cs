@@ -2,7 +2,7 @@
 using HE.Remediation.Core.Data.StoredProcedureParameters.MonthlyProgressReport.ProjectSupport;
 using HE.Remediation.Core.Enums;
 using HE.Remediation.Core.Interface;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.MonthlyProgressReporting.ProjectSupport;
 public class SetProgressSupportTypeHandler : IRequestHandler<SetProgressSupportTypeRequest>
@@ -17,7 +17,7 @@ public class SetProgressSupportTypeHandler : IRequestHandler<SetProgressSupportT
         _applicationDataProvider = applicationDataProvider;
     }
 
-    public async Task<Unit> Handle(SetProgressSupportTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetProgressSupportTypeRequest request, CancellationToken cancellationToken)
     {
         var applicationId = _applicationDataProvider.GetApplicationId();
         var progressReportId = _applicationDataProvider.GetProgressReportId();

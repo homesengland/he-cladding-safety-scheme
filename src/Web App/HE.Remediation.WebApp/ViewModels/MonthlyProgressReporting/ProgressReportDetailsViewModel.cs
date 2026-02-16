@@ -6,6 +6,7 @@ public class ProgressReportDetailsViewModel
 {
     public string BuildingName { get; set; }
     public string ApplicationReferenceNumber { get; set; }
+    public int ApplicationSchemeId { get; set; }
 
     public Guid Id { get; set; }
     public DateTime? DateCreated { get; set; }

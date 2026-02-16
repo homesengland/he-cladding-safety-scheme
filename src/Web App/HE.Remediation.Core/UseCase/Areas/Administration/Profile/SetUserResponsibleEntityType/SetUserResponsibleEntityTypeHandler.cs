@@ -3,7 +3,7 @@ using HE.Remediation.Core.Exceptions;
 using HE.Remediation.Core.Interface;
 using HE.Remediation.Core.Services.UserService;
 using HE.Remediation.Core.Services.UserService.Enum;
-using MediatR;
+using Mediator;
 
 namespace HE.Remediation.Core.UseCase.Areas.Administration.Profile.SetUserResponsibleEntityType;
 
@@ -20,7 +20,7 @@ public class SetUserResponsibleEntityTypeHandler : IRequestHandler<SetUserRespon
         _adp = adp;
     }
 
-    public async Task<Unit> Handle(SetUserResponsibleEntityTypeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetUserResponsibleEntityTypeRequest request, CancellationToken cancellationToken)
     {
         var userId = _adp.GetUserId();
 
@@ -84,7 +84,7 @@ public class SetUserResponsibleEntityTypeHandler : IRequestHandler<SetUserRespon
         return Unit.Value;
     }
 
-    private async Task SetUpCompanyCompletionSteps()
+    private async ValueTask SetUpCompanyCompletionSteps()
     {
         var userId = _adp.GetUserId();
 
@@ -105,7 +105,7 @@ public class SetUserResponsibleEntityTypeHandler : IRequestHandler<SetUserRespon
         await _userService.UpdateUserProfileCompletionStages(userId.Value, existingSteps);
     }
 
-    private async Task SetUpIndividualCompletionSteps()
+    private async ValueTask SetUpIndividualCompletionSteps()
     {
         var userId = _adp.GetUserId();
 
